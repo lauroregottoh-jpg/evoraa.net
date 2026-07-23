@@ -259,22 +259,53 @@ export function scorePair(viewer: MatchableProfile, candidate: MatchableProfile)
     candidate.matching_indicators
   )
 
-  const raw = denomination + location + age + attendance + indicators.points
-  const score = Math.max(0, Math.min(100, Math.round(raw)))
+  const profileRaw = denomination + location + age + attendance + indicators.points
+  let score = Math.max(0, Math.min(100, Math.round(profileRaw)))
+
+  const psych = psychometricCompatibility(
+    viewer.psychometric_results,
+    candidate.psychometric_results
+  )
+  if (psych != null) {
+    score = Math.round(score * 0.4 + psych * 0.6)
+    if (!indicators.hits.includes("psych")) indicators.hits.push("psych")
+  }
 
   if (score < MIN_RECOMMENDED_SCORE) return null
+
+  const reasons = buildReasons(viewer, candidate, indicators.hits, {
+    denomination,
+    location,
+    age,
+  })
+  if (psych != null) {
+    reasons.unshift("Alignement des questionnaires psychométriques")
+  }
 
   return {
     profile: candidate,
     score,
-    reasons: buildReasons(viewer, candidate, indicators.hits, {
-      denomination,
-      location,
-      age,
-    }),
+    reasons: reasons.slice(0, 4),
     pillars: buildPillars(viewer, candidate, indicators.hits),
     level: compatibilityLevel(score),
   }
+}
+
+function psychometricCompatibility(
+  a: MatchableProfile["psychometric_results"],
+  b: MatchableProfile["psychometric_results"]
+): number | null {
+  if (!a || !b) return null
+  const keys = ["personality", "spiritual", "relationship"] as const
+  const parts: number[] = []
+  for (const key of keys) {
+    const av = a[key]
+    const bv = b[key]
+    if (av == null || bv == null) continue
+    parts.push(100 - Math.abs(Number(av) - Number(bv)))
+  }
+  if (parts.length === 0) return null
+  return Math.round(parts.reduce((s, v) => s + v, 0) / parts.length)
 }
 
 export function rankMatches(

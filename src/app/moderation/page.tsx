@@ -99,10 +99,15 @@ export default function ModerationPage() {
           </div>
 
           {showDemoReport && (
-            <SafetyReportModal
-              partnerName="Alexandre (Test)"
-              onClose={() => setShowDemoReport(false)}
-            />
+            <div className="space-y-2">
+              <p className="text-xs text-muted-foreground">
+                Aperçu UI uniquement. Pour un signalement réel persisté, utilisez le bouton « Signaler » dans une conversation.
+              </p>
+              <SafetyReportModal
+                partnerName="Alexandre (Test)"
+                onClose={() => setShowDemoReport(false)}
+              />
+            </div>
           )}
         </div>
 

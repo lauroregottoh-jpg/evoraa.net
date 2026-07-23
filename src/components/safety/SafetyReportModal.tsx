@@ -1,24 +1,49 @@
 "use client";
 
 import * as React from "react";
-import { ShieldAlert, CheckCircle2, Lock, AlertCircle, X } from "lucide-react";
+import { ShieldAlert, CheckCircle2, Lock, X } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { submitSafetyReportAction } from "@/app/actions/reports";
 
 interface SafetyReportModalProps {
   partnerName: string;
+  reportedUserId?: string;
   onClose?: () => void;
   className?: string;
 }
 
-export function SafetyReportModal({ partnerName, onClose, className }: SafetyReportModalProps) {
+export function SafetyReportModal({
+  partnerName,
+  reportedUserId,
+  onClose,
+  className,
+}: SafetyReportModalProps) {
   const [reason, setReason] = React.useState("propos_deplaces");
   const [details, setDetails] = React.useState("");
   const [submitted, setSubmitted] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const [submitting, setSubmitting] = React.useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!reportedUserId) {
+      setError("Identifiant du membre manquant — ouvrez le signalement depuis une conversation.");
+      return;
+    }
+    setSubmitting(true);
+    setError("");
+    const result = await submitSafetyReportAction({
+      reportedUserId,
+      reasonCode: reason,
+      details,
+    });
+    setSubmitting(false);
+    if (result.error) {
+      setError(result.error);
+      return;
+    }
     setSubmitted(true);
   };
 
@@ -34,7 +59,7 @@ export function SafetyReportModal({ partnerName, onClose, className }: SafetyRep
             Signaler un écart à la Charte concernant {partnerName}
           </CardTitle>
           <CardDescription className="text-xs text-muted-foreground">
-            Votre signalement est 100% confidentiel. Le membre ne saura pas qui a transmis l&apos;alerte.
+            Votre signalement est confidentiel et enregistré pour l&apos;équipe de modération.
           </CardDescription>
         </div>
         {onClose && (
@@ -56,10 +81,10 @@ export function SafetyReportModal({ partnerName, onClose, className }: SafetyRep
                 onChange={(e) => setReason(e.target.value)}
                 className="w-full h-11 px-3.5 rounded-xl bg-background border border-border/80 text-sm text-foreground focus:ring-destructive"
               >
-                <option value="propos_deplaces">Propos déplacés, impatiens ou contraires au respect chrétien</option>
+                <option value="propos_deplaces">Propos déplacés, impatients ou contraires au respect chrétien</option>
                 <option value="authenticite_suspecte">Doute sur la véracité du profil ou des photos</option>
                 <option value="sollicitation_commerciale">Sollicitation commerciale ou demande financière suspecte</option>
-                <option value="pression_externe">Pression insistante pour échanger hors d&apos;Evoraa</option>
+                <option value="pression_externe">Pression insistante pour échanger hors de KELIA</option>
               </select>
             </div>
 
@@ -78,9 +103,10 @@ export function SafetyReportModal({ partnerName, onClose, className }: SafetyRep
             <div className="flex items-center gap-2 text-xs text-muted-foreground bg-secondary/50 p-3 rounded-xl border border-border/60">
               <Lock className="h-4 w-4 text-accent shrink-0" />
               <span>
-                Notre équipe humaine et EVA examinent chaque alerte dans un délai maximal de 2 heures.
+                Notre équipe examine chaque alerte. Le membre signalé ne voit pas votre identité.
               </span>
             </div>
+            {error && <p className="text-xs text-destructive">{error}</p>}
           </CardContent>
 
           <CardFooter className="flex justify-end gap-3 border-t border-border/40 pt-4 bg-secondary/20">
@@ -92,9 +118,10 @@ export function SafetyReportModal({ partnerName, onClose, className }: SafetyRep
             <Button
               type="submit"
               size="sm"
+              disabled={submitting}
               className="rounded-xl h-9 px-5 bg-destructive hover:bg-destructive/90 text-destructive-foreground text-xs font-medium shadow-2xs"
             >
-              Transmettre à la modération
+              {submitting ? "Envoi…" : "Transmettre à la modération"}
             </Button>
           </CardFooter>
         </form>
@@ -104,9 +131,9 @@ export function SafetyReportModal({ partnerName, onClose, className }: SafetyRep
             <CheckCircle2 className="h-7 w-7" />
           </div>
           <div className="space-y-1">
-            <h3 className="font-serif text-xl font-bold text-foreground">Signalement pris en charge en paix</h3>
+            <h3 className="font-serif text-xl font-bold text-foreground">Signalement enregistré</h3>
             <p className="text-xs sm:text-sm text-muted-foreground max-w-md mx-auto">
-              Nous vous remercions de préserver la pureté et la sécurité de notre plateforme. L'échange avec {partnerName} a été suspendu le temps de notre audit.
+              Merci de préserver la sécurité de la plateforme. L&apos;équipe a reçu votre alerte concernant {partnerName}.
             </p>
           </div>
           {onClose && (

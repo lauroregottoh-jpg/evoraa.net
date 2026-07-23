@@ -59,8 +59,8 @@ export function CinematicFooter() {
               </h4>
               <ul className="space-y-2.5 text-xs sm:text-sm font-medium text-muted-foreground">
                 <li><Link href="/register" className="hover:text-primary transition-colors">Charte des 4 piliers</Link></li>
-                <li><span className="hover:text-primary cursor-pointer transition-colors">Confidentialité & Pudeur</span></li>
-                <li><span className="hover:text-primary cursor-pointer transition-colors">Sécurité & Modération</span></li>
+                <li><Link href="/confidentialite" className="hover:text-primary transition-colors">Confidentialité & Pudeur</Link></li>
+                <li><Link href="/moderation" className="hover:text-primary transition-colors">Sécurité & Modération</Link></li>
                 <li><Link href="/admin" className="text-primary/80 hover:underline transition-colors text-xs flex items-center gap-1">Console Admin</Link></li>
               </ul>
             </div>
@@ -76,9 +76,8 @@ export function CinematicFooter() {
           </p>
 
           <div className="flex items-center gap-6">
-            <span className="hover:text-foreground cursor-pointer transition-colors">Mentions légales</span>
-            <span className="hover:text-foreground cursor-pointer transition-colors">Protection des données</span>
-            <span className="hover:text-foreground cursor-pointer transition-colors">Conditions générales</span>
+            <Link href="/confidentialite" className="hover:text-foreground transition-colors">Protection des données</Link>
+            <Link href="/cgu" className="hover:text-foreground transition-colors">Conditions générales</Link>
           </div>
         </div>
 

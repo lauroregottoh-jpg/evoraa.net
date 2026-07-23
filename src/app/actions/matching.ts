@@ -10,6 +10,16 @@ import {
 } from "@/lib/matching/types"
 import { ageFromProfile, parseIndicators, rankMatches } from "@/lib/matching/score"
 
+function parsePsychometrics(value: unknown): MatchableProfile["psychometric_results"] {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null
+  const v = value as Record<string, unknown>
+  return {
+    personality: typeof v.personality === "number" ? v.personality : null,
+    spiritual: typeof v.spiritual === "number" ? v.spiritual : null,
+    relationship: typeof v.relationship === "number" ? v.relationship : null,
+  }
+}
+
 const PROFILE_SELECT = `
   id,
   user_id,
@@ -23,9 +33,11 @@ const PROFILE_SELECT = `
   biography,
   testimony,
   matching_indicators,
+  psychometric_results,
   completion_percentage,
   moderation_status,
   onboarding_status,
+  privacy_settings,
   deleted_at,
   is_verified,
   avatar_url
@@ -45,6 +57,7 @@ function mapProfile(row: Record<string, unknown>): MatchableProfile {
     biography: (row.biography as string | null) ?? null,
     testimony: (row.testimony as string | null) ?? null,
     matching_indicators: parseIndicators(row.matching_indicators),
+    psychometric_results: parsePsychometrics(row.psychometric_results),
     completion_percentage: (row.completion_percentage as number | null) ?? null,
     moderation_status: (row.moderation_status as string | null) ?? null,
     onboarding_status: (row.onboarding_status as string | null) ?? null,
@@ -167,7 +180,13 @@ export async function getCompatibilitySuggestions(limit?: number): Promise<{
     return { error: error.message, suggestions: [] }
   }
 
-  const candidates = (rows ?? []).map((row) => mapProfile(row))
+  const candidates = (rows ?? [])
+    .filter((row) => {
+      const privacy = row.privacy_settings
+      if (!privacy || typeof privacy !== "object" || Array.isArray(privacy)) return true
+      return !(privacy as Record<string, unknown>).retreat_mode
+    })
+    .map((row) => mapProfile(row))
   const ranked = rankMatches(viewer, candidates, suggestionLimit)
 
   await persistMatches(loaded.supabase, viewer.user_id, ranked)

@@ -46,9 +46,6 @@ export function MainLayout({
               <span className="font-serif text-2xl font-bold tracking-tight text-gradient">
                 KELIA
               </span>
-              <span className="text-[10px] font-sans uppercase tracking-widest bg-accent/10 text-accent px-1.5 py-0.5 rounded border border-accent/20">
-                Evoraa V1
-              </span>
             </Link>
           </div>
 
@@ -92,11 +89,12 @@ export function MainLayout({
         <footer className="w-full border-t border-border/40 bg-background py-8 text-xs text-muted-foreground">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="font-serif">
-              © {new Date().getFullYear()} KELIA (Evoraa). Rencontres chrétiennes fondées sur la dignité et la compatibilité.
+              © {new Date().getFullYear()} KELIA. Rencontres chrétiennes fondées sur la dignité et la compatibilité.
             </p>
             <div className="flex items-center gap-6">
-              <span className="hover:underline cursor-pointer">Charte de bienveillance</span>
-              <span className="hover:underline cursor-pointer">Confidentialité</span>
+              <Link href="/cgu" className="hover:underline">CGU</Link>
+              <Link href="/confidentialite" className="hover:underline">Confidentialité</Link>
+              <Link href="/moderation" className="hover:underline">Sécurité</Link>
             </div>
           </div>
         </footer>

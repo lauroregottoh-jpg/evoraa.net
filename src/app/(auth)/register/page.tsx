@@ -60,7 +60,7 @@ export default function RegisterPage() {
           variant="suggestion"
           message={
             <span>
-              Bienvenue sur Evoraa. Avant de créer votre profil, nous vous demandons de lire et signer notre <b>Charte de Bienveillance & Dignité</b>. C&apos;est ce filtre rigoureux qui garantit que chaque rencontre ici est fondée sur le respect.
+              Bienvenue sur KELIA. Avant de créer votre profil, nous vous demandons de lire et signer notre <b>Charte de Bienveillance & Dignité</b>. C&apos;est ce filtre rigoureux qui garantit que chaque rencontre ici est fondée sur le respect.
             </span>
           }
         />

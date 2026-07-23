@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { EvaExplanationBlock } from "@/components/compatibility/EvaExplanationBlock";
 import { EvaCompanion } from "@/components/evoraa/EvaCompanion";
@@ -17,6 +18,7 @@ import {
   MapPin,
   BookOpen,
 } from "lucide-react";
+import { startConversationFromProfile } from "@/app/actions/messaging";
 
 export type CompatibilityDetailData = {
   id: string;
@@ -42,22 +44,37 @@ export function CompatibilityDetailView({
   profile?: CompatibilityDetailData;
   error?: string;
 }) {
+  const router = useRouter();
   const [photoRequested, setPhotoRequested] = React.useState(false);
-  const [messageSent, setMessageSent] = React.useState(false);
+  const [isStarting, setIsStarting] = React.useState(false);
+  const [startError, setStartError] = React.useState("");
+
+  const handleStart = async () => {
+    if (!profile) return;
+    setIsStarting(true);
+    setStartError("");
+    try {
+      const result = await startConversationFromProfile(profile.id);
+      if (result.error || !result.conversationId) {
+        setStartError(result.error || "Impossible d'ouvrir la conversation.");
+        return;
+      }
+      router.push(`/messages/${result.conversationId}`);
+    } finally {
+      setIsStarting(false);
+    }
+  };
 
   if (error || !profile) {
     return (
       <MainLayout maxWidth="4xl">
         <div className="space-y-6 py-6">
           <Link href="/compatibility">
-            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Retour à l&apos;Espace de Compatibilités
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="mr-2 h-4 w-4" /> Retour
             </Button>
           </Link>
-          <div className="rounded-2xl border border-border/60 bg-secondary/30 p-8 text-center space-y-3">
-            <p className="font-serif text-2xl text-foreground">Diagnostic indisponible</p>
-            <p className="text-sm text-muted-foreground">{error || "Profil introuvable."}</p>
-          </div>
+          <p className="text-sm text-muted-foreground">{error || "Profil introuvable."}</p>
         </div>
       </MainLayout>
     );
@@ -66,84 +83,62 @@ export function CompatibilityDetailView({
   return (
     <MainLayout maxWidth="4xl">
       <div className="space-y-8 py-6">
-        <div>
-          <Link href="/compatibility">
-            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Retour à l&apos;Espace de Compatibilités
-            </Button>
-          </Link>
-        </div>
+        <Link href="/compatibility">
+          <Button variant="ghost" size="sm" className="text-muted-foreground">
+            <ArrowLeft className="mr-2 h-4 w-4" /> Retour aux compatibilités
+          </Button>
+        </Link>
 
-        <Card className="rounded-2xl border-border/60 bg-background/90 backdrop-blur-md shadow-sm overflow-hidden">
+        <Card className="rounded-2xl overflow-hidden">
           <div className="grid md:grid-cols-3">
             <div className="relative h-64 md:h-auto bg-secondary flex flex-col items-center justify-center p-6 border-b md:border-b-0 md:border-r border-border/40">
-              <div className="w-28 h-28 rounded-full bg-gradient-to-br from-primary/30 via-accent/20 to-secondary flex items-center justify-center filter blur-md shadow-inner select-none">
+              <div className="w-28 h-28 rounded-full bg-gradient-to-br from-primary/30 via-accent/20 to-secondary flex items-center justify-center filter blur-md">
                 <span className="font-serif text-5xl text-primary/40">{profile.name[0]}</span>
               </div>
-              <div className="absolute top-4 left-4 bg-background/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-medium border border-accent/30 flex items-center gap-1.5 shadow-2xs">
+              <div className="absolute top-4 left-4 bg-background/90 px-3 py-1 rounded-full text-xs border border-accent/30 flex items-center gap-1.5">
                 <Sparkles className="h-3.5 w-3.5 text-accent fill-accent" />
-                <span>{profile.harmonyScore}%</span>
+                {profile.harmonyScore}%
               </div>
-
-              <div className="mt-4 text-center space-y-2">
-                {profile.isVerified && (
-                  <Badge variant="outline" className="text-[10px] bg-background/80">
-                    <Shield className="h-3 w-3 mr-1 text-accent" /> Vérifié par l&apos;équipe
-                  </Badge>
-                )}
-                {!photoRequested ? (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => setPhotoRequested(true)}
-                    className="w-full text-xs h-8 rounded-lg border-accent/40 text-accent hover:bg-accent/10"
-                  >
-                    <Eye className="mr-1.5 h-3.5 w-3.5" /> Demander accès photo nette
-                  </Button>
-                ) : (
-                  <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium block">
-                    ✓ Demande d&apos;accès enregistrée (messagerie à brancher)
-                  </span>
-                )}
-              </div>
+              {profile.isVerified && (
+                <Badge variant="outline" className="mt-4 text-[10px]">
+                  <Shield className="h-3 w-3 mr-1 text-accent" /> Vérifié
+                </Badge>
+              )}
+              <Button
+                size="sm"
+                variant="outline"
+                className="mt-3 text-xs"
+                onClick={() => setPhotoRequested(true)}
+              >
+                <Eye className="mr-1.5 h-3.5 w-3.5" />
+                {photoRequested ? "Demande envoyée" : "Demander photo nette"}
+              </Button>
             </div>
 
-            <div className="md:col-span-2 p-6 sm:p-8 space-y-4 flex flex-col justify-between">
-              <div className="space-y-3">
-                <div className="flex items-start justify-between gap-4 flex-wrap">
-                  <div>
-                    <h1 className="font-serif text-3xl font-bold text-foreground">
-                      {profile.name}
-                      {profile.age > 0 ? `, ${profile.age} ans` : ""}
-                    </h1>
-                    <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1 flex-wrap">
-                      <MapPin className="h-4 w-4 text-muted-foreground shrink-0" /> {profile.city}
-                      <span className="mx-1">•</span>
-                      <BookOpen className="h-4 w-4 text-muted-foreground shrink-0" /> {profile.community}
-                    </p>
-                  </div>
-                </div>
-
-                <p className="text-sm text-foreground/90 leading-relaxed italic bg-secondary/30 p-3.5 rounded-xl border border-border/40 font-serif">
-                  « {profile.bio} »
+            <div className="md:col-span-2 p-6 sm:p-8 space-y-4">
+              <div>
+                <h1 className="font-serif text-3xl font-bold">
+                  {profile.name}
+                  {profile.age > 0 ? `, ${profile.age} ans` : ""}
+                </h1>
+                <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1">
+                  <MapPin className="h-4 w-4" /> {profile.city}
+                  <span>•</span>
+                  <BookOpen className="h-4 w-4" /> {profile.community}
                 </p>
               </div>
-
-              <div className="pt-4 border-t border-border/40 flex flex-col sm:flex-row items-center gap-3">
-                {!messageSent ? (
-                  <Button
-                    onClick={() => setMessageSent(true)}
-                    className="w-full sm:flex-1 h-11 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-xs"
-                  >
-                    <MessageSquareText className="mr-2 h-4 w-4 text-accent" />
-                    <span>Initiation d&apos;échange respectueuse</span>
-                  </Button>
-                ) : (
-                  <div className="w-full sm:flex-1 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs text-center font-medium">
-                    ✓ Intention enregistrée. La messagerie realtime sera branchée à l&apos;étape suivante.
-                  </div>
-                )}
-              </div>
+              <p className="text-sm italic bg-secondary/30 p-3.5 rounded-xl border border-border/40 font-serif">
+                « {profile.bio} »
+              </p>
+              <Button
+                onClick={handleStart}
+                disabled={isStarting}
+                className="w-full h-11 rounded-xl"
+              >
+                <MessageSquareText className="mr-2 h-4 w-4" />
+                {isStarting ? "Ouverture…" : "Initiation d'échange respectueuse"}
+              </Button>
+              {startError && <p className="text-xs text-destructive">{startError}</p>}
             </div>
           </div>
         </Card>
@@ -154,28 +149,26 @@ export function CompatibilityDetailView({
           pillars={profile.pillars}
         />
 
-        <Card className="rounded-2xl border-border/60 bg-background/90 backdrop-blur-md shadow-sm">
-          <CardHeader className="border-b border-border/40 pb-4">
-            <CardTitle className="font-serif text-xl text-foreground">
-              Réponses au Questionnaire de Discernement
-            </CardTitle>
+        <Card className="rounded-2xl">
+          <CardHeader className="border-b border-border/40">
+            <CardTitle className="font-serif text-xl">Questionnaire de discernement</CardTitle>
           </CardHeader>
           <CardContent className="p-6 space-y-6">
             {profile.answers.map((item, idx) => (
-              <div key={idx} className="space-y-1.5 border-b border-border/30 pb-4 last:border-0 last:pb-0">
-                <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block font-sans">
+              <div key={idx} className="space-y-1.5 border-b border-border/30 pb-4 last:border-0">
+                <span className="text-xs uppercase tracking-wider text-muted-foreground">
                   {item.question}
                 </span>
-                <p className="text-sm text-foreground leading-relaxed">{item.answer}</p>
+                <p className="text-sm">{item.answer}</p>
               </div>
             ))}
           </CardContent>
         </Card>
 
         <EvaCompanion
-          title="EVA - Protection & Sérénité"
+          title="EVA - Protection"
           variant="reflection"
-          message={`Si vous décidez d'entamer une conversation avec ${profile.name}, chaque échange devra rester digne et bienveillant, conformément à la Charte.`}
+          message={`Les échanges avec ${profile.name} restent soumis à la Charte KELIA.`}
         />
       </div>
     </MainLayout>

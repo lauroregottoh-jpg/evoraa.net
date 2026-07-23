@@ -19,6 +19,11 @@ export type MatchableProfile = {
   biography: string | null
   testimony: string | null
   matching_indicators: MatchingIndicators | null
+  psychometric_results: {
+    personality?: number | null
+    spiritual?: number | null
+    relationship?: number | null
+  } | null
   completion_percentage: number | null
   moderation_status: string | null
   onboarding_status: string | null

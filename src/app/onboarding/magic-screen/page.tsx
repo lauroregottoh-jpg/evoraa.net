@@ -62,7 +62,7 @@ export default function MagicScreenPage() {
               <div className="flex items-center gap-3 text-sm">
                 <CheckCircle2 className={`h-5 w-5 shrink-0 transition-colors duration-500 ${analyzingStep >= 2 ? "text-emerald-500" : "text-muted-foreground/30 animate-pulse"}`} />
                 <span className={analyzingStep >= 2 ? "font-medium text-foreground" : "text-muted-foreground"}>
-                  Mise en résonance avec les profils vérifiés d&apos;Evoraa
+                  Mise en résonance avec les profils vérifiés de KELIA
                 </span>
               </div>
             </div>
@@ -98,19 +98,19 @@ export default function MagicScreenPage() {
               </div>
               <div className="space-y-1">
                 <h3 className="font-serif text-2xl font-bold text-foreground">
-                  Vos Premières Compatibilités sont Prêtes
+                  Prochaine étape : les questionnaires
                 </h3>
                 <p className="text-xs sm:text-sm text-muted-foreground max-w-md mx-auto">
-                  Découvrez pourquoi chaque profil vous a été suggéré grâce à notre transparence algorithmique.
+                  Trois tests courts enrichissent votre score de compatibilité avant les suggestions.
                 </p>
               </div>
 
               <Button
-                onClick={() => router.push("/compatibility")}
+                onClick={() => router.push("/assessments")}
                 className="w-full sm:w-auto h-12 px-8 rounded-xl font-medium bg-primary hover:bg-primary/90 text-primary-foreground shadow-md text-base"
               >
                 <span className="flex items-center gap-2">
-                  Déverrouiller mon Espace <ArrowRight className="h-5 w-5" />
+                  Commencer les questionnaires <ArrowRight className="h-5 w-5" />
                 </span>
               </Button>
             </Card>

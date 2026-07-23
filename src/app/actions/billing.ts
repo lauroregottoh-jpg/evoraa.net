@@ -12,11 +12,14 @@ function appBaseUrl() {
 }
 
 function isDemoPayments() {
-  return (
-    process.env.PAYMENTS_DEMO_MODE === "true" ||
-    !process.env.CINETPAY_API_KEY ||
-    !process.env.CINETPAY_SITE_ID
-  )
+  // Never allow demo activation in production builds
+  if (process.env.NODE_ENV === "production" && process.env.PAYMENTS_DEMO_MODE !== "true") {
+    return false
+  }
+  if (process.env.PAYMENTS_DEMO_MODE === "false") return false
+  if (process.env.PAYMENTS_DEMO_MODE === "true") return true
+  // Local default: demo if CinetPay keys missing
+  return !process.env.CINETPAY_API_KEY || !process.env.CINETPAY_SITE_ID
 }
 
 export async function getBillingStatus() {
@@ -178,7 +181,10 @@ export async function confirmDemoPaymentAction(paymentId: string): Promise<{
   error?: string
   success?: boolean
 }> {
-  if (!isDemoPayments() && process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === "production" && process.env.PAYMENTS_DEMO_MODE !== "true") {
+    return { error: "Le mode démo paiement est désactivé en production." }
+  }
+  if (!isDemoPayments()) {
     return { error: "Le mode démo paiement est désactivé." }
   }
 

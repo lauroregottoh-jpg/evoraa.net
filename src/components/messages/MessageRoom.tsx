@@ -9,13 +9,14 @@ import { PhotoAccessCard } from "@/components/messages/PhotoAccessCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, Send, Sparkles, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Send, Sparkles, ShieldCheck, Flag } from "lucide-react";
 import {
   sendMessageAction,
   type ChatMessageDTO,
   type ConversationRoomDTO,
 } from "@/app/actions/messaging";
 import { createClient } from "@/utils/supabase/client";
+import { SafetyReportModal } from "@/components/safety/SafetyReportModal";
 
 function formatMsgTime(iso: string) {
   return new Date(iso).toLocaleTimeString("fr-FR", {
@@ -33,6 +34,7 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
   const [showShieldWarning, setShowShieldWarning] = React.useState(false);
   const [error, setError] = React.useState("");
   const [isSending, setIsSending] = React.useState(false);
+  const [showReport, setShowReport] = React.useState(false);
   const bottomRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -156,14 +158,36 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
           </div>
         </div>
 
-        {room.partnerProfileId && (
-          <Link href={`/compatibility/${room.partnerProfileId}`}>
-            <Button variant="outline" size="sm" className="rounded-xl text-xs border-border/80">
-              Voir le diagnostic d&apos;EVA
+        <div className="flex items-center gap-2">
+          {room.partnerUserId && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="rounded-xl text-xs text-destructive"
+              onClick={() => setShowReport(true)}
+            >
+              <Flag className="h-3.5 w-3.5 mr-1" />
+              Signaler
             </Button>
-          </Link>
-        )}
+          )}
+          {room.partnerProfileId && (
+            <Link href={`/compatibility/${room.partnerProfileId}`}>
+              <Button variant="outline" size="sm" className="rounded-xl text-xs border-border/80">
+                Voir le diagnostic d&apos;EVA
+              </Button>
+            </Link>
+          )}
+        </div>
       </div>
+
+      {showReport && (
+        <SafetyReportModal
+          partnerName={room.partnerName}
+          reportedUserId={room.partnerUserId}
+          onClose={() => setShowReport(false)}
+        />
+      )}
 
       <EvaMediator
         partnerName={room.partnerName}

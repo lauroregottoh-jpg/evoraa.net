@@ -52,7 +52,7 @@ export function OnboardingWizard() {
         message={
           step === 1
             ? "Ces premières informations posent la base de votre profil (60%). Elles nous permettent de vérifier la cohérence et l'ancrage spirituel de votre démarche."
-            : "Magnifique. Nous atteignons ici le cœur d'Evoraa (78%). Votre vision du foyer et du mariage est ce qui permettra un vrai discernement conjugal."
+            : "Magnifique. Nous atteignons ici le cœur de KELIA (78%). Votre vision du foyer et du mariage est ce qui permettra un vrai discernement conjugal."
         }
       />
 

@@ -186,8 +186,8 @@ export default function Home() {
             { icon: <BookOpen />, title: "4. Construisez", desc: "Avancez sereinement vers une relation durable et un projet de mariage chrétien." },
           ].map((step, i) => (
             <div key={i} className="step-card group relative p-8 rounded-2xl bg-white border border-border shadow-card hover:shadow-elevated hover:-translate-y-2 transition-all duration-500">
-              <div className="w-14 h-14 rounded-xl bg-secondary border border-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 drop-shadow-sm group-hover:drop-shadow-glow">
-                {React.cloneElement(step.icon as React.ReactElement, { className: "w-6 h-6" })}
+              <div className="w-14 h-14 rounded-xl bg-secondary border border-primary/10 flex items-center justify-center text-primary mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 drop-shadow-sm group-hover:drop-shadow-glow [&>svg]:w-6 [&>svg]:h-6">
+                {step.icon}
               </div>
               <h3 className="font-serif text-xl font-bold text-foreground mb-3">{step.title}</h3>
               <p className="text-muted-foreground text-sm leading-relaxed">{step.desc}</p>
