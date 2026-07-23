@@ -5,6 +5,7 @@ import { createClient } from "@/utils/supabase/server"
 
 export type OnboardingPayload = {
   age: string
+  gender: string
   city: string
   practice: string
   community: string
@@ -55,6 +56,7 @@ export async function saveOnboardingAction(payload: OnboardingPayload) {
   const { error } = await supabase
     .from("profiles")
     .update({
+      gender: payload.gender === "M" ? "M" : "F",
       city: payload.city,
       denomination: payload.community,
       attendance_frequency: attendance,

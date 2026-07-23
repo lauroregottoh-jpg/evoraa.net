@@ -27,6 +27,12 @@ interface CompatibilityCardProps {
 export function CompatibilityCard({ profile, defaultBlurred = true }: CompatibilityCardProps) {
   const [isBlurred, setIsBlurred] = React.useState(profile.isBlurred !== undefined ? profile.isBlurred : defaultBlurred);
 
+  React.useEffect(() => {
+    if (profile.isBlurred !== undefined) {
+      setIsBlurred(profile.isBlurred);
+    }
+  }, [profile.isBlurred]);
+
   return (
     <Card className="rounded-2xl border-border/60 bg-background/90 backdrop-blur-md shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden group">
       

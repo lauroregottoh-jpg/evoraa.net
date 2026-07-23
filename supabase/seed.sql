@@ -17,7 +17,8 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO public.profiles (
   id, user_id, first_name, last_name, gender, birth_date, country, city, 
   denomination, profession, education_level, marital_status, testimony, 
-  is_verified, identity_verified, email_verified, completion_percentage, role, moderation_status
+  is_verified, identity_verified, email_verified, completion_percentage, role, moderation_status,
+  onboarding_status, attendance_frequency, matching_indicators
 )
 VALUES 
   (
@@ -25,41 +26,52 @@ VALUES
     'Équipe', 'Modération EVA', 'M', '1988-05-15', 'France', 'Paris', 
     'Protestant Évangélique', 'Responsable Éthique', 'masters', 'single', 
     'Veiller sur la paix et la sincérité du sanctuaire Evoraa.', 
-    true, true, true, 100, 'admin', 'approved'
+    true, true, true, 100, 'admin', 'approved',
+    'active', 'weekly', '{}'::jsonb
   ),
   (
     '22222222-2222-2222-2222-222222222222', '00000000-0000-0000-0000-000000000002', 
     'Laure', 'Regottoh', 'F', '1996-03-21', 'France', 'Lyon', 
     'Protestant Évangélique', 'Architecte d''intérieur', 'bachelors', 'single', 
     'J''ai découvert une foi personnelle durant mes études universitaires. Aujourd''hui, elle est le pilier d''amour et de paix qui guide chacun de mes choix personnels et professionnels.', 
-    true, true, true, 100, 'member', 'approved'
+    true, true, true, 100, 'member', 'approved',
+    'active', 'weekly',
+    '{"spiritual_practice":"regulier","marriage_vision":"Un engagement sacré fondé sur la prière commune et le soutien mutuel","family_project":"Désir d accueillir des enfants et un foyer hospitalier","communication_style":"dialogue_doux","age_declared":30}'::jsonb
   ),
   (
     '33333333-3333-3333-3333-333333333333', '00000000-0000-0000-0000-000000000003', 
     'Alexandre', 'Dumas', 'M', '1993-08-14', 'France', 'Lyon', 
     'Protestant Évangélique', 'Ingénieur Environnement', 'masters', 'single', 
     'Passionné par la création de Dieu et l''engagement associatif, je cherche à construire un foyer fondé sur l''hospitalité, la prière et la joie quotidienne.', 
-    true, true, true, 94, 'member', 'approved'
+    true, true, true, 94, 'member', 'approved',
+    'active', 'weekly',
+    '{"spiritual_practice":"regulier","marriage_vision":"Un engagement sacré, partenariat fondé sur la prière commune","family_project":"Accueillir des enfants et bâtir un foyer hospitalier","communication_style":"dialogue_doux","age_declared":32}'::jsonb
   ),
   (
     '44444444-4444-4444-4444-444444444444', '00000000-0000-0000-0000-000000000004', 
     'Thomas', 'Bernard', 'M', '1995-11-02', 'France', 'Grenoble', 
     'Baptiste', 'Enseignant', 'masters', 'single', 
     'L''enseignement et le service dans mon église locale sont au cœur de ma vie spirituelle. J''aspire à rencontrer une partenaire de prière authentique.', 
-    true, true, true, 89, 'member', 'approved'
+    true, true, true, 89, 'member', 'approved',
+    'active', 'monthly',
+    '{"spiritual_practice":"cheminement","marriage_vision":"Alliance de soutien et de prière authentique","family_project":"Foyer éducatif et serviable","communication_style":"ecoute_active","age_declared":30}'::jsonb
   ),
   (
     '55555555-5555-5555-5555-555555555555', '00000000-0000-0000-0000-000000000005', 
     'Marc', 'Inconnu', 'M', '1991-01-01', 'France', 'Marseille', 
     'Autre', 'Consultant', 'bachelors', 'single', 
     'Recherche contact rapide whatsapp pour opportunité.', 
-    false, false, true, 45, 'member', 'pending'
+    false, false, true, 45, 'member', 'pending',
+    'step2_profile', 'rarely', '{}'::jsonb
   )
 ON CONFLICT (user_id) DO UPDATE SET
   role = EXCLUDED.role,
   testimony = EXCLUDED.testimony,
   completion_percentage = EXCLUDED.completion_percentage,
-  moderation_status = EXCLUDED.moderation_status;
+  moderation_status = EXCLUDED.moderation_status,
+  onboarding_status = EXCLUDED.onboarding_status,
+  attendance_frequency = EXCLUDED.attendance_frequency,
+  matching_indicators = EXCLUDED.matching_indicators;
 
 -- 3. Insert User Photos (Pending review & Approved)
 INSERT INTO public.user_photos (id, user_id, photo_url, is_primary, status)

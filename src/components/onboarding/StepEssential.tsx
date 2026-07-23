@@ -2,9 +2,8 @@
 
 import * as React from "react";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, MapPin, Calendar, Heart } from "lucide-react";
+import { ArrowRight, MapPin, Calendar, Heart, User } from "lucide-react";
 
 interface StepEssentialProps {
   onNext: (data: any) => void;
@@ -13,13 +12,14 @@ interface StepEssentialProps {
 
 export function StepEssential({ onNext, defaultValues }: StepEssentialProps) {
   const [age, setAge] = React.useState(defaultValues?.age || "28");
+  const [gender, setGender] = React.useState(defaultValues?.gender || "F");
   const [city, setCity] = React.useState(defaultValues?.city || "Paris / Île-de-France");
   const [practice, setPractice] = React.useState(defaultValues?.practice || "regulier");
   const [community, setCommunity] = React.useState(defaultValues?.community || "Protestant Évangélique");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onNext({ age, city, practice, community });
+    onNext({ age, gender, city, practice, community });
   };
 
   return (
@@ -50,6 +50,23 @@ export function StepEssential({ onNext, defaultValues }: StepEssentialProps) {
         </div>
 
         <div className="space-y-2">
+          <label className="text-sm font-medium text-foreground flex items-center gap-2">
+            <User className="h-4 w-4 text-muted-foreground" /> Genre
+          </label>
+          <select
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+            className="w-full h-11 px-3.5 rounded-xl bg-background border border-border/80 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            required
+          >
+            <option value="F">Femme</option>
+            <option value="M">Homme</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="grid gap-6 sm:grid-cols-2 pt-2">
+        <div className="space-y-2 sm:col-span-2">
           <label className="text-sm font-medium text-foreground flex items-center gap-2">
             <MapPin className="h-4 w-4 text-muted-foreground" /> Ville ou Région
           </label>
