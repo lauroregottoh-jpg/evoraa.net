@@ -93,7 +93,10 @@ export async function startCheckoutAction(planId: string): Promise<{
   // Optional live CinetPay initiation
   if (!isDemoPayments()) {
     try {
-      const notifyUrl = `${appBaseUrl()}/api/payments/cinetpay/notify`
+      const secret = process.env.CINETPAY_SECRET_KEY
+      const notifyUrl = secret
+        ? `${appBaseUrl()}/api/payments/cinetpay/notify?token=${encodeURIComponent(secret)}`
+        : `${appBaseUrl()}/api/payments/cinetpay/notify`
       const returnUrl = `${appBaseUrl()}/checkout/success?payment=${payment.id}`
       const cancelUrl = `${appBaseUrl()}/checkout/cancel?payment=${payment.id}`
 

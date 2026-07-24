@@ -209,7 +209,7 @@ export async function uploadProfilePhotoAction(
   await supabase
     .from("profiles")
     .update({
-      avatar_url: publicUrl,
+      // Keep avatar pending moderation — do not publish avatar_url until approved
       updated_at: new Date().toISOString(),
       updated_by: user.id,
     })

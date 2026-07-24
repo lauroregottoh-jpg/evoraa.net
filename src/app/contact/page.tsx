@@ -6,8 +6,12 @@ import { MagneticButton } from "@/components/ui/magnetic-button";
 import { Mail, MessageSquare, ShieldCheck, Send, CheckCircle2, HelpCircle, Phone, MapPin } from "lucide-react";
 import { cn } from "@/utils/cn";
 
+import { submitContactAction } from "@/app/actions/contact";
+
 export default function ContactPage() {
   const [submitted, setSubmitted] = React.useState(false);
+  const [sending, setSending] = React.useState(false);
+  const [error, setError] = React.useState("");
   const [formData, setFormData] = React.useState({
     name: "",
     email: "",
@@ -15,8 +19,16 @@ export default function ContactPage() {
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSending(true);
+    setError("");
+    const result = await submitContactAction(formData);
+    setSending(false);
+    if (result.error) {
+      setError(result.error);
+      return;
+    }
     setSubmitted(true);
   };
 
@@ -65,7 +77,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 className="font-sans text-xs font-bold text-white uppercase tracking-wider">Conseil Pastoral</h4>
-                  <p className="text-sm font-mono text-purple-300 mt-0.5">pasteurs@evoraa.net</p>
+                  <p className="text-sm font-mono text-purple-300 mt-0.5">pasteurs@kelia.net</p>
                   <p className="text-[11px] text-muted-foreground mt-1">Discernement spirituel & mentorat</p>
                 </div>
               </div>
@@ -76,7 +88,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 className="font-sans text-xs font-bold text-white uppercase tracking-wider">Modération & Éthique</h4>
-                  <p className="text-sm font-mono text-emerald-300 mt-0.5">ethique@evoraa.net</p>
+                  <p className="text-sm font-mono text-emerald-300 mt-0.5">ethique@kelia.net</p>
                   <p className="text-[11px] text-muted-foreground mt-1">Signalement confidentiel</p>
                 </div>
               </div>
@@ -169,9 +181,17 @@ export default function ContactPage() {
                   />
                 </div>
 
-                <div className="pt-2">
-                  <MagneticButton type="submit" variant="primary" size="lg" className="w-full">
-                    <span>Envoyer mon message</span>
+                <div className="pt-2 space-y-3">
+                  {error && (
+                    <p className="text-xs text-destructive bg-destructive/10 border border-destructive/30 rounded-xl p-3">
+                      {error}{" "}
+                      <a href="mailto:contact@kelia.net" className="underline">
+                        contact@kelia.net
+                      </a>
+                    </p>
+                  )}
+                  <MagneticButton type="submit" variant="primary" size="lg" className="w-full" disabled={sending}>
+                    <span>{sending ? "Envoi…" : "Envoyer mon message"}</span>
                     <Send className="h-4 w-4 ml-1" />
                   </MagneticButton>
                 </div>

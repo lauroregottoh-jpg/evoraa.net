@@ -80,11 +80,13 @@ export async function registerAction(formData: FormData) {
   }
 
   const supabase = await createClient()
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
 
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
+      emailRedirectTo: `${appUrl}/auth/callback`,
       data: {
         first_name: firstName,
         last_name: lastName || null,

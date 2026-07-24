@@ -76,6 +76,7 @@ export function CinematicFooter() {
           </p>
 
           <div className="flex items-center gap-6">
+            <Link href="/mentions-legales" className="hover:text-foreground transition-colors">Mentions légales</Link>
             <Link href="/confidentialite" className="hover:text-foreground transition-colors">Protection des données</Link>
             <Link href="/cgu" className="hover:text-foreground transition-colors">Conditions générales</Link>
           </div>

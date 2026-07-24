@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { EvaMediator } from "@/components/messages/EvaMediator";
 import { BenevolenceShield, checkBenevolence } from "@/components/messages/BenevolenceShield";
-import { PhotoAccessCard } from "@/components/messages/PhotoAccessCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -30,7 +29,6 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
   const [room, setRoom] = React.useState(initialRoom);
   const [messages, setMessages] = React.useState(initialRoom.messages);
   const [input, setInput] = React.useState("");
-  const [photoStatus, setPhotoStatus] = React.useState<"pending" | "granted" | "postponed">("pending");
   const [showShieldWarning, setShowShieldWarning] = React.useState(false);
   const [error, setError] = React.useState("");
   const [isSending, setIsSending] = React.useState(false);
@@ -197,12 +195,7 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
         }}
       />
 
-      <PhotoAccessCard
-        requesterName={room.partnerName}
-        status={photoStatus}
-        onGrant={() => setPhotoStatus("granted")}
-        onPostpone={() => setPhotoStatus("postponed")}
-      />
+      {/* Photo unlock productisé plus tard — on n’affiche plus un faux succès local */}
 
       <Card className="rounded-2xl border-border/60 bg-background/80 backdrop-blur-md shadow-xs min-h-[320px] max-h-[460px] overflow-y-auto p-5 space-y-4">
         {messages.length === 0 && (

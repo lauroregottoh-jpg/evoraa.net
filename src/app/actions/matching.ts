@@ -187,7 +187,23 @@ export async function getCompatibilitySuggestions(limit?: number): Promise<{
       return !(privacy as Record<string, unknown>).retreat_mode
     })
     .map((row) => mapProfile(row))
-  const ranked = rankMatches(viewer, candidates, suggestionLimit)
+
+  const { data: prefs } = await loaded.supabase
+    .from("user_preferences")
+    .select("age_min, age_max")
+    .eq("user_id", viewer.id)
+    .maybeSingle()
+
+  const ageFiltered = candidates.filter((candidate) => {
+    if (!prefs) return true
+    const age = ageFromProfile(candidate)
+    if (age == null) return true
+    if (prefs.age_min != null && age < prefs.age_min) return false
+    if (prefs.age_max != null && age > prefs.age_max) return false
+    return true
+  })
+
+  const ranked = rankMatches(viewer, ageFiltered, suggestionLimit)
 
   await persistMatches(loaded.supabase, viewer.user_id, ranked)
 
@@ -236,6 +252,16 @@ export async function getCompatibilityDetail(profileId: string): Promise<{
 
   if (error || !data) {
     return { error: "Profil introuvable." }
+  }
+
+  const privacy = data.privacy_settings
+  if (
+    privacy &&
+    typeof privacy === "object" &&
+    !Array.isArray(privacy) &&
+    (privacy as Record<string, unknown>).retreat_mode
+  ) {
+    return { error: "Ce profil est actuellement en mode retraite." }
   }
 
   const candidate = mapProfile(data)

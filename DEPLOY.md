@@ -1,53 +1,82 @@
-# KELIA — Checklist Ops (P0)
+# Ce que VOUS devez faire (humain) — le reste est automatisable dans le code
 
-## 1. Migrations Supabase
+Le code KELIA est prêt côté produit. **Sans les actions ci-dessous, le soft launch reste bloqué** car elles nécessitent vos comptes / secrets / identité légale.
 
-Dans le dossier du projet :
+## Checklist minimale (copier-coller)
 
-```powershell
-# Option A — script existant (nécessite SUPABASE_DB_URL dans .env.local)
-.\run_migration.ps1
+### 1. Compléter `.env.local` (projet local)
 
-# Option B — CLI liée au projet
-npx supabase db push
+```
+NEXT_PUBLIC_SUPABASE_URL=...          # déjà présent
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...     # déjà présent
+NEXT_PUBLIC_APP_URL=https://votre-domaine.com
+SUPABASE_DB_URL=postgresql://postgres:...@db.xxxx.supabase.co:5432/postgres
+SUPABASE_SERVICE_ROLE_KEY=...         # Dashboard Supabase → Settings → API
+PAYMENTS_DEMO_MODE=false              # ou true si soft launch sans paiement réel
+CINETPAY_API_KEY=...
+CINETPAY_SITE_ID=...
+CINETPAY_SECRET_KEY=...
+RESEND_API_KEY=...                    # optionnel mais active le formulaire Contact
+RESEND_FROM_EMAIL=KELIA <noreply@kelia.net>
+CONTACT_INBOX_EMAIL=contact@kelia.net
 ```
 
-Appliquer **toutes** les migrations `20240101000000` → `…008`.
+Puis dans le dossier du projet :
 
-## 2. Realtime
+```powershell
+.\run_migration.ps1
+```
 
-La migration `…008` tente d’ajouter `public.messages` à `supabase_realtime`.  
-Vérifier dans le dashboard Supabase → **Database → Replication** que `messages` est coché.
+### 2. Dashboard Supabase (5 min)
 
-## 3. Auth redirects
+1. **Authentication → URL Configuration**
+   - Site URL = URL prod
+   - Redirect URLs = `https://domaine/auth/callback` + `http://localhost:3000/auth/callback`
+2. **Database → Replication** : cocher `messages`
+3. **Storage** : vérifier bucket `avatars` (public read)
 
-Supabase → Authentication → URL Configuration :
+### 3. Vercel
 
-- Site URL = `https://votre-domaine.com`
-- Redirect URLs :
-  - `https://votre-domaine.com/auth/callback`
-  - `http://localhost:3000/auth/callback`
+1. Importer le repo `evoraa.net`
+2. Coller les mêmes variables (sauf `SUPABASE_DB_URL`)
+3. Deploy
 
-## 4. Vercel
+### 4. CinetPay (si paiements réels)
 
-1. Import du repo `evoraa.net`
-2. Framework : Next.js
-3. Variables d’environnement (Production) :
+Notify URL (déjà construite par le code si `CINETPAY_SECRET_KEY` est défini) :
 
-| Variable | Obligatoire |
-|----------|-------------|
-| `NEXT_PUBLIC_SUPABASE_URL` | oui |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | oui |
-| `NEXT_PUBLIC_APP_URL` | oui (URL Vercel) |
-| `SUPABASE_SERVICE_ROLE_KEY` | oui (webhook) |
-| `PAYMENTS_DEMO_MODE` | `false` |
-| `CINETPAY_API_KEY` | oui prod |
-| `CINETPAY_SITE_ID` | oui prod |
-| `CINETPAY_SECRET_KEY` | oui (auth webhook) |
-| `RESEND_API_KEY` | optionnel |
+`https://domaine/api/payments/cinetpay/notify?token=VOTRE_CINETPAY_SECRET_KEY`
 
-4. Deploy → tester `/login`, `/pricing`, `/messages`
+### 5. Domaine DNS
 
-## 5. Storage photos
+Pointer le domaine vers Vercel (registrar).
 
-Bucket `avatars` (créé en SQL). Vérifier qu’il existe et est public en lecture.
+### 6. Mentions légales
+
+Remplir raison sociale / SIREN / siège dans `/mentions-legales` (placeholders `[À compléter]`).
+
+---
+
+## Ce que l’agent a déjà automatisé dans le code
+
+- Auth, matching, messaging, billing, reports, photos, settings, admin live
+- Dashboard réel (plus de faux “Laure”)
+- Contact honnête (Resend ou message d’erreur, pas faux succès)
+- Webhook CinetPay sécurisé + `notify_url` avec token
+- CGU / confidentialité / mentions légales (brouillon)
+- Migrations SQL `000`→`008` prêtes à appliquer
+- CI GitHub Actions
+
+## Ce que l’agent NE PEUT PAS faire sans vous
+
+| Action | Pourquoi |
+|--------|----------|
+| Créer / coller service role, DB password, CinetPay, Resend | Secrets — sécurité |
+| Appliquer migrations sans `SUPABASE_DB_URL` | Accès DB |
+| Configurer Auth redirects Supabase | Dashboard propriétaire |
+| Créer projet Vercel + coller env | Compte Vercel |
+| DNS domaine | Registrar |
+| Remplir SIREN / société | Identité légale réelle |
+| Activer Realtime dans le dashboard | Vérification propriétaire |
+
+Dès que `.env.local` contient `SUPABASE_DB_URL` + service role, redemandez : **« applique migrations + deploy »** — l’agent peut enchaîner.

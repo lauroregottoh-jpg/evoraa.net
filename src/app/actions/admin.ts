@@ -134,12 +134,32 @@ export async function adminModeratePhoto(photoId: string, status: "approved" | "
   const gate = await requireAdmin()
   if (gate.error || !gate.supabase) return { error: gate.error }
 
+  const { data: photo, error: fetchError } = await gate.supabase
+    .from("user_photos")
+    .select("id, profile_id, photo_url, is_primary")
+    .eq("id", photoId)
+    .maybeSingle()
+
+  if (fetchError || !photo) return { error: fetchError?.message || "Photo introuvable" }
+
   const { error } = await gate.supabase
     .from("user_photos")
     .update({ status })
     .eq("id", photoId)
 
   if (error) return { error: error.message }
+
+  if (status === "approved" && photo.is_primary) {
+    await gate.supabase
+      .from("profiles")
+      .update({
+        avatar_url: photo.photo_url,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", photo.profile_id)
+  }
+
   revalidatePath("/admin")
+  revalidatePath("/profile")
   return { success: true }
 }
