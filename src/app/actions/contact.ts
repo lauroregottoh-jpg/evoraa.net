@@ -4,7 +4,8 @@ import { sendEmailNotificationStub } from "@/app/actions/notifications"
 
 const SUBJECT_LABELS: Record<string, string> = {
   question: "Question générale",
-  pastoral: "Conseil pastoral",
+  coaching: "Conseil / coaching",
+  pastoral: "Conseil / coaching",
   report: "Signalement / éthique",
   billing: "Abonnement / paiement",
   other: "Autre",
@@ -32,7 +33,7 @@ export async function submitContactAction(payload: {
   }
 
   const subjectLabel = SUBJECT_LABELS[subjectCode] || subjectCode
-  const to = process.env.CONTACT_INBOX_EMAIL || "contact@kelia.net"
+  const to = process.env.CONTACT_INBOX_EMAIL || "contact@keliaa.net"
   const html = `
     <p><strong>De :</strong> ${name} &lt;${email}&gt;</p>
     <p><strong>Sujet :</strong> ${subjectLabel}</p>
@@ -41,7 +42,7 @@ export async function submitContactAction(payload: {
 
   const result = await sendEmailNotificationStub({
     to,
-    subject: `[KELIA Contact] ${subjectLabel} — ${name}`,
+    subject: `[KELIAA Contact] ${subjectLabel} — ${name}`,
     html,
   })
 
@@ -49,7 +50,7 @@ export async function submitContactAction(payload: {
     // Honest fallback: no fake success — ask user to email directly
     return {
       error:
-        "L’envoi automatique n’est pas encore configuré. Écrivez-nous à contact@kelia.net avec votre message.",
+        "L’envoi automatique n’est pas encore configuré. Écrivez-nous à contact@keliaa.net avec votre message.",
     }
   }
 

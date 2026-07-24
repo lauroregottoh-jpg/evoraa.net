@@ -15,12 +15,12 @@ interface QAPair {
 const PREDEFINED_TOPICS: QAPair[] = [
   {
     question: "Quand et comment aborder la question des finances dans le couple ?",
-    answer: "Sur Evoraa, nous conseillons d'aborder la question de la gestion matérielle dès que le discernement s'oriente vers un projet de fiançailles. Parlez-en non pas sous l'angle de l'avoir, mais sous l'angle de l'intendance chrétienne et de la générosité.",
+    answer: "Sur KELIAA, nous conseillons d'aborder la question de la gestion matérielle dès que le discernement s'oriente vers un projet de fiançailles. Parlez-en non pas sous l'angle de l'avoir, mais sous l'angle de l'intendance chrétienne et de la générosité.",
     verse: "« Là où est votre trésor, là aussi sera votre cœur. » (Matthieu 6:21)",
   },
   {
     question: "Comment cultiver la paix intérieure pendant la période d'attente ?",
-    answer: "L'attente n'est pas un temps vide, c'est un temps de préparation pastorale où Dieu affermit notre identité en Lui. Profitez de cette saison pour servir dans votre église locale et grandir dans l'amour désintéressé.",
+    answer: "L'attente n'est pas un temps vide, c'est un temps de préparation où Dieu affermit notre identité en Lui. Profitez de cette saison pour servir dans votre église locale et grandir dans l'amour désintéressé.",
     verse: "« C'est dans le calme et la confiance que sera votre force. » (Ésaïe 30:15)",
   },
   {
@@ -43,7 +43,7 @@ export function EvaSpiritualAdvisor() {
     setTimeout(() => {
       const newAnswer: QAPair = {
         question: customQuestion,
-        answer: `Merci de me confier cette réflexion. Sur cette question fondamentale, la sagesse d'Evoraa vous encourage à rechercher d'abord l'unité d'intention et à avancer pas à pas, dans la prière et avec le conseil d'aînés dans la foi.`,
+        answer: `Merci de me confier cette réflexion. Sur cette question fondamentale, la sagesse de KELIAA vous encourage à rechercher d'abord l'unité d'intention et à avancer pas à pas, dans la prière et avec le conseil d'aînés dans la foi.`,
         verse: "« La sagesse d'en haut est d'abord pure, ensuite pacifique, modérée, conciliante. » (Jacques 3:17)",
       };
       setSelectedTopic(newAnswer);

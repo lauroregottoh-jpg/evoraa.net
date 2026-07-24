@@ -3,10 +3,12 @@
 import * as React from "react";
 import Image from "next/image";
 import { CinematicLayout } from "@/components/layout/CinematicLayout";
-import { ExpertiseEncart } from "@/components/marketing/ExpertiseEncart";
+import { PageHero } from "@/components/marketing/PageHero";
+import { EvaSpiritualAdvisor } from "@/components/spiritual/EvaSpiritualAdvisor";
 import { MagneticButton } from "@/components/ui/magnetic-button";
-import { Mail, MessageSquare, ShieldCheck, Send, CheckCircle2 } from "lucide-react";
+import { Mail, MessageSquare, ShieldCheck, Send, CheckCircle2, Headphones } from "lucide-react";
 import { submitContactAction } from "@/app/actions/contact";
+import { HeroBackground3D } from "@/components/home/HeroBackground3D";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = React.useState(false);
@@ -34,34 +36,48 @@ export default function ContactPage() {
 
   return (
     <CinematicLayout>
-      <section className="relative pt-36 pb-12 px-6 sm:px-12 lg:px-20 max-w-4xl mx-auto text-center space-y-6">
-        <span className="inline-block text-xs uppercase tracking-[0.2em] px-4 py-1.5 rounded-full bg-secondary text-primary border border-border font-semibold">
-          Équipe & support
-        </span>
-        <h1 className="font-serif text-4xl sm:text-6xl font-bold tracking-tight text-foreground leading-tight">
-          Nous sommes là pour{" "}
-          <span className="italic font-normal text-primary">vous écouter.</span>
-        </h1>
-        <p className="font-sans text-base sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Question plateforme, conseil pastoral ou signalement : réponse sous 24&nbsp;h, avec bienveillance.
-        </p>
-      </section>
+      <div className="relative">
+        <div className="pointer-events-none absolute inset-0 opacity-30 z-0 overflow-hidden h-[200px]">
+          <HeroBackground3D />
+        </div>
 
-      <ExpertiseEncart
-        className="max-w-7xl mx-auto mb-12"
-        eyebrow="Présence humaine"
-        title="Une équipe qui veille sur la dignité des échanges."
-        body="Support, éthique et accompagnement pastoral travaillent ensemble pour que chaque membre se sente en sécurité sur KELIA."
-        imageSrc="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1600&auto=format&fit=crop"
-        imageAlt="Communauté en conversation"
+        {/* 1. Réponse immédiate — tout en haut */}
+        <section className="relative z-10 pt-28 pb-8 px-6 text-center space-y-5">
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-foreground">
+            Besoin d&apos;une réponse immédiate ?
+          </h2>
+          <p className="text-sm text-muted-foreground max-w-lg mx-auto">
+            Consultez nos FAQ ou écrivez-nous — notre équipe de coachs et de conseillers vous répond
+            sous 24&nbsp;h.
+          </p>
+          <div className="flex justify-center gap-3 flex-wrap">
+            <MagneticButton href="/how-it-works" variant="secondary" size="md">
+              FAQ Fonctionnement
+            </MagneticButton>
+            <MagneticButton href="/pricing" variant="secondary" size="md">
+              FAQ Tarifs
+            </MagneticButton>
+          </div>
+        </section>
+      </div>
+
+      {/* 2. Header */}
+      <PageHero
+        eyebrow="Contact"
+        title="Nous sommes là pour"
+        highlight="vous écouter."
+        subtitle="Question plateforme, conseil relationnel ou signalement : une équipe humaine et bienveillante."
+        imageSrc="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=2000&auto=format&fit=crop"
+        imageAlt="Équipe à l'écoute"
       />
 
-      <section className="py-12 px-6 sm:px-12 lg:px-20 max-w-6xl mx-auto">
+      {/* 3. Encart contact + formulaire */}
+      <section className="py-16 px-6 sm:px-12 lg:px-20 max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           <div className="lg:col-span-5 space-y-8 p-8 sm:p-10 rounded-lg border border-border bg-primary text-primary-foreground shadow-elevated">
             <h3 className="font-serif text-2xl font-bold">Canaux de contact</h3>
             <p className="text-sm text-primary-foreground/80 leading-relaxed">
-              Échanges humains et attentionnés — formulaire ou e-mail direct.
+              Échanges humains avec nos coachs et conseillers — formulaire ou e-mail direct.
             </p>
 
             <div className="space-y-6 pt-2">
@@ -71,18 +87,20 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 className="text-xs font-bold uppercase tracking-wider">Support</h4>
-                  <p className="text-sm mt-0.5 text-accent">contact@kelia.net</p>
+                  <p className="text-sm mt-0.5 text-accent">contact@keliaa.net</p>
                   <p className="text-[11px] text-primary-foreground/70 mt-1">Technique & abonnements</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
                 <div className="p-3 rounded-md bg-white/10 text-accent shrink-0">
-                  <MessageSquare className="h-5 w-5" />
+                  <Headphones className="h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider">Conseil pastoral</h4>
-                  <p className="text-sm mt-0.5 text-accent">pasteurs@kelia.net</p>
-                  <p className="text-[11px] text-primary-foreground/70 mt-1">Discernement & mentorat</p>
+                  <h4 className="text-xs font-bold uppercase tracking-wider">Coachs & conseillers</h4>
+                  <p className="text-sm mt-0.5 text-accent">conseil@keliaa.net</p>
+                  <p className="text-[11px] text-primary-foreground/70 mt-1">
+                    Accompagnement relationnel & discernement
+                  </p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
@@ -91,7 +109,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 className="text-xs font-bold uppercase tracking-wider">Éthique</h4>
-                  <p className="text-sm mt-0.5 text-accent">ethique@kelia.net</p>
+                  <p className="text-sm mt-0.5 text-accent">ethique@keliaa.net</p>
                   <p className="text-[11px] text-primary-foreground/70 mt-1">Signalement confidentiel</p>
                 </div>
               </div>
@@ -132,7 +150,9 @@ export default function ContactPage() {
               <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
                 <div>
                   <h3 className="font-serif text-2xl font-bold text-foreground">Écrivez-nous</h3>
-                  <p className="text-xs text-muted-foreground mt-1">Tous les champs sont utiles pour vous répondre précisément.</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Tous les champs sont utiles pour vous répondre précisément.
+                  </p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
@@ -164,7 +184,7 @@ export default function ContactPage() {
                     className="w-full px-4 py-3 rounded-md bg-background border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                   >
                     <option value="question">Fonctionnement</option>
-                    <option value="pastoral">Conseil pastoral</option>
+                    <option value="coaching">Conseil / coaching</option>
                     <option value="billing">Abonnements</option>
                     <option value="report">Éthique / signalement</option>
                   </select>
@@ -194,18 +214,30 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section className="py-16 px-6 text-center space-y-6">
-        <h3 className="font-serif text-2xl sm:text-3xl font-bold text-foreground">
-          Besoin d&apos;une réponse immédiate ?
-        </h3>
-        <div className="flex justify-center gap-4 flex-wrap">
-          <MagneticButton href="/how-it-works" variant="secondary" size="md">
-            FAQ Fonctionnement
-          </MagneticButton>
-          <MagneticButton href="/pricing" variant="secondary" size="md">
-            FAQ Tarifs
-          </MagneticButton>
+      {/* 4. EVA */}
+      <section className="py-12 px-6 sm:px-12 lg:px-20 max-w-4xl mx-auto space-y-6">
+        <div className="text-center space-y-2">
+          <span className="text-xs font-semibold uppercase tracking-widest text-primary">EVA</span>
+          <h2 className="font-serif text-3xl font-bold text-foreground">
+            Conseils & réponses rapides
+          </h2>
+          <p className="text-sm text-muted-foreground max-w-xl mx-auto">
+            Pour une orientation immédiate sur le discernement et la vie de couple chrétien.
+          </p>
         </div>
+        <EvaSpiritualAdvisor />
+      </section>
+
+      {/* 5. Rappel contact humain */}
+      <section className="py-16 px-6 text-center space-y-4 max-w-2xl mx-auto">
+        <MessageSquare className="h-8 w-8 text-accent mx-auto" />
+        <h3 className="font-serif text-2xl font-bold text-foreground">
+          Préférez un échange humain ?
+        </h3>
+        <p className="text-sm text-muted-foreground">
+          Utilisez le formulaire ci-dessus : notre équipe de coachs et de conseillers vous répond
+          personnellement, avec bienveillance et discrétion.
+        </p>
       </section>
     </CinematicLayout>
   );

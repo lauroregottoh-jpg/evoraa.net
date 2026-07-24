@@ -87,7 +87,7 @@ export async function sendEmailNotificationStub(input: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: process.env.RESEND_FROM_EMAIL || "KELIA <noreply@kelia.net>",
+        from: process.env.RESEND_FROM_EMAIL || "KELIAA <noreply@keliaa.net>",
         to: [input.to],
         subject: input.subject,
         html: input.html,

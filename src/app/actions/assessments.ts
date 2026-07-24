@@ -164,7 +164,7 @@ export async function submitAssessmentAction(
     title: `Questionnaire « ${bank.name} » terminé`,
     body: `Score : ${scored.normalized}%. ${
       completedCount >= 3
-        ? "Vous pouvez accéder pleinement aux suggestions KELIA."
+        ? "Vous pouvez accéder pleinement aux suggestions KELIAA."
         : "Continuez les questionnaires restants."
     }`,
   })

@@ -94,7 +94,7 @@ export function AdminConsole(props: Props) {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border/40 pb-6">
         <div className="space-y-1.5">
           <h1 className="text-3xl font-serif font-bold text-foreground">
-            Quartier Général KELIA
+            Quartier Général KELIAA
           </h1>
           <p className="text-sm text-muted-foreground">
             Données réelles Supabase — modération, revenus et santé plateforme.

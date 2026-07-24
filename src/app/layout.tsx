@@ -17,7 +17,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "KELIA | Rencontres Chrétiennes",
+  title: "KELIAA | Rencontres Chrétiennes",
   description:
     "Plateforme de rencontres chrétiennes pour les célibataires qui souhaitent construire un mariage selon les standards bibliques.",
 };

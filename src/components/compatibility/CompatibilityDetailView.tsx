@@ -168,7 +168,7 @@ export function CompatibilityDetailView({
         <EvaCompanion
           title="EVA - Protection"
           variant="reflection"
-          message={`Les échanges avec ${profile.name} restent soumis à la Charte KELIA.`}
+          message={`Les échanges avec ${profile.name} restent soumis à la Charte KELIAA.`}
         />
       </div>
     </MainLayout>

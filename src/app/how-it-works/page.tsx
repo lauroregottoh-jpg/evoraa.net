@@ -1,9 +1,12 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { CinematicLayout } from "@/components/layout/CinematicLayout";
+import { PageHero } from "@/components/marketing/PageHero";
 import { ExpertiseEncart } from "@/components/marketing/ExpertiseEncart";
 import { MagneticButton } from "@/components/ui/magnetic-button";
+import { HeroBackground3D } from "@/components/home/HeroBackground3D";
 import {
   Sparkles,
   ShieldCheck,
@@ -26,9 +29,10 @@ export default function HowItWorksPage() {
       step: "01",
       title: "Créez votre compte",
       subtitle: "L'entrée dans la communauté",
-      desc: "La création d'un compte ne prend que quelques minutes. Vous renseignez vos informations essentielles, confirmez votre adresse e-mail et acceptez la Charte de Respect et de Bienveillance de KELIA. Cette charte constitue le socle de notre communauté. Elle rappelle les comportements attendus et contribue à créer un environnement respectueux pour tous.",
+      desc: "La création d'un compte ne prend que quelques minutes. Vous renseignez vos informations essentielles, confirmez votre adresse e-mail et acceptez la Charte de Respect et de Bienveillance de KELIAA. Cette charte constitue le socle de notre communauté. Elle rappelle les comportements attendus et contribue à créer un environnement respectueux pour tous.",
       highlights: ["Inscription rapide en quelques minutes", "Confirmation par e-mail", "Acceptation de la Charte de Respect"],
       icon: <ShieldCheck className="h-6 w-6 text-primary" />,
+      image: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?q=80&w=800&auto=format&fit=crop",
     },
     {
       step: "02",
@@ -37,22 +41,25 @@ export default function HowItWorksPage() {
       desc: "Votre profil est conçu pour permettre aux autres membres de mieux comprendre qui vous êtes. Vous pourrez notamment partager votre présentation, votre parcours de foi, votre situation personnelle, votre vision du mariage, vos centres d'intérêt, vos passions, vos projets de vie et vos attentes relationnelles. Vous choisissez les informations que vous souhaitez rendre visibles afin de préserver votre confidentialité.",
       highlights: ["Partage de votre parcours de foi", "Vision du mariage et projets", "Contrôle de votre confidentialité"],
       icon: <BookOpen className="h-6 w-6 text-accent" />,
+      image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=800&auto=format&fit=crop",
     },
     {
       step: "03",
       title: "Répondez aux questionnaires",
       subtitle: "Une compatibilité évaluée en profondeur",
-      desc: "Chez KELIA, nous pensons qu'une compatibilité ne peut pas être évaluée uniquement à partir d'une photo ou de quelques critères. C'est pourquoi nous vous invitons à compléter plusieurs questionnaires spécialement conçus pour mieux comprendre votre manière de fonctionner. Ils explorent notamment votre personnalité, votre façon de communiquer, votre manière de gérer les désaccords, vos valeurs, votre vision du couple et du mariage, votre maturité relationnelle, vos projets de vie et votre pratique de la foi.",
+      desc: "Chez KELIAA, nous pensons qu'une compatibilité ne peut pas être évaluée uniquement à partir d'une photo ou de quelques critères. C'est pourquoi nous vous invitons à compléter plusieurs questionnaires spécialement conçus pour mieux comprendre votre manière de fonctionner. Ils explorent notamment votre personnalité, votre façon de communiquer, votre manière de gérer les désaccords, vos valeurs, votre vision du couple et du mariage, votre maturité relationnelle, vos projets de vie et votre pratique de la foi.",
       highlights: ["Personnalité et communication", "Valeurs, couple et mariage", "Maturité relationnelle et foi"],
       icon: <Sparkles className="h-6 w-6 text-primary" />,
+      image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=800&auto=format&fit=crop",
     },
     {
       step: "04",
       title: "Découvrez vos compatibilités",
       subtitle: "Des recommandations cohérentes",
-      desc: "Une fois votre profil complété, KELIA vous propose progressivement des personnes qui présentent des compatibilités avec votre profil. Nos recommandations ne reposent pas uniquement sur des critères visibles. Elles prennent en compte l'ensemble des informations que vous avez choisies de partager afin de favoriser des rencontres plus cohérentes. Pour chaque profil recommandé, vous pourrez découvrir les principaux points de compatibilité qui vous rapprochent.",
+      desc: "Une fois votre profil complété, KELIAA vous propose progressivement des personnes qui présentent des compatibilités avec votre profil. Nos recommandations ne reposent pas uniquement sur des critères visibles. Elles prennent en compte l'ensemble des informations que vous avez choisies de partager afin de favoriser des rencontres plus cohérentes. Pour chaque profil recommandé, vous pourrez découvrir les principaux points de compatibilité qui vous rapprochent.",
       highlights: ["Recommandations progressives", "Au-delà des critères visibles", "Points de compatibilité détaillés"],
       icon: <Heart className="h-6 w-6 text-accent" />,
+      image: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=800&auto=format&fit=crop",
     },
     {
       step: "05",
@@ -61,6 +68,7 @@ export default function HowItWorksPage() {
       desc: "Lorsqu'une personne retient votre attention, vous pouvez commencer à échanger. Les conversations se déroulent dans un environnement conçu pour favoriser des échanges respectueux et authentiques. Notre objectif est de permettre à chacun de prendre le temps de découvrir l'autre, sans pression et dans un climat de confiance.",
       highlights: ["Environnement sécurisé", "Échanges sans pression", "Climat de confiance"],
       icon: <UserCheck className="h-6 w-6 text-primary" />,
+      image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=800&auto=format&fit=crop",
     },
   ];
 
@@ -78,33 +86,30 @@ export default function HowItWorksPage() {
       a: "Non. Certaines informations servent uniquement à améliorer les recommandations et ne sont jamais affichées publiquement.",
     },
     {
-      q: "Pourquoi KELIA demande-t-elle autant d'informations ?",
+      q: "Pourquoi KELIAA demande-t-elle autant d'informations ?",
       a: "Parce qu'une relation appelée à durer mérite d'être construite sur une connaissance plus profonde qu'une simple photo ou quelques centres d'intérêt. Notre objectif est de vous proposer des rencontres de qualité, fondées sur une meilleure compréhension de chaque personne.",
     },
     {
-      q: "Puis-je quitter KELIA à tout moment ?",
+      q: "Puis-je quitter KELIAA à tout moment ?",
       a: "Oui. Vous pouvez suspendre ou supprimer votre compte lorsque vous le souhaitez, conformément à notre politique de confidentialité.",
     },
   ];
 
   return (
     <CinematicLayout>
-      {/* HERO SECTION */}
-      <section className="relative pt-40 pb-20 px-6 sm:px-12 lg:px-20 max-w-5xl mx-auto text-center space-y-6">
-        <span className="inline-block text-xs font-sans uppercase tracking-widest px-4 py-1.5 rounded-full bg-secondary text-primary font-semibold border border-border">
-          Le Parcours KELIA
-        </span>
-        <h1 className="font-serif text-4xl sm:text-6xl font-bold tracking-tight text-foreground leading-tight">
-          Comment fonctionne <br />
-          <span className="italic font-normal text-primary">KELIA ?</span>
-        </h1>
-        <p className="font-sans text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed pt-2">
-          Trouver LA bonne personne commence par une meilleure compréhension de soi. Chez KELIA, nous croyons qu&apos;une rencontre qui peut conduire à un mariage mérite davantage qu&apos;un simple &quot;match&quot;.
-        </p>
-        <p className="font-sans text-sm text-muted-foreground/80 max-w-2xl mx-auto leading-relaxed">
-          C&apos;est pourquoi nous avons conçu une expérience qui place la foi, les valeurs, la personnalité et le projet de vie au cœur de chaque étape. Notre objectif n&apos;est pas de multiplier les rencontres, mais de vous aider à rencontrer LA personne avec laquelle vous pourrez construire une relation durable.
-        </p>
-      </section>
+      <div className="relative">
+        <div className="pointer-events-none absolute inset-0 opacity-25 overflow-hidden h-40 z-10">
+          <HeroBackground3D />
+        </div>
+        <PageHero
+          eyebrow="Le parcours KELIAA"
+          title="Comment fonctionne"
+          highlight="KELIAA ?"
+          subtitle="Trouver L'âme sœur commence par une meilleure compréhension de soi. Foi, valeurs et projet de vie au cœur de chaque étape — pas un simple match."
+          imageSrc="https://images.unsplash.com/photo-1511285560929-80b456fe3b4f?q=80&w=2000&auto=format&fit=crop"
+          imageAlt="Parcours de rencontre chrétienne"
+        />
+      </div>
 
       <ExpertiseEncart
         className="max-w-7xl mx-auto mb-8"
@@ -133,7 +138,10 @@ export default function HowItWorksPage() {
               key={idx}
               className="p-8 sm:p-12 rounded-lg bg-white border border-border shadow-card grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
             >
-              <div className="lg:col-span-4 space-y-3">
+              <div className="lg:col-span-4 space-y-4">
+                <div className="relative h-40 w-full rounded-xl overflow-hidden border border-border">
+                  <Image src={item.image} alt="" fill className="object-cover" sizes="320px" />
+                </div>
                 <div className="flex items-center gap-3">
                   <span className="font-serif text-5xl font-bold text-muted-foreground/30">{item.step}</span>
                   <div className="p-3 rounded-xl bg-secondary border border-border">
@@ -259,7 +267,7 @@ export default function HowItWorksPage() {
         <div className="p-10 rounded-lg bg-secondary/40 border border-border space-y-4 text-center">
           <h3 className="font-serif text-2xl font-bold text-foreground">Une expérience qui évolue avec vous</h3>
           <p className="text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
-            Votre profil n&apos;est jamais figé. Au fil du temps, vous pourrez le compléter, le mettre à jour et enrichir les informations que vous souhaitez partager. Cette évolution permet à KELIA d&apos;améliorer progressivement la pertinence de vos recommandations.
+            Votre profil n&apos;est jamais figé. Au fil du temps, vous pourrez le compléter, le mettre à jour et enrichir les informations que vous souhaitez partager. Cette évolution permet à KELIAA d&apos;améliorer progressivement la pertinence de vos recommandations.
           </p>
         </div>
       </section>

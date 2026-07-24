@@ -21,7 +21,7 @@ export default function BlogReadingPage() {
     category: "Discernement & Sagesse",
     readTime: "6 min de lecture",
     date: "18 Juillet 2026",
-    author: "Équipe Pastorale KELIA",
+    author: "Équipe Pastorale KELIAA",
     image: "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&w=1600&q=80",
     content: `
       <p class="lead">Au-delà des émotions passagères et de l'attraction physique initiale, la Parole de Dieu nous offre des repères clairs et éternels pour discerner la personne avec qui construire une alliance conjugale.</p>
@@ -102,7 +102,7 @@ export default function BlogReadingPage() {
             Vivez cette promesse dans votre propre parcours.
           </h3>
           <p className="text-sm text-muted-foreground max-w-xl mx-auto leading-relaxed">
-            Sur KELIA, chaque questionnaire, chaque échange et chaque révélation de photo est pensé pour honorer ces principes bibliques fondamentaux.
+            Sur KELIAA, chaque questionnaire, chaque échange et chaque révélation de photo est pensé pour honorer ces principes bibliques fondamentaux.
           </p>
           <div className="pt-2">
             <MagneticButton href="/register" variant="primary" size="lg">

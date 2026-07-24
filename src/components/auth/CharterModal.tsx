@@ -30,7 +30,7 @@ export function CharterModal({ onAccept, isAccepted, className }: CharterModalPr
           <span className="text-xs uppercase tracking-widest font-sans font-semibold">Plateforme Éthique</span>
         </div>
         <CardTitle className="font-serif text-2xl text-foreground">
-          La Charte de Bienveillance & Dignité de KELIA
+          La Charte de Bienveillance & Dignité de KELIAA
         </CardTitle>
         <CardDescription className="text-sm text-muted-foreground leading-relaxed">
           Avant d&apos;entrer, chaque membre s&apos;engage solennellement à préserver cet espace de discernement chrétien.
@@ -66,7 +66,7 @@ export function CharterModal({ onAccept, isAccepted, className }: CharterModalPr
               <span>3. Discernement & Sincérité</span>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              KELIA n&apos;est pas un espace de collection de matches, mais de discernement sérieux en vue d&apos;un projet de vie conjugal.
+              KELIAA n&apos;est pas un espace de collection de matches, mais de discernement sérieux en vue d&apos;un projet de vie conjugal.
             </p>
           </div>
 
@@ -92,7 +92,7 @@ export function CharterModal({ onAccept, isAccepted, className }: CharterModalPr
             className="rounded-md border-accent text-accent data-[state=checked]:bg-accent"
           />
           <label htmlFor="accept-charter" className="text-sm font-medium text-foreground cursor-pointer select-none">
-            Je donne ma parole et j&apos;accepte les 4 piliers de la Charte de KELIA.
+            Je donne ma parole et j&apos;accepte les 4 piliers de la Charte de KELIAA.
           </label>
         </div>
 

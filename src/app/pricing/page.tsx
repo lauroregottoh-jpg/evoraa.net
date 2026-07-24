@@ -4,8 +4,11 @@ import * as React from "react";
 import { CinematicLayout } from "@/components/layout/CinematicLayout";
 import { CheckoutPlanButton } from "@/components/billing/CheckoutPlanButton";
 import { ExpertiseEncart } from "@/components/marketing/ExpertiseEncart";
+import { PageHero } from "@/components/marketing/PageHero";
 import { MagneticButton } from "@/components/ui/magnetic-button";
+import { HeroBackground3D } from "@/components/home/HeroBackground3D";
 import { CheckCircle2, ChevronDown, Sparkles } from "lucide-react";
+import Image from "next/image";
 import { cn } from "@/utils/cn";
 import { PLANS, type PlanId } from "@/lib/billing/plans";
 
@@ -41,7 +44,7 @@ export default function PricingPage() {
       a: "Mobile Money via CinetPay (Tmoney, Flooz, Wave selon les pays). Les tarifs sont affichés clairement avant validation."
     },
     {
-      q: "Est-il vraiment possible d'utiliser KELIA gratuitement ?",
+      q: "Est-il vraiment possible d'utiliser KELIAA gratuitement ?",
       a: "Oui. L'offre Découverte permet de créer votre profil, compléter l'accueil et recevoir 3 suggestions / jour, avec 5 messages par conversation."
     },
     {
@@ -56,17 +59,32 @@ export default function PricingPage() {
 
   return (
     <CinematicLayout>
-      <section className="relative pt-40 pb-24 px-6 sm:px-12 lg:px-20 max-w-5xl mx-auto text-center space-y-6">
-        <span className="inline-block text-xs font-sans uppercase tracking-widest px-4 py-1.5 rounded-full bg-secondary text-primary font-semibold border border-border">
-          Nos Offres
-        </span>
-        <h1 className="font-serif text-4xl sm:text-6xl font-bold tracking-tight text-foreground leading-tight">
-          Un investissement dans une <br />
-          <span className="italic font-normal text-primary">rencontre sérieuse.</span>
-        </h1>
-        <p className="font-sans text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed pt-4">
-          Trouver la bonne personne est l&apos;une des décisions les plus importantes d&apos;une vie. Choisissez le niveau d&apos;accompagnement qui vous correspond.
-        </p>
+      <div className="relative">
+        <div className="pointer-events-none absolute inset-0 opacity-25 overflow-hidden h-40 z-10">
+          <HeroBackground3D />
+        </div>
+        <PageHero
+          eyebrow="Tarifs"
+          title="Un investissement dans une"
+          highlight="rencontre sérieuse."
+          subtitle="Trouver L'âme sœur est l'une des décisions les plus importantes d'une vie. Choisissez le niveau d'accompagnement qui vous correspond."
+          imageSrc="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=2000&auto=format&fit=crop"
+          imageAlt="Engagement et alliance"
+        />
+      </div>
+
+      <section className="py-10 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-4">
+          {[
+            "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=600&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=600&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=600&auto=format&fit=crop",
+          ].map((src) => (
+            <div key={src} className="relative h-36 rounded-xl overflow-hidden border border-border">
+              <Image src={src} alt="" fill className="object-cover" sizes="400px" />
+            </div>
+          ))}
+        </div>
       </section>
 
       <ExpertiseEncart
@@ -208,7 +226,7 @@ export default function PricingPage() {
           Bien plus qu&apos;un abonnement.
         </h2>
         <p className="text-muted-foreground text-base max-w-xl mx-auto">
-          En choisissant KELIA, vous rejoignez des célibataires chrétiens qui veulent construire un mariage solide — pas accumuler des matches.
+          En choisissant KELIAA, vous rejoignez des célibataires chrétiens qui veulent construire un mariage solide — pas accumuler des matches.
         </p>
         <MagneticButton href="/register" variant="primary" size="lg">
           Créer mon compte gratuit

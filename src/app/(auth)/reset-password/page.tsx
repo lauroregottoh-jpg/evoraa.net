@@ -35,7 +35,7 @@ export default function ResetPasswordPage() {
           <CardHeader className="text-center space-y-2">
             <CardTitle className="font-serif text-3xl">Nouveau mot de passe</CardTitle>
             <CardDescription>
-              Choisissez un mot de passe robuste pour sécuriser votre espace KELIA.
+              Choisissez un mot de passe robuste pour sécuriser votre espace KELIAA.
             </CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>

@@ -9,7 +9,7 @@ const REASON_LABELS: Record<string, string> = {
   authenticite_suspecte: "Doute sur la véracité du profil ou des photos",
   sollicitation_commerciale:
     "Sollicitation commerciale ou demande financière suspecte",
-  pression_externe: "Pression insistante pour échanger hors de KELIA",
+  pression_externe: "Pression insistante pour échanger hors de KELIAA",
 }
 
 export async function submitSafetyReportAction(payload: {

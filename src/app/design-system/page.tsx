@@ -35,11 +35,11 @@ export default function DesignSystemShowcasePage() {
           </p>
         </div>
 
-        {/* 1. KELIA / EVA Companion Component Showcase */}
+        {/* 1. KELIAA / EVA Companion Component Showcase */}
         <section className="space-y-6">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <h2 className="text-2xl font-serif font-semibold">1. L&apos;Accompagnatrice (EVA / KELIA)</h2>
+              <h2 className="text-2xl font-serif font-semibold">1. L&apos;Accompagnatrice (EVA / KELIAA)</h2>
               <p className="text-sm text-muted-foreground">Présence bienveillante, explicative et non intrusive.</p>
             </div>
             <div className="flex gap-2">

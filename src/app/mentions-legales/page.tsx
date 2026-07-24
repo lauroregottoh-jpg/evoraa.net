@@ -17,7 +17,7 @@ export default function MentionsLegalesPage() {
         <section className="space-y-2 text-sm text-foreground/90 leading-relaxed">
           <h2 className="font-serif text-xl font-semibold">Éditeur</h2>
           <p>
-            Plateforme KELIA — service de mise en relation pour célibataires chrétiens.
+            Plateforme KELIAA — service de mise en relation pour célibataires chrétiens.
             <br />
             Raison sociale : <em>[À compléter]</em>
             <br />
@@ -26,8 +26,8 @@ export default function MentionsLegalesPage() {
             Siège social : <em>[À compléter]</em>
             <br />
             Contact :{" "}
-            <a href="mailto:contact@kelia.net" className="text-primary underline">
-              contact@kelia.net
+            <a href="mailto:contact@keliaa.net" className="text-primary underline">
+              contact@keliaa.net
             </a>
           </p>
         </section>
@@ -44,7 +44,7 @@ export default function MentionsLegalesPage() {
         <section className="space-y-2 text-sm text-foreground/90 leading-relaxed">
           <h2 className="font-serif text-xl font-semibold">Propriété intellectuelle</h2>
           <p>
-            Les contenus, marques et éléments graphiques de KELIA sont protégés. Toute reproduction
+            Les contenus, marques et éléments graphiques de KELIAA sont protégés. Toute reproduction
             non autorisée est interdite.
           </p>
         </section>

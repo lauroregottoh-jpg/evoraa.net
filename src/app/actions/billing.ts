@@ -50,7 +50,7 @@ export async function startCheckoutAction(planId: string): Promise<{
   }
 
   const plan = PLANS[planId as Exclude<PlanId, "free">]
-  const transactionRef = `KELIA-${user.id.slice(0, 8)}-${Date.now()}`
+  const transactionRef = `KELIAA-${user.id.slice(0, 8)}-${Date.now()}`
 
   const { data: subscription, error: subError } = await supabase
     .from("subscriptions")
@@ -109,7 +109,7 @@ export async function startCheckoutAction(planId: string): Promise<{
           transaction_id: transactionRef,
           amount: plan.amountXof,
           currency: "XOF",
-          description: `KELIA ${plan.name} — 30 jours`,
+          description: `KELIAA ${plan.name} — 30 jours`,
           notify_url: notifyUrl,
           return_url: returnUrl,
           channels: "ALL",

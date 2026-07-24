@@ -8,7 +8,7 @@ export default function PastoralEndorsementPage() {
         <h1 className="font-serif text-3xl font-bold">Endorsement pastoral</h1>
         <p className="text-sm text-muted-foreground leading-relaxed">
           La validation pastorale sera bientôt disponible pour renforcer la confiance
-          sur KELIA. En attendant, complétez votre profil et vos questionnaires.
+          sur KELIAA. En attendant, complétez votre profil et vos questionnaires.
         </p>
         <Link href="/assessments" className="text-accent underline text-sm">
           Aller aux questionnaires

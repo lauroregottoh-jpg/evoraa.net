@@ -62,6 +62,8 @@ export async function registerAction(formData: FormData) {
   const password = String(formData.get("password") ?? "")
   const firstName = String(formData.get("first_name") ?? "").trim()
   const lastName = String(formData.get("last_name") ?? "").trim()
+  const city = String(formData.get("city") ?? "").trim()
+  const address = String(formData.get("address") ?? "").trim()
   const charterAccepted = formData.get("charter_accepted") === "true"
 
   if (!email || !password || !firstName) {
@@ -90,6 +92,8 @@ export async function registerAction(formData: FormData) {
       data: {
         first_name: firstName,
         last_name: lastName || null,
+        city: city || null,
+        address: address || null,
         charter_accepted: true,
         charter_accepted_at: new Date().toISOString(),
       },
@@ -106,6 +110,7 @@ export async function registerAction(formData: FormData) {
       .update({
         first_name: firstName,
         last_name: lastName || null,
+        city: city || null,
         onboarding_status: "step1_account",
         completion_percentage: 10,
         email_verified: Boolean(data.user.email_confirmed_at),

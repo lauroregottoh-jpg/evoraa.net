@@ -10,68 +10,94 @@ export default function ConfidentialitePage() {
           Politique de confidentialité
         </h1>
         <p className="text-sm text-muted-foreground !mt-0">
-          Dernière mise à jour : 23 juillet 2026 — Plateforme KELIA
+          Dernière mise à jour : 24 juillet 2026 — Plateforme KELIAA
         </p>
 
         <section className="space-y-3 text-sm text-foreground/90 leading-relaxed">
           <h2 className="font-serif text-xl font-semibold">1. Responsable du traitement</h2>
           <p>
-            Les données personnelles collectées via KELIA sont traitées pour permettre l&apos;inscription,
-            le matching, la messagerie, la facturation et la modération.
+            Le responsable du traitement des données personnelles collectées via KELIAA est
+            l&apos;éditeur de la plateforme. Pour exercer vos droits ou poser une question :{" "}
+            <a href="mailto:contact@keliaa.net" className="text-primary underline underline-offset-2">
+              contact@keliaa.net
+            </a>{" "}
+            ou via la{" "}
+            <Link href="/contact" className="text-primary underline underline-offset-2">
+              page Contact
+            </Link>
+            .
           </p>
         </section>
 
         <section className="space-y-3 text-sm text-foreground/90 leading-relaxed">
           <h2 className="font-serif text-xl font-semibold">2. Données collectées</h2>
           <ul className="list-disc pl-5 space-y-1">
-            <li>Identifiants de compte (email, mot de passe hashé via le prestataire d&apos;auth)</li>
-            <li>Profil (prénom, ville, témoignage, préférences, photos)</li>
+            <li>Identifiants de compte (email ; mot de passe géré/hashé par le prestataire d&apos;authentification)</li>
+            <li>Profil (prénom, nom, ville, adresse le cas échéant, biographie, préférences, photos)</li>
+            <li>Réponses aux questionnaires de compatibilité et scores associés</li>
             <li>Messages échangés sur la plateforme</li>
-            <li>Données de paiement (références transactionnelles, pas de carte stockée chez KELIA)</li>
-            <li>Signalements et logs de sécurité</li>
+            <li>Données de paiement (références transactionnelles ; pas de numéro de carte stocké chez KELIAA)</li>
+            <li>Signalements, logs techniques et données de sécurité</li>
+            <li>Données de navigation (cookies / équivalents, selon configuration)</li>
           </ul>
         </section>
 
         <section className="space-y-3 text-sm text-foreground/90 leading-relaxed">
-          <h2 className="font-serif text-xl font-semibold">3. Finalités</h2>
+          <h2 className="font-serif text-xl font-semibold">3. Finalités du traitement</h2>
           <p>
-            Fournir le service de rencontre, assurer la sécurité, améliorer le matching, gérer les
-            abonnements, et répondre aux obligations légales.
+            Fournir le service de rencontre et de matching ; assurer la sécurité et la modération ;
+            gérer les abonnements et la facturation ; améliorer l&apos;expérience et les
+            recommandations ; répondre aux demandes d&apos;assistance ; respecter les obligations
+            légales.
           </p>
         </section>
 
         <section className="space-y-3 text-sm text-foreground/90 leading-relaxed">
-          <h2 className="font-serif text-xl font-semibold">4. Base légale</h2>
+          <h2 className="font-serif text-xl font-semibold">4. Bases légales</h2>
           <p>
-            Exécution du contrat (CGU), intérêt légitime (modération, prévention des abus), et
-            consentement lorsque requis (ex. cookies non essentiels).
+            Exécution du contrat (CGU et fourniture du service) ; intérêt légitime (sécurité,
+            prévention des abus, amélioration du service) ; consentement lorsque requis (par ex.
+            cookies non essentiels ou communications marketing, le cas échéant) ; obligations légales.
           </p>
         </section>
 
         <section className="space-y-3 text-sm text-foreground/90 leading-relaxed">
-          <h2 className="font-serif text-xl font-semibold">5. Destinataires &amp; sous-traitants</h2>
+          <h2 className="font-serif text-xl font-semibold">5. Destinataires et sous-traitants</h2>
           <p>
             Hébergement et base de données (ex. Supabase), paiements (ex. CinetPay), emails
-            transactionnels (ex. Resend), et équipes de modération internes.
+            transactionnels (ex. Resend), outils d&apos;analyse éventuels, et équipes internes
+            (support, coachs/conseillers, modération). Aucune vente de données personnelles à des
+            tiers à des fins publicitaires.
           </p>
         </section>
 
         <section className="space-y-3 text-sm text-foreground/90 leading-relaxed">
-          <h2 className="font-serif text-xl font-semibold">6. Durée de conservation</h2>
+          <h2 className="font-serif text-xl font-semibold">6. Transferts hors UE</h2>
           <p>
-            Compte actif : durée de la relation + délais légaux. Compte supprimé : effacement ou
-            anonymisation sous un délai raisonnable, sauf obligations de conservation.
+            Certains sous-traitants peuvent être situés hors de l&apos;Espace économique européen. Dans
+            ce cas, des garanties appropriées (clauses contractuelles types ou mécanismes équivalents)
+            sont mises en œuvre lorsque la réglementation l&apos;exige.
           </p>
         </section>
 
         <section className="space-y-3 text-sm text-foreground/90 leading-relaxed">
-          <h2 className="font-serif text-xl font-semibold">7. Vos droits</h2>
+          <h2 className="font-serif text-xl font-semibold">7. Durée de conservation</h2>
           <p>
-            Accès, rectification, effacement, opposition, portabilité — via{" "}
-            <Link href="/contact" className="text-primary underline underline-offset-2">
-              Contact
-            </Link>
-            . Vous pouvez aussi ajuster vos préférences dans{" "}
+            Compte actif : durée de la relation contractuelle. Après suppression du compte :
+            effacement ou anonymisation sous un délai raisonnable, sous réserve des obligations de
+            conservation (comptabilité, litiges, sécurité). Les logs de sécurité peuvent être
+            conservés plus longtemps pour la prévention des abus.
+          </p>
+        </section>
+
+        <section className="space-y-3 text-sm text-foreground/90 leading-relaxed">
+          <h2 className="font-serif text-xl font-semibold">8. Vos droits</h2>
+          <p>
+            Conformément à la réglementation applicable (dont le RGPD le cas échéant), vous disposez
+            des droits d&apos;accès, de rectification, d&apos;effacement, de limitation, d&apos;opposition
+            et de portabilité, ainsi que du droit de retirer votre consentement. Vous pouvez aussi
+            introduire une réclamation auprès de l&apos;autorité de contrôle compétente. Exercez vos
+            droits via Contact ou depuis{" "}
             <Link href="/settings" className="text-primary underline underline-offset-2">
               Paramètres
             </Link>
@@ -80,17 +106,30 @@ export default function ConfidentialitePage() {
         </section>
 
         <section className="space-y-3 text-sm text-foreground/90 leading-relaxed">
-          <h2 className="font-serif text-xl font-semibold">8. Sécurité</h2>
+          <h2 className="font-serif text-xl font-semibold">9. Sécurité</h2>
           <p>
-            Contrôle d&apos;accès, chiffrement en transit (HTTPS), politiques RLS, et signalements
-            persistés pour la modération. Aucune sécurité n&apos;est absolue : signalez tout incident.
+            Mesures techniques et organisationnelles : HTTPS, contrôle d&apos;accès, politiques RLS
+            côté base de données, procédures de signalement. Aucune mesure n&apos;est absolue :
+            signalez tout incident suspect à ethique@keliaa.net.
+          </p>
+        </section>
+
+        <section className="space-y-3 text-sm text-foreground/90 leading-relaxed">
+          <h2 className="font-serif text-xl font-semibold">10. Mineurs</h2>
+          <p>
+            Le service n&apos;est pas destiné aux mineurs. Tout compte suspecté d&apos;appartenir à un
+            mineur pourra être suspendu.
           </p>
         </section>
 
         <p className="text-sm">
           Voir aussi les{" "}
           <Link href="/cgu" className="text-primary underline underline-offset-2">
-            Conditions Générales d&apos;Utilisation
+            CGU
+          </Link>{" "}
+          et{" "}
+          <Link href="/charte" className="text-primary underline underline-offset-2">
+            Notre charte
           </Link>
           .
         </p>

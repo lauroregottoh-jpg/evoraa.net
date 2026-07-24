@@ -3,15 +3,17 @@
 import * as React from "react";
 import Link from "next/link";
 import { CinematicLayout } from "@/components/layout/CinematicLayout";
+import { PageHero } from "@/components/marketing/PageHero";
 import { MagneticButton } from "@/components/ui/magnetic-button";
-import { Search, Sparkles, BookOpen, Clock, ArrowRight, Tag } from "lucide-react";
+import { HeroBackground3D } from "@/components/home/HeroBackground3D";
+import { Search, BookOpen, Clock, ArrowRight, MessageCircle } from "lucide-react";
 import { cn } from "@/utils/cn";
 
 export default function BlogListPage() {
   const [search, setSearch] = React.useState("");
   const [activeCategory, setActiveCategory] = React.useState("Tous");
 
-  const categories = ["Tous", "Foi & Mariage", "Discernement", "Témoignages", "Conseils Pastoraux"];
+  const categories = ["Tous", "Foi & Mariage", "Discernement", "Témoignages", "Conseils"];
 
   const articles = [
     {
@@ -26,7 +28,7 @@ export default function BlogListPage() {
     {
       slug: "pourquoi-le-floutage-des-photos-transforme-les-rencontres",
       title: "Pourquoi le floutage des photos révolutionne les rencontres chrétiennes",
-      excerpt: "En mettant l'accent sur l'âme, la foi et le projet de vie avant l'apparence physique, KELIA restaure la dignité du dialogue conjugal.",
+      excerpt: "En mettant l'accent sur l'âme, la foi et le projet de vie avant l'apparence physique, KELIAA restaure la dignité du dialogue conjugal.",
       category: "Foi & Mariage",
       readTime: "5 min de lecture",
       date: "14 Juillet 2026",
@@ -36,7 +38,7 @@ export default function BlogListPage() {
       slug: "le-role-de-la-prieres-dans-le-parcours-de-celibat",
       title: "Le rôle de la prière dans la saison du célibat : attente ou préparation ?",
       excerpt: "Le célibat n'est pas une salle d'attente passive. C'est un espace de croissance où Dieu forme notre cœur à aimer selon Son standard.",
-      category: "Conseils Pastoraux",
+      category: "Conseils",
       readTime: "7 min de lecture",
       date: "10 Juillet 2026",
       image: "https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=800&q=80",
@@ -44,7 +46,7 @@ export default function BlogListPage() {
     {
       slug: "temoignage-sarah-et-david-une-connexion-fondee-sur-la-vision",
       title: "Témoignage : « Nous avions exactement la même vision de l'hospitalité »",
-      excerpt: "Découvrez l'histoire touchante de Sarah et David, qui se sont rencontrés sur KELIA grâce à leur diagnostic spirituel commun sur l'accueil et le ministère.",
+      excerpt: "Découvrez l'histoire touchante de Sarah et David, qui se sont rencontrés sur KELIAA grâce à leur diagnostic spirituel commun sur l'accueil et le ministère.",
       category: "Témoignages",
       readTime: "8 min de lecture",
       date: "05 Juillet 2026",
@@ -60,10 +62,10 @@ export default function BlogListPage() {
       image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80",
     },
     {
-      slug: "l-importance-de-l-accompagnement-pastoral-avant-le-mariage",
-      title: "L'importance du conseil pastoral avant de s'engager dans le mariage",
-      excerpt: "Dans une société individualiste, inviter un mentor ou un pasteur dans son discernement conjugal est une preuve immense de maturité spirituelle.",
-      category: "Conseils Pastoraux",
+      slug: "l-importance-du-conseil-avant-le-mariage",
+      title: "L'importance du conseil avant de s'engager dans le mariage",
+      excerpt: "Dans une société individualiste, inviter un mentor ou un conseiller de confiance dans son discernement conjugal est une preuve de maturité.",
+      category: "Conseils",
       readTime: "5 min de lecture",
       date: "20 Juin 2026",
       image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=800&q=80",
@@ -78,49 +80,68 @@ export default function BlogListPage() {
 
   return (
     <CinematicLayout>
-      {/* HERO BLOG */}
-      <section className="relative pt-36 pb-16 px-6 sm:px-12 lg:px-20 max-w-5xl mx-auto text-center space-y-6">
-        <span className="inline-block text-xs font-mono uppercase tracking-widest px-4 py-1.5 rounded-full bg-accent/15 text-accent border border-accent/30 font-semibold">
-          Journal & Inspirations
-        </span>
-        <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-tight">
-          Sagesse spirituelle pour <br />
-          <span className="italic font-normal text-accent">votre saison de préparation.</span>
-        </h1>
-        <p className="font-sans text-base sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Témoignages édifiants, conseils pastoraux et visions bibliques du couple pour vous guider sereinement vers le mariage.
-        </p>
-
-        {/* Search Bar */}
-        <div className="pt-6 max-w-xl mx-auto relative">
-          <div className="relative">
-            <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Rechercher un article, un thème spirituel..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-14 pr-6 py-4 rounded-full bg-[#12121A] border border-border/60 text-white placeholder:text-muted-foreground focus:outline-none focus:border-accent shadow-xl text-sm transition-all"
-            />
-          </div>
+      <div className="relative">
+        <div className="pointer-events-none absolute inset-0 opacity-25 overflow-hidden h-40 z-10">
+          <HeroBackground3D />
         </div>
+        <PageHero
+          eyebrow="Journal d'inspiration"
+          title="Sagesse pour votre"
+          highlight="saison de préparation."
+          subtitle="Témoignages, conseils et visions bibliques du couple pour cheminer vers le mariage avec discernement."
+          imageSrc="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?q=80&w=2000&auto=format&fit=crop"
+          imageAlt="Inspiration et méditation"
+        >
+          <div className="pt-6 max-w-xl">
+            <div className="relative">
+              <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-white/60" />
+              <input
+                type="text"
+                placeholder="Rechercher un article…"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-14 pr-6 py-4 rounded-full bg-black/40 border border-white/30 text-white placeholder:text-white/50 focus:outline-none focus:border-accent text-sm backdrop-blur-md"
+              />
+            </div>
+          </div>
+          <div className="pt-4 flex flex-wrap items-center gap-2.5">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setActiveCategory(cat)}
+                className={cn(
+                  "px-5 py-2 rounded-full text-xs font-semibold transition-all duration-300",
+                  activeCategory === cat
+                    ? "bg-accent text-background"
+                    : "bg-white/10 text-white/80 hover:bg-white/20 border border-white/20"
+                )}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </PageHero>
+      </div>
 
-        {/* Category Filters */}
-        <div className="pt-4 flex flex-wrap items-center justify-center gap-2.5">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={cn(
-                "px-5 py-2 rounded-full text-xs font-semibold transition-all duration-300 select-none cursor-pointer",
-                activeCategory === cat
-                  ? "bg-accent text-background shadow-md shadow-accent/20"
-                  : "bg-[#14141E] text-muted-foreground hover:text-white border border-border/40"
-              )}
-            >
-              {cat}
-            </button>
-          ))}
+      <section className="py-10 px-6 sm:px-12 lg:px-20 max-w-4xl mx-auto">
+        <div className="encart-kelia p-6 sm:p-8 flex flex-col sm:flex-row gap-5 items-start sm:items-center justify-between">
+          <div className="flex gap-4 items-start">
+            <div className="h-11 w-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+              <MessageCircle className="h-5 w-5" />
+            </div>
+            <div className="space-y-1">
+              <p className="font-serif text-xl font-semibold text-foreground">
+                Besoin d&apos;une réponse personnalisée ?
+              </p>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Posez votre question et notre assistant vous répond 24h/24 et 7j/7.
+              </p>
+            </div>
+          </div>
+          <MagneticButton href="/contact" variant="primary" size="md">
+            Poser ma question
+          </MagneticButton>
         </div>
       </section>
 
@@ -187,7 +208,7 @@ export default function BlogListPage() {
           Écrivez votre propre témoignage spirituel.
         </h2>
         <p className="text-muted-foreground text-base max-w-xl mx-auto">
-          Inscrivez-vous sur KELIA et laissez Dieu guider vos pas vers une relation authentique, fondée sur Sa Parole.
+          Inscrivez-vous sur KELIAA et laissez Dieu guider vos pas vers une relation authentique, fondée sur Sa Parole.
         </p>
         <div className="pt-4">
           <MagneticButton href="/register" variant="primary" size="lg">

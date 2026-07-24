@@ -10,7 +10,7 @@ export default function AboutPage() {
           Notre mission
         </span>
         <h1 className="font-serif text-4xl sm:text-6xl font-bold text-foreground leading-tight">
-          KELIA existe pour les alliances,{" "}
+          KELIAA existe pour les alliances,{" "}
           <span className="italic font-normal text-primary">pas pour les swipes.</span>
         </h1>
         <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
