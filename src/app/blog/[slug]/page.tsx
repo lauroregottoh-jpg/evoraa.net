@@ -21,7 +21,7 @@ export default function BlogReadingPage() {
     category: "Discernement & Sagesse",
     readTime: "6 min de lecture",
     date: "18 Juillet 2026",
-    author: "Équipe Pastorale KELIAA",
+    author: "Équipe conseil KELIAA",
     image: "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&w=1600&q=80",
     content: `
       <p class="lead">Au-delà des émotions passagères et de l'attraction physique initiale, la Parole de Dieu nous offre des repères clairs et éternels pour discerner la personne avec qui construire une alliance conjugale.</p>
@@ -37,8 +37,8 @@ export default function BlogReadingPage() {
       <h3>3. Le fruit de l'Esprit dans la gestion des conflits</h3>
       <p>Observez comment l'autre réagit face à la contradiction, à l'attente et au stress. La patience, la douceur, la maîtrise de soi et l'humilité (Galates 5:22) sont le véritable ciment d'un mariage qui dure toute une vie.</p>
 
-      <h3>4. La paix de Dieu et la confirmation des pères spirituels</h3>
-      <p>Lorsque Dieu unit deux personnes dans la dignité, Sa paix surnaturelle règne dans les cœurs. De plus, la sagesse pastorale et le conseil de mentors bienveillants viennent souvent confirmer ce que l'Esprit Saint dépose en vous.</p>
+      <h3>4. La paix intérieure et le regard de personnes de confiance</h3>
+      <p>Quand une relation est juste, une forme de paix durable s'installe — même dans les zones encore floues. Et très souvent, des mentors, coachs ou amis matures confirment ce que vous discernez déjà, sans forcer votre décision.</p>
     `,
   };
 

@@ -36,27 +36,27 @@ export default function SpiritualResourcesPage() {
         
         <div className="space-y-2">
           <Badge variant="outline" className="border-accent/40 text-accent bg-accent/5 font-sans uppercase tracking-wider text-xs">
-            Sprint 9 : Discernement Pastoral
+            Sprint 9 : Discernement & conseils
           </Badge>
           <h1 className="text-3xl sm:text-4xl font-serif font-bold text-foreground">
-            Ressources & Sagesse de Discernement
+            Ressources & sagesse pour avancer
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Nourrissez votre réflexion spirituelle pour fonder vos rencontres sur la clarté biblique et la paix.
+            Des repères clairs pour fonder vos rencontres sur la lucidité, la paix intérieure et un projet de vie solide.
           </p>
         </div>
 
         {/* EVA Spiritual Guidance Intro */}
         <EvaCompanion
-          title="EVA - Votre Compagnon de Prière et de Sagesse"
-          message="Je suis à votre disposition ci-dessous pour répondre à vos interrogations sur la fréquentation chrétienne et vous éclairer avec les principes bibliques qui fondent Evoraa."
+          title="EVA — votre compagnon de discernement"
+          message="Je suis là pour répondre à vos questions sur la fréquentation chrétienne et vous aider à clarifier ce qui compte vraiment avant de vous engager."
           variant="reflection"
         />
 
         {/* Interactive Q&A Advisor */}
         <section className="space-y-4">
           <h2 className="font-serif text-2xl font-bold text-foreground">
-            Interroger le Conseiller Pastoral EVA
+            Interroger EVA
           </h2>
           <EvaSpiritualAdvisor />
         </section>

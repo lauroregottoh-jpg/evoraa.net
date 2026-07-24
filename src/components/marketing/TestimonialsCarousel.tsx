@@ -7,25 +7,25 @@ import { cn } from "@/utils/cn";
 const TESTIMONIALS = [
   {
     quote:
-      "Pour la premi\u00e8re fois, on m\u2019a demand\u00e9 ma vision du mariage avant de me juger sur une photo. KELIAA m\u2019a redonn\u00e9 confiance.",
+      "Pour la premi\u00e8re fois, on m\u2019a demand\u00e9 ma vision du mariage avant de me juger sur une photo. J\u2019ai senti que je pouvais \u00eatre honn\u00eate \u2014 sans me vendre.",
     name: "A\u00efcha",
     meta: "Abidjan \u00b7 Premium",
   },
   {
     quote:
-      "Les questionnaires ont r\u00e9v\u00e9l\u00e9 ce que je cherchais vraiment. Nos \u00e9changes ont commenc\u00e9 sur la foi, pas sur les r\u00e9seaux.",
+      "Les questionnaires m\u2019ont confront\u00e9 \u00e0 des sujets que j\u2019\u00e9vitais. Nos premiers messages ont parl\u00e9 de foi et de projet de vie. C\u2019\u00e9tait nouveau pour moi.",
     name: "Marc",
     meta: "Paris \u00b7 Premium+",
   },
   {
     quote:
-      "Cadre digne, profils s\u00e9rieux, pas de swipe. On avance avec discernement \u2014 c\u2019est exactement ce qu\u2019il me fallait.",
+      "Pas de swipe, pas de th\u00e9\u00e2tre. Juste un cadre s\u00e9rieux. J\u2019avance plus lentement, mais je dors mieux la nuit.",
     name: "Esther",
     meta: "Douala \u00b7 D\u00e9couverte",
   },
   {
     quote:
-      "Le matching m\u2019a propos\u00e9 quelqu\u2019un qui partageait ma vision du foyer. Aujourd\u2019hui on discerne ensemble, en paix.",
+      "Le matching m\u2019a propos\u00e9 quelqu\u2019un qui partageait ma vision du foyer. On discerne ensemble. Sans pression. C\u2019est rare.",
     name: "Samuel",
     meta: "Lom\u00e9 \u00b7 Premium",
   },
@@ -51,7 +51,7 @@ export function TestimonialsCarousel() {
             {"Témoignages"}
           </span>
           <h2 className="font-serif text-3xl sm:text-5xl font-bold text-foreground">
-            {"Des parcours fondés sur le discernement"}
+            {"Des parcours qui parlent vrai"}
           </h2>
         </div>
 
@@ -73,9 +73,7 @@ export function TestimonialsCarousel() {
               </blockquote>
               <figcaption className="mt-6 text-sm font-semibold text-primary">
                 {t.name}
-                <span className="block font-normal text-muted-foreground mt-1">
-                  {t.meta}
-                </span>
+                <span className="block font-normal text-muted-foreground mt-1">{t.meta}</span>
               </figcaption>
             </figure>
           ))}

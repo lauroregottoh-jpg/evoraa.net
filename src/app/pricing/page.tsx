@@ -6,7 +6,6 @@ import { CheckoutPlanButton } from "@/components/billing/CheckoutPlanButton";
 import { ExpertiseEncart } from "@/components/marketing/ExpertiseEncart";
 import { PageHero } from "@/components/marketing/PageHero";
 import { MagneticButton } from "@/components/ui/magnetic-button";
-import { HeroBackground3D } from "@/components/home/HeroBackground3D";
 import { CheckCircle2, ChevronDown, Sparkles } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/utils/cn";
@@ -59,19 +58,14 @@ export default function PricingPage() {
 
   return (
     <CinematicLayout>
-      <div className="relative">
-        <div className="pointer-events-none absolute inset-0 opacity-25 overflow-hidden h-40 z-10">
-          <HeroBackground3D />
-        </div>
-        <PageHero
+      <PageHero
           eyebrow="Tarifs"
-          title="Un investissement dans une"
+          title="Investir dans une"
           highlight="rencontre sérieuse."
-          subtitle="Trouver L'âme sœur est l'une des décisions les plus importantes d'une vie. Choisissez le niveau d'accompagnement qui vous correspond."
+          subtitle="Choisir KELIAA, c'est choisir du temps, de la clarté et un accompagnement adapté — pas une consommation d'attention."
           imageSrc="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=2000&auto=format&fit=crop"
           imageAlt="Engagement et alliance"
         />
-      </div>
 
       <section className="py-10 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
         <div className="grid md:grid-cols-3 gap-4">

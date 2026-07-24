@@ -20,7 +20,7 @@ const PREDEFINED_TOPICS: QAPair[] = [
   },
   {
     question: "Comment cultiver la paix intérieure pendant la période d'attente ?",
-    answer: "L'attente n'est pas un temps vide, c'est un temps de préparation où Dieu affermit notre identité en Lui. Profitez de cette saison pour servir dans votre église locale et grandir dans l'amour désintéressé.",
+    answer: "L'attente n'est pas un temps vide : c'est souvent la saison où l'on clarifie qui l'on est et ce que l'on cherche vraiment. Servez, grandissez, soignez vos amitiés — vous arriverez plus libre face à une rencontre sérieuse.",
     verse: "« C'est dans le calme et la confiance que sera votre force. » (Ésaïe 30:15)",
   },
   {
@@ -43,7 +43,7 @@ export function EvaSpiritualAdvisor() {
     setTimeout(() => {
       const newAnswer: QAPair = {
         question: customQuestion,
-        answer: `Merci de me confier cette réflexion. Sur cette question fondamentale, la sagesse de KELIAA vous encourage à rechercher d'abord l'unité d'intention et à avancer pas à pas, dans la prière et avec le conseil d'aînés dans la foi.`,
+        answer: `Merci pour cette question. Sur KELIAA, on recommande souvent la même chose : clarifier vos intentions, avancer sans précipitation, et en parler avec des personnes de confiance qui vous connaissent vraiment — coach, conseiller, amis matures.`,
         verse: "« La sagesse d'en haut est d'abord pure, ensuite pacifique, modérée, conciliante. » (Jacques 3:17)",
       };
       setSelectedTopic(newAnswer);
@@ -107,7 +107,7 @@ export function EvaSpiritualAdvisor() {
           <CardHeader className="space-y-2 border-b border-border/40 pb-5">
             <div className="flex items-center gap-2 text-accent">
               <Sparkles className="h-4 w-4 fill-accent" />
-              <span className="text-xs uppercase tracking-wider font-semibold">Conseiller Pastoral EVA</span>
+              <span className="text-xs uppercase tracking-wider font-semibold">EVA — coach &amp; conseil</span>
             </div>
             <CardTitle className="font-serif text-xl sm:text-2xl text-foreground">
               {selectedTopic?.question || "Sélectionnez un sujet"}

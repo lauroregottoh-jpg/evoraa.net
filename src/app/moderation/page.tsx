@@ -29,7 +29,7 @@ export default function ModerationPage() {
 
         <EvaCompanion
           title="EVA - Veille Éthique Continue"
-          message="Je travaille main dans la main avec l'équipe pastorale et humaine d'Evoraa pour veiller sur la sincérité des profils. Aucun comportement harcelant, pressant ou irrespectueux ne peut exister sur notre plateforme."
+          message="Je travaille avec l'équipe de modération et les coachs de KELIAA pour veiller sur la sincérité des profils. Harcèlement, pression et manque de respect n'ont pas leur place ici."
           variant="reassurance"
         />
 

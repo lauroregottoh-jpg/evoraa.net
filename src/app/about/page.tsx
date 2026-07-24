@@ -1,21 +1,30 @@
 import { CinematicLayout } from "@/components/layout/CinematicLayout";
+import { PageHero } from "@/components/marketing/PageHero";
 import { ExpertiseEncart } from "@/components/marketing/ExpertiseEncart";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 
 export default function AboutPage() {
   return (
     <CinematicLayout>
-      <section className="pt-36 pb-16 px-6 sm:px-12 lg:px-20 max-w-4xl mx-auto text-center space-y-6">
-        <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-          Notre mission
-        </span>
-        <h1 className="font-serif text-4xl sm:text-6xl font-bold text-foreground leading-tight">
-          KELIAA existe pour les alliances,{" "}
-          <span className="italic font-normal text-primary">pas pour les swipes.</span>
-        </h1>
-        <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-          Nous aidons les célibataires chrétiens à discerner une compatibilité réelle —
-          foi, vision du foyer, maturité relationnelle — dans un cadre digne et sécurisé.
+      <PageHero
+        eyebrow="Notre histoire"
+        title="KELIAA n'est pas née d'une idée marketing."
+        highlight="Elle est née d'une fatigue."
+        subtitle="Celle des célibataires chrétiens qui veulent se marier — et qui n'en peuvent plus des apps où l'on se vend avant de se connaître."
+        imageSrc="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=2000&auto=format&fit=crop"
+        imageAlt="Cheminer ensemble"
+      />
+
+      <section className="py-16 px-6 sm:px-12 lg:px-20 max-w-3xl mx-auto space-y-6 text-lg text-muted-foreground leading-relaxed">
+        <p>
+          Après des années à accompagner des personnes qui aspirent à un mariage solide, un
+          constat revient sans cesse : le problème n&apos;est pas le manque de désir. C&apos;est le
+          manque de cadre. Trop d&apos;outils poussent la vitesse, l&apos;image et l&apos;ambiguïté.
+        </p>
+        <p>
+          Nous avons construit KELIAA pour inverser la logique. D&apos;abord la vision. Ensuite la
+          compatibilité. Puis le dialogue — dans un espace où la dignité n&apos;est pas une option
+          décorative, mais une règle du jeu.
         </p>
       </section>
 
@@ -23,9 +32,9 @@ export default function AboutPage() {
         className="max-w-7xl mx-auto mb-16"
         eyebrow="Méthode"
         title="Discernement avant attraction."
-        body="Questionnaires, charte de bienveillance et modération humaine : chaque étape renforce la confiance avant d’ouvrir un dialogue."
-        imageSrc="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=1600&auto=format&fit=crop"
-        imageAlt="Couple marchant ensemble"
+        body="Questionnaires, charte de bienveillance, vérification et modération humaine : chaque étape renforce la confiance avant d'ouvrir un dialogue."
+        imageSrc="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1600&auto=format&fit=crop"
+        imageAlt="Moment de partage"
       />
 
       <div className="max-w-3xl mx-auto px-6 pb-24 text-center space-y-6">

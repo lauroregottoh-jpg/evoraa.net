@@ -6,7 +6,6 @@ import { CinematicLayout } from "@/components/layout/CinematicLayout";
 import { PageHero } from "@/components/marketing/PageHero";
 import { ExpertiseEncart } from "@/components/marketing/ExpertiseEncart";
 import { MagneticButton } from "@/components/ui/magnetic-button";
-import { HeroBackground3D } from "@/components/home/HeroBackground3D";
 import {
   Sparkles,
   ShieldCheck,
@@ -97,19 +96,14 @@ export default function HowItWorksPage() {
 
   return (
     <CinematicLayout>
-      <div className="relative">
-        <div className="pointer-events-none absolute inset-0 opacity-25 overflow-hidden h-40 z-10">
-          <HeroBackground3D />
-        </div>
-        <PageHero
+      <PageHero
           eyebrow="Le parcours KELIAA"
-          title="Comment fonctionne"
-          highlight="KELIAA ?"
-          subtitle="Trouver L'âme sœur commence par une meilleure compréhension de soi. Foi, valeurs et projet de vie au cœur de chaque étape — pas un simple match."
+          title="Comment ça marche,"
+          highlight="vraiment."
+          subtitle="Pas de magie. Un parcours clair : profil, questionnaires, compatibilités, puis des échanges dans un cadre digne — pour chercher L'âme sœur sans se perdre en chemin."
           imageSrc="https://images.unsplash.com/photo-1511285560929-80b456fe3b4f?q=80&w=2000&auto=format&fit=crop"
           imageAlt="Parcours de rencontre chrétienne"
         />
-      </div>
 
       <ExpertiseEncart
         className="max-w-7xl mx-auto mb-8"

@@ -42,7 +42,7 @@ export function AdminStats() {
           <CardContent>
             <div className="text-2xl font-serif font-bold text-foreground">89.4%</div>
             <p className="text-xs text-muted-foreground mt-1">
-              des profils ont la caution pastorale
+              des profils sont vérifiés
             </p>
           </CardContent>
         </Card>

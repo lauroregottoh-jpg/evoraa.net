@@ -111,7 +111,7 @@ export function AdminSettings() {
                 <div>
                   <span className="text-xs font-semibold text-foreground block">Mode Maintenance Plateforme</span>
                   <p className="text-[11px] text-muted-foreground mt-0.5">
-                    Mettre le site en pause globale pour mises à jour pastorales.
+                    Mettre le site en pause globale pour maintenance.
                   </p>
                 </div>
                 <button

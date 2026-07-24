@@ -8,7 +8,6 @@ import { EvaSpiritualAdvisor } from "@/components/spiritual/EvaSpiritualAdvisor"
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { Mail, MessageSquare, ShieldCheck, Send, CheckCircle2, Headphones } from "lucide-react";
 import { submitContactAction } from "@/app/actions/contact";
-import { HeroBackground3D } from "@/components/home/HeroBackground3D";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = React.useState(false);
@@ -36,19 +35,14 @@ export default function ContactPage() {
 
   return (
     <CinematicLayout>
-      <div className="relative">
-        <div className="pointer-events-none absolute inset-0 opacity-30 z-0 overflow-hidden h-[200px]">
-          <HeroBackground3D />
-        </div>
-
-        {/* 1. Réponse immédiate — tout en haut */}
-        <section className="relative z-10 pt-28 pb-8 px-6 text-center space-y-5">
+      {/* 1. Réponse immédiate — tout en haut */}
+      <section className="relative z-10 pt-28 pb-8 px-6 text-center space-y-5">
           <h2 className="font-serif text-2xl sm:text-3xl font-bold text-foreground">
-            Besoin d&apos;une réponse immédiate ?
+            Besoin d&apos;une réponse rapide ?
           </h2>
           <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-            Consultez nos FAQ ou écrivez-nous — notre équipe de coachs et de conseillers vous répond
-            sous 24&nbsp;h.
+            Les FAQ répondent souvent en deux minutes. Sinon, écrivez-nous : nos coachs et
+            conseillers reviennent vers vous sous 24&nbsp;h.
           </p>
           <div className="flex justify-center gap-3 flex-wrap">
             <MagneticButton href="/how-it-works" variant="secondary" size="md">
@@ -59,7 +53,6 @@ export default function ContactPage() {
             </MagneticButton>
           </div>
         </section>
-      </div>
 
       {/* 2. Header */}
       <PageHero

@@ -44,7 +44,7 @@ export default function CguPage() {
             KELIAA propose notamment : création de profil, questionnaires de compatibilité,
             suggestions de profils, messagerie, outils d&apos;accompagnement (dont l&apos;assistant
             EVA), et offres d&apos;abonnement. Le service vise le discernement et le projet de
-            mariage ; il ne constitue ni un cabinet de conseil spirituel institutionnel, ni un conseil juridique ou médical.
+            mariage ; il ne constitue ni un cabinet de coaching institutionnel, ni un conseil juridique ou médical.
           </p>
         </section>
 

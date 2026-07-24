@@ -77,7 +77,7 @@ export function StepValues({ onNext, onBack, defaultValues, isSubmitting = false
           <option value="dialogue_doux">Dialogue posé immédiat après un temps de prière ou de calme</option>
           <option value="ecoute_active">Écoute active en priorité pour comprendre le ressenti de l&apos;autre</option>
           <option value="reflexion_puis_echange">Besoin d&apos;un court recul personnel avant de revenir échanger en paix</option>
-          <option value="mediateur_ou_conseil">Ouverture au conseil spirituel ou pastoral si nécessaire</option>
+          <option value="mediateur_ou_conseil">Ouverture au conseil d&apos;un coach ou d&apos;un mentor de confiance</option>
         </select>
       </div>
 

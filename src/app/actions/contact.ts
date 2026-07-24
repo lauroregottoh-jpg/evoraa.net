@@ -5,7 +5,6 @@ import { sendEmailNotificationStub } from "@/app/actions/notifications"
 const SUBJECT_LABELS: Record<string, string> = {
   question: "Question générale",
   coaching: "Conseil / coaching",
-  pastoral: "Conseil / coaching",
   report: "Signalement / éthique",
   billing: "Abonnement / paiement",
   other: "Autre",

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useMemo } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
 import Image from "next/image";
@@ -13,49 +13,36 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
 
-// Particle System with distinct layers for depth
 function ParticleField() {
   const ref = useRef<THREE.Points>(null);
-  const { viewport } = useThree();
-  const count = 4000;
-  
-  const [positions, colors, sizes] = useMemo(() => {
+  const count = 3200;
+
+  const [positions, colors] = useMemo(() => {
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
-    const sizes = new Float32Array(count);
-    
-    const colorPrimary = new THREE.Color("#722F37"); // Bordeaux
-    const colorAccent = new THREE.Color("#D4AF37"); // Or Patiné
-    const colorIvory = new THREE.Color("#FDFBF7"); // Ivoire
+    const colorPrimary = new THREE.Color("#722F37");
+    const colorAccent = new THREE.Color("#D4AF37");
+    const colorIvory = new THREE.Color("#FDFBF7");
 
     for (let i = 0; i < count; i++) {
-      // Spread across a wider area to allow camera movement
       positions[i * 3] = (Math.random() - 0.5) * 20;
       positions[i * 3 + 1] = (Math.random() - 0.5) * 20;
       positions[i * 3 + 2] = (Math.random() - 0.5) * 15;
 
-      // Color distribution: 60% Ivory (stars), 30% Gold, 10% Bordeaux
       const rand = Math.random();
       let mixedColor = colorIvory;
       if (rand > 0.9) mixedColor = colorPrimary;
-      else if (rand > 0.6) mixedColor = colorAccent;
-      
+      else if (rand > 0.55) mixedColor = colorAccent;
       mixedColor.toArray(colors, i * 3);
-
-      // Random sizes for depth perception
-      sizes[i] = Math.random() * 0.05 + 0.01;
     }
-    return [positions, colors, sizes];
+    return [positions, colors];
   }, [count]);
 
   useFrame((state, delta) => {
     if (ref.current) {
-      // Very slow, elegant rotation (like a night sky)
-      ref.current.rotation.x -= delta / 50;
-      ref.current.rotation.y -= delta / 60;
-      
-      // Gentle breathing effect
-      ref.current.position.y = Math.sin(state.clock.elapsedTime * 0.1) * 0.2;
+      ref.current.rotation.x -= delta / 45;
+      ref.current.rotation.y -= delta / 55;
+      ref.current.position.y = Math.sin(state.clock.elapsedTime * 0.12) * 0.25;
     }
   });
 
@@ -64,76 +51,86 @@ function ParticleField() {
       <PointMaterial
         transparent
         vertexColors
-        size={0.04}
-        sizeAttenuation={true}
+        size={0.045}
+        sizeAttenuation
         depthWrite={false}
-        opacity={0.8}
+        opacity={0.85}
         blending={THREE.AdditiveBlending}
       />
     </Points>
   );
 }
 
-// Interactive camera that reacts slightly to mouse movement for parallax
 function CameraRig() {
   useFrame((state) => {
-    state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, (state.pointer.x * 2) / 10, 0.05);
-    state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, (state.pointer.y * 2) / 10, 0.05);
+    state.camera.position.x = THREE.MathUtils.lerp(
+      state.camera.position.x,
+      (state.pointer.x * 2) / 10,
+      0.05
+    );
+    state.camera.position.y = THREE.MathUtils.lerp(
+      state.camera.position.y,
+      (state.pointer.y * 2) / 10,
+      0.05
+    );
     state.camera.lookAt(0, 0, 0);
   });
   return null;
 }
 
-export function HeroBackground3D() {
+type HeroBackground3DProps = {
+  /** Softer photo so particles remain the star */
+  imageOpacity?: number;
+};
+
+export function HeroBackground3D({ imageOpacity = 0.35 }: HeroBackground3DProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
-  useGSAP(() => {
-    // Parallax effect on the background image
-    if (imageRef.current && containerRef.current) {
-      gsap.to(imageRef.current, {
-        y: "20%", // Moves down as you scroll down
-        ease: "none",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-    }
-  }, { scope: containerRef });
+  useGSAP(
+    () => {
+      if (imageRef.current && containerRef.current) {
+        gsap.to(imageRef.current, {
+          y: "12%",
+          ease: "none",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
+    },
+    { scope: containerRef }
+  );
 
   return (
-    <div ref={containerRef} className="absolute inset-0 z-0 overflow-hidden bg-[#1A1A1A]">
-      
-      {/* 1. Base Photographic Image */}
-      <div className="absolute inset-[-5%] z-0">
+    <div ref={containerRef} className="absolute inset-0 z-0 overflow-hidden bg-[#120f10]">
+      <div className="absolute inset-[-8%] z-0">
         <Image
           ref={imageRef}
           src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop"
-          alt="Mariage Chrétien Élégant"
+          alt=""
           fill
           priority
-          className="object-cover opacity-60 scale-105"
+          className="object-cover scale-110"
+          style={{ opacity: imageOpacity }}
+          aria-hidden
         />
       </div>
 
-      {/* 2. Golden Hour Light Ray Effect */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-tr from-transparent via-[#D4AF37]/10 to-transparent mix-blend-overlay pointer-events-none" />
-      
-      {/* 3. Dark Gradient for Readability */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-b from-[#1A1A1A]/40 via-transparent to-[#FDFBF7] pointer-events-none" />
+      {/* Warm wash — keeps particles readable without a flat slab */}
+      <div className="absolute inset-0 z-10 bg-gradient-to-tr from-primary/30 via-transparent to-accent/10 pointer-events-none" />
+      <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/50 via-black/25 to-black/70 pointer-events-none" />
 
-      {/* 4. Three.js Particle System */}
       <div className="absolute inset-0 z-20 pointer-events-none">
-        <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
+        <Canvas camera={{ position: [0, 0, 5], fov: 75 }} dpr={[1, 1.5]}>
           <ParticleField />
           <CameraRig />
-          <ambientLight intensity={0.5} />
+          <ambientLight intensity={0.45} />
         </Canvas>
       </div>
-
     </div>
   );
 }

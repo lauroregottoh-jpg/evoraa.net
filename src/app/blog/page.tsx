@@ -5,7 +5,6 @@ import Link from "next/link";
 import { CinematicLayout } from "@/components/layout/CinematicLayout";
 import { PageHero } from "@/components/marketing/PageHero";
 import { MagneticButton } from "@/components/ui/magnetic-button";
-import { HeroBackground3D } from "@/components/home/HeroBackground3D";
 import { Search, BookOpen, Clock, ArrowRight, MessageCircle } from "lucide-react";
 import { cn } from "@/utils/cn";
 
@@ -80,15 +79,11 @@ export default function BlogListPage() {
 
   return (
     <CinematicLayout>
-      <div className="relative">
-        <div className="pointer-events-none absolute inset-0 opacity-25 overflow-hidden h-40 z-10">
-          <HeroBackground3D />
-        </div>
-        <PageHero
+      <PageHero
           eyebrow="Journal d'inspiration"
           title="Sagesse pour votre"
           highlight="saison de préparation."
-          subtitle="Témoignages, conseils et visions bibliques du couple pour cheminer vers le mariage avec discernement."
+          subtitle="Témoignages, conseils concrets et repères bibliques pour avancer vers le mariage avec lucidité — pas avec de la pression."
           imageSrc="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?q=80&w=2000&auto=format&fit=crop"
           imageAlt="Inspiration et méditation"
         >
@@ -122,7 +117,6 @@ export default function BlogListPage() {
             ))}
           </div>
         </PageHero>
-      </div>
 
       <section className="py-10 px-6 sm:px-12 lg:px-20 max-w-4xl mx-auto">
         <div className="encart-kelia p-6 sm:p-8 flex flex-col sm:flex-row gap-5 items-start sm:items-center justify-between">
