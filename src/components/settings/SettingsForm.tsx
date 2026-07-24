@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Moon, Sliders, CheckCircle2 } from "lucide-react";
 import {
   ageRangeLabel,
-  saveSettingsAction,
   type SettingsData,
-} from "@/app/actions/settings";
+} from "@/lib/settings";
+import { saveSettingsAction } from "@/app/actions/settings";
 
 export function SettingsForm({ initial }: { initial: SettingsData }) {
   const [retreatMode, setRetreatMode] = React.useState(initial.retreatMode);

@@ -8,7 +8,9 @@ async function requireAdmin() {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { error: "Non authentifié." as const, supabase, user: null }
+  if (!user) {
+    return { error: "Non authentifié." as string, supabase: null, user: null }
+  }
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -17,10 +19,10 @@ async function requireAdmin() {
     .maybeSingle()
 
   if (profile?.role !== "admin" && profile?.role !== "moderator") {
-    return { error: "Accès admin requis." as const, supabase, user: null }
+    return { error: "Accès admin requis." as string, supabase: null, user: null }
   }
 
-  return { error: null, supabase, user }
+  return { error: undefined as string | undefined, supabase, user }
 }
 
 export async function getAdminDashboardData() {
@@ -104,7 +106,7 @@ export async function getAdminDashboardData() {
 
 export async function adminUpdateModerationStatus(profileId: string, status: "approved" | "rejected" | "pending") {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error }
+  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé." }
 
   const { error } = await gate.supabase
     .from("profiles")
@@ -118,7 +120,7 @@ export async function adminUpdateModerationStatus(profileId: string, status: "ap
 
 export async function adminResolveReport(reportId: string, status: "resolved" | "dismissed" | "pending") {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error }
+  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé." }
 
   const { error } = await gate.supabase
     .from("reports")
@@ -132,7 +134,7 @@ export async function adminResolveReport(reportId: string, status: "resolved" | 
 
 export async function adminModeratePhoto(photoId: string, status: "approved" | "rejected") {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error }
+  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé." }
 
   const { data: photo, error: fetchError } = await gate.supabase
     .from("user_photos")

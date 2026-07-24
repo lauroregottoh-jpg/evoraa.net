@@ -9,13 +9,13 @@ import {
 } from "@/lib/assessments/questionBank"
 import { createNotification } from "@/app/actions/notifications"
 
-export const TEST_IDS: Record<AssessmentSlug, string> = {
+const TEST_IDS: Record<AssessmentSlug, string> = {
   personality: "a1111111-1111-4111-8111-111111111111",
   spiritual: "a2222222-2222-4222-8222-222222222222",
   relationship: "a3333333-3333-4333-8333-333333333333",
 }
 
-export function getQuestionId(slug: AssessmentSlug, index: number) {
+function getQuestionId(slug: AssessmentSlug, index: number) {
   const map = { personality: 1, spiritual: 2, relationship: 3 } as const
   const t = map[slug]
   const i = index + 1
