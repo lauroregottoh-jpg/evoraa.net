@@ -1,42 +1,39 @@
 @import "tailwindcss";
 
 @theme {
-  /* KELIA Design System — Palette Officielle */
-  --color-background: #FDFBF7;        /* Beige Ivoire */
-  --color-foreground: #1A1A1A;         /* Noir Onyx */
-  
-  --color-primary: #722F37;            /* Bordeaux Profond */
-  --color-primary-foreground: #FDFBF7; /* Ivoire sur Bordeaux */
-  
-  --color-secondary: #F5F0EA;          /* Ivoire chaud secondaire */
-  --color-secondary-foreground: #1A1A1A;
-  
-  --color-muted: #F5F0EA;
-  --color-muted-foreground: #6B5E54;   /* Texte atténué chaud */
-  
-  --color-accent: #C5A059;             /* Or Patiné */
-  --color-accent-foreground: #1A1A1A;
+  /* KELIA — palette harmonisée (pierre chaude + bordeaux + or, hors cluster cream générique) */
+  --color-background: #F3EFE8;
+  --color-foreground: #1C1412;
 
-  --color-destructive: #B91C1C;
-  --color-destructive-foreground: #FDFBF7;
+  --color-primary: #5C1F28;
+  --color-primary-foreground: #F8F4EE;
 
-  --color-border: #EBE6DF;             /* Bordures ultra-fines chaudes */
-  --color-input: #EBE6DF;
-  --color-ring: #C5A059;
+  --color-secondary: #E8E0D4;
+  --color-secondary-foreground: #1C1412;
 
-  /* Fonts — Charte : Playfair Display + Inter */
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-playfair), ui-serif, Georgia, serif;
+  --color-muted: #E8E0D4;
+  --color-muted-foreground: #5C534A;
 
-  /* Ombres — Douces, diffuses, teintées Bordeaux */
-  --shadow-premium: 0 10px 40px -10px rgba(114, 47, 55, 0.08);
-  --shadow-card: 0 4px 24px -4px rgba(114, 47, 55, 0.06);
-  --shadow-elevated: 0 16px 48px -12px rgba(114, 47, 55, 0.10);
-  
-  /* Radii — Charte : légers, pas d'effet jouet */
-  --radius-lg: 0.5rem;   /* 8px */
-  --radius-md: 0.375rem;  /* 6px */
-  --radius-sm: 0.25rem;   /* 4px */
+  --color-accent: #B8954A;
+  --color-accent-foreground: #1C1412;
+
+  --color-destructive: #9F1239;
+  --color-destructive-foreground: #F8F4EE;
+
+  --color-border: #D9D0C4;
+  --color-input: #D9D0C4;
+  --color-ring: #B8954A;
+
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
+
+  --shadow-premium: 0 12px 40px -12px rgba(92, 31, 40, 0.12);
+  --shadow-card: 0 4px 20px -4px rgba(92, 31, 40, 0.08);
+  --shadow-elevated: 0 18px 48px -14px rgba(92, 31, 40, 0.14);
+
+  --radius-lg: 0.5rem;
+  --radius-md: 0.375rem;
+  --radius-sm: 0.25rem;
 }
 
 @layer base {
@@ -53,35 +50,34 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-serif);
   }
-  /* Typographic scale — per Design System */
-  h1 { font-size: 3rem; line-height: 3.5rem; font-weight: 700; }       /* 48px/56px */
-  h2 { font-size: 2.25rem; line-height: 2.5rem; font-weight: 600; }    /* 36px/40px */
-  h3 { font-size: 1.5rem; line-height: 2rem; font-weight: 600; }       /* 24px/32px */
-  
+  h1 { font-size: 3rem; line-height: 3.5rem; font-weight: 700; }
+  h2 { font-size: 2.25rem; line-height: 2.5rem; font-weight: 600; }
+  h3 { font-size: 1.5rem; line-height: 2rem; font-weight: 600; }
+
   @media (max-width: 640px) {
-    h1 { font-size: 2.25rem; line-height: 2.5rem; }   /* 36px/40px mobile */
-    h2 { font-size: 1.75rem; line-height: 2rem; }      /* 28px/32px mobile */
-    h3 { font-size: 1.25rem; line-height: 1.75rem; }   /* 20px/28px mobile */
+    h1 { font-size: 2.25rem; line-height: 2.5rem; }
+    h2 { font-size: 1.75rem; line-height: 2rem; }
+    h3 { font-size: 1.25rem; line-height: 1.75rem; }
   }
 }
 
 @layer utilities {
   .glass {
-    background: rgba(253, 251, 247, 0.8);
+    background: rgba(243, 239, 232, 0.85);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(235, 230, 223, 0.6);
+    border: 1px solid rgba(217, 208, 196, 0.7);
   }
-  
+
   .glass-card {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(235, 230, 223, 0.5);
+    border: 1px solid rgba(217, 208, 196, 0.6);
     box-shadow: var(--shadow-premium);
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, #722F37, #C5A059);
+    background: linear-gradient(135deg, #5C1F28, #B8954A);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -89,9 +85,16 @@
 
   .card-kelia {
     background: #FFFFFF;
-    border: 1px solid #EBE6DF;
+    border: 1px solid #D9D0C4;
     box-shadow: var(--shadow-card);
     border-radius: 0.5rem;
+  }
+
+  .encart-kelia {
+    background: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--color-primary);
+    box-shadow: var(--shadow-card);
   }
 }
 
@@ -112,7 +115,6 @@
   }
 }
 
-/* Hide scrollbars when needed */
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }

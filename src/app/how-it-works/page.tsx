@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { CinematicLayout } from "@/components/layout/CinematicLayout";
+import { ExpertiseEncart } from "@/components/marketing/ExpertiseEncart";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import {
   Sparkles,
@@ -104,6 +105,15 @@ export default function HowItWorksPage() {
           C&apos;est pourquoi nous avons conçu une expérience qui place la foi, les valeurs, la personnalité et le projet de vie au cœur de chaque étape. Notre objectif n&apos;est pas de multiplier les rencontres, mais de vous aider à rencontrer LA personne avec laquelle vous pourrez construire une relation durable.
         </p>
       </section>
+
+      <ExpertiseEncart
+        className="max-w-7xl mx-auto mb-8"
+        eyebrow="Parcours"
+        title="Cinq étapes. Un seul objectif : une alliance digne."
+        body="Du compte à la conversation, chaque étape renforce le discernement : profil, questionnaires, compatibilités, puis échanges respectueux."
+        imageSrc="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1600&auto=format&fit=crop"
+        imageAlt="Moment de partage spirituel"
+      />
 
       {/* UNE EXPÉRIENCE PENSÉE POUR LES CÉLIBATAIRES CHRÉTIENS */}
       <section className="py-8 px-6 sm:px-12 max-w-4xl mx-auto text-center">

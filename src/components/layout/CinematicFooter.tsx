@@ -61,7 +61,6 @@ export function CinematicFooter() {
                 <li><Link href="/register" className="hover:text-primary transition-colors">Charte des 4 piliers</Link></li>
                 <li><Link href="/confidentialite" className="hover:text-primary transition-colors">Confidentialité & Pudeur</Link></li>
                 <li><Link href="/moderation" className="hover:text-primary transition-colors">Sécurité & Modération</Link></li>
-                <li><Link href="/admin" className="text-primary/80 hover:underline transition-colors text-xs flex items-center gap-1">Console Admin</Link></li>
               </ul>
             </div>
 

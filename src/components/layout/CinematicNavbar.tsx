@@ -41,12 +41,17 @@ export function CinematicNavbar() {
             "pointer-events-auto flex items-center justify-between gap-6 sm:gap-10 px-6 py-3.5 rounded-2xl transition-all duration-500 ease-out border",
             scrolled || pathname !== "/"
               ? "bg-background/85 backdrop-blur-2xl border-border/40 shadow-premium text-foreground py-3"
-              : "bg-transparent text-foreground border-transparent py-4"
+              : "bg-black/25 backdrop-blur-md text-white border-white/20 py-4"
           )}
         >
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <span className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-primary transition-transform duration-300 group-hover:scale-105">
+            <span
+              className={cn(
+                "font-serif text-2xl sm:text-3xl font-bold tracking-tight transition-transform duration-300 group-hover:scale-105",
+                scrolled || pathname !== "/" ? "text-primary" : "text-white"
+              )}
+            >
               KELIA
             </span>
           </Link>
@@ -60,8 +65,14 @@ export function CinematicNavbar() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "relative text-xs sm:text-sm font-medium transition-colors duration-300 hover:text-primary select-none",
-                    active ? "text-primary font-semibold" : "text-muted-foreground hover:text-foreground"
+                    "relative text-xs sm:text-sm font-medium transition-colors duration-300 select-none",
+                    scrolled || pathname !== "/"
+                      ? active
+                        ? "text-primary font-semibold"
+                        : "text-muted-foreground hover:text-foreground"
+                      : active
+                        ? "text-white font-semibold"
+                        : "text-white/80 hover:text-white"
                   )}
                 >
                   {link.name}
@@ -77,7 +88,12 @@ export function CinematicNavbar() {
           <div className="hidden sm:flex items-center gap-3">
             <Link
               href="/login"
-              className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors px-3 py-2"
+              className={cn(
+                "text-xs font-medium transition-colors px-3 py-2",
+                scrolled || pathname !== "/"
+                  ? "text-muted-foreground hover:text-foreground"
+                  : "text-white/85 hover:text-white"
+              )}
             >
               Connexion
             </Link>
@@ -89,7 +105,12 @@ export function CinematicNavbar() {
           {/* Mobile Menu Trigger */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 rounded-full text-foreground/80 hover:text-foreground hover:bg-secondary/40 transition-colors"
+            className={cn(
+              "md:hidden p-2 rounded-full transition-colors",
+              scrolled || pathname !== "/"
+                ? "text-foreground/80 hover:text-foreground hover:bg-secondary/40"
+                : "text-white hover:bg-white/10"
+            )}
             aria-label="Menu"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}

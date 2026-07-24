@@ -3,6 +3,8 @@
 import * as React from "react";
 import { CinematicLayout } from "@/components/layout/CinematicLayout";
 import { CheckoutPlanButton } from "@/components/billing/CheckoutPlanButton";
+import { ExpertiseEncart } from "@/components/marketing/ExpertiseEncart";
+import { MagneticButton } from "@/components/ui/magnetic-button";
 import { CheckCircle2, ChevronDown, Sparkles } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { PLANS, type PlanId } from "@/lib/billing/plans";
@@ -36,7 +38,7 @@ export default function PricingPage() {
     },
     {
       q: "Quels sont les moyens de paiement acceptés ?",
-      a: "En production : Mobile Money via CinetPay (Tmoney, Flooz, Wave selon les pays). En développement, un mode démo active l'abonnement sans débit réel."
+      a: "Mobile Money via CinetPay (Tmoney, Flooz, Wave selon les pays). Les tarifs sont affichés clairement avant validation."
     },
     {
       q: "Est-il vraiment possible d'utiliser KELIA gratuitement ?",
@@ -66,6 +68,15 @@ export default function PricingPage() {
           Trouver la bonne personne est l&apos;une des décisions les plus importantes d&apos;une vie. Choisissez le niveau d&apos;accompagnement qui vous correspond.
         </p>
       </section>
+
+      <ExpertiseEncart
+        className="max-w-7xl mx-auto mb-8"
+        eyebrow="Investissement relationnel"
+        title="Moins de hasard. Plus de discernement."
+        body="Chaque offre débloque davantage de suggestions, de messages et d’outils pour approfondir une relation digne — jusqu’à l’accompagnement Premium+."
+        imageSrc="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=1600&auto=format&fit=crop"
+        imageAlt="Alliance et engagement"
+      />
 
       <section className="py-16 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
@@ -197,8 +208,11 @@ export default function PricingPage() {
           Bien plus qu&apos;un abonnement.
         </h2>
         <p className="text-muted-foreground text-base max-w-xl mx-auto">
-          En choisissant KELIA, vous rejoignez une communauté de célibataires chrétiens qui partagent une même aspiration : rencontrer LA personne avec laquelle construire un mariage solide.
+          En choisissant KELIA, vous rejoignez des célibataires chrétiens qui veulent construire un mariage solide — pas accumuler des matches.
         </p>
+        <MagneticButton href="/register" variant="primary" size="lg">
+          Créer mon compte gratuit
+        </MagneticButton>
       </section>
     </CinematicLayout>
   );
