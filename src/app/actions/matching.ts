@@ -173,6 +173,7 @@ export async function getCompatibilitySuggestions(limit?: number): Promise<{
     .select(PROFILE_SELECT)
     .is("deleted_at", null)
     .neq("user_id", viewer.user_id)
+    .neq("moderation_status", "rejected")
     .gte("completion_percentage", 50)
     .limit(80)
 
@@ -182,6 +183,9 @@ export async function getCompatibilitySuggestions(limit?: number): Promise<{
 
   const candidates = (rows ?? [])
     .filter((row) => {
+      const status = row.moderation_status as string | null
+      // Soft launch : pending OK si profil assez complet ; rejected déjà exclu
+      if (status === "rejected") return false
       const privacy = row.privacy_settings
       if (!privacy || typeof privacy !== "object" || Array.isArray(privacy)) return true
       return !(privacy as Record<string, unknown>).retreat_mode

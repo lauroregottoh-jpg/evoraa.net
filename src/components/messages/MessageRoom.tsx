@@ -66,17 +66,26 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
           }
           setMessages((prev) => {
             if (prev.some((m) => m.id === row.id)) return prev
+            const isMine = row.sender_id !== room.partnerUserId
             const next: ChatMessageDTO = {
               id: row.id,
               senderId: row.sender_id,
               text: row.message,
               createdAt: row.created_at ?? new Date().toISOString(),
               isRead: Boolean(row.is_read),
-              isMine: row.sender_id !== room.partnerUserId,
+              isMine,
             }
             return [...prev, next]
           })
-          setRoom((prev) => ({ ...prev, messageCount: prev.messageCount + 1 }))
+          setRoom((prev) => {
+            const isMine = row.sender_id !== room.partnerUserId
+            return {
+              ...prev,
+              messageCount: isMine ? prev.messageCount + 1 : prev.messageCount,
+              replyUnlimited:
+                prev.replyUnlimited || row.sender_id === room.partnerUserId,
+            }
+          })
         }
       )
       .subscribe()
@@ -104,7 +113,7 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
         )
         setRoom((prev) => ({
           ...prev,
-          messageCount: Math.max(prev.messageCount, prev.messageCount + 1),
+          messageCount: prev.messageCount + 1,
         }))
       }
       setInput("")
@@ -125,7 +134,15 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
     await doSend()
   }
 
-  const remaining = Math.max(0, room.freeLimit - messages.length)
+  const remaining = room.replyUnlimited
+    ? Number.MAX_SAFE_INTEGER
+    : Math.max(0, room.freeLimit - room.messageCount)
+
+  const remainingLabel = room.replyUnlimited
+    ? "réponses illimitées"
+    : remaining > 10000
+      ? "illimité"
+      : `${remaining} msg restants`
 
   return (
     <div className="space-y-6 py-4">
@@ -150,7 +167,7 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
                 )}
               </div>
               <span className="text-[11px] text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                <ShieldCheck className="h-3 w-3" /> Espace modéré · {remaining === Number.MAX_SAFE_INTEGER || remaining > 10000 ? "illimité" : `${remaining} msg restants`}
+                <ShieldCheck className="h-3 w-3" /> Espace modéré · {remainingLabel}
               </span>
             </div>
           </div>

@@ -30,8 +30,11 @@ export type ConversationRoomDTO = {
   partnerUserId: string
   harmonyScore: number
   messages: ChatMessageDTO[]
+  /** Messages envoyés par moi (pour quota) */
   messageCount: number
   freeLimit: number
+  /** Free : répondre sans plafond si le partenaire a déjà écrit */
+  replyUnlimited?: boolean
 }
 
 function formatListTime(iso: string | null): string {
@@ -350,6 +353,8 @@ export async function getConversationRoom(conversationId: string): Promise<{
 
   const entitlements = await getUserEntitlements(user.id)
   const messageLimit = entitlements.limits.messagesPerConversation
+  const myMessageCount = mapped.filter((m) => m.isMine).length
+  const partnerHasWritten = mapped.some((m) => !m.isMine)
 
   return {
     room: {
@@ -359,8 +364,9 @@ export async function getConversationRoom(conversationId: string): Promise<{
       partnerUserId,
       harmonyScore: Math.round(Number(match.compatibility_score ?? 0)),
       messages: mapped,
-      messageCount: mapped.length,
+      messageCount: myMessageCount,
       freeLimit: messageLimit,
+      replyUnlimited: partnerHasWritten && !entitlements.isPaid,
     },
   }
 }
@@ -394,17 +400,27 @@ export async function sendMessageAction(
     return { error: "Accès non autorisé à cette conversation." }
   }
 
-  const { count } = await supabase
+  const { count: myCount } = await supabase
     .from("messages")
     .select("id", { count: "exact", head: true })
     .eq("conversation_id", conversationId)
+    .eq("sender_id", user.id)
+
+  const { count: partnerCount } = await supabase
+    .from("messages")
+    .select("id", { count: "exact", head: true })
+    .eq("conversation_id", conversationId)
+    .neq("sender_id", user.id)
 
   const entitlements = await getUserEntitlements(user.id)
   const messageLimit = entitlements.limits.messagesPerConversation
+  const partnerHasWritten = (partnerCount ?? 0) > 0
+  // Free : répondre illimité si l'autre a déjà écrit (style Farata)
+  const replyUnlimited = partnerHasWritten && !entitlements.isPaid
 
-  if ((count ?? 0) >= messageLimit) {
+  if (!replyUnlimited && (myCount ?? 0) >= messageLimit) {
     return {
-      error: `Limite de messages atteinte pour votre offre ${entitlements.planName}. Passez Premium sur /pricing.`,
+      error: `Limite de messages atteinte pour votre offre ${entitlements.planName}. Passez Alliance sur /billing.`,
     }
   }
 

@@ -1,82 +1,54 @@
-# Ce que VOUS devez faire (humain) — le reste est automatisable dans le code
+# Ce que VOUS devez faire (humain) — le reste est dans le code
 
-Le code KELIA est prêt côté produit. **Sans les actions ci-dessous, le soft launch reste bloqué** car elles nécessitent vos comptes / secrets / identité légale.
+Guide détaillé (admin, pool H+F, Farata/paiement) : **`docs/OPS_JOUR1.md`**
 
-## Checklist minimale (copier-coller)
+## Checklist minimale
 
-### 1. Compléter `.env.local` (projet local)
+### 1. `.env.local` / Vercel
 
 ```
-NEXT_PUBLIC_SUPABASE_URL=...          # déjà présent
-NEXT_PUBLIC_SUPABASE_ANON_KEY=...     # déjà présent
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 NEXT_PUBLIC_APP_URL=https://votre-domaine.com
-SUPABASE_DB_URL=postgresql://postgres:...@db.xxxx.supabase.co:5432/postgres
-SUPABASE_SERVICE_ROLE_KEY=...         # Dashboard Supabase → Settings → API
-PAYMENTS_DEMO_MODE=false              # ou true si soft launch sans paiement réel
-CINETPAY_API_KEY=...
-CINETPAY_SITE_ID=...
-CINETPAY_SECRET_KEY=...
-RESEND_API_KEY=...                    # optionnel mais active le formulaire Contact
-RESEND_FROM_EMAIL=KELIA <noreply@kelia.net>
-CONTACT_INBOX_EMAIL=contact@kelia.net
+SUPABASE_SERVICE_ROLE_KEY=...
+PAYMENTS_DEMO_MODE=true              # false + CinetPay si encaissement réel
+# CINETPAY_API_KEY=
+# CINETPAY_SITE_ID=
+# CINETPAY_SECRET_KEY=
+# RESEND_API_KEY=
+# RESEND_FROM_EMAIL=KELIAA <noreply@keliaa.net>
+# CONTACT_INBOX_EMAIL=contact@keliaa.net
+# SUPABASE_DB_URL=...                # seulement pour run_migration.ps1
 ```
-
-Puis dans le dossier du projet :
 
 ```powershell
 .\run_migration.ps1
 ```
 
-### 2. Dashboard Supabase (5 min)
+### 2. Supabase (5 min)
 
-1. **Authentication → URL Configuration**
-   - Site URL = URL prod
-   - Redirect URLs = `https://domaine/auth/callback` + `http://localhost:3000/auth/callback`
-2. **Database → Replication** : cocher `messages`
-3. **Storage** : vérifier bucket `avatars` (public read)
+1. Auth → Site URL + Redirect `…/auth/callback`
+2. Replication : table `messages`
+3. Storage : bucket `avatars`
+4. Devenir admin : `profiles.role = 'admin'` (voir OPS_JOUR1)
 
-### 3. Vercel
+### 3. Vercel + DNS
 
-1. Importer le repo `evoraa.net`
-2. Coller les mêmes variables (sauf `SUPABASE_DB_URL`)
-3. Deploy
+Importer le repo, coller les env, pointer le domaine.
 
-### 4. CinetPay (si paiements réels)
+### 4. Paiements (Togo)
 
-Notify URL (déjà construite par le code si `CINETPAY_SECRET_KEY` est défini) :
+KELIAA utilise **CinetPay** (Moov Money + TMoney au Togo ; Wave/Orange ailleurs).  
+Compte marchand : [cinetpay.com](https://cinetpay.com) — le code est déjà prêt.
+
+Notify URL :
 
 `https://domaine/api/payments/cinetpay/notify?token=VOTRE_CINETPAY_SECRET_KEY`
 
-### 5. Domaine DNS
+### 5. Mentions légales
 
-Pointer le domaine vers Vercel (registrar).
+Page adaptée **Togo** (pas de SIREN). Ajoutez RCCM/NIF quand vous les avez.
 
-### 6. Mentions légales
+### 6. Premiers users
 
-Remplir raison sociale / SIREN / siège dans `/mentions-legales` (placeholders `[À compléter]`).
-
----
-
-## Ce que l’agent a déjà automatisé dans le code
-
-- Auth, matching, messaging, billing, reports, photos, settings, admin live
-- Dashboard réel (plus de faux “Laure”)
-- Contact honnête (Resend ou message d’erreur, pas faux succès)
-- Webhook CinetPay sécurisé + `notify_url` avec token
-- CGU / confidentialité / mentions légales (brouillon)
-- Migrations SQL `000`→`008` prêtes à appliquer
-- CI GitHub Actions
-
-## Ce que l’agent NE PEUT PAS faire sans vous
-
-| Action | Pourquoi |
-|--------|----------|
-| Créer / coller service role, DB password, CinetPay, Resend | Secrets — sécurité |
-| Appliquer migrations sans `SUPABASE_DB_URL` | Accès DB |
-| Configurer Auth redirects Supabase | Dashboard propriétaire |
-| Créer projet Vercel + coller env | Compte Vercel |
-| DNS domaine | Registrar |
-| Remplir SIREN / société | Identité légale réelle |
-| Activer Realtime dans le dashboard | Vérification propriétaire |
-
-Dès que `.env.local` contient `SUPABASE_DB_URL` + service role, redemandez : **« applique migrations + deploy »** — l’agent peut enchaîner.
+Invitez des **hommes et des femmes** (sinon matching vide). Approuvez les photos dans `/admin`.

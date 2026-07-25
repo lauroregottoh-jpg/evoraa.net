@@ -35,7 +35,7 @@ export default async function HelpPage() {
           </div>
         )}
 
-        <EvaSpiritualAdvisor />
+        <EvaSpiritualAdvisor dailyLimit={usage?.evaQuestionsLimit ?? 3} />
 
         <div className="text-center pt-4">
           <Link href="/contact" className="text-sm font-semibold text-primary underline">

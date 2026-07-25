@@ -98,6 +98,27 @@ export async function updateSession(request: NextRequest) {
     return redirectWithCookies(needsOnboarding ? '/onboarding' : '/dashboard')
   }
 
+  // Gate onboarding on product routes (except onboarding + settings)
+  if (user && isProtected && pathname !== '/onboarding' && !pathname.startsWith('/onboarding/') && pathname !== '/settings' && !pathname.startsWith('/settings/')) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('completion_percentage, onboarding_status, role')
+      .eq('user_id', user.id)
+      .maybeSingle()
+
+    const completion = profile?.completion_percentage ?? 0
+    const status = profile?.onboarding_status
+    const needsOnboarding =
+      completion < 70 ||
+      !status ||
+      status === 'step1_account' ||
+      status === 'step2_profile'
+
+    if (needsOnboarding && !isAdminRoute) {
+      return redirectWithCookies('/onboarding')
+    }
+  }
+
   if (user && isAdminRoute) {
     const { data: profile } = await supabase
       .from('profiles')

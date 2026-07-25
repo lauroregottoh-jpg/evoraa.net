@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server"
-import { getPlan, type PlanDefinition, type PlanId } from "@/lib/billing/plans"
+import { getPlan, isPaidPlan, type PlanDefinition, type PlanId } from "@/lib/billing/plans"
 
 export type ActiveSubscription = {
   id: string
@@ -66,5 +66,6 @@ export async function getUserEntitlements(userId?: string) {
     planName: plan.name,
     limits: plan.limits,
     subscription: sub,
+    isPaid: isPaidPlan(plan.id),
   }
 }
