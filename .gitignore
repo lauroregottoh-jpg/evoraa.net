@@ -41,3 +41,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Inspiration assets (large local media — keep local)
+/INSPIRATION FARATA/
+*.mp4

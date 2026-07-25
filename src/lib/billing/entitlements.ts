@@ -44,13 +44,17 @@ export async function getActiveSubscription(
   }
 
   const planId = (data.plan as PlanId) || "free"
+  const safeId: PlanId =
+    planId === "premium" || planId === "premium_plus" || planId === "free"
+      ? planId
+      : "free"
   return {
     id: data.id,
-    planId: planId in { premium: 1, premium_plus: 1, free: 1 } ? planId : "free",
+    planId: safeId,
     status: data.status ?? "active",
     startsAt: data.starts_at,
     endsAt: data.ends_at,
-    plan: getPlan(planId),
+    plan: getPlan(safeId),
   }
 }
 

@@ -2,81 +2,107 @@ export type PlanId = "free" | "premium" | "premium_plus"
 
 export type PlanLimits = {
   dailySuggestions: number
-  messagesPerConversation: number
+  /** Nouvelles conversations initiées / mois */
   conversationsPerMonth: number
+  messagesPerConversation: number
+  /** Questions EVA / jour (coach local) */
+  evaQuestionsPerDay: number
 }
 
 export type PlanDefinition = {
   id: PlanId
   name: string
   amountXof: number
+  /** Prix barré (ancrage lancement), optionnel */
+  compareAtXof?: number
   periodLabel: string
   description: string
   features: string[]
   popular?: boolean
+  /** Affiché sur la page Tarifs publique */
+  public: boolean
   limits: PlanLimits
 }
 
+/**
+ * Grille validée soft launch : Free + Alliance (premium_plus).
+ * `premium` (2 500) reste en code pour d'éventuels abonnés legacy — non public.
+ */
 export const PLANS: Record<PlanId, PlanDefinition> = {
   free: {
     id: "free",
     name: "Découverte",
     amountXof: 0,
-    periodLabel: "",
-    description: "Idéal pour explorer la plateforme.",
+    periodLabel: "Pour toujours",
+    description: "Gratuit pour commencer. Assez pour goûter — pas pour tout vivre.",
+    public: true,
     features: [
+      "Création de profil & questionnaires",
       "3 suggestions de compatibilité / jour",
-      "5 conversations / mois",
+      "5 nouvelles conversations / mois",
       "5 messages / conversation",
-      "Questionnaire d'accueil & profil",
+      "Répondre aux messages reçus",
+      "EVA : 3 questions / jour",
+      "Journal & ressources",
       "Bouclier de bienveillance",
     ],
     limits: {
       dailySuggestions: 3,
-      messagesPerConversation: 5,
       conversationsPerMonth: 5,
+      messagesPerConversation: 5,
+      evaQuestionsPerDay: 3,
     },
   },
   premium: {
     id: "premium",
-    name: "Premium",
+    name: "Essentiel (legacy)",
     amountXof: 2500,
     periodLabel: "/ mois",
-    description: "L'expérience complète pour un discernement sérieux.",
-    popular: true,
+    description: "Ancien plan — non proposé aux nouveaux inscrits.",
+    public: false,
     features: [
       "10 suggestions / jour",
       "15 conversations / mois",
       "70 messages / conversation",
-      "Badge Premium",
-      "Renouvellement manuel (sans surprise)",
     ],
     limits: {
       dailySuggestions: 10,
-      messagesPerConversation: 70,
       conversationsPerMonth: 15,
+      messagesPerConversation: 70,
+      evaQuestionsPerDay: 10,
     },
   },
   premium_plus: {
     id: "premium_plus",
-    name: "Premium+",
+    name: "Alliance",
     amountXof: 5000,
+    compareAtXof: 7500,
     periodLabel: "/ mois",
-    description: "L'expérience accélérée et illimitée.",
+    description: "Premium pour accélérer : maximisez vos chances grâce au matching à 3 piliers.",
+    popular: true,
+    public: true,
     features: [
-      "20 suggestions / jour",
-      "Conversations illimitées",
-      "Messages illimités",
-      "Visibilité prioritaire (badge Premium+)",
-      "Renouvellement manuel",
+      "15 suggestions de compatibilité / jour",
+      "25 nouvelles conversations / mois",
+      "100 messages / conversation",
+      "EVA : questions étendues (20 / jour)",
+      "Score de compatibilité détaillé",
+      "Badge Alliance",
+      "Priorité soft dans les suggestions",
+      "Support prioritaire",
+      "Renouvellement manuel (sans surprise)",
     ],
     limits: {
-      dailySuggestions: 20,
-      messagesPerConversation: Number.MAX_SAFE_INTEGER,
-      conversationsPerMonth: Number.MAX_SAFE_INTEGER,
+      dailySuggestions: 15,
+      conversationsPerMonth: 25,
+      messagesPerConversation: 100,
+      evaQuestionsPerDay: 20,
     },
   },
 }
+
+/** Plans affichés sur /pricing */
+export const PUBLIC_PLAN_ORDER: PlanId[] = ["free", "premium_plus"]
 
 export function isPaidPlan(planId: string): planId is Exclude<PlanId, "free"> {
   return planId === "premium" || planId === "premium_plus"
@@ -85,4 +111,9 @@ export function isPaidPlan(planId: string): planId is Exclude<PlanId, "free"> {
 export function getPlan(planId: string | null | undefined): PlanDefinition {
   if (planId && planId in PLANS) return PLANS[planId as PlanId]
   return PLANS.free
+}
+
+/** Plan payant recommandé (Alliance) */
+export function getHeroPaidPlan(): PlanDefinition {
+  return PLANS.premium_plus
 }

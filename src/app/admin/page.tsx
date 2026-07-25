@@ -6,7 +6,7 @@ import Link from "next/link";
 export default async function AdminPage() {
   const data = await getAdminDashboardData();
 
-  if (data.error) {
+  if (data.error || !data.stats || !data.retention) {
     return (
       <MainLayout maxWidth="4xl">
         <div className="py-16 text-center space-y-3">
@@ -21,13 +21,15 @@ export default async function AdminPage() {
   }
 
   return (
-    <MainLayout maxWidth="7xl">
+    <MainLayout maxWidth="7xl" showFooter={false}>
       <AdminConsole
-        stats={data.stats!}
+        stats={data.stats}
+        retention={data.retention}
         users={data.users}
         reports={data.reports}
         payments={data.payments}
         photos={data.photos}
+        subscriptions={data.subscriptions}
       />
     </MainLayout>
   );

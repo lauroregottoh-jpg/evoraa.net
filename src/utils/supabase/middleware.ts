@@ -15,6 +15,8 @@ const PROTECTED_PREFIXES = [
   '/checkout',
   '/assessments',
   '/notifications',
+  '/billing',
+  '/help',
 ]
 
 const ADMIN_PREFIXES = ['/admin', '/moderation']

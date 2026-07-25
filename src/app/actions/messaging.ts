@@ -178,7 +178,7 @@ export async function startConversationFromProfile(profileId: string): Promise<{
 
       if ((convCount ?? 0) >= entitlements.limits.conversationsPerMonth) {
         return {
-          error: `Limite de conversations atteinte pour votre offre ${entitlements.planName}. Passez Premium sur /pricing.`,
+          error: `Limite de conversations atteinte pour votre offre ${entitlements.planName}. Passez Alliance sur /billing.`,
         }
       }
     }
