@@ -1,7 +1,9 @@
 "use client";
 
 import * as React from "react";
+import { Suspense } from "react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { CinematicLayout } from "@/components/layout/CinematicLayout";
 import { PageHero } from "@/components/marketing/PageHero";
 import { EvaSpiritualAdvisor } from "@/components/spiritual/EvaSpiritualAdvisor";
@@ -10,6 +12,15 @@ import { Mail, MessageSquare, ShieldCheck, Send, CheckCircle2, Headphones } from
 import { submitContactAction } from "@/app/actions/contact";
 
 export default function ContactPage() {
+  return (
+    <Suspense fallback={<CinematicLayout><div className="pt-32 text-center text-sm text-muted-foreground">Chargement…</div></CinematicLayout>}>
+      <ContactPageInner />
+    </Suspense>
+  );
+}
+
+function ContactPageInner() {
+  const searchParams = useSearchParams();
   const [submitted, setSubmitted] = React.useState(false);
   const [sending, setSending] = React.useState(false);
   const [error, setError] = React.useState("");
@@ -19,6 +30,23 @@ export default function ContactPage() {
     subject: "question",
     message: "",
   });
+
+  React.useEffect(() => {
+    const subject = searchParams.get("subject");
+    const moduleTitle = searchParams.get("moduleTitle");
+    const moduleId = searchParams.get("module");
+    if (subject === "coaching" || moduleTitle) {
+      setFormData((prev) => ({
+        ...prev,
+        subject: "coaching",
+        message: moduleTitle
+          ? `Bonjour,\n\nJe souhaite un coaching sur le thème : ${moduleTitle}${
+              moduleId ? ` (${moduleId})` : ""
+            }.\n\nDisponibilités / WhatsApp :\n`
+          : prev.message,
+      }));
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

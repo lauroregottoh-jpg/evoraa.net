@@ -8,10 +8,17 @@ import {
   Wallet,
   Sparkles,
   Compass,
+  ChevronRight,
 } from "lucide-react"
 import { MemberPage } from "@/components/layout/MemberPage"
 import { getMyGrowthAxes } from "@/app/actions/assessments"
-import { ACADEMY_MODULES } from "@/lib/academy/modules"
+import { AcademyCoachingCta } from "@/components/academy/AcademyCoachingCta"
+import { ModuleProgressBar } from "@/components/academy/AcademyProgress"
+import {
+  ACADEMY_MODULES,
+  academyLessonPath,
+  academyModulePath,
+} from "@/lib/academy/modules"
 import { cn } from "@/utils/cn"
 
 const ICONS = {
@@ -28,7 +35,10 @@ const ICONS = {
 export default async function AcademieMariagePage() {
   const { axes } = await getMyGrowthAxes()
   const recommendedIds = new Set(
-    axes.slice(0, 3).map((a) => a.academyHref.replace("/academie-mariage#", ""))
+    axes.slice(0, 3).map((a) => {
+      const parts = a.academyHref.split("/").filter(Boolean)
+      return parts[parts.length - 1] || ""
+    })
   )
 
   const recommended = ACADEMY_MODULES.filter((m) => recommendedIds.has(m.id))
@@ -45,9 +55,8 @@ export default async function AcademieMariagePage() {
             Grandir avant (et pour) l&apos;alliance
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
-            Des modules courts pour travailler vos axes d&apos;amélioration issus des
-            questionnaires — dialogue, familles, pureté, finances, foi. Sans jugement : avec
-            clarté.
+            Leçons courtes (texte + exercice). Les emplacements vidéo sont prêts : les médias
+            s&apos;ajouteront au fur et à mesure. Sans jugement — avec clarté.
           </p>
           <div className="flex flex-wrap gap-3 pt-2">
             <Link href="/assessments" className="text-sm font-semibold text-primary underline">
@@ -66,37 +75,9 @@ export default async function AcademieMariagePage() {
               Basé sur vos questionnaires — commencez par ces modules.
             </p>
             <div className="grid gap-4">
-              {recommended.map((mod) => {
-                const Icon = ICONS[mod.id]
-                return (
-                  <section
-                    key={mod.id}
-                    id={mod.id}
-                    className="scroll-mt-24 rounded-2xl border-2 border-primary/30 bg-primary/5 p-5 sm:p-6 space-y-3"
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="h-10 w-10 rounded-xl bg-primary/15 text-primary flex items-center justify-center shrink-0">
-                        <Icon className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
-                          Pour vous
-                        </p>
-                        <h3 className="font-serif text-xl font-bold">{mod.title}</h3>
-                        <p className="text-sm text-muted-foreground mt-1">{mod.summary}</p>
-                      </div>
-                    </div>
-                    <ul className="space-y-1.5 pl-1">
-                      {mod.lessons.map((lesson) => (
-                        <li key={lesson} className="text-sm flex gap-2">
-                          <span className="text-accent font-bold">·</span>
-                          <span>{lesson}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
-                )
-              })}
+              {recommended.map((mod) => (
+                <ModuleCard key={mod.id} mod={mod} highlight />
+              ))}
             </div>
           </div>
         )}
@@ -105,43 +86,89 @@ export default async function AcademieMariagePage() {
           {recommended.length > 0 && (
             <h2 className="font-serif text-xl font-bold pt-2">Tous les modules</h2>
           )}
-          {(recommended.length > 0 ? others : ACADEMY_MODULES).map((mod) => {
-            const Icon = ICONS[mod.id]
-            return (
-              <section
-                key={mod.id}
-                id={recommendedIds.has(mod.id) ? undefined : mod.id}
-                className={cn(
-                  "scroll-mt-24 rounded-2xl border border-border bg-card p-5 sm:p-6 space-y-3"
-                )}
-              >
-                <div className="flex items-start gap-3">
-                  <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h2 className="font-serif text-xl font-bold">{mod.title}</h2>
-                    <p className="text-sm text-muted-foreground mt-1">{mod.summary}</p>
-                  </div>
-                </div>
-                <ul className="space-y-1.5 pl-1">
-                  {mod.lessons.map((lesson) => (
-                    <li key={lesson} className="text-sm flex gap-2">
-                      <span className="text-accent font-bold">·</span>
-                      <span>{lesson}</span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            )
-          })}
+          {(recommended.length > 0 ? others : ACADEMY_MODULES).map((mod) => (
+            <ModuleCard key={mod.id} mod={mod} />
+          ))}
         </div>
 
+        <AcademyCoachingCta moduleId="dialogue" moduleTitle="Académie du mariage" />
+
         <p className="text-xs text-muted-foreground text-center">
-          L&apos;Académie s&apos;enrichira de contenus vidéo et d&apos;exercices. Pour l&apos;instant :
-          repères concrets liés à votre profil KELIAA.
+          {ACADEMY_MODULES.reduce((n, m) => n + m.lessons.length, 0)} leçons disponibles en version
+          texte. Vidéos : à brancher quand elles sont prêtes (YouTube / Vimeo).
         </p>
       </div>
     </MemberPage>
+  )
+}
+
+function ModuleCard({
+  mod,
+  highlight,
+}: {
+  mod: (typeof ACADEMY_MODULES)[number]
+  highlight?: boolean
+}) {
+  const Icon = ICONS[mod.id]
+  const first = mod.lessons[0]
+
+  return (
+    <section
+      id={mod.id}
+      className={cn(
+        "scroll-mt-24 rounded-2xl border p-5 sm:p-6 space-y-4",
+        highlight ? "border-2 border-primary/30 bg-primary/5" : "border-border bg-card"
+      )}
+    >
+      <div className="flex items-start gap-3">
+        <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+          <Icon className="h-5 w-5" />
+        </div>
+        <div className="min-w-0 flex-1">
+          {highlight && (
+            <p className="text-[10px] font-bold uppercase tracking-widest text-primary">Pour vous</p>
+          )}
+          <h2 className="font-serif text-xl font-bold">{mod.title}</h2>
+          <p className="text-sm text-muted-foreground mt-1">{mod.summary}</p>
+        </div>
+      </div>
+
+      <ModuleProgressBar
+        moduleId={mod.id}
+        lessonSlugs={mod.lessons.map((l) => l.slug)}
+      />
+
+      <ul className="space-y-1">
+        {mod.lessons.map((lesson, i) => (
+          <li key={lesson.slug}>
+            <Link
+              href={academyLessonPath(mod.id, lesson.slug)}
+              className="text-sm flex items-center gap-2 py-1.5 hover:text-primary"
+            >
+              <span className="text-accent font-bold">{i + 1}.</span>
+              <span className="flex-1">{lesson.title}</span>
+              <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
+            </Link>
+          </li>
+        ))}
+      </ul>
+
+      <div className="flex flex-wrap gap-2 pt-1">
+        <Link
+          href={academyModulePath(mod.id)}
+          className="inline-flex h-9 items-center px-4 rounded-xl border border-border text-xs font-semibold"
+        >
+          Voir le module
+        </Link>
+        {first && (
+          <Link
+            href={academyLessonPath(mod.id, first.slug)}
+            className="inline-flex h-9 items-center px-4 rounded-xl bg-primary text-primary-foreground text-xs font-semibold"
+          >
+            Commencer
+          </Link>
+        )}
+      </div>
+    </section>
   )
 }

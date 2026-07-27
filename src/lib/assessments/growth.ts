@@ -185,7 +185,7 @@ export function buildGrowthAxes(
         score,
         title: tip.title,
         advice: tip.advice,
-        academyHref: `/academie-mariage#${tip.module}`,
+        academyHref: `/academie-mariage/${tip.module}`,
       })
     }
   }
