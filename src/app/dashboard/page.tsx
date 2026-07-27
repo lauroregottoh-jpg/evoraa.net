@@ -41,7 +41,19 @@ export default async function DashboardPage() {
   const { usage } = data
 
   return (
-    <MemberShell firstName={data.firstName} planLabel={usage.planName} isPaid={usage.isPaid}>
+    <MemberShell
+      firstName={data.firstName}
+      planLabel={usage.planName}
+      isPaid={usage.isPaid}
+      completionPercentage={data.completionPercentage}
+      hasAvatar={data.hasAvatar}
+      assessmentsDone={data.assessmentsDone}
+      assessmentsTotal={data.assessmentsTotal}
+      renewSoon={usage.renewSoon}
+      daysRemaining={usage.daysRemaining}
+      trialDaysRemaining={usage.trialDaysRemaining}
+      isTrialBoost={usage.isTrialBoost}
+    >
       <div className="space-y-5 max-w-3xl mx-auto">
         {data.nextSteps.map((step) => (
           <div
