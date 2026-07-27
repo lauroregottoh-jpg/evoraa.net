@@ -5,6 +5,7 @@ import { MemberPage } from "@/components/layout/MemberPage"
 import { AcademyVideoSlot } from "@/components/academy/AcademyVideoSlot"
 import { AcademyCoachingCta } from "@/components/academy/AcademyCoachingCta"
 import { MarkLessonDoneButton } from "@/components/academy/AcademyProgress"
+import { AcademySelfCheckBox } from "@/components/academy/AcademySelfCheck"
 import {
   academyLessonPath,
   academyModulePath,
@@ -38,18 +39,24 @@ export default async function AcademyLessonPage({
           <h1 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
             {lesson.title}
           </h1>
+          <p className="text-sm text-muted-foreground leading-relaxed">{lesson.subtitle}</p>
         </div>
 
         <AcademyVideoSlot lesson={lesson} />
 
-        <section className="space-y-4">
-          <h2 className="font-serif text-xl font-bold">Leçon</h2>
-          {lesson.body.map((para) => (
-            <p key={para.slice(0, 24)} className="text-sm leading-relaxed text-foreground/90">
-              {para}
-            </p>
-          ))}
-        </section>
+        {lesson.sections.map((section) => (
+          <section key={section.title} className="space-y-3">
+            <h2 className="font-serif text-xl font-bold">{section.title}</h2>
+            <ul className="space-y-2">
+              {section.points.map((p) => (
+                <li key={p} className="text-sm flex gap-2 leading-snug">
+                  <span className="text-accent font-bold shrink-0">·</span>
+                  <span>{p}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
 
         <section className="rounded-2xl border border-border bg-card p-5 space-y-3">
           <h2 className="font-serif text-lg font-bold">Points clés</h2>
@@ -63,8 +70,26 @@ export default async function AcademyLessonPage({
           </ul>
         </section>
 
+        <section className="rounded-2xl border border-border bg-card p-5 space-y-3">
+          <h2 className="font-serif text-lg font-bold">Ressources pratiques</h2>
+          <ul className="space-y-3">
+            {lesson.resources.map((r) => (
+              <li key={r.label} className="text-sm">
+                <p className="font-semibold text-foreground">{r.label}</p>
+                <p className="text-muted-foreground mt-0.5 leading-snug">{r.detail}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <AcademySelfCheckBox
+          moduleId={mod.id}
+          lessonSlug={lesson.slug}
+          selfCheck={lesson.selfCheck}
+        />
+
         <section className="rounded-2xl border border-primary/20 bg-primary/5 p-5 space-y-2">
-          <h2 className="font-serif text-lg font-bold">Exercice pratique</h2>
+          <h2 className="font-serif text-lg font-bold">Exercice de la semaine</h2>
           <p className="text-sm leading-relaxed">{lesson.exercise}</p>
         </section>
 
