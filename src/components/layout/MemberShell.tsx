@@ -15,6 +15,7 @@ import {
   Menu,
   X,
   GraduationCap,
+  Settings,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { ThemeToggle } from "@/components/evoraa/ThemeToggle";
@@ -150,7 +151,7 @@ export function MemberShell({
               onClick={() => setOpen(false)}
               className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-foreground hover:bg-secondary"
             >
-              <CreditCard className="h-4 w-4" />
+              <Settings className="h-4 w-4" />
               Paramètres
             </Link>
           </div>

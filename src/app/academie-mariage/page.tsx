@@ -144,7 +144,7 @@ export default async function AcademieMariagePage() {
               <section
                 key={mod.id}
                 id={mod.id}
-                className="scroll-mt-24 rounded-2xl border border-border bg-white p-5 sm:p-6 space-y-3"
+                className="scroll-mt-24 rounded-2xl border border-border bg-card p-5 sm:p-6 space-y-3"
               >
                 <div className="flex items-start gap-3">
                   <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">

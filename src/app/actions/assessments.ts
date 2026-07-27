@@ -132,13 +132,18 @@ export async function submitAssessmentAction(
       .maybeSingle()
 
     if (existing?.id) {
-      await supabase.from("test_answers").update({ answer_value: value }).eq("id", existing.id)
+      const { error: answerError } = await supabase
+        .from("test_answers")
+        .update({ answer_value: value })
+        .eq("id", existing.id)
+      if (answerError) return { error: answerError.message }
     } else {
-      await supabase.from("test_answers").insert({
+      const { error: answerError } = await supabase.from("test_answers").insert({
         user_id: user.id,
         question_id: questionId,
         answer_value: value,
       })
+      if (answerError) return { error: answerError.message }
     }
   }
 

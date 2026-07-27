@@ -18,7 +18,7 @@ Il manque surtout : **migrations appliquées ?**, **réglages Auth/Storage/Realt
 
 3. Si ça réussit → OK.  
    Si ça échoue → ouvre [Supabase](https://supabase.com/dashboard) → ton projet → **SQL Editor** → colle et exécute les fichiers dans l’ordre  
-   `supabase/migrations/20240101000000_…` jusqu’à `…00009_…` (un par un).
+   `supabase/migrations/20240101000000_…` jusqu’à `…00011_…` (un par un).
 
 **Tu as fini quand :** aucune erreur SQL, les tables existent (`profiles`, `messages`, `subscriptions`, etc.).
 
