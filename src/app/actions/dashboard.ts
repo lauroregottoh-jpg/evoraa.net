@@ -43,21 +43,58 @@ export type DashboardData = {
   topSuggestions: Array<{
     profileId: string
     name: string
+    age: number
     score: number
     city: string | null
+    photoUrl: string | null
+    community: string | null
+    isVerified: boolean
   }>
   usage: UsageSnapshot
   social: SocialInsights
   nextSteps: DashboardNextStep[]
   affirmation: string
+  affirmationSource: string
+  dailyTip: { title: string; body: string }
   mission: DashboardMission
 }
 
 const AFFIRMATIONS = [
-  "Le discernement prend du temps. Aujourd'hui, une conversation honnête vaut mieux que dix swipes.",
-  "Vous n'êtes pas en retard. Vous construisez quelque chose de digne.",
-  "La compatibilité se révèle dans la clarté — pas dans la précipitation.",
-  "Votre profil sincère attire les bonnes personnes. Continuez d'être vrai(e).",
+  {
+    text: "Que tout ce que vous faites soit fait avec amour.",
+    source: "1 Corinthiens 16.14",
+  },
+  {
+    text: "Le discernement prend du temps. Aujourd'hui, une conversation honnête vaut mieux que dix swipes.",
+    source: "KELIAA — rappel du jour",
+  },
+  {
+    text: "Vous n'êtes pas en retard. Vous construisez quelque chose de digne.",
+    source: "KELIAA — rappel du jour",
+  },
+  {
+    text: "La paix de Dieu, qui surpasse toute intelligence, gardera vos cœurs.",
+    source: "Philippiens 4.7",
+  },
+]
+
+const DAILY_TIPS = [
+  {
+    title: "Implique ta famille avec sagesse",
+    body: "Le mariage concerne aussi les familles. Garde-les informés, sans tout décider sous pression.",
+  },
+  {
+    title: "Une photo claire change tout",
+    body: "Un visage visible inspire confiance et te rend trouvable dans les suggestions.",
+  },
+  {
+    title: "Écoute avant de répondre",
+    body: "Dans un message délicat : 1 minute d'écoute intérieure, puis une phrase honnête.",
+  },
+  {
+    title: "Les 5 piliers avant la précipitation",
+    body: "Complète tes questionnaires : le matching KELIAA devient vraiment utile.",
+  },
 ]
 
 export async function getDashboardData(): Promise<{
@@ -170,6 +207,7 @@ export async function getDashboardData(): Promise<{
   }
 
   const dayIndex = new Date().getDate() % AFFIRMATIONS.length
+  const tipIndex = new Date().getDate() % DAILY_TIPS.length
   const assessmentProgress = progress.map((p) => ({
     slug: p.slug,
     completed: p.completed,
@@ -244,13 +282,19 @@ export async function getDashboardData(): Promise<{
       topSuggestions: suggestions.slice(0, 4).map((s) => ({
         profileId: s.id,
         name: s.name || "Membre",
+        age: s.age || 0,
         score: s.harmonyScore,
         city: s.city ?? null,
+        photoUrl: s.photoUrl ?? null,
+        community: s.community ?? null,
+        isVerified: Boolean(s.isVerified),
       })),
       usage,
       social,
       nextSteps: nextSteps.slice(0, 3),
-      affirmation: AFFIRMATIONS[dayIndex],
+      affirmation: AFFIRMATIONS[dayIndex].text,
+      affirmationSource: AFFIRMATIONS[dayIndex].source,
+      dailyTip: DAILY_TIPS[tipIndex],
       mission,
     },
   }
