@@ -18,6 +18,7 @@ export type AcademyResource = {
   detail: string
 }
 
+/** Checklist perso — pas un quiz ni une note */
 export type AcademySelfCheck = {
   prompt: string
   items: string[]
@@ -28,11 +29,9 @@ export type AcademyLesson = {
   title: string
   subtitle: string
   durationMin: number
-  /** Blocs courts : titre + puces pratiques */
   sections: AcademySection[]
   keyPoints: string[]
   resources: AcademyResource[]
-  /** Mini auto-test / checklist */
   selfCheck: AcademySelfCheck
   exercise: string
   videoUrl?: string | null
@@ -50,798 +49,812 @@ export type AcademyModule = {
 export const ACADEMY_MODULES: AcademyModule[] = [
   {
     id: "foi",
-    title: "Foi au quotidien du couple",
+    title: "Foi au quotidien",
     summary:
-      "Prière, Parole, service : des rythmes réalistes pour avancer sans s'épuiser ni se juger.",
+      "Avant le mariage : construire une vie avec Dieu que vous pourrez un jour partager à deux, sans pression ni façade.",
     lessons: [
       {
         slug: "rythme-priere",
-        title: "Un rythme de prière réaliste",
-        subtitle: "Petit, régulier, tenable — pas un marathon spirituel.",
+        title: "Prier un peu, mais vraiment",
+        subtitle: "Pas 1 heure par jour. 3 minutes qui tiennent la route.",
         durationMin: 8,
         isFreePreview: true,
         videoUrl: null,
         sections: [
           {
-            title: "Pourquoi ça casse souvent",
+            title: "Ce qui bloque souvent",
             points: [
-              "Objectif trop haut (« 30 min chaque soir ») → abandon en 2 semaines",
-              "Un des deux parle, l'autre subit → frustration",
-              "Prière = performance au lieu de présence",
+              "Vous visez trop haut, puis vous abandonnez",
+              "Vous priez seulement quand ça va mal",
+              "Vous attendez le « bon partenaire » pour commencer à prier",
             ],
           },
           {
-            title: "Ce qui marche en pratique",
+            title: "Petits trucs qui marchent",
             points: [
-              "3 minutes, 3 soirs / semaine : déjà une victoire",
-              "Fixer l'heure (ex. après le repas) — pas « quand on pourra »",
-              "Alterner : un jour l'un prie à voix haute, l'autre dit Amen",
-              "Célibataire : même rythme seul(e), pour le préparer au couple",
+              "Même heure, même coin (lit, chaise, trajet bus)",
+              "3 minutes chrono : merci → besoin → Amen",
+              "Un verset lu à voix haute, même court",
+              "Si vous fréquentez quelqu’un : proposez 1 prière courte le dimanche, pas tous les soirs dès le 1er mois",
             ],
           },
         ],
         keyPoints: [
-          "Régularité > durée",
-          "Créneau écrit dans l'agenda",
-          "Pas de comparaison avec d'autres couples d'église",
+          "La régularité compte plus que la longueur",
+          "Vous préparez le couple en étant déjà solide seul(e)",
+          "Dieu n’attend pas une performance",
         ],
         resources: [
           {
             label: "Modèle 3 minutes",
-            detail: "1) Merci (30s) 2) Besoin du jour (1 min) 3) Bénédiction mutuelle (30s)",
+            detail: "Merci (30 s) · Un besoin précis (1 min) · Une bénédiction (30 s).",
           },
           {
-            label: "Verset ancre",
-            detail: "Matthieu 18.20 — présence promise, même à deux, même court.",
+            label: "Ancre biblique",
+            detail: "Matthieu 6.6 — la chambre fermée avant la scène publique.",
           },
         ],
         selfCheck: {
-          prompt: "Cochez ce qui est vrai pour vous cette semaine",
+          prompt: "Cochez ce qui est déjà vrai pour vous (le reste = à travailler)",
           items: [
-            "J'ai un créneau de prière écrit (seul ou à deux)",
-            "Mon objectif tient en ≤ 5 minutes",
-            "Je ne me compare pas à un « couple modèle »",
+            "J’ai un moment de prière cette semaine, même court",
+            "Mon objectif tient en 5 minutes max",
+            "Je ne compare pas ma vie spirituelle à celle des autres sur les réseaux",
           ],
         },
         exercise:
-          "Choisissez 3 soirs. Chronométrez 3 minutes. Notez 1 frein et 1 aide après chaque fois.",
+          "Cette semaine : 3 soirs, 3 minutes. Notez juste : « fait / pas fait ». Pas de culpabilité, juste l’habitude.",
       },
       {
         slug: "service-eglise",
-        title: "Servir sans vider le foyer",
-        subtitle: "Le service est une saison — pas une compétition d'épuisement.",
+        title: "Servir sans s’épuiser",
+        subtitle: "L’église a besoin de vous — votre futur foyer aussi.",
         durationMin: 7,
         videoUrl: null,
         sections: [
           {
-            title: "Signaux d'alerte",
+            title: "Signaux à écouter",
             points: [
-              "Vous rentrez trop fatigué(e) pour parler ou prier",
-              "Les enfants / le conjoint voient surtout votre absence",
-              "Dire non à l'église vous remplit de culpabilité",
+              "Vous dites oui par peur de décevoir le pasteur",
+              "Vous n’avez plus d’énergie pour vos amis, votre famille, ou un début de relation",
+              "Le dimanche devient une course, pas un repos",
             ],
           },
           {
-            title: "Règles simples",
+            title: "Avant de vous engager (ou de vous marier)",
             points: [
-              "Aucun nouvel engagement sans en parler à deux (ou à un mentor)",
-              "Revue tous les 3 mois : garder / réduire / pause",
-              "Une saison intense (camp, conférence) = une saison de récupération après",
+              "Écrivez vos heures d’église / semaine (honnêtement)",
+              "Avant un nouvel engagement : une nuit de réflexion, puis une réponse claire",
+              "En fréquentation : dites tôt ce que vous faites à l’église — pour éviter la surprise plus tard",
             ],
           },
         ],
         keyPoints: [
-          "Foyer et service ne s'opposent pas — ils se planifient",
-          "Dire non peut être un acte d'amour",
-          "La culpabilité n'est pas un guide fiable",
+          "Dire non peut être sage",
+          "Un service trop lourd aujourd’hui peut devenir un conflit demain",
+          "Votre capacité a une limite — et c’est normal",
         ],
         resources: [
           {
-            label: "Tableau des engagements",
-            detail: "Colonnes : activité · heures/semaine · joie (1–5) · coût foyer (1–5)",
+            label: "Phrase pour un responsable",
+            detail: "« Pour cette saison, je peux X heures. Au-delà, je dois décliner. »",
           },
           {
-            label: "Phrase utile au responsable",
-            detail: "« Pour cette saison, je peux X heures. Au-delà, je dois décliner. »",
+            label: "Liste rapide",
+            detail: "Activité · heures/semaine · joie (1–5) · fatigue (1–5).",
           },
         ],
         selfCheck: {
-          prompt: "Auto-test charge de service",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "Je connais mon nombre d'heures / semaine pour l'église",
-            "Mon conjoint / mentor connaît mes engagements",
-            "J'ai le droit écrit de dire non sans me justifier 10 minutes",
+            "Je sais combien d’heures je donne à l’église",
+            "J’ai le droit de dire non sans me justifier 10 minutes",
+            "Si je fréquente quelqu’un, il/elle connaît mes engagements",
           ],
         },
         exercise:
-          "Listez tous vos engagements. Cochez 1 à 2 qui peuvent attendre 3 mois. Dites-le à quelqu'un cette semaine.",
+          "Listez vos engagements d’église. Entourez-en un que vous pourriez réduire 3 mois. Parlez-en à une personne de confiance.",
       },
       {
         slug: "discerner-pasteur",
-        title: "Discerner avec un aîné mature",
-        subtitle: "Demander conseil sans déléguer sa décision.",
+        title: "Demander conseil sans se décharger",
+        subtitle: "Un aîné éclaire. Vous décidez.",
         durationMin: 6,
         videoUrl: null,
         sections: [
           {
-            title: "Quand aller voir quelqu'un",
+            title: "Quand y aller",
             points: [
-              "Décision lourde (mariage, déménagement, rupture)",
-              "Vous tournez en rond depuis > 1 mois",
-              "Conflit familial ou d'église qui vous dépasse",
+              "Vous pensez sérieusement à une fréquentation ou à une rupture",
+              "Vous tournez en rond depuis des semaines",
+              "La famille ou l’église met une pression que vous n’arrivez plus à porter seul(e)",
             ],
           },
           {
             title: "Comment préparer le RDV",
             points: [
-              "3 questions max, écrites",
-              "Faits en 5 minutes, pas un roman",
-              "Demander : sagesse, pas « dites-moi quoi faire »",
+              "3 questions max, écrites sur le téléphone",
+              "Faits en 5 minutes (pas l’histoire complète depuis 2019)",
+              "Demandez de la sagesse, pas « dites-moi oui ou non à sa place »",
             ],
           },
         ],
         keyPoints: [
-          "Le conseiller éclaire — vous décidez",
-          "Confidentialité et respect",
-          "Un deuxième avis si le premier vous met mal à l'aise",
+          "Le conseiller n’épouse pas à votre place",
+          "Choisissez quelqu’un discret, mature, sans intérêt caché",
+          "Un avis qui vous met très mal à l’aise : prenez un second conseil",
         ],
         resources: [
           {
-            label: "Fiche RDV",
-            detail: "Situation (5 lignes) · Ce que j'ai déjà essayé · 3 questions · Ce que je crains",
+            label: "Mini fiche RDV",
+            detail: "Situation (5 lignes) · Ce que j’ai déjà fait · 3 questions · Ce que je crains.",
           },
           {
-            label: "Qui choisir ?",
-            detail: "Quelqu'un mature, discret, sans intérêt personnel dans votre choix.",
+            label: "Qui éviter",
+            detail: "Quelqu’un qui aime les ragots, ou qui veut vous « caser » à tout prix.",
           },
         ],
         selfCheck: {
-          prompt: "Suis-je prêt(e) à demander conseil ?",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "J'ai 3 questions précises",
-            "Je peux accepter un avis différent du mien",
+            "J’ai 3 questions précises à poser",
+            "Je peux entendre un avis différent du mien",
             "Je sais que la décision finale reste la mienne",
           ],
         },
         exercise:
-          "Écrivez vos 3 questions. Identifiez 1 personne à contacter (même si le RDV est dans 2 semaines).",
+          "Écrivez vos 3 questions. Notez le nom d’une personne à contacter — même si le RDV est dans 2 semaines.",
       },
     ],
   },
   {
     id: "dialogue",
-    title: "Dialogue & besoins affectifs",
-    summary: "Dire ce qu'on ressent sans attaquer. Écouter sans se défendre tout de suite.",
+    title: "Dialogue & besoins",
+    summary:
+      "Apprendre à dire les choses tôt, clairement, sans attaquer — avant que le silence ne devienne une habitude de couple.",
     lessons: [
       {
         slug: "je-ressens",
-        title: "La formule « je ressens / j'ai besoin »",
-        subtitle: "Remplacer l'accusation par une demande claire.",
+        title: "Dire ce que vous ressentez",
+        subtitle: "Une phrase simple vaut mieux qu’un silence de 3 semaines.",
         durationMin: 8,
         isFreePreview: true,
         videoUrl: null,
         sections: [
           {
-            title: "À éviter",
+            title: "Ce qui fait mal",
             points: [
-              "« Tu ne m'écoutes jamais »",
-              "« Tu es comme ça… » (étiquette)",
-              "Remonter 10 vieux dossiers dans la même phrase",
+              "« Tu ne m’écoutes jamais » (attaque)",
+              "Attendre qu’il/elle « comprenne tout seul »",
+              "Tout sortir d’un coup après 10 petits non-dits",
             ],
           },
           {
-            title: "Structure utile",
+            title: "Formule à garder",
             points: [
               "Je ressens… (émotion)",
-              "Quand… (fait précis, récent)",
-              "J'ai besoin de… (demande faisable)",
+              "Quand… (un fait précis, récent)",
+              "J’aimerais… (demande faisable)",
             ],
           },
         ],
         keyPoints: [
-          "Un fait > une généralisation",
-          "Un besoin n'est pas un ordre",
-          "30 secondes d'écoute avant de répondre",
+          "Un fait précis > une généralisation",
+          "Demander n’est pas ordonner",
+          "En fréquentation : mieux une petite phrase claire qu’une scène",
         ],
         resources: [
           {
             label: "Exemple prêt",
             detail:
-              "« Je me sens seul(e) quand on ne se parle pas le soir. J'ai besoin de 10 minutes ensemble sans téléphone. »",
+              "« Je me sens un peu mis(e) de côté quand on ne se parle pas 3 jours. J’aimerais un message même court le soir. »",
           },
           {
-            label: "Liste d'émotions",
-            detail: "Seul(e), frustré(e), inquiet(e), fatigué(e), blessé(e), reconnaissant(e)…",
+            label: "Mots utiles",
+            detail: "Seul(e), inquiet(e), fatigué(e), blessé(e), content(e), confus(e)…",
           },
         ],
         selfCheck: {
-          prompt: "Reformulation",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "Ma phrase parle de moi, pas d'une attaque",
-            "Le fait est daté / précis",
-            "La demande tient en une action concrète",
+            "Ma phrase parle de moi, pas d’une attaque",
+            "Le fait est précis (pas « toujours / jamais »)",
+            "La demande tient en une action simple",
           ],
         },
         exercise:
-          "Prenez une frustration récente. Écrivez-la en 1 phrase « je ressens / quand / j'ai besoin ». Lisez-la à voix haute.",
+          "Prenez une frustration récente. Réécrivez-la en une phrase « je ressens / quand / j’aimerais ». Lisez-la à voix haute.",
       },
       {
         slug: "feedback-difficile",
-        title: "Recevoir un feedback difficile",
-        subtitle: "Écouter d'abord — se défendre après, si besoin.",
+        title: "Entendre une remarque qui pique",
+        subtitle: "Écouter d’abord. Se justifier après, si vraiment besoin.",
         durationMin: 7,
         videoUrl: null,
         sections: [
           {
-            title: "Réflexe à freiner",
+            title: "Réflexes qui cassent la relation",
             points: [
-              "Interrompre pour se justifier",
-              "Retourner la faute immédiatement",
-              "Fuite (silence froid 3 jours)",
+              "Couper la parole pour se défendre",
+              "Retourner la faute tout de suite",
+              "Disparaître 3 jours en silence",
             ],
           },
           {
-            title: "Séquence saine",
+            title: "Ce que vous pouvez faire",
             points: [
-              "« Merci d'en parler. Laisse-moi digérer. »",
-              "Clarifier : comprendre ou changer quelque chose ?",
-              "Revenir à heure fixe si c'est trop chaud",
+              "« Merci d’en parler. Laisse-moi digérer. »",
+              "Demander : tu veux que je comprenne, ou que je change quelque chose ?",
+              "Fixer un moment pour en reparler (même 24 h plus tard)",
             ],
           },
         ],
         keyPoints: [
           "Pause ≠ rejet",
           "Vous pouvez être en désaccord et rester respectueux",
-          "Le but n'est pas de « gagner »",
+          "Le but n’est pas de « gagner » l’échange",
         ],
         resources: [
           {
-            label: "3 questions miroir",
+            label: "3 questions utiles",
             detail:
-              "1) Qu'as-tu besoin que je comprenne ? 2) Qu'attends-tu de moi ? 3) Quand on en reparle ?",
+              "1) Qu’as-tu besoin que je comprenne ? 2) Qu’attends-tu de moi ? 3) Quand on en reparle ?",
           },
           {
-            label: "Si c'est injuste",
-            detail: "Notez votre version à froid. Revenez avec des faits, pas de la rage.",
+            label: "Si c’est injuste",
+            detail: "Notez votre version à froid. Revenez avec des faits, pas la colère du moment.",
           },
         ],
         selfCheck: {
-          prompt: "Dernier feedback reçu",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "J'ai écouté au moins 2 minutes sans me justifier",
-            "J'ai reformulé ce que j'ai compris",
-            "J'ai fixé un moment pour y revenir si besoin",
+            "Je peux écouter sans interrompre 1 minute",
+            "Je sais demander une pause sans fuir",
+            "Je peux revenir sur le sujet le lendemain",
           ],
         },
         exercise:
-          "Demandez à un ami 1 feedback honnête. Entraînez-vous à écouter 2 minutes sans vous défendre.",
+          "Repensez à la dernière remarque difficile. Écrivez ce que vous auriez pu dire en 2 phrases : « j’entends » + « j’ai besoin de… ».",
       },
       {
-        slug: "besoins-sans-deviner",
-        title: "Demander sans attendre qu'on devine",
-        subtitle: "La clarté est un cadeau — pas une faiblesse.",
-        durationMin: 6,
+        slug: "demander-clairement",
+        title: "Demander sans attendre qu’on devine",
+        subtitle: "La clarté n’est pas une faiblesse. C’est de l’amour anticipé.",
+        durationMin: 7,
         videoUrl: null,
         sections: [
           {
-            title: "Le piège du « il/elle devrait savoir »",
+            title: "Le piège",
             points: [
-              "Attendisme → rancœur",
-              "Tests (« si tu m'aimais, tu saurais ») → manipulation",
-              "L'autre échoue à un examen qu'il n'a pas vu",
+              "« S’il/elle m’aimait, il/elle saurait »",
+              "Tester l’autre en silence pour voir s’il/elle « mérite »",
+              "Râler après coup au lieu d’avoir demandé avant",
             ],
           },
           {
             title: "Demander proprement",
             points: [
-              "Une demande à la fois",
-              "Accepter un non sans punition",
-              "Remercier quand c'est entendu (même partiel)",
+              "Une chose à la fois",
+              "Dire le besoin + une option concrète",
+              "Accepter un non — et en parler, pas punir",
             ],
           },
         ],
         keyPoints: [
-          "Demander = offrir une chance",
-          "Non ≠ rejet de votre personne",
-          "Répéter calmement si oublié — pas avec sarcasme",
+          "Deviner n’est pas un don biblique obligatoire",
+          "En fréquentation : dites tôt comment vous aimez être rassuré(e)",
+          "Un non clair vaut mieux qu’un oui forcé",
         ],
         resources: [
           {
-            label: "Besoins fréquents",
-            detail: "Temps · encouragement · aide concrète · tendresse · solitude respectée · prière",
+            label: "Phrase type",
+            detail: "« J’ai besoin de X. Est-ce possible pour toi ce week-end ? »",
           },
           {
-            label: "Phrase courte",
-            detail: "« Est-ce possible pour toi de… cette semaine ? »",
+            label: "3 besoins à clarifier tôt",
+            detail: "Temps · messages · prière / église · rythme de fréquentation.",
           },
         ],
         selfCheck: {
-          prompt: "Besoins non dits",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "J'ai identifié 2 besoins non exprimés",
-            "J'en ai formulé 1 clairement",
-            "Je suis prêt(e) à entendre un non",
+            "Je peux nommer 1 besoin sans raconter toute mon histoire",
+            "Je demande avant de me vexer",
+            "Je laisse à l’autre le droit de dire non",
           ],
         },
         exercise:
-          "Notez 2 besoins non dits. Exprimez-en 1 cette semaine (conjoint, ami ou mentor).",
+          "Notez 1 besoin non dit. Formulez-le en une phrase. Si vous fréquentez quelqu’un : dites-le cette semaine. Sinon : dites-le à un ami proche.",
       },
     ],
   },
   {
     id: "conflits",
     title: "Conflits & réconciliation",
-    summary: "Pause, premier pas, blessures : sortir des impasses sans s'écraser.",
+    summary:
+      "Le mariage n’efface pas les disputes. Apprenez dès maintenant à faire pause, revenir, et réparer.",
     lessons: [
       {
         slug: "regle-pause",
         title: "La règle de pause",
-        subtitle: "S'arrêter pour ne pas blesser — puis revenir.",
-        durationMin: 7,
+        subtitle: "S’arrêter pour ne pas blesser — puis revenir vraiment.",
+        durationMin: 8,
         isFreePreview: true,
         videoUrl: null,
         sections: [
           {
             title: "Quand faire pause",
             points: [
-              "Voix qui monte / insultes proches",
-              "Envie de fuir ou de « gagner » à tout prix",
-              "Corps en alerte (cœur, tremblements)",
+              "La voix monte, le cœur tape, vous voulez « gagner »",
+              "Vous êtes sur le point d’envoyer un message que vous regretterez",
+              "Il est trop tard le soir et vous êtes épuisés",
             ],
           },
           {
-            title: "Comment faire pause",
+            title: "Comment le faire",
             points: [
-              "Phrase : « Je m'arrête pour ne pas te blesser. On se reparle à __h. »",
-              "20–30 minutes minimum",
-              "Pas de SMS agressifs pendant la pause",
+              "Dire : « Je pause 20 minutes, je reviens. »",
+              "Pas de disparition 3 jours sans mot",
+              "Revenir : même 10 minutes, même maladroit",
             ],
           },
         ],
         keyPoints: [
-          "Pause avec heure de retour = responsabilité",
-          "Pause sans retour = abandon",
-          "Revenir même si ce n'est pas « résolu »",
+          "Pause = protection, pas punition",
+          "Toujours fixer un retour",
+          "En fréquentation : testez ça tôt — ça révèle beaucoup",
         ],
         resources: [
           {
-            label: "Activités de pause",
-            detail: "Marcher · boire de l'eau · prier 2 min · écrire 5 lignes — pas ruminer sur le canapé",
+            label: "Phrase de pause",
+            detail: "« Je m’énerve. Je reviens dans 20 min. On n’abandonne pas le sujet. »",
           },
           {
-            label: "À l'écrit si besoin",
-            detail: "3 faits · 1 émotion · 1 besoin — avant de se revoir",
+            label: "Pendant la pause",
+            detail: "Boire de l’eau, marcher, prier 1 minute. Pas alimenter la rage sur WhatsApp.",
           },
         ],
         selfCheck: {
-          prompt: "Votre protocole",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "J'ai une phrase de pause mémorisée",
-            "Nous avons (ou j'ai) une durée de pause par défaut",
-            "Je m'engage à revenir à l'heure dite",
+            "J’ai une phrase de pause prête",
+            "Je sais revenir après, même gêné(e)",
+            "Je n’utilise pas le silence pour punir",
           ],
         },
         exercise:
-          "Écrivez votre phrase de pause. Enregistrez-la dans les notes du téléphone.",
+          "Écrivez votre phrase de pause. Envoyez-la à un ami de confiance ou gardez-la dans les notes du téléphone.",
       },
       {
         slug: "premier-pas",
         title: "Faire le premier pas",
-        subtitle: "Responsabilité ≠ s'écraser.",
-        durationMin: 6,
+        subtitle: "Dire « j’ai eu tort sur ça » n’est pas s’écraser.",
+        durationMin: 7,
         videoUrl: null,
         sections: [
           {
-            title: "Ce que ce n'est pas",
+            title: "Ce que ce n’est pas",
             points: [
-              "« C'est entièrement de ma faute » (faux si ce n'est pas vrai)",
-              "Mendier le pardon en s'humiliant",
-              "Ignorer la part de l'autre",
+              "Tout accepter pour « garder la paix »",
+              "S’excuser juste pour que l’autre se taise",
+              "Attendre que l’autre plie en premier par orgueil",
             ],
           },
           {
-            title: "Ce que c'est",
+            title: "Ce que c’est",
             points: [
-              "« Je tiens à nous. Voici ma part : … »",
-              "Nommer un comportement concret à changer",
-              "Inviter l'autre sans le forcer",
+              "Nommer votre part : un fait, une attitude",
+              "Demander pardon sur quelque chose de précis",
+              "Proposer une petite réparation (temps, message, changement)",
             ],
           },
         ],
         keyPoints: [
-          "Le premier pas ouvre la porte — l'autre reste libre",
-          "Une part honnête vaut mieux qu'un grand discours",
-          "La fierté coûte plus cher que 2 minutes d'humilité",
+          "Votre part existe presque toujours",
+          "Le premier pas désarme souvent l’autre",
+          "Pardon ≠ oublier le problème non traité",
         ],
         resources: [
           {
-            label: "Modèle",
-            detail:
-              "« Quand j'ai [fait X], ça t'a [impact]. Je reconnais ma part. Je voudrais [action]. Es-tu ouvert(e) à en reparler ? »",
+            label: "Phrase simple",
+            detail: "« Sur X, j’ai eu tort. Tu méritais mieux. Est-ce qu’on peut en reparler calmement ? »",
+          },
+          {
+            label: "Ancre",
+            detail: "Éphésiens 4.26 — la colère a une heure limite.",
           },
         ],
         selfCheck: {
-          prompt: "Sur un conflit en cours",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "Je peux nommer ma part en une phrase",
-            "Je ne demande pas à l'autre d'effacer sa blessure",
-            "Je suis prêt(e) à un premier pas cette semaine",
+            "Je peux nommer ma part dans un conflit récent",
+            "Je peux demander pardon sans « mais toi aussi »",
+            "Je peux proposer une réparation concrète",
           ],
         },
         exercise:
-          "Sur un conflit non résolu : écrivez « votre part » en une phrase honnête.",
+          "Pensez à un conflit (ami, famille, fréquentation). Écrivez 1 phrase de responsabilité + 1 proposition de réparation. Envoyez-la si c’est sage.",
       },
       {
         slug: "ne-pas-pourrir",
-        title: "Ne pas laisser pourrir une blessure",
-        subtitle: "Mieux une conversation maladroite qu'une rancune de 6 mois.",
-        durationMin: 6,
+        title: "Ne pas laisser pourrir",
+        subtitle: "Une conversation maladroite vaut mieux qu’une rancune de 6 mois.",
+        durationMin: 7,
         videoUrl: null,
         sections: [
           {
-            title: "Signes de pourriture",
+            title: "Signes que ça pourrit",
             points: [
-              "Ironie / froid sans explication",
-              "Vous en parlez à tout le monde sauf à la personne",
-              "Le moindre détail ravive la même colère",
+              "Vous évitez le sujet, mais vous y pensez souvent",
+              "Ironie, froid, ou « tout va bien » forcé",
+              "Vous le racontez à tout le monde sauf à la personne concernée",
             ],
           },
           {
             title: "Débloquer",
             points: [
-              "Fixer une date pour en parler (même 20 minutes)",
-              "Écrire d'abord si la parole est trop chaude",
-              "Chercher un tiers mature si le cycle se répète",
+              "Choisir un moment calme (pas au milieu d’une dispute)",
+              "Dire : « Il y a quelque chose qui me reste. Est-ce qu’on peut en parler 10 minutes ? »",
+              "Si c’est trop lourd : mentor ou pasteur mature",
             ],
           },
         ],
         keyPoints: [
           "Le temps seul ne guérit pas toujours",
-          "Nommer la blessure = premier soin",
-          "Aide extérieure = sagesse, pas échec",
+          "En fréquentation : une blessure non dite devient souvent une rupture brutale",
+          "Mieux tôt, même imparfait",
         ],
         resources: [
           {
-            label: "Timer 20 min",
-            detail: "10 min chacun · pas d'interruptions · 1 demande chacun à la fin",
+            label: "Ouverture douce",
+            detail: "« Ce n’est pas pour attaquer. J’ai besoin d’être honnête pour qu’on avance bien. »",
           },
           {
-            label: "Quand appeler à l'aide",
-            detail: "Même conflit 3+ fois · insultes · peur · silence > 2 semaines",
+            label: "Limite saine",
+            detail: "Si l’autre refuse toute conversation pendant des semaines : c’est une info pour discerner.",
           },
         ],
         selfCheck: {
-          prompt: "Blessure ouverte ?",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "J'ai identifié une blessure encore active",
-            "J'ai un créneau pour l'aborder (ou pour écrire / prier)",
-            "Je sais qui pourrait m'aider si je bloque",
+            "Je sais nommer une blessure encore ouverte",
+            "Je peux en parler à la bonne personne (pas à tout le groupe)",
+            "Je n’attends pas « le moment parfait » depuis trop longtemps",
           ],
         },
         exercise:
-          "Identifiez 1 blessure ouverte. Planifiez un créneau cette semaine (parole, écrit ou prière).",
+          "Notez une chose non dite. Décidez : en parler cette semaine, ou la confier d’abord à un mentor.",
       },
     ],
   },
   {
     id: "purete",
-    title: "Pureté & limites physiques",
-    summary: "Limites, parole et passé : clarifier avec dignité pour protéger l'engagement.",
+    title: "Pureté & limites",
+    summary:
+      "Avant le mariage : des limites claires, des mots respectueux, et de l’honnêteté sans se mettre à nu trop tôt.",
     lessons: [
       {
         slug: "definir-limites",
-        title: "Définir ses limites avant le mariage",
-        subtitle: "Le flou crée la confusion ; la clarté protège.",
+        title: "Définir vos limites avant",
+        subtitle: "Le flou crée la confusion. La clarté protège les deux.",
         durationMin: 8,
         isFreePreview: true,
         videoUrl: null,
         sections: [
           {
-            title: "Pourquoi écrire ses limites",
+            title: "Pourquoi écrire vos limites",
             points: [
-              "Sous émotion, on négocie mal",
-              "Chacun a un passé et une conscience différents",
-              "Ce n'est pas un concours de sainteté — c'est du respect",
+              "Sous émotion, on improvise mal",
+              "Chacun arrive avec une définition différente de « trop loin »",
+              "Vous pourrez en parler calmement, pas en urgence à 23 h",
             ],
           },
           {
             title: "Comment faire",
             points: [
-              "Seul(e) d'abord : OK / pas OK / zone grise",
-              "En parler avant que la situation chauffe",
-              "Revoir avec un mentor si besoin",
+              "Seul(e) d’abord : listez ce qui est ok / pas ok pour vous",
+              "En fréquentation sérieuse : partagez tôt, sans jugement",
+              "Incluez aussi les écrans, les lieux, les heures tardives",
             ],
           },
         ],
         keyPoints: [
-          "Limites personnelles avant limites de couple",
-          "Revoir si le contexte change",
-          "Pression ≠ amour",
+          "Vos limites sont un cadeau, pas une accusation",
+          "Si l’autre pousse sans respect : c’est une info majeure",
+          "Les limites évoluent — mais pas sous pression",
         ],
         resources: [
           {
-            label: "Grille simple",
-            detail: "3 colonnes : OK · Pas OK · À discuter — lieux, heures, réseaux, contact physique",
+            label: "Mini grille",
+            detail: "Toucher · bisous · solitude · nuit · contenus · alcool. Pour chacun : ok / pas ok / à discuter.",
           },
           {
-            label: "Phrase de protection",
-            detail: "« Je tiens à toi et à nos limites. On s'arrête là pour ce soir. »",
+            label: "Phrase d’ouverture",
+            detail: "« Pour moi, pour honorer Dieu et nous respecter, j’aimerais qu’on soit clairs sur… »",
           },
         ],
         selfCheck: {
-          prompt: "Clarté personnelle",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "J'ai écrit au moins 3 « pas OK »",
-            "Je peux les dire sans m'excuser 5 minutes",
-            "Je sais qui m'aiderait si je suis sous pression",
+            "J’ai écrit au moins 3 limites personnelles",
+            "Je peux les dire sans m’excuser 10 fois",
+            "Je sais que « non » n’a pas besoin d’un sermon",
           ],
         },
         exercise:
-          "Feuille privée : 3 OK / 3 pas OK. Gardez-la. Pas besoin de tout partager tout de suite.",
+          "Écrivez vos limites (ok / pas ok / à discuter). Gardez-les privées pour l’instant, ou partagez-les avec un mentor.",
       },
       {
         slug: "parler-sexualite",
         title: "Parler de sexualité avec respect",
-        subtitle: "Pudeur + clarté + bon timing.",
+        subtitle: "Pudeur + clarté. Pas de détail inutile, pas de silence total.",
         durationMin: 7,
         videoUrl: null,
         sections: [
           {
             title: "Mauvais moments",
             points: [
-              "En public ou devant la famille",
-              "Au milieu d'une dispute",
-              "Sous forte excitation (décisions biaisées)",
+              "En pleine excitation, ou tard le soir",
+              "Par message pendant une dispute",
+              "Devant des amis « pour rire »",
             ],
           },
           {
             title: "Bon cadre",
             points: [
-              "Lieu calme, temps limité (20–30 min)",
-              "Respecter le rythme de l'autre",
-              "Zéro chantage (« si tu m'aimais… »)",
+              "Jour, lieu calme, intention claire",
+              "Parler de valeurs, peurs, attentes — pas d’un inventaire cru",
+              "Si besoin : pastorat / counseling chrétien avant le mariage",
             ],
           },
         ],
         keyPoints: [
-          "Le sujet n'est pas sale — il demande sagesse",
-          "Écouter autant que parler",
-          "On peut reporter sans rejeter",
+          "Le silence total crée des surprises douloureuses",
+          "Trop de détails trop tôt peut blesser ou exciter sans sagesse",
+          "Un couple qui se prépare ose les sujets importants",
         ],
         resources: [
           {
-            label: "Ouverture respectueuse",
-            detail:
-              "« J'aimerais qu'on clarifie nos limites / attentes, pour se respecter. Est-ce un bon moment ? »",
+            label: "Sujets utiles",
+            detail: "Attentes · peurs · passé (niveau adapté) · pureté · vision du mariage.",
           },
           {
-            label: "Si blocage",
-            detail: "Proposer un couple mentor ou pasteur — pas forcer la confidence.",
+            label: "Si c’est tabou chez vous",
+            detail: "Commencez par un livre ou un aîné mature, puis en parlez à deux.",
           },
         ],
         selfCheck: {
-          prompt: "Préparation",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "J'ai 2 phrases d'ouverture prêtes",
-            "Je connais mon rythme (pas celui des réseaux)",
-            "Je refuse la pression comme critère d'amour",
+            "Je sais ce que je veux clarifier avant le mariage",
+            "Je peux en parler sans me moquer ni me cacher",
+            "Je sais vers qui aller si c’est trop lourd seul(e)",
           ],
         },
-        exercise: "Écrivez 2 phrases respectueuses pour ouvrir ce sujet le moment venu.",
+        exercise:
+          "Notez 3 questions que vous aimeriez aborder avant un engagement. Choisissez le bon moment (ou un mentor d’abord).",
       },
       {
-        slug: "passe-transparence",
+        slug: "passe-guerison",
         title: "Passé, guérison, transparence",
-        subtitle: "Honnêteté utile — pas forcément tous les détails.",
-        durationMin: 7,
+        subtitle: "Honnêteté utile — pas forcément tous les détails le premier mois.",
+        durationMin: 8,
         videoUrl: null,
         sections: [
           {
             title: "Ordre sage",
             points: [
-              "Guérir / être accompagné(e) soi-même d'abord",
-              "Choisir le niveau de détail utile à la confiance",
-              "Bon moment (pas le 2ᵉ rendez-vous ni la veille du mariage sans préparation)",
+              "Guérir avec Dieu et un mentor avant de tout déverser",
+              "En fréquentation : timing adapté à la confiance réelle",
+              "Avant le mariage : transparence sur ce qui touche le foyer (santé, dettes, enfants, addictions…)",
             ],
           },
           {
             title: "Pièges",
             points: [
-              "Tout cacher par honte",
-              "Tout déverser pour « vider » sans égard",
-              "Utiliser le passé de l'autre comme arme plus tard",
+              "Tout cacher par honte → explosion plus tard",
+              "Tout raconter trop tôt → lien trop intense trop vite",
+              "Utiliser le passé de l’autre comme arme",
             ],
           },
         ],
         keyPoints: [
-          "Grâce et vérité ensemble",
-          "Un conseiller peut préparer la conversation",
-          "Le futur conjoint n'est pas votre thérapeute exclusif",
+          "La grâce de Dieu ne remplace pas la vérité",
+          "Certains sujets demandent un accompagnement",
+          "La transparence se gagne ; elle ne se force pas",
         ],
         resources: [
           {
-            label: "Questions à se poser",
-            detail:
-              "Qu'est-ce qui affecte notre futur ? Qu'est-ce qui est déjà guéri ? De quoi ai-je besoin (prière, counseling) ?",
+            label: "Ce qui doit sortir avant le mariage",
+            detail: "Ce qui impacte la vie à deux : santé, finances, engagements, enfants, addictions.",
           },
           {
-            label: "Soutien",
-            detail: "Pasteur · conseiller chrétien · groupe de guérison — selon votre contexte.",
+            label: "Phrase humble",
+            detail: "« Il y a une part de mon passé que je veux partager avec sagesse. Est-ce qu’on peut choisir un bon moment ? »",
           },
         ],
         selfCheck: {
-          prompt: "Transparence responsable",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "Je distingue honte et responsabilité",
-            "Je sais si j'ai besoin d'aide avant d'en parler",
-            "Je ne compte pas utiliser un passé contre quelqu'un",
+            "Je travaille ma guérison (prière, mentor, counseling si besoin)",
+            "Je sais distinguer secret honteux et sagesse de timing",
+            "Je ne garde pas volontairement une bombe pour « après les fiançailles »",
           ],
         },
         exercise:
-          "Si un élément pèse : notez « j'ai besoin d'un conseiller avant / je peux en parler / pas encore ». Une case suffit.",
+          "Écrivez (privé) : ce que je dois guérir · ce que je partagerai tôt · ce que je partagerai avant le mariage. Priez dessus.",
       },
     ],
   },
   {
     id: "familles",
     title: "Familles & foyer",
-    summary: "Honorer les parents, décider à deux, poser des limites sans guerre.",
+    summary:
+      "Honorer père et mère, tout en préparant un foyer qui pourra respirer. Surtout avant de s’engager.",
     lessons: [
       {
-        slug: "beaux-parents",
-        title: "Limites saines avec les familles",
-        subtitle: "Honorer ≠ tout accepter.",
-        durationMin: 7,
+        slug: "limites-familles",
+        title: "Limites saines avec la famille",
+        subtitle: "Honorer ≠ tout accepter. Aimer ≠ tout raconter.",
+        durationMin: 8,
         isFreePreview: true,
         videoUrl: null,
         sections: [
           {
-            title: "Principes",
+            title: "Principes simples",
             points: [
-              "Le couple décide ; la famille conseille",
-              "Pas de triangulation (plaintes via un parent)",
-              "Visites, argent, avis : règles claires",
+              "Vos parents comptent — votre futur couple aussi",
+              "Certaines décisions se prennent à deux, pas en comité familial",
+              "Le respect reste, même quand vous dites non",
             ],
           },
           {
-            title: "En pratique",
+            title: "En pratique (célibataire / en fréquentation)",
             points: [
-              "Une voix du couple vers l'extérieur (éviter les messages contradictoires)",
-              "Remercier avant de poser une limite",
-              "Revoir les règles aux grandes saisons (bébé, deuil, déménagement)",
+              "Clarifiez tôt : qui décide quoi (logement, argent, dates)",
+              "Ne laissez pas la famille négocier votre relation à votre place",
+              "Une phrase polie et ferme vaut mieux qu’un mensonge pour « éviter le drame »",
             ],
           },
         ],
         keyPoints: [
-          "Limite = protection du foyer, pas rejet des parents",
-          "L'unité du couple passe avant « faire plaisir à tous »",
-          "La politesse n'oblige pas à l'obéissance adulte",
+          "Genèse 2.24 : quitter / s’attacher — un processus, pas un scandale",
+          "Si la famille gouverne déjà tout : parlez-en avant le mariage",
+          "L’unité du couple se prépare dès la fréquentation",
         ],
         resources: [
           {
-            label: "Phrase limite",
-            detail:
-              "« On vous aime. Sur ce point, on a décidé X. Merci de nous faire confiance. »",
+            label: "Phrase polie",
+            detail: "« On entend votre avis. On va prier et décider ensemble. On vous tiendra au courant. »",
           },
           {
             label: "Sujets à clarifier",
-            detail: "Argent · garde enfants · avis sur conjoint · fréquence des visites · secrets",
+            detail: "Visites · argent donné · secrets · qui vient habiter · qui choisit le conjoint.",
           },
         ],
         selfCheck: {
-          prompt: "Clarté familiale",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "Nous (ou je) avons 1 limite prioritaire écrite",
-            "Elle est formulée sans insulte",
-            "On sait qui parle à la famille élargie",
+            "Je peux dire non à un proche sans exploser",
+            "Je sais quels sujets restent privés en couple",
+            "Je n’utilise pas ma famille pour faire pression sur quelqu’un",
           ],
         },
         exercise:
-          "Écrivez 1 limite à protéger (temps, argent ou décisions) en une phrase respectueuse.",
+          "Notez 1 limite familiale importante pour vous. Formulez-la en une phrase respectueuse. Entraînez-vous à voix haute.",
       },
       {
-        slug: "vivre-avec-famille",
-        title: "Vivre avec la famille élargie",
-        subtitle: "Pour ou contre — sans jugement culturel.",
-        durationMin: 6,
+        slug: "famille-elargie",
+        title: "Vivre près (ou avec) la famille",
+        subtitle: "Pas de jugement culturel — juste des yeux ouverts.",
+        durationMin: 7,
         videoUrl: null,
         sections: [
           {
             title: "Peser le pour / contre",
             points: [
-              "Avantages : aide, économies, présence",
-              "Risques : intimité, conflits, décisions diluées",
-              "Durée prévue si possible (ex. 12 mois)",
+              "Aide concrète vs manque d’intimité",
+              "Économie vs tensions quotidiennes",
+              "Honneur culturel vs besoin d’espace pour le couple",
             ],
           },
           {
-            title: "Si vous cohabitez",
+            title: "Si c’est probable chez vous",
             points: [
-              "Espace couple (chambre / horaires)",
-              "Budget et courses : qui paie quoi",
-              "Droit de dire non aux « avis » quotidiens",
+              "En parler tôt en fréquentation (pas la veille du mariage)",
+              "Définir chambre, argent, horaires, visiteurs",
+              "Prévoir une date de revue (ex. dans 12 mois)",
             ],
           },
         ],
         keyPoints: [
-          "Accord conscient > arrangement subi",
-          "Culture et moyens comptent — la dignité aussi",
-          "Prévoir une date de réévaluation",
+          "Le « on verra » finit souvent en crise",
+          "Deux visions opposées sans compromis = signal d’alarme",
+          "Un plan écrit réduit les disputes",
         ],
         resources: [
           {
-            label: "Checklist cohabitation",
-            detail: "Durée · loyer · intimité · tâches · gestion des conflits · plan de sortie",
+            label: "Questions à poser",
+            detail: "Combien de temps ? Qui paie quoi ? Où se retirer pour parler à deux ?",
+          },
+          {
+            label: "Plan B",
+            detail: "Même si vous cohabitez : un espace couple (balade, prière, soirée).",
           },
         ],
         selfCheck: {
-          prompt: "Décision éclairée",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "J'ai listé 3 avantages et 3 risques",
-            "Il y a une durée ou une condition de sortie",
-            "L'intimité du couple est prévue",
+            "Je sais ce que je veux / ne veux pas sur le logement familial",
+            "Je peux en parler sans mentir pour plaire",
+            "J’accepte que mon futur conjoint ait aussi une opinion",
           ],
         },
-        exercise: "3 avantages + 3 risques de cohabiter dans votre contexte. Une page max.",
+        exercise:
+          "Écrivez votre préférence logement (idéal + acceptable + non négociable). Gardez-la pour les conversations sérieuses.",
       },
       {
-        slug: "opinion-famille",
-        title: "Quand la famille a une opinion forte",
-        subtitle: "Écouter sans abdiquer.",
-        durationMin: 6,
+        slug: "pression-familiale",
+        title: "Quand la famille pousse fort",
+        subtitle: "Écouter sans abdiquer. Respecter sans se marier sous pression.",
+        durationMin: 7,
         videoUrl: null,
         sections: [
           {
             title: "Recevoir",
             points: [
-              "Écouter sans se disputer immédiatement",
-              "Remercier pour l'intérêt",
-              "Dire : « On va prier / réfléchir, on revient vers vous »",
+              "Remercier pour l’intérêt (même si c’est lourd)",
+              "Séparer : conseil utile vs pression émotionnelle",
+              "Ne pas répondre à chaud si vous tremblez de colère",
             ],
           },
           {
             title: "Répondre",
             points: [
-              "Décision claire, ton calme",
-              "Pas besoin d'un plaidoyer de 30 minutes",
-              "Mentor si la pression devient harcèlement",
+              "« On avance à notre rythme. Merci de prier pour nous. »",
+              "Ne promettez pas une date juste pour calmer",
+              "Si besoin : un aîné mature comme médiateur",
             ],
           },
         ],
         keyPoints: [
-          "Écouter ≠ obéir",
-          "La répétition calme vaut mieux que la colère",
-          "Protéger le couple des campagnes familiales",
+          "Se marier pour faire taire la famille est dangereux",
+          "Votre « oui » doit être libre",
+          "La pression révèle souvent des attentes non dites",
         ],
         resources: [
           {
-            label: "Réponse type",
-            detail:
-              "« Merci pour votre avis. Nous avons décidé X, en conscience. On compte sur votre bénédiction. »",
+            label: "Phrase courte",
+            detail: "« Je vous aime. Sur ce point, la décision sera la mienne / la nôtre. »",
+          },
+          {
+            label: "Si ça devient toxique",
+            detail: "Limitez les appels, documentez, cherchez un accompagnement pastoral.",
           },
         ],
         selfCheck: {
-          prompt: "Sous pression ?",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "Je distingue conseil et contrôle",
-            "J'ai une réponse courte prête",
-            "Je sais qui m'appuie si ça force",
+            "Je reconnais la différence entre conseil et pression",
+            "Je peux tenir une décision sans mentir",
+            "Je sais vers qui aller si la pression déborde",
           ],
         },
         exercise:
-          "Rédigez une réponse courte à une objection familiale typique (mariage, études, déménagement…).",
+          "Écrivez votre réponse type à une pression (« à quel âge tu te maries ? »). Entraînez-vous une fois.",
       },
     ],
   },
   {
     id: "finances",
     title: "Finances & intendance",
-    summary: "Transparence, budget, aide familiale : un cadre commun sans honte.",
+    summary:
+      "Avant de s’engager : savoir ce qu’on gagne, ce qu’on doit, et ce qu’on donne — sans surprise douloureuse.",
     lessons: [
       {
         slug: "transparence-argent",
-        title: "Transparence avant l'engagement",
-        subtitle: "Mieux un inventaire honnête tôt qu'une surprise tardive.",
+        title: "Parler argent avant l’engagement",
+        subtitle: "Mieux un inventaire honnête tôt qu’une bombe après la bague.",
         durationMin: 8,
         isFreePreview: true,
         videoUrl: null,
@@ -849,49 +862,50 @@ export const ACADEMY_MODULES: AcademyModule[] = [
           {
             title: "À mettre sur la table",
             points: [
-              "Revenus approximatifs",
-              "Dettes (montant + mensualités)",
-              "Habitudes (épargne, dons, dépenses « plaisir »)",
+              "Revenus approximatifs et stabilité",
+              "Dettes (banque, famille, études)",
+              "Habitudes : épargne, dons, dépenses impulsives",
             ],
           },
           {
             title: "Comment en parler",
             points: [
-              "Sans jugement : faits d'abord",
-              "Documents si possible (relevés, crédits)",
-              "Plan ensuite — pas seulement des sentiments",
+              "Jour calme, pas après une dispute",
+              "Faits d’abord, excuses après",
+              "Seul(e) d’abord : soyez honnête avec vous-même sur papier",
             ],
           },
         ],
         keyPoints: [
-          "La honte se soigne par la clarté, pas le secret",
-          "Chacun révèle avant de demander à l'autre",
-          "Un mentor financier peut aider si c'est lourd",
+          "Cacher une dette grave n’est pas de la pudeur",
+          "L’argent révèle des valeurs",
+          "Un partenaire mature préfère la vérité tôt",
         ],
         resources: [
           {
-            label: "Mini bilan",
-            detail: "Actifs · dettes · charges fixes mensuelles · reste à vivre",
+            label: "Liste perso",
+            detail: "Revenus · dettes · dons habituels · 3 postes où je dépense trop.",
           },
           {
-            label: "Phrase d'ouverture",
-            detail: "« Je veux qu'on construise en vérité. Voici ma situation actuelle… »",
+            label: "Ouverture",
+            detail: "« Avant d’aller plus loin, je veux être transparent(e) sur mon argent. »",
           },
         ],
         selfCheck: {
-          prompt: "Suis-je transparent(e) avec moi-même ?",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "Je connais mes dettes à ±10 %",
-            "Je connais mes charges fixes",
-            "Je peux en parler sans mentir par omission",
+            "Je connais le montant approximatif de mes dettes",
+            "Je peux expliquer mes priorités d’argent en 2 minutes",
+            "Je n’attends pas « après le mariage » pour être honnête",
           ],
         },
-        exercise: "Faites votre inventaire personnel (même approximatif) sur une feuille.",
+        exercise:
+          "Faites votre inventaire sur une feuille (même approximatif). Priez. Si besoin, montrez-le à un mentor.",
       },
       {
-        slug: "budget-deux",
-        title: "Budget simple à deux",
-        subtitle: "Une carte — pas une prison.",
+        slug: "budget-simple",
+        title: "Un budget simple (même seul)",
+        subtitle: "Une carte claire — pas une prison. Vous vous entraînez pour à deux.",
         durationMin: 7,
         videoUrl: null,
         sections: [
@@ -899,264 +913,266 @@ export const ACADEMY_MODULES: AcademyModule[] = [
             title: "4 cases",
             points: [
               "Besoins (loyer, nourriture, transport)",
-              "Épargne / imprévus",
-              "Dons",
+              "Dons / église",
+              "Épargne (même petite)",
               "Plaisir (sans culpabilité, avec plafond)",
             ],
           },
           {
             title: "Routine",
             points: [
-              "Revue 20 minutes / mois",
-              "Compte commun ou règles claires si comptes séparés",
-              "1 objectif d'épargne visible",
+              "1 fois / mois : 20 minutes sur le téléphone ou un carnet",
+              "En fréquentation sérieuse : comparer vos styles (épargnant vs dépensier)",
+              "Avant le mariage : décider comment vous gérerez les comptes",
             ],
           },
         ],
         keyPoints: [
-          "Le budget se révise — il ne se rigidifie pas",
-          "Chacun a un peu d'autonomie (argent « libre »)",
-          "L'imprévu est prévu (même petit)",
+          "Petit budget tenu > grand budget imaginaire",
+          "Les styles d’argent se confrontent tôt ou tard",
+          "L’intendance commence célibataire",
         ],
         resources: [
           {
-            label: "Rituel mensuel",
-            detail: "Date fixe · thés · 4 cases · 1 ajustement · 1 célébration",
+            label: "Rituel 20 min",
+            detail: "Entrées · sorties · 1 ajustement · Amen.",
           },
           {
-            label: "Outils simples",
-            detail: "Cahier · Excel · app notes — le plus simple que vous tiendrez",
+            label: "Question couple",
+            detail: "« Qu’est-ce qui te stresse le plus dans l’argent ? »",
           },
         ],
         selfCheck: {
-          prompt: "Budget vivant ?",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "Nous (ou je) avons 4 cases définies",
-            "Il y a une date de revue",
-            "Il existe un petit poste « plaisir » assumé",
+            "Je sais où part mon argent ce mois-ci",
+            "J’ai une petite épargne ou un début de plan",
+            "Je connais mon style (économe / généreux / impulsif)",
           ],
         },
         exercise:
-          "Répartissez 100 % d'un revenu (réel ou fictif) en 4 cases. Une ligne chacune.",
+          "Cette semaine : 20 minutes sur vos 4 cases. Notez 1 poste à ajuster le mois prochain.",
       },
       {
         slug: "aider-famille",
-        title: "Aider sa famille sans asphyxier le foyer",
-        subtitle: "Générosité avec un plafond.",
-        durationMin: 6,
+        title: "Aider la famille sans s’asphyxier",
+        subtitle: "La générosité a besoin d’un plafond — surtout avant le mariage.",
+        durationMin: 7,
         videoUrl: null,
         sections: [
           {
             title: "Tension classique",
             points: [
-              "Pression familiale vs besoin du couple",
-              "Urgence réelle vs habitude de dépendance",
-              "Culpabilité si on dit non",
+              "La famille compte sur vous (et parfois trop)",
+              "Un futur conjoint peut avoir une autre culture d’aide",
+              "Dire non fait culpabiliser — dire oui sans limite aussi",
             ],
           },
           {
-            title: "Cadre",
+            title: "Cadre utile",
             points: [
-              "Plafond mensuel décidé à deux",
-              "Urgence ≠ abonnement à vie",
-              "Dire non avec respect et alternative (si possible)",
+              "Fixez un montant / mois (ou % ) pour l’aide familiale",
+              "Distinguez urgence réelle et demande habituelle",
+              "En couple : décidez ensemble, pas sous appel émotionnel",
             ],
           },
         ],
         keyPoints: [
-          "Aider n'oblige pas à se ruiner",
-          "Le couple est prioritaire sur les demandes chroniques",
-          "La transparence évite les « cadeaux secrets » toxiques",
+          "Aider n’est pas se ruiner",
+          "Le plafond se discute avant les fiançailles",
+          "La culpabilité n’est pas un budget",
         ],
         resources: [
           {
-            label: "Plafond",
-            detail: "Montant max / mois · exceptions (santé, décès) · qui décide en urgence",
+            label: "Phrase",
+            detail: "« Ce mois-ci je peux X. Au-delà, je ne peux pas. »",
           },
           {
-            label: "Non respectueux",
-            detail: "« On ne peut pas ce mois-ci. On a un engagement foyer. On prie avec vous. »",
+            label: "À clarifier à deux",
+            detail: "Parents · frères/sœurs · urgences · dîmes / offrandes.",
           },
         ],
         selfCheck: {
-          prompt: "Générosité cadrée",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "Un plafond existe (même provisoire)",
-            "Le conjoint / mentor est au courant",
-            "Je distingue urgence et habitude",
+            "J’ai une idée de plafond pour l’aide familiale",
+            "Je peux dire non sans mentir",
+            "Je sais que mon futur foyer aura aussi besoin d’oxygène",
           ],
         },
-        exercise: "Fixez un plafond mensuel d'aide familiale réaliste (même pour vous seul).",
+        exercise:
+          "Choisissez un plafond mensuel (même provisoire). Notez-le. Respectez-le 1 mois pour tester.",
       },
     ],
   },
   {
     id: "emotions",
     title: "Émotions & stress",
-    summary: "Nommer, calmer, reconstruire la confiance après stress ou blessure.",
+    summary:
+      "Nommer ce qui se passe en vous, gérer la jalousie, et guérir avant de vous précipiter dans une nouvelle relation.",
     lessons: [
       {
         slug: "nommer-emotion",
-        title: "Nommer l'émotion avant de répondre",
-        subtitle: "Ce qui est nommé se dirige mieux.",
-        durationMin: 6,
+        title: "Nommer l’émotion avant de répondre",
+        subtitle: "Ce qui est nommé se dirige mieux. Ce qui est nié dirige à votre place.",
+        durationMin: 7,
         isFreePreview: true,
         videoUrl: null,
         sections: [
           {
-            title: "Sans nom = pilote automatique",
+            title: "Sans nom = pilote auto",
             points: [
-              "Message envoyé trop vite",
-              "Ton qui blesse",
-              "Regret 10 minutes plus tard",
+              "Vous répondez sèchement sans savoir pourquoi",
+              "Vous envoyez un message trop long à 1 h du matin",
+              "Vous priez « contre l’autre » au lieu de déposer votre cœur",
             ],
           },
           {
             title: "Micro-protocole",
             points: [
-              "Pause 10 secondes",
-              "Nommer : peur, colère, tristesse, honte, fatigue…",
-              "Puis choisir : parler / écrire / marcher",
+              "Stop 10 secondes",
+              "Dire (à vous) : « Je suis… (mot) »",
+              "Puis seulement : répondre, ou attendre",
             ],
           },
         ],
         keyPoints: [
-          "L'émotion est une info, pas un ordre",
-          "Nommer n'excuse pas de blesser",
-          "Le corps signale souvent avant les mots",
+          "L’émotion n’est pas un péché — la laisser tout piloter peut l’être",
+          "Un mot simple suffit : peur, tristesse, colère, honte",
+          "En fréquentation : « Je suis inquiet(e) » désamorce souvent",
         ],
         resources: [
           {
-            label: "Vocabulaire court",
-            detail: "En colère · inquiet · humilié · déçu · submergé · reconnaissant",
+            label: "Liste courte",
+            detail: "Peur · colère · tristesse · honte · joie · fatigue · solitude.",
           },
           {
-            label: "Phrase tampon",
-            detail: "« Je suis trop monté(e). Je reviens dans 20 minutes. »",
+            label: "Phrase",
+            detail: "« Là, je suis [émotion]. Laisse-moi 10 minutes. »",
           },
         ],
         selfCheck: {
-          prompt: "Aujourd'hui",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "J'ai nommé au moins 1 émotion avant d'agir",
-            "J'ai utilisé une pause une fois",
-            "Je n'ai pas envoyé de message « à chaud »",
+            "Je peux nommer mon émotion du jour en 1 mot",
+            "Je sais faire une pause avant de répondre",
+            "Je ne confonds pas émotion et vérité absolue",
           ],
         },
         exercise:
-          "Quand une émotion monte : notez son nom avant d'envoyer un message. Une fois suffit pour commencer.",
+          "3 jours : le soir, écrivez 1 émotion dominante + 1 déclencheur. Pas d’analyse longue.",
       },
       {
-        slug: "jalousie",
+        slug: "jalousie-confiance",
         title: "Jalousie : règles et confiance",
-        subtitle: "Besoin de sécurité ≠ droit de contrôler.",
-        durationMin: 7,
+        subtitle: "Besoin de sécurité ≠ droit de contrôler le téléphone.",
+        durationMin: 8,
         videoUrl: null,
         sections: [
           {
             title: "Deux lectures possibles",
             points: [
-              "Besoin de rassurance (légitime à dire)",
-              "Blessure ancienne (à travailler)",
-              "Contrôle déguisé (à refuser)",
+              "Besoin normal de clarté et de fidélité",
+              "Contrôle qui étouffe (mots de passe, interrogatoires)",
             ],
           },
           {
-            title: "Cadre couple",
+            title: "Cadre sain (même en fréquentation)",
             points: [
-              "Règles mutuelles (réseaux, amitiés, transparence)",
-              "Parler du besoin sous la jalousie",
-              "Aide perso si la peur domine tout",
+              "Dites ce qui vous rassure (et ce qui vous blesse)",
+              "Accords clairs sur amitiés / réseaux / transparence",
+              "Si la jalousie domine tout : travail perso + mentor",
             ],
           },
         ],
         keyPoints: [
-          "La confiance se construit — elle ne s'exige pas par la force",
-          "Règles claires > soupçons permanents",
-          "Surveiller le téléphone de l'autre n'est pas une solution durable",
+          "La confiance se construit, elle ne s’extorque pas",
+          "Cacher des choses « pour éviter la scène » empire tout",
+          "Un contrôle permanent n’est pas de l’amour",
         ],
         resources: [
           {
-            label: "Questions utiles",
-            detail: "De quoi ai-je peur ? De quoi ai-je besoin ? Quelle règle nous aiderait tous les deux ?",
+            label: "Questions honnêtes",
+            detail: "Qu’est-ce qui me rassure ? Qu’est-ce que je contrôle par peur ?",
           },
           {
-            label: "Ligne rouge",
-            detail: "Insultes · isolement · chantage — sortir et chercher de l'aide",
+            label: "Accord type",
+            detail: "« On se dit les choses qui touchent notre relation. On ne fouille pas par panique. »",
           },
         ],
         selfCheck: {
-          prompt: "Lecture honnête",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "Je peux nommer le besoin sous ma jalousie",
-            "Mes demandes sont des règles, pas du contrôle",
-            "Je travaille aussi ma part (pas seulement « l'autre doit… »)",
+            "Je distingue besoin de sécurité et contrôle",
+            "Je peux parler de ma jalousie sans accuser",
+            "Je travaille ma part (pas seulement « l’autre doit changer »)",
           ],
         },
         exercise:
-          "Situation déclenchante → besoin caché en 1 mot. Écrivez-le.",
+          "Notez 1 situation jalouse récente. Écrivez le besoin réel derrière (sécurité, respect, clarté).",
       },
       {
         slug: "guerir-deception",
-        title: "Guérir d'une déception amoureuse",
-        subtitle: "Avant de rebondir : laisser le deuil faire son travail.",
-        durationMin: 7,
+        title: "Guérir d’une déception amoureuse",
+        subtitle: "Avant de rebondir : laisser le cœur se remettre.",
+        durationMin: 8,
         videoUrl: null,
         sections: [
           {
             title: "Pièges du rebond",
             points: [
-              "Nouveau lien pour anesthésier la douleur",
-              "Idéaliser le suivant",
-              "Répéter le même schéma sans l'avoir nommé",
+              "Nouvelle relation pour prouver que « ça va »",
+              "Comparer chaque personne au précédent",
+              "Promettre trop vite pour combler le vide",
             ],
           },
           {
-            title: "Chemin de guérison",
+            title: "Chemin simple",
             points: [
-              "Temps + soutien + vérité",
-              "Journal : faits / leçons / pardon (soi et l'autre)",
-              "Reprise progressive (amitiés, service, projets)",
+              "Nommer la perte (même si « ce n’était pas un mariage »)",
+              "Limiter les scrolls sur son profil",
+              "Temps avec Dieu, amis sains, éventuellement counseling",
             ],
           },
         ],
         keyPoints: [
-          "Guérir n'est pas « tout oublier »",
-          "Une leçon claire évite la rumination",
-          "Vous n'êtes pas en retard sur l'amour",
+          "Guérir n’est pas une faiblesse",
+          "KELIAA est un outil — pas un pansement émotionnel",
+          "Vous serez plus libre pour aimer après",
         ],
         resources: [
           {
-            label: "3 questions",
-            detail: "Qu'ai-je appris sur moi ? Sur mes critères ? Sur mes limites ?",
+            label: "Signes que vous avancez",
+            detail: "Moins d’obsession · sommeil · capacité à dire non · joie qui revient par moments.",
           },
           {
-            label: "Soutien",
-            detail: "Ami fidèle · pasteur · counseling — selon l'intensité de la blessure",
+            label: "Ancre",
+            detail: "Psaume 34.19 — Dieu près des cœurs brisés.",
           },
         ],
         selfCheck: {
-          prompt: "État de guérison",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "Je peux parler de la déception sans exploser",
-            "J'ai tiré 1–3 leçons concrètes",
-            "Je ne force pas un nouveau départ « pour prouver »",
+            "Je peux parler de ma déception sans m’effondrer chaque fois",
+            "Je ne cherche pas quelqu’un juste pour « remplacer »",
+            "J’ai au moins 1 personne de confiance dans mon parcours",
           ],
         },
         exercise:
-          "Écrivez 3 choses apprises d'une déception (sans ruminer les détails).",
+          "Écrivez une lettre (non envoyée) : ce qui a blessé · ce que vous libérez · ce que vous demandez à Dieu. Puis rangez-la.",
       },
     ],
   },
   {
     id: "projet",
     title: "Projet de vie à deux",
-    summary: "Enfants, rôles, objectifs : aligner une vision partageable.",
+    summary:
+      "Enfants, rôles, objectifs : en parler assez tôt pour construire ensemble — pas découvrir trop tard des murs invisibles.",
     lessons: [
       {
         slug: "projet-enfants",
-        title: "Aligner le projet d'enfants",
-        subtitle: "En parler tôt — avec douceur et clarté.",
+        title: "Parler du projet d’enfants",
+        subtitle: "Tôt, avec douceur. Pas comme un interrogatoire au 2e café.",
         durationMin: 7,
         isFreePreview: true,
         videoUrl: null,
@@ -1164,136 +1180,145 @@ export const ACADEMY_MODULES: AcademyModule[] = [
           {
             title: "Sujets à clarifier",
             points: [
-              "Désir d'enfants : oui / non / ouvert",
-              "Timing approximatif",
-              "Nombre envisagé (même large)",
+              "Envie d’enfants : oui / non / plus tard / je ne sais pas encore",
+              "Nombre approximatif et timing",
+              "Peur, infertilité, adoption : des sujets possibles avec délicatesse",
             ],
           },
           {
             title: "Si désaccord",
             points: [
-              "Écouter sans ridiculiser",
-              "Ne pas « convertir » sous pression",
-              "Revenir au sujet (ce n'est pas un one-shot)",
+              "Ne forcez pas un « on verra » pour sauver la relation",
+              "Prenez le temps + conseil mature",
+              "Certains désaccords sont des non-compatibles — et c’est mieux de le savoir",
             ],
           },
         ],
         keyPoints: [
-          "Le non-dit pèse plus que le désaccord assumé",
-          "Les convictions peuvent évoluer — la vérité actuelle compte",
-          "Un mentor aide si le fossé est large",
+          "Ce n’est pas un sujet « après le mariage seulement »",
+          "L’honnêteté aujourd’hui évite la rancune demain",
+          "Le désir peut évoluer — le silence, non",
         ],
         resources: [
           {
-            label: "Carte vision",
-            detail: "Ma vision · sa vision · zone commune · points à creuser",
+            label: "Question douce",
+            detail: "« Comment tu imagines une famille dans 5–10 ans ? »",
+          },
+          {
+            label: "Timing",
+            detail: "Quand la relation devient sérieuse — pas au premier message.",
           },
         ],
         selfCheck: {
-          prompt: "Clarté personnelle",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "Je peux dire ma vision en une phrase",
-            "Je connais (ou vais demander) celle de l'autre",
-            "Je refuse de mentir pour « garder » quelqu'un",
+            "Je connais mon désir actuel (même s’il est « je ne sais pas »)",
+            "Je peux en parler sans paniquer",
+            "Je n’utiliserai pas ce sujet pour manipuler quelqu’un",
           ],
         },
-        exercise: "Votre vision enfants/timing en une phrase. Notez-la.",
+        exercise:
+          "Écrivez votre vision (3 lignes). Si vous êtes en fréquentation sérieuse : choisissez un moment calme pour en parler.",
       },
       {
         slug: "roles-foyer",
         title: "Rôles au foyer",
-        subtitle: "Selon dons et saison — pas selon les réseaux.",
-        durationMin: 6,
+        subtitle: "Selon dons et saisons — pas selon TikTok ou la pression du quartier.",
+        durationMin: 7,
         videoUrl: null,
         sections: [
           {
             title: "Éviter la guerre idéologique",
             points: [
-              "Ni « c'est toujours comme ça chez nous » sans discussion",
-              "Ni copie d'un modèle Instagram",
-              "Charge mentale = travail invisible à nommer",
+              "« Chez nous les hommes… / les femmes… » sans écoute",
+              "Copier un couple d’influenceurs",
+              "Tout décider seul(e) « parce que c’est la tradition »",
             ],
           },
           {
             title: "Répartir",
             points: [
-              "Lister les tâches",
-              "Qui le fait le mieux / qui a la bande passante",
-              "Revoir quand la vie change (job, bébé, déménagement)",
+              "Lister tâches + compétences + charges mentales",
+              "Revoir chaque saison (bébé, déménagement, études)",
+              "En fréquentation : observer comment l’autre traite le service et le quotidien",
             ],
           },
         ],
         keyPoints: [
-          "Accord juste > modèle théorique",
-          "Remercier le travail invisible",
-          "Flexible ≠ flou",
+          "Le service mutuel vaut mieux que le score",
+          "Les rôles se discutent, ils ne s’imposent pas en silence",
+          "Un bon partenaire parle de la vie concrète",
         ],
         resources: [
           {
-            label: "Liste type",
-            detail: "Courses · repas · ménage · admin · enfants · liens famille · spirituel",
+            label: "Liste à co-créer",
+            detail: "Courses · cuisine · lessive · factures · enfants · prière · contacts familles.",
           },
           {
-            label: "Revue",
-            detail: "Tous les 3 mois : qu'est-ce qui pèse ? Qu'est-ce qu'on permute ?",
+            label: "Question",
+            detail: "« Qu’est-ce qui te fatigue le plus dans le quotidien ? »",
           },
         ],
         selfCheck: {
-          prompt: "Équité ressentie",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "Les tâches principales sont nommées",
-            "Chacun sait ce qu'il porte",
-            "On a une date de revue",
+            "J’ai une idée de ce que je peux porter / ce qui me pèse",
+            "Je peux négocier sans mépriser l’autre",
+            "Je n’attends pas un « rôle magique » sans conversation",
           ],
         },
         exercise:
-          "Listez 5 tâches du foyer. Pour chacune : qui le ferait le mieux aujourd'hui ?",
+          "Listez 5 tâches de foyer. Notez : j’aime / je peux / j’évite. Gardez pour une discussion sérieuse.",
       },
       {
-        slug: "objectifs-concrets",
+        slug: "objectifs-12-mois",
         title: "Objectifs concrets (12 mois)",
-        subtitle: "Une vision sans chiffre reste un rêve.",
-        durationMin: 6,
+        subtitle: "Une vision sans petit pas reste un rêve. Même célibataire.",
+        durationMin: 8,
         videoUrl: null,
         sections: [
           {
             title: "Choisir 1 objectif",
             points: [
-              "Logement · épargne · formation · dette · santé",
-              "Mesurable (montant, date, livrable)",
-              "Partagé si vous êtes à deux",
+              "Spirituel, relationnel, pro, santé, ou finance — un seul d’abord",
+              "Mesurable (ex. : « 3 soirées prière / semaine », pas « être meilleur »)",
+              "Lié à la préparation du mariage si c’est votre saison",
             ],
           },
           {
             title: "Le découper",
             points: [
-              "Étape de ce mois",
-              "Responsable",
-              "Mini-célébration à mi-parcours",
+              "12 mois → 90 jours → cette semaine",
+              "Un témoin (ami, mentor) pour rendre compte",
+              "En couple : 1 objectif commun + 1 personnel chacun",
             ],
           },
         ],
         keyPoints: [
-          "1 objectif bien suivi > 5 abandonnés",
-          "Écrire = s'engager",
-          "Ajuster sans abandonner la direction",
+          "Petit et tenu > grand et abandonné",
+          "Vous préparez le mariage en devenant quelqu’un de fiable",
+          "Dieu bénit aussi la discipline humble",
         ],
         resources: [
           {
-            label: "Fiche 12 mois",
-            detail: "Objectif · pourquoi · montant/date · 1ère action · revue mensuelle",
+            label: "Fiche 1 page",
+            detail: "Objectif · pourquoi · 1ère étape cette semaine · qui m’encourage.",
+          },
+          {
+            label: "Revue",
+            detail: "Chaque dimanche soir : 5 minutes — avancé / bloqué / prochain pas.",
           },
         ],
         selfCheck: {
-          prompt: "Objectif vivant",
+          prompt: "Cochez ce qui est déjà vrai pour vous",
           items: [
-            "J'ai 1 objectif à 12 mois écrit",
-            "J'ai 1 action ce mois-ci",
-            "Quelqu'un de confiance est au courant",
+            "J’ai 1 objectif clair pour les 12 mois",
+            "J’ai une première étape cette semaine",
+            "Quelqu’un peut me demander des nouvelles",
           ],
         },
         exercise:
-          "Écrivez 1 objectif à 12 mois + la première action de ce mois-ci.",
+          "Écrivez votre objectif 12 mois + l’étape de cette semaine. Envoyez-la à une personne de confiance.",
       },
     ],
   },
@@ -1304,17 +1329,17 @@ export function getAcademyModule(id: string): AcademyModule | undefined {
 }
 
 export function getAcademyLesson(moduleId: string, lessonSlug: string) {
-  const mod = getAcademyModule(moduleId)
-  if (!mod) return null
-  const lesson = mod.lessons.find((l) => l.slug === lessonSlug)
-  if (!lesson) return null
-  const index = mod.lessons.findIndex((l) => l.slug === lessonSlug)
+  const module = getAcademyModule(moduleId)
+  if (!module) return undefined
+  const index = module.lessons.findIndex((l) => l.slug === lessonSlug)
+  if (index < 0) return undefined
+  const lesson = module.lessons[index]
   return {
-    module: mod,
+    module,
     lesson,
     index,
-    prev: index > 0 ? mod.lessons[index - 1] : null,
-    next: index < mod.lessons.length - 1 ? mod.lessons[index + 1] : null,
+    prev: index > 0 ? module.lessons[index - 1] : null,
+    next: index < module.lessons.length - 1 ? module.lessons[index + 1] : null,
   }
 }
 

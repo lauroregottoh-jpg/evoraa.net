@@ -42,12 +42,16 @@ export function AcademySelfCheckBox({
   return (
     <section className="rounded-2xl border border-border bg-card p-5 space-y-3">
       <div className="flex items-center justify-between gap-2">
-        <h2 className="font-serif text-lg font-bold">Auto-test</h2>
+        <h2 className="font-serif text-lg font-bold">Où j’en suis</h2>
         <span className="text-xs text-muted-foreground">
           {score}/{selfCheck.items.length}
         </span>
       </div>
-      <p className="text-sm text-muted-foreground">{selfCheck.prompt}</p>
+      <p className="text-xs text-muted-foreground leading-relaxed">
+        Ce n’est pas un examen ni une note. Cochez ce qui est déjà vrai pour vous —
+        le reste, c’est votre chantier de la semaine.
+      </p>
+      <p className="text-sm text-foreground/90">{selfCheck.prompt}</p>
       <ul className="space-y-2">
         {selfCheck.items.map((item, i) => (
           <li key={item}>
