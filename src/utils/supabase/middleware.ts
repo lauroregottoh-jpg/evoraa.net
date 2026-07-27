@@ -15,6 +15,7 @@ const PROTECTED_PREFIXES = [
   '/moderation',
   '/checkout',
   '/assessments',
+  '/academie-mariage',
   '/notifications',
   '/billing',
   '/help',

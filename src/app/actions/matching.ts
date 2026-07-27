@@ -13,10 +13,20 @@ import { ageFromProfile, parseIndicators, rankMatches } from "@/lib/matching/sco
 function parsePsychometrics(value: unknown): MatchableProfile["psychometric_results"] {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null
   const v = value as Record<string, unknown>
+  const dimsRaw =
+    v.dimensions && typeof v.dimensions === "object" && !Array.isArray(v.dimensions)
+      ? (v.dimensions as Record<string, Record<string, number>>)
+      : null
   return {
     personality: typeof v.personality === "number" ? v.personality : null,
     spiritual: typeof v.spiritual === "number" ? v.spiritual : null,
     relationship: typeof v.relationship === "number" ? v.relationship : null,
+    couple_life: typeof v.couple_life === "number" ? v.couple_life : null,
+    finances: typeof v.finances === "number" ? v.finances : null,
+    dimensions: dimsRaw,
+    pillars_completed:
+      typeof v.pillars_completed === "number" ? v.pillars_completed : null,
+    updated_at: typeof v.updated_at === "string" ? v.updated_at : null,
   }
 }
 

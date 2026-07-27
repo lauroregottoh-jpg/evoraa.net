@@ -12,9 +12,9 @@ import {
   Bell,
   User,
   HelpCircle,
-  CreditCard,
   Menu,
   X,
+  GraduationCap,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { ThemeToggle } from "@/components/evoraa/ThemeToggle";
@@ -25,6 +25,7 @@ const NAV = [
   { href: "/compatibility", label: "Découvrir", icon: Compass },
   { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/assessments", label: "Tests", icon: ClipboardList },
+  { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
   { href: "/billing", label: "Alliance", icon: Crown, accent: true },
 ];
 

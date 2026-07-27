@@ -23,6 +23,17 @@ export type MatchableProfile = {
     personality?: number | null
     spiritual?: number | null
     relationship?: number | null
+    couple_life?: number | null
+    finances?: number | null
+    /** Scores par dimension à l'intérieur de chaque pilier — matching fin. */
+    dimensions?: Partial<
+      Record<
+        "personality" | "spiritual" | "relationship" | "couple_life" | "finances",
+        Record<string, number>
+      >
+    > | null
+    pillars_completed?: number | null
+    updated_at?: string | null
   } | null
   completion_percentage: number | null
   moderation_status: string | null
@@ -45,4 +56,9 @@ export type ScoredMatch = {
 }
 
 export const FREE_DAILY_SUGGESTIONS = 3
-export const MIN_RECOMMENDED_SCORE = 60
+/** Seuil minimum pour apparaître en suggestion (après questionnaires). */
+export const MIN_RECOMMENDED_SCORE = 62
+/** Un score ≥ 90 exige au moins N piliers partagés. */
+export const HIGH_SCORE_MIN_PILLARS = 4
+/** Un score ≥ 95 exige au moins N piliers partagés. */
+export const EXCELLENT_SCORE_MIN_PILLARS = 5

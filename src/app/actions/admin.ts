@@ -170,7 +170,13 @@ export async function getAdminDashboardData() {
     const psy = p.psychometric_results
     if (!psy || typeof psy !== "object") continue
     const o = psy as Record<string, unknown>
-    if (o.personality != null && o.spiritual != null && o.relationship != null) {
+    if (
+      o.personality != null &&
+      o.spiritual != null &&
+      o.relationship != null &&
+      o.couple_life != null &&
+      o.finances != null
+    ) {
       assessmentsDoneAll += 1
     }
   }

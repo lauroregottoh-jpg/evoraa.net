@@ -257,7 +257,7 @@ export default async function DashboardPage() {
         </section>
 
         {/* Tests + Aide */}
-        <div className="grid sm:grid-cols-2 gap-3">
+        <div className="grid sm:grid-cols-3 gap-3">
           <Link
             href="/assessments"
             className="rounded-2xl border border-border bg-white p-5 hover:border-primary/30"
@@ -267,7 +267,17 @@ export default async function DashboardPage() {
               {data.assessmentsDone}/{data.assessmentsTotal} piliers
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              Personnalité · Foi & valeurs · Relationnel
+              Personnalité · Foi · Conflits · Couple · Finances
+            </p>
+          </Link>
+          <Link
+            href="/academie-mariage"
+            className="rounded-2xl border border-border bg-white p-5 hover:border-primary/30"
+          >
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Académie</p>
+            <p className="font-serif text-lg font-bold mt-1">Grandir pour le mariage</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Modules liés à vos axes d&apos;amélioration
             </p>
           </Link>
           <Link

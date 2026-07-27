@@ -1,5 +1,12 @@
 import type { MatchableProfile, MatchingIndicators } from "./types"
-import { MIN_RECOMMENDED_SCORE, type ScoredMatch } from "./types"
+import {
+  MIN_RECOMMENDED_SCORE,
+  type ScoredMatch,
+} from "./types"
+import {
+  applyMatchConfidenceCaps,
+  computeDimensionMatchScore,
+} from "./dimensionMatch"
 
 function normalizeGender(value: string | null | undefined): "M" | "F" | null {
   if (!value) return null
@@ -260,15 +267,22 @@ export function scorePair(viewer: MatchableProfile, candidate: MatchableProfile)
   )
 
   const profileRaw = denomination + location + age + attendance + indicators.points
-  let score = Math.max(0, Math.min(100, Math.round(profileRaw)))
+  const profileScore = Math.max(0, Math.min(100, Math.round(profileRaw)))
 
-  const psych = psychometricCompatibility(
+  const psych = computeDimensionMatchScore(
     viewer.psychometric_results,
     candidate.psychometric_results
   )
+
+  let score: number
   if (psych != null) {
-    score = Math.round(score * 0.4 + psych * 0.6)
+    // Plus de dimensions qui matchent → score plus haut (jusqu'à 100 %).
+    const psychWeight = Math.min(0.85, 0.4 + psych.sharedPillars * 0.09)
+    const blended = Math.round(profileScore * (1 - psychWeight) + psych.score * psychWeight)
+    score = applyMatchConfidenceCaps(blended, psych.sharedPillars, psych.matchRatio)
     if (!indicators.hits.includes("psych")) indicators.hits.push("psych")
+  } else {
+    score = Math.min(profileScore, 72)
   }
 
   if (score < MIN_RECOMMENDED_SCORE) return null
@@ -279,7 +293,12 @@ export function scorePair(viewer: MatchableProfile, candidate: MatchableProfile)
     age,
   })
   if (psych != null) {
-    reasons.unshift("Alignement des questionnaires psychométriques")
+    const pct = Math.round(psych.matchRatio * 100)
+    reasons.unshift(
+      psych.sharedPillars >= 5
+        ? `${pct}% des dimensions alignées sur les 5 questionnaires`
+        : `${pct}% des dimensions alignées (${psych.sharedPillars}/5 questionnaires)`
+    )
   }
 
   return {
@@ -289,23 +308,6 @@ export function scorePair(viewer: MatchableProfile, candidate: MatchableProfile)
     pillars: buildPillars(viewer, candidate, indicators.hits),
     level: compatibilityLevel(score),
   }
-}
-
-function psychometricCompatibility(
-  a: MatchableProfile["psychometric_results"],
-  b: MatchableProfile["psychometric_results"]
-): number | null {
-  if (!a || !b) return null
-  const keys = ["personality", "spiritual", "relationship"] as const
-  const parts: number[] = []
-  for (const key of keys) {
-    const av = a[key]
-    const bv = b[key]
-    if (av == null || bv == null) continue
-    parts.push(100 - Math.abs(Number(av) - Number(bv)))
-  }
-  if (parts.length === 0) return null
-  return Math.round(parts.reduce((s, v) => s + v, 0) / parts.length)
 }
 
 export function rankMatches(

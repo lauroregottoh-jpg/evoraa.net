@@ -117,11 +117,11 @@ export async function getDashboardData(): Promise<{
       tone: "profile",
     })
   }
-  if (assessmentsDone < 3) {
+  if (assessmentsDone < 5) {
     nextSteps.push({
       id: "tests",
-      title: `${assessmentsDone}/3 tests de compatibilité`,
-      body: "Personnalité, foi & valeurs, relationnel : le cœur du matching KELIAA.",
+      title: `${assessmentsDone}/5 questionnaires de discernement`,
+      body: "Personnalité, foi, conflits, vision du couple, finances — profils plus précis.",
       href: "/assessments",
       cta: "Continuer",
       tone: "tests",
@@ -174,7 +174,7 @@ export async function getDashboardData(): Promise<{
       latestPartnerName: latest?.partnerName ?? null,
       latestConversationId: latest?.id ?? null,
       assessmentsDone,
-      assessmentsTotal: 3,
+      assessmentsTotal: 5,
       topSuggestions: suggestions.slice(0, 4).map((s) => ({
         profileId: s.id,
         name: s.name || "Membre",
