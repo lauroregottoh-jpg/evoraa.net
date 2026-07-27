@@ -1,8 +1,8 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
-import { CinematicLayout } from "@/components/layout/CinematicLayout";
+import { MemberPage } from "@/components/layout/MemberPage";
 import { isPaidPlan } from "@/lib/billing/plans";
 import { startCheckoutAction } from "@/app/actions/billing";
-import Link from "next/link";
 
 export default async function CheckoutPlanPage({
   params,
@@ -11,7 +11,7 @@ export default async function CheckoutPlanPage({
 }) {
   const { plan } = await params;
   if (!isPaidPlan(plan)) {
-    redirect("/pricing");
+    redirect("/billing");
   }
 
   const result = await startCheckoutAction(plan);
@@ -20,14 +20,14 @@ export default async function CheckoutPlanPage({
   }
 
   return (
-    <CinematicLayout showFooter={false}>
-      <div className="pt-32 pb-20 px-6 text-center space-y-4">
+    <MemberPage>
+      <div className="py-10 text-center space-y-4 max-w-lg mx-auto">
         <h1 className="font-serif text-3xl font-bold">Checkout indisponible</h1>
         <p className="text-sm text-muted-foreground">{result.error}</p>
-        <Link href="/pricing" className="text-accent underline text-sm">
-          Retour aux offres
+        <Link href="/billing" className="text-accent underline text-sm">
+          Retour à Alliance
         </Link>
       </div>
-    </CinematicLayout>
+    </MemberPage>
   );
 }

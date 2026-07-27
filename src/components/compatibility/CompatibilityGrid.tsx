@@ -45,13 +45,15 @@ export function CompatibilityGrid({
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border/40 pb-8">
         <div className="space-y-3">
           <Badge variant="outline" className="border-accent/40 text-accent bg-accent/5 font-sans uppercase tracking-wider text-xs">
-            Matching réel · Profils Supabase
+            Découvrir
           </Badge>
           <h1 className="text-3xl sm:text-5xl font-serif font-bold text-foreground">
             Vos Rencontres en Résonance
           </h1>
           <p className="text-muted-foreground text-base max-w-2xl leading-relaxed">
-            Suggestions calculées à partir de votre questionnaire d&apos;accueil (foi, localisation, âge, vision du foyer). Seuls les profils ≥ 60&nbsp;% d&apos;harmonie vous sont présentés.
+            Suggestions calculées à partir de votre profil et de vos questionnaires (foi,
+            localisation, vision du foyer, piliers). Seuls les profils ≥ 60&nbsp;% d&apos;harmonie
+            vous sont présentés.
           </p>
         </div>
 
@@ -96,7 +98,7 @@ export function CompatibilityGrid({
 
       <EvaCompanion
         title="EVA - Présentation transparente"
-        message="Chaque score s'explique : communauté de foi, proximité, rythme spirituel et vision du mariage croisés avec vos réponses. Les questionnaires psychométriques enrichiront bientôt ce diagnostic."
+        message="Chaque score s'explique : communauté de foi, proximité, rythme spirituel et vision du mariage croisés avec vos réponses et vos 5 piliers de discernement."
         variant="default"
       />
 
@@ -116,11 +118,26 @@ export function CompatibilityGrid({
       )}
 
       {!needsOnboarding && !localError && suggestions.length === 0 && (
-        <div className="rounded-2xl border border-border/60 bg-secondary/30 p-8 text-center space-y-2">
+        <div className="rounded-2xl border border-border/60 bg-card p-8 text-center space-y-4">
           <p className="font-serif text-xl text-foreground">Aucune suggestion pour le moment</p>
           <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-            Il faut d&apos;autres profils éligibles (≥ 50&nbsp;% complétés, non rejetés) avec une harmonie ≥ 60&nbsp;%. Invitez des membres ou revenez après avoir enrichi votre profil.
+            Complétez vos questionnaires pour affiner le matching, ou revenez quand d&apos;autres
+            profils éligibles (harmonie ≥ 60&nbsp;%) seront présents.
           </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <Link
+              href="/assessments"
+              className="inline-flex h-10 items-center px-4 rounded-xl bg-primary text-primary-foreground text-sm font-semibold"
+            >
+              Faire les tests
+            </Link>
+            <Link
+              href="/profile"
+              className="inline-flex h-10 items-center px-4 rounded-xl border border-border text-sm font-semibold"
+            >
+              Enrichir mon profil
+            </Link>
+          </div>
         </div>
       )}
 

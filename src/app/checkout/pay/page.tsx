@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { CinematicLayout } from "@/components/layout/CinematicLayout";
+import { MemberPage } from "@/components/layout/MemberPage";
 import { DemoPaymentPanel } from "@/components/billing/DemoPaymentPanel";
 import { getPendingPayment } from "@/app/actions/billing";
 
@@ -13,14 +13,14 @@ export default async function CheckoutPayPage({
 
   if (!paymentId) {
     return (
-      <CinematicLayout showFooter={false}>
-        <div className="pt-32 pb-20 px-6 text-center space-y-4">
+      <MemberPage>
+        <div className="py-10 text-center space-y-4 max-w-lg mx-auto">
           <h1 className="font-serif text-3xl font-bold">Paiement manquant</h1>
-          <Link href="/pricing" className="text-accent underline text-sm">
-            Retour aux offres
+          <Link href="/billing" className="text-accent underline text-sm">
+            Retour à Alliance
           </Link>
         </div>
-      </CinematicLayout>
+      </MemberPage>
     );
   }
 
@@ -28,15 +28,15 @@ export default async function CheckoutPayPage({
 
   if (result.error || !result.payment) {
     return (
-      <CinematicLayout showFooter={false}>
-        <div className="pt-32 pb-20 px-6 text-center space-y-4">
+      <MemberPage>
+        <div className="py-10 text-center space-y-4 max-w-lg mx-auto">
           <h1 className="font-serif text-3xl font-bold">Paiement introuvable</h1>
           <p className="text-sm text-muted-foreground">{result.error}</p>
-          <Link href="/pricing" className="text-accent underline text-sm">
-            Retour aux offres
+          <Link href="/billing" className="text-accent underline text-sm">
+            Retour à Alliance
           </Link>
         </div>
-      </CinematicLayout>
+      </MemberPage>
     );
   }
 
@@ -45,8 +45,8 @@ export default async function CheckoutPayPage({
   }
 
   return (
-    <CinematicLayout showFooter={false}>
-      <div className="pt-28 pb-20 px-6">
+    <MemberPage>
+      <div className="py-6 max-w-lg mx-auto">
         <DemoPaymentPanel
           paymentId={result.payment.id}
           amount={result.payment.amount}
@@ -55,6 +55,6 @@ export default async function CheckoutPayPage({
           transactionReference={result.payment.transactionReference}
         />
       </div>
-    </CinematicLayout>
+    </MemberPage>
   );
 }

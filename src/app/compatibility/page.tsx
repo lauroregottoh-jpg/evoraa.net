@@ -1,17 +1,17 @@
-import { MainLayout } from "@/components/layout/MainLayout";
+import { MemberPage } from "@/components/layout/MemberPage";
 import { CompatibilityGrid } from "@/components/compatibility/CompatibilityGrid";
 import { getCompatibilitySuggestions } from "@/app/actions/matching";
 
-export default async function CompatibilityGridPage() {
+export default async function CompatibilityPage() {
   const result = await getCompatibilitySuggestions();
 
   return (
-    <MainLayout maxWidth="7xl">
+    <MemberPage>
       <CompatibilityGrid
         initialSuggestions={result.suggestions}
         error={result.error}
         needsOnboarding={result.needsOnboarding}
       />
-    </MainLayout>
+    </MemberPage>
   );
 }

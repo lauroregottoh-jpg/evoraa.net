@@ -1,4 +1,4 @@
-import { MainLayout } from "@/components/layout/MainLayout";
+import { MemberPage } from "@/components/layout/MemberPage";
 import { MessageRoom } from "@/components/messages/MessageRoom";
 import { getConversationRoom } from "@/app/actions/messaging";
 import Link from "next/link";
@@ -15,8 +15,8 @@ export default async function MessageRoomPage({
 
   if (result.error || !result.room) {
     return (
-      <MainLayout maxWidth="4xl">
-        <div className="space-y-6 py-6">
+      <MemberPage dense>
+        <div className="space-y-6 py-2">
           <Link href="/messages">
             <Button variant="ghost" size="sm" className="text-muted-foreground">
               <ArrowLeft className="mr-2 h-4 w-4" /> Retour aux dialogues
@@ -27,13 +27,13 @@ export default async function MessageRoomPage({
             <p className="text-sm text-muted-foreground mt-2">{result.error}</p>
           </div>
         </div>
-      </MainLayout>
+      </MemberPage>
     );
   }
 
   return (
-    <MainLayout maxWidth="4xl">
+    <MemberPage dense>
       <MessageRoom room={result.room} />
-    </MainLayout>
+    </MemberPage>
   );
 }

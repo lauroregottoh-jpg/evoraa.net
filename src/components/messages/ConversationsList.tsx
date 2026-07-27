@@ -20,7 +20,7 @@ export function ConversationsList({
       <div className="flex items-center justify-between border-b border-border/40 pb-6">
         <div className="space-y-1">
           <Badge variant="outline" className="border-accent/40 text-accent bg-accent/5 font-sans uppercase tracking-wider text-xs">
-            Messagerie réelle · Supabase
+            Messages
           </Badge>
           <h1 className="text-3xl sm:text-4xl font-serif font-bold text-foreground">
             Vos Dialogues Dignes
@@ -34,7 +34,7 @@ export function ConversationsList({
       <EvaCompanion
         title="EVA - Veille & Sérénité"
         variant="reassurance"
-        message="Les conversations naissent depuis un profil compatible. Le Bouclier de bienveillance reste actif à l'envoi. Limite gratuite : 5 messages par conversation."
+        message="Les conversations naissent depuis un profil compatible. Le Bouclier de bienveillance reste actif à l'envoi. Vos quotas du mois s'affichent ci-dessus."
       />
 
       {error && (
@@ -47,7 +47,7 @@ export function ConversationsList({
         <div className="rounded-2xl border border-border/60 bg-secondary/30 p-8 text-center space-y-3">
           <p className="font-serif text-xl text-foreground">Aucun dialogue pour le moment</p>
           <p className="text-sm text-muted-foreground">
-            Ouvrez un diagnostic de compatibilité et cliquez sur « Initiation d&apos;échange respectueuse ».
+            Ouvrez une fiche compatible et cliquez sur « Écrire ».
           </p>
           <Link href="/compatibility" className="text-accent font-semibold underline underline-offset-2 text-sm">
             Voir mes compatibilités

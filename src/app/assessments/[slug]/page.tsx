@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { MainLayout } from "@/components/layout/MainLayout";
+import { MemberPage } from "@/components/layout/MemberPage";
 import { AssessmentRunner } from "@/components/assessments/AssessmentRunner";
 import { ASSESSMENTS, type AssessmentSlug } from "@/lib/assessments/questionBank";
 import { getAssessmentsProgress } from "@/app/actions/assessments";
@@ -18,8 +18,8 @@ export default async function AssessmentPage({
   const item = progress.find((p) => p.slug === typed);
 
   return (
-    <MainLayout maxWidth="4xl">
-      <div className="space-y-6 py-6">
+    <MemberPage>
+      <div className="space-y-6 py-2 max-w-4xl mx-auto">
         <div className="space-y-1">
           <Link href="/assessments" className="text-xs text-muted-foreground hover:underline">
             ← Tous les questionnaires
@@ -36,6 +36,6 @@ export default async function AssessmentPage({
           lockMessage={item?.lockMessage ?? undefined}
         />
       </div>
-    </MainLayout>
+    </MemberPage>
   );
 }

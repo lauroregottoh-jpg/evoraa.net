@@ -11,7 +11,7 @@ export default function OnboardingPage() {
       <div className="space-y-6 py-4">
         <div className="space-y-2">
           <Badge variant="outline" className="border-accent/40 text-accent bg-accent/5 font-sans uppercase tracking-wider text-xs">
-            Sprint 3 : Profil Progressif
+            Bienvenue
           </Badge>
           <h1 className="text-3xl sm:text-4xl font-serif font-semibold text-foreground">
             Questionnaire d&apos;Accueil et de Compatibilité

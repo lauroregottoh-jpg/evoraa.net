@@ -1,3 +1,4 @@
+import { MemberPage } from "@/components/layout/MemberPage";
 import { getCompatibilityDetail } from "@/app/actions/matching";
 import { CompatibilityDetailView } from "@/components/compatibility/CompatibilityDetailView";
 
@@ -10,9 +11,8 @@ export default async function CompatibilityDetailPage({
   const result = await getCompatibilityDetail(id);
 
   return (
-    <CompatibilityDetailView
-      profile={result.detail}
-      error={result.error}
-    />
+    <MemberPage>
+      <CompatibilityDetailView profile={result.detail} error={result.error} />
+    </MemberPage>
   );
 }

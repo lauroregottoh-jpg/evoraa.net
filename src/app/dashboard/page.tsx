@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { MemberShell } from "@/components/layout/MemberShell";
-import { getDashboardData } from "@/app/actions/dashboard";
-import { Button } from "@/components/ui/button";
+import Link from "next/link"
+import { MemberShell } from "@/components/layout/MemberShell"
+import { getDashboardData } from "@/app/actions/dashboard"
+import { Button } from "@/components/ui/button"
 import {
   MessageCircle,
   Heart,
@@ -12,12 +12,16 @@ import {
   Sparkles,
   ShieldCheck,
   Moon,
-} from "lucide-react";
-import { SocialInsightsCard } from "@/components/social/SocialInsightsCard";
-import { cn } from "@/utils/cn";
+} from "lucide-react"
+import { SocialInsightsCard } from "@/components/social/SocialInsightsCard"
+import { QuotaPill } from "@/components/billing/QuotaPill"
+import { PillarBadges } from "@/components/assessments/PillarBadges"
+import { MissionCard } from "@/components/dashboard/MissionCard"
+import { PresenceStreak } from "@/components/dashboard/PresenceStreak"
+import { cn } from "@/utils/cn"
 
 export default async function DashboardPage() {
-  const { data, error } = await getDashboardData();
+  const { data, error } = await getDashboardData()
 
   if (error || !data) {
     return (
@@ -31,33 +35,24 @@ export default async function DashboardPage() {
           </Link>
         </div>
       </MemberShell>
-    );
+    )
   }
 
-  const { usage } = data;
-  const convPct =
-    usage.conversationsLimit > 0
-      ? Math.min(100, Math.round((usage.conversationsUsed / usage.conversationsLimit) * 100))
-      : 0;
+  const { usage } = data
 
   return (
-    <MemberShell
-      firstName={data.firstName}
-      planLabel={usage.planName}
-      isPaid={usage.isPaid}
-    >
+    <MemberShell firstName={data.firstName} planLabel={usage.planName} isPaid={usage.isPaid}>
       <div className="space-y-5 max-w-3xl mx-auto">
-        {/* Next steps / banners */}
         {data.nextSteps.map((step) => (
           <div
             key={step.id}
             className={cn(
               "rounded-2xl border px-4 py-3.5 flex flex-col sm:flex-row sm:items-center gap-3 justify-between",
-              step.tone === "photo" && "bg-[#F5EFE0] border-accent/30",
+              step.tone === "photo" && "bg-accent/10 border-accent/30",
               step.tone === "upgrade" && "bg-primary text-primary-foreground border-primary",
               step.tone === "renew" && "bg-primary text-primary-foreground border-primary",
               step.tone === "profile" && "bg-primary/90 text-primary-foreground border-primary",
-              step.tone === "tests" && "bg-white border-border"
+              step.tone === "tests" && "bg-card border-border"
             )}
           >
             <div className="flex items-start gap-3 min-w-0">
@@ -66,7 +61,7 @@ export default async function DashboardPage() {
                   "h-10 w-10 rounded-xl flex items-center justify-center shrink-0",
                   step.tone === "photo" && "bg-accent/20 text-accent",
                   (step.tone === "upgrade" || step.tone === "renew" || step.tone === "profile") &&
-                    "bg-white/15 text-accent",
+                    "bg-primary-foreground/15 text-accent",
                   step.tone === "tests" && "bg-secondary text-primary"
                 )}
               >
@@ -90,7 +85,7 @@ export default async function DashboardPage() {
                   {step.body}
                 </p>
                 {step.tone === "profile" && (
-                  <div className="mt-2 h-1.5 rounded-full bg-white/20 overflow-hidden max-w-xs">
+                  <div className="mt-2 h-1.5 rounded-full bg-primary-foreground/20 overflow-hidden max-w-xs">
                     <div
                       className="h-full bg-accent rounded-full"
                       style={{ width: `${data.completionPercentage}%` }}
@@ -117,14 +112,15 @@ export default async function DashboardPage() {
           </div>
         ))}
 
-        {/* Greeting card */}
-        <section className="rounded-2xl bg-primary text-primary-foreground p-6 sm:p-8 shadow-sm">
+        <MissionCard mission={data.mission} />
+
+        <section className="rounded-2xl bg-primary text-primary-foreground p-6 sm:p-8">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <h1 className="font-serif text-2xl sm:text-3xl font-bold">
                 Bonjour, {data.firstName}
               </h1>
-              <p className="text-sm text-primary-foreground/75 mt-1 flex items-center gap-2">
+              <p className="text-sm text-primary-foreground/75 mt-1 flex flex-wrap items-center gap-2">
                 <ShieldCheck className="h-4 w-4 text-accent shrink-0" />
                 {data.isVerified ? "Membre vérifié(e)" : "Profil en maturité"}
                 {data.retreatMode ? (
@@ -133,12 +129,15 @@ export default async function DashboardPage() {
                   </span>
                 ) : null}
               </p>
+              <div className="mt-2 text-primary-foreground/80">
+                <PresenceStreak />
+              </div>
             </div>
             <Link href="/profile">
               <Button
                 variant="outline"
                 size="sm"
-                className="rounded-full border-white/30 bg-white/10 text-white hover:bg-white/20"
+                className="rounded-full border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20"
               >
                 Mon profil
               </Button>
@@ -149,11 +148,19 @@ export default async function DashboardPage() {
           </p>
         </section>
 
-        {/* Quota + stats */}
+        <div className="rounded-2xl border border-border bg-card p-5">
+          <PillarBadges
+            pillars={data.assessmentProgress.map((p) => ({
+              slug: p.slug,
+              completed: p.completed,
+            }))}
+          />
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <Link
             href="/messages"
-            className="rounded-2xl border border-border bg-white p-5 hover:border-primary/30 transition-colors"
+            className="rounded-2xl border border-border bg-card p-5 hover:border-primary/30 transition-colors"
           >
             <div className="flex items-center gap-2 text-primary mb-2">
               <MessageCircle className="h-4 w-4" />
@@ -172,7 +179,7 @@ export default async function DashboardPage() {
 
           <Link
             href="/compatibility"
-            className="rounded-2xl border border-border bg-white p-5 hover:border-primary/30 transition-colors"
+            className="rounded-2xl border border-border bg-card p-5 hover:border-primary/30 transition-colors"
           >
             <div className="flex items-center gap-2 text-primary mb-2">
               <Heart className="h-4 w-4" />
@@ -184,44 +191,19 @@ export default async function DashboardPage() {
             </p>
           </Link>
 
-          <div className="rounded-2xl border border-border bg-white p-5">
-            <div className="flex items-center gap-2 text-primary mb-2">
-              <Crown className="h-4 w-4" />
-              <span className="text-xs font-semibold uppercase tracking-wide">Quotas du mois</span>
-            </div>
-            <p className="font-serif text-2xl font-bold">
-              {usage.conversationsRemaining}
-              <span className="text-base font-normal text-muted-foreground">
-                /{usage.conversationsLimit}
-              </span>
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">conversations restantes</p>
-            <div className="mt-3 h-1.5 rounded-full bg-secondary overflow-hidden">
-              <div className="h-full bg-primary rounded-full" style={{ width: `${convPct}%` }} />
-            </div>
-            <p className="text-[11px] text-muted-foreground mt-2">
-              {usage.messagesPerConversation} msg/convo · {usage.suggestionsLimit} sugg./jour · EVA{" "}
-              {usage.evaQuestionsLimit}/j
-            </p>
-            {!usage.isPaid && (
-              <Link href="/billing" className="text-xs font-semibold text-accent mt-2 inline-block">
-                Passer Alliance →
-              </Link>
-            )}
-          </div>
+          <QuotaPill usage={usage} />
         </div>
 
         <SocialInsightsCard insights={data.social} />
 
-        {/* Sélection */}
-        <section className="rounded-2xl border border-border bg-white p-5 sm:p-6 space-y-4">
+        <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 space-y-4">
           <div className="flex items-center justify-between gap-3">
             <div>
               <h2 className="font-serif text-xl font-bold flex items-center gap-2">
                 <Heart className="h-5 w-5 text-primary" /> La sélection KELIAA
               </h2>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Profils choisis pour vous — matching à 3 piliers
+                Profils choisis pour vous — matching sur vos 5 piliers
               </p>
             </div>
             <Link href="/compatibility" className="text-xs font-semibold text-primary">
@@ -231,7 +213,10 @@ export default async function DashboardPage() {
 
           {data.topSuggestions.length === 0 ? (
             <p className="text-sm text-muted-foreground py-6 text-center">
-              Complétez votre profil et vos tests pour recevoir des suggestions.
+              Complétez vos tests pour recevoir des suggestions plus précises.{" "}
+              <Link href="/assessments" className="text-primary font-semibold underline">
+                Voir les questionnaires
+              </Link>
             </p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -256,11 +241,10 @@ export default async function DashboardPage() {
           )}
         </section>
 
-        {/* Tests + Aide */}
         <div className="grid sm:grid-cols-3 gap-3">
           <Link
             href="/assessments"
-            className="rounded-2xl border border-border bg-white p-5 hover:border-primary/30"
+            className="rounded-2xl border border-border bg-card p-5 hover:border-primary/30"
           >
             <p className="text-xs font-semibold uppercase tracking-wide text-primary">Tests</p>
             <p className="font-serif text-lg font-bold mt-1">
@@ -272,7 +256,7 @@ export default async function DashboardPage() {
           </Link>
           <Link
             href="/academie-mariage"
-            className="rounded-2xl border border-border bg-white p-5 hover:border-primary/30"
+            className="rounded-2xl border border-border bg-card p-5 hover:border-primary/30"
           >
             <p className="text-xs font-semibold uppercase tracking-wide text-primary">Académie</p>
             <p className="font-serif text-lg font-bold mt-1">Grandir pour le mariage</p>
@@ -282,7 +266,7 @@ export default async function DashboardPage() {
           </Link>
           <Link
             href="/help"
-            className="rounded-2xl border border-border bg-white p-5 hover:border-primary/30"
+            className="rounded-2xl border border-border bg-card p-5 hover:border-primary/30"
           >
             <p className="text-xs font-semibold uppercase tracking-wide text-primary">EVA</p>
             <p className="font-serif text-lg font-bold mt-1">Besoin d&apos;un conseil ?</p>
@@ -293,5 +277,5 @@ export default async function DashboardPage() {
         </div>
       </div>
     </MemberShell>
-  );
+  )
 }

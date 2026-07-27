@@ -38,11 +38,11 @@ export function MainLayout({
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-300">
-      {/* Navbar Placeholder (Sprint 1 Foundation) */}
+      {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-6">
-            <Link href="/" className="flex items-center gap-2">
+            <Link href="/dashboard" className="flex items-center gap-2">
               <span className="font-serif text-2xl font-bold tracking-tight text-gradient">
                 KELIAA
               </span>
@@ -84,7 +84,6 @@ export function MainLayout({
 
       {process.env.NODE_ENV === "development" && <DevSessionSwitcher />}
 
-      {/* Footer Placeholder (Sprint 1 Foundation) */}
       {showFooter && (
         <footer className="w-full border-t border-border/40 bg-background py-8 text-xs text-muted-foreground">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">

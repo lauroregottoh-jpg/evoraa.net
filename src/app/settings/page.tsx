@@ -1,4 +1,4 @@
-import { MainLayout } from "@/components/layout/MainLayout";
+import { MemberPage } from "@/components/layout/MemberPage";
 import { EvaCompanion } from "@/components/evoraa/EvaCompanion";
 import { Badge } from "@/components/ui/badge";
 import { SettingsForm } from "@/components/settings/SettingsForm";
@@ -10,8 +10,8 @@ export default async function SettingsPage() {
   const { data, error } = await getMySettings();
 
   return (
-    <MainLayout maxWidth="3xl">
-      <div className="space-y-8 py-6">
+    <MemberPage>
+      <div className="space-y-8 py-2 max-w-3xl mx-auto">
         <div className="space-y-2">
           <Badge
             variant="outline"
@@ -46,6 +46,6 @@ export default async function SettingsPage() {
           <SettingsForm initial={data} />
         )}
       </div>
-    </MainLayout>
+    </MemberPage>
   );
 }

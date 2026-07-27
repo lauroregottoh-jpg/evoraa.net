@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CinematicLayout } from "@/components/layout/CinematicLayout";
+import { MemberPage } from "@/components/layout/MemberPage";
 import { getPendingPayment, getMySubscriptionSummary } from "@/app/actions/billing";
 import { CheckCircle2, Clock } from "lucide-react";
 
@@ -23,8 +23,8 @@ export default async function CheckoutSuccessPage({
     !active && (paymentStatus === "pending" || paymentStatus === "processing" || !paymentId);
 
   return (
-    <CinematicLayout showFooter={false}>
-      <div className="pt-32 pb-24 px-6 max-w-lg mx-auto text-center space-y-6">
+    <MemberPage>
+      <div className="py-10 max-w-lg mx-auto text-center space-y-6">
         <div
           className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center ${
             active ? "bg-emerald-500/15" : "bg-amber-500/15"
@@ -42,8 +42,8 @@ export default async function CheckoutSuccessPage({
         <p className="text-muted-foreground text-sm leading-relaxed">
           {active ? (
             <>
-              Votre offre <strong>{planName}</strong> est active pour 30 jours. Les quotas
-              Alliance s&apos;appliquent à la messagerie et aux suggestions.
+              Votre offre <strong>{planName}</strong> est active pour 30 jours. Les quotas Alliance
+              s&apos;appliquent à la messagerie et aux suggestions.
             </>
           ) : (
             <>
@@ -56,19 +56,19 @@ export default async function CheckoutSuccessPage({
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
           <Link
-            href={active ? "/compatibility" : "/billing"}
+            href={active ? "/dashboard" : "/billing"}
             className="inline-flex items-center justify-center h-11 px-6 rounded-xl bg-primary text-primary-foreground text-sm font-semibold"
           >
-            {active ? "Voir mes compatibilités" : "Vérifier mon offre"}
+            {active ? "Retour à l'accueil" : "Vérifier mon offre"}
           </Link>
           <Link
-            href="/messages"
+            href="/compatibility"
             className="inline-flex items-center justify-center h-11 px-6 rounded-xl border border-border text-sm font-semibold"
           >
-            Messagerie
+            Découvrir
           </Link>
         </div>
       </div>
-    </CinematicLayout>
+    </MemberPage>
   );
 }

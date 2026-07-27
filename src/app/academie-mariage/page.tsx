@@ -1,6 +1,4 @@
 import Link from "next/link"
-import { MemberShell } from "@/components/layout/MemberShell"
-import { getUsageSnapshot } from "@/lib/billing/usage"
 import {
   BookOpen,
   Heart,
@@ -11,106 +9,33 @@ import {
   Sparkles,
   Compass,
 } from "lucide-react"
+import { MemberPage } from "@/components/layout/MemberPage"
+import { getMyGrowthAxes } from "@/app/actions/assessments"
+import { ACADEMY_MODULES } from "@/lib/academy/modules"
+import { cn } from "@/utils/cn"
 
-const MODULES = [
-  {
-    id: "foi",
-    icon: BookOpen,
-    title: "Foi au quotidien du couple",
-    summary:
-      "Prière à deux, Parole, service d'église : comment avancer sans s'épuiser ni se juger.",
-    lessons: [
-      "Construire un rythme de prière réaliste",
-      "Servir à l'église sans négliger le foyer",
-      "Discerner avec un pasteur / aîné mature",
-    ],
-  },
-  {
-    id: "dialogue",
-    icon: MessageCircle,
-    title: "Dialogue & besoins affectifs",
-    summary: "Dire ce qu'on ressent sans attaquer. Écouter sans se défendre tout de suite.",
-    lessons: [
-      "La formule « je ressens / j'ai besoin »",
-      "Recevoir un feedback difficile",
-      "Exprimer ses besoins sans attendre qu'on devine",
-    ],
-  },
-  {
-    id: "conflits",
-    icon: Shield,
-    title: "Conflits & réconciliation",
-    summary: "Silence, colère, premier pas : des outils pour sortir des impasses.",
-    lessons: [
-      "Règles de pause pendant une dispute",
-      "Faire le premier pas sans s'écraser",
-      "Ne pas laisser pourrir une blessure",
-    ],
-  },
-  {
-    id: "purete",
-    icon: Heart,
-    title: "Pureté & limites physiques",
-    summary:
-      "Abstinence, limites, passé sexuel : clarifier avec dignité pour protéger l'engagement.",
-    lessons: [
-      "Définir ses limites avant le mariage",
-      "Parler de sexualité avec respect",
-      "Guérison et transparence sur le passé",
-    ],
-  },
-  {
-    id: "familles",
-    icon: Users,
-    title: "Familles & foyer",
-    summary:
-      "Honorer les parents, vivre ou non avec la famille, décider à deux : des visions différentes, légitimes.",
-    lessons: [
-      "Limites saines avec les beaux-parents",
-      "Vivre avec la famille : pour ou contre, sans jugement",
-      "Quand la famille a une opinion forte",
-    ],
-  },
-  {
-    id: "finances",
-    icon: Wallet,
-    title: "Finances & intendance",
-    summary: "Dettes, dîme, budget, aide à la famille : poser un cadre commun.",
-    lessons: [
-      "Transparence avant l'engagement",
-      "Budget simple à deux",
-      "Aider sa famille sans asphyxier le foyer",
-    ],
-  },
-  {
-    id: "emotions",
-    icon: Sparkles,
-    title: "Émotions & stress",
-    summary: "Réagir sous pression, jalousie, méfiance après une blessure.",
-    lessons: [
-      "Nommer l'émotion avant de répondre",
-      "Jalousie : règles et confiance",
-      "Guérir d'une déception amoureuse",
-    ],
-  },
-  {
-    id: "projet",
-    icon: Compass,
-    title: "Projet de vie à deux",
-    summary: "Enfants, rôles, distance, épargne : bâtir une vision partagée.",
-    lessons: [
-      "Aligner le projet d'enfants",
-      "Rôles au foyer sans guerre idéologique",
-      "Objectifs concrets (logement, épargne)",
-    ],
-  },
-]
+const ICONS = {
+  foi: BookOpen,
+  dialogue: MessageCircle,
+  conflits: Shield,
+  purete: Heart,
+  familles: Users,
+  finances: Wallet,
+  emotions: Sparkles,
+  projet: Compass,
+} as const
 
 export default async function AcademieMariagePage() {
-  const usage = await getUsageSnapshot()
+  const { axes } = await getMyGrowthAxes()
+  const recommendedIds = new Set(
+    axes.slice(0, 3).map((a) => a.academyHref.replace("/academie-mariage#", ""))
+  )
+
+  const recommended = ACADEMY_MODULES.filter((m) => recommendedIds.has(m.id))
+  const others = ACADEMY_MODULES.filter((m) => !recommendedIds.has(m.id))
 
   return (
-    <MemberShell planLabel={usage?.planName} isPaid={usage?.isPaid}>
+    <MemberPage>
       <div className="max-w-3xl mx-auto space-y-8 pb-10">
         <div className="space-y-2">
           <p className="text-xs font-semibold uppercase tracking-widest text-primary">
@@ -125,10 +50,7 @@ export default async function AcademieMariagePage() {
             clarté.
           </p>
           <div className="flex flex-wrap gap-3 pt-2">
-            <Link
-              href="/assessments"
-              className="text-sm font-semibold text-primary underline"
-            >
+            <Link href="/assessments" className="text-sm font-semibold text-primary underline">
               Voir mes axes (tests)
             </Link>
             <Link href="/help" className="text-sm font-semibold text-muted-foreground underline">
@@ -137,14 +59,61 @@ export default async function AcademieMariagePage() {
           </div>
         </div>
 
+        {recommended.length > 0 && (
+          <div className="space-y-3">
+            <h2 className="font-serif text-xl font-bold">Recommandé pour vous</h2>
+            <p className="text-xs text-muted-foreground">
+              Basé sur vos questionnaires — commencez par ces modules.
+            </p>
+            <div className="grid gap-4">
+              {recommended.map((mod) => {
+                const Icon = ICONS[mod.id]
+                return (
+                  <section
+                    key={mod.id}
+                    id={mod.id}
+                    className="scroll-mt-24 rounded-2xl border-2 border-primary/30 bg-primary/5 p-5 sm:p-6 space-y-3"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="h-10 w-10 rounded-xl bg-primary/15 text-primary flex items-center justify-center shrink-0">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
+                          Pour vous
+                        </p>
+                        <h3 className="font-serif text-xl font-bold">{mod.title}</h3>
+                        <p className="text-sm text-muted-foreground mt-1">{mod.summary}</p>
+                      </div>
+                    </div>
+                    <ul className="space-y-1.5 pl-1">
+                      {mod.lessons.map((lesson) => (
+                        <li key={lesson} className="text-sm flex gap-2">
+                          <span className="text-accent font-bold">·</span>
+                          <span>{lesson}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
         <div className="grid gap-4">
-          {MODULES.map((mod) => {
-            const Icon = mod.icon
+          {recommended.length > 0 && (
+            <h2 className="font-serif text-xl font-bold pt-2">Tous les modules</h2>
+          )}
+          {(recommended.length > 0 ? others : ACADEMY_MODULES).map((mod) => {
+            const Icon = ICONS[mod.id]
             return (
               <section
                 key={mod.id}
-                id={mod.id}
-                className="scroll-mt-24 rounded-2xl border border-border bg-card p-5 sm:p-6 space-y-3"
+                id={recommendedIds.has(mod.id) ? undefined : mod.id}
+                className={cn(
+                  "scroll-mt-24 rounded-2xl border border-border bg-card p-5 sm:p-6 space-y-3"
+                )}
               >
                 <div className="flex items-start gap-3">
                   <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
@@ -173,6 +142,6 @@ export default async function AcademieMariagePage() {
           repères concrets liés à votre profil KELIAA.
         </p>
       </div>
-    </MemberShell>
+    </MemberPage>
   )
 }

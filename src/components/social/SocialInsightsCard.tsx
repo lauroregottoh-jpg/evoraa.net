@@ -13,7 +13,7 @@ export function SocialInsightsCard({ insights }: Props) {
   }
 
   return (
-    <section className="rounded-2xl border border-border bg-white p-5 sm:p-6 space-y-4">
+    <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 space-y-4">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h2 className="font-serif text-xl font-bold">Curiosité & intérêt</h2>

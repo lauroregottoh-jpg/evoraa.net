@@ -20,7 +20,7 @@ export function GrowthAxesCard({ axes }: { axes: GrowthAxis[] }) {
   }
 
   return (
-    <section className="rounded-2xl border border-border bg-white p-5 sm:p-6 space-y-4">
+    <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 space-y-4">
       <div>
         <h2 className="font-serif text-xl font-bold">Vos axes d&apos;amélioration</h2>
         <p className="text-xs text-muted-foreground mt-1">

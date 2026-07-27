@@ -1,4 +1,4 @@
-import { MainLayout } from "@/components/layout/MainLayout";
+import { MemberPage } from "@/components/layout/MemberPage";
 import { ProfileEditor } from "@/components/profile/ProfileEditor";
 import { Badge } from "@/components/ui/badge";
 import { getMyProfileEditorData } from "@/app/actions/profile";
@@ -9,8 +9,8 @@ export default async function ProfilePage() {
   const { data, error } = await getMyProfileEditorData();
 
   return (
-    <MainLayout maxWidth="3xl">
-      <div className="space-y-6 py-6">
+    <MemberPage>
+      <div className="space-y-6 py-2 max-w-3xl mx-auto">
         <div className="space-y-2">
           <Badge
             variant="outline"
@@ -39,6 +39,6 @@ export default async function ProfilePage() {
           <ProfileEditor initial={data} />
         )}
       </div>
-    </MainLayout>
+    </MemberPage>
   );
 }

@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { MainLayout } from "@/components/layout/MainLayout";
+import { MemberPage } from "@/components/layout/MemberPage";
 import { getAssessmentsProgress, getMyGrowthAxes } from "@/app/actions/assessments";
 import { ASSESSMENT_RETAKE_COOLDOWN_DAYS } from "@/lib/assessments/constants";
 import { GrowthAxesCard } from "@/components/assessments/GrowthAxesCard";
+import { PillarBadges } from "@/components/assessments/PillarBadges";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, Circle, Lock } from "lucide-react";
 
@@ -15,8 +16,8 @@ export default async function AssessmentsHubPage() {
   const completedAny = progress.some((p) => p.completed);
 
   return (
-    <MainLayout maxWidth="4xl">
-      <div className="space-y-8 py-6">
+    <MemberPage>
+      <div className="space-y-8 py-2 max-w-4xl mx-auto">
         <div className="space-y-2 border-b border-border/40 pb-6">
           <Badge variant="outline" className="text-accent border-accent/40">
             5 piliers KELIAA
@@ -28,6 +29,12 @@ export default async function AssessmentsHubPage() {
             personnelle — pas un « bon » ou « mauvais » choix. Mise à jour possible tous les{" "}
             {ASSESSMENT_RETAKE_COOLDOWN_DAYS} jours.
           </p>
+        </div>
+
+        <div className="rounded-2xl border border-border bg-card p-5">
+          <PillarBadges
+            pillars={progress.map((p) => ({ slug: p.slug, completed: p.completed }))}
+          />
         </div>
 
         {error && <p className="text-sm text-destructive">{error}</p>}
@@ -53,7 +60,7 @@ export default async function AssessmentsHubPage() {
             return (
               <div
                 key={item.slug}
-                className="rounded-2xl border border-border/60 bg-background p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                className="rounded-2xl border border-border/60 bg-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
               >
                 <div className="space-y-1 min-w-0">
                   <div className="flex items-center gap-2">
@@ -94,6 +101,6 @@ export default async function AssessmentsHubPage() {
           })}
         </div>
       </div>
-    </MainLayout>
+    </MemberPage>
   );
 }

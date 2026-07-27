@@ -16,6 +16,15 @@ export type DashboardNextStep = {
   tone: "photo" | "profile" | "tests" | "upgrade" | "renew"
 }
 
+export type DashboardMission = {
+  id: string
+  title: string
+  body: string
+  href: string
+  cta: string
+  kind: "tests" | "discover" | "photo" | "message" | "done"
+}
+
 export type DashboardData = {
   firstName: string
   completionPercentage: number
@@ -30,6 +39,7 @@ export type DashboardData = {
   latestConversationId: string | null
   assessmentsDone: number
   assessmentsTotal: number
+  assessmentProgress: Array<{ slug: string; completed: boolean; name: string }>
   topSuggestions: Array<{
     profileId: string
     name: string
@@ -40,6 +50,7 @@ export type DashboardData = {
   social: SocialInsights
   nextSteps: DashboardNextStep[]
   affirmation: string
+  mission: DashboardMission
 }
 
 const AFFIRMATIONS = [
@@ -111,7 +122,7 @@ export async function getDashboardData(): Promise<{
     nextSteps.push({
       id: "profile",
       title: `Profil complété à ${completion}%`,
-      body: "Plus votre profil est clair, plus le matching à 3 piliers est précis.",
+      body: "Plus votre profil est clair, plus le matching sur vos 5 piliers est précis.",
       href: "/profile",
       cta: "Compléter",
       tone: "profile",
@@ -159,6 +170,60 @@ export async function getDashboardData(): Promise<{
   }
 
   const dayIndex = new Date().getDate() % AFFIRMATIONS.length
+  const assessmentProgress = progress.map((p) => ({
+    slug: p.slug,
+    completed: p.completed,
+    name: p.name,
+  }))
+  const nextTest = progress.find((p) => !p.completed)
+
+  let mission: DashboardMission
+  if (!hasAvatar) {
+    mission = {
+      id: "photo",
+      title: "Ajoutez votre photo",
+      body: "Un visage clair inspire confiance et vous rend visible dans les suggestions.",
+      href: "/profile",
+      cta: "Ajouter",
+      kind: "photo",
+    }
+  } else if (nextTest) {
+    mission = {
+      id: "tests",
+      title: `Mission : ${nextTest.name}`,
+      body: "Scénarios courts — environ 5 à 8 minutes. Chaque réponse affine votre matching.",
+      href: `/assessments/${nextTest.slug}`,
+      cta: "Commencer",
+      kind: "tests",
+    }
+  } else if (unreadMessages > 0 && latest?.id) {
+    mission = {
+      id: "message",
+      title: "Répondre à vos dialogues",
+      body: `${unreadMessages} message(s) non lu(s). Une réponse honnête vaut mieux qu'une réponse rapide.`,
+      href: `/messages/${latest.id}`,
+      cta: "Ouvrir",
+      kind: "message",
+    }
+  } else if (suggestions.length > 0) {
+    mission = {
+      id: "discover",
+      title: `${highHarmony.length || suggestions.length} profil(s) à découvrir`,
+      body: "Lisez le diagnostic EVA, puis écrivez si le cœur est en paix.",
+      href: "/compatibility",
+      cta: "Découvrir",
+      kind: "discover",
+    }
+  } else {
+    mission = {
+      id: "done",
+      title: "Votre espace est prêt",
+      body: "Explorez l'Académie, posez une question à EVA, ou affinez votre profil.",
+      href: "/academie-mariage",
+      cta: "Continuer",
+      kind: "done",
+    }
+  }
 
   return {
     data: {
@@ -175,6 +240,7 @@ export async function getDashboardData(): Promise<{
       latestConversationId: latest?.id ?? null,
       assessmentsDone,
       assessmentsTotal: 5,
+      assessmentProgress,
       topSuggestions: suggestions.slice(0, 4).map((s) => ({
         profileId: s.id,
         name: s.name || "Membre",
@@ -185,6 +251,7 @@ export async function getDashboardData(): Promise<{
       social,
       nextSteps: nextSteps.slice(0, 3),
       affirmation: AFFIRMATIONS[dayIndex],
+      mission,
     },
   }
 }

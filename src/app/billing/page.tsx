@@ -35,7 +35,7 @@ export default async function BillingPage() {
           <p className="text-xs font-semibold uppercase tracking-widest text-primary">Abonnement</p>
           <h1 className="font-serif text-3xl sm:text-4xl font-bold">Votre offre KELIAA</h1>
           <p className="text-sm text-muted-foreground">
-            Gratuit pour commencer. Alliance pour accélérer — matching à 3 piliers, sans surprise
+            Gratuit pour commencer. Alliance pour accélérer — matching sur 5 piliers, sans surprise
             de renouvellement automatique.
           </p>
         </div>
@@ -54,7 +54,7 @@ export default async function BillingPage() {
           </div>
         )}
 
-        <div className="rounded-2xl border border-border bg-white p-6 space-y-4">
+        <div className="rounded-2xl border border-border bg-card p-6 space-y-4">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-xs uppercase tracking-wide text-muted-foreground">Offre actuelle</p>
@@ -91,7 +91,7 @@ export default async function BillingPage() {
         </div>
 
         {!usage.isPaid && (
-          <div className="rounded-2xl border-2 border-accent bg-white p-6 sm:p-8 space-y-5 relative overflow-hidden">
+          <div className="rounded-2xl border-2 border-accent bg-card p-6 sm:p-8 space-y-5 relative overflow-hidden">
             <span className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-wider bg-accent text-accent-foreground px-2.5 py-1 rounded-full">
               Recommandé
             </span>
@@ -129,7 +129,7 @@ export default async function BillingPage() {
         )}
 
         {usage.isPaid && (
-          <div className="rounded-2xl border border-border bg-white p-6 space-y-3">
+          <div className="rounded-2xl border border-border bg-card p-6 space-y-3">
             <h2 className="font-serif text-xl font-bold">Renouveler</h2>
             <p className="text-sm text-muted-foreground">
               Le renouvellement est manuel. Aucun prélèvement surprise.

@@ -125,12 +125,16 @@ export function AssessmentRunner({
 
   if (phase === "done" && doneScore != null) {
     return (
-      <Card className="rounded-2xl max-w-xl mx-auto">
+      <Card className="rounded-2xl max-w-xl mx-auto border-emerald-500/30 bg-emerald-500/5">
         <CardContent className="p-8 text-center space-y-3">
-          <CheckCircle2 className="h-10 w-10 text-emerald-500 mx-auto" />
-          <p className="font-serif text-2xl">Profil enregistré</p>
+          <CheckCircle2 className="h-12 w-12 text-emerald-500 mx-auto" />
+          <p className="font-serif text-2xl">Bravo — pilier validé</p>
           <p className="text-muted-foreground text-sm">
-            Score : <strong>{doneScore}%</strong> — vos réponses enrichissent le matching.
+            « {bank.name} » enregistré · score <strong>{doneScore}%</strong>
+          </p>
+          <p className="text-sm text-foreground/80">
+            Votre matching vient de gagner en précision. Une étape de plus vers des rencontres
+            alignées.
           </p>
           <p className="text-xs text-muted-foreground">
             Mise à jour possible dans 60 jours. Redirection…
