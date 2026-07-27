@@ -1,6 +1,7 @@
 "use server"
 
 import { createClient } from "@/utils/supabase/server"
+import { createAdminClient } from "@/utils/supabase/admin"
 import { revalidatePath } from "next/cache"
 
 async function requireAdmin() {
@@ -9,7 +10,7 @@ async function requireAdmin() {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) {
-    return { error: "Non authentifié." as string, supabase: null, user: null }
+    return { error: "Non authentifié." as string, supabase: null, user: null, role: null as string | null }
   }
 
   const { data: profile } = await supabase
@@ -19,10 +20,24 @@ async function requireAdmin() {
     .maybeSingle()
 
   if (profile?.role !== "admin" && profile?.role !== "moderator") {
-    return { error: "Accès admin requis." as string, supabase: null, user: null }
+    return { error: "Accès admin requis." as string, supabase: null, user: null, role: null }
   }
 
-  return { error: undefined as string | undefined, supabase, user }
+  return {
+    error: undefined as string | undefined,
+    supabase,
+    user,
+    role: (profile?.role as string) || null,
+  }
+}
+
+async function requireFullAdmin() {
+  const gate = await requireAdmin()
+  if (gate.error || !gate.supabase) return gate
+  if (gate.role !== "admin") {
+    return { ...gate, error: "Réservé aux administrateurs (pas modérateurs)." }
+  }
+  return gate
 }
 
 export type AdminRetention = {
@@ -36,6 +51,25 @@ export type AdminRetention = {
   cancelledSubs30d: number
   conversations30d: number
   conversionPaidPct: number
+  menCount: number
+  womenCount: number
+  renewalsDue7d: number
+  matches30d: number
+}
+
+export type AdminOpsFlags = {
+  paymentsDemoMode: boolean
+  hasCinetPay: boolean
+  hasResend: boolean
+  hasCronSecret: boolean
+  hasServiceRole: boolean
+  appUrl: string
+}
+
+export type PlatformSettingRow = {
+  key: string
+  value: unknown
+  description: string | null
 }
 
 export async function getAdminDashboardData() {
@@ -48,8 +82,12 @@ export async function getAdminDashboardData() {
       payments: [],
       photos: [],
       subscriptions: [],
+      conversations: [],
+      settings: [] as PlatformSettingRow[],
       stats: null,
       retention: null,
+      ops: null as AdminOpsFlags | null,
+      viewerRole: null as string | null,
     }
   }
   const supabase = gate.supabase
@@ -58,13 +96,18 @@ export async function getAdminDashboardData() {
   since30.setDate(since30.getDate() - 30)
   const since30Iso = since30.toISOString()
 
+  const in7 = new Date()
+  in7.setDate(in7.getDate() + 7)
+  const in7Iso = in7.toISOString()
+  const nowIso = new Date().toISOString()
+
   const { data: profiles } = await supabase
     .from("profiles")
     .select(
-      "id, user_id, first_name, last_name, city, completion_percentage, role, moderation_status, onboarding_status, is_verified, identity_verified, created_at, avatar_url, psychometric_results"
+      "id, user_id, first_name, last_name, city, gender, completion_percentage, role, moderation_status, onboarding_status, is_verified, identity_verified, created_at, avatar_url, psychometric_results"
     )
     .order("created_at", { ascending: false })
-    .limit(150)
+    .limit(200)
 
   const { data: reports } = await supabase
     .from("reports")
@@ -93,9 +136,30 @@ export async function getAdminDashboardData() {
     .order("created_at", { ascending: false })
     .limit(100)
 
+  const { data: conversations } = await supabase
+    .from("conversations")
+    .select("id, match_id, created_at")
+    .order("created_at", { ascending: false })
+    .limit(40)
+
+  const { data: settings } = await supabase
+    .from("platform_settings")
+    .select("key, value, description")
+    .order("key")
+
   const { count: usersCount } = await supabase
     .from("profiles")
     .select("id", { count: "exact", head: true })
+
+  const { count: menCount } = await supabase
+    .from("profiles")
+    .select("id", { count: "exact", head: true })
+    .eq("gender", "M")
+
+  const { count: womenCount } = await supabase
+    .from("profiles")
+    .select("id", { count: "exact", head: true })
+    .eq("gender", "F")
 
   const { count: activeSubs } = await supabase
     .from("subscriptions")
@@ -151,7 +215,18 @@ export async function getAdminDashboardData() {
     .select("id", { count: "exact", head: true })
     .gte("created_at", since30Iso)
 
-  // Revenue: sum completed from loaded payments + broader query
+  const { count: matches30d } = await supabase
+    .from("matches")
+    .select("id", { count: "exact", head: true })
+    .gte("created_at", since30Iso)
+
+  const { count: renewalsDue7d } = await supabase
+    .from("subscriptions")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "active")
+    .gte("ends_at", nowIso)
+    .lte("ends_at", in7Iso)
+
   const { data: allCompleted } = await supabase
     .from("payments")
     .select("amount")
@@ -186,6 +261,7 @@ export async function getAdminDashboardData() {
     userId: p.user_id as string,
     name: [p.first_name, p.last_name].filter(Boolean).join(" ") || "Sans nom",
     city: p.city || "—",
+    gender: (p.gender as string) || "—",
     completion: p.completion_percentage ?? 0,
     role: (p.role as "admin" | "moderator" | "member") || "member",
     status: (p.moderation_status as string) || "pending",
@@ -206,6 +282,22 @@ export async function getAdminDashboardData() {
     cancelledSubs30d: cancelledSubs30d ?? 0,
     conversations30d: conversations30d ?? 0,
     conversionPaidPct,
+    menCount: menCount ?? 0,
+    womenCount: womenCount ?? 0,
+    renewalsDue7d: renewalsDue7d ?? 0,
+    matches30d: matches30d ?? 0,
+  }
+
+  const demoRaw = process.env.PAYMENTS_DEMO_MODE
+  const ops: AdminOpsFlags = {
+    paymentsDemoMode:
+      demoRaw === "true" ||
+      (demoRaw !== "false" && !process.env.CINETPAY_API_KEY),
+    hasCinetPay: Boolean(process.env.CINETPAY_API_KEY && process.env.CINETPAY_SITE_ID),
+    hasResend: Boolean(process.env.RESEND_API_KEY),
+    hasCronSecret: Boolean(process.env.CRON_SECRET),
+    hasServiceRole: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
+    appUrl: process.env.NEXT_PUBLIC_APP_URL || "",
   }
 
   return {
@@ -222,6 +314,16 @@ export async function getAdminDashboardData() {
       endsAt: s.ends_at as string | null,
       createdAt: s.created_at as string | null,
     })),
+    conversations: (conversations ?? []).map((c) => ({
+      id: c.id as string,
+      matchId: c.match_id as string,
+      createdAt: c.created_at as string | null,
+    })),
+    settings: (settings ?? []).map((s) => ({
+      key: s.key as string,
+      value: s.value,
+      description: (s.description as string) || null,
+    })),
     stats: {
       users: totalUsers,
       activeSubscriptions: activeSubs ?? 0,
@@ -230,6 +332,8 @@ export async function getAdminDashboardData() {
       revenueXof: revenue,
     },
     retention,
+    ops,
+    viewerRole: gate.role,
   }
 }
 
@@ -265,6 +369,81 @@ export async function adminSetVerified(profileId: string, verified: boolean) {
 
   if (error) return { error: error.message }
   revalidatePath("/admin")
+  return { success: true }
+}
+
+export async function adminSetRole(
+  profileId: string,
+  role: "admin" | "moderator" | "member"
+) {
+  const gate = await requireFullAdmin()
+  if (gate.error || !gate.supabase || !gate.user) {
+    return { error: gate.error || "Accès refusé." }
+  }
+
+  const { data: target } = await gate.supabase
+    .from("profiles")
+    .select("user_id")
+    .eq("id", profileId)
+    .maybeSingle()
+
+  if (target?.user_id === gate.user.id && role !== "admin") {
+    return { error: "Vous ne pouvez pas retirer votre propre rôle admin." }
+  }
+
+  const { error } = await gate.supabase
+    .from("profiles")
+    .update({ role, updated_at: new Date().toISOString() })
+    .eq("id", profileId)
+
+  if (error) return { error: error.message }
+  revalidatePath("/admin")
+  return { success: true }
+}
+
+export async function adminGrantAlliance(userId: string, days = 30) {
+  const gate = await requireFullAdmin()
+  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé." }
+
+  const now = new Date()
+  const ends = new Date(now)
+  ends.setDate(ends.getDate() + days)
+
+  const { data: existing } = await gate.supabase
+    .from("subscriptions")
+    .select("id, ends_at")
+    .eq("user_id", userId)
+    .eq("status", "active")
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (existing?.id) {
+    const currentEnd = existing.ends_at ? new Date(existing.ends_at) : now
+    const base = currentEnd > now ? currentEnd : now
+    const newEnd = new Date(base)
+    newEnd.setDate(newEnd.getDate() + days)
+    const { error } = await gate.supabase
+      .from("subscriptions")
+      .update({
+        plan: "premium_plus",
+        ends_at: newEnd.toISOString(),
+      })
+      .eq("id", existing.id)
+    if (error) return { error: error.message }
+  } else {
+    const { error } = await gate.supabase.from("subscriptions").insert({
+      user_id: userId,
+      plan: "premium_plus",
+      status: "active",
+      starts_at: now.toISOString(),
+      ends_at: ends.toISOString(),
+    })
+    if (error) return { error: error.message }
+  }
+
+  revalidatePath("/admin")
+  revalidatePath("/billing")
   return { success: true }
 }
 
@@ -317,4 +496,47 @@ export async function adminModeratePhoto(photoId: string, status: "approved" | "
   revalidatePath("/admin")
   revalidatePath("/profile")
   return { success: true }
+}
+
+export async function adminUpdatePlatformSetting(key: string, value: unknown) {
+  const gate = await requireFullAdmin()
+  if (gate.error || !gate.supabase || !gate.user) {
+    return { error: gate.error || "Accès refusé." }
+  }
+
+  const allowed = new Set([
+    "maintenance_mode",
+    "min_compatibility_threshold",
+    "default_photo_blur",
+    "require_charter",
+    "soft_launch_notes",
+  ])
+  if (!allowed.has(key)) return { error: "Clé non autorisée." }
+
+  const { error } = await gate.supabase.from("platform_settings").upsert({
+    key,
+    value: value as never,
+    updated_at: new Date().toISOString(),
+    updated_by: gate.user.id,
+  })
+
+  if (error) return { error: error.message }
+  revalidatePath("/admin")
+  return { success: true }
+}
+
+/** Diagnostic service-role (sans exposer la clé). */
+export async function adminPingServiceRole() {
+  const gate = await requireFullAdmin()
+  if (gate.error) return { error: gate.error, ok: false }
+  try {
+    const admin = createAdminClient()
+    const { count, error } = await admin
+      .from("profiles")
+      .select("id", { count: "exact", head: true })
+    if (error) return { error: error.message, ok: false }
+    return { ok: true, profiles: count ?? 0 }
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : "Erreur", ok: false }
+  }
 }

@@ -81,9 +81,15 @@ where user_id = (
 );
 ```
 
-6. Va sur `https://TON-SITE/admin` → tu dois voir la console admin.
+6. Va sur `https://TON-SITE/admin` → tu dois voir la console admin (3 zones : Utilisateur · Optimiseur · Développeur).
+7. Applique aussi la migration `20240101000012_admin_ops_policies.sql` (SQL Editor) pour voir paiements / abos / conversations côté admin.
 
 **Tu as fini quand :** `/admin` s’ouvre (pas de renvoi vers dashboard).
+
+Liens prod :
+- Inscription : https://evoraa-net.vercel.app/register
+- Connexion : https://evoraa-net.vercel.app/login
+- Admin : https://evoraa-net.vercel.app/admin
 
 ---
 
