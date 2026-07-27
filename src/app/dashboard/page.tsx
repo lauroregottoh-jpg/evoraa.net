@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   Moon,
 } from "lucide-react";
+import { SocialInsightsCard } from "@/components/social/SocialInsightsCard";
 import { cn } from "@/utils/cn";
 
 export default async function DashboardPage() {
@@ -209,6 +210,8 @@ export default async function DashboardPage() {
             )}
           </div>
         </div>
+
+        <SocialInsightsCard insights={data.social} />
 
         {/* Sélection */}
         <section className="rounded-2xl border border-border bg-white p-5 sm:p-6 space-y-4">

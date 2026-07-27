@@ -1,4 +1,5 @@
 import { createClient } from "@/utils/supabase/server"
+import { applyTrialBoost } from "@/lib/billing/trial"
 import { getPlan, isPaidPlan, type PlanDefinition, type PlanId } from "@/lib/billing/plans"
 
 export type ActiveSubscription = {
@@ -59,13 +60,37 @@ export async function getActiveSubscription(
 }
 
 export async function getUserEntitlements(userId?: string) {
-  const sub = await getActiveSubscription(userId)
+  const supabase = await createClient()
+  let uid = userId
+  if (!uid) {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    uid = user?.id
+  }
+
+  const sub = await getActiveSubscription(uid)
   const plan = sub?.plan ?? getPlan("free")
+
+  let trialEndsAt: string | null = null
+  if (uid && plan.id === "free") {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("trial_ends_at")
+      .eq("user_id", uid)
+      .maybeSingle()
+    trialEndsAt = (profile?.trial_ends_at as string | null) ?? null
+  }
+
+  const limits = applyTrialBoost(plan.limits, plan.id, trialEndsAt)
+
   return {
     planId: plan.id,
     planName: plan.name,
-    limits: plan.limits,
+    limits,
     subscription: sub,
     isPaid: isPaidPlan(plan.id),
+    trialEndsAt,
+    isTrialBoost: plan.id === "free" && Boolean(trialEndsAt),
   }
 }

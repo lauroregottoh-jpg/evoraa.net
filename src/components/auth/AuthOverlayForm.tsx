@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CharterModal } from "@/components/auth/CharterModal";
+import { PasswordInput } from "@/components/auth/PasswordInput";
 import { loginAction, registerAction } from "@/app/actions/auth";
 import {
   Lock,
@@ -158,13 +159,11 @@ export function AuthOverlayForm({ initialMode = "login" }: { initialMode?: Mode 
                     Oublié ?
                   </Link>
                 </div>
-                <Input
+                <PasswordInput
                   id="password"
                   name="password"
-                  type="password"
                   required
                   autoComplete="current-password"
-                  className="h-11 rounded-xl"
                 />
               </div>
 
@@ -254,13 +253,12 @@ export function AuthOverlayForm({ initialMode = "login" }: { initialMode?: Mode 
                 <label htmlFor="reg_password" className="text-xs font-medium flex items-center gap-1">
                   <Lock className="h-3.5 w-3.5" /> Mot de passe
                 </label>
-                <Input
+                <PasswordInput
                   id="reg_password"
                   name="password"
-                  type="password"
                   minLength={8}
                   required={isCharterAccepted}
-                  className="h-10 rounded-xl"
+                  className="h-10"
                   placeholder="8 caractères minimum"
                 />
               </div>

@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { consumeEvaQuotaAction, getEvaQuotaAction } from "@/app/actions/eva";
 
 interface QAPair {
   question: string;
@@ -35,39 +36,6 @@ const PREDEFINED_TOPICS: QAPair[] = [
   },
 ];
 
-function todayKey() {
-  return new Date().toISOString().slice(0, 10);
-}
-
-function readUsage(limit: number): { used: number; remaining: number } {
-  if (typeof window === "undefined") return { used: 0, remaining: limit };
-  try {
-    const raw = localStorage.getItem("keliaa_eva_daily");
-    if (!raw) return { used: 0, remaining: limit };
-    const parsed = JSON.parse(raw) as { date?: string; count?: number };
-    if (parsed.date !== todayKey()) return { used: 0, remaining: limit };
-    const used = Number(parsed.count) || 0;
-    return { used, remaining: Math.max(0, limit - used) };
-  } catch {
-    return { used: 0, remaining: limit };
-  }
-}
-
-function bumpUsage() {
-  const key = "keliaa_eva_daily";
-  try {
-    const raw = localStorage.getItem(key);
-    let count = 0;
-    if (raw) {
-      const parsed = JSON.parse(raw) as { date?: string; count?: number };
-      if (parsed.date === todayKey()) count = Number(parsed.count) || 0;
-    }
-    localStorage.setItem(key, JSON.stringify({ date: todayKey(), count: count + 1 }));
-  } catch {
-    /* ignore */
-  }
-}
-
 type Props = {
   dailyLimit?: number;
 };
@@ -78,35 +46,41 @@ export function EvaSpiritualAdvisor({ dailyLimit = 3 }: Props) {
   );
   const [customQuestion, setCustomQuestion] = React.useState("");
   const [isTyping, setIsTyping] = React.useState(false);
+  const [limit, setLimit] = React.useState(dailyLimit);
   const [remaining, setRemaining] = React.useState(dailyLimit);
   const [quotaError, setQuotaError] = React.useState("");
 
   React.useEffect(() => {
-    setRemaining(readUsage(dailyLimit).remaining);
+    getEvaQuotaAction().then((q) => {
+      if (!q.error) {
+        setLimit(q.limit);
+        setRemaining(q.remaining);
+      }
+    });
   }, [dailyLimit]);
 
-  const consumeQuota = () => {
-    const { remaining: left } = readUsage(dailyLimit);
-    if (left <= 0) {
-      setQuotaError("Quota EVA du jour atteint. Revenez demain ou passez Alliance.");
+  const consumeQuota = async () => {
+    const result = await consumeEvaQuotaAction();
+    if (result.error) {
+      setQuotaError(result.error);
       setRemaining(0);
       return false;
     }
-    bumpUsage();
-    setRemaining(left - 1);
+    setRemaining(result.remaining ?? 0);
+    setLimit(result.limit ?? dailyLimit);
     setQuotaError("");
     return true;
   };
 
-  const handleSelectTopic = (topic: QAPair) => {
-    if (!consumeQuota()) return;
+  const handleSelectTopic = async (topic: QAPair) => {
+    if (!(await consumeQuota())) return;
     setSelectedTopic(topic);
   };
 
-  const handleAskCustom = (e: React.FormEvent) => {
+  const handleAskCustom = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!customQuestion.trim()) return;
-    if (!consumeQuota()) return;
+    if (!(await consumeQuota())) return;
 
     setIsTyping(true);
     setTimeout(() => {
@@ -131,7 +105,7 @@ export function EvaSpiritualAdvisor({ dailyLimit = 3 }: Props) {
             Questions de Discernement
           </h3>
           <span className="text-[11px] text-muted-foreground whitespace-nowrap">
-            {remaining}/{dailyLimit} aujourd&apos;hui
+            {remaining}/{limit} aujourd&apos;hui
           </span>
         </div>
 

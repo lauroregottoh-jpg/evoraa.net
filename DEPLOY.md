@@ -12,6 +12,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 NEXT_PUBLIC_APP_URL=https://votre-domaine.com
 SUPABASE_SERVICE_ROLE_KEY=...
 PAYMENTS_DEMO_MODE=true              # false + CinetPay si encaissement réel
+# CRON_SECRET=                         # rappels J-7 Alliance (Vercel Cron)
 # CINETPAY_API_KEY=
 # CINETPAY_SITE_ID=
 # CINETPAY_SECRET_KEY=

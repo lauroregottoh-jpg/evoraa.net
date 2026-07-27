@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KELIAA — Plateforme de rencontre chrétienne (Afrique francophone)
 
-## Getting Started
+**KELIAA** (`keliaa.net`) est une PWA de discernement relationnel : matching à 3 piliers, messagerie, EVA (coach local), abonnement Alliance via Mobile Money (CinetPay).
 
-First, run the development server:
+## Démarrage rapide (développeur)
 
 ```bash
+npm install
+cp .env.local.example .env.local   # puis remplir Supabase
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ouvrir [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Ce que VOUS devez faire (fondateur / ops)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Guide pas à pas :** [`docs/OPS_JOUR1.md`](docs/OPS_JOUR1.md)
 
-## Learn More
+| Étape | Action |
+|-------|--------|
+| 1 | Appliquer les migrations Supabase (`.\run_migration.ps1`) |
+| 2 | Configurer Auth Supabase (URLs callback) |
+| 3 | Bucket `avatars` + Realtime `messages` |
+| 4 | Déployer sur Vercel |
+| 5 | Devenir admin (`profiles.role = admin`) |
+| 6 | Tester (mode démo paiements) |
+| 7 | Inviter hommes + femmes |
+| 8 | Activer CinetPay (quand vous voulez encaisser) |
 
-To learn more about Next.js, take a look at the following resources:
+## Paiements
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Agrégateur :** [CinetPay](https://cinetpay.com) — Moov Money, TMoney (Togo), Wave, Orange Money (UEMOA)
+- **Mode démo :** `PAYMENTS_DEMO_MODE=true` (soft launch sans encaisser)
+- **Production :** clés `CINETPAY_*` + `PAYMENTS_DEMO_MODE=false`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Le code checkout + webhook est déjà intégré.
 
-## Deploy on Vercel
+## Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Next.js 16 · React 19 · TypeScript · Tailwind 4
+- Supabase (Auth, PostgreSQL, Storage, Realtime)
+- Vercel · CinetPay · Resend (emails, optionnel)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Documentation
+
+- [`DEPLOY.md`](DEPLOY.md) — checklist déploiement
+- [`docs/PLAN_DASHBOARDS_ET_PRICING.md`](docs/PLAN_DASHBOARDS_ET_PRICING.md) — stratégie pricing
+- [`software-architecture/`](software-architecture/) — specs produit
+
+## Variables d'environnement
+
+Voir [`.env.local.example`](.env.local.example).
+
+## Migrations
+
+9 fichiers SQL dans `supabase/migrations/` (dernier : `…00009_social_usage_trial.sql`).
+
+```powershell
+.\run_migration.ps1
+```
+
+Nécessite `SUPABASE_DB_URL` dans `.env.local`.

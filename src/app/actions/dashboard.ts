@@ -5,6 +5,7 @@ import { listConversations } from "@/app/actions/messaging"
 import { getCompatibilitySuggestions } from "@/app/actions/matching"
 import { getAssessmentsProgress } from "@/app/actions/assessments"
 import { getUsageSnapshot, type UsageSnapshot } from "@/lib/billing/usage"
+import { getSocialInsights, type SocialInsights } from "@/app/actions/social"
 
 export type DashboardNextStep = {
   id: string
@@ -36,6 +37,7 @@ export type DashboardData = {
     city: string | null
   }>
   usage: UsageSnapshot
+  social: SocialInsights
   nextSteps: DashboardNextStep[]
   affirmation: string
 }
@@ -72,12 +74,13 @@ export async function getDashboardData(): Promise<{
       ? (profile.privacy_settings as Record<string, unknown>)
       : {}
 
-  const [conversationsResult, suggestionsResult, assessments, usage] =
+  const [conversationsResult, suggestionsResult, assessments, usage, social] =
     await Promise.all([
       listConversations(),
       getCompatibilitySuggestions(6),
       getAssessmentsProgress(),
       getUsageSnapshot(user.id),
+      getSocialInsights(),
     ])
 
   if (!usage) return { error: "Impossible de charger vos quotas." }
@@ -121,6 +124,16 @@ export async function getDashboardData(): Promise<{
       body: "Personnalité, foi & valeurs, relationnel : le cœur du matching KELIAA.",
       href: "/assessments",
       cta: "Continuer",
+      tone: "tests",
+    })
+  }
+  if (usage.isTrialBoost && usage.trialDaysRemaining != null) {
+    nextSteps.push({
+      id: "trial",
+      title: `Période découverte enrichie — ${usage.trialDaysRemaining} jour(s) restant(s)`,
+      body: "Quotas boostés : plus de conversations et suggestions. Profitez-en pour tester KELIAA.",
+      href: "/compatibility",
+      cta: "Explorer",
       tone: "tests",
     })
   }
@@ -169,6 +182,7 @@ export async function getDashboardData(): Promise<{
         city: s.city ?? null,
       })),
       usage,
+      social,
       nextSteps: nextSteps.slice(0, 3),
       affirmation: AFFIRMATIONS[dayIndex],
     },

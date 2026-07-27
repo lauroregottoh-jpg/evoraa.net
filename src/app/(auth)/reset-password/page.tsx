@@ -5,6 +5,7 @@ import Link from "next/link";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/auth/PasswordInput";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { updatePasswordAction } from "@/app/actions/password";
@@ -50,11 +51,11 @@ export default function ResetPasswordPage() {
                 <label htmlFor="password" className="text-sm font-medium flex items-center gap-2">
                   <Lock className="h-4 w-4" /> Nouveau mot de passe
                 </label>
-                <Input id="password" name="password" type="password" minLength={8} required className="h-11 rounded-xl" />
+                <PasswordInput id="password" name="password" minLength={8} required />
               </div>
               <div className="space-y-2">
                 <label htmlFor="confirm" className="text-sm font-medium">Confirmation</label>
-                <Input id="confirm" name="confirm" type="password" minLength={8} required className="h-11 rounded-xl" />
+                <PasswordInput id="confirm" name="confirm" minLength={8} required />
               </div>
             </CardContent>
             <CardFooter className="flex flex-col gap-3">

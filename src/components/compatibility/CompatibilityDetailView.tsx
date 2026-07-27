@@ -19,6 +19,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { startConversationFromProfile } from "@/app/actions/messaging";
+import { FavoriteButton } from "@/components/social/FavoriteButton";
 
 export type CompatibilityDetailData = {
   id: string;
@@ -138,6 +139,7 @@ export function CompatibilityDetailView({
                 <MessageSquareText className="mr-2 h-4 w-4" />
                 {isStarting ? "Ouverture…" : "Initiation d'échange respectueuse"}
               </Button>
+              <FavoriteButton targetProfileId={profile.id} />
               {startError && <p className="text-xs text-destructive">{startError}</p>}
             </div>
           </div>

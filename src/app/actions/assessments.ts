@@ -149,15 +149,26 @@ export async function submitAssessmentAction(
     psychometric.relationship,
   ].filter((s) => s != null).length
 
-  await supabase
+  const { data: currentProfile } = await supabase
     .from("profiles")
-    .update({
-      psychometric_results: psychometric,
-      onboarding_status: completedCount >= 3 ? "active" : "step3_tests",
-      completion_percentage: completedCount >= 3 ? 95 : 85,
-      updated_at: new Date().toISOString(),
-    })
+    .select("trial_ends_at")
     .eq("user_id", user.id)
+    .maybeSingle()
+
+  const profileUpdate: Record<string, unknown> = {
+    psychometric_results: psychometric,
+    onboarding_status: completedCount >= 3 ? "active" : "step3_tests",
+    completion_percentage: completedCount >= 3 ? 95 : 85,
+    updated_at: new Date().toISOString(),
+  }
+
+  if (completedCount >= 3 && !currentProfile?.trial_ends_at) {
+    const trialEnd = new Date()
+    trialEnd.setDate(trialEnd.getDate() + 30)
+    profileUpdate.trial_ends_at = trialEnd.toISOString()
+  }
+
+  await supabase.from("profiles").update(profileUpdate).eq("user_id", user.id)
 
   await createNotification({
     userId: user.id,

@@ -278,6 +278,19 @@ export async function getCompatibilityDetail(profileId: string): Promise<{
     }
   }
 
+  // Enregistre la visite (analytics + paywall visiteurs Alliance)
+  const viewerProfileId = loaded.viewer.id
+  if (viewerProfileId !== profileId) {
+    await loaded.supabase.from("profile_views").upsert(
+      {
+        viewer_profile_id: viewerProfileId,
+        viewed_profile_id: profileId,
+        viewed_at: new Date().toISOString(),
+      },
+      { onConflict: "viewer_profile_id,viewed_profile_id" }
+    )
+  }
+
   const ind = candidate.matching_indicators
 
   return {

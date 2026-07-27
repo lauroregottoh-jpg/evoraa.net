@@ -1,78 +1,158 @@
-# Ops jour 1 — ce que VOUS faites vs ce que le code fait
+# Tes étapes — dans l’ordre (toi uniquement)
 
-## En 3 phrases
+Le code est prêt. Fais **une étape à la fois**. Quand une étape est finie, passe à la suivante.
 
-1. **Compte admin** = votre compte KELIAA (email + mot de passe), puis dans Supabase vous passez le champ `role` de votre profil à `admin`. Sans ça, `/admin` vous renvoie au dashboard.
-2. **Pool H + F** = il faut des **hommes et des femmes** inscrits (onboarding fini + photo). Le matching cherche l’autre genre : si tout le monde est du même genre, la liste est vide.
-3. **Paiement** = on reste sur **CinetPay** (comme la plupart des apps AF Ouest pour Wave / Orange / Moov / TMoney). Farata Pointe n’affiche pas publiquement son agrégateur ; pour le **Togo**, CinetPay couvre **Moov Money** et **TMoney**. Créez un compte marchand sur [cinetpay.com](https://cinetpay.com) et collez les clés — le code est déjà branché.
+Tu as déjà dans `.env.local` : Supabase URL/anon, `APP_URL`, `DB_URL`, `SERVICE_ROLE`, `PAYMENTS_DEMO_MODE`.  
+Il manque surtout : **migrations appliquées ?**, **réglages Auth/Storage/Realtime**, **Vercel**, **te passer admin**, **inviter H+F**. CinetPay peut attendre (mode démo).
 
 ---
 
-## Checklist minimale (humain)
+## Étape 1 — Appliquer les migrations Supabase
 
-### A. Supabase
-1. Migrations `000` → `008` appliquées (`.\run_migration.ps1` si `SUPABASE_DB_URL` est dans `.env.local`)
-2. Auth → Site URL = votre domaine prod
-3. Redirect URLs = `https://VOTRE-DOMAINE/auth/callback` (+ localhost si besoin)
-4. Storage : bucket `avatars` (lecture publique)
-5. Database → Replication : cocher `messages`
+1. Ouvre PowerShell dans le dossier du projet `evoraa.net`.
+2. Lance :
 
-### B. Devenir admin (explication simple)
+```powershell
+.\run_migration.ps1
+```
 
-1. Créez un compte normal sur le site (Register).
-2. Ouvrez Supabase → Table Editor → `profiles`.
-3. Trouvez la ligne avec votre `user_id` / email.
-4. Colonne `role` → mettez **`admin`** (au lieu de `member`).
-5. Rechargez `/admin` : vous voyez la console.
+3. Si ça réussit → OK.  
+   Si ça échoue → ouvre [Supabase](https://supabase.com/dashboard) → ton projet → **SQL Editor** → colle et exécute les fichiers dans l’ordre  
+   `supabase/migrations/20240101000000_…` jusqu’à `…00009_…` (un par un).
 
-SQL équivalent (SQL Editor Supabase) — remplacez l’email :
+**Tu as fini quand :** aucune erreur SQL, les tables existent (`profiles`, `messages`, `subscriptions`, etc.).
+
+---
+
+## Étape 2 — Régler l’Auth Supabase
+
+1. Supabase → **Authentication** → **URL Configuration**.
+2. **Site URL** = l’URL **production** Vercel (pas l’URL `git-main-…` preview) :
+   - ✅ `https://evoraa-net.vercel.app`
+   - ❌ pas `https://evoraa-net-git-main-laurore.vercel.app` (souvent bloquée par Vercel)
+3. **Redirect URLs** — ajoute :
+   - `https://evoraa-net.vercel.app/auth/callback`
+   - `http://localhost:3000/auth/callback` (tests locaux uniquement)
+
+**Tu as fini quand :** Site URL + redirects sauvegardés.
+
+---
+
+## Étape 3 — Storage photos + messages temps réel
+
+1. Supabase → **Storage** → vérifie qu’il existe un bucket **`avatars`** (lecture publique).  
+   Sinon : Create bucket → nom `avatars` → Public.
+2. Supabase → **Database** → **Replication** (ou Publications) → coche la table **`messages`**.
+
+**Tu as fini quand :** bucket `avatars` OK + `messages` en realtime.
+
+---
+
+## Étape 4 — Mettre le site en ligne (Vercel)
+
+1. Va sur [vercel.com](https://vercel.com) → Import le repo GitHub `evoraa.net`.
+2. Dans **Environment Variables**, colle (mêmes valeurs que `.env.local`, **sauf** `SUPABASE_DB_URL`) :
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `NEXT_PUBLIC_APP_URL` = **l’URL HTTPS Vercel** (ex. `https://evoraa-net.vercel.app`) — mets à jour après le 1er deploy si besoin
+   - `SUPABASE_SERVICE_ROLE_KEY`
+   - `PAYMENTS_DEMO_MODE` = `true` (pour commencer **sans** encaisser)
+   - `CRON_SECRET` = une chaîne secrète longue (rappels J-7 abonnement — optionnel mais recommandé)
+3. Deploy.
+4. Si tu as un nom de domaine : DNS chez ton registrar → pointe vers Vercel, puis mets à jour `NEXT_PUBLIC_APP_URL` + Auth Site URL (Étape 2).
+
+**Tu as fini quand :** tu ouvres l’URL Vercel et la page d’accueil charge.
+
+---
+
+## Étape 5 — Créer TON compte + devenir admin
+
+1. Sur le site live (ou local) : **Créer un compte** (ton vrai email).
+2. Finis l’**onboarding**.
+3. Supabase → **Table Editor** → table **`profiles`**.
+4. Trouve ta ligne → colonne **`role`** → écris **`admin`** (à la place de `member`).
+5. Ou SQL Editor :
 
 ```sql
 update profiles
 set role = 'admin'
 where user_id = (
-  select id from auth.users where email = 'VOTRE@EMAIL.com'
+  select id from auth.users where email = 'TON@EMAIL.com'
 );
 ```
 
-### C. Vercel
-- Importer le repo, coller les variables de `.env.local.example` (sauf `SUPABASE_DB_URL`)
-- `NEXT_PUBLIC_APP_URL` = URL prod HTTPS
-- Soft launch **sans** encaisser : `PAYMENTS_DEMO_MODE=true`
-- Soft launch **avec** Mobile Money : `PAYMENTS_DEMO_MODE=false` + clés CinetPay + `SUPABASE_SERVICE_ROLE_KEY`
+6. Va sur `https://TON-SITE/admin` → tu dois voir la console admin.
 
-### D. Premiers utilisateurs (pool H+F)
-Invitez ~10–20 personnes **des deux genres**, dites-leur de :
-1. Créer un compte
-2. Finir l’onboarding
-3. Ajouter une photo
-
-Vous approuvez les photos dans `/admin` (onglet Photos).
-
-**Ne pas** lancer `seed.sql` (Laure / Alexandre) en production.
-
-### E. Mentions légales
-Page adaptée **Togo** (pas de SIREN). Quand vous avez RCCM / NIF / raison sociale, envoyez-les pour mise à jour.
+**Tu as fini quand :** `/admin` s’ouvre (pas de renvoi vers dashboard).
 
 ---
 
-## Farata & paiement — décision produit
+## Étape 6 — Test solo (avant d’inviter qui que ce soit)
 
-| Question | Réponse KELIAA |
-|----------|----------------|
-| Que paient les users Farata-like ? | Mobile Money (Wave, Orange…) via un **agrégateur** |
-| Que fait KELIAA déjà ? | **CinetPay** (`channels: ALL`) |
-| Togo | Moov Money + TMoney via CinetPay |
-| Faut-il changer de PSP ? | **Non** pour le soft launch — créer le compte CinetPay suffit |
+Sur le site, avec ton compte :
+
+1. Ajoute une **photo** → dans `/admin` → onglet Photos → **OK**.
+2. Va sur **Découvrir / Compatibilité** (pour l’instant peut être vide — normal).
+3. Ouvre **/billing** → Alliance → si `PAYMENTS_DEMO_MODE=true`, simule le paiement → abo actif.
+4. Ouvre **/help** → pose 1 question EVA.
+
+**Tu as fini quand :** photo approuvée + billing démo compris.
 
 ---
 
-## Ce que le code fait déjà (agent)
+## Étape 7 — Inviter les premiers users (hommes ET femmes)
 
-- Auth, onboarding, matching, messages, Free + Alliance, admin, webhooks CinetPay, mode démo
-- Mentions légales Togo
-- Gate onboarding sur les routes produit
-- Réponses illimitées aux messages reçus (Free)
-- Filtrage matching (pas de profils rejetés)
-- Quota EVA / jour côté interface
-- Page succès paiement honnête (activé vs en attente)
+Le matching montre l’**autre genre**. Il faut les deux.
+
+1. Invite **≈ 10–20 personnes** (mélange H et F).
+2. Dis-leur exactement :
+   - créer un compte  
+   - finir l’onboarding  
+   - mettre une photo  
+3. Toi : `/admin` → Photos → approuver rapidement.  
+4. Support : un WhatsApp ou `contact@keliaa.net` pour la cohorte.
+
+**Tu as fini quand :** au moins quelques H et quelques F ont un profil + photo OK, et Découvrir montre des suggestions.
+
+---
+
+## Étape 8 — Paiements réels (plus tard, quand tu veux encaisser)
+
+Pas obligatoire pour la 1re cohorte si démo = true.
+
+1. Crée un compte [cinetpay.com](https://cinetpay.com) (Togo : Moov / TMoney).
+2. Sur Vercel, ajoute :
+   - `CINETPAY_API_KEY`
+   - `CINETPAY_SITE_ID`
+   - `CINETPAY_SECRET_KEY`
+   - `PAYMENTS_DEMO_MODE` = `false`
+3. Notify URL CinetPay :
+
+`https://TON-DOMAINE/api/payments/cinetpay/notify?token=TA_CINETPAY_SECRET_KEY`
+
+4. Fais **1 paiement test** de 5 000 FCFA.
+
+---
+
+## Étape 9 — Optionnel
+
+- **Resend** (formulaire Contact) : `RESEND_API_KEY` + `RESEND_FROM_EMAIL` + `CONTACT_INBOX_EMAIL`
+- **RCCM / NIF** : envoie-les → on met à jour `/mentions-legales`
+- Ne lance **jamais** `seed.sql` (faux profils Laure/Alexandre) en prod
+
+---
+
+## Récap ultra court
+
+| # | Toi | Où |
+|---|-----|-----|
+| 1 | Migrations | PowerShell ou SQL Editor |
+| 2 | Auth URLs | Supabase Auth |
+| 3 | Avatars + Realtime messages | Supabase Storage / Replication |
+| 4 | Deploy + env | Vercel |
+| 5 | Compte + role admin | Site + Supabase profiles |
+| 6 | Smoke test | Site + /admin |
+| 7 | Inviter H et F | WhatsApp / bouche-à-oreille |
+| 8 | CinetPay | Quand tu veux encaisser |
+
+Dis **« étape 1 faite »** (ou le numéro) quand tu bloques — on avance une par une.

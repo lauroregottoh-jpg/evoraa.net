@@ -1,5 +1,6 @@
 import { createClient } from "@/utils/supabase/server"
 import { getUserEntitlements } from "@/lib/billing/entitlements"
+import { isTrialActive, trialDaysRemaining } from "@/lib/billing/trial"
 
 function startOfLocalMonth(d = new Date()) {
   return new Date(d.getFullYear(), d.getMonth(), 1)
@@ -18,6 +19,9 @@ export type UsageSnapshot = {
   daysRemaining: number | null
   renewSoon: boolean
   isPaid: boolean
+  trialEndsAt: string | null
+  trialDaysRemaining: number | null
+  isTrialBoost: boolean
 }
 
 /** Quotas visibles dashboard — aligné sur l'enforcement messaging. */
@@ -76,5 +80,10 @@ export async function getUsageSnapshot(userId?: string): Promise<UsageSnapshot |
     daysRemaining,
     renewSoon,
     isPaid: entitlements.planId !== "free",
+    trialEndsAt: entitlements.trialEndsAt ?? null,
+    trialDaysRemaining: isTrialActive(entitlements.trialEndsAt)
+      ? trialDaysRemaining(entitlements.trialEndsAt)
+      : null,
+    isTrialBoost: Boolean(entitlements.isTrialBoost && isTrialActive(entitlements.trialEndsAt)),
   }
 }
