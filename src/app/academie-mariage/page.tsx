@@ -15,10 +15,12 @@ import { getMyGrowthAxes } from "@/app/actions/assessments"
 import { AcademyCoachingCta } from "@/components/academy/AcademyCoachingCta"
 import { ModuleProgressBar } from "@/components/academy/AcademyProgress"
 import {
-  ACADEMY_MODULES,
   academyLessonPath,
   academyModulePath,
+  type AcademyModule,
 } from "@/lib/academy/modules"
+import { applyAcademyOverrides } from "@/lib/academy/published"
+import { loadPublicCms } from "@/lib/admin/loadCms"
 import { cn } from "@/utils/cn"
 
 const ICONS = {
@@ -33,7 +35,8 @@ const ICONS = {
 } as const
 
 export default async function AcademieMariagePage() {
-  const { axes } = await getMyGrowthAxes()
+  const [{ axes }, cms] = await Promise.all([getMyGrowthAxes(), loadPublicCms()])
+  const ACADEMY_MODULES = applyAcademyOverrides(cms.academyOverrides)
   const recommendedIds = new Set(
     axes.slice(0, 3).map((a) => {
       const parts = a.academyHref.split("/").filter(Boolean)
@@ -106,7 +109,7 @@ function ModuleCard({
   mod,
   highlight,
 }: {
-  mod: (typeof ACADEMY_MODULES)[number]
+  mod: AcademyModule
   highlight?: boolean
 }) {
   const Icon = ICONS[mod.id]

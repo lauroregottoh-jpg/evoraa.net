@@ -26,6 +26,13 @@ import {
   SectionCard,
   type AdminNavId,
 } from "@/components/admin/AdminShell"
+import {
+  AcademyEditor,
+  AdsEditor,
+  AppTextsEditor,
+  AutoModerationPanel,
+  CreateMemberForm,
+} from "@/components/admin/AdminOpsEditors"
 import { cn } from "@/utils/cn"
 
 type Props = {
@@ -399,9 +406,10 @@ export function AdminConsole(props: Props) {
           <div>
             <h1 className="font-serif text-3xl font-bold">Membres</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Table + panneau détail (inspiré DASHBOARD 3).
+              Table + panneau détail · créer un compte.
             </p>
           </div>
+          <CreateMemberForm isFullAdmin={isFullAdmin} busy={busy} run={run} />
           <div className="grid lg:grid-cols-5 gap-4">
             <div className="lg:col-span-3 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
               <div className="overflow-x-auto">
@@ -460,9 +468,16 @@ export function AdminConsole(props: Props) {
           <div>
             <h1 className="font-serif text-3xl font-bold">Modération</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Photos · Signalements · Profils en attente.
+              Photos · Signalements · Profils · auto-discernement.
             </p>
           </div>
+          <AutoModerationPanel
+            settings={props.settings}
+            isFullAdmin={isFullAdmin}
+            busy={busy}
+            run={run}
+            setMsg={setMsg}
+          />
           <div className="flex gap-2 flex-wrap">
             {(
               [
@@ -730,6 +745,7 @@ export function AdminConsole(props: Props) {
             <div>
               <h1 className="font-serif text-3xl font-bold">Académie</h1>
               <p className="text-sm text-muted-foreground mt-1">
+                Éditer titres, résumés, vidéos, exercices ·{" "}
                 {ACADEMY_MODULES.length} modules ·{" "}
                 {ACADEMY_MODULES.reduce((n, m) => n + m.lessons.length, 0)} leçons
               </p>
@@ -738,23 +754,12 @@ export function AdminConsole(props: Props) {
               Aperçu membre →
             </Link>
           </div>
-          <div className="grid sm:grid-cols-2 gap-3">
-            {ACADEMY_MODULES.map((m) => (
-              <div
-                key={m.id}
-                className="rounded-2xl border border-border bg-card p-5 shadow-sm space-y-2"
-              >
-                <p className="font-serif text-lg font-bold">{m.title}</p>
-                <p className="text-xs text-muted-foreground leading-relaxed">{m.summary}</p>
-                <p className="text-xs font-semibold text-primary">{m.lessons.length} leçons</p>
-                <ul className="text-xs text-muted-foreground space-y-1">
-                  {m.lessons.map((l) => (
-                    <li key={l.slug}>· {l.title}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+          <AcademyEditor
+            settings={props.settings}
+            isFullAdmin={isFullAdmin}
+            busy={busy}
+            run={run}
+          />
         </div>
       )}
 
@@ -802,9 +807,21 @@ export function AdminConsole(props: Props) {
           <div>
             <h1 className="font-serif text-3xl font-bold">Contenu & marketing</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Notes soft launch, bannières, messages ops.
+              Textes app, publicités, notes soft launch.
             </p>
           </div>
+          <AppTextsEditor
+            settings={props.settings}
+            isFullAdmin={isFullAdmin}
+            busy={busy}
+            run={run}
+          />
+          <AdsEditor
+            settings={props.settings}
+            isFullAdmin={isFullAdmin}
+            busy={busy}
+            run={run}
+          />
           <SectionCard title="Notes soft launch">
             <textarea
               value={notes}
@@ -826,24 +843,6 @@ export function AdminConsole(props: Props) {
               </Button>
             )}
           </SectionCard>
-          <div className="grid sm:grid-cols-2 gap-3">
-            <div className="rounded-2xl border border-accent/40 bg-[#F7F0E0] p-4">
-              <p className="text-xs font-bold uppercase tracking-wide text-accent-foreground">
-                Bannière type Farata
-              </p>
-              <p className="font-semibold text-sm mt-2">Profil sans photo = invisible</p>
-              <p className="text-xs text-muted-foreground mt-1">
-                Affichée côté membre Accueil si pas d&apos;avatar.
-              </p>
-            </div>
-            <div className="rounded-2xl border border-primary bg-primary text-primary-foreground p-4">
-              <p className="text-xs font-bold uppercase tracking-wide text-accent">Alliance</p>
-              <p className="font-semibold text-sm mt-2">Passe Alliance — accélère les échanges</p>
-              <p className="text-xs text-primary-foreground/75 mt-1">
-                Bannière upgrade Free → Alliance sur l&apos;accueil membre.
-              </p>
-            </div>
-          </div>
         </div>
       )}
 
@@ -933,6 +932,11 @@ export function AdminConsole(props: Props) {
               }}
             />
           </div>
+          <p className="text-xs text-muted-foreground">
+            Auto-discernement des profils → onglet <strong>Modération</strong>. Textes &amp; pubs →{" "}
+            <strong>Contenu &amp; marketing</strong>. Académie éditable → onglet{" "}
+            <strong>Académie</strong>.
+          </p>
           <SectionCard title="Santé système">
             <div className="grid sm:grid-cols-2 gap-2">
               <Flag label="URL app" value={props.ops.appUrl || "—"} ok={Boolean(props.ops.appUrl)} />

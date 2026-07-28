@@ -530,6 +530,10 @@ export async function adminUpdatePlatformSetting(key: string, value: unknown) {
     "default_photo_blur",
     "require_charter",
     "soft_launch_notes",
+    "app_texts",
+    "ads",
+    "auto_moderation",
+    "academy_overrides",
   ])
   if (!allowed.has(key)) return { error: "Clé non autorisée." }
 
@@ -542,6 +546,8 @@ export async function adminUpdatePlatformSetting(key: string, value: unknown) {
 
   if (error) return { error: error.message }
   revalidatePath("/admin")
+  revalidatePath("/dashboard")
+  revalidatePath("/academie-mariage")
   return { success: true }
 }
 
@@ -559,4 +565,212 @@ export async function adminPingServiceRole() {
   } catch (e) {
     return { error: e instanceof Error ? e.message : "Erreur", ok: false }
   }
+}
+
+export async function adminCreateMember(input: {
+  email: string
+  password: string
+  firstName: string
+  lastName?: string
+  gender?: "M" | "F"
+  city?: string
+  approve?: boolean
+}) {
+  const gate = await requireFullAdmin()
+  if (gate.error) return { error: gate.error }
+
+  const email = input.email.trim().toLowerCase()
+  const password = input.password
+  const firstName = input.firstName.trim()
+  if (!email || !password || password.length < 8 || !firstName) {
+    return { error: "Email, prénom et mot de passe (≥ 8) requis." }
+  }
+
+  try {
+    const admin = createAdminClient()
+    const { data: created, error: authErr } = await admin.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+      user_metadata: { first_name: firstName, last_name: input.lastName || "" },
+    })
+    if (authErr || !created.user) {
+      return { error: authErr?.message || "Création compte impossible." }
+    }
+
+    const userId = created.user.id
+    // Wait briefly for trigger profile, then upsert fields
+    await new Promise((r) => setTimeout(r, 400))
+    const { data: existing } = await admin
+      .from("profiles")
+      .select("id")
+      .eq("user_id", userId)
+      .maybeSingle()
+
+    const patch = {
+      first_name: firstName,
+      last_name: input.lastName?.trim() || null,
+      gender: input.gender || null,
+      city: input.city?.trim() || null,
+      moderation_status: input.approve ? "approved" : "pending",
+      onboarding_status: "registered",
+      updated_at: new Date().toISOString(),
+    }
+
+    if (existing?.id) {
+      const { error } = await admin.from("profiles").update(patch).eq("id", existing.id)
+      if (error) return { error: error.message, userId }
+    } else {
+      const { error } = await admin.from("profiles").insert({
+        user_id: userId,
+        ...patch,
+      })
+      if (error) return { error: error.message, userId }
+    }
+
+    revalidatePath("/admin")
+    return { success: true, userId }
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : "Erreur création membre." }
+  }
+}
+
+/**
+ * Discernement automatique (règles) — analyse les profils pending et approuve
+ * ceux qui passent les seuils. Pas un LLM facturé (V2 possible plus tard).
+ */
+export async function adminRunAutoModeration() {
+  const gate = await requireAdmin()
+  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé." }
+
+  const {
+    parseAutoMod,
+    evaluateProfileAuto,
+  } = await import("@/lib/admin/cms")
+
+  const { data: setting } = await gate.supabase
+    .from("platform_settings")
+    .select("value")
+    .eq("key", "auto_moderation")
+    .maybeSingle()
+
+  const cfg = parseAutoMod(setting?.value)
+  if (!cfg.enabled) {
+    return { error: "Auto-modération désactivée. Activez-la dans Paramètres." }
+  }
+
+  const { data: pending } = await gate.supabase
+    .from("profiles")
+    .select("id, first_name, avatar_url, completion_percentage, moderation_status")
+    .eq("moderation_status", "pending")
+    .limit(100)
+
+  let approved = 0
+  let reviewed = 0
+  const details: Array<{ id: string; recommend: string; score: number }> = []
+
+  for (const p of pending || []) {
+    const ev = evaluateProfileAuto(
+      {
+        completion: Number(p.completion_percentage || 0),
+        hasAvatar: Boolean(p.avatar_url),
+        hasName: Boolean(p.first_name),
+      },
+      cfg
+    )
+    details.push({ id: p.id, recommend: ev.recommend, score: ev.score })
+    if (ev.recommend === "approve") {
+      const { error } = await gate.supabase
+        .from("profiles")
+        .update({
+          moderation_status: "approved",
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", p.id)
+      if (!error) approved += 1
+    } else {
+      reviewed += 1
+    }
+  }
+
+  if (cfg.autoApprovePhotosIfPrimary) {
+    const { data: photos } = await gate.supabase
+      .from("user_photos")
+      .select("id, profile_id, photo_url, is_primary, status")
+      .eq("status", "pending")
+      .eq("is_primary", true)
+      .limit(50)
+
+    for (const ph of photos || []) {
+      await gate.supabase
+        .from("user_photos")
+        .update({ status: "approved" })
+        .eq("id", ph.id)
+      if (ph.photo_url) {
+        await gate.supabase
+          .from("profiles")
+          .update({
+            avatar_url: ph.photo_url,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", ph.profile_id)
+      }
+    }
+  }
+
+  revalidatePath("/admin")
+  return {
+    success: true,
+    approved,
+    reviewed,
+    scanned: (pending || []).length,
+    details,
+  }
+}
+
+export async function adminPreviewAutoModeration() {
+  const gate = await requireAdmin()
+  if (gate.error || !gate.supabase) {
+    return { error: gate.error || "Accès refusé.", items: [] as Array<{
+      id: string
+      name: string
+      score: number
+      recommend: string
+      reasons: string[]
+    }> }
+  }
+
+  const { parseAutoMod, evaluateProfileAuto } = await import("@/lib/admin/cms")
+  const { data: setting } = await gate.supabase
+    .from("platform_settings")
+    .select("value")
+    .eq("key", "auto_moderation")
+    .maybeSingle()
+  const cfg = parseAutoMod(setting?.value)
+
+  const { data: pending } = await gate.supabase
+    .from("profiles")
+    .select("id, first_name, last_name, avatar_url, completion_percentage")
+    .eq("moderation_status", "pending")
+    .limit(40)
+
+  const items = (pending || []).map((p) => {
+    const ev = evaluateProfileAuto(
+      {
+        completion: Number(p.completion_percentage || 0),
+        hasAvatar: Boolean(p.avatar_url),
+        hasName: Boolean(p.first_name),
+      },
+      cfg
+    )
+    return {
+      id: p.id,
+      name: [p.first_name, p.last_name].filter(Boolean).join(" ") || "Sans nom",
+      score: ev.score,
+      recommend: ev.recommend,
+      reasons: ev.reasons,
+    }
+  })
+
+  return { items, cfg }
 }

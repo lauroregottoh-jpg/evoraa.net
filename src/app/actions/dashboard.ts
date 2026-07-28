@@ -6,6 +6,8 @@ import { getCompatibilitySuggestions } from "@/app/actions/matching"
 import { getAssessmentsProgress } from "@/app/actions/assessments"
 import { getUsageSnapshot, type UsageSnapshot } from "@/lib/billing/usage"
 import { getSocialInsights, type SocialInsights } from "@/app/actions/social"
+import { loadPublicCms } from "@/lib/admin/loadCms"
+import type { AdSlot } from "@/lib/admin/cms"
 
 export type DashboardNextStep = {
   id: string
@@ -57,6 +59,10 @@ export type DashboardData = {
   affirmationSource: string
   dailyTip: { title: string; body: string }
   mission: DashboardMission
+  selectionTitle: string
+  selectionSubtitle: string
+  greetingPrefix: string
+  sponsoredAds: AdSlot[]
 }
 
 const AFFIRMATIONS = [
@@ -122,13 +128,14 @@ export async function getDashboardData(): Promise<{
       ? (profile.privacy_settings as Record<string, unknown>)
       : {}
 
-  const [conversationsResult, suggestionsResult, assessments, usage, social] =
+  const [conversationsResult, suggestionsResult, assessments, usage, social, cms] =
     await Promise.all([
       listConversations(),
       getCompatibilitySuggestions(6),
       getAssessmentsProgress(),
       getUsageSnapshot(user.id),
       getSocialInsights(),
+      loadPublicCms(),
     ])
 
   if (!usage) return { error: "Impossible de charger vos quotas." }
@@ -143,13 +150,14 @@ export async function getDashboardData(): Promise<{
 
   const hasAvatar = Boolean(profile.avatar_url)
   const completion = profile.completion_percentage ?? 0
+  const texts = cms.texts
 
   const nextSteps: DashboardNextStep[] = []
   if (!hasAvatar) {
     nextSteps.push({
       id: "photo",
-      title: "Votre profil sans photo passe inaperçu",
-      body: "Ajoutez une photo pour apparaître dans les suggestions et inspirer confiance.",
+      title: texts.banner_photo_title,
+      body: texts.banner_photo_body,
       href: "/profile",
       cta: "Ajouter",
       tone: "photo",
@@ -188,8 +196,8 @@ export async function getDashboardData(): Promise<{
   if (!usage.isPaid && usage.conversationsRemaining <= 1) {
     nextSteps.push({
       id: "upgrade",
-      title: "Vous approchez de la limite Découverte",
-      body: "Passez Alliance pour accélérer : plus de conversations, messages et suggestions.",
+      title: texts.banner_alliance_title,
+      body: texts.banner_alliance_body,
       href: "/billing",
       cta: "Découvrir Alliance",
       tone: "upgrade",
@@ -296,6 +304,12 @@ export async function getDashboardData(): Promise<{
       affirmationSource: AFFIRMATIONS[dayIndex].source,
       dailyTip: DAILY_TIPS[tipIndex],
       mission,
+      selectionTitle: texts.selection_title,
+      selectionSubtitle: texts.selection_subtitle,
+      greetingPrefix: texts.home_greeting_prefix,
+      sponsoredAds: cms.ads.filter(
+        (a) => a.active && (a.slot === "dashboard" || a.slot === "global")
+      ),
     },
   }
 }

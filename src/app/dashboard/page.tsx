@@ -75,9 +75,35 @@ export default async function DashboardPage() {
         </div>
 
         <section className="space-y-3">
-          <SelectionHeader />
+          <SelectionHeader
+            title={data.selectionTitle}
+            subtitle={data.selectionSubtitle}
+          />
           <SelectionGrid items={data.topSuggestions} />
         </section>
+
+        {data.sponsoredAds.length > 0 && (
+          <div className="space-y-3">
+            {data.sponsoredAds.map((ad) => (
+              <Link
+                key={ad.id}
+                href={ad.href || "#"}
+                className="block rounded-2xl border border-border bg-secondary/40 p-4 hover:border-primary/30 transition-colors"
+              >
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                  Partenaire
+                </p>
+                <p className="font-semibold text-sm mt-1">{ad.title}</p>
+                {ad.body ? (
+                  <p className="text-xs text-muted-foreground mt-1">{ad.body}</p>
+                ) : null}
+                <span className="inline-block mt-2 text-xs font-bold text-primary">
+                  {ad.ctaLabel} →
+                </span>
+              </Link>
+            ))}
+          </div>
+        )}
 
         <DailyReminderCard text={data.affirmation} source={data.affirmationSource} />
         <DailyTipCard title={data.dailyTip.title} body={data.dailyTip.body} />

@@ -6,8 +6,9 @@ import { AcademyCoachingCta } from "@/components/academy/AcademyCoachingCta"
 import { ModuleProgressBar } from "@/components/academy/AcademyProgress"
 import {
   academyLessonPath,
-  getAcademyModule,
 } from "@/lib/academy/modules"
+import { getPublishedModule } from "@/lib/academy/published"
+import { loadPublicCms } from "@/lib/admin/loadCms"
 
 export default async function AcademyModulePage({
   params,
@@ -15,7 +16,8 @@ export default async function AcademyModulePage({
   params: Promise<{ moduleId: string }>
 }) {
   const { moduleId } = await params
-  const mod = getAcademyModule(moduleId)
+  const cms = await loadPublicCms()
+  const mod = getPublishedModule(moduleId, cms.academyOverrides)
   if (!mod) notFound()
 
   const slugs = mod.lessons.map((l) => l.slug)

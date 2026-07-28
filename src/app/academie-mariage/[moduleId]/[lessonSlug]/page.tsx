@@ -9,8 +9,9 @@ import { AcademySelfCheckBox } from "@/components/academy/AcademySelfCheck"
 import {
   academyLessonPath,
   academyModulePath,
-  getAcademyLesson,
 } from "@/lib/academy/modules"
+import { getPublishedLesson } from "@/lib/academy/published"
+import { loadPublicCms } from "@/lib/admin/loadCms"
 
 export default async function AcademyLessonPage({
   params,
@@ -18,7 +19,8 @@ export default async function AcademyLessonPage({
   params: Promise<{ moduleId: string; lessonSlug: string }>
 }) {
   const { moduleId, lessonSlug } = await params
-  const data = getAcademyLesson(moduleId, lessonSlug)
+  const cms = await loadPublicCms()
+  const data = getPublishedLesson(moduleId, lessonSlug, cms.academyOverrides)
   if (!data) notFound()
 
   const { module: mod, lesson, index, prev, next } = data

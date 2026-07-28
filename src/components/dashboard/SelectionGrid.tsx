@@ -76,7 +76,13 @@ export function SelectionGrid({ items }: { items: SelectionCard[] }) {
   )
 }
 
-export function SelectionHeader() {
+export function SelectionHeader({
+  title = "La sélection KELIAA",
+  subtitle = "Des profils choisis pour vous",
+}: {
+  title?: string
+  subtitle?: string
+}) {
   return (
     <div className="flex items-center justify-between gap-3">
       <div className="flex items-center gap-2.5 min-w-0">
@@ -84,8 +90,8 @@ export function SelectionHeader() {
           <Heart className="h-4 w-4" />
         </div>
         <div className="min-w-0">
-          <h2 className="font-serif text-xl font-bold leading-tight">La sélection KELIAA</h2>
-          <p className="text-xs text-muted-foreground">Des profils choisis pour vous</p>
+          <h2 className="font-serif text-xl font-bold leading-tight">{title}</h2>
+          <p className="text-xs text-muted-foreground">{subtitle}</p>
         </div>
       </div>
       <Link
