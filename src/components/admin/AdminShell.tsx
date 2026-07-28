@@ -35,7 +35,7 @@ export type AdminNavId =
 type NavItem = {
   id: AdminNavId
   label: string
-  icon: React.ElementType
+  icon: React.ComponentType<{ className?: string }>
   badge?: number
 }
 
