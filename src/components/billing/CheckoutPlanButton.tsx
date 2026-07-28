@@ -1,55 +1,76 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { useRouter } from "next/navigation";
-import { startCheckoutAction } from "@/app/actions/billing";
-import { MagneticButton } from "@/components/ui/magnetic-button";
-import type { PlanId } from "@/lib/billing/plans";
+import * as React from "react"
+import { useRouter } from "next/navigation"
+import { startCheckoutAction } from "@/app/actions/billing"
+import { MagneticButton } from "@/components/ui/magnetic-button"
+import { PaymentModePicker } from "@/components/billing/PaymentModePicker"
+import type { PlanId } from "@/lib/billing/plans"
+import type { BictorysPaymentMode } from "@/lib/billing/bictorys"
 
 export function CheckoutPlanButton({
   planId,
   label,
   popular,
   variant = "outline",
+  showModePicker = false,
+  suggestedMode = "mobile_money",
 }: {
-  planId: PlanId;
-  label: string;
-  popular?: boolean;
-  variant?: "primary" | "outline" | "secondary";
+  planId: PlanId
+  label: string
+  popular?: boolean
+  variant?: "primary" | "outline" | "secondary"
+  showModePicker?: boolean
+  suggestedMode?: BictorysPaymentMode
 }) {
-  const router = useRouter();
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState("");
+  const router = useRouter()
+  const [loading, setLoading] = React.useState(false)
+  const [error, setError] = React.useState("")
+  const [paymentMode, setPaymentMode] = React.useState<BictorysPaymentMode>(suggestedMode)
+
+  React.useEffect(() => {
+    setPaymentMode(suggestedMode)
+  }, [suggestedMode])
 
   if (planId === "free") {
     return (
       <MagneticButton href="/register" variant={variant} className="w-full">
         {label}
       </MagneticButton>
-    );
+    )
   }
 
   const handleClick = async () => {
-    setLoading(true);
-    setError("");
+    setLoading(true)
+    setError("")
     try {
-      const result = await startCheckoutAction(planId);
+      const result = await startCheckoutAction(
+        planId,
+        showModePicker ? paymentMode : undefined
+      )
       if (result.checkoutPath) {
         if (result.checkoutPath.startsWith("http")) {
-          window.location.href = result.checkoutPath;
+          window.location.href = result.checkoutPath
         } else {
-          router.push(result.checkoutPath);
+          router.push(result.checkoutPath)
         }
-        return;
+        return
       }
-      setError(result.error || "Impossible de démarrer le paiement.");
+      setError(result.error || "Impossible de démarrer le paiement.")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
+      {showModePicker && (
+        <PaymentModePicker
+          value={paymentMode}
+          onChange={setPaymentMode}
+          suggested={suggestedMode}
+        />
+      )}
       <button
         type="button"
         onClick={handleClick}
@@ -64,5 +85,5 @@ export function CheckoutPlanButton({
       </button>
       {error && <p className="text-xs text-destructive text-center">{error}</p>}
     </div>
-  );
+  )
 }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MemberShell } from "@/components/layout/MemberShell";
+import { getCheckoutHints } from "@/app/actions/billing";
 import { getUsageSnapshot } from "@/lib/billing/usage";
 import { getHeroPaidPlan, getPlan } from "@/lib/billing/plans";
 import { CheckoutPlanButton } from "@/components/billing/CheckoutPlanButton";
@@ -14,6 +15,7 @@ export default async function BillingPage() {
   } = await supabase.auth.getUser();
 
   const usage = user ? await getUsageSnapshot(user.id) : null;
+  const checkoutHints = user ? await getCheckoutHints() : null;
   const alliance = getHeroPaidPlan();
   const free = getPlan("free");
 
@@ -50,7 +52,7 @@ export default async function BillingPage() {
                 Renouvelez pour garder vos quotas et votre badge.
               </p>
             </div>
-            <CheckoutPlanButton planId="premium_plus" label="Renouveler Alliance" />
+            <CheckoutPlanButton planId="premium_plus" label="Renouveler Alliance" showModePicker={checkoutHints?.showModePicker} suggestedMode={checkoutHints?.suggestedMode} />
           </div>
         )}
 
@@ -124,7 +126,12 @@ export default async function BillingPage() {
                 </li>
               ))}
             </ul>
-            <CheckoutPlanButton planId="premium_plus" label="Passer Alliance" />
+            <CheckoutPlanButton
+              planId="premium_plus"
+              label="Passer Alliance"
+              showModePicker={checkoutHints?.showModePicker}
+              suggestedMode={checkoutHints?.suggestedMode}
+            />
           </div>
         )}
 
@@ -134,7 +141,12 @@ export default async function BillingPage() {
             <p className="text-sm text-muted-foreground">
               Le renouvellement est manuel. Aucun prélèvement surprise.
             </p>
-            <CheckoutPlanButton planId="premium_plus" label="Renouveler 30 jours" />
+            <CheckoutPlanButton
+              planId="premium_plus"
+              label="Renouveler 30 jours"
+              showModePicker={checkoutHints?.showModePicker}
+              suggestedMode={checkoutHints?.suggestedMode}
+            />
           </div>
         )}
 

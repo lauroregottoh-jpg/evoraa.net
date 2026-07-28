@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js"
 import { createHmac, timingSafeEqual } from "crypto"
 import { NextRequest, NextResponse } from "next/server"
+import { logPaymentEvent } from "@/lib/billing/paymentAudit"
 
 function verifyTokenOrSignature(request: NextRequest, rawBody: string) {
   const secret = process.env.BICTORYS_WEBHOOK_SECRET
@@ -74,7 +75,23 @@ export async function POST(request: NextRequest) {
 
   const { data: payment } = await query.maybeSingle()
   if (!payment) return NextResponse.json({ error: "Paiement introuvable" }, { status: 404 })
+
+  await logPaymentEvent({
+    paymentId: payment.id,
+    provider: "bictorys",
+    eventType: "webhook_received",
+    status: statusRaw,
+    payload: body as Record<string, unknown>,
+  })
+
   if (payment.status === "completed") {
+    await logPaymentEvent({
+      paymentId: payment.id,
+      provider: "bictorys",
+      eventType: "webhook_ignored",
+      status: "completed",
+      message: "Paiement déjà activé",
+    })
     return NextResponse.json({ ok: true, activated: true, already: true })
   }
 
@@ -93,10 +110,24 @@ export async function POST(request: NextRequest) {
       })
       .eq("id", payment.id)
     await admin.from("subscriptions").update({ status: "failed" }).eq("id", payment.subscription_id)
+    await logPaymentEvent({
+      paymentId: payment.id,
+      provider: "bictorys",
+      eventType: "payment_failed",
+      status: "failed",
+      message: statusRaw,
+    })
     return NextResponse.json({ ok: true, activated: false })
   }
 
   if (mapped === "pending") {
+    await logPaymentEvent({
+      paymentId: payment.id,
+      provider: "bictorys",
+      eventType: "webhook_ignored",
+      status: "pending",
+      message: "État non terminal",
+    })
     return NextResponse.json({ ok: true, activated: false, pending: true })
   }
 
@@ -139,6 +170,14 @@ export async function POST(request: NextRequest) {
       ends_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
     })
     .eq("id", subscription.id)
+
+  await logPaymentEvent({
+    paymentId: payment.id,
+    provider: "bictorys",
+    eventType: "payment_completed",
+    status: "completed",
+    message: transactionId || undefined,
+  })
 
   return NextResponse.json({ ok: true, activated: true })
 }

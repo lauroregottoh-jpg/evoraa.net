@@ -45,6 +45,10 @@ import {
   SanctionRulesEditor,
   YoutubeConfigEditor,
 } from "@/components/admin/AdminOpsV2Panels"
+import {
+  BictorysSandboxPanel,
+  PaymentsAuditPanel,
+} from "@/components/admin/AdminPaymentsPanels"
 import { DistBars, SparkColumns } from "@/components/admin/AdminCharts"
 import { cn } from "@/utils/cn"
 
@@ -95,8 +99,19 @@ type Props = {
     amount: number
     currency: string
     status: string | null
+    provider: string | null
     transaction_reference: string | null
     created_at: string | null
+    metadata?: unknown
+  }>
+  paymentEvents: Array<{
+    id: string
+    paymentId: string | null
+    provider: string | null
+    eventType: string
+    status: string | null
+    message: string | null
+    createdAt: string | null
   }>
   photos: Array<{
     id: string
@@ -658,9 +673,30 @@ export function AdminConsole(props: Props) {
             Paiements démo :{" "}
             <strong>{props.ops.paymentsDemoMode ? "ON" : "OFF"}</strong>
             {" · "}
+            Provider : <strong>{props.ops.paymentProvider}</strong>
+            {" · "}
+            Bictorys : <strong>{props.ops.hasBictorys ? "configuré" : "non"}</strong>
+            {props.ops.hasBictorys && (
+              <>
+                {" · "}
+                Mode : <strong>{props.ops.bictorysSandbox ? "sandbox" : "production"}</strong>
+              </>
+            )}
+            {" · "}
             CinetPay : <strong>{props.ops.hasCinetPay ? "configuré" : "non"}</strong>
           </p>
-          <div className="grid lg:grid-cols-2 gap-4">
+          <BictorysSandboxPanel
+            ops={props.ops}
+            isFullAdmin={isFullAdmin}
+            busy={busy}
+            run={run}
+            setMsg={setMsg}
+          />
+          <PaymentsAuditPanel
+            payments={props.payments}
+            paymentEvents={props.paymentEvents}
+          />
+          <div className="grid lg:grid-cols-1 gap-4 max-w-2xl">
             <SectionCard title="Abonnements récents">
               <div className="divide-y divide-border max-h-96 overflow-y-auto">
                 {props.subscriptions.length === 0 && (
@@ -680,26 +716,6 @@ export function AdminConsole(props: Props) {
                         {s.endsAt ? new Date(s.endsAt).toLocaleDateString("fr-FR") : "—"}
                       </p>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </SectionCard>
-            <SectionCard title="Paiements">
-              <div className="divide-y divide-border max-h-96 overflow-y-auto">
-                {props.payments.length === 0 && (
-                  <p className="text-sm text-muted-foreground py-4">Aucun.</p>
-                )}
-                {props.payments.map((p) => (
-                  <div key={p.id} className="py-3 flex justify-between gap-2 text-sm">
-                    <div>
-                      <p className="font-medium">
-                        {Number(p.amount).toLocaleString("fr-FR")} FCFA
-                      </p>
-                      <p className="text-[11px] font-mono text-muted-foreground">
-                        {p.transaction_reference || "—"}
-                      </p>
-                    </div>
-                    <Badge variant="outline">{p.status || "—"}</Badge>
                   </div>
                 ))}
               </div>

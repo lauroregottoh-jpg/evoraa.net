@@ -25,7 +25,7 @@ export default function PricingPage() {
     },
     {
       q: "Quels paiements acceptez-vous ?",
-      a: "Mobile Money via CinetPay (selon les pays). Les montants sont affichés avant validation.",
+      a: "Mobile Money et carte via Bictorys (UEMOA) ou CinetPay selon configuration. Les montants sont affichés avant validation.",
     },
     {
       q: "L'abonnement se renouvelle-t-il tout seul ?",

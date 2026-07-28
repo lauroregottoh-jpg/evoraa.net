@@ -10,7 +10,7 @@ async function requireAdmin() {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) {
-    return { error: "Non authentifi?." as string, supabase: null, user: null, role: null as string | null }
+    return { error: "Non authentifie.." as string, supabase: null, user: null, role: null as string | null }
   }
 
   const { data: profile } = await supabase
@@ -20,7 +20,7 @@ async function requireAdmin() {
     .maybeSingle()
 
   if (profile?.role !== "admin" && profile?.role !== "moderator") {
-    return { error: "Accès admin requis." as string, supabase: null, user: null, role: null }
+    return { error: "Acces admin requis." as string, supabase: null, user: null, role: null }
   }
 
   return {
@@ -35,7 +35,7 @@ async function requireFullAdmin() {
   const gate = await requireAdmin()
   if (gate.error || !gate.supabase) return gate
   if (gate.role !== "admin") {
-    return { ...gate, error: "R?serv? aux administrateurs (pas mod?rateurs)." }
+    return { ...gate, error: "Reserve aux administrateurs (pas moderateurs)." }
   }
   return gate
 }
@@ -75,6 +75,9 @@ export type AdminBreakdowns = {
 export type AdminOpsFlags = {
   paymentsDemoMode: boolean
   hasCinetPay: boolean
+  hasBictorys: boolean
+  paymentProvider: string
+  bictorysSandbox: boolean
   hasResend: boolean
   hasCronSecret: boolean
   hasServiceRole: boolean
@@ -98,6 +101,15 @@ export async function getAdminDashboardData() {
       users: [],
       reports: [],
       payments: [],
+      paymentEvents: [] as Array<{
+        id: string
+        paymentId: string | null
+        provider: string | null
+        eventType: string
+        status: string | null
+        message: string | null
+        createdAt: string | null
+      }>,
       photos: [],
       subscriptions: [],
       conversations: [],
@@ -162,10 +174,17 @@ export async function getAdminDashboardData() {
   const { data: payments } = await supabase
     .from("payments")
     .select(
-      "id, amount, currency, status, provider, transaction_reference, created_at, subscription_id, user_id"
+      "id, amount, currency, status, provider, transaction_reference, created_at, subscription_id, metadata"
     )
     .order("created_at", { ascending: false })
     .limit(100)
+
+  const payEventRes = await supabase
+    .from("payment_events")
+    .select("id, payment_id, provider, event_type, status, message, created_at")
+    .order("created_at", { ascending: false })
+    .limit(80)
+  const paymentEventRows = payEventRes.error ? [] : payEventRes.data
 
   const { data: photos } = await supabase
     .from("user_photos")
@@ -376,7 +395,7 @@ export async function getAdminDashboardData() {
       10
     ),
     byCountry: aggregateTop(
-      (profiles ?? []).map((p) => (p.country as string) || "Non renseign?"),
+      (profiles ?? []).map((p) => (p.country as string) || "Non renseigne"),
       8
     ),
     byAge: aggregateTop(
@@ -422,11 +441,21 @@ export async function getAdminDashboardData() {
   }
 
   const demoRaw = process.env.PAYMENTS_DEMO_MODE
+  const hasBictorys = Boolean(process.env.BICTORYS_API_KEY)
+  const hasCinetPay = Boolean(process.env.CINETPAY_API_KEY && process.env.CINETPAY_SITE_ID)
+  const paymentProvider = hasBictorys
+    ? "bictorys"
+    : hasCinetPay
+      ? "cinetpay"
+      : process.env.PAYMENT_PROVIDER || "demo"
   const ops: AdminOpsFlags = {
     paymentsDemoMode:
       demoRaw === "true" ||
-      (demoRaw !== "false" && !process.env.CINETPAY_API_KEY),
-    hasCinetPay: Boolean(process.env.CINETPAY_API_KEY && process.env.CINETPAY_SITE_ID),
+      (demoRaw !== "false" && !hasCinetPay && !hasBictorys),
+    hasCinetPay,
+    hasBictorys,
+    paymentProvider,
+    bictorysSandbox: process.env.BICTORYS_API_KEY?.startsWith("test_") ?? false,
     hasResend: Boolean(process.env.RESEND_API_KEY),
     hasCronSecret: Boolean(process.env.CRON_SECRET),
     hasServiceRole: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
@@ -439,7 +468,25 @@ export async function getAdminDashboardData() {
   return {
     users,
     reports: reports ?? [],
-    payments: payments ?? [],
+    payments: (payments ?? []).map((p) => ({
+      id: p.id as string,
+      amount: Number(p.amount),
+      currency: p.currency as string,
+      status: (p.status as string) || null,
+      provider: (p.provider as string) || null,
+      transaction_reference: (p.transaction_reference as string) || null,
+      created_at: (p.created_at as string) || null,
+      metadata: p.metadata,
+    })),
+    paymentEvents: (paymentEventRows ?? []).map((e) => ({
+      id: e.id as string,
+      paymentId: (e.payment_id as string) || null,
+      provider: (e.provider as string) || null,
+      eventType: e.event_type as string,
+      status: (e.status as string) || null,
+      message: (e.message as string) || null,
+      createdAt: (e.created_at as string) || null,
+    })),
     photos: photos ?? [],
     subscriptions: (subscriptions ?? []).map((s) => ({
       id: s.id as string,
@@ -504,7 +551,7 @@ export async function adminUpdateModerationStatus(
   status: "approved" | "rejected" | "pending"
 ) {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "Acces refuse." }
 
   const { error } = await gate.supabase
     .from("profiles")
@@ -518,7 +565,7 @@ export async function adminUpdateModerationStatus(
 
 export async function adminSetVerified(profileId: string, verified: boolean) {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "Acces refuse." }
 
   const { error } = await gate.supabase
     .from("profiles")
@@ -540,7 +587,7 @@ export async function adminSetRole(
 ) {
   const gate = await requireFullAdmin()
   if (gate.error || !gate.supabase || !gate.user) {
-    return { error: gate.error || "Accès refusé." }
+    return { error: gate.error || "Acces refuse." }
   }
 
   const { data: target } = await gate.supabase
@@ -550,7 +597,7 @@ export async function adminSetRole(
     .maybeSingle()
 
   if (target?.user_id === gate.user.id && role !== "admin") {
-    return { error: "Vous ne pouvez pas retirer votre propre r?le admin." }
+    return { error: "Vous ne pouvez pas retirer votre propre role admin." }
   }
 
   const { error } = await gate.supabase
@@ -565,7 +612,7 @@ export async function adminSetRole(
 
 export async function adminGrantAlliance(userId: string, days = 30) {
   const gate = await requireFullAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "Acces refuse." }
 
   const now = new Date()
   const ends = new Date(now)
@@ -614,7 +661,7 @@ export async function adminResolveReport(
   status: "resolved" | "dismissed" | "pending"
 ) {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "Acces refuse." }
 
   const { error } = await gate.supabase
     .from("reports")
@@ -632,7 +679,7 @@ export async function adminModeratePhoto(
   reason?: string
 ) {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "Acces refuse." }
 
   const { data: photo, error: fetchError } = await gate.supabase
     .from("user_photos")
@@ -679,7 +726,7 @@ export async function adminModeratePhoto(
 export async function adminUpdatePlatformSetting(key: string, value: unknown) {
   const gate = await requireFullAdmin()
   if (gate.error || !gate.supabase || !gate.user) {
-    return { error: gate.error || "Accès refusé." }
+    return { error: gate.error || "Acces refuse." }
   }
 
   const allowed = new Set([
@@ -698,7 +745,7 @@ export async function adminUpdatePlatformSetting(key: string, value: unknown) {
     "youtube_config",
     "integrations",
   ])
-  if (!allowed.has(key)) return { error: "Cl? non autoris?e." }
+  if (!allowed.has(key)) return { error: "Cle non autorisee." }
 
   const { error } = await gate.supabase.from("platform_settings").upsert({
     key,
@@ -714,7 +761,7 @@ export async function adminUpdatePlatformSetting(key: string, value: unknown) {
   return { success: true }
 }
 
-/** Diagnostic service-role (sans exposer la cl?). */
+/** Diagnostic service-role (sans exposer la cle). */
 export async function adminPingServiceRole() {
   const gate = await requireFullAdmin()
   if (gate.error) return { error: gate.error, ok: false }
@@ -746,7 +793,7 @@ export async function adminCreateMember(input: {
   const password = input.password
   const firstName = input.firstName.trim()
   if (!email || !password || password.length < 8 || !firstName) {
-    return { error: "Email, pr?nom et mot de passe (? 8) requis." }
+    return { error: "Email, prenom et mot de passe (>= 8) requis." }
   }
 
   try {
@@ -758,7 +805,7 @@ export async function adminCreateMember(input: {
       user_metadata: { first_name: firstName, last_name: input.lastName || "" },
     })
     if (authErr || !created.user) {
-      return { error: authErr?.message || "Cr?ation compte impossible." }
+      return { error: authErr?.message || "Creation compte impossible." }
     }
 
     const userId = created.user.id
@@ -794,17 +841,17 @@ export async function adminCreateMember(input: {
     revalidatePath("/admin")
     return { success: true, userId }
   } catch (e) {
-    return { error: e instanceof Error ? e.message : "Erreur cr?ation membre." }
+    return { error: e instanceof Error ? e.message : "Erreur creation membre." }
   }
 }
 
 /**
- * Discernement automatique (r?gles) ? analyse les profils pending et approuve
- * ceux qui passent les seuils. Pas un LLM factur? (V2 possible plus tard).
+ * Discernement automatique (regles) - analyse les profils pending et approuve
+ * ceux qui passent les seuils. Pas un LLM facture (V2 possible plus tard).
  */
 export async function adminRunAutoModeration() {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "Acces refuse." }
 
   const {
     parseAutoMod,
@@ -819,7 +866,7 @@ export async function adminRunAutoModeration() {
 
   const cfg = parseAutoMod(setting?.value)
   if (!cfg.enabled) {
-    return { error: "Auto-mod?ration d?sactiv?e. Activez-la dans Param?tres." }
+    return { error: "Auto-moderation desactivee. Activez-la dans Parametres." }
   }
 
   const { data: pending } = await gate.supabase
@@ -894,7 +941,7 @@ export async function adminRunAutoModeration() {
 export async function adminPreviewAutoModeration() {
   const gate = await requireAdmin()
   if (gate.error || !gate.supabase) {
-    return { error: gate.error || "Accès refusé.", items: [] as Array<{
+    return { error: gate.error || "Acces refuse.", items: [] as Array<{
       id: string
       name: string
       score: number
@@ -940,7 +987,7 @@ export async function adminPreviewAutoModeration() {
 
 export async function adminAnalyzePendingPhotos() {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé.", results: [] as Array<{ id: string; decision: string; message: string; reasons: string[] }> }
+  if (gate.error || !gate.supabase) return { error: gate.error || "Acces refuse.", results: [] as Array<{ id: string; decision: string; message: string; reasons: string[] }> }
 
   const { parsePhotoRules, evaluatePhotoRules } = await import("@/lib/admin/opsRules")
   const { data: setting } = await gate.supabase
@@ -973,7 +1020,7 @@ export async function adminAnalyzePendingPhotos() {
 
 export async function adminApplyPhotoVerdict(photoId: string) {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "Acces refuse." }
 
   const { parsePhotoRules, evaluatePhotoRules } = await import("@/lib/admin/opsRules")
   const { data: setting } = await gate.supabase
@@ -1008,7 +1055,7 @@ export async function adminApplySanction(
 ) {
   const gate = await requireAdmin()
   if (gate.error || !gate.supabase || !gate.user) {
-    return { error: gate.error || "Accès refusé." }
+    return { error: gate.error || "Acces refuse." }
   }
 
   const { parseSanctionRules, nextSanctionStatus } = await import("@/lib/admin/opsRules")
@@ -1085,7 +1132,7 @@ export async function adminApplySanction(
   await gate.supabase.from("moderation_events").insert({
     profile_id: profileId,
     kind,
-    reason: `Sanction ${action} → ${sanctionStatus}`,
+    reason: `Sanction ${action} -> ${sanctionStatus}`,
     created_by: gate.user.id,
   })
 
@@ -1099,7 +1146,7 @@ export async function adminReviewChurchRecommendation(
 ) {
   const gate = await requireAdmin()
   if (gate.error || !gate.supabase || !gate.user) {
-    return { error: gate.error || "Accès refusé." }
+    return { error: gate.error || "Acces refuse." }
   }
 
   const { data: reco } = await gate.supabase
@@ -1153,7 +1200,7 @@ export async function adminReviewChurchRecommendation(
 export async function adminScanRecentMessages() {
   const gate = await requireAdmin()
   if (gate.error || !gate.supabase) {
-    return { error: gate.error || "Accès refusé.", flags: [] as Array<{ id: string; hits: string[]; preview: string }> }
+    return { error: gate.error || "Acces refuse.", flags: [] as Array<{ id: string; hits: string[]; preview: string }> }
   }
 
   const { parseSanctionRules, scanTextForBanned } = await import("@/lib/admin/opsRules")
@@ -1184,4 +1231,153 @@ export async function adminScanRecentMessages() {
     .filter((m) => m.flagged)
 
   return { flags, scanned: (messages || []).length }
+}
+
+export async function adminBictorysProbe() {
+  const gate = await requireFullAdmin()
+  if (gate.error) return { error: gate.error }
+
+  const apiKey = process.env.BICTORYS_API_KEY
+  if (!apiKey) return { error: "BICTORYS_API_KEY manquant." }
+
+  const { probeBictorysKey } = await import("@/lib/billing/bictorysClient")
+  const { logPaymentEvent } = await import("@/lib/billing/paymentAudit")
+  const result = await probeBictorysKey(apiKey)
+
+  await logPaymentEvent({
+    provider: "bictorys",
+    eventType: "sandbox_probe",
+    status: result.ok ? "ok" : "failed",
+    message: result.ok ? `HTTP ${result.status}` : result.error,
+  })
+
+  if (!result.ok) return { error: result.error }
+  return {
+    success: true,
+    sandbox: result.sandbox,
+    httpStatus: result.status,
+  }
+}
+
+export async function adminBictorysSandboxCharge(input: {
+  amount?: number
+  paymentMode?: string
+}) {
+  const gate = await requireFullAdmin()
+  if (gate.error || !gate.user) return { error: gate.error || "Acces refuse." }
+
+  const apiKey = process.env.BICTORYS_API_KEY
+  if (!apiKey) return { error: "BICTORYS_API_KEY manquant." }
+
+  const amount = Math.max(100, Math.min(input.amount || 500, 500_000))
+  const { resolveBictorysPaymentMode, parseBictorysPaymentMode } = await import(
+    "@/lib/billing/bictorys"
+  )
+  const paymentMode = resolveBictorysPaymentMode(
+    null,
+    parseBictorysPaymentMode(input.paymentMode) ?? input.paymentMode
+  )
+
+  const admin = createAdminClient()
+  const { data: subscription, error: subError } = await admin
+    .from("subscriptions")
+    .insert({
+      user_id: gate.user.id,
+      plan: "premium_plus",
+      status: "pending",
+      starts_at: null,
+      ends_at: null,
+    })
+    .select("id")
+    .single()
+
+  if (subError || !subscription) {
+    return { error: subError?.message || "Impossible de creer l'abonnement test." }
+  }
+
+  const { data: payment, error: payError } = await admin
+    .from("payments")
+    .insert({
+      subscription_id: subscription.id,
+      provider: "bictorys",
+      transaction_reference: `SANDBOX-${Date.now()}`,
+      amount,
+      currency: "XOF",
+      status: "pending",
+      metadata: {
+        sandbox_test: true,
+        payment_mode: paymentMode,
+        initiated_by: gate.user.id,
+      },
+    })
+    .select("id")
+    .single()
+
+  if (payError || !payment) {
+    return { error: payError?.message || "Impossible de creer le paiement test." }
+  }
+
+  const appUrl =
+    process.env.NEXT_PUBLIC_APP_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "")
+  if (!appUrl || appUrl.includes("localhost")) {
+    return {
+      error:
+        "NEXT_PUBLIC_APP_URL requis (domaine public, pas localhost) pour tester Bictorys.",
+    }
+  }
+
+  const { bictorysCreateCharge } = await import("@/lib/billing/bictorysClient")
+  const { logPaymentEvent } = await import("@/lib/billing/paymentAudit")
+  const result = await bictorysCreateCharge({
+    apiKey,
+    paymentId: payment.id,
+    amount,
+    description: `KELIAA sandbox test - ${amount} XOF`,
+    customerName: "Admin Sandbox",
+    customerEmail: gate.user.email || "sandbox@keliaa.app",
+    paymentMode,
+    appBaseUrl: appUrl,
+  })
+
+  if (!result.ok) {
+    await logPaymentEvent({
+      paymentId: payment.id,
+      provider: "bictorys",
+      eventType: "sandbox_test",
+      status: "failed",
+      message: result.error,
+    })
+    return { error: result.error }
+  }
+
+  await admin
+    .from("payments")
+    .update({
+      transaction_reference: result.txId,
+      metadata: {
+        sandbox_test: true,
+        payment_mode: paymentMode,
+        bictorys: result.raw,
+      },
+    })
+    .eq("id", payment.id)
+
+  await logPaymentEvent({
+    paymentId: payment.id,
+    provider: "bictorys",
+    eventType: "sandbox_test",
+    status: "pending",
+    message: `Charge ${amount} XOF (${paymentMode})`,
+    payload: { transactionId: result.txId, checkoutUrl: result.checkoutUrl },
+  })
+
+  revalidatePath("/admin")
+  return {
+    success: true,
+    paymentId: payment.id,
+    checkoutUrl: result.checkoutUrl,
+    transactionId: result.txId,
+    paymentMode,
+  }
 }

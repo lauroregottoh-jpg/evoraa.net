@@ -36,6 +36,7 @@ export default async function AdminPage() {
       users={data.users}
       reports={data.reports}
       payments={data.payments}
+      paymentEvents={data.paymentEvents}
       photos={data.photos}
       subscriptions={data.subscriptions}
       conversations={data.conversations}

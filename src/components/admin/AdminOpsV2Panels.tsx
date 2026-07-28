@@ -777,6 +777,7 @@ export function IntegrationsEditor({
   ops: {
     hasStripe: boolean
     hasCinetPay: boolean
+    hasBictorys: boolean
     hasResend: boolean
     hasOpenAI: boolean
     hasYoutube: boolean
@@ -793,6 +794,7 @@ export function IntegrationsEditor({
     <SectionCard title="API & connecteurs">
       <div className="grid sm:grid-cols-2 gap-2 text-sm mb-3">
         <p>Stripe env : <strong>{ops.hasStripe ? "oui" : "non"}</strong></p>
+        <p>Bictorys : <strong>{ops.hasBictorys ? "oui" : "non"}</strong></p>
         <p>CinetPay : <strong>{ops.hasCinetPay ? "oui" : "non"}</strong></p>
         <p>Resend : <strong>{ops.hasResend ? "oui" : "non"}</strong></p>
         <p>OpenAI : <strong>{ops.hasOpenAI ? "oui" : "non"}</strong></p>
