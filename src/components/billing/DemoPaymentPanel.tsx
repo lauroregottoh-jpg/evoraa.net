@@ -45,7 +45,8 @@ export function DemoPaymentPanel({
       <CardHeader className="border-b border-border/40">
         <CardTitle className="font-serif text-2xl">Paiement {planName}</CardTitle>
         <p className="text-sm text-muted-foreground">
-          Mode démo / préparation CinetPay. En production, vous serez redirigé vers Mobile Money (TMoney, Flooz, Wave…).
+          Mode démo. En production, vous serez redirigé vers le provider actif
+          (Bictorys ou CinetPay).
         </p>
       </CardHeader>
       <CardContent className="p-6 space-y-5">
