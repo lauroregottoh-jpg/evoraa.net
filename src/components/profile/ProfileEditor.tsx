@@ -14,6 +14,7 @@ import {
   uploadProfilePhotoAction,
   type ProfileEditorData,
 } from "@/app/actions/profile";
+import { ChurchRecommendationForm } from "@/components/profile/ChurchRecommendationForm";
 
 export function ProfileEditor({ initial }: { initial: ProfileEditorData }) {
   const [testimony, setTestimony] = React.useState(initial.testimony);
@@ -214,6 +215,8 @@ export function ProfileEditor({ initial }: { initial: ProfileEditorData }) {
           </Button>
         </div>
       </form>
+
+      <ChurchRecommendationForm />
     </div>
   );
 }

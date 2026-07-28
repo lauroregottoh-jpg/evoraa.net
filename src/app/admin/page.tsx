@@ -5,7 +5,7 @@ import Link from "next/link"
 export default async function AdminPage() {
   const data = await getAdminDashboardData()
 
-  if (data.error || !data.stats || !data.retention || !data.ops) {
+  if (data.error || !data.stats || !data.retention || !data.ops || !data.breakdowns) {
     return (
       <div className="min-h-screen flex items-center justify-center p-6 bg-[#F4F6F5]">
         <div className="max-w-md text-center space-y-3 rounded-2xl border border-border bg-card p-8 shadow-sm">
@@ -14,8 +14,11 @@ export default async function AdminPage() {
           <p className="text-xs text-muted-foreground">
             Compte avec <code>profiles.role = admin</code> requis.
           </p>
+          <Link href="/login" className="text-primary underline text-sm inline-block mr-3">
+            Se connecter
+          </Link>
           <Link href="/dashboard" className="text-primary underline text-sm inline-block">
-            Retour espace membre
+            Espace membre
           </Link>
         </div>
       </div>
@@ -26,6 +29,7 @@ export default async function AdminPage() {
     <AdminConsole
       stats={data.stats}
       retention={data.retention}
+      breakdowns={data.breakdowns}
       ops={data.ops}
       viewerRole={data.viewerRole}
       settings={data.settings}
@@ -35,6 +39,9 @@ export default async function AdminPage() {
       photos={data.photos}
       subscriptions={data.subscriptions}
       conversations={data.conversations}
+      matches={data.matches}
+      recommendations={data.recommendations}
+      moderationEvents={data.moderationEvents}
     />
   )
 }

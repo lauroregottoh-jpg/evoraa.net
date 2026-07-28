@@ -17,13 +17,17 @@ import {
   LogOut,
   ShieldCheck,
   Bell,
+  UserCircle2,
+  Home,
 } from "lucide-react"
 import { cn } from "@/utils/cn"
+import { logoutAction } from "@/app/actions/auth"
 
 export type AdminNavId =
   | "dashboard"
   | "analytics"
   | "members"
+  | "profiles"
   | "moderation"
   | "alliance"
   | "matching"
@@ -50,7 +54,7 @@ export function AdminShell({
 }: {
   active: AdminNavId
   onNavigate: (id: AdminNavId) => void
-  badges: { moderation: number; renewals: number }
+  badges: { moderation: number; renewals: number; pendingProfiles?: number }
   viewerRole: string | null
   search: string
   onSearch: (v: string) => void
@@ -62,6 +66,12 @@ export function AdminShell({
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "analytics", label: "Analytique", icon: BarChart3 },
     { id: "members", label: "Membres", icon: Users },
+    {
+      id: "profiles",
+      label: "Profils",
+      icon: UserCircle2,
+      badge: badges.pendingProfiles || undefined,
+    },
     {
       id: "moderation",
       label: "Modération",
@@ -155,13 +165,21 @@ export function AdminShell({
         <NavGroup title="Général" items={menuGeneral} />
       </nav>
 
-      <div className="p-3 border-t border-border space-y-2">
+      <div className="p-3 border-t border-border space-y-1">
         <Link
           href="/dashboard"
           className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary"
         >
-          <LogOut className="h-4 w-4" /> Espace membre
+          <Home className="h-4 w-4" /> Espace membre
         </Link>
+        <form action={logoutAction}>
+          <button
+            type="submit"
+            className="w-full flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm text-red-700 hover:bg-red-50"
+          >
+            <LogOut className="h-4 w-4" /> Se déconnecter
+          </button>
+        </form>
       </div>
     </aside>
   )
@@ -209,16 +227,25 @@ export function AdminShell({
                 </span>
               )}
             </span>
-            <div className="rounded-full border border-border pl-1 pr-3 py-1 flex items-center gap-2">
+            <div className="rounded-full border border-border pl-1 pr-2 py-1 flex items-center gap-2">
               <span className="h-8 w-8 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center">
                 A
               </span>
-              <div className="hidden md:block leading-tight">
+              <div className="hidden md:block leading-tight pr-1">
                 <p className="text-xs font-semibold">KELIAA Ops</p>
                 <p className="text-[10px] text-muted-foreground capitalize">
                   {viewerRole || "admin"}
                 </p>
               </div>
+              <form action={logoutAction} className="hidden sm:block">
+                <button
+                  type="submit"
+                  title="Se déconnecter"
+                  className="h-8 w-8 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-red-700 hover:bg-red-50"
+                >
+                  <LogOut className="h-3.5 w-3.5" />
+                </button>
+              </form>
             </div>
           </div>
         </header>

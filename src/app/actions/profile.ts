@@ -219,3 +219,43 @@ export async function uploadProfilePhotoAction(
   revalidatePath("/admin")
   return { success: true, photoUrl: publicUrl }
 }
+
+export async function submitChurchRecommendationAction(payload: {
+  recommenderName: string
+  recommenderRole?: string
+  churchName?: string
+  contactEmail?: string
+  contactPhone?: string
+  message?: string
+}) {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return { error: "Non authentifié" }
+
+  const name = payload.recommenderName.trim()
+  if (name.length < 2) return { error: "Nom du recommandant requis." }
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("user_id", user.id)
+    .maybeSingle()
+  if (!profile) return { error: "Profil introuvable" }
+
+  const { error } = await supabase.from("church_recommendations").insert({
+    profile_id: profile.id,
+    recommender_name: name,
+    recommender_role: payload.recommenderRole?.trim() || null,
+    church_name: payload.churchName?.trim() || null,
+    contact_email: payload.contactEmail?.trim() || null,
+    contact_phone: payload.contactPhone?.trim() || null,
+    message: payload.message?.trim() || null,
+    status: "pending",
+  })
+  if (error) return { error: error.message }
+  revalidatePath("/profile")
+  revalidatePath("/admin")
+  return { success: true }
+}

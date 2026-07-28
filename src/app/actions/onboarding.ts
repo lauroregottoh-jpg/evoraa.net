@@ -7,8 +7,12 @@ export type OnboardingPayload = {
   age: string
   gender: string
   city: string
+  country: string
   practice: string
   community: string
+  churchName: string
+  pastorName: string
+  pastorContact: string
   marriageVision: string
   familyProject: string
   communicationStyle: string
@@ -58,7 +62,11 @@ export async function saveOnboardingAction(payload: OnboardingPayload) {
     .update({
       gender: payload.gender === "M" ? "M" : "F",
       city: payload.city,
+      country: payload.country || null,
       denomination: payload.community,
+      church_attended: payload.churchName || null,
+      pastor_name: payload.pastorName || null,
+      pastor_contact: payload.pastorContact || null,
       attendance_frequency: attendance,
       birth_date: birthDate,
       matching_indicators: matchingIndicators,

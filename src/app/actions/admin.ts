@@ -10,7 +10,7 @@ async function requireAdmin() {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) {
-    return { error: "Non authentifiÃ©." as string, supabase: null, user: null, role: null as string | null }
+    return { error: "Non authentifi?." as string, supabase: null, user: null, role: null as string | null }
   }
 
   const { data: profile } = await supabase
@@ -20,7 +20,7 @@ async function requireAdmin() {
     .maybeSingle()
 
   if (profile?.role !== "admin" && profile?.role !== "moderator") {
-    return { error: "AccÃ¨s admin requis." as string, supabase: null, user: null, role: null }
+    return { error: "Acc?s admin requis." as string, supabase: null, user: null, role: null }
   }
 
   return {
@@ -35,7 +35,7 @@ async function requireFullAdmin() {
   const gate = await requireAdmin()
   if (gate.error || !gate.supabase) return gate
   if (gate.role !== "admin") {
-    return { ...gate, error: "RÃ©servÃ© aux administrateurs (pas modÃ©rateurs)." }
+    return { ...gate, error: "R?serv? aux administrateurs (pas mod?rateurs)." }
   }
   return gate
 }
@@ -60,6 +60,18 @@ export type AdminRetention = {
   pendingProfiles: number
 }
 
+export type AdminBreakdowns = {
+  byCity: Array<{ name: string; count: number }>
+  byCountry: Array<{ name: string; count: number }>
+  byAge: Array<{ name: string; count: number }>
+  byDenomination: Array<{ name: string; count: number }>
+  signups14d: Array<{ name: string; count: number }>
+  matchingRatePct: number
+  avgTrust: number
+  sanctioned: number
+  pendingRecos: number
+}
+
 export type AdminOpsFlags = {
   paymentsDemoMode: boolean
   hasCinetPay: boolean
@@ -67,6 +79,9 @@ export type AdminOpsFlags = {
   hasCronSecret: boolean
   hasServiceRole: boolean
   appUrl: string
+  hasStripe: boolean
+  hasOpenAI: boolean
+  hasYoutube: boolean
 }
 
 export type PlatformSettingRow = {
@@ -90,6 +105,32 @@ export async function getAdminDashboardData() {
       stats: null,
       retention: null,
       ops: null as AdminOpsFlags | null,
+      breakdowns: null as AdminBreakdowns | null,
+      matches: [] as Array<{
+        id: string
+        score: number | null
+        status: string | null
+        createdAt: string | null
+        userOne: string
+        userTwo: string
+      }>,
+      recommendations: [] as Array<{
+        id: string
+        profileId: string
+        recommenderName: string
+        recommenderRole: string | null
+        churchName: string | null
+        status: string
+        message: string | null
+        createdAt: string | null
+      }>,
+      moderationEvents: [] as Array<{
+        id: string
+        profileId: string | null
+        kind: string
+        reason: string | null
+        createdAt: string | null
+      }>,
       viewerRole: null as string | null,
     }
   }
@@ -107,10 +148,10 @@ export async function getAdminDashboardData() {
   const { data: profiles } = await supabase
     .from("profiles")
     .select(
-      "id, user_id, first_name, last_name, city, gender, completion_percentage, role, moderation_status, onboarding_status, is_verified, identity_verified, created_at, avatar_url, psychometric_results"
+      "id, user_id, first_name, last_name, city, country, gender, birth_date, denomination, church_attended, pastor_name, pastor_contact, completion_percentage, role, moderation_status, onboarding_status, is_verified, identity_verified, created_at, avatar_url, psychometric_results, trust_score, warning_count, sanction_status, sanction_until"
     )
     .order("created_at", { ascending: false })
-    .limit(200)
+    .limit(500)
 
   const { data: reports } = await supabase
     .from("reports")
@@ -144,6 +185,28 @@ export async function getAdminDashboardData() {
     .select("id, match_id, created_at")
     .order("created_at", { ascending: false })
     .limit(40)
+
+  const { data: matchRows } = await supabase
+    .from("matches")
+    .select("id, user_one, user_two, compatibility_score, status, created_at")
+    .order("created_at", { ascending: false })
+    .limit(60)
+
+  const recoRes = await supabase
+    .from("church_recommendations")
+    .select(
+      "id, profile_id, recommender_name, recommender_role, church_name, status, message, created_at"
+    )
+    .order("created_at", { ascending: false })
+    .limit(40)
+  const recoRows = recoRes.error ? [] : recoRes.data
+
+  const modRes = await supabase
+    .from("moderation_events")
+    .select("id, profile_id, kind, reason, created_at")
+    .order("created_at", { ascending: false })
+    .limit(40)
+  const modEventRows = modRes.error ? [] : modRes.data
 
   const { data: settings } = await supabase
     .from("platform_settings")
@@ -273,20 +336,70 @@ export async function getAdminDashboardData() {
     }
   }
 
-  const users = (profiles ?? []).map((p) => ({
-    id: p.id,
-    userId: p.user_id as string,
-    name: [p.first_name, p.last_name].filter(Boolean).join(" ") || "Sans nom",
-    city: p.city || "â€”",
-    gender: (p.gender as string) || "â€”",
-    completion: p.completion_percentage ?? 0,
-    role: (p.role as "admin" | "moderator" | "member") || "member",
-    status: (p.moderation_status as string) || "pending",
-    onboarding: p.onboarding_status as string | null,
-    verified: Boolean(p.is_verified || p.identity_verified),
-    hasAvatar: Boolean(p.avatar_url),
-    createdAt: p.created_at as string | null,
-  }))
+  const users = (profiles ?? []).map((p) => {
+    let age: number | null = null
+    if (p.birth_date) {
+      const y = new Date(p.birth_date as string).getFullYear()
+      if (Number.isFinite(y)) age = new Date().getFullYear() - y
+    }
+    return {
+      id: p.id,
+      userId: p.user_id as string,
+      name: [p.first_name, p.last_name].filter(Boolean).join(" ") || "Sans nom",
+      city: p.city || "?",
+      country: (p.country as string) || "?",
+      gender: (p.gender as string) || "?",
+      age,
+      denomination: (p.denomination as string) || "",
+      church: (p.church_attended as string) || "",
+      pastorName: (p.pastor_name as string) || "",
+      completion: p.completion_percentage ?? 0,
+      role: (p.role as "admin" | "moderator" | "member") || "member",
+      status: (p.moderation_status as string) || "pending",
+      onboarding: p.onboarding_status as string | null,
+      verified: Boolean(p.is_verified || p.identity_verified),
+      hasAvatar: Boolean(p.avatar_url),
+      createdAt: p.created_at as string | null,
+      trustScore: Number(p.trust_score ?? 50),
+      warningCount: Number(p.warning_count ?? 0),
+      sanctionStatus: (p.sanction_status as string) || "none",
+    }
+  })
+
+  const { aggregateTop, ageBucket, signupsByDay, matchingRate } = await import(
+    "@/lib/admin/analytics"
+  )
+
+  const breakdowns: AdminBreakdowns = {
+    byCity: aggregateTop(
+      (profiles ?? []).map((p) => p.city as string | null),
+      10
+    ),
+    byCountry: aggregateTop(
+      (profiles ?? []).map((p) => (p.country as string) || "Non renseign?"),
+      8
+    ),
+    byAge: aggregateTop(
+      (profiles ?? []).map((p) => ageBucket(p.birth_date as string | null)),
+      8
+    ),
+    byDenomination: aggregateTop(
+      (profiles ?? []).map((p) => p.denomination as string | null),
+      8
+    ),
+    signups14d: signupsByDay(
+      (profiles ?? []).map((p) => p.created_at as string | null),
+      14
+    ),
+    matchingRatePct: matchingRate(matches30d ?? 0, totalUsers),
+    avgTrust:
+      users.length > 0
+        ? Math.round(users.reduce((s, u) => s + u.trustScore, 0) / users.length)
+        : 50,
+    sanctioned: users.filter((u) => u.sanctionStatus && u.sanctionStatus !== "none")
+      .length,
+    pendingRecos: (recoRows ?? []).filter((r) => r.status === "pending").length,
+  }
 
   const retention: AdminRetention = {
     newMembers30d: newMembers30d ?? 0,
@@ -318,6 +431,9 @@ export async function getAdminDashboardData() {
     hasCronSecret: Boolean(process.env.CRON_SECRET),
     hasServiceRole: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
     appUrl: process.env.NEXT_PUBLIC_APP_URL || "",
+    hasStripe: Boolean(process.env.STRIPE_SECRET_KEY),
+    hasOpenAI: Boolean(process.env.OPENAI_API_KEY),
+    hasYoutube: Boolean(process.env.YOUTUBE_API_KEY),
   }
 
   return {
@@ -339,6 +455,31 @@ export async function getAdminDashboardData() {
       matchId: c.match_id as string,
       createdAt: c.created_at as string | null,
     })),
+    matches: (matchRows ?? []).map((m) => ({
+      id: m.id as string,
+      score: m.compatibility_score != null ? Number(m.compatibility_score) : null,
+      status: (m.status as string) || null,
+      createdAt: m.created_at as string | null,
+      userOne: m.user_one as string,
+      userTwo: m.user_two as string,
+    })),
+    recommendations: (recoRows ?? []).map((r) => ({
+      id: r.id as string,
+      profileId: r.profile_id as string,
+      recommenderName: r.recommender_name as string,
+      recommenderRole: (r.recommender_role as string) || null,
+      churchName: (r.church_name as string) || null,
+      status: r.status as string,
+      message: (r.message as string) || null,
+      createdAt: r.created_at as string | null,
+    })),
+    moderationEvents: (modEventRows ?? []).map((e) => ({
+      id: e.id as string,
+      profileId: (e.profile_id as string) || null,
+      kind: e.kind as string,
+      reason: (e.reason as string) || null,
+      createdAt: e.created_at as string | null,
+    })),
     settings: (settings ?? []).map((s) => ({
       key: s.key as string,
       value: s.value,
@@ -352,6 +493,7 @@ export async function getAdminDashboardData() {
       revenueXof: revenue,
     },
     retention,
+    breakdowns,
     ops,
     viewerRole: gate.role,
   }
@@ -362,7 +504,7 @@ export async function adminUpdateModerationStatus(
   status: "approved" | "rejected" | "pending"
 ) {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "AccÃ¨s refusÃ©." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé.." }
 
   const { error } = await gate.supabase
     .from("profiles")
@@ -376,7 +518,7 @@ export async function adminUpdateModerationStatus(
 
 export async function adminSetVerified(profileId: string, verified: boolean) {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "AccÃ¨s refusÃ©." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé.." }
 
   const { error } = await gate.supabase
     .from("profiles")
@@ -398,7 +540,7 @@ export async function adminSetRole(
 ) {
   const gate = await requireFullAdmin()
   if (gate.error || !gate.supabase || !gate.user) {
-    return { error: gate.error || "AccÃ¨s refusÃ©." }
+    return { error: gate.error || "Accès refusé.." }
   }
 
   const { data: target } = await gate.supabase
@@ -408,7 +550,7 @@ export async function adminSetRole(
     .maybeSingle()
 
   if (target?.user_id === gate.user.id && role !== "admin") {
-    return { error: "Vous ne pouvez pas retirer votre propre rÃ´le admin." }
+    return { error: "Vous ne pouvez pas retirer votre propre r?le admin." }
   }
 
   const { error } = await gate.supabase
@@ -423,7 +565,7 @@ export async function adminSetRole(
 
 export async function adminGrantAlliance(userId: string, days = 30) {
   const gate = await requireFullAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "AccÃ¨s refusÃ©." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé.." }
 
   const now = new Date()
   const ends = new Date(now)
@@ -472,7 +614,7 @@ export async function adminResolveReport(
   status: "resolved" | "dismissed" | "pending"
 ) {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "AccÃ¨s refusÃ©." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé.." }
 
   const { error } = await gate.supabase
     .from("reports")
@@ -484,9 +626,13 @@ export async function adminResolveReport(
   return { success: true }
 }
 
-export async function adminModeratePhoto(photoId: string, status: "approved" | "rejected") {
+export async function adminModeratePhoto(
+  photoId: string,
+  status: "approved" | "rejected",
+  reason?: string
+) {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "AccÃ¨s refusÃ©." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé.." }
 
   const { data: photo, error: fetchError } = await gate.supabase
     .from("user_photos")
@@ -498,7 +644,10 @@ export async function adminModeratePhoto(photoId: string, status: "approved" | "
 
   const { error } = await gate.supabase
     .from("user_photos")
-    .update({ status })
+    .update({
+      status,
+      rejection_reason: status === "rejected" ? reason || null : null,
+    })
     .eq("id", photoId)
 
   if (error) return { error: error.message }
@@ -513,6 +662,15 @@ export async function adminModeratePhoto(photoId: string, status: "approved" | "
       .eq("id", photo.profile_id)
   }
 
+  if (status === "rejected" && reason) {
+    await gate.supabase.from("moderation_events").insert({
+      profile_id: photo.profile_id,
+      kind: "photo_reject",
+      reason,
+      created_by: gate.user?.id || null,
+    })
+  }
+
   revalidatePath("/admin")
   revalidatePath("/profile")
   return { success: true }
@@ -521,7 +679,7 @@ export async function adminModeratePhoto(photoId: string, status: "approved" | "
 export async function adminUpdatePlatformSetting(key: string, value: unknown) {
   const gate = await requireFullAdmin()
   if (gate.error || !gate.supabase || !gate.user) {
-    return { error: gate.error || "AccÃ¨s refusÃ©." }
+    return { error: gate.error || "Accès refusé.." }
   }
 
   const allowed = new Set([
@@ -534,8 +692,13 @@ export async function adminUpdatePlatformSetting(key: string, value: unknown) {
     "ads",
     "auto_moderation",
     "academy_overrides",
+    "photo_rules",
+    "sanction_rules",
+    "eva_config",
+    "youtube_config",
+    "integrations",
   ])
-  if (!allowed.has(key)) return { error: "ClÃ© non autorisÃ©e." }
+  if (!allowed.has(key)) return { error: "Cl? non autoris?e." }
 
   const { error } = await gate.supabase.from("platform_settings").upsert({
     key,
@@ -551,7 +714,7 @@ export async function adminUpdatePlatformSetting(key: string, value: unknown) {
   return { success: true }
 }
 
-/** Diagnostic service-role (sans exposer la clÃ©). */
+/** Diagnostic service-role (sans exposer la cl?). */
 export async function adminPingServiceRole() {
   const gate = await requireFullAdmin()
   if (gate.error) return { error: gate.error, ok: false }
@@ -583,7 +746,7 @@ export async function adminCreateMember(input: {
   const password = input.password
   const firstName = input.firstName.trim()
   if (!email || !password || password.length < 8 || !firstName) {
-    return { error: "Email, prÃ©nom et mot de passe (â‰¥ 8) requis." }
+    return { error: "Email, pr?nom et mot de passe (? 8) requis." }
   }
 
   try {
@@ -595,7 +758,7 @@ export async function adminCreateMember(input: {
       user_metadata: { first_name: firstName, last_name: input.lastName || "" },
     })
     if (authErr || !created.user) {
-      return { error: authErr?.message || "CrÃ©ation compte impossible." }
+      return { error: authErr?.message || "Cr?ation compte impossible." }
     }
 
     const userId = created.user.id
@@ -631,17 +794,17 @@ export async function adminCreateMember(input: {
     revalidatePath("/admin")
     return { success: true, userId }
   } catch (e) {
-    return { error: e instanceof Error ? e.message : "Erreur crÃ©ation membre." }
+    return { error: e instanceof Error ? e.message : "Erreur cr?ation membre." }
   }
 }
 
 /**
- * Discernement automatique (rÃ¨gles) â€” analyse les profils pending et approuve
- * ceux qui passent les seuils. Pas un LLM facturÃ© (V2 possible plus tard).
+ * Discernement automatique (r?gles) ? analyse les profils pending et approuve
+ * ceux qui passent les seuils. Pas un LLM factur? (V2 possible plus tard).
  */
 export async function adminRunAutoModeration() {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "AccÃ¨s refusÃ©." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé.." }
 
   const {
     parseAutoMod,
@@ -656,7 +819,7 @@ export async function adminRunAutoModeration() {
 
   const cfg = parseAutoMod(setting?.value)
   if (!cfg.enabled) {
-    return { error: "Auto-modÃ©ration dÃ©sactivÃ©e. Activez-la dans ParamÃ¨tres." }
+    return { error: "Auto-mod?ration d?sactiv?e. Activez-la dans Param?tres." }
   }
 
   const { data: pending } = await gate.supabase
@@ -731,7 +894,7 @@ export async function adminRunAutoModeration() {
 export async function adminPreviewAutoModeration() {
   const gate = await requireAdmin()
   if (gate.error || !gate.supabase) {
-    return { error: gate.error || "AccÃ¨s refusÃ©.", items: [] as Array<{
+    return { error: gate.error || "Accès refusé..", items: [] as Array<{
       id: string
       name: string
       score: number
@@ -773,4 +936,252 @@ export async function adminPreviewAutoModeration() {
   })
 
   return { items, cfg }
+}
+
+export async function adminAnalyzePendingPhotos() {
+  const gate = await requireAdmin()
+  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé..", results: [] as Array<{ id: string; decision: string; message: string; reasons: string[] }> }
+
+  const { parsePhotoRules, evaluatePhotoRules } = await import("@/lib/admin/opsRules")
+  const { data: setting } = await gate.supabase
+    .from("platform_settings")
+    .select("value")
+    .eq("key", "photo_rules")
+    .maybeSingle()
+  const rules = parsePhotoRules(setting?.value)
+
+  const { data: photos } = await gate.supabase
+    .from("user_photos")
+    .select("id, photo_url, status")
+    .eq("status", "pending")
+    .limit(40)
+
+  const results = (photos || []).map((ph) => {
+    const url = String(ph.photo_url || "")
+    const fileName = url.split("/").pop() || url
+    const verdict = evaluatePhotoRules({ fileName, mime: "image/jpeg", bytes: 200000 }, rules)
+    return {
+      id: ph.id as string,
+      decision: verdict.decision,
+      message: verdict.message,
+      reasons: verdict.reasons,
+    }
+  })
+
+  return { results, rules }
+}
+
+export async function adminApplyPhotoVerdict(photoId: string) {
+  const gate = await requireAdmin()
+  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé.." }
+
+  const { parsePhotoRules, evaluatePhotoRules } = await import("@/lib/admin/opsRules")
+  const { data: setting } = await gate.supabase
+    .from("platform_settings")
+    .select("value")
+    .eq("key", "photo_rules")
+    .maybeSingle()
+  const rules = parsePhotoRules(setting?.value)
+
+  const { data: photo } = await gate.supabase
+    .from("user_photos")
+    .select("id, photo_url, profile_id, is_primary, status")
+    .eq("id", photoId)
+    .maybeSingle()
+  if (!photo) return { error: "Photo introuvable" }
+
+  const fileName = String(photo.photo_url || "").split("/").pop() || ""
+  const verdict = evaluatePhotoRules({ fileName, mime: "image/jpeg", bytes: 200000 }, rules)
+
+  if (verdict.decision === "approve") {
+    return adminModeratePhoto(photoId, "approved", verdict.message)
+  }
+  if (verdict.decision === "reject") {
+    return adminModeratePhoto(photoId, "rejected", verdict.message)
+  }
+  return { success: true, decision: "retry" as const, message: verdict.message, reasons: verdict.reasons }
+}
+
+export async function adminApplySanction(
+  profileId: string,
+  action: "warn" | "suspend" | "block" | "clear"
+) {
+  const gate = await requireAdmin()
+  if (gate.error || !gate.supabase || !gate.user) {
+    return { error: gate.error || "Accès refusé.." }
+  }
+
+  const { parseSanctionRules, nextSanctionStatus } = await import("@/lib/admin/opsRules")
+  const { data: setting } = await gate.supabase
+    .from("platform_settings")
+    .select("value")
+    .eq("key", "sanction_rules")
+    .maybeSingle()
+  const rules = parseSanctionRules(setting?.value)
+
+  const { data: profile } = await gate.supabase
+    .from("profiles")
+    .select("id, warning_count, trust_score, sanction_status")
+    .eq("id", profileId)
+    .maybeSingle()
+  if (!profile) return { error: "Profil introuvable" }
+
+  let warningCount = Number(profile.warning_count || 0)
+  let trust = Number(profile.trust_score ?? 50)
+  let sanctionStatus = (profile.sanction_status as string) || "none"
+  let sanctionUntil: string | null = null
+  let kind = action
+
+  if (action === "clear") {
+    warningCount = 0
+    sanctionStatus = "none"
+    sanctionUntil = null
+    trust = Math.min(100, trust + 5)
+    kind = "clear"
+  } else if (action === "warn") {
+    warningCount += 1
+    trust = Math.max(0, trust - rules.trustPenaltyWarn)
+    sanctionStatus = nextSanctionStatus(warningCount, rules)
+    if (sanctionStatus === "suspended") {
+      const until = new Date()
+      until.setDate(until.getDate() + rules.suspendDays)
+      sanctionUntil = until.toISOString()
+    }
+    if (sanctionStatus === "blocked") {
+      await gate.supabase
+        .from("profiles")
+        .update({ moderation_status: "rejected" })
+        .eq("id", profileId)
+    }
+  } else if (action === "suspend") {
+    warningCount = Math.max(warningCount, 2)
+    sanctionStatus = "suspended"
+    const until = new Date()
+    until.setDate(until.getDate() + rules.suspendDays)
+    sanctionUntil = until.toISOString()
+    trust = Math.max(0, trust - rules.trustPenaltyWarn)
+  } else if (action === "block") {
+    warningCount = Math.max(warningCount, rules.autoBlockAfterWarns)
+    sanctionStatus = "blocked"
+    trust = Math.max(0, trust - rules.trustPenaltyWarn * 2)
+    await gate.supabase
+      .from("profiles")
+      .update({ moderation_status: "rejected" })
+      .eq("id", profileId)
+  }
+
+  const { error } = await gate.supabase
+    .from("profiles")
+    .update({
+      warning_count: warningCount,
+      trust_score: trust,
+      sanction_status: sanctionStatus,
+      sanction_until: sanctionUntil,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", profileId)
+  if (error) return { error: error.message }
+
+  await gate.supabase.from("moderation_events").insert({
+    profile_id: profileId,
+    kind,
+    reason: `Sanction ${action} ? ${sanctionStatus}`,
+    created_by: gate.user.id,
+  })
+
+  revalidatePath("/admin")
+  return { success: true, sanctionStatus, warningCount, trust }
+}
+
+export async function adminReviewChurchRecommendation(
+  recoId: string,
+  status: "verified" | "rejected"
+) {
+  const gate = await requireAdmin()
+  if (gate.error || !gate.supabase || !gate.user) {
+    return { error: gate.error || "Accès refusé.." }
+  }
+
+  const { data: reco } = await gate.supabase
+    .from("church_recommendations")
+    .select("id, profile_id, status")
+    .eq("id", recoId)
+    .maybeSingle()
+  if (!reco) return { error: "Recommandation introuvable" }
+
+  const { error } = await gate.supabase
+    .from("church_recommendations")
+    .update({
+      status,
+      reviewed_at: new Date().toISOString(),
+      reviewed_by: gate.user.id,
+    })
+    .eq("id", recoId)
+  if (error) return { error: error.message }
+
+  if (status === "verified" && reco.profile_id) {
+    const { parseSanctionRules } = await import("@/lib/admin/opsRules")
+    const { data: setting } = await gate.supabase
+      .from("platform_settings")
+      .select("value")
+      .eq("key", "sanction_rules")
+      .maybeSingle()
+    const rules = parseSanctionRules(setting?.value)
+    const { data: profile } = await gate.supabase
+      .from("profiles")
+      .select("trust_score")
+      .eq("id", reco.profile_id)
+      .maybeSingle()
+    const trust = Math.min(
+      100,
+      Number(profile?.trust_score ?? 50) + rules.trustBonusReco
+    )
+    await gate.supabase
+      .from("profiles")
+      .update({
+        trust_score: trust,
+        is_verified: true,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", reco.profile_id)
+  }
+
+  revalidatePath("/admin")
+  return { success: true }
+}
+
+export async function adminScanRecentMessages() {
+  const gate = await requireAdmin()
+  if (gate.error || !gate.supabase) {
+    return { error: gate.error || "Accès refusé..", flags: [] as Array<{ id: string; hits: string[]; preview: string }> }
+  }
+
+  const { parseSanctionRules, scanTextForBanned } = await import("@/lib/admin/opsRules")
+  const { data: setting } = await gate.supabase
+    .from("platform_settings")
+    .select("value")
+    .eq("key", "sanction_rules")
+    .maybeSingle()
+  const rules = parseSanctionRules(setting?.value)
+
+  const { data: messages } = await gate.supabase
+    .from("messages")
+    .select("id, content, sender_id, created_at")
+    .order("created_at", { ascending: false })
+    .limit(80)
+
+  const flags = (messages || [])
+    .map((m) => {
+      const scan = scanTextForBanned(String(m.content || ""), rules.bannedWords)
+      return {
+        id: m.id as string,
+        hits: scan.hits,
+        preview: String(m.content || "").slice(0, 120),
+        flagged: scan.flagged,
+        senderId: m.sender_id as string,
+      }
+    })
+    .filter((m) => m.flagged)
+
+  return { flags, scanned: (messages || []).length }
 }

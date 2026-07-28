@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
+  adminApplySanction,
   adminGrantAlliance,
   adminModeratePhoto,
   adminPingServiceRole,
@@ -13,6 +14,7 @@ import {
   adminSetVerified,
   adminUpdateModerationStatus,
   adminUpdatePlatformSetting,
+  type AdminBreakdowns,
   type AdminOpsFlags,
   type AdminRetention,
   type PlatformSettingRow,
@@ -33,6 +35,17 @@ import {
   AutoModerationPanel,
   CreateMemberForm,
 } from "@/components/admin/AdminOpsEditors"
+import {
+  AnalyticsRichPanel,
+  EvaConfigEditor,
+  IntegrationsEditor,
+  MembersAdvancedPanel,
+  PhotoRulesEditor,
+  ProfilesHubPanel,
+  SanctionRulesEditor,
+  YoutubeConfigEditor,
+} from "@/components/admin/AdminOpsV2Panels"
+import { DistBars, SparkColumns } from "@/components/admin/AdminCharts"
 import { cn } from "@/utils/cn"
 
 type Props = {
@@ -44,6 +57,7 @@ type Props = {
     revenueXof: number
   }
   retention: AdminRetention
+  breakdowns: AdminBreakdowns
   ops: AdminOpsFlags
   viewerRole: string | null
   settings: PlatformSettingRow[]
@@ -52,7 +66,12 @@ type Props = {
     userId: string
     name: string
     city: string
+    country: string
     gender: string
+    age: number | null
+    denomination: string
+    church: string
+    pastorName: string
     completion: number
     role: string
     status: string
@@ -60,6 +79,9 @@ type Props = {
     verified: boolean
     hasAvatar: boolean
     createdAt: string | null
+    trustScore: number
+    warningCount: number
+    sanctionStatus: string
   }>
   reports: Array<{
     id: string
@@ -94,6 +116,31 @@ type Props = {
   conversations: Array<{
     id: string
     matchId: string
+    createdAt: string | null
+  }>
+  matches: Array<{
+    id: string
+    score: number | null
+    status: string | null
+    createdAt: string | null
+    userOne: string
+    userTwo: string
+  }>
+  recommendations: Array<{
+    id: string
+    profileId: string
+    recommenderName: string
+    recommenderRole: string | null
+    churchName: string | null
+    status: string
+    message: string | null
+    createdAt: string | null
+  }>
+  moderationEvents: Array<{
+    id: string
+    profileId: string | null
+    kind: string
+    reason: string | null
     createdAt: string | null
   }>
 }
@@ -187,7 +234,11 @@ export function AdminConsole(props: Props) {
     <AdminShell
       active={nav}
       onNavigate={setNav}
-      badges={{ moderation: moderationBadge, renewals: props.retention.renewalsDue7d }}
+      badges={{
+        moderation: moderationBadge,
+        renewals: props.retention.renewalsDue7d,
+        pendingProfiles: props.retention.pendingProfiles,
+      }}
       viewerRole={props.viewerRole}
       search={search}
       onSearch={setSearch}
@@ -315,6 +366,15 @@ export function AdminConsole(props: Props) {
             </SectionCard>
           </div>
 
+          <div className="grid lg:grid-cols-2 gap-4">
+            <SectionCard title="Inscriptions 14 j">
+              <SparkColumns items={props.breakdowns.signups14d} />
+            </SectionCard>
+            <SectionCard title="Top villes">
+              <DistBars items={props.breakdowns.byCity.slice(0, 6)} />
+            </SectionCard>
+          </div>
+
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {(
               [
@@ -339,65 +399,11 @@ export function AdminConsole(props: Props) {
 
       {/* ——— 2. ANALYTIQUE ——— */}
       {nav === "analytics" && (
-        <div className="space-y-6">
-          <div>
-            <h1 className="font-serif text-3xl font-bold">Analytique</h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              Funnel, engagement social, conversion Free → Alliance.
-            </p>
-          </div>
-          <div className="grid lg:grid-cols-2 gap-4">
-            <SectionCard title="Funnel conversion">
-              <div className="space-y-4">
-                <FunnelBar label="Inscriptions" value={props.stats.users} max={props.stats.users} />
-                <FunnelBar
-                  label="Profil ≥ 70%"
-                  value={props.retention.profilesComplete70}
-                  max={props.stats.users}
-                />
-                <FunnelBar
-                  label="5 tests (échantillon)"
-                  value={props.retention.assessmentsDoneAll}
-                  max={Math.max(props.users.length, 1)}
-                />
-                <FunnelBar
-                  label="Conversations 30j"
-                  value={props.retention.conversations30d}
-                  max={props.stats.users}
-                />
-                <FunnelBar
-                  label="Alliance actives"
-                  value={props.retention.activeAlliance}
-                  max={props.stats.users}
-                />
-              </div>
-            </SectionCard>
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <KpiCard label="Visites profil 30j" value={props.retention.views30d} />
-                <KpiCard label="Favoris totaux" value={props.retention.favoritesTotal} />
-                <KpiCard
-                  label="Conversion payante"
-                  value={`${props.retention.conversionPaidPct}%`}
-                  tone="green"
-                />
-                <KpiCard
-                  label="Churn proxy 30j"
-                  value={props.retention.expiredSubs30d + props.retention.cancelledSubs30d}
-                  tone="red"
-                  hint="Expirés + annulés"
-                />
-              </div>
-              <SectionCard title="Lecture soft launch">
-                <ul className="text-sm text-muted-foreground space-y-2 list-disc pl-4">
-                  <li>Visez un pool H/F équilibré sinon matching vide d&apos;un côté.</li>
-                  <li>Photos en attente = frein n°1 à la découverte.</li>
-                  <li>Renouvellements J-7 : {props.retention.renewalsDue7d} Alliance à rappeler.</li>
-                </ul>
-              </SectionCard>
-            </div>
-          </div>
-        </div>
+        <AnalyticsRichPanel
+          breakdowns={props.breakdowns}
+          retention={props.retention}
+          stats={props.stats}
+        />
       )}
 
       {/* ——— 3. MEMBRES ——— */}
@@ -406,51 +412,20 @@ export function AdminConsole(props: Props) {
           <div>
             <h1 className="font-serif text-3xl font-bold">Membres</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Table + panneau détail · créer un compte.
+              Créer, filtrer, stats ville/pays, confiance.
             </p>
           </div>
           <CreateMemberForm isFullAdmin={isFullAdmin} busy={busy} run={run} />
-          <div className="grid lg:grid-cols-5 gap-4">
-            <div className="lg:col-span-3 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead className="bg-secondary/50 text-xs text-muted-foreground">
-                    <tr>
-                      <th className="text-left font-semibold px-4 py-3">Membre</th>
-                      <th className="text-left font-semibold px-2 py-3">Ville</th>
-                      <th className="text-left font-semibold px-2 py-3">%</th>
-                      <th className="text-left font-semibold px-2 py-3">Statut</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border">
-                    {filteredUsers.map((u) => (
-                      <tr
-                        key={u.id}
-                        onClick={() => setSelectedUser(u.id)}
-                        className={cn(
-                          "cursor-pointer hover:bg-secondary/40",
-                          selectedUser === u.id && "bg-primary/5"
-                        )}
-                      >
-                        <td className="px-4 py-3">
-                          <p className="font-semibold">{u.name}</p>
-                          <p className="text-[11px] text-muted-foreground">
-                            {u.gender === "M" ? "H" : u.gender === "F" ? "F" : "?"} · {u.role}
-                            {u.verified ? " · ✓" : ""}
-                          </p>
-                        </td>
-                        <td className="px-2 py-3 text-muted-foreground">{u.city}</td>
-                        <td className="px-2 py-3 font-medium">{u.completion}%</td>
-                        <td className="px-2 py-3">
-                          <StatusPill status={u.status} />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
+          <MembersAdvancedPanel
+            users={props.users}
+            subscriptions={props.subscriptions}
+            breakdowns={props.breakdowns}
+            isFullAdmin={isFullAdmin}
+            busy={busy}
+            run={run}
+            selectedUser={selectedUser}
+            setSelectedUser={setSelectedUser}
+          >
             <MemberDetailPanel
               selected={selected}
               userSubs={userSubs}
@@ -458,8 +433,18 @@ export function AdminConsole(props: Props) {
               isFullAdmin={isFullAdmin}
               run={run}
             />
-          </div>
+          </MembersAdvancedPanel>
         </div>
+      )}
+
+      {/* ——— PROFILS ——— */}
+      {nav === "profiles" && (
+        <ProfilesHubPanel
+          users={props.users}
+          recommendations={props.recommendations}
+          busy={busy}
+          run={run}
+        />
       )}
 
       {/* ——— 4. MODÉRATION ——— */}
@@ -472,6 +457,19 @@ export function AdminConsole(props: Props) {
             </p>
           </div>
           <AutoModerationPanel
+            settings={props.settings}
+            isFullAdmin={isFullAdmin}
+            busy={busy}
+            run={run}
+            setMsg={setMsg}
+          />
+          <PhotoRulesEditor
+            settings={props.settings}
+            isFullAdmin={isFullAdmin}
+            busy={busy}
+            run={run}
+          />
+          <SanctionRulesEditor
             settings={props.settings}
             isFullAdmin={isFullAdmin}
             busy={busy}
@@ -559,9 +557,21 @@ export function AdminConsole(props: Props) {
                     <Button
                       size="sm"
                       disabled={busy === r.id}
-                      onClick={() => run(r.id, () => adminResolveReport(r.id, "resolved"))}
+                      onClick={() =>
+                        run(r.id, async () => {
+                          const resolve = await adminResolveReport(r.id, "resolved")
+                          if (resolve.error) return resolve
+                          const profile = props.users.find(
+                            (u) => u.userId === r.reported_user_id
+                          )
+                          if (profile) {
+                            return adminApplySanction(profile.id, "warn")
+                          }
+                          return { success: true }
+                        })
+                      }
                     >
-                      Résolu
+                      Résolu + avertir
                     </Button>
                     <Button
                       size="sm"
@@ -710,8 +720,12 @@ export function AdminConsole(props: Props) {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             <KpiCard label="Matches 30j" value={props.retention.matches30d} />
             <KpiCard label="Conversations 30j" value={props.retention.conversations30d} />
-            <KpiCard label="Hommes" value={props.retention.menCount} />
-            <KpiCard label="Femmes" value={props.retention.womenCount} />
+            <KpiCard
+              label="Taux matching"
+              value={`${props.breakdowns.matchingRatePct}%`}
+              tone="green"
+            />
+            <KpiCard label="Hommes / Femmes" value={`${props.retention.menCount}/${props.retention.womenCount}`} />
           </div>
           {Math.abs(props.retention.menCount - props.retention.womenCount) > 5 &&
             menTotal > 0 && (
@@ -719,22 +733,51 @@ export function AdminConsole(props: Props) {
                 Alerte matching : déséquilibre H/F important. Invitez le côté minoritaire.
               </p>
             )}
-          <SectionCard title="Dernières conversations (ops)">
-            <div className="divide-y divide-border max-h-96 overflow-y-auto">
-              {props.conversations.length === 0 && (
-                <p className="text-sm text-muted-foreground py-4">Aucune.</p>
-              )}
-              {props.conversations.map((c) => (
-                <div key={c.id} className="py-3 text-xs font-mono space-y-0.5">
-                  <p>convo {c.id}</p>
-                  <p className="text-muted-foreground">match {c.matchId}</p>
-                  <p className="text-muted-foreground">
-                    {c.createdAt ? new Date(c.createdAt).toLocaleString("fr-FR") : "—"}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </SectionCard>
+          <div className="grid lg:grid-cols-2 gap-4">
+            <SectionCard title="Matches récents (score IA / règles)">
+              <div className="divide-y divide-border max-h-96 overflow-y-auto">
+                {props.matches.length === 0 && (
+                  <p className="text-sm text-muted-foreground py-4">Aucun match.</p>
+                )}
+                {props.matches.map((m) => (
+                  <div key={m.id} className="py-3 text-sm space-y-1">
+                    <div className="flex justify-between gap-2">
+                      <p className="font-semibold">
+                        Compatibilité {m.score != null ? `${Math.round(m.score)}%` : "—"}
+                      </p>
+                      <Badge variant="outline">{m.status || "—"}</Badge>
+                    </div>
+                    <p className="text-[11px] font-mono text-muted-foreground">
+                      {m.userOne.slice(0, 8)}… ↔ {m.userTwo.slice(0, 8)}…
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Raisons typiques : piliers EVA, dénomination, géographie, vision couple.
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </SectionCard>
+            <SectionCard title="Conversations (ops)">
+              <div className="divide-y divide-border max-h-96 overflow-y-auto">
+                {props.conversations.length === 0 && (
+                  <p className="text-sm text-muted-foreground py-4">Aucune.</p>
+                )}
+                {props.conversations.map((c) => (
+                  <div key={c.id} className="py-3 text-xs font-mono space-y-0.5">
+                    <p>convo {c.id}</p>
+                    <p className="text-muted-foreground">match {c.matchId}</p>
+                    <p className="text-muted-foreground">
+                      {c.createdAt ? new Date(c.createdAt).toLocaleString("fr-FR") : "—"}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground mt-3">
+                Rapport thématique EVA : activez « Analyser les conversations » dans Coach EVA.
+                Scan mots interdits : onglet Modération.
+              </p>
+            </SectionCard>
+          </div>
         </div>
       )}
 
@@ -760,6 +803,16 @@ export function AdminConsole(props: Props) {
             busy={busy}
             run={run}
           />
+          <YoutubeConfigEditor
+            settings={props.settings}
+            isFullAdmin={isFullAdmin}
+            busy={busy}
+            run={run}
+          />
+          <p className="text-xs text-muted-foreground">
+            Module indépendant : éditez titres/vidéos/exercices ici. Drag &amp; drop parcours et
+            stats de visionnage YouTube = prochain niveau (playlist branchée ci-dessus).
+          </p>
         </div>
       )}
 
@@ -769,7 +822,7 @@ export function AdminConsole(props: Props) {
           <div>
             <h1 className="font-serif text-3xl font-bold">Coach EVA</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Quotas coach local (sans LLM V1) — style Farata Coach.
+              Consignes, base de connaissances, quotas, rapports — pas de « Sarah Coach ».
             </p>
           </div>
           <div className="grid sm:grid-cols-3 gap-3">
@@ -784,8 +837,18 @@ export function AdminConsole(props: Props) {
               tone="green"
               hint="Alliance"
             />
-            <KpiCard label="Mode" value="Local FAQ" hint="Pas de coût API LLM" />
+            <KpiCard
+              label="OpenAI"
+              value={props.ops.hasOpenAI ? "Prêt" : "Local FAQ"}
+              hint={props.ops.hasOpenAI ? "Clé détectée" : "FAQ locale V1"}
+            />
           </div>
+          <EvaConfigEditor
+            settings={props.settings}
+            isFullAdmin={isFullAdmin}
+            busy={busy}
+            run={run}
+          />
           <SectionCard title="Actions">
             <div className="flex flex-wrap gap-3">
               <Link href="/help">
@@ -793,9 +856,6 @@ export function AdminConsole(props: Props) {
                   Ouvrir EVA (membre)
                 </Button>
               </Link>
-              <p className="text-xs text-muted-foreground self-center">
-                Les réponses V1 sont locales. LLM éventuel = V2 derrière Alliance.
-              </p>
             </div>
           </SectionCard>
         </div>
@@ -822,6 +882,14 @@ export function AdminConsole(props: Props) {
             busy={busy}
             run={run}
           />
+          <SectionCard title="Prévisualisation & dimensions conseillées">
+            <ul className="text-sm text-muted-foreground space-y-2 list-disc pl-4">
+              <li>Dashboard / global : 1200×400 (ratio ~3:1), JPG/WebP &lt; 300 Ko</li>
+              <li>Discover : 800×1000 (portrait), visage ou produit centré</li>
+              <li>Messages : 1080×360, contraste élevé sur texte CTA</li>
+              <li>Uploadez une URL image dans chaque pub, activez, enregistrez — aperçu côté membre Accueil.</li>
+            </ul>
+          </SectionCard>
           <SectionCard title="Notes soft launch">
             <textarea
               value={notes}
@@ -933,10 +1001,23 @@ export function AdminConsole(props: Props) {
             />
           </div>
           <p className="text-xs text-muted-foreground">
-            Auto-discernement des profils → onglet <strong>Modération</strong>. Textes &amp; pubs →{" "}
-            <strong>Contenu &amp; marketing</strong>. Académie éditable → onglet{" "}
-            <strong>Académie</strong>.
+            Auto-discernement → <strong>Modération</strong>. Textes &amp; pubs →{" "}
+            <strong>Contenu &amp; marketing</strong>. Académie → <strong>Académie</strong>.
+            Profils / pasteurs → <strong>Profils</strong>.
           </p>
+          <IntegrationsEditor
+            settings={props.settings}
+            ops={props.ops}
+            isFullAdmin={isFullAdmin}
+            busy={busy}
+            run={run}
+          />
+          <YoutubeConfigEditor
+            settings={props.settings}
+            isFullAdmin={isFullAdmin}
+            busy={busy}
+            run={run}
+          />
           <SectionCard title="Santé système">
             <div className="grid sm:grid-cols-2 gap-2">
               <Flag label="URL app" value={props.ops.appUrl || "—"} ok={Boolean(props.ops.appUrl)} />
@@ -1005,7 +1086,17 @@ function MemberDetailPanel({
               {selected.userId}
             </p>
             <p className="text-xs text-muted-foreground mt-2">
-              {selected.city} · {selected.completion}% · {selected.role}
+              {selected.city} · {selected.country} · {selected.completion}% · {selected.role}
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Foi : {selected.denomination || "—"}
+              {selected.church ? ` · ${selected.church}` : ""}
+              {selected.pastorName ? ` · pasteur ${selected.pastorName}` : ""}
+            </p>
+            <p className="text-xs mt-1">
+              Confiance <strong>{selected.trustScore}</strong> · avert.{" "}
+              <strong>{selected.warningCount}</strong> · sanction{" "}
+              <strong>{selected.sanctionStatus}</strong>
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -1027,7 +1118,7 @@ function MemberDetailPanel({
                 run(selected.id, () => adminUpdateModerationStatus(selected.id, "rejected"))
               }
             >
-              Suspendre
+              Suspendre profil
             </Button>
             <Button
               size="sm"
@@ -1039,6 +1130,36 @@ function MemberDetailPanel({
               }
             >
               {selected.verified ? "Retirer vérif." : "Vérifier"}
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={busy === `w-${selected.id}`}
+              onClick={() =>
+                run(`w-${selected.id}`, () => adminApplySanction(selected.id, "warn"))
+              }
+            >
+              Avertir
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={busy === `s-${selected.id}`}
+              onClick={() =>
+                run(`s-${selected.id}`, () => adminApplySanction(selected.id, "suspend"))
+              }
+            >
+              Suspension
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={busy === `b-${selected.id}`}
+              onClick={() =>
+                run(`b-${selected.id}`, () => adminApplySanction(selected.id, "block"))
+              }
+            >
+              Bloquer
             </Button>
             {isFullAdmin && (
               <Button
