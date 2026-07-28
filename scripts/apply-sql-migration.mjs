@@ -1,6 +1,8 @@
 /**
  * Applique une migration SQL via SUPABASE_DB_URL (.env.local).
  * Usage: node scripts/apply-sql-migration.mjs supabase/migrations/20240101000012_admin_ops_policies.sql
+ *
+ * Note: `supabase db query` n'accepte qu'une commande à la fois → on découpe sur `;`.
  */
 import { readFileSync } from "fs"
 import { resolve, dirname } from "path"
@@ -23,6 +25,18 @@ function loadEnv() {
   return env
 }
 
+/** Découpe SQL en statements (ignore commentaires de ligne). */
+function splitStatements(sql) {
+  const withoutLineComments = sql
+    .split("\n")
+    .filter((l) => !l.trim().startsWith("--"))
+    .join("\n")
+  return withoutLineComments
+    .split(";")
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0)
+}
+
 const rel = process.argv[2]
 if (!rel) {
   console.error("Usage: node scripts/apply-sql-migration.mjs <path-to.sql>")
@@ -36,7 +50,6 @@ if (!dbUrl) {
   process.exit(1)
 }
 
-// Encode password special chars if present
 const m = dbUrl.match(/^(postgres(?:ql)?:\/\/)([^:]+):(.+)@([^/]+)(\/.*)?$/)
 if (m) {
   const [, scheme, user, password, hostPart, pathPart] = m
@@ -45,31 +58,35 @@ if (m) {
 
 const sqlPath = resolve(root, rel)
 const sql = readFileSync(sqlPath, "utf8")
-console.log("Applying:", rel)
+const statements = splitStatements(sql)
+console.log("Applying:", rel, `(${statements.length} statements)`)
 
-const r = spawnSync(
-  "npx",
-  ["--yes", "supabase", "db", "query", "--db-url", dbUrl, sql],
-  { cwd: root, encoding: "utf8", shell: true, maxBuffer: 10 * 1024 * 1024 }
-)
-
-if (r.stdout) process.stdout.write(r.stdout)
-if (r.stderr) process.stderr.write(r.stderr)
-
-if (r.status !== 0) {
-  // Fallback: psql if available
-  console.log("Retry via psql...")
-  const r2 = spawnSync("psql", [dbUrl, "-v", "ON_ERROR_STOP=1", "-c", sql], {
-    cwd: root,
-    encoding: "utf8",
-    shell: true,
-  })
-  if (r2.stdout) process.stdout.write(r2.stdout)
-  if (r2.stderr) process.stderr.write(r2.stderr)
-  if (r2.status !== 0) {
-    console.error("Échec application migration")
-    process.exit(r2.status || 1)
+let failed = false
+for (let i = 0; i < statements.length; i++) {
+  const stmt = statements[i] + ";"
+  console.log(`\n--- [${i + 1}/${statements.length}] ---`)
+  const r = spawnSync(
+    "npx",
+    ["--yes", "supabase", "db", "query", "--db-url", dbUrl],
+    {
+      cwd: root,
+      encoding: "utf8",
+      shell: true,
+      input: stmt,
+      maxBuffer: 10 * 1024 * 1024,
+    }
+  )
+  if (r.stdout) process.stdout.write(r.stdout)
+  if (r.stderr) process.stderr.write(r.stderr)
+  if (r.status !== 0) {
+    console.error(`Échec statement ${i + 1}`)
+    failed = true
+    break
   }
 }
 
-console.log("Migration OK")
+if (failed) {
+  process.exit(1)
+}
+
+console.log("\nMigration OK")
