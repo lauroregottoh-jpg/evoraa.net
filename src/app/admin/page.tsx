@@ -1,48 +1,40 @@
-import { MainLayout } from "@/components/layout/MainLayout";
-import { AdminConsole } from "@/components/admin/AdminConsole";
-import { getAdminDashboardData } from "@/app/actions/admin";
-import Link from "next/link";
+import { AdminConsole } from "@/components/admin/AdminConsole"
+import { getAdminDashboardData } from "@/app/actions/admin"
+import Link from "next/link"
 
 export default async function AdminPage() {
-  const data = await getAdminDashboardData();
+  const data = await getAdminDashboardData()
 
   if (data.error || !data.stats || !data.retention || !data.ops) {
     return (
-      <MainLayout maxWidth="4xl">
-        <div className="py-16 text-center space-y-3">
-          <h1 className="font-serif text-2xl">Accès admin requis</h1>
+      <div className="min-h-screen flex items-center justify-center p-6 bg-[#F4F6F5]">
+        <div className="max-w-md text-center space-y-3 rounded-2xl border border-border bg-card p-8 shadow-sm">
+          <h1 className="font-serif text-2xl font-bold">Accès admin requis</h1>
           <p className="text-sm text-muted-foreground">{data.error}</p>
-          <p className="text-xs text-muted-foreground max-w-md mx-auto">
-            Inscris-toi sur{" "}
-            <a className="underline" href="https://evoraa-net.vercel.app/register">
-              /register
-            </a>
-            , puis dans Supabase passe{" "}
-            <code className="text-foreground">profiles.role = &apos;admin&apos;</code>.
+          <p className="text-xs text-muted-foreground">
+            Compte avec <code>profiles.role = admin</code> requis.
           </p>
-          <Link href="/dashboard" className="text-accent underline text-sm">
-            Retour tableau de bord
+          <Link href="/dashboard" className="text-primary underline text-sm inline-block">
+            Retour espace membre
           </Link>
         </div>
-      </MainLayout>
-    );
+      </div>
+    )
   }
 
   return (
-    <MainLayout maxWidth="7xl" showFooter={false}>
-      <AdminConsole
-        stats={data.stats}
-        retention={data.retention}
-        ops={data.ops}
-        viewerRole={data.viewerRole}
-        settings={data.settings}
-        users={data.users}
-        reports={data.reports}
-        payments={data.payments}
-        photos={data.photos}
-        subscriptions={data.subscriptions}
-        conversations={data.conversations}
-      />
-    </MainLayout>
-  );
+    <AdminConsole
+      stats={data.stats}
+      retention={data.retention}
+      ops={data.ops}
+      viewerRole={data.viewerRole}
+      settings={data.settings}
+      users={data.users}
+      reports={data.reports}
+      payments={data.payments}
+      photos={data.photos}
+      subscriptions={data.subscriptions}
+      conversations={data.conversations}
+    />
+  )
 }
