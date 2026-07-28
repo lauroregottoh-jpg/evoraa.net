@@ -20,7 +20,7 @@ async function requireAdmin() {
     .maybeSingle()
 
   if (profile?.role !== "admin" && profile?.role !== "moderator") {
-    return { error: "Acc?s admin requis." as string, supabase: null, user: null, role: null }
+    return { error: "AccÃ¨s admin requis." as string, supabase: null, user: null, role: null }
   }
 
   return {
@@ -504,7 +504,7 @@ export async function adminUpdateModerationStatus(
   status: "approved" | "rejected" | "pending"
 ) {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé.." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "AccÃ¨s refusÃ©." }
 
   const { error } = await gate.supabase
     .from("profiles")
@@ -518,7 +518,7 @@ export async function adminUpdateModerationStatus(
 
 export async function adminSetVerified(profileId: string, verified: boolean) {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé.." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "AccÃ¨s refusÃ©." }
 
   const { error } = await gate.supabase
     .from("profiles")
@@ -540,7 +540,7 @@ export async function adminSetRole(
 ) {
   const gate = await requireFullAdmin()
   if (gate.error || !gate.supabase || !gate.user) {
-    return { error: gate.error || "Accès refusé.." }
+    return { error: gate.error || "AccÃ¨s refusÃ©." }
   }
 
   const { data: target } = await gate.supabase
@@ -565,7 +565,7 @@ export async function adminSetRole(
 
 export async function adminGrantAlliance(userId: string, days = 30) {
   const gate = await requireFullAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé.." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "AccÃ¨s refusÃ©." }
 
   const now = new Date()
   const ends = new Date(now)
@@ -614,7 +614,7 @@ export async function adminResolveReport(
   status: "resolved" | "dismissed" | "pending"
 ) {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé.." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "AccÃ¨s refusÃ©." }
 
   const { error } = await gate.supabase
     .from("reports")
@@ -632,7 +632,7 @@ export async function adminModeratePhoto(
   reason?: string
 ) {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé.." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "AccÃ¨s refusÃ©." }
 
   const { data: photo, error: fetchError } = await gate.supabase
     .from("user_photos")
@@ -679,7 +679,7 @@ export async function adminModeratePhoto(
 export async function adminUpdatePlatformSetting(key: string, value: unknown) {
   const gate = await requireFullAdmin()
   if (gate.error || !gate.supabase || !gate.user) {
-    return { error: gate.error || "Accès refusé.." }
+    return { error: gate.error || "AccÃ¨s refusÃ©." }
   }
 
   const allowed = new Set([
@@ -804,7 +804,7 @@ export async function adminCreateMember(input: {
  */
 export async function adminRunAutoModeration() {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé.." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "AccÃ¨s refusÃ©." }
 
   const {
     parseAutoMod,
@@ -894,7 +894,7 @@ export async function adminRunAutoModeration() {
 export async function adminPreviewAutoModeration() {
   const gate = await requireAdmin()
   if (gate.error || !gate.supabase) {
-    return { error: gate.error || "Accès refusé..", items: [] as Array<{
+    return { error: gate.error || "AccÃ¨s refusÃ©.", items: [] as Array<{
       id: string
       name: string
       score: number
@@ -940,7 +940,7 @@ export async function adminPreviewAutoModeration() {
 
 export async function adminAnalyzePendingPhotos() {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé..", results: [] as Array<{ id: string; decision: string; message: string; reasons: string[] }> }
+  if (gate.error || !gate.supabase) return { error: gate.error || "AccÃ¨s refusÃ©.", results: [] as Array<{ id: string; decision: string; message: string; reasons: string[] }> }
 
   const { parsePhotoRules, evaluatePhotoRules } = await import("@/lib/admin/opsRules")
   const { data: setting } = await gate.supabase
@@ -973,7 +973,7 @@ export async function adminAnalyzePendingPhotos() {
 
 export async function adminApplyPhotoVerdict(photoId: string) {
   const gate = await requireAdmin()
-  if (gate.error || !gate.supabase) return { error: gate.error || "Accès refusé.." }
+  if (gate.error || !gate.supabase) return { error: gate.error || "AccÃ¨s refusÃ©." }
 
   const { parsePhotoRules, evaluatePhotoRules } = await import("@/lib/admin/opsRules")
   const { data: setting } = await gate.supabase
@@ -1008,7 +1008,7 @@ export async function adminApplySanction(
 ) {
   const gate = await requireAdmin()
   if (gate.error || !gate.supabase || !gate.user) {
-    return { error: gate.error || "Accès refusé.." }
+    return { error: gate.error || "AccÃ¨s refusÃ©." }
   }
 
   const { parseSanctionRules, nextSanctionStatus } = await import("@/lib/admin/opsRules")
@@ -1085,7 +1085,7 @@ export async function adminApplySanction(
   await gate.supabase.from("moderation_events").insert({
     profile_id: profileId,
     kind,
-    reason: `Sanction ${action} ? ${sanctionStatus}`,
+    reason: `Sanction ${action} â†’ ${sanctionStatus}`,
     created_by: gate.user.id,
   })
 
@@ -1099,7 +1099,7 @@ export async function adminReviewChurchRecommendation(
 ) {
   const gate = await requireAdmin()
   if (gate.error || !gate.supabase || !gate.user) {
-    return { error: gate.error || "Accès refusé.." }
+    return { error: gate.error || "AccÃ¨s refusÃ©." }
   }
 
   const { data: reco } = await gate.supabase
@@ -1153,7 +1153,7 @@ export async function adminReviewChurchRecommendation(
 export async function adminScanRecentMessages() {
   const gate = await requireAdmin()
   if (gate.error || !gate.supabase) {
-    return { error: gate.error || "Accès refusé..", flags: [] as Array<{ id: string; hits: string[]; preview: string }> }
+    return { error: gate.error || "AccÃ¨s refusÃ©.", flags: [] as Array<{ id: string; hits: string[]; preview: string }> }
   }
 
   const { parseSanctionRules, scanTextForBanned } = await import("@/lib/admin/opsRules")
