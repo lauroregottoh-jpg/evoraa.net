@@ -55,6 +55,9 @@ export type AdminRetention = {
   womenCount: number
   renewalsDue7d: number
   matches30d: number
+  views30d: number
+  favoritesTotal: number
+  pendingProfiles: number
 }
 
 export type AdminOpsFlags = {
@@ -227,6 +230,20 @@ export async function getAdminDashboardData() {
     .gte("ends_at", nowIso)
     .lte("ends_at", in7Iso)
 
+  const { count: views30d } = await supabase
+    .from("profile_views")
+    .select("viewer_profile_id", { count: "exact", head: true })
+    .gte("viewed_at", since30Iso)
+
+  const { count: favoritesTotal } = await supabase
+    .from("profile_favorites")
+    .select("id", { count: "exact", head: true })
+
+  const { count: pendingProfiles } = await supabase
+    .from("profiles")
+    .select("id", { count: "exact", head: true })
+    .eq("moderation_status", "pending")
+
   const { data: allCompleted } = await supabase
     .from("payments")
     .select("amount")
@@ -286,6 +303,9 @@ export async function getAdminDashboardData() {
     womenCount: womenCount ?? 0,
     renewalsDue7d: renewalsDue7d ?? 0,
     matches30d: matches30d ?? 0,
+    views30d: views30d ?? 0,
+    favoritesTotal: favoritesTotal ?? 0,
+    pendingProfiles: pendingProfiles ?? 0,
   }
 
   const demoRaw = process.env.PAYMENTS_DEMO_MODE

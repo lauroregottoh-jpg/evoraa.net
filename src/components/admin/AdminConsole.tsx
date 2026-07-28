@@ -18,10 +18,12 @@ import {
   type PlatformSettingRow,
 } from "@/app/actions/admin"
 import { ACADEMY_MODULES } from "@/lib/academy/modules"
+import { PLANS } from "@/lib/billing/plans"
 import {
-  ActivityItem,
   AdminShell,
+  FunnelBar,
   KpiCard,
+  SectionCard,
   type AdminNavId,
 } from "@/components/admin/AdminShell"
 import { cn } from "@/utils/cn"
@@ -108,9 +110,17 @@ function settingNum(settings: PlatformSettingRow[], key: string, fallback: numbe
   return Number.isFinite(n) ? n : fallback
 }
 
+function settingText(settings: PlatformSettingRow[], key: string, fallback = "") {
+  const row = settings.find((s) => s.key === key)
+  if (row == null || row.value == null) return fallback
+  if (typeof row.value === "string") return row.value.replace(/^"|"$/g, "")
+  return String(row.value)
+}
+
 export function AdminConsole(props: Props) {
   const isFullAdmin = props.viewerRole === "admin"
-  const [nav, setNav] = React.useState<AdminNavId>("overview")
+  const [nav, setNav] = React.useState<AdminNavId>("dashboard")
+  const [modTab, setModTab] = React.useState<"photos" | "reports" | "pending">("photos")
   const [search, setSearch] = React.useState("")
   const [busy, setBusy] = React.useState("")
   const [selectedUser, setSelectedUser] = React.useState<string | null>(null)
@@ -127,6 +137,9 @@ export function AdminConsole(props: Props) {
   const [charter, setCharter] = React.useState(() =>
     settingBool(props.settings, "require_charter", true)
   )
+  const [notes, setNotes] = React.useState(() =>
+    settingText(props.settings, "soft_launch_notes", "Invitez H+F, approuvez les photos vite.")
+  )
 
   const filteredUsers = props.users.filter(
     (u) =>
@@ -140,6 +153,7 @@ export function AdminConsole(props: Props) {
   const userSubs = selected
     ? props.subscriptions.filter((s) => s.userId === selected.userId)
     : []
+  const pendingUsers = props.users.filter((u) => u.status === "pending")
 
   const run = async (key: string, fn: () => Promise<{ error?: string; success?: boolean }>) => {
     setBusy(key)
@@ -153,42 +167,50 @@ export function AdminConsole(props: Props) {
     }
   }
 
-  const menPct =
-    props.retention.menCount + props.retention.womenCount > 0
-      ? Math.round(
-          (props.retention.menCount /
-            (props.retention.menCount + props.retention.womenCount)) *
-            100
-        )
-      : 50
+  const menTotal = props.retention.menCount + props.retention.womenCount
+  const menPct = menTotal > 0 ? Math.round((props.retention.menCount / menTotal) * 100) : 50
+  const moderationBadge =
+    props.stats.pendingPhotos + props.stats.openReports + props.retention.pendingProfiles
+
+  React.useEffect(() => {
+    if (search && nav !== "members") setNav("members")
+  }, [search]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <AdminShell
       active={nav}
       onNavigate={setNav}
-      badges={{
-        photos: props.stats.pendingPhotos,
-        reports: props.stats.openReports,
-        renewals: props.retention.renewalsDue7d,
-      }}
+      badges={{ moderation: moderationBadge, renewals: props.retention.renewalsDue7d }}
       viewerRole={props.viewerRole}
       search={search}
       onSearch={setSearch}
     >
       {msg && (
-        <p className="mb-4 text-xs rounded-xl border border-border bg-card px-3 py-2">{msg}</p>
+        <p className="mb-4 text-xs rounded-xl border border-border bg-card px-3 py-2 shadow-sm">
+          {msg}
+        </p>
       )}
 
-      {nav === "overview" && (
+      {/* ——— 1. DASHBOARD ——— */}
+      {nav === "dashboard" && (
         <div className="space-y-6">
-          <div>
-            <h1 className="font-serif text-3xl font-bold">Dashboard</h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              Vue ops KELIAA — membres, Alliance, modération, croissance.
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+            <div>
+              <h1 className="font-serif text-3xl font-bold tracking-tight">Dashboard</h1>
+              <p className="text-sm text-muted-foreground mt-1">
+                Vue d&apos;ensemble ops — style DASHBOARD 1–4, données KELIAA live.
+              </p>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {new Date().toLocaleDateString("fr-FR", {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+              })}
             </p>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <KpiCard label="Membres" value={props.stats.users} hint="Profils totaux" />
             <KpiCard
               label="Alliance actives"
@@ -204,61 +226,59 @@ export function AdminConsole(props: Props) {
             />
             <KpiCard
               label="À traiter"
-              value={props.stats.pendingPhotos + props.stats.openReports}
-              tone={props.stats.pendingPhotos + props.stats.openReports > 0 ? "red" : "default"}
+              value={moderationBadge}
+              tone={moderationBadge > 0 ? "red" : "default"}
               hint={`${props.stats.pendingPhotos} photos · ${props.stats.openReports} signalements`}
             />
           </div>
 
           <div className="grid lg:grid-cols-3 gap-4">
-            <div className="lg:col-span-2 rounded-2xl border border-border bg-card p-5 shadow-sm space-y-4">
-              <div className="flex items-center justify-between">
-                <h2 className="font-semibold">Équilibre H / F</h2>
-                <span className="text-xs text-muted-foreground">Pool matching</span>
-              </div>
-              <div className="flex gap-1 h-10 rounded-xl overflow-hidden">
+            <SectionCard title="Équilibre H / F" className="lg:col-span-2">
+              <div className="flex h-12 rounded-xl overflow-hidden mb-4">
                 <div
-                  className="bg-primary flex items-center justify-center text-xs font-bold text-primary-foreground"
+                  className="bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold"
                   style={{ width: `${menPct}%` }}
                 >
                   H {props.retention.menCount}
                 </div>
                 <div
-                  className="bg-accent flex items-center justify-center text-xs font-bold text-accent-foreground"
+                  className="bg-accent text-accent-foreground flex items-center justify-center text-xs font-bold"
                   style={{ width: `${100 - menPct}%` }}
                 >
                   F {props.retention.womenCount}
                 </div>
               </div>
-              <div className="grid sm:grid-cols-3 gap-3 pt-2">
-                <MiniStat label="Nouveaux 30j" value={props.retention.newMembers30d} />
-                <MiniStat label="Matches 30j" value={props.retention.matches30d} />
-                <MiniStat label="Convos 30j" value={props.retention.conversations30d} />
+              <div className="grid sm:grid-cols-4 gap-3">
+                {[
+                  ["Nouveaux 30j", props.retention.newMembers30d],
+                  ["Matches 30j", props.retention.matches30d],
+                  ["Convos 30j", props.retention.conversations30d],
+                  ["Renouvel. J-7", props.retention.renewalsDue7d],
+                ].map(([l, v]) => (
+                  <div key={String(l)} className="rounded-xl bg-secondary/60 px-3 py-2.5">
+                    <p className="text-[11px] text-muted-foreground">{l}</p>
+                    <p className="font-serif text-xl font-bold">{v}</p>
+                  </div>
+                ))}
               </div>
-              <div className="grid sm:grid-cols-3 gap-3">
-                <MiniStat label="Profils ≥70%" value={props.retention.profilesComplete70} />
-                <MiniStat label="Renouvellements J-7" value={props.retention.renewalsDue7d} />
-                <MiniStat label="Free estimés" value={props.retention.activeFreeEstimate} />
-              </div>
-            </div>
+            </SectionCard>
 
-            <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
-              <h2 className="font-semibold mb-2">Activité récente</h2>
-              <div className="max-h-[320px] overflow-y-auto">
-                {props.photos.slice(0, 3).map((p) => (
-                  <ActivityItem
+            <SectionCard title="Activité récente">
+              <div className="space-y-0 max-h-72 overflow-y-auto">
+                {props.photos.slice(0, 4).map((p) => (
+                  <ActivityRow
                     key={p.id}
                     title="Photo en attente"
-                    meta={p.profile_id.slice(0, 8) + "…"}
+                    meta={p.profile_id.slice(0, 10) + "…"}
                     badge="Photo"
-                    badgeTone="gold"
+                    tone="gold"
                   />
                 ))}
                 {props.reports
                   .filter((r) => r.status === "pending")
                   .slice(0, 3)
                   .map((r) => (
-                    <ActivityItem
+                    <ActivityRow
                       key={r.id}
                       title={r.reason}
                       meta={
@@ -266,36 +286,34 @@ export function AdminConsole(props: Props) {
                           ? new Date(r.created_at).toLocaleDateString("fr-FR")
                           : "—"
                       }
-                      badge="Signalement"
-                      badgeTone="red"
+                      badge="Alerte"
+                      tone="red"
                     />
                   ))}
                 {props.payments.slice(0, 3).map((p) => (
-                  <ActivityItem
+                  <ActivityRow
                     key={p.id}
                     title={`${Number(p.amount).toLocaleString("fr-FR")} FCFA`}
                     meta={p.transaction_reference || "paiement"}
                     badge={p.status || "—"}
-                    badgeTone={p.status === "completed" ? "green" : "blue"}
+                    tone={p.status === "completed" ? "green" : "blue"}
                   />
                 ))}
-                {props.photos.length === 0 &&
-                  props.reports.length === 0 &&
-                  props.payments.length === 0 && (
-                    <p className="text-sm text-muted-foreground py-6 text-center">
-                      Pas encore d&apos;activité.
-                    </p>
-                  )}
+                {props.photos.length + props.reports.length + props.payments.length === 0 && (
+                  <p className="text-sm text-muted-foreground py-8 text-center">
+                    Pas encore d&apos;activité.
+                  </p>
+                )}
               </div>
-            </div>
+            </SectionCard>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {(
               [
                 ["members", "Gérer les membres"],
-                ["photos", "Modérer les photos"],
-                ["finance", "Voir la finance"],
+                ["moderation", "Ouvrir la modération"],
+                ["alliance", "Alliance & paiements"],
                 ["academy", "Académie du mariage"],
               ] as const
             ).map(([id, label]) => (
@@ -303,7 +321,7 @@ export function AdminConsole(props: Props) {
                 key={id}
                 type="button"
                 onClick={() => setNav(id)}
-                className="rounded-2xl border border-border bg-card p-4 text-left text-sm font-semibold hover:border-primary/40 shadow-sm"
+                className="rounded-2xl border border-border bg-card p-4 text-left text-sm font-semibold shadow-sm hover:border-primary/40 transition-colors"
               >
                 {label} →
               </button>
@@ -312,350 +330,412 @@ export function AdminConsole(props: Props) {
         </div>
       )}
 
-      {nav === "members" && (
-        <div className="grid lg:grid-cols-5 gap-4">
-          <div className="lg:col-span-3 space-y-3">
-            <h1 className="font-serif text-2xl font-bold">Membres</h1>
-            <div className="rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
-              <div className="max-h-[70vh] overflow-y-auto divide-y divide-border">
-                {filteredUsers.map((u) => (
-                  <button
-                    key={u.id}
-                    type="button"
-                    onClick={() => setSelectedUser(u.id)}
-                    className={cn(
-                      "w-full text-left px-4 py-3.5 hover:bg-secondary/50 transition-colors",
-                      selectedUser === u.id && "bg-primary/5"
-                    )}
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <p className="font-semibold text-sm">{u.name}</p>
-                      <Badge variant="outline" className="text-[10px]">
-                        {u.status}
-                      </Badge>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      {u.gender === "M" ? "H" : u.gender === "F" ? "F" : "?"} · {u.city} ·{" "}
-                      {u.completion}%
-                      {u.verified ? " · vérifié" : ""}
-                      {u.hasAvatar ? "" : " · sans photo"}
-                    </p>
-                  </button>
-                ))}
+      {/* ——— 2. ANALYTIQUE ——— */}
+      {nav === "analytics" && (
+        <div className="space-y-6">
+          <div>
+            <h1 className="font-serif text-3xl font-bold">Analytique</h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Funnel, engagement social, conversion Free → Alliance.
+            </p>
+          </div>
+          <div className="grid lg:grid-cols-2 gap-4">
+            <SectionCard title="Funnel conversion">
+              <div className="space-y-4">
+                <FunnelBar label="Inscriptions" value={props.stats.users} max={props.stats.users} />
+                <FunnelBar
+                  label="Profil ≥ 70%"
+                  value={props.retention.profilesComplete70}
+                  max={props.stats.users}
+                />
+                <FunnelBar
+                  label="5 tests (échantillon)"
+                  value={props.retention.assessmentsDoneAll}
+                  max={Math.max(props.users.length, 1)}
+                />
+                <FunnelBar
+                  label="Conversations 30j"
+                  value={props.retention.conversations30d}
+                  max={props.stats.users}
+                />
+                <FunnelBar
+                  label="Alliance actives"
+                  value={props.retention.activeAlliance}
+                  max={props.stats.users}
+                />
               </div>
+            </SectionCard>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <KpiCard label="Visites profil 30j" value={props.retention.views30d} />
+                <KpiCard label="Favoris totaux" value={props.retention.favoritesTotal} />
+                <KpiCard
+                  label="Conversion payante"
+                  value={`${props.retention.conversionPaidPct}%`}
+                  tone="green"
+                />
+                <KpiCard
+                  label="Churn proxy 30j"
+                  value={props.retention.expiredSubs30d + props.retention.cancelledSubs30d}
+                  tone="red"
+                  hint="Expirés + annulés"
+                />
+              </div>
+              <SectionCard title="Lecture soft launch">
+                <ul className="text-sm text-muted-foreground space-y-2 list-disc pl-4">
+                  <li>Visez un pool H/F équilibré sinon matching vide d&apos;un côté.</li>
+                  <li>Photos en attente = frein n°1 à la découverte.</li>
+                  <li>Renouvellements J-7 : {props.retention.renewalsDue7d} Alliance à rappeler.</li>
+                </ul>
+              </SectionCard>
             </div>
           </div>
+        </div>
+      )}
 
-          <div className="lg:col-span-2 rounded-2xl border border-border bg-card p-5 shadow-sm h-fit sticky top-24 space-y-4">
-            {!selected ? (
-              <p className="text-sm text-muted-foreground">
-                Sélectionnez un membre pour le panneau détail.
-              </p>
-            ) : (
-              <>
-                <div>
-                  <h3 className="font-serif text-xl font-bold">{selected.name}</h3>
-                  <p className="text-[11px] text-muted-foreground font-mono break-all mt-1">
-                    {selected.userId}
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    {selected.city} · rôle {selected.role} · onboarding{" "}
-                    {selected.onboarding || "—"}
-                  </p>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    disabled={busy === selected.id}
-                    onClick={() =>
-                      run(selected.id, () =>
-                        adminUpdateModerationStatus(selected.id, "approved")
-                      )
-                    }
-                  >
-                    Approuver
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    disabled={busy === selected.id}
-                    onClick={() =>
-                      run(selected.id, () =>
-                        adminUpdateModerationStatus(selected.id, "rejected")
-                      )
-                    }
-                  >
-                    Suspendre
-                  </Button>
-                  <Button
-                    size="sm"
-                    disabled={busy === `v-${selected.id}`}
-                    onClick={() =>
-                      run(`v-${selected.id}`, () =>
-                        adminSetVerified(selected.id, !selected.verified)
-                      )
-                    }
-                  >
-                    {selected.verified ? "Retirer vérif." : "Vérifier"}
-                  </Button>
-                  {isFullAdmin && (
+      {/* ——— 3. MEMBRES ——— */}
+      {nav === "members" && (
+        <div className="space-y-4">
+          <div>
+            <h1 className="font-serif text-3xl font-bold">Membres</h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Table + panneau détail (inspiré DASHBOARD 3).
+            </p>
+          </div>
+          <div className="grid lg:grid-cols-5 gap-4">
+            <div className="lg:col-span-3 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-secondary/50 text-xs text-muted-foreground">
+                    <tr>
+                      <th className="text-left font-semibold px-4 py-3">Membre</th>
+                      <th className="text-left font-semibold px-2 py-3">Ville</th>
+                      <th className="text-left font-semibold px-2 py-3">%</th>
+                      <th className="text-left font-semibold px-2 py-3">Statut</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {filteredUsers.map((u) => (
+                      <tr
+                        key={u.id}
+                        onClick={() => setSelectedUser(u.id)}
+                        className={cn(
+                          "cursor-pointer hover:bg-secondary/40",
+                          selectedUser === u.id && "bg-primary/5"
+                        )}
+                      >
+                        <td className="px-4 py-3">
+                          <p className="font-semibold">{u.name}</p>
+                          <p className="text-[11px] text-muted-foreground">
+                            {u.gender === "M" ? "H" : u.gender === "F" ? "F" : "?"} · {u.role}
+                            {u.verified ? " · ✓" : ""}
+                          </p>
+                        </td>
+                        <td className="px-2 py-3 text-muted-foreground">{u.city}</td>
+                        <td className="px-2 py-3 font-medium">{u.completion}%</td>
+                        <td className="px-2 py-3">
+                          <StatusPill status={u.status} />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <MemberDetailPanel
+              selected={selected}
+              userSubs={userSubs}
+              busy={busy}
+              isFullAdmin={isFullAdmin}
+              run={run}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* ——— 4. MODÉRATION ——— */}
+      {nav === "moderation" && (
+        <div className="space-y-4">
+          <div>
+            <h1 className="font-serif text-3xl font-bold">Modération</h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Photos · Signalements · Profils en attente.
+            </p>
+          </div>
+          <div className="flex gap-2 flex-wrap">
+            {(
+              [
+                ["photos", `Photos (${props.photos.length})`],
+                ["reports", `Signalements (${props.stats.openReports})`],
+                ["pending", `Profils (${pendingUsers.length})`],
+              ] as const
+            ).map(([id, label]) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => setModTab(id)}
+                className={cn(
+                  "rounded-full px-4 py-2 text-xs font-semibold border",
+                  modTab === id
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-card border-border text-muted-foreground"
+                )}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {modTab === "photos" && (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {props.photos.length === 0 && (
+                <p className="text-sm text-muted-foreground col-span-full">Aucune photo en attente.</p>
+              )}
+              {props.photos.map((ph) => (
+                <div
+                  key={ph.id}
+                  className="rounded-2xl border border-border bg-card overflow-hidden shadow-sm"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={ph.photo_url} alt="" className="w-full aspect-square object-cover" />
+                  <div className="p-3 flex gap-2">
+                    <Button
+                      size="sm"
+                      className="flex-1"
+                      disabled={busy === ph.id}
+                      onClick={() => run(ph.id, () => adminModeratePhoto(ph.id, "approved"))}
+                    >
+                      OK
+                    </Button>
                     <Button
                       size="sm"
                       variant="outline"
-                      disabled={busy === `g-${selected.id}`}
+                      className="flex-1"
+                      disabled={busy === ph.id}
+                      onClick={() => run(ph.id, () => adminModeratePhoto(ph.id, "rejected"))}
+                    >
+                      Refuser
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {modTab === "reports" && (
+            <div className="space-y-3">
+              {props.reports.length === 0 && (
+                <p className="text-sm text-muted-foreground">Aucun signalement.</p>
+              )}
+              {props.reports.map((r) => (
+                <div
+                  key={r.id}
+                  className="rounded-2xl border border-border bg-card p-4 shadow-sm space-y-2"
+                >
+                  <div className="flex justify-between gap-2">
+                    <p className="text-sm font-medium">{r.reason}</p>
+                    <Badge variant="outline">{r.status || "pending"}</Badge>
+                  </div>
+                  <p className="text-[11px] font-mono text-muted-foreground">
+                    {r.reported_user_id}
+                  </p>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      disabled={busy === r.id}
+                      onClick={() => run(r.id, () => adminResolveReport(r.id, "resolved"))}
+                    >
+                      Résolu
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled={busy === r.id}
+                      onClick={() => run(r.id, () => adminResolveReport(r.id, "dismissed"))}
+                    >
+                      Ignorer
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {modTab === "pending" && (
+            <div className="rounded-2xl border border-border bg-card shadow-sm divide-y divide-border">
+              {pendingUsers.length === 0 && (
+                <p className="p-5 text-sm text-muted-foreground">Aucun profil pending.</p>
+              )}
+              {pendingUsers.map((u) => (
+                <div
+                  key={u.id}
+                  className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                >
+                  <div>
+                    <p className="font-semibold text-sm">{u.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {u.city} · {u.completion}%
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      disabled={busy === u.id}
                       onClick={() =>
-                        run(`g-${selected.id}`, () =>
-                          adminGrantAlliance(selected.userId, 30)
-                        )
+                        run(u.id, () => adminUpdateModerationStatus(u.id, "approved"))
                       }
                     >
-                      +30j Alliance
+                      Approuver
                     </Button>
-                  )}
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled={busy === u.id}
+                      onClick={() =>
+                        run(u.id, () => adminUpdateModerationStatus(u.id, "rejected"))
+                      }
+                    >
+                      Rejeter
+                    </Button>
+                  </div>
                 </div>
-                {isFullAdmin && (
-                  <div className="space-y-2 border-t border-border pt-3">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                      Rôle
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {(["member", "moderator", "admin"] as const).map((r) => (
-                        <Button
-                          key={r}
-                          size="sm"
-                          variant={selected.role === r ? "default" : "outline"}
-                          disabled={busy === `role-${selected.id}`}
-                          onClick={() =>
-                            run(`role-${selected.id}`, () => adminSetRole(selected.id, r))
-                          }
-                        >
-                          {r}
-                        </Button>
-                      ))}
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ——— 5. ALLIANCE ——— */}
+      {nav === "alliance" && (
+        <div className="space-y-6">
+          <div>
+            <h1 className="font-serif text-3xl font-bold">Alliance & paiements</h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Abonnements, revenus, renouvellements J-7.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <KpiCard label="Alliance" value={props.retention.activeAlliance} tone="green" />
+            <KpiCard label="Legacy 2 500" value={props.retention.activeLegacyPremium} />
+            <KpiCard
+              label="Revenus"
+              value={`${props.stats.revenueXof.toLocaleString("fr-FR")} F`}
+              tone="gold"
+            />
+            <KpiCard
+              label="J-7 à rappeler"
+              value={props.retention.renewalsDue7d}
+              tone={props.retention.renewalsDue7d > 0 ? "red" : "default"}
+            />
+          </div>
+          <p className="text-xs rounded-xl border border-border bg-card px-3 py-2">
+            Paiements démo :{" "}
+            <strong>{props.ops.paymentsDemoMode ? "ON" : "OFF"}</strong>
+            {" · "}
+            CinetPay : <strong>{props.ops.hasCinetPay ? "configuré" : "non"}</strong>
+          </p>
+          <div className="grid lg:grid-cols-2 gap-4">
+            <SectionCard title="Abonnements récents">
+              <div className="divide-y divide-border max-h-96 overflow-y-auto">
+                {props.subscriptions.length === 0 && (
+                  <p className="text-sm text-muted-foreground py-4">Aucun.</p>
+                )}
+                {props.subscriptions.map((s) => (
+                  <div key={s.id} className="py-3 flex justify-between gap-2 text-sm">
+                    <div>
+                      <p className="font-semibold">{planLabel(s.plan)}</p>
+                      <p className="text-[11px] font-mono text-muted-foreground truncate max-w-[200px]">
+                        {s.userId}
+                      </p>
+                    </div>
+                    <div className="text-right text-xs text-muted-foreground">
+                      <StatusPill status={s.status} />
+                      <p className="mt-1">
+                        {s.endsAt ? new Date(s.endsAt).toLocaleDateString("fr-FR") : "—"}
+                      </p>
                     </div>
                   </div>
+                ))}
+              </div>
+            </SectionCard>
+            <SectionCard title="Paiements">
+              <div className="divide-y divide-border max-h-96 overflow-y-auto">
+                {props.payments.length === 0 && (
+                  <p className="text-sm text-muted-foreground py-4">Aucun.</p>
                 )}
-                <div className="space-y-2 border-t border-border pt-3">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    Abonnements
-                  </p>
-                  {userSubs.length === 0 && (
-                    <p className="text-xs text-muted-foreground">Aucun</p>
-                  )}
-                  {userSubs.map((s) => (
-                    <p key={s.id} className="text-xs">
-                      {planLabel(s.plan)} · {s.status}
-                      {s.endsAt
-                        ? ` · fin ${new Date(s.endsAt).toLocaleDateString("fr-FR")}`
-                        : ""}
-                    </p>
-                  ))}
-                </div>
-              </>
+                {props.payments.map((p) => (
+                  <div key={p.id} className="py-3 flex justify-between gap-2 text-sm">
+                    <div>
+                      <p className="font-medium">
+                        {Number(p.amount).toLocaleString("fr-FR")} FCFA
+                      </p>
+                      <p className="text-[11px] font-mono text-muted-foreground">
+                        {p.transaction_reference || "—"}
+                      </p>
+                    </div>
+                    <Badge variant="outline">{p.status || "—"}</Badge>
+                  </div>
+                ))}
+              </div>
+            </SectionCard>
+          </div>
+        </div>
+      )}
+
+      {/* ——— 6. MATCHING ——— */}
+      {nav === "matching" && (
+        <div className="space-y-6">
+          <div>
+            <h1 className="font-serif text-3xl font-bold">Matching & conversations</h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Santé du matching · audit conversations.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <KpiCard label="Matches 30j" value={props.retention.matches30d} />
+            <KpiCard label="Conversations 30j" value={props.retention.conversations30d} />
+            <KpiCard label="Hommes" value={props.retention.menCount} />
+            <KpiCard label="Femmes" value={props.retention.womenCount} />
+          </div>
+          {Math.abs(props.retention.menCount - props.retention.womenCount) > 5 &&
+            menTotal > 0 && (
+              <p className="text-sm rounded-xl border border-amber-200 bg-amber-50 text-amber-900 px-4 py-3">
+                Alerte matching : déséquilibre H/F important. Invitez le côté minoritaire.
+              </p>
             )}
-          </div>
-        </div>
-      )}
-
-      {nav === "photos" && (
-        <div className="space-y-4">
-          <h1 className="font-serif text-2xl font-bold">Photos à modérer</h1>
-          {props.photos.length === 0 && (
-            <p className="text-sm text-muted-foreground">Aucune photo en attente.</p>
-          )}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {props.photos.map((ph) => (
-              <div
-                key={ph.id}
-                className="rounded-2xl border border-border bg-card overflow-hidden shadow-sm"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={ph.photo_url} alt="" className="w-full aspect-square object-cover" />
-                <div className="p-3 flex gap-2">
-                  <Button
-                    size="sm"
-                    className="flex-1"
-                    disabled={busy === ph.id}
-                    onClick={() => run(ph.id, () => adminModeratePhoto(ph.id, "approved"))}
-                  >
-                    OK
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="flex-1"
-                    disabled={busy === ph.id}
-                    onClick={() => run(ph.id, () => adminModeratePhoto(ph.id, "rejected"))}
-                  >
-                    Refuser
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {nav === "reports" && (
-        <div className="space-y-4">
-          <h1 className="font-serif text-2xl font-bold">Signalements</h1>
-          {props.reports.length === 0 && (
-            <p className="text-sm text-muted-foreground">Aucun signalement.</p>
-          )}
-          <div className="space-y-3">
-            {props.reports.map((r) => (
-              <div key={r.id} className="rounded-2xl border border-border bg-card p-4 shadow-sm space-y-2">
-                <div className="flex justify-between gap-2">
-                  <p className="text-sm font-medium">{r.reason}</p>
-                  <Badge variant="outline">{r.status || "pending"}</Badge>
-                </div>
-                <p className="text-[11px] text-muted-foreground font-mono">
-                  {r.reported_user_id}
-                </p>
-                <div className="flex gap-2">
-                  <Button
-                    size="sm"
-                    disabled={busy === r.id}
-                    onClick={() => run(r.id, () => adminResolveReport(r.id, "resolved"))}
-                  >
-                    Résolu
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    disabled={busy === r.id}
-                    onClick={() => run(r.id, () => adminResolveReport(r.id, "dismissed"))}
-                  >
-                    Ignorer
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {nav === "subs" && (
-        <div className="space-y-4">
-          <h1 className="font-serif text-2xl font-bold">Abonnements</h1>
-          <div className="rounded-2xl border border-border bg-card shadow-sm divide-y divide-border">
-            {props.subscriptions.length === 0 && (
-              <p className="p-5 text-sm text-muted-foreground">Aucun abonnement.</p>
-            )}
-            {props.subscriptions.map((s) => (
-              <div
-                key={s.id}
-                className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-sm"
-              >
-                <div>
-                  <p className="font-semibold">{planLabel(s.plan)}</p>
-                  <p className="text-xs text-muted-foreground font-mono truncate max-w-md">
-                    {s.userId}
+          <SectionCard title="Dernières conversations (ops)">
+            <div className="divide-y divide-border max-h-96 overflow-y-auto">
+              {props.conversations.length === 0 && (
+                <p className="text-sm text-muted-foreground py-4">Aucune.</p>
+              )}
+              {props.conversations.map((c) => (
+                <div key={c.id} className="py-3 text-xs font-mono space-y-0.5">
+                  <p>convo {c.id}</p>
+                  <p className="text-muted-foreground">match {c.matchId}</p>
+                  <p className="text-muted-foreground">
+                    {c.createdAt ? new Date(c.createdAt).toLocaleString("fr-FR") : "—"}
                   </p>
                 </div>
-                <div className="text-xs text-muted-foreground sm:text-right">
-                  <Badge variant="outline">{s.status}</Badge>
-                  <p className="mt-1">
-                    {s.startsAt ? new Date(s.startsAt).toLocaleDateString("fr-FR") : "—"} →{" "}
-                    {s.endsAt ? new Date(s.endsAt).toLocaleDateString("fr-FR") : "—"}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </SectionCard>
         </div>
       )}
 
-      {nav === "finance" && (
-        <div className="space-y-4">
-          <h1 className="font-serif text-2xl font-bold">Finance</h1>
-          <KpiCard
-            label="Total completed"
-            value={`${props.stats.revenueXof.toLocaleString("fr-FR")} FCFA`}
-            tone="gold"
-          />
-          <div className="rounded-2xl border border-border bg-card shadow-sm divide-y divide-border">
-            {props.payments.length === 0 && (
-              <p className="p-5 text-sm text-muted-foreground">Aucun paiement.</p>
-            )}
-            {props.payments.map((p) => (
-              <div key={p.id} className="p-4 flex justify-between gap-3 text-sm">
-                <div>
-                  <p className="font-medium">
-                    {Number(p.amount).toLocaleString("fr-FR")}{" "}
-                    {p.currency === "XOF" ? "FCFA" : p.currency}
-                  </p>
-                  <p className="text-xs text-muted-foreground font-mono">
-                    {p.transaction_reference || "—"}
-                  </p>
-                </div>
-                <Badge variant="outline">{p.status || "—"}</Badge>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {nav === "retention" && (
-        <div className="space-y-4">
-          <h1 className="font-serif text-2xl font-bold">Rétention & croissance</h1>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {[
-              ["Nouveaux 30j", props.retention.newMembers30d],
-              ["Profils ≥ 70%", props.retention.profilesComplete70],
-              ["5 tests (échantillon)", props.retention.assessmentsDoneAll],
-              ["Free estimés", props.retention.activeFreeEstimate],
-              ["Alliance", props.retention.activeAlliance],
-              ["Legacy 2 500", props.retention.activeLegacyPremium],
-              ["Expirés 30j", props.retention.expiredSubs30d],
-              ["Annulés 30j", props.retention.cancelledSubs30d],
-              ["Renouvellements J-7", props.retention.renewalsDue7d],
-              ["Conversion %", `${props.retention.conversionPaidPct}%`],
-              ["Hommes", props.retention.menCount],
-              ["Femmes", props.retention.womenCount],
-            ].map(([label, value]) => (
-              <KpiCard key={String(label)} label={String(label)} value={value} />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {nav === "conversations" && (
-        <div className="space-y-4">
-          <h1 className="font-serif text-2xl font-bold">Conversations (ops)</h1>
-          <p className="text-xs text-muted-foreground">
-            Audit — dernières conversations (IDs). Contenu messages non affiché ici.
-          </p>
-          <div className="rounded-2xl border border-border bg-card shadow-sm divide-y divide-border">
-            {props.conversations.length === 0 && (
-              <p className="p-5 text-sm text-muted-foreground">Aucune conversation.</p>
-            )}
-            {props.conversations.map((c) => (
-              <div key={c.id} className="p-4 text-xs font-mono space-y-1">
-                <p>convo {c.id}</p>
-                <p className="text-muted-foreground">match {c.matchId}</p>
-                <p className="text-muted-foreground">
-                  {c.createdAt ? new Date(c.createdAt).toLocaleString("fr-FR") : "—"}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
+      {/* ——— 7. ACADÉMIE ——— */}
       {nav === "academy" && (
         <div className="space-y-4">
           <div className="flex items-end justify-between gap-3">
             <div>
-              <h1 className="font-serif text-2xl font-bold">Académie du mariage</h1>
+              <h1 className="font-serif text-3xl font-bold">Académie</h1>
               <p className="text-sm text-muted-foreground mt-1">
                 {ACADEMY_MODULES.length} modules ·{" "}
-                {ACADEMY_MODULES.reduce((n, m) => n + m.lessons.length, 0)} leçons publiées
+                {ACADEMY_MODULES.reduce((n, m) => n + m.lessons.length, 0)} leçons
               </p>
             </div>
             <Link href="/academie-mariage" className="text-sm font-semibold text-primary">
-              Voir côté membre →
+              Aperçu membre →
             </Link>
           </div>
           <div className="grid sm:grid-cols-2 gap-3">
@@ -666,10 +746,8 @@ export function AdminConsole(props: Props) {
               >
                 <p className="font-serif text-lg font-bold">{m.title}</p>
                 <p className="text-xs text-muted-foreground leading-relaxed">{m.summary}</p>
-                <p className="text-xs font-semibold text-primary">
-                  {m.lessons.length} leçons
-                </p>
-                <ul className="text-xs text-muted-foreground space-y-1 pt-1">
+                <p className="text-xs font-semibold text-primary">{m.lessons.length} leçons</p>
+                <ul className="text-xs text-muted-foreground space-y-1">
                   {m.lessons.map((l) => (
                     <li key={l.slug}>· {l.title}</li>
                   ))}
@@ -680,17 +758,111 @@ export function AdminConsole(props: Props) {
         </div>
       )}
 
+      {/* ——— 8. EVA ——— */}
+      {nav === "eva" && (
+        <div className="space-y-6">
+          <div>
+            <h1 className="font-serif text-3xl font-bold">Coach EVA</h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Quotas coach local (sans LLM V1) — style Farata Coach.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-3">
+            <KpiCard
+              label="Quota Free / jour"
+              value={PLANS.free.limits.evaQuestionsPerDay}
+              hint="Découverte"
+            />
+            <KpiCard
+              label="Quota Alliance / jour"
+              value={PLANS.premium_plus.limits.evaQuestionsPerDay}
+              tone="green"
+              hint="Alliance"
+            />
+            <KpiCard label="Mode" value="Local FAQ" hint="Pas de coût API LLM" />
+          </div>
+          <SectionCard title="Actions">
+            <div className="flex flex-wrap gap-3">
+              <Link href="/help">
+                <Button variant="outline" size="sm">
+                  Ouvrir EVA (membre)
+                </Button>
+              </Link>
+              <p className="text-xs text-muted-foreground self-center">
+                Les réponses V1 sont locales. LLM éventuel = V2 derrière Alliance.
+              </p>
+            </div>
+          </SectionCard>
+        </div>
+      )}
+
+      {/* ——— 9. MARKETING ——— */}
+      {nav === "marketing" && (
+        <div className="space-y-6">
+          <div>
+            <h1 className="font-serif text-3xl font-bold">Contenu & marketing</h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Notes soft launch, bannières, messages ops.
+            </p>
+          </div>
+          <SectionCard title="Notes soft launch">
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              disabled={!isFullAdmin}
+              rows={4}
+              className="w-full rounded-xl border border-border bg-background p-3 text-sm outline-none focus:ring-2 focus:ring-primary/20"
+            />
+            {isFullAdmin && (
+              <Button
+                size="sm"
+                className="mt-3"
+                disabled={busy === "notes"}
+                onClick={() =>
+                  run("notes", () => adminUpdatePlatformSetting("soft_launch_notes", notes))
+                }
+              >
+                Enregistrer
+              </Button>
+            )}
+          </SectionCard>
+          <div className="grid sm:grid-cols-2 gap-3">
+            <div className="rounded-2xl border border-accent/40 bg-[#F7F0E0] p-4">
+              <p className="text-xs font-bold uppercase tracking-wide text-accent-foreground">
+                Bannière type Farata
+              </p>
+              <p className="font-semibold text-sm mt-2">Profil sans photo = invisible</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Affichée côté membre Accueil si pas d&apos;avatar.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-primary bg-primary text-primary-foreground p-4">
+              <p className="text-xs font-bold uppercase tracking-wide text-accent">Alliance</p>
+              <p className="font-semibold text-sm mt-2">Passe Alliance — accélère les échanges</p>
+              <p className="text-xs text-primary-foreground/75 mt-1">
+                Bannière upgrade Free → Alliance sur l&apos;accueil membre.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ——— 10. PARAMÈTRES ——— */}
       {nav === "settings" && (
-        <div className="space-y-4">
-          <h1 className="font-serif text-2xl font-bold">Paramètres plateforme</h1>
+        <div className="space-y-6">
+          <div>
+            <h1 className="font-serif text-3xl font-bold">Paramètres</h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Plateforme · santé système · rôles.
+            </p>
+          </div>
           {!isFullAdmin && (
             <p className="text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2">
               Lecture seule pour les modérateurs.
             </p>
           )}
           <div className="grid sm:grid-cols-2 gap-4">
-            <div className="rounded-2xl border border-border bg-card p-5 shadow-sm space-y-3">
-              <p className="font-semibold text-sm">Seuil compatibilité EVA</p>
+            <SectionCard title="Seuil compatibilité EVA">
               <div className="flex items-center gap-3">
                 <input
                   type="range"
@@ -706,6 +878,7 @@ export function AdminConsole(props: Props) {
               {isFullAdmin && (
                 <Button
                   size="sm"
+                  className="mt-3"
                   disabled={busy === "thr"}
                   onClick={() =>
                     run("thr", () =>
@@ -716,8 +889,8 @@ export function AdminConsole(props: Props) {
                   Enregistrer
                 </Button>
               )}
-            </div>
-            <ToggleSetting
+            </SectionCard>
+            <ToggleRow
               title="Mode maintenance"
               value={maintenance}
               disabled={!isFullAdmin}
@@ -731,7 +904,7 @@ export function AdminConsole(props: Props) {
                 }
               }}
             />
-            <ToggleSetting
+            <ToggleRow
               title="Floutage photos"
               value={blur}
               disabled={!isFullAdmin}
@@ -745,7 +918,7 @@ export function AdminConsole(props: Props) {
                 }
               }}
             />
-            <ToggleSetting
+            <ToggleRow
               title="Charte obligatoire"
               value={charter}
               disabled={!isFullAdmin}
@@ -760,56 +933,211 @@ export function AdminConsole(props: Props) {
               }}
             />
           </div>
-        </div>
-      )}
-
-      {nav === "system" && (
-        <div className="space-y-4">
-          <h1 className="font-serif text-2xl font-bold">Système</h1>
-          <div className="grid sm:grid-cols-2 gap-3">
-            <FlagRow label="URL app" value={props.ops.appUrl || "—"} ok={Boolean(props.ops.appUrl)} />
-            <FlagRow
-              label="Paiements démo"
-              value={props.ops.paymentsDemoMode ? "ON" : "OFF"}
-              ok={!props.ops.paymentsDemoMode}
-            />
-            <FlagRow label="CinetPay" value={props.ops.hasCinetPay ? "Oui" : "Non"} ok={props.ops.hasCinetPay} />
-            <FlagRow label="Resend" value={props.ops.hasResend ? "Oui" : "Non"} ok={props.ops.hasResend} />
-            <FlagRow label="CRON_SECRET" value={props.ops.hasCronSecret ? "Oui" : "Non"} ok={props.ops.hasCronSecret} />
-            <FlagRow label="SERVICE_ROLE" value={props.ops.hasServiceRole ? "Oui" : "Non"} ok={props.ops.hasServiceRole} />
-          </div>
-          {isFullAdmin && (
-            <Button
-              size="sm"
-              variant="outline"
-              disabled={busy === "ping"}
-              onClick={() =>
-                run("ping", async () => {
-                  const r = await adminPingServiceRole()
-                  if (!r.ok) return { error: r.error || "Échec" }
-                  return { success: true }
-                })
-              }
-            >
-              Tester service role
-            </Button>
-          )}
+          <SectionCard title="Santé système">
+            <div className="grid sm:grid-cols-2 gap-2">
+              <Flag label="URL app" value={props.ops.appUrl || "—"} ok={Boolean(props.ops.appUrl)} />
+              <Flag
+                label="Paiements démo"
+                value={props.ops.paymentsDemoMode ? "ON" : "OFF"}
+                ok={!props.ops.paymentsDemoMode}
+              />
+              <Flag label="CinetPay" value={props.ops.hasCinetPay ? "Oui" : "Non"} ok={props.ops.hasCinetPay} />
+              <Flag label="Resend" value={props.ops.hasResend ? "Oui" : "Non"} ok={props.ops.hasResend} />
+              <Flag label="CRON" value={props.ops.hasCronSecret ? "Oui" : "Non"} ok={props.ops.hasCronSecret} />
+              <Flag
+                label="SERVICE_ROLE"
+                value={props.ops.hasServiceRole ? "Oui" : "Non"}
+                ok={props.ops.hasServiceRole}
+              />
+            </div>
+            {isFullAdmin && (
+              <Button
+                size="sm"
+                variant="outline"
+                className="mt-4"
+                disabled={busy === "ping"}
+                onClick={() =>
+                  run("ping", async () => {
+                    const r = await adminPingServiceRole()
+                    if (!r.ok) return { error: r.error || "Échec" }
+                    return { success: true }
+                  })
+                }
+              >
+                Tester service role
+              </Button>
+            )}
+          </SectionCard>
         </div>
       )}
     </AdminShell>
   )
 }
 
-function MiniStat({ label, value }: { label: string; value: number }) {
+function MemberDetailPanel({
+  selected,
+  userSubs,
+  busy,
+  isFullAdmin,
+  run,
+}: {
+  selected: Props["users"][0] | null
+  userSubs: Props["subscriptions"]
+  busy: string
+  isFullAdmin: boolean
+  run: (key: string, fn: () => Promise<{ error?: string; success?: boolean }>) => Promise<void>
+}) {
   return (
-    <div className="rounded-xl bg-secondary/50 px-3 py-2.5">
-      <p className="text-[11px] text-muted-foreground">{label}</p>
-      <p className="font-serif text-xl font-bold">{value}</p>
+    <div className="lg:col-span-2 rounded-2xl border border-border bg-card p-5 shadow-sm h-fit sticky top-24 space-y-4">
+      {!selected ? (
+        <p className="text-sm text-muted-foreground py-8 text-center">
+          Sélectionnez un membre dans la table.
+        </p>
+      ) : (
+        <>
+          <div>
+            <h3 className="font-serif text-xl font-bold">{selected.name}</h3>
+            <p className="text-[11px] font-mono text-muted-foreground break-all mt-1">
+              {selected.userId}
+            </p>
+            <p className="text-xs text-muted-foreground mt-2">
+              {selected.city} · {selected.completion}% · {selected.role}
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={busy === selected.id}
+              onClick={() =>
+                run(selected.id, () => adminUpdateModerationStatus(selected.id, "approved"))
+              }
+            >
+              Approuver
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={busy === selected.id}
+              onClick={() =>
+                run(selected.id, () => adminUpdateModerationStatus(selected.id, "rejected"))
+              }
+            >
+              Suspendre
+            </Button>
+            <Button
+              size="sm"
+              disabled={busy === `v-${selected.id}`}
+              onClick={() =>
+                run(`v-${selected.id}`, () =>
+                  adminSetVerified(selected.id, !selected.verified)
+                )
+              }
+            >
+              {selected.verified ? "Retirer vérif." : "Vérifier"}
+            </Button>
+            {isFullAdmin && (
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={busy === `g-${selected.id}`}
+                onClick={() =>
+                  run(`g-${selected.id}`, () => adminGrantAlliance(selected.userId, 30))
+                }
+              >
+                +30j Alliance
+              </Button>
+            )}
+          </div>
+          {isFullAdmin && (
+            <div className="border-t border-border pt-3 space-y-2">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Rôle
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {(["member", "moderator", "admin"] as const).map((r) => (
+                  <Button
+                    key={r}
+                    size="sm"
+                    variant={selected.role === r ? "default" : "outline"}
+                    disabled={busy === `role-${selected.id}`}
+                    onClick={() =>
+                      run(`role-${selected.id}`, () => adminSetRole(selected.id, r))
+                    }
+                  >
+                    {r}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+          <div className="border-t border-border pt-3 space-y-1">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Abonnements
+            </p>
+            {userSubs.length === 0 && (
+              <p className="text-xs text-muted-foreground">Aucun</p>
+            )}
+            {userSubs.map((s) => (
+              <p key={s.id} className="text-xs">
+                {planLabel(s.plan)} · {s.status}
+                {s.endsAt ? ` · fin ${new Date(s.endsAt).toLocaleDateString("fr-FR")}` : ""}
+              </p>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   )
 }
 
-function ToggleSetting({
+function ActivityRow({
+  title,
+  meta,
+  badge,
+  tone,
+}: {
+  title: string
+  meta: string
+  badge: string
+  tone: "gold" | "red" | "green" | "blue"
+}) {
+  return (
+    <div className="flex items-start justify-between gap-2 py-2.5 border-b border-border/50 last:border-0">
+      <div className="min-w-0">
+        <p className="text-sm font-medium truncate">{title}</p>
+        <p className="text-[11px] text-muted-foreground">{meta}</p>
+      </div>
+      <span
+        className={cn(
+          "shrink-0 text-[10px] font-bold uppercase rounded-full px-2 py-0.5",
+          tone === "gold" && "bg-accent/20 text-accent-foreground",
+          tone === "red" && "bg-red-100 text-red-700",
+          tone === "green" && "bg-emerald-100 text-emerald-800",
+          tone === "blue" && "bg-sky-100 text-sky-800"
+        )}
+      >
+        {badge}
+      </span>
+    </div>
+  )
+}
+
+function StatusPill({ status }: { status: string }) {
+  const tone =
+    status === "approved" || status === "active" || status === "completed"
+      ? "bg-emerald-100 text-emerald-800"
+      : status === "rejected" || status === "expired" || status === "cancelled"
+        ? "bg-red-100 text-red-700"
+        : "bg-amber-100 text-amber-800"
+  return (
+    <span className={cn("text-[10px] font-bold uppercase rounded-full px-2 py-0.5", tone)}>
+      {status}
+    </span>
+  )
+}
+
+function ToggleRow({
   title,
   value,
   disabled,
@@ -839,11 +1167,13 @@ function ToggleSetting({
   )
 }
 
-function FlagRow({ label, value, ok }: { label: string; value: string; ok: boolean }) {
+function Flag({ label, value, ok }: { label: string; value: string; ok: boolean }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-4 flex justify-between gap-2 text-sm shadow-sm">
+    <div className="rounded-xl border border-border px-3 py-2.5 flex justify-between gap-2 text-sm">
       <span className="text-muted-foreground">{label}</span>
-      <span className={cn("font-medium", ok ? "text-emerald-700" : "text-amber-700")}>{value}</span>
+      <span className={cn("font-medium", ok ? "text-emerald-700" : "text-amber-700")}>
+        {value}
+      </span>
     </div>
   )
 }
