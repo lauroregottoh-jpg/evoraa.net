@@ -1,5 +1,5 @@
 -- ==========================================
--- KELIA MVP - Initial Database Schema
+-- KELIAA MVP - Initial Database Schema
 -- ==========================================
 
 -- Enable uuid-ossp extension

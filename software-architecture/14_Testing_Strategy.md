@@ -1,4 +1,4 @@
-# KELIA
+# KELIAA
 # 14_Testing_Strategy.md
 
 **Version:** 1.0 (MVP)
@@ -7,7 +7,7 @@
 
 # Purpose
 
-This document defines the testing strategy for KELIA MVP.
+This document defines the testing strategy for KELIAA MVP.
 
 The goal is to ensure that every core feature works reliably before production deployment.
 
@@ -57,7 +57,7 @@ Critical scenarios:
 - User registration
 - Email verification
 - Profile completion
-- Completing the three assessments
+- Completing the five KELIAA assessment pillars
 - Viewing suggested matches
 - Starting a conversation
 - Purchasing a subscription

@@ -1,5 +1,5 @@
 
-# KELIA
+# KELIAA
 # 18_AI_Development_Instructions.md
 
 **Version:** 1.0 (MVP)
@@ -8,7 +8,7 @@
 
 # Purpose
 
-This document defines the rules that any AI development agent (Claude Code, Codex, ChatGPT, etc.) must follow when building the KELIA MVP.
+This document defines the rules that any AI development agent (Claude Code, Codex, ChatGPT, etc.) must follow when building the KELIAA MVP.
 
 These instructions take precedence over assumptions. If a specification is missing or ambiguous, the AI must stop and request clarification.
 

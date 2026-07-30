@@ -10,7 +10,7 @@ interface SubscriptionRow {
   id: string;
   userName: string;
   userEmail: string;
-  planName: "Essentiel (2 500 FCFA)" | "Premium+ (5 000 FCFA)" | "Gratuit";
+  planName: "Essentiel legacy (2 500 FCFA)" | "Alliance (5 000 FCFA)" | "Découverte";
   amount: number;
   status: "active" | "canceled" | "pending";
   renewDate: string;
@@ -20,8 +20,8 @@ const SUB_DATA: SubscriptionRow[] = [
   {
     id: "sub-1",
     userName: "Laure Regottoh",
-    userEmail: "laure.regottoh@evoraa.net",
-    planName: "Premium+ (5 000 FCFA)",
+    userEmail: "laure.regottoh@keliaa.net",
+    planName: "Alliance (5 000 FCFA)",
     amount: 5000,
     status: "active",
     renewDate: "21 Août 2026",
@@ -29,8 +29,8 @@ const SUB_DATA: SubscriptionRow[] = [
   {
     id: "sub-2",
     userName: "Alexandre Dumas",
-    userEmail: "alexandre.dumas@evoraa.net",
-    planName: "Premium+ (5 000 FCFA)",
+    userEmail: "alexandre.dumas@keliaa.net",
+    planName: "Alliance (5 000 FCFA)",
     amount: 5000,
     status: "active",
     renewDate: "14 Août 2026",
@@ -38,8 +38,8 @@ const SUB_DATA: SubscriptionRow[] = [
   {
     id: "sub-3",
     userName: "Thomas Bernard",
-    userEmail: "thomas.bernard@evoraa.net",
-    planName: "Essentiel (2 500 FCFA)",
+    userEmail: "thomas.bernard@keliaa.net",
+    planName: "Essentiel legacy (2 500 FCFA)",
     amount: 2500,
     status: "active",
     renewDate: "02 Août 2026",
@@ -47,8 +47,8 @@ const SUB_DATA: SubscriptionRow[] = [
   {
     id: "sub-4",
     userName: "Marc Inconnu",
-    userEmail: "suspect.spam@evoraa.net",
-    planName: "Essentiel (2 500 FCFA)",
+    userEmail: "suspect.spam@keliaa.net",
+    planName: "Essentiel legacy (2 500 FCFA)",
     amount: 2500,
     status: "canceled",
     renewDate: "Expiré (Churn)",

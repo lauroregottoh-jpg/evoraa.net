@@ -1,110 +1,61 @@
-# KELIA
+# KELIAA
 
-## Overview
+KELIAA est une plateforme web de rencontres chrétiennes sérieuses pour l’Afrique francophone, l’UEMOA et la diaspora.
 
-KELIA is a Christian matchmaking platform designed to help members discover compatible profiles through three lightweight assessments, profile matching and secure communication.
+## Produit
 
-This repository contains the MVP implementation.
+- Profils chrétiens et onboarding guidé.
+- Compatibilité fondée sur cinq piliers.
+- Suggestions et scores expliqués.
+- Messagerie privée et Bouclier de bienveillance.
+- Coach EVA.
+- Académie du mariage.
+- Recommandations pastorales.
+- Offre gratuite Découverte.
+- Offre payante Alliance.
+- Paiements Bictorys/CinetPay par Mobile Money ou carte.
+- Back-office complet : analytics, membres, modération, CMS et audit paiement.
 
----
+## Stack
 
-# MVP Objectives
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- Supabase Auth, Postgres, RLS et Realtime
+- Vercel
 
-The MVP allows users to:
+## Développement local
 
-- Create an account
-- Complete a profile
-- Complete three assessments
-- Receive compatible matches
-- Exchange private messages
-- Subscribe to Premium
-- Be managed through an admin portal
-
----
-
-# Technology Stack
-
-- Frontend: Next.js + React + TypeScript
-- UI: Tailwind CSS + shadcn/ui
-- Backend: Supabase
-- Database: PostgreSQL (Supabase)
-- Authentication: Supabase Auth
-- Hosting: Vercel
-- Source Control: GitHub
-
----
-
-# Documentation Structure
-
-Read the documents in this order:
-
-1. 01_Tech_Stack.md
-2. 02_System_Architecture.md
-3. 03_Database_Schema.md
-4. 04_API_Specification.md
-5. 05_Backend_Specification.md
-6. 06_Frontend_Specification.md
-7. 07_Authentication_Authorization.md
-8. 08_Matching_Engine.md
-9. 09_Messaging_System.md
-10. 10_Payments_Subscriptions.md
-11. 11_Admin_Backoffice.md
-12. 12_Notifications.md
-13. 13_Security.md
-14. 14_Testing_Strategy.md
-15. 15_Deployment.md
-16. 16_Implementation_Roadmap.md
-17. Assessment documents
-18. 18_AI_Development_Instructions.md
-19. 19_Master_Prompt.md
-
----
-
-# Development Principles
-
-- Respect MVP scope.
-- Do not invent features.
-- Keep the architecture simple.
-- Build one phase at a time.
-- Write maintainable code.
-- Test before moving to the next phase.
-
----
-
-# Suggested Project Structure
-
-```
-KELIA-net/
-│
-├── app/
-├── components/
-├── lib/
-├── public/
-├── software-architecture/
-├── supabase/
-├── tests/
-└── README.md
+```bash
+npm install
+npm run dev
 ```
 
----
+Configurer les variables à partir de `.env.local.example`.
 
-# Local Development
+## Vérifications
 
-1. Clone the repository.
-2. Install dependencies.
-3. Configure environment variables.
-4. Start Supabase.
-5. Run the development server.
-6. Execute tests.
+```bash
+npm run lint
+npm run test:smoke
+npm run build
+```
 
----
+## Documentation
 
-# Deployment
+Commencer par :
 
-Deploy the application to Vercel after completing all roadmap phases and validating the production checklist.
+1. `software-architecture/planning_design-site-web-de-rencontre-chretien (1).md`
+2. `software-architecture/planning_prd-site-web-de-rencontre-chretien (1).md`
+3. `software-architecture/Product_Design_Principles.md`
+4. `software-architecture/08_Design_System.md`
+5. `software-architecture/06_Frontend_Specification.md`
+6. `software-architecture/08_Matching_Engine.md`
+7. `software-architecture/10_Payments_Subscriptions.md`
+8. `software-architecture/11_Admin_Backoffice.md`
+9. `software-architecture/16_Implementation_Roadmap.md`
 
----
+## Vision
 
-# Vision
-
-The purpose of KELIA is not to replace discernment, but to help Christian singles identify more compatible relationships through transparent, respectful and ethical technology.
+KELIAA ne remplace pas le discernement. La plateforme aide les célibataires chrétiens à identifier des relations plus compatibles grâce à une technologie transparente, respectueuse et éthique.

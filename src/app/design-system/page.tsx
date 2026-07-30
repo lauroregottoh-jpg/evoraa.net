@@ -192,7 +192,7 @@ export default function DesignSystemShowcasePage() {
                   <span className="text-xs text-muted-foreground uppercase tracking-wider block">Badges & Statuts</span>
                   <div className="flex flex-wrap gap-2">
                     <Badge className="bg-primary text-primary-foreground rounded-full px-3">Vérifié par EVA</Badge>
-                    <Badge variant="outline" className="border-accent text-accent rounded-full px-3">⭐ Profil Premium</Badge>
+                    <Badge variant="outline" className="border-accent text-accent rounded-full px-3">⭐ Profil Avancé</Badge>
                     <Badge className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-full px-3">En ligne</Badge>
                   </div>
                 </div>

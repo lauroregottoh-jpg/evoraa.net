@@ -1,4 +1,4 @@
-# KELIA
+# KELIAA
 # 05_Backend_Specification.md
 
 **Version:** 1.0 (MVP)
@@ -7,7 +7,7 @@
 
 # Purpose
 
-This document defines the backend business logic for KELIA MVP.
+This document defines the backend business logic for KELIAA MVP.
 
 The backend is responsible for enforcing all business rules independently of the user interface.
 
@@ -96,11 +96,11 @@ Rules
 
 # Subscription Rules
 
-Plans
+Offres
 
-- Free
-- Premium
-- Premium+
+- Découverte
+- Alliance
+- Essentiel (legacy, non public)
 
 The backend checks subscription limits before granting access to premium features.
 
@@ -110,12 +110,12 @@ The backend checks subscription limits before granting access to premium feature
 
 Workflow
 
-1. Create payment request.
-2. Redirect user to payment provider.
-3. Wait for provider callback.
-4. Validate callback.
-5. Activate subscription.
-6. Store transaction.
+1. Create a pending subscription and payment.
+2. Initiate Bictorys or CinetPay checkout.
+3. Redirect the user to the hosted provider page.
+4. Verify the signed provider webhook.
+5. Activate Alliance for 30 days after confirmed payment.
+6. Store the transaction and payment audit event.
 
 ---
 

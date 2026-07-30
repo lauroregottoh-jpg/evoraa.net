@@ -19,7 +19,7 @@ function psychCompat(a, b) {
   return Math.round(parts.reduce((s, v) => s + v, 0) / parts.length)
 }
 
-describe("KELIA matching smoke", () => {
+describe("KELIAA matching smoke", () => {
   it("normalizes likert raw scores to 0-100", () => {
     assert.equal(normalizeScore(12, 12), 0)
     assert.equal(normalizeScore(60, 12), 100)

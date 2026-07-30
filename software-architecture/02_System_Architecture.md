@@ -1,4 +1,4 @@
-# KELIA
+# KELIAA
 # 02_System_Architecture.md
 
 **Version:** 1.0 (MVP)
@@ -8,7 +8,7 @@
 
 # 1. Objective
 
-This document defines the high-level architecture of KELIA MVP.
+This document defines the high-level architecture of KELIAA MVP.
 
 The architecture is designed to:
 

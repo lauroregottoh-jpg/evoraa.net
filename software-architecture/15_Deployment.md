@@ -1,4 +1,4 @@
-# KELIA
+# KELIAA
 # 15_Deployment.md
 
 **Version:** 1.0 (MVP)
@@ -7,7 +7,7 @@
 
 # Purpose
 
-This document defines the deployment process for KELIA MVP.
+This document defines the deployment process for KELIAA MVP.
 
 The objective is to deploy the application with minimal cost while ensuring reliability and security.
 

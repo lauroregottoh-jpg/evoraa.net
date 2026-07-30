@@ -1,169 +1,155 @@
-# KELIA
-# 11_Admin_Backoffice.md
+# KELIAA — Back-office
 
-**Version:** 1.0 (MVP)
+**Version :** 2.0
+**Dernière mise à jour :** 30 juillet 2026
 
----
+## Rôles
 
-# Purpose
+### Administrateur
 
-This document defines the administration portal for KELIA MVP.
+Accès complet : membres, rôles, contenus, paramètres, paiements, intégrations et modération.
 
-The back office enables platform administrators to monitor, moderate and manage the application without modifying source code.
+### Modérateur
 
----
+Accès aux données et actions nécessaires à la modération, sans gestion des paramètres réservés à l’administrateur complet.
 
-# Administrator Roles
+Toutes les autorisations sont revérifiées côté serveur.
 
-## Super Administrator
+## Navigation
 
-Can:
+1. Dashboard
+2. Analytique
+3. Membres
+4. Profils
+5. Modération
+6. Alliance et paiements
+7. Matching et conversations
+8. Académie
+9. Coach EVA
+10. Contenu et marketing
+11. Paramètres
 
-- Manage administrators
-- Access all modules
-- Configure platform settings
+## Dashboard
 
----
+- Membres.
+- Abonnements actifs.
+- Signalements ouverts.
+- Photos en attente.
+- Revenus confirmés.
+- Activité récente.
+- Profils en attente et renouvellements proches.
 
-## Administrator
+## Analytique
 
-Can:
+- Inscriptions.
+- Villes et pays.
+- Âges et dénominations.
+- Ratio femmes/hommes.
+- Matching et conversations.
+- Conversion vers Alliance.
+- Rétention.
+- Score de confiance moyen.
+- Membres sanctionnés et recommandations en attente.
 
-- Moderate users
-- Manage reports
-- Review subscriptions
-- View analytics
+## Membres
 
----
+- Recherche et filtres.
+- Statistiques géographiques.
+- Fiche détaillée.
+- Création de compte membre.
+- Vérification.
+- Attribution du rôle.
+- Attribution ou extension Alliance.
 
-# Dashboard
+## Profils
 
-The dashboard displays:
+- File de profils en attente.
+- Acceptation/refus.
+- Prévisualisation et exécution de l’auto-modération.
+- Recommandations pastorales.
+- Score de confiance et sanctions.
 
-- Total users
-- New registrations
-- Active users
-- Premium subscriptions
-- Revenue
-- Pending reports
-- Completed assessments
-- Active conversations
+## Modération
 
----
+- Photos en attente.
+- Règles de validation photo.
+- Signalements.
+- Avertissement, suspension et blocage.
+- Historique des événements.
+- Scan des conversations selon les termes interdits.
 
-# User Management
+L’analyse automatisée est explicable et fondée sur des règles configurables. Elle ne remplace pas la décision humaine.
 
-Administrators can:
+## Alliance et paiements
 
-- Search users
-- View profiles
-- Suspend accounts
-- Restore accounts
-- Delete accounts
-- Verify user information
+- Abonnements.
+- Paiements.
+- Revenus.
+- Échéances.
+- Provider actif et mode démo.
+- Bictorys/CinetPay configurés.
+- Journal `payment_events`.
+- Probe de clé Bictorys.
+- Charge sandbox Bictorys.
 
----
+## Matching et conversations
 
-# Report Moderation
+- Matchs récents.
+- Scores.
+- Conversations récentes.
+- Indicateurs de santé.
+- Audit ciblé des contenus signalés.
 
-Administrators can:
+## Académie
 
-- View reports
-- Review evidence
-- Warn users
-- Suspend accounts
-- Close reports
+- Titres et résumés des modules.
+- Leçons, sous-titres, exercices, durée et points clés.
+- URLs vidéo.
+- Configuration YouTube.
 
-Report status:
+## Coach EVA
 
-- Pending
-- Under Review
-- Resolved
-- Rejected
+- Prompt système.
+- Ton.
+- Sujets interdits.
+- Base de connaissances.
+- Analyse des conversations désactivable.
+- Rapport quotidien configurable.
 
----
+## Contenu et marketing
 
-# Subscription Management
+- Textes du dashboard.
+- Titres et sous-titres.
+- Bannières.
+- Publicités : dashboard, découverte, messages ou global.
+- Activation, lien, image et CTA.
 
-Administrators can:
+## Paramètres et connecteurs
 
-- View subscriptions
-- Activate subscriptions
-- Extend subscriptions
-- Cancel subscriptions
-- View payment history
+- Règles d’auto-modération.
+- Règles photo.
+- Règles de sanctions.
+- Maintenance et charte.
+- Stripe futur, Bictorys, CinetPay, Resend, OpenAI et YouTube.
 
----
+## Audit
 
-# Psychometric Tests
+Les événements sensibles doivent conserver :
 
-The back office allows administrators to:
+- auteur ;
+- type d’action ;
+- cible ;
+- motif ;
+- résultat ;
+- horodatage.
 
-- Create a test
-- Activate or deactivate a test
-- Create questions
-- Modify questions
-- Change question order
+Les paiements possèdent un journal dédié. Les actions de modération utilisent `moderation_events`.
 
-Assessment scoring rules remain protected and are managed separately.
+## Sécurité
 
----
-
-# Notifications
-
-Administrators can:
-
-- Send platform announcements
-- Notify selected users
-- Broadcast maintenance messages
-
----
-
-# Platform Settings
-
-Manage:
-
-- Application name
-- Contact email
-- Terms of service
-- Privacy policy
-- Support information
-
----
-
-# Audit Log
-
-Every administrative action is recorded with:
-
-- Administrator ID
-- Action
-- Target resource
-- Timestamp
-
-Audit logs cannot be modified.
-
----
-
-# Security
-
-- Administrator authentication required
-- Role-based permissions
-- HTTPS only
-- Server-side authorization
-- Audit logging enabled
-
----
-
-# Out of Scope (MVP)
-
-- Advanced analytics
-- Marketing automation
-- A/B testing
-- CRM integration
-- AI moderation
-
----
-
-# Next Document
-
-12_Notifications.md
+- Authentification obligatoire.
+- `profiles.role` vérifié côté serveur.
+- RLS Supabase.
+- Service role uniquement pour les opérations serveur autorisées.
+- Aucun secret affiché dans le navigateur.
+- Les modérateurs ne peuvent pas modifier les réglages réservés aux administrateurs complets.

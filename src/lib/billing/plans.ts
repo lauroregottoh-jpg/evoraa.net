@@ -45,7 +45,7 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
       "EVA : 3 questions / jour",
       "Journal & ressources",
       "Bouclier de bienveillance",
-      "Paiement Alliance via Mobile Money (CinetPay)",
+      "Paiement Alliance par Mobile Money ou carte (Bictorys / CinetPay)",
     ],
     limits: {
       dailySuggestions: 3,
@@ -79,7 +79,7 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
     amountXof: 5000,
     compareAtXof: 7500,
     periodLabel: "/ mois",
-    description: "Premium pour accélérer : maximisez vos chances grâce au matching à 3 piliers.",
+    description: "Alliance pour accélérer : maximisez vos chances grâce au matching à 5 piliers.",
     popular: true,
     public: true,
     features: [

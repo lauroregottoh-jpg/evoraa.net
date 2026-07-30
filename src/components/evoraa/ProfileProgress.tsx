@@ -21,7 +21,7 @@ export function ProfileProgress({
   const getLevelInfo = (pct: number) => {
     if (pct >= 100) return { stars: 5, label: "Profil Optimisé", level: "optimized" };
     if (pct >= 92) return { stars: 4, label: "Profil Expert", level: "expert" };
-    if (pct >= 85) return { stars: 3, label: "Profil Premium", level: "premium" };
+    if (pct >= 85) return { stars: 3, label: "Profil Avancé", level: "premium" };
     if (pct >= 78) return { stars: 2, label: "Profil Complet", level: "complete" };
     return { stars: 1, label: "Profil Essentiel", level: "essential" };
   };

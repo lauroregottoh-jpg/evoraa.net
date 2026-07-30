@@ -1,4 +1,4 @@
-# KELIA
+# KELIAA
 # 09_Messaging_System.md
 
 **Version:** 1.0 (MVP)
@@ -7,7 +7,7 @@
 
 # Purpose
 
-This document defines the messaging system for KELIA MVP.
+This document defines the messaging system for KELIAA MVP.
 
 The messaging feature is designed to encourage meaningful conversations between compatible members while preventing spam and abuse.
 
@@ -59,20 +59,21 @@ Each message stores:
 
 # Subscription Limits
 
-## Free
+## Découverte
 
 - Up to 5 conversations per month
 - Up to 5 messages per conversation
+- Unlimited replies to messages received
 
-## Premium
+## Alliance
+
+- Up to 25 new conversations per month
+- Up to 100 messages per initiated conversation
+
+## Essentiel (legacy, non public)
 
 - Up to 15 conversations per month
-- Up to 70 total messages per month
-
-## Premium+
-
-- Unlimited conversations
-- Unlimited messages
+- Up to 70 messages per conversation
 
 ---
 

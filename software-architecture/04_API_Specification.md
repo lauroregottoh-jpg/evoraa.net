@@ -1,4 +1,4 @@
-# KELIA
+# KELIAA
 # 04_API_Specification.md
 
 **Version:** 1.0 (MVP)
@@ -7,7 +7,7 @@
 
 # Purpose
 
-This document defines the backend integration strategy for KELIA MVP.
+This document defines the backend integration strategy for KELIAA MVP.
 
 Instead of a traditional REST API for all operations, the architecture uses **Supabase Native** (Supabase SDK + Row Level Security) for most CRUD operations (Profiles, Messages, Tests). 
 

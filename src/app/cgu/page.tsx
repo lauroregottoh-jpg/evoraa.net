@@ -62,7 +62,7 @@ export default function CguPage() {
           <h2 className="font-serif text-xl font-semibold">5. Abonnements et paiements</h2>
           <p>
             Certaines fonctionnalités sont payantes. Les tarifs sont affichés avant validation. Les
-            paiements sont traités par des prestataires tiers (ex. CinetPay). Sauf mention contraire,
+            paiements sont traités par des prestataires tiers (Bictorys ou CinetPay). Sauf mention contraire,
             les périodes d&apos;abonnement ne sont pas renouvelées automatiquement. Les réclamations
             relatives au paiement doivent être adressées via la page Contact dans un délai raisonnable.
           </p>

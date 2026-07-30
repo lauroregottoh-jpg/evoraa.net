@@ -64,7 +64,7 @@ export default function ConfidentialitePage() {
         <section className="space-y-3 text-sm text-foreground/90 leading-relaxed">
           <h2 className="font-serif text-xl font-semibold">5. Destinataires et sous-traitants</h2>
           <p>
-            Hébergement et base de données (ex. Supabase), paiements (ex. CinetPay), emails
+            Hébergement et base de données (ex. Supabase), paiements (Bictorys ou CinetPay), emails
             transactionnels (ex. Resend), outils d&apos;analyse éventuels, et équipes internes
             (support, coachs/conseillers, modération). Aucune vente de données personnelles à des
             tiers à des fins publicitaires.

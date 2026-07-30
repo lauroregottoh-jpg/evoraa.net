@@ -158,7 +158,10 @@ export default async function BillingPage() {
             {free.limits.evaQuestionsPerDay} questions EVA / jour. Vous pouvez toujours répondre aux
             messages reçus.
           </p>
-          <Link href="/pricing" className="inline-flex items-center text-primary font-semibold text-xs">
+          <Link href="/premium" className="inline-flex items-center text-primary font-semibold text-xs">
+            Voir la page Alliance / Boost <ArrowRight className="h-3 w-3 ml-1" />
+          </Link>
+          <Link href="/pricing" className="inline-flex items-center text-primary font-semibold text-xs ml-4">
             Voir la page Tarifs <ArrowRight className="h-3 w-3 ml-1" />
           </Link>
         </div>

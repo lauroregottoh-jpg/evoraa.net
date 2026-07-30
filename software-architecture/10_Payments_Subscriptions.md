@@ -1,155 +1,119 @@
-# KELIA
-# 10_Payments_Subscriptions.md
+# KELIAA — Payments & Subscriptions
 
-**Version:** 1.0 (MVP)
+**Version :** 2.0
+**Dernière mise à jour :** 30 juillet 2026
 
----
+## Offres
 
-# Purpose
+### Découverte
 
-This document defines the subscription model and payment workflow for KELIA MVP.
+- 0 FCFA.
+- 3 suggestions par jour.
+- 5 conversations initiées par mois.
+- 5 messages par conversation initiée.
+- Réponses sans limite aux messages reçus.
+- EVA : 3 questions par jour.
 
-The objective is to provide a simple, secure and scalable monetization model.
+### Alliance
 
----
+- 5 000 FCFA pour 30 jours.
+- Prix d’ancrage : 7 500 FCFA.
+- 15 suggestions par jour.
+- 25 conversations initiées par mois.
+- 100 messages par conversation.
+- EVA : 20 questions par jour.
+- Score détaillé, badge et priorité douce.
 
-# Subscription Plans
+### Essentiel (legacy)
 
-## Free
+Plan technique non public à 2 500 FCFA, conservé pour les abonnements historiques.
 
-Features:
+## Providers
 
-- Create profile
-- Complete assessments
-- 3 match suggestions per day
-- 5 conversations per month
-- 5 messages per conversation
+### Bictorys
 
----
+Provider prioritaire. Checkout hébergé, Mobile Money et carte.
 
-## Premium
+- Sandbox si la clé commence par `test_`.
+- Production sinon.
+- Mobile Money préselectionné pour l’UEMOA.
+- Carte préselectionnée pour la diaspora.
+- Choix manuel autorisé.
+- Les requêtes serveur utilisent `curl` à cause du WAF Bictorys.
 
-Features:
+### CinetPay
 
-- 10 match suggestions per day
-- 15 conversations per month
-- 70 total messages per month
-- Advanced profile filters
+Provider complémentaire déjà supporté.
 
----
+### Stripe
 
-## Premium+
+Prévu ultérieurement, non actif dans le parcours public.
 
-Features:
+## Flux
 
-- 20 match suggestions per day
-- Unlimited conversations
-- Unlimited messages
-- Priority profile visibility
-- Premium badge
+1. Créer une souscription `pending`.
+2. Créer un paiement `pending`.
+3. Initier la charge chez le provider.
+4. Stocker la référence provider et les métadonnées.
+5. Rediriger vers le checkout hébergé.
+6. Recevoir et vérifier le webhook.
+7. Appliquer un statut terminal `completed` ou `failed`.
+8. Activer Alliance pendant 30 jours si le paiement est confirmé.
+9. Journaliser l’événement.
 
----
+## Webhooks
 
-# Payment Providers
+- Bictorys : `/api/payments/bictorys/notify`
+- CinetPay : `/api/payments/cinetpay/notify`
 
-Primary provider:
+Exigences :
 
-- CinetPay
+- signature ou secret obligatoire ;
+- traitement serveur uniquement ;
+- idempotence ;
+- aucune confiance dans le retour navigateur ;
+- service role jamais exposé au client ;
+- statut `pending` ignoré jusqu’à l’état terminal.
 
-Alternative:
+## Audit
 
-- MakeTou (if official API supports payment creation, callbacks and verification)
+`payment_events` stocke :
 
-Flutterwave and Stripe are not required for MVP.
+- paiement ;
+- provider ;
+- type d’événement ;
+- statut ;
+- message ;
+- payload utile ;
+- horodatage.
 
----
+L’admin Alliance affiche le journal, les paiements détaillés et les outils sandbox Bictorys.
 
-# Payment Flow
+## Renouvellement
 
-1. User selects a plan.
-2. Payment request is created.
-3. User is redirected to the payment provider.
-4. Provider sends a callback (webhook).
-5. Backend verifies the transaction.
-6. Subscription is activated.
-7. Confirmation notification is sent.
+- Manuel uniquement.
+- Durée : 30 jours.
+- Rappels avant échéance.
+- Aucun prélèvement automatique en V1.
 
----
+## Variables
 
-# Subscription Status
+- `PAYMENT_PROVIDER`
+- `PAYMENTS_DEMO_MODE`
+- `NEXT_PUBLIC_APP_URL`
+- `BICTORYS_API_KEY`
+- `BICTORYS_WEBHOOK_SECRET`
+- `BICTORYS_MERCHANT_COUNTRY`
+- `CINETPAY_API_KEY`
+- `CINETPAY_SITE_ID`
+- `CINETPAY_SECRET_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
 
-Possible values:
+## Sécurité
 
-- Active
-- Pending
-- Expired
-- Cancelled
-- Failed
-
----
-
-# Renewal
-
-For MVP:
-
-- Manual renewal only.
-- No automatic recurring billing.
-
----
-
-# Access Control
-
-The backend validates the subscription before allowing access to premium features.
-
-If the subscription expires:
-
-- Premium features are disabled.
-- User returns to the Free plan.
-
----
-
-# Payment History
-
-Each payment stores:
-
-- User ID
-- Plan
-- Provider
-- Transaction reference
-- Amount
-- Currency
-- Status
-- Timestamp
-
----
-
-# Refund Policy
-
-Refund requests are handled manually by administrators.
-
-No automatic refund process is included in MVP.
-
----
-
-# Security
-
-- Verify every payment callback.
-- Never trust client-side payment status.
-- Log all payment events.
-- Use HTTPS exclusively.
-
----
-
-# Future (Not MVP)
-
-- Automatic renewals
-- Promotional codes
-- Family plans
-- Gift subscriptions
-- Multiple payment providers simultaneously
-
----
-
-# Next Document
-
-11_Admin_Backoffice.md
+- HTTPS.
+- Validation des modes `mobile_money` et `card`.
+- URLs publiques, jamais `localhost`, pour une charge Bictorys.
+- Pas de clé dans les logs.
+- Données personnelles expurgées des traces techniques.
+- RLS et autorisation admin pour la consultation.

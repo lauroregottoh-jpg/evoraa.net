@@ -39,7 +39,7 @@ export default function PricingPage() {
         eyebrow="Tarifs"
         title="Gratuit pour commencer."
         highlight="Alliance pour accélérer."
-        subtitle="Deux chemins, une intention : rencontrer L'âme sœur grâce au matching à 3 piliers — pas au swipe."
+        subtitle="Deux chemins, une intention : rencontrer L'âme sœur grâce au matching à 5 piliers — pas au swipe."
         imageSrc="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=2000&auto=format&fit=crop"
         imageAlt="Engagement"
       />

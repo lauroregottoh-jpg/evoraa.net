@@ -9,13 +9,13 @@ const TESTIMONIALS = [
     quote:
       "Pour la premi\u00e8re fois, on m\u2019a demand\u00e9 ma vision du mariage avant de me juger sur une photo. J\u2019ai senti que je pouvais \u00eatre honn\u00eate \u2014 sans me vendre.",
     name: "A\u00efcha",
-    meta: "Abidjan \u00b7 Premium",
+    meta: "Abidjan \u00b7 Alliance",
   },
   {
     quote:
       "Les questionnaires m\u2019ont confront\u00e9 \u00e0 des sujets que j\u2019\u00e9vitais. Nos premiers messages ont parl\u00e9 de foi et de projet de vie. C\u2019\u00e9tait nouveau pour moi.",
     name: "Marc",
-    meta: "Paris \u00b7 Premium+",
+    meta: "Paris \u00b7 Alliance",
   },
   {
     quote:
@@ -27,7 +27,7 @@ const TESTIMONIALS = [
     quote:
       "Le matching m\u2019a propos\u00e9 quelqu\u2019un qui partageait ma vision du foyer. On discerne ensemble. Sans pression. C\u2019est rare.",
     name: "Samuel",
-    meta: "Lom\u00e9 \u00b7 Premium",
+    meta: "Lom\u00e9 \u00b7 Alliance",
   },
 ];
 

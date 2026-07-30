@@ -1,217 +1,113 @@
-# KELIA
-# 06_Frontend_Specification.md
+# KELIAA — Frontend Specification
 
-**Version:** 1.0 (MVP)
+**Version :** 2.0
+**Dernière mise à jour :** 30 juillet 2026
 
----
+## Stack
 
-# Purpose
-
-This document defines the frontend behavior and user experience for KELIA MVP.
-
----
-
-# Technology
-
-- Next.js
-- React
+- Next.js 16 App Router
+- React 19
 - TypeScript
-- Tailwind CSS
-- shadcn/ui
+- Tailwind CSS 4
+- Supabase SSR
+- React Hook Form et Zod
 - Zustand
-- React Hook Form
-- Zod
+- GSAP, Lenis, React Three Fiber et Three.js pour le marketing
+- Lucide React
 
----
+## Principes
 
-# Design Principles
+- Mobile-first et responsive.
+- Accessible WCAG AA.
+- Rapide sur 3G.
+- Autorisation et validation métier côté serveur.
+- Une action principale clairement identifiable.
+- Réutilisation des composants existants.
 
-- Mobile-first
-- Responsive
-- Fast loading
-- Accessible
-- Simple navigation
-- Consistent components
+## Routes publiques
 
----
+- `/`
+- `/about`
+- `/how-it-works`
+- `/pricing`
+- `/blog`, `/blog/[slug]`
+- `/contact`
+- `/community-network`
+- `/spiritual-resources`
+- `/pastoral-endorsement`
+- `/moderation`
+- `/charte`
+- `/confidentialite`
+- `/cgu`
+- `/mentions-legales`
+- `/login`, `/register`
+- `/forgot-password`, `/reset-password`
 
-# Public Pages
+## Routes membre
 
-- Home
-- About
-- Pricing
-- FAQ
-- Contact
-- Login
-- Register
+- `/dashboard`
+- `/compatibility`, `/compatibility/[id]`
+- `/messages`, `/messages/[id]`
+- `/assessments`, `/assessments/[slug]`
+- `/academie-mariage`, modules et leçons
+- `/profile`
+- `/billing`
+- `/notifications`
+- `/settings`
+- `/help`
+- `/onboarding`, `/onboarding/magic-screen`
+- `/checkout/[plan]`, `/checkout/pay`, `/checkout/success`, `/checkout/cancel`
 
----
+## Route admin
 
-# Authenticated Pages
+- `/admin`
 
-## Dashboard
+L’admin est une console à navigation interne : Dashboard, Analytique, Membres, Profils, Modération, Alliance et paiements, Matching et conversations, Académie, Coach EVA, Contenu et marketing, Paramètres.
 
-Displays:
+## Navigation membre
 
-- Profile completion
-- Suggested matches
-- Notifications
-- Subscription status
+Desktop :
 
----
-
-## Profile
-
-Users can:
-
-- Edit information
-- Upload photos
-- Update biography
-- Update preferences
-
----
-
-## Psychometric Tests
-
-Flow:
-
-1. Select test
-2. Answer questions
-3. Submit
-4. Display completion
-5. View results
-
----
-
-## Matches
-
-Features:
-
-- Suggested matches
-- Compatibility score
-- View profile
-- Start conversation (if allowed)
-
----
-
-## Messaging
-
-Features:
-
-- Conversation list
-- Message history
-- Send text message
-- Read status
-
-Text messages only for MVP.
-
----
-
-## Subscription
-
-Display:
-
-- Current plan
-- Available plans
-- Upgrade button
-- Payment status
-
----
-
-## Notifications
-
-Display:
-
-- New match
-- New message
-- Subscription updates
-
----
-
-# Navigation
-
-Bottom navigation (mobile)
-
-- Home
-- Matches
+- Accueil
+- Découvrir
 - Messages
-- Notifications
-- Profile
+- Tests
+- Académie
+- Alliance
 
-Desktop
+Mobile primaire :
 
-- Left sidebar
-- Main content
-- Right utility panel (optional)
+- Accueil
+- Découvrir
+- Messages
+- Tests
 
----
+Le menu secondaire contient Académie, Alliance, Alertes, Profil, Aide et Paramètres.
 
-# Validation
+## Fonctionnalités UI principales
 
-Client-side validation using:
+- Progression et rappels de profil.
+- Compatibilités et scores expliqués.
+- Cinq questionnaires de discernement.
+- Axes de croissance.
+- Messagerie et Bouclier de bienveillance.
+- Coach EVA.
+- Académie du mariage.
+- Recommandation pastorale.
+- Quotas Découverte/Alliance.
+- Choix Mobile Money/carte.
+- CMS admin, modération, analytics et audit paiement.
 
-- Zod
-- React Hook Form
+## États obligatoires
 
-Server validation always has priority.
+Chaque écran de données doit prévoir : chargement, vide, erreur, succès, accès refusé et données partielles.
 
----
+## Design
 
-# Loading States
+La source de vérité est `08_Design_System.md`, puis `src/app/globals.css` et `src/app/layout.tsx`.
 
-Every page should include:
+## Hors périmètre
 
-- Loading indicator
-- Empty state
-- Error state
-
----
-
-# UI Components
-
-- Button
-- Card
-- Avatar
-- Badge
-- Input
-- Textarea
-- Modal
-- Dialog
-- Toast
-- Tabs
-- Progress Bar
-- Pagination
-
----
-
-# Accessibility
-
-- Keyboard navigation
-- Visible focus states
-- Sufficient color contrast
-- Semantic HTML
-
----
-
-# Performance
-
-- Lazy loading where appropriate
-- Optimized images
-- Pagination
-- Code splitting
-
----
-
-# Out of Scope (V1)
-
-- Dark mode
-- Offline mode
-- Native mobile app
-- Voice messaging
-- Video calls
-
----
-
-# Next Document
-
-07_Authentication_Authorization.md
+- Application native.
+- Appels audio/vidéo natifs.
+- Mode hors-ligne complet.

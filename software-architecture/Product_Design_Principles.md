@@ -1,7 +1,10 @@
-# Product Design Principles - La Charte d'Evoraa
+# Product Design Principles — La Charte KELIAA
+
+**Version :** 2.0
+**Dernière mise à jour :** 30 juillet 2026
 
 > **Boussole Stratégique :**
-> *Evoraa n'est pas une application de rencontre traditionnelle. C'est une plateforme qui aide les chrétiens à construire des rencontres fondées sur la compatibilité, les valeurs et un projet de vie commun.*
+> *KELIAA n'est pas une application de rencontre traditionnelle. C'est une plateforme qui aide les chrétiens à construire des rencontres fondées sur la compatibilité, les valeurs et un projet de vie commun.*
 >
 > *(Chaque fonctionnalité développée devra répondre à cette question : "Est-ce que cela aide réellement une personne à discerner une relation de qualité ?" Si la réponse est non, la fonctionnalité n'a pas sa place).*
 
@@ -9,7 +12,7 @@
 
 ## 1. L'Identité Émotionnelle
 
-L'expérience Evoraa doit provoquer 6 émotions clés :
+L'expérience KELIAA doit provoquer 6 émotions clés :
 1. **Dignité** : Chaque utilisateur doit se sentir considéré comme une personne, jamais comme un simple profil ou un produit de consommation.
 2. **Sérénité** : L'interface respire. Pas d'urgence, pas de pop-ups agressifs.
 3. **Confiance** : La plateforme est un espace sûr (confidentialité, modération assumée).
@@ -21,18 +24,18 @@ L'expérience Evoraa doit provoquer 6 émotions clés :
 
 ## 2. EVA, L'Accompagnatrice (IA)
 
-L'intelligence artificielle n'est pas un robot, elle a une identité : **EVA**. 
+L'intelligence artificielle n'est pas un robot, elle a une identité : **EVA**.
 Cependant, EVA a un rôle strictement défini. Elle ne prend **jamais** de décisions à la place de l'utilisateur.
 
 * **Ce qu'elle fait :** Elle explique, accompagne, encourage, suggère et rassure.
 * **Ce qu'elle ne fait jamais :** Elle ne juge jamais. Elle ne manipule jamais. Elle ne promet jamais.
-* **Le ton :** *"Bonjour Laure 👋 Je suis EVA. Je serai votre guide tout au long de votre parcours sur Evoraa."*
+* **Le ton :** *« Bonjour Laure, je suis EVA. Je vous accompagne avec douceur tout au long de votre parcours KELIAA. »*
 
 ---
 
 ## 3. Les Principes UX Fondamentaux
 
-### Evoraa est...
+### KELIAA est...
 * **Rassurant** avant d'être impressionnant.
 * **Humain** avant d'être technologique.
 * **Élégant** avant d'être spectaculaire.
@@ -43,11 +46,10 @@ Cependant, EVA a un rôle strictement défini. Elle ne prend **jamais** de déci
 1. **Transparence algorithmique** : L'utilisateur doit toujours comprendre *pourquoi* une compatibilité est proposée (ex: *"Compatibilité élevée parce que vous partagez la même vision du mariage et des valeurs communes"*).
 2. **Charge mentale minimale** : Une action principale par écran (2 à 4 champs maximum).
 3. **Micro-récompenses (Profil Infini)** : Le profil est *complet*, mais il peut toujours être *enrichi*. Les niveaux intègrent le pourcentage pour rester factuels tout en valorisant :
-   * ⭐ Profil Essentiel (60%)
-   * ⭐⭐ Profil Complet (78%)
-   * ⭐⭐⭐ Profil Premium (85%)
-   * ⭐⭐⭐⭐ Profil Expert (92%)
-   * ⭐⭐⭐⭐⭐ Profil Optimisé (100%)
+   * Profil à compléter (moins de 60 %)
+   * Profil essentiel (60 à 77 %)
+   * Profil complet (78 à 91 %)
+   * Profil optimisé (92 à 100 %)
 4. **Rappels contextuels** : *"Une seule étape vous sépare de vos premières compatibilités."*
 
 ---
@@ -59,11 +61,11 @@ Cependant, EVA a un rôle strictement défini. Elle ne prend **jamais** de déci
 * **Explicabilité** : *"Cette question nous aide à comprendre votre manière de gérer les conflits."*
 
 ### Les Photos
-* **Règle absolue** : Au moins UNE photo doit montrer clairement le visage.
-* **Sécurité immédiate** : Aucune photo n'est publiée sans avoir passé les contrôles automatiques d'EVA, suivis d'une validation humaine.
+* **Règle absolue** : au moins une photo doit montrer clairement le visage.
+* **Sécurité immédiate** : les photos passent par les règles automatiques configurées et restent révisables par un modérateur humain. Cette analyse n'est pas attribuée à EVA.
 
 ### La Messagerie (L'Authenticité avant tout)
-* **La règle d'or** : Sur Evoraa, on échange avec des personnes, pas avec des messages générés par une IA. EVA n'écrit et ne suggère **aucun** message (pas d'icebreakers automatisés).
+* **La règle d'or** : sur KELIAA, on échange avec des personnes, pas avec des messages générés par une IA. EVA n'écrit et ne suggère **aucun** message intime à la place de l'utilisateur.
 * **Le rôle bouclier d'EVA** : Elle protège les conversations sans les dénaturer. Si un message détecté est potentiellement insultant, harcelant, manipulateur ou de l'arnaque, EVA intervient.
   * *Intervention pédagogique* : *"Ce message pourrait être perçu comme blessant ou irrespectueux. Souhaitez-vous le modifier avant de l'envoyer ?"*
   * *Intervention ferme* : Blocage de l'envoi pour les cas graves et signalement à la modération.
@@ -72,7 +74,7 @@ Cependant, EVA a un rôle strictement défini. Elle ne prend **jamais** de déci
 
 ## 5. Les Principes de Confiance
 
-L'espace Evoraa est un sanctuaire sécurisé.
+L'espace KELIAA est un sanctuaire sécurisé.
 * **Confidentialité par défaut** (floutage optionnel).
 * **Consentement strict** avant toute interaction.
 * **Modération assumée** et bannissement immédiat des comportements toxiques.
@@ -83,7 +85,7 @@ L'espace Evoraa est un sanctuaire sécurisé.
 
 ## 6. Standards d'Interface & Accessibilité (A11y)
 
-* **Design universel** : Mode Sombre (Dark Mode) natif dès la V1. Textes compréhensibles, tailles de police adaptatives, et contrastes stricts.
+* **Design universel** : thème clair officiel, thème sombre lorsque disponible, textes compréhensibles, tailles adaptatives et contrastes stricts.
 * **Performance** : Compatibilité mobile absolue (Mobile-first) et vitesse de chargement irréprochable.
 * **Espace blanc & Animations** : Espace généreux, animations discrètes (micro-interactions) qui ne surchargent pas l'attention.
 

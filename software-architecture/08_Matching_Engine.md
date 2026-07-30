@@ -1,140 +1,102 @@
-# KELIA
-# 08_Matching_Engine.md
+# KELIAA — Matching Engine
 
-**Version:** 1.0 (MVP)
+**Version :** 2.0
+**Dernière mise à jour :** 30 juillet 2026
+**Référence :** `src/lib/matching/score.ts`
 
----
+## Éligibilité
 
-# Purpose
+Un candidat est exclu si :
 
-This document defines the matching engine for KELIA MVP.
+- il s’agit du membre lui-même ;
+- le profil est supprimé, banni ou rejeté ;
+- la complétion est inférieure à 50 % ;
+- l’onboarding est encore aux étapes compte/profil ;
+- le genre est identique lorsque les deux genres binaires sont connus ;
+- l’écart d’âge dépasse 15 ans.
 
-The objective is to recommend serious Christian profiles with the highest compatibility.
+Le mode soft launch autorise les profils `pending` suffisamment complets ; les profils `rejected` sont toujours exclus.
 
----
+## Données utilisées
 
-# Eligibility
+### Profil
 
-A user can enter the matching engine only if:
+- dénomination ;
+- ville et pays ;
+- âge ;
+- fréquence de pratique ;
+- pratique spirituelle ;
+- style de communication ;
+- vision du mariage ;
+- projet familial.
 
-- Email verified
-- Profile completed
-- Main profile photo uploaded
-- Three required assessments completed
+### Cinq piliers
 
----
+- personnalité et stress ;
+- foi et vie spirituelle ;
+- relation et communication ;
+- vie de couple ;
+- finances et projet de foyer.
 
-# Required Assessments
+Le moteur compare les dimensions communes, pas uniquement un score total.
 
-1. Personality Assessment
-2. Spiritual Compatibility Assessment
-3. Relationship Compatibility Assessment
+## Calcul
 
-The scoring models are defined in the future document:
-**17_Psychometric_Assessment.md**
+1. Calculer un score de profil de 0 à 100.
+2. Calculer l’alignement dimensionnel des piliers communs.
+3. Pondérer progressivement le psychométrique : `min(0,85 ; 0,40 + piliers_communs × 0,09)`.
+4. Appliquer des plafonds de confiance selon la couverture et le ratio d’alignement.
+5. Sans données psychométriques communes, plafonner le score à 72.
+6. Exclure les scores inférieurs au minimum recommandé.
 
----
+## Explicabilité
 
-# Matching Factors
+Jusqu’à quatre raisons sont affichées :
 
-The compatibility score is calculated from:
+- dimensions alignées et couverture des cinq questionnaires ;
+- communauté de foi proche ;
+- proximité géographique ;
+- écart d’âge compatible ;
+- rythme spirituel ;
+- style de dialogue ;
+- vision du mariage ;
+- projet de foyer ;
+- profil vérifié.
 
-| Factor | Weight |
-|---------|-------:|
-| Personality assessment | 35% |
-| Spiritual assessment | 30% |
-| Relationship assessment | 20% |
-| Basic profile compatibility (age, location, denomination, preferences) | 15% |
+## Niveaux
 
-Total = 100%
+- 90–100 : excellent.
+- 75–89 : élevé.
+- 60–74 : modéré.
+- inférieur à 60 : faible.
 
----
+## Quotas
 
-# Hard Filters
+- Découverte : 3 suggestions par jour.
+- Alliance : 15 suggestions par jour.
+- Essentiel legacy : 10 suggestions par jour.
 
-Profiles are never suggested when:
+## Persistance
 
-- Gender preference does not match
-- Age is outside accepted range
-- Account is suspended
-- User has been blocked
-- Profile is incomplete
+Les suggestions calculées sont insérées ou mises à jour dans `matches` avec :
 
----
+- les deux utilisateurs ;
+- le score ;
+- le statut ;
+- la date.
 
-# Soft Filters
+## Recalcul
 
-The engine should prioritize:
+Recalcul recommandé lorsque :
 
-- Same country (when possible)
-- Similar denomination
-- Similar marriage intentions
-- Recent activity
+- un questionnaire change ;
+- les préférences d’âge changent ;
+- les informations de foi, localisation ou projet changent ;
+- le statut de modération change.
 
----
+## Limites
 
-# Compatibility Levels
-
-- 90–100 : Excellent
-- 75–89  : High
-- 60–74  : Moderate
-- Below 60 : Not recommended
-
----
-
-# Daily Suggestions
-
-Free:
-- 3 suggestions/day
-
-Premium:
-- 10 suggestions/day
-
-Premium+:
-- 20 suggestions/day
-
----
-
-# Matching Lifecycle & Execution
-
-1. User completes assessments.
-2. Scores are calculated and consolidated.
-3. **Execution Trigger:** A Supabase Edge Function is triggered asynchronously (or via an API call) to generate initial matches.
-4. Engine filters candidates and calculates the compatibility score.
-5. Daily suggestions are stored in the database.
-6. **Cron Job:** A scheduled task (`pg_cron` or external trigger) runs nightly to generate new daily suggestions for active users.
-7. User can view suggested profiles.
-
----
-
-# Recalculation
-
-Compatibility should be recalculated when:
-
-- A required assessment changes
-- Profile information changes
-- Preferences change
-
----
-
-# Privacy
-
-Users never see raw assessment scores of other members.
-
-Only an overall compatibility percentage is displayed.
-
----
-
-# Out of Scope (V1)
-
-- AI recommendations
-- Machine learning
-- Behaviour-based recommendations
-- Conversation analysis
-- Personality explanations generated by AI
-
----
-
-# Next Document
-
-09_Messaging_System.md
+- Pas de machine learning autonome.
+- Pas d’analyse comportementale secrète.
+- Pas de décision sentimentale par EVA.
+- Les scores orientent le discernement sans prédire la réussite d’un couple.

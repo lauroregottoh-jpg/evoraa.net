@@ -1,4 +1,4 @@
-# KELIA
+# KELIAA
 # 13_Security.md
 
 **Version:** 1.0 (MVP)
@@ -7,7 +7,7 @@
 
 # Purpose
 
-This document defines the security strategy for KELIA MVP.
+This document defines the security strategy for KELIAA MVP.
 
 Security must protect user identities, personal information, conversations and payments.
 

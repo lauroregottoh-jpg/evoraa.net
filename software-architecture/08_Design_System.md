@@ -1,109 +1,199 @@
-# KELIA
-# 08_Design_System.md
+# KELIAA — Design System
 
-**Version:** 1.0
-**Dernière mise à jour :** Juillet 2026
+**Version :** 2.0
+**Dernière mise à jour :** 30 juillet 2026
+**Références techniques :** `src/app/globals.css`, `src/app/layout.tsx`
 
----
+## 1. Identité
 
-## 1. Identité de Marque
+KELIAA associe foi, dignité, confiance et élégance. L’interface doit ressembler à un espace éditorial premium et humain, jamais à une application de swipe ou à un produit SaaS violet générique.
 
-### Mission
-Bâtir des mariages chrétiens solides, authentiques et durables, en facilitant la rencontre d'âmes partageant la même foi et la même vision de l'engagement.
+### Ton
 
-### Vision
-Devenir le standard d'excellence et de confiance pour la rencontre chrétienne francophone, où l'amour est abordé avec profondeur, respect et sacralité.
+- chaleureux ;
+- rassurant ;
+- digne ;
+- biblique sans être moralisateur ;
+- clair et concret ;
+- inclusif pour l’Afrique francophone et la diaspora.
 
-### Valeurs Fondamentales
-- **Foi & Spiritualité** : Christ au centre de la démarche.
-- **Authenticité** : Des profils vérifiés et des intentions sincères.
-- **Élégance** : Un environnement premium qui honore l'engagement matrimonial.
-- **Bienveillance** : Un cadre sécurisant, respectueux de chacun.
+## 2. Tokens actifs
 
-### Promesse
-"Où l'authenticité rencontre la spiritualité. Trouvez une connexion qui a du sens, pour aujourd'hui et pour l'éternité."
+| Token | Valeur | Usage |
+|---|---|---|
+| `background` | `#F3EFE8` | Fond pierre chaude |
+| `foreground` | `#1C1412` | Texte principal |
+| `primary` | `#5C1F28` | Bordeaux, actions principales |
+| `primary-foreground` | `#F8F4EE` | Texte sur primaire |
+| `secondary` | `#E8E0D4` | Surfaces secondaires |
+| `muted` | `#E8E0D4` | États atténués |
+| `muted-foreground` | `#5C534A` | Texte secondaire |
+| `accent` | `#B8954A` | Or patiné |
+| `border` | `#D9D0C4` | Bordures |
+| `ring` | `#B8954A` | Focus |
+| `destructive` | `#9F1239` | Erreurs et actions destructives |
 
-### Personnalité de la Marque & Ton Éditorial
-- **Élégant** : Vocabulaire soigné, refus de la vulgarité ou de la superficialité.
-- **Rassurant** : Communication transparente, claire et protectrice.
-- **Inspirant** : Orienté vers l'espérance, la joie du mariage et la beauté de l'alliance.
-- **Bienveillant** : Toujours dans l'empathie et le respect des parcours individuels.
+Les couleurs doivent être utilisées via les tokens Tailwind (`bg-background`, `text-primary`, etc.), pas recopiées arbitrairement.
 
----
+## 3. Typographie active
 
-## 2. Design System Complet
+### Titres
 
-### Palette Officielle des Couleurs
-Le choix des couleurs s'écarte volontairement des codes classiques des applications de rencontres (rose/rouge vif/violet fluo) pour s'orienter vers l'édition d'art et le luxe.
+**Cormorant Garamond**, variable `--font-cormorant`, classe `font-serif`.
 
-| Nom | Valeur HEX | Rôle |
-|-----|------------|------|
-| **Bordeaux Profond** | `#722F37` | Couleur primaire. Symbole de la passion mature, du vin des noces et du sang de l'alliance. |
-| **Beige Ivoire** | `#FDFBF7` | Couleur de fond principale. Luminosité organique, rappelant les pages d'un livre ancien ou une robe de mariée. |
-| **Noir Onyx** | `#1A1A1A` | Couleur de texte. Contraste élégant et lisibilité optimale. |
-| **Or Patiné** | `#C5A059` | Couleur d'accent. Utilisée pour les détails subtils (icônes, bordures fines). |
+- H1 desktop : 48/56, 700.
+- H1 mobile : 36/40, 700.
+- H2 desktop : 36/40, 600.
+- H2 mobile : 28/32, 600.
+- H3 desktop : 24/32, 600.
+- H3 mobile : 20/28, 600.
 
-### Typographies & Hiérarchie
-L'alliance d'une Serif et d'une Sans-Serif crée une dynamique éditoriale haut de gamme.
+### Interface et texte
 
-- **Playfair Display (Serif)** : Exclusivement pour les Titres.
-  - `H1` : 48px/56px (Desktop) - 36px/40px (Mobile), Font-Weight 700.
-  - `H2` : 36px/40px (Desktop) - 28px/32px (Mobile), Font-Weight 600.
-  - `H3` : 24px/32px (Desktop) - 20px/28px (Mobile), Font-Weight 600.
-- **Inter (Sans-Serif)** : Pour le texte courant et l'interface.
-  - `Body Large` : 18px, Font-Weight 400.
-  - `Body Regular` : 16px, Font-Weight 400.
-  - `Caption` : 14px, Font-Weight 400.
-  - `Button` : 16px, Font-Weight 500, Tracking normal.
+**DM Sans**, variable `--font-dm-sans`, classe `font-sans`.
 
-### Espacements, Grille & Formes
-- **Espacements (Spacing)** : Système basé sur des multiples de 8px (8, 16, 24, 32, 48, 64). L'utilisation de grands espaces blancs (whitespace) est essentielle pour l'aspect premium.
-- **Grille** : 12 colonnes sur Desktop (max-width 1200px), 1 colonne sur Mobile.
-- **Rayons de bordure (Border-Radius)** : Très légers. `0.375rem` (6px) ou `0.5rem` (8px) pour les cartes et boutons. Pas de coins excessivement arrondis (évite l'effet "jouet").
-- **Élévations & Ombres** : Des ombres extrêmement douces, diffuses et teintées. Pas d'ombres noires dures. `box-shadow: 0 10px 40px -10px rgba(114, 47, 55, 0.08)`.
+- Corps standard : 16 px.
+- Corps compact : 14 px.
+- Légende : 12 px.
+- CTA : 14 à 16 px, 600.
 
-### Composants & Animations
-- **Boutons** : Bouton Primaire = Fond Bordeaux, Texte Ivoire. Effet de survol doux avec léger fondu (transition 300ms).
-- **Cartes & Formulaires** : Fond blanc ou Ivoire très clair, bordures ultra-fines (`1px solid #EBE6DF`), ombres douces. Champs de formulaire élégants avec placeholder subtil.
-- **Transitions** : Durée de `0.3s` à `0.5s` en `ease-in-out`. Aucune animation saccadée ou agressive.
-- **Icônes** : Utilisation de la librairie *Lucide Icons* avec un trait fin (`stroke-width: 1.5`), couleur Noir ou Or.
+Playfair Display et Inter ne sont plus les polices officielles.
 
----
+## 4. Espacement et layout
 
-## 3. Direction Artistique Photographique
+- Échelle principale : 4, 8, 12, 16, 24, 32, 48 et 64 px.
+- Largeur membre habituelle : `max-w-6xl`.
+- Largeur éditoriale : `max-w-3xl` à `max-w-5xl`.
+- Mobile : une colonne et zones tactiles d’au moins 44 px.
+- Desktop : grilles de 2 à 4 colonnes selon la densité.
+- Les écrans administratifs peuvent être plus denses que les pages marketing.
 
-Toutes les images utilisées dans KELIA doivent respecter scrupuleusement les règles suivantes pour garantir un univers visuel cohérent, cinématographique et digne d'une marque de luxe.
+## 5. Rayons et ombres
 
-### Règles de Style
-- **Lumière** : Lumière naturelle exclusivement. Privilégier la "Golden Hour" (lumière de fin de journée, douce, chaude, rasante).
-- **Couleurs** : Harmonisées avec la palette (Bordeaux, Ivoire, Noir, Or). Pas de couleurs criardes ou de néons.
-- **Cadrage & Composition** : Profondeur de champ importante (flou d'arrière-plan/bokeh) pour un rendu photographique très réaliste. Toujours prévoir une zone assombrie ou "calme" dans l'image (Negative Space) pour garantir la lisibilité du texte superposé.
-- **Sujets** : Couples élégants, habillés avec sobriété et raffinement (sans ostentation ni marques visibles). Différentes origines représentées.
-- **Émotion & Attitude** : L'émotion est suggérée. Les sujets **ne regardent pas l'objectif** (pour permettre la projection de l'utilisateur). Les attitudes sont dignes, complices, avec des regards tendres et des gestes mesurés. Aucun cliché "Tinder" (pas de selfies, pas de smartphones visibles, pas de poses suggestives).
+### Rayons
 
-### Catégories d'Illustrations Requises
-- Couples marchant ensemble dans la nature ou une architecture raffinée.
-- Couples en prière ou méditation.
-- Demande en mariage / Mariage chrétien élégant.
-- Temps de réflexion individuelle, personne seule en prière.
-- Paysages inspirants (montagnes, vignobles, lacs).
-- Détails symboliques (Bible ouverte, alliances, mains jointes, lumière de vitrail).
+- `sm` : 4 px.
+- `md` : 6 px.
+- `lg` : 8 px.
+- Les panneaux marketing flottants peuvent utiliser 12 à 16 px avec parcimonie.
+- Éviter les coins excessivement arrondis sur tous les éléments.
 
----
+### Ombres
 
-## 4. États de l'Application
+- `shadow-card` : cartes standard.
+- `shadow-premium` : surfaces importantes.
+- `shadow-elevated` : overlays et panneaux élevés.
 
-Les états UI doivent offrir la même qualité d'expérience que les pages principales :
-- **Empty State (Vide)** : Illustration subtile dorée, typographie élégante, message d'encouragement (ex: "Dieu écrit votre histoire, la patience est une vertu.").
-- **Loading (Chargement)** : Skeleton loaders aux teintes Ivoire/Or ou léger "Pulse" sur le logo.
-- **Erreur/Réseau** : Message doux, sans icône d'alerte agressive. Utilisation du Bordeaux assombri.
-- **Succès** : Confirmation élégante et minimaliste, apparition en fondu.
+Les ombres sont chaudes, diffuses et basées sur le bordeaux.
 
----
+## 6. Composants
 
-## 5. Accessibilité & Responsive
-- Contraste validé (WCAG AA minimum). Le Noir Onyx sur Beige Ivoire offre une excellente lisibilité. Le blanc sur Bordeaux profond également.
-- Mobile First absolu : Toutes les grilles, tailles de polices et espacements s'adaptent de manière fluide via Tailwind.
+### Fondamentaux
 
----
-*(Ce document est la source de vérité pour tout développement futur sur l'application KELIA).*
+- Button
+- MagneticButton
+- Card / SectionCard
+- Input, Select et Textarea
+- Badge et StatusPill
+- Avatar et galerie photo
+- Dialog / Modal
+- Progress
+- Skeleton
+- Toast/message d’état
+- Tabs
+- KPI card
+- Graphiques simples admin
+
+### Composants métier
+
+- Carte de compatibilité.
+- Explication du score.
+- Progression profil.
+- Questionnaires et badges des cinq piliers.
+- Conversation et Bouclier de bienveillance.
+- Coach EVA.
+- Module/leçon Académie.
+- Quotas Découverte/Alliance.
+- Sélecteur Mobile Money/carte.
+- Éditeurs CMS admin.
+- Journal d’audit paiement.
+
+## 7. Navigation
+
+### Navigation publique
+
+Accueil, Fonctionnement, Tarifs, Blog et Contact, avec Connexion et Créer mon compte.
+
+### Navigation membre desktop
+
+Accueil, Découvrir, Messages, Tests, Académie et Alliance.
+
+### Navigation membre mobile
+
+Accueil, Découvrir, Messages et Tests ; les autres entrées sont regroupées dans « Plus ».
+
+### Navigation admin
+
+Dashboard, Analytique, Membres, Profils, Modération, Alliance et paiements, Matching et conversations, Académie, Coach EVA, Contenu et marketing, Paramètres.
+
+## 8. États
+
+Chaque fonctionnalité doit prévoir :
+
+- chargement ;
+- vide ;
+- erreur ;
+- succès ;
+- accès limité ;
+- mode désactivé ;
+- données partielles ;
+- connexion lente.
+
+Les messages sont humains et actionnables. Une erreur ne doit pas culpabiliser l’utilisateur.
+
+## 9. Motion
+
+- Transitions UI : 150 à 300 ms.
+- Animations marketing : GSAP et Lenis, avec sobriété.
+- Three.js uniquement si le bénéfice visuel justifie le coût.
+- Respecter `prefers-reduced-motion`.
+- Ne pas bloquer une action pendant une animation décorative.
+
+## 10. Images
+
+- Afrique francophone et diaspora représentées authentiquement.
+- Lumière naturelle et scènes crédibles.
+- Tenues dignes, gestes mesurés et absence de poses suggestives.
+- Pas de selfies Tinder ni de couples génériques surjoués.
+- Toujours optimiser et renseigner le texte alternatif.
+
+## 11. Accessibilité
+
+- Contraste WCAG AA.
+- Focus visible.
+- Utilisation complète au clavier.
+- HTML sémantique.
+- Libellés associés aux champs.
+- Icônes seules accompagnées d’un `aria-label`.
+- Ne jamais transmettre une information uniquement par couleur.
+
+## 12. Règles anti-générique
+
+Interdits :
+
+- violet/rose en dégradé comme identité principale ;
+- glow sur chaque bouton ;
+- sparkles purement décoratifs partout ;
+- glassmorphism omniprésent ;
+- douze CTA concurrents ;
+- gamification addictive ;
+- copie qui promet « l’âme sœur garantie ».
+
+## 13. Source de vérité
+
+Pour toute implémentation :
+
+1. Les tokens de `src/app/globals.css` ont priorité.
+2. Les polices de `src/app/layout.tsx` ont priorité.
+3. Les composants existants doivent être réutilisés avant d’en créer de nouveaux.
+4. Toute modification des tokens ou polices doit mettre à jour ce document dans le même changement.

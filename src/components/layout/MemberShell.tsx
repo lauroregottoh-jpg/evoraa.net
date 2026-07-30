@@ -28,7 +28,7 @@ const NAV = [
   { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/assessments", label: "Tests", icon: ClipboardList },
   { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
-  { href: "/billing", label: "Alliance", icon: Crown, accent: true },
+  { href: "/premium", label: "Alliance", icon: Crown, accent: true },
 ] as const;
 
 const BOTTOM_PRIMARY = [
@@ -40,7 +40,7 @@ const BOTTOM_PRIMARY = [
 
 const MORE_LINKS = [
   { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
-  { href: "/billing", label: "Alliance", icon: Crown },
+  { href: "/premium", label: "Alliance", icon: Crown },
   { href: "/notifications", label: "Alertes", icon: Bell },
   { href: "/profile", label: "Profil", icon: User },
   { href: "/help", label: "Aide", icon: HelpCircle },
@@ -83,10 +83,18 @@ export function MemberShell({
   const [open, setOpen] = React.useState(false);
   const [moreOpen, setMoreOpen] = React.useState(false);
 
-  const isActive = (href: string) =>
-    href === "/dashboard"
-      ? pathname === "/dashboard"
-      : pathname === href || pathname.startsWith(`${href}/`);
+  const isActive = (href: string) => {
+    if (href === "/dashboard") return pathname === "/dashboard"
+    if (href === "/premium") {
+      return (
+        pathname === "/premium" ||
+        pathname.startsWith("/premium/") ||
+        pathname === "/billing" ||
+        pathname.startsWith("/billing/")
+      )
+    }
+    return pathname === href || pathname.startsWith(`${href}/`)
+  }
 
   const moreActive = MORE_LINKS.some((l) => isActive(l.href));
 

@@ -1,4 +1,4 @@
-# KELIA
+# KELIAA
 # 03_Database_Schema.md
 
 **Version:** 1.0 (MVP)
@@ -7,7 +7,7 @@
 
 # Purpose
 
-This document defines the database structure for KELIA MVP.
+This document defines the database structure for KELIAA MVP.
 
 Database Engine: PostgreSQL (Supabase)
 
