@@ -4,11 +4,13 @@ import React, { useRef } from "react";
 import Image from "next/image";
 import { CinematicNavbar } from "@/components/layout/CinematicNavbar";
 import { CinematicFooter } from "@/components/layout/CinematicFooter";
-import { HomeHeroSplit } from "@/components/home/HomeHeroSplit";
+import { HeroBackground3D } from "@/components/home/HeroBackground3D";
+import { HomeHeroCarousel } from "@/components/home/HomeHeroCarousel";
 import { TestimonialsCarousel } from "@/components/marketing/TestimonialsCarousel";
 import { ShareRecommendSection } from "@/components/marketing/ShareRecommendSection";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import {
+  ArrowRight,
   Heart,
   ShieldCheck,
   Sparkles,
@@ -30,6 +32,15 @@ export default function Home() {
 
   useGSAP(
     () => {
+      gsap.to(".hero-cta-main", {
+        scale: 1.02,
+        boxShadow: "0 0 18px rgba(212, 175, 55, 0.28)",
+        duration: 2.2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+
       const fadeUpElements = gsap.utils.toArray<HTMLElement>(".gsap-fade-up");
       fadeUpElements.forEach((el) => {
         gsap.from(el, {
@@ -72,12 +83,40 @@ export default function Home() {
     { scope: containerRef }
   );
 
+  const heroCta = (
+    <div className="flex flex-wrap items-center justify-center gap-6">
+      <div className="hero-cta-main">
+        <MagneticButton
+          href="/register"
+          variant="primary"
+          size="lg"
+          className="px-8 py-7 text-lg bg-primary hover:bg-primary/90 text-white shadow-elevated border-none"
+        >
+          <span className="flex items-center gap-2">
+            Commencer gratuitement <ArrowRight className="h-5 w-5" />
+          </span>
+        </MagneticButton>
+      </div>
+      <MagneticButton
+        href="/how-it-works"
+        variant="outline"
+        size="lg"
+        className="px-8 py-7 text-lg bg-white/10 hover:bg-white/20 text-white border-white/40 backdrop-blur-md"
+      >
+        Voir comment ça marche
+      </MagneticButton>
+    </div>
+  );
+
   return (
     <div ref={containerRef} className="min-h-screen bg-background selection:bg-primary/20 overflow-hidden">
       <CinematicNavbar />
 
-      {/* Variante claire inspirée de INSPIRATION EN TETE (Datify). Ancien hero: HomeHeroCarousel + HeroBackground3D. */}
-      <HomeHeroSplit />
+      {/* One living background + rotating copy (no static photo slab on top) */}
+      <div className="relative">
+        <HeroBackground3D />
+        <HomeHeroCarousel cta={heroCta} />
+      </div>
 
       <section className="story-container py-28 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto overflow-hidden">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
