@@ -4,7 +4,6 @@ import * as React from "react";
 import Image from "next/image";
 import { CinematicLayout } from "@/components/layout/CinematicLayout";
 import { PageHero } from "@/components/marketing/PageHero";
-import { ExpertiseEncart } from "@/components/marketing/ExpertiseEncart";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import {
   Sparkles,
@@ -17,6 +16,8 @@ import {
   Award,
   ArrowRight,
   ChevronDown,
+  Flag,
+  Users,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 
@@ -26,46 +27,41 @@ export default function HowItWorksPage() {
   const steps = [
     {
       step: "01",
-      title: "Créez votre compte",
-      subtitle: "L'entrée dans la communauté",
-      desc: "La création d'un compte ne prend que quelques minutes. Vous renseignez vos informations essentielles, confirmez votre adresse e-mail et acceptez la Charte de Respect et de Bienveillance de KELIAA. Cette charte constitue le socle de notre communauté. Elle rappelle les comportements attendus et contribue à créer un environnement respectueux pour tous.",
-      highlights: ["Inscription rapide en quelques minutes", "Confirmation par e-mail", "Acceptation de la Charte de Respect"],
+      title: "Entrez dans une communauté qui partage vos valeurs.",
+      desc: "Créer votre compte ne prend que quelques minutes. Vous rejoignez une communauté de célibataires chrétiens engagés dans une démarche sérieuse vers le mariage.",
+      highlights: ["Inscription en quelques minutes", "Célibataires chrétiens engagés", "Démarche sérieuse vers le mariage"],
       icon: <ShieldCheck className="h-6 w-6 text-primary" />,
       image: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?q=80&w=800&auto=format&fit=crop",
     },
     {
       step: "02",
-      title: "Construisez un profil qui vous ressemble",
-      subtitle: "Bien plus qu'une simple présentation",
-      desc: "Votre profil est conçu pour permettre aux autres membres de mieux comprendre qui vous êtes. Vous pourrez notamment partager votre présentation, votre parcours de foi, votre situation personnelle, votre vision du mariage, vos centres d'intérêt, vos passions, vos projets de vie et vos attentes relationnelles. Vous choisissez les informations que vous souhaitez rendre visibles afin de préserver votre confidentialité.",
-      highlights: ["Partage de votre parcours de foi", "Vision du mariage et projets", "Contrôle de votre confidentialité"],
+      title: "Faites découvrir la personne que vous êtes réellement.",
+      desc: "Au-delà d'une photo, racontez votre parcours de foi, votre vision du mariage, vos aspirations et ce qui est essentiel pour vous.",
+      highlights: ["Parcours de foi", "Vision du mariage", "Ce qui est essentiel pour vous"],
       icon: <BookOpen className="h-6 w-6 text-accent" />,
       image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=800&auto=format&fit=crop",
     },
     {
       step: "03",
-      title: "Répondez aux questionnaires",
-      subtitle: "Une compatibilité évaluée en profondeur",
-      desc: "Chez KELIAA, nous pensons qu'une compatibilité ne peut pas être évaluée uniquement à partir d'une photo ou de quelques critères. C'est pourquoi nous vous invitons à compléter plusieurs questionnaires spécialement conçus pour mieux comprendre votre manière de fonctionner. Ils explorent notamment votre personnalité, votre façon de communiquer, votre manière de gérer les désaccords, vos valeurs, votre vision du couple et du mariage, votre maturité relationnelle, vos projets de vie et votre pratique de la foi.",
-      highlights: ["Personnalité et communication", "Valeurs, couple et mariage", "Maturité relationnelle et foi"],
+      title: "Découvrez ce qui favorise une relation durable.",
+      desc: "Nos questionnaires explorent votre manière de communiquer, votre personnalité, votre maturité relationnelle, votre pratique de la foi et votre vision du couple afin de proposer des compatibilités plus pertinentes.",
+      highlights: ["Communication et personnalité", "Maturité relationnelle", "Pratique de la foi et vision du couple"],
       icon: <Sparkles className="h-6 w-6 text-primary" />,
       image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=800&auto=format&fit=crop",
     },
     {
       step: "04",
-      title: "Découvrez vos compatibilités",
-      subtitle: "Des recommandations cohérentes",
-      desc: "Une fois votre profil complété, KELIAA vous propose progressivement des personnes qui présentent des compatibilités avec votre profil. Nos recommandations ne reposent pas uniquement sur des critères visibles. Elles prennent en compte l'ensemble des informations que vous avez choisies de partager afin de favoriser des rencontres plus cohérentes. Pour chaque profil recommandé, vous pourrez découvrir les principaux points de compatibilité qui vous rapprochent.",
-      highlights: ["Recommandations progressives", "Au-delà des critères visibles", "Points de compatibilité détaillés"],
+      title: "Laissez notre système de matching faire le travail pour vous.",
+      desc: "Vous recevez progressivement des profils dont les valeurs, les objectifs et le projet de vie sont proches des vôtres.",
+      highlights: ["Profils proposés progressivement", "Valeurs et objectifs proches", "Projet de vie aligné"],
       icon: <Heart className="h-6 w-6 text-accent" />,
       image: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=800&auto=format&fit=crop",
     },
     {
       step: "05",
-      title: "Faites connaissance",
-      subtitle: "Des échanges respectueux et authentiques",
-      desc: "Lorsqu'une personne retient votre attention, vous pouvez commencer à échanger. Les conversations se déroulent dans un environnement conçu pour favoriser des échanges respectueux et authentiques. Notre objectif est de permettre à chacun de prendre le temps de découvrir l'autre, sans pression et dans un climat de confiance.",
-      highlights: ["Environnement sécurisé", "Échanges sans pression", "Climat de confiance"],
+      title: "Commencez une conversation qui a du sens.",
+      desc: "Échangez dans un environnement pensé pour favoriser des discussions sincères, respectueuses et orientées vers une véritable construction.",
+      highlights: ["Discussions sincères", "Cadre respectueux", "Construction relationnelle"],
       icon: <UserCheck className="h-6 w-6 text-primary" />,
       image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=800&auto=format&fit=crop",
     },
@@ -73,56 +69,61 @@ export default function HowItWorksPage() {
 
   const faqs = [
     {
-      q: "Dois-je remplir tous les questionnaires dès le premier jour ?",
-      a: "Non. Vous pouvez compléter votre profil progressivement. Toutefois, un profil plus complet permet d'obtenir des recommandations plus pertinentes.",
+      q: "Dois-je compléter mon profil dès l'inscription ?",
+      a: "Non. Vous pouvez avancer à votre rythme. Cependant, un profil plus complet améliore la qualité des recommandations.",
     },
     {
-      q: "Puis-je modifier mes réponses plus tard ?",
-      a: "Oui. Votre parcours évolue, votre profil aussi. Vous pouvez mettre à jour vos informations lorsque vous le souhaitez.",
+      q: "Comment les compatibilités sont-elles calculées ?",
+      a: "Elles prennent en compte vos questionnaires, vos valeurs, votre vision du mariage, votre personnalité et les informations que vous choisissez de partager.",
     },
     {
-      q: "Les autres membres voient-ils toutes mes réponses ?",
-      a: "Non. Certaines informations servent uniquement à améliorer les recommandations et ne sont jamais affichées publiquement.",
+      q: "Puis-je contrôler mes informations personnelles ?",
+      a: "Oui. Vous décidez des informations visibles sur votre profil.",
     },
     {
-      q: "Pourquoi KELIAA demande-t-elle autant d'informations ?",
-      a: "Parce qu'une relation appelée à durer mérite d'être construite sur une connaissance plus profonde qu'une simple photo ou quelques centres d'intérêt. Notre objectif est de vous proposer des rencontres de qualité, fondées sur une meilleure compréhension de chaque personne.",
-    },
-    {
-      q: "Puis-je quitter KELIAA à tout moment ?",
-      a: "Oui. Vous pouvez suspendre ou supprimer votre compte lorsque vous le souhaitez, conformément à notre politique de confidentialité.",
+      q: "Les profils sont-ils vérifiés ?",
+      a: "Oui. Nous mettons progressivement en place des procédures de vérification afin de garantir un environnement de confiance.",
     },
   ];
 
   return (
     <CinematicLayout>
       <PageHero
-          eyebrow="Le parcours KELIAA"
-          title="Comment ça marche,"
-          highlight="vraiment."
-          subtitle="Pas de magie. Un parcours clair : profil, questionnaires, compatibilités, puis des échanges dans un cadre digne — pour chercher L'âme sœur sans se perdre en chemin."
-          imageSrc="https://images.unsplash.com/photo-1511285560929-80b456fe3b4f?q=80&w=2000&auto=format&fit=crop"
-          imageAlt="Parcours de rencontre chrétienne"
-        />
-
-      <ExpertiseEncart
-        className="max-w-7xl mx-auto mb-8"
         eyebrow="Parcours"
-        title="Cinq étapes. Un seul objectif : une alliance digne."
-        body="Du compte à la conversation, chaque étape renforce le discernement : profil, questionnaires, compatibilités, puis échanges respectueux."
-        imageSrc="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1600&auto=format&fit=crop"
-        imageAlt="Moment de partage spirituel"
-      />
-
-      {/* UNE EXPÉRIENCE PENSÉE POUR LES CÉLIBATAIRES CHRÉTIENS */}
-      <section className="py-8 px-6 sm:px-12 max-w-4xl mx-auto text-center">
-        <div className="p-10 rounded-lg bg-secondary/40 border border-border space-y-3">
-          <h3 className="font-serif text-2xl font-bold text-foreground">Une expérience pensée pour les chrétiens</h3>
-          <p className="text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
-            Que vous soyez inscrit depuis quelques minutes ou depuis plusieurs semaines, votre parcours suit une progression naturelle vers une meilleure connaissance de vous-même et des autres.
+        title="Le parcours qui vous connecte à"
+        highlight="votre âme sœur"
+        subtitle="Ici, chaque étape est pensée pour vous aider à rencontrer LA personne compatible avec votre foi, vos valeurs et votre projet de mariage — sans hasard et sans perdre votre temps."
+        imageSrc="https://images.unsplash.com/photo-1511285560929-80b456fe3b4f?q=80&w=2000&auto=format&fit=crop"
+        imageAlt="Parcours de rencontre chrétienne"
+      >
+        <div className="space-y-5 pt-2">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+            <MagneticButton
+              href="/register"
+              variant="primary"
+              size="lg"
+              className="bg-primary hover:bg-primary/90 text-white shadow-elevated border-none"
+            >
+              <span className="flex items-center gap-2">
+                Créer gratuitement mon profil
+                <ArrowRight className="h-4 w-4" />
+              </span>
+            </MagneticButton>
+            <MagneticButton
+              href="/pricing"
+              variant="outline"
+              size="lg"
+              className="bg-white/10 hover:bg-white/20 text-white border-white/40 backdrop-blur-md"
+            >
+              Découvrir les offres
+            </MagneticButton>
+          </div>
+          <p className="text-sm text-white/85 leading-relaxed drop-shadow-md">
+            ✓ Compatibilité avant l&apos;apparence · ✓ Profils vérifiés · ✓ Respect de votre
+            confidentialité
           </p>
         </div>
-      </section>
+      </PageHero>
 
       {/* 5 ÉTAPES DU PARCOURS */}
       <section className="py-16 px-6 sm:px-12 lg:px-20 max-w-6xl mx-auto space-y-16">
@@ -142,9 +143,6 @@ export default function HowItWorksPage() {
                     {item.icon}
                   </div>
                 </div>
-                <span className="inline-block text-xs font-sans uppercase tracking-widest text-primary font-semibold pt-2">
-                  {item.subtitle}
-                </span>
               </div>
 
               <div className="lg:col-span-8 space-y-6">
@@ -176,13 +174,15 @@ export default function HowItWorksPage() {
 
           <div className="max-w-2xl space-y-4 relative z-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white text-xs font-sans font-semibold uppercase tracking-wide">
-              <Sparkles className="h-3.5 w-3.5" /> EVA vous accompagne
+              <Sparkles className="h-3.5 w-3.5" /> EVA
             </div>
             <h2 className="font-serif text-3xl sm:text-5xl font-bold">
-              Un accompagnement tout au long de votre parcours
+              Votre conseillère, tout au long de votre parcours
             </h2>
             <p className="text-primary-foreground/80 text-sm sm:text-base leading-relaxed">
-              Tout au long de votre parcours, EVA est présente pour vous accompagner. EVA n&apos;a pas vocation à prendre des décisions à votre place. Son rôle est de vous accompagner et de vous apporter un regard complémentaire.
+              EVA est votre assistante intelligente. Elle vous aide à mieux comprendre vos résultats,
+              répond à vos questions et vous accompagne dans l&apos;utilisation de la plateforme, sans
+              jamais prendre de décisions à votre place.
             </p>
           </div>
 
@@ -190,15 +190,15 @@ export default function HowItWorksPage() {
             {[
               {
                 title: "Comprendre vos compatibilités",
-                desc: "EVA peut vous aider à mieux comprendre certaines compatibilités et à interpréter vos résultats.",
+                desc: "Mieux interpréter vos résultats et les points qui vous rapprochent.",
               },
               {
-                title: "Informations et conseils",
-                desc: "Retrouvez facilement des informations importantes et recevez des conseils adaptés à votre parcours.",
+                title: "Obtenir des conseils personnalisés",
+                desc: "Des suggestions adaptées à votre parcours et à vos questions.",
               },
               {
-                title: "Questions et assistance",
-                desc: "EVA répond à vos questions sur l'utilisation de la plateforme et vous propose des suggestions personnalisées.",
+                title: "Recevoir une assistance à tout moment",
+                desc: "Une aide disponible pour naviguer sur la plateforme quand vous en avez besoin.",
               },
             ].map((box, idx) => (
               <div key={idx} className="p-6 rounded-lg bg-white/10 border border-white/10 space-y-3">
@@ -212,34 +212,33 @@ export default function HowItWorksPage() {
 
       {/* CONFIANCE, SÉCURITÉ ET CONFIDENTIALITÉ */}
       <section className="py-20 px-6 sm:px-12 lg:px-20 max-w-6xl mx-auto space-y-16">
-        <div className="text-center max-w-3xl mx-auto space-y-4">
-          <span className="text-xs font-sans uppercase tracking-widest text-primary font-semibold">
-            Confiance et sécurité
-          </span>
+        <div className="text-center max-w-3xl mx-auto">
           <h2 className="font-serif text-3xl sm:text-4xl font-bold text-foreground">
-            Une plateforme pensée pour inspirer confiance
+            Votre sécurité est une priorité.
           </h2>
-          <p className="text-muted-foreground text-base">
-            Nous savons que la confiance est essentielle lorsqu&apos;il s&apos;agit de faire des rencontres. Notre ambition est que chacun puisse évoluer dans un environnement où il se sent respecté et en sécurité.
-          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {[
             {
-              title: "Vérification des profils",
-              desc: "Vérification progressive des profils, contrôle des photos publiées et détection des comportements inappropriés pour protéger la communauté.",
+              title: "Profils vérifiés",
+              desc: "Nous mettons progressivement en place des procédures de vérification afin de garantir un environnement de confiance.",
               icon: <ShieldCheck className="h-6 w-6 text-primary" />,
             },
             {
-              title: "Modération et signalement",
-              desc: "Outils de signalement confidentiels et modération humaine lorsque cela est nécessaire, pour garantir un environnement respectueux.",
-              icon: <Award className="h-6 w-6 text-accent" />,
+              title: "Confidentialité",
+              desc: "Vous décidez des informations visibles sur votre profil et choisissez ce que vous souhaitez partager.",
+              icon: <Lock className="h-6 w-6 text-primary" />,
             },
             {
-              title: "Votre confidentialité entre vos mains",
-              desc: "Vous gardez le contrôle sur vos informations. Vous choisissez les éléments que vous souhaitez partager et ceux que vous préférez conserver privés. Certaines informations sensibles ne sont jamais affichées publiquement.",
-              icon: <Lock className="h-6 w-6 text-primary" />,
+              title: "Signalement simplifié",
+              desc: "Des outils de signalement confidentiels et une modération humaine lorsque cela est nécessaire.",
+              icon: <Flag className="h-6 w-6 text-accent" />,
+            },
+            {
+              title: "Une communauté respectueuse",
+              desc: "Chaque membre accepte la Charte KELIAA, socle de notre communauté et garantie d'un environnement respectueux.",
+              icon: <Users className="h-6 w-6 text-primary" />,
             },
           ].map((item, idx) => (
             <div
@@ -253,16 +252,6 @@ export default function HowItWorksPage() {
               </div>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* UNE EXPÉRIENCE QUI ÉVOLUE AVEC VOUS */}
-      <section className="py-12 px-6 sm:px-12 max-w-4xl mx-auto">
-        <div className="p-10 rounded-lg bg-secondary/40 border border-border space-y-4 text-center">
-          <h3 className="font-serif text-2xl font-bold text-foreground">Une expérience qui évolue avec vous</h3>
-          <p className="text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
-            Votre profil n&apos;est jamais figé. Au fil du temps, vous pourrez le compléter, le mettre à jour et enrichir les informations que vous souhaitez partager. Cette évolution permet à KELIAA d&apos;améliorer progressivement la pertinence de vos recommandations.
-          </p>
         </div>
       </section>
 
@@ -308,18 +297,21 @@ export default function HowItWorksPage() {
       {/* CTA FINAL */}
       <section className="py-24 px-6 sm:px-12 text-center max-w-3xl mx-auto space-y-8">
         <h2 className="font-serif text-4xl sm:text-5xl font-bold text-foreground leading-tight">
-          Prêt à commencer votre parcours ?
+          Une seule rencontre peut changer toute une vie.
         </h2>
-        <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-          Chaque belle histoire commence par une première étape. Et si aujourd&apos;hui était celle qui vous rapprochait de LA personne que vous recherchez ?
+        <p className="text-muted-foreground text-lg max-w-xl mx-auto leading-relaxed">
+          Vous n&apos;avez pas besoin de rencontrer des centaines de personnes. Vous avez besoin de
+          rencontrer celle avec qui construire un foyer. Commencez aujourd&apos;hui votre parcours sur
+          KELIAA et avancez avec une méthode pensée pour les célibataires chrétiens qui désirent un
+          mariage durable.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-6 pt-4">
           <MagneticButton href="/register" variant="primary" size="lg">
-            <span>Créer gratuitement mon compte</span>
+            <span>Créer gratuitement mon profil</span>
             <ArrowRight className="h-4 w-4" />
           </MagneticButton>
           <MagneticButton href="/pricing" variant="outline" size="lg">
-            <span>Découvrir nos offres</span>
+            <span>Découvrir les offres</span>
           </MagneticButton>
         </div>
       </section>

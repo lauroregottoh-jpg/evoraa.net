@@ -64,12 +64,14 @@ export default function BlogReadingPage() {
             <span className="text-xs font-mono text-muted-foreground">• {article.date}</span>
           </div>
 
-          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-white leading-tight">
+          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-foreground leading-tight">
             {article.title}
           </h1>
 
-          <div className="flex items-center justify-between border-y border-border/30 py-4 text-xs text-muted-foreground">
-            <span>Rédigé par <strong className="text-white">{article.author}</strong></span>
+          <div className="flex items-center justify-between border-y border-border py-4 text-xs text-muted-foreground">
+            <span>
+              Rédigé par <strong className="text-foreground">{article.author}</strong>
+            </span>
             <button className="flex items-center gap-1.5 hover:text-accent transition-colors">
               <Share2 className="h-4 w-4" /> Partager
             </button>
@@ -86,19 +88,20 @@ export default function BlogReadingPage() {
 
         {/* CONTENT */}
         <div
-          className="prose prose-invert prose-lg max-w-none font-sans text-white/90 space-y-6 leading-relaxed
-                     [&>h3]:font-serif [&>h3]:text-2xl [&>h3]:text-accent [&>h3]:font-bold [&>h3]:mt-10 [&>h3]:mb-4
-                     [&>blockquote]:font-serif [&>blockquote]:italic [&>blockquote]:border-l-2 [&>blockquote]:border-accent [&>blockquote]:pl-6 [&>blockquote]:py-2 [&>blockquote]:bg-secondary/20 [&>blockquote]:rounded-r-2xl
-                     [&>.lead]:font-serif [&>.lead]:text-xl [&>.lead]:text-white [&>.lead]:leading-relaxed [&>.lead]:italic"
+          className="prose prose-lg max-w-none font-sans text-foreground space-y-6 leading-relaxed
+                     [&>h3]:font-serif [&>h3]:text-2xl [&>h3]:text-primary [&>h3]:font-bold [&>h3]:mt-10 [&>h3]:mb-4
+                     [&>blockquote]:font-serif [&>blockquote]:italic [&>blockquote]:border-l-2 [&>blockquote]:border-accent [&>blockquote]:pl-6 [&>blockquote]:py-2 [&>blockquote]:bg-secondary/30 [&>blockquote]:rounded-r-2xl [&>blockquote]:text-foreground
+                     [&>.lead]:font-serif [&>.lead]:text-xl [&>.lead]:text-foreground [&>.lead]:leading-relaxed [&>.lead]:italic
+                     [&>p]:text-foreground/90"
           dangerouslySetInnerHTML={{ __html: article.content }}
         />
 
         {/* BOTTOM AUTHOR & CTA */}
-        <div className="mt-16 p-10 rounded-[3rem] bg-gradient-to-br from-[#161622] to-[#12121A] border border-accent/40 shadow-2xl text-center space-y-6">
-          <div className="h-12 w-12 rounded-full bg-accent/20 border border-accent/40 flex items-center justify-center text-accent mx-auto">
+        <div className="mt-16 p-10 rounded-[3rem] bg-white border border-accent/30 shadow-elevated text-center space-y-6">
+          <div className="h-12 w-12 rounded-full bg-accent/15 border border-accent/40 flex items-center justify-center text-accent mx-auto">
             <Sparkles className="h-6 w-6" />
           </div>
-          <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white">
+          <h3 className="font-serif text-2xl sm:text-3xl font-bold text-foreground">
             Vivez cette promesse dans votre propre parcours.
           </h3>
           <p className="text-sm text-muted-foreground max-w-xl mx-auto leading-relaxed">
@@ -106,7 +109,7 @@ export default function BlogReadingPage() {
           </p>
           <div className="pt-2">
             <MagneticButton href="/register" variant="primary" size="lg">
-              <span>Créer gratuitement mon compte</span>
+              <span>Créer gratuitement mon profil</span>
               <ArrowRight className="h-4 w-4" />
             </MagneticButton>
           </div>

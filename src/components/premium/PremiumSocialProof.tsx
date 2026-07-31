@@ -1,39 +1,72 @@
 "use client"
 
 import * as React from "react"
-import { ChevronDown } from "lucide-react"
+import { ChevronDown, Quote } from "lucide-react"
 import { cn } from "@/utils/cn"
-import { TestimonialsCarousel } from "@/components/marketing/TestimonialsCarousel"
+
+/** Témoignages + FAQ Alliance — KELIA Page d'accueil.docx */
+const ALLIANCE_TESTIMONIALS = [
+  {
+    quote:
+      "Je pensais simplement avoir plus de profils. En réalité, j'ai surtout reçu des recommandations beaucoup plus pertinentes. Chaque conversation semblait partir sur de meilleures bases.",
+    name: "Grâce",
+    meta: "Alliance depuis 4 mois",
+  },
+  {
+    quote:
+      "Le score de compatibilité nous a permis d'aborder rapidement les sujets essentiels. Nous savions déjà que nous partagions les mêmes convictions.",
+    name: "David",
+    meta: "Alliance",
+  },
+  {
+    quote:
+      "Je considère aujourd'hui Alliance comme un investissement dans mon avenir, pas comme une dépense supplémentaire.",
+    name: "Rachel",
+    meta: "Alliance",
+  },
+  {
+    quote:
+      "J'ai perdu moins de temps avec des échanges sans lendemain. Les profils proposés correspondaient réellement à ce que je recherchais.",
+    name: "Samuel",
+    meta: "Alliance",
+  },
+]
 
 const FAQS = [
   {
-    q: "Quels modes de paiement sont acceptés ?",
-    a: "Mobile Money (Orange, Wave, Moov…) et carte bancaire via Bictorys ou CinetPay, selon la configuration active.",
+    q: "Pourquoi devenir membre Alliance ?",
+    a: "Parce que vous profitez de toute la puissance du Matching KELIAA™ et d'une expérience complète pour avancer plus sereinement dans votre recherche.",
+  },
+  {
+    q: "Puis-je arrêter quand je le souhaite ?",
+    a: "Oui. Le renouvellement est entièrement manuel. Vous gardez toujours le contrôle.",
   },
   {
     q: "Mon paiement est-il sécurisé ?",
-    a: "Oui. Le paiement est traité sur la page hébergée du prestataire. KELIAA ne stocke jamais vos données de carte ni votre PIN Mobile Money.",
+    a: "Oui. Tous les paiements sont réalisés via Bictorys ou CinetPay selon votre pays.",
   },
   {
-    q: "Puis-je annuler mon abonnement ?",
-    a: "Alliance n'est pas prélevée automatiquement. À la fin des 30 jours, vous choisissez de renouveler ou non.",
+    q: "Que se passe-t-il si je repasse en offre Découverte ?",
+    a: "Votre compte reste actif. Vous conservez votre profil et retrouvez simplement les fonctionnalités incluses dans l'offre gratuite.",
   },
   {
-    q: "Comment fonctionne le renouvellement ?",
-    a: "Renouvellement manuel uniquement. Vous êtes notifié avant l'échéance pour garder vos quotas et votre badge.",
-  },
-  {
-    q: "À quoi sert le Boost ?",
-    a: "Le Boost place temporairement votre profil en priorité dans les suggestions (24h, 3 jours ou 7 jours), en complément d'Alliance.",
-  },
-  {
-    q: "Puis-je faire confiance à KELIAA ?",
-    a: "Profils modérés, recommandations pastorales, Bouclier de bienveillance et règles claires. Nous privilégions le discernement, pas le swipe.",
+    q: "Pourquoi proposer un abonnement ?",
+    a: "Parce que nous préférons investir dans la qualité des recommandations, la sécurité de la plateforme et l'amélioration continue de notre Matching plutôt que d'afficher de la publicité ou de vendre vos données.",
   },
 ]
 
 export function PremiumSocialProof() {
   const [open, setOpen] = React.useState<number | null>(0)
+  const [tIndex, setTIndex] = React.useState(0)
+
+  React.useEffect(() => {
+    const id = window.setInterval(() => {
+      setTIndex((i) => (i + 1) % ALLIANCE_TESTIMONIALS.length)
+    }, 5500)
+    return () => window.clearInterval(id)
+  }, [])
+
+  const t = ALLIANCE_TESTIMONIALS[tIndex]
 
   return (
     <div className="space-y-8">
@@ -44,7 +77,30 @@ export function PremiumSocialProof() {
           </span>
           <h2 className="font-serif text-2xl font-bold">Ils avancent avec Alliance</h2>
         </div>
-        <TestimonialsCarousel />
+        <figure className="text-center space-y-4 min-h-[160px] flex flex-col justify-center">
+          <Quote className="h-7 w-7 text-accent mx-auto" />
+          <blockquote className="font-serif text-lg sm:text-xl italic text-foreground leading-relaxed">
+            « {t.quote} »
+          </blockquote>
+          <figcaption className="text-sm font-semibold text-primary">
+            {t.name}
+            <span className="block font-normal text-muted-foreground mt-1">{t.meta}</span>
+          </figcaption>
+        </figure>
+        <div className="flex justify-center gap-2">
+          {ALLIANCE_TESTIMONIALS.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              aria-label={`Témoignage ${i + 1}`}
+              onClick={() => setTIndex(i)}
+              className={cn(
+                "h-2 rounded-full transition-all",
+                i === tIndex ? "w-7 bg-accent" : "w-2 bg-border"
+              )}
+            />
+          ))}
+        </div>
       </section>
 
       <section className="space-y-3">

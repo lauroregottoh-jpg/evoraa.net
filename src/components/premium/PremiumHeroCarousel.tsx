@@ -10,27 +10,28 @@ export type PremiumHeroSlide = {
   subtitle: string
 }
 
+/** Source : KELIA - Page d'accueil.docx — section Alliance / Premium */
 const DEFAULT_SLIDES: PremiumHeroSlide[] = [
   {
-    badge: "Chrétien · sérieux · vérifié",
-    title: "ton futur foyer t'attend.",
-    highlight: "Ne le rate pas.",
-    subtitle:
-      "Sans Alliance, votre profil reste limité. Avec Alliance, vous apparaissez mieux, vous échangez davantage, et vous avancez avec clarté.",
-  },
-  {
     badge: "Matching à 5 piliers",
-    title: "la compatibilité avant l'apparence.",
-    highlight: "Discernez mieux.",
+    title: "mérite plus que le hasard.",
+    highlight: "Votre futur conjoint",
     subtitle:
-      "Foi, personnalité, communication, vie de couple et projet de foyer : Alliance débloque les quotas pour rencontrer plus sérieusement.",
+      "Alliance vous donne accès à toute la puissance du Matching KELIAA™ à 5 piliers pour recevoir davantage de profils réellement compatibles avec votre foi, vos valeurs et votre projet de mariage.",
   },
   {
-    badge: "Mobile Money & carte",
-    title: "activez Alliance en quelques minutes.",
-    highlight: "Sans surprise.",
+    badge: "Compatibilités détaillées",
+    title: "toutes les chances à votre future rencontre.",
+    highlight: "Donnez",
     subtitle:
-      "Paiement sécurisé via Bictorys ou CinetPay. Renouvellement manuel après 30 jours — vous gardez le contrôle.",
+      "Passez à Alliance et profitez d'une expérience complète conçue pour vous aider à rencontrer une personne réellement compatible.",
+  },
+  {
+    badge: "Renouvellement manuel",
+    title: "vous perdez moins de temps, vous avancez plus sereinement.",
+    highlight: "Avec Alliance,",
+    subtitle:
+      "Parce que rencontrer la bonne personne ne dépend pas uniquement du nombre de profils consultés — vous échangez avec des profils plus pertinents grâce au Matching KELIAA™.",
   },
 ]
 
@@ -57,18 +58,14 @@ export function PremiumHeroCarousel({
 
   return (
     <section className="text-center space-y-5 max-w-3xl mx-auto px-1">
-      <div
-        key={index}
-        className="space-y-4 animate-in fade-in duration-500"
-      >
+      <div key={index} className="space-y-4 animate-in fade-in duration-500">
         <span className="inline-flex items-center rounded-full bg-accent/20 text-accent-foreground border border-accent/30 px-3 py-1 text-[11px] font-semibold tracking-wide">
           {slide.badge}
         </span>
         <h1 className="font-serif text-3xl sm:text-4xl font-bold text-foreground leading-tight">
           <span className="italic font-semibold">{name}</span>
           {", "}
-          {slide.title}{" "}
-          <span className="text-accent">{slide.highlight}</span>
+          <span className="text-accent">{slide.highlight}</span> {slide.title}
         </h1>
         <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto">
           {slide.subtitle}
@@ -80,8 +77,8 @@ export function PremiumHeroCarousel({
         aria-label="Indicateurs Alliance"
       >
         {[
-          { value: "3×", label: "plus de suggestions" },
-          { value: "5", label: "piliers de matching" },
+          { value: "5", label: "piliers Matching" },
+          { value: "✓", label: "compatibilités détaillées" },
           { value: "100 %", label: "renouvellement manuel" },
         ].map((s) => (
           <div key={s.label} className="text-center">

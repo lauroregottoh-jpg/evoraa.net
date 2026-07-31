@@ -26,10 +26,11 @@ export function BoostSection() {
       <div className="flex items-start justify-between gap-3">
         <div className="space-y-1">
           <p className="text-xs font-semibold uppercase tracking-widest text-primary">Boost</p>
-          <h2 className="font-serif text-2xl font-bold">Boostez votre visibilité</h2>
+          <h2 className="font-serif text-2xl font-bold">Donnez plus de visibilité à votre profil</h2>
           <p className="text-sm text-muted-foreground max-w-xl">
-            Apparaissez en priorité dans les suggestions et recevez jusqu&apos;à 10× plus de vues
-            sur votre profil pendant la durée choisie.
+            Pendant la durée du Boost, votre profil est présenté en priorité auprès des membres
+            compatibles. Jusqu&apos;à 10 fois plus de visibilité. Idéal lorsque votre profil est
+            complet et que vous souhaitez accélérer votre recherche.
           </p>
         </div>
         <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary shrink-0">

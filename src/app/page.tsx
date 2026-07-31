@@ -11,6 +11,7 @@ import { ShareRecommendSection } from "@/components/marketing/ShareRecommendSect
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import {
   ArrowRight,
+  Check,
   Heart,
   ShieldCheck,
   Sparkles,
@@ -18,6 +19,7 @@ import {
   BookOpen,
   Lock,
   ClipboardCheck,
+  MessageCircle,
 } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -27,6 +29,7 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
 
+/** Copy source: software-architecture/KELIA - Page d'accueil.docx — orienté inscription. */
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -84,27 +87,33 @@ export default function Home() {
   );
 
   const heroCta = (
-    <div className="flex flex-wrap items-center justify-center gap-6">
-      <div className="hero-cta-main">
+    <div className="space-y-5">
+      <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+        <div className="hero-cta-main">
+          <MagneticButton
+            href="/register"
+            variant="primary"
+            size="lg"
+            className="px-8 py-7 text-lg bg-primary hover:bg-primary/90 text-white shadow-elevated border-none"
+          >
+            <span className="flex items-center gap-2">
+              Créer gratuitement mon profil <ArrowRight className="h-5 w-5" />
+            </span>
+          </MagneticButton>
+        </div>
         <MagneticButton
-          href="/register"
-          variant="primary"
+          href="/how-it-works"
+          variant="outline"
           size="lg"
-          className="px-8 py-7 text-lg bg-primary hover:bg-primary/90 text-white shadow-elevated border-none"
+          className="px-8 py-7 text-lg bg-white/10 hover:bg-white/20 text-white border-white/40 backdrop-blur-md"
         >
-          <span className="flex items-center gap-2">
-            Commencer gratuitement <ArrowRight className="h-5 w-5" />
-          </span>
+          Découvrir notre méthode
         </MagneticButton>
       </div>
-      <MagneticButton
-        href="/how-it-works"
-        variant="outline"
-        size="lg"
-        className="px-8 py-7 text-lg bg-white/10 hover:bg-white/20 text-white border-white/40 backdrop-blur-md"
-      >
-        Voir comment ça marche
-      </MagneticButton>
+      <p className="text-sm sm:text-base text-white/85 max-w-xl mx-auto leading-relaxed drop-shadow-md">
+        Déjà des centaines de célibataires chrétiens ont choisi une approche plus sérieuse pour
+        construire leur avenir. Pourquoi pas vous ?
+      </p>
     </div>
   );
 
@@ -112,45 +121,53 @@ export default function Home() {
     <div ref={containerRef} className="min-h-screen bg-background selection:bg-primary/20 overflow-hidden">
       <CinematicNavbar />
 
-      {/* One living background + rotating copy (no static photo slab on top) */}
       <div className="relative">
         <HeroBackground3D />
         <HomeHeroCarousel cta={heroCta} />
       </div>
 
+      {/* Pourquoi KELIAA existe */}
       <section className="story-container py-28 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto overflow-hidden">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="story-text space-y-8">
             <div className="space-y-4">
               <span className="text-sm font-sans font-semibold text-primary uppercase tracking-widest">
-                Pourquoi on existe
+                Pourquoi KELIAA existe
               </span>
               <h2 className="text-4xl sm:text-5xl font-serif font-bold text-foreground leading-tight">
-                Parce que trop de plateformes traitent l&apos;amour comme un flux.
+                Vous méritez mieux que des rencontres sans lendemain.
               </h2>
             </div>
             <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
               <p>
-                Si vous êtes célibataire et que vous voulez vraiment vous marier, vous le savez déjà :
-                la plupart des apps ne sont pas faites pour vous. Elles poussent le swipe, l&apos;image,
-                la conversation rapide — et souvent, ce qui suit n&apos;a plus grand-chose à voir avec
-                vos convictions.
+                Si vous êtes célibataire et que vous souhaitez réellement vous marier, vous avez
+                probablement déjà ressenti cette frustration.
               </p>
+              <ul className="space-y-3 text-base sm:text-lg">
+                {[
+                  "Des conversations qui s'arrêtent du jour au lendemain.",
+                  "Des personnes qui ne partagent pas vos convictions.",
+                  "Des échanges centrés sur l'apparence plutôt que sur les valeurs.",
+                  "Le sentiment de perdre du temps alors que vous cherchez simplement quelqu'un avec qui construire un foyer.",
+                ].map((line) => (
+                  <li key={line} className="flex gap-3">
+                    <span className="mt-2.5 h-1.5 w-1.5 rounded-full bg-accent shrink-0" />
+                    <span>{line}</span>
+                  </li>
+                ))}
+              </ul>
               <p>
-                KELIAA est née d&apos;un constat simple, vécu auprès de centaines de célibataires
-                chrétiens : on peut vouloir une rencontre sérieuse sans se mettre en vitrine. On peut
-                parler foi, vision du foyer et maturité avant de parler photos. On peut chercher{" "}
-                <strong className="text-foreground font-serif italic">L&apos;âme sœur</strong> sans
-                renoncer à sa dignité.
+                KELIAA est née pour répondre à cette réalité. Nous avons imaginé un espace où les
+                célibataires chrétiens peuvent se rencontrer autrement : avec respect, discernement
+                et une véritable recherche de compatibilité.
               </p>
-              <p>
-                Notre travail, ce n&apos;est pas de multiplier les likes. C&apos;est de créer un espace
-                où le discernement a sa place — sécurisé, confidentiel, et porté par une méthode de
-                matching qui s&apos;appuie sur autre chose que l&apos;attirance du moment.
+              <p className="text-foreground font-medium">
+                Parce qu&apos;une rencontre qui peut changer une vie mérite davantage qu&apos;un
+                simple swipe.
               </p>
             </div>
-            <MagneticButton href="/about" variant="outline" className="mt-2">
-              Notre histoire
+            <MagneticButton href="/register" variant="primary" className="mt-2">
+              Créer gratuitement mon profil
             </MagneticButton>
           </div>
           <div className="story-image relative h-[520px] sm:h-[600px] rounded-2xl overflow-hidden shadow-elevated">
@@ -165,6 +182,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Ce qui change concrètement */}
       <section className="py-8 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
         <div className="encart-kelia p-8 sm:p-10 gsap-fade-up">
           <div className="grid md:grid-cols-2 gap-10 items-center">
@@ -173,20 +191,24 @@ export default function Home() {
                 Ce qui change concrètement
               </p>
               <h2 className="font-serif text-3xl sm:text-4xl font-bold text-foreground">
-                Un matching qui respecte votre réalité
+                Une méthode pensée pour construire des relations durables.
               </h2>
               <p className="text-muted-foreground leading-relaxed">
-                Questionnaires, lecture de compatibilité, vérification de profils, règles claires sur
-                la vie privée. Ce n&apos;est pas du marketing : c&apos;est le cœur du produit. Sans ça,
-                on retombe dans le hasard — et le hasard fatigue.
+                Nous avons remplacé les mécanismes qui favorisent les rencontres éphémères par une
+                approche qui aide à discerner une personne réellement compatible.
               </p>
+              <MagneticButton href="/register" variant="outline" className="mt-2">
+                Créer gratuitement mon profil
+              </MagneticButton>
             </div>
-            <ul className="grid sm:grid-cols-2 gap-4">
+            <ul className="grid sm:grid-cols-2 gap-3">
               {[
-                { icon: <ClipboardCheck className="h-5 w-5" />, label: "Tests structurés" },
-                { icon: <Heart className="h-5 w-5" />, label: "Compatibilité réelle" },
+                { icon: <Heart className="h-5 w-5" />, label: "Compatibilité avant attirance" },
                 { icon: <ShieldCheck className="h-5 w-5" />, label: "Profils vérifiés" },
-                { icon: <Lock className="h-5 w-5" />, label: "Vie privée respectée" },
+                { icon: <Lock className="h-5 w-5" />, label: "Confidentialité renforcée" },
+                { icon: <Sparkles className="h-5 w-5" />, label: "Communauté engagée vers le mariage" },
+                { icon: <MessageCircle className="h-5 w-5" />, label: "Échanges plus profonds dès le début" },
+                { icon: <BookOpen className="h-5 w-5" />, label: "Une démarche qui respecte votre foi" },
               ].map((item) => (
                 <li
                   key={item.label}
@@ -201,40 +223,38 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Parcours */}
       <section className="py-28 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto relative">
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16 gsap-fade-up">
           <span className="text-sm font-sans font-semibold text-primary uppercase tracking-widest">
             Le parcours
           </span>
           <h2 className="text-4xl sm:text-5xl font-serif font-bold text-foreground">
-            Quatre étapes. Zéro théâtre.
+            Votre parcours vers une rencontre qui a du sens
           </h2>
-          <p className="text-muted-foreground text-lg">
-            Vous avancez à votre rythme. On vous donne de la clarté — pas de la pression.
-          </p>
         </div>
 
         <div className="steps-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {[
             {
               icon: <UserCheck />,
-              title: "1. Un profil qui vous ressemble",
-              desc: "Foi, projet de vie, attentes relationnelles. Assez pour être compris — sans vous exposer inutilement.",
+              title: "1. Présentez qui vous êtes",
+              desc: "Votre foi, vos valeurs, votre vision du mariage et du foyer.",
             },
             {
               icon: <ClipboardCheck />,
-              title: "2. Des tests utiles",
-              desc: "Pas un quiz gadget : des questions qui éclairent la façon dont vous aimez, communiquez et construisez.",
+              title: "2. Découvrez votre compatibilité",
+              desc: "Notre méthode identifie les bases d'une relation durable.",
             },
             {
               icon: <ShieldCheck />,
-              title: "3. Des échanges cadrés",
-              desc: "Profils vérifiés, règles de respect, confidentialité. Vous pouvez parler vrai sans vous sentir en danger.",
+              title: "3. Échangez en confiance",
+              desc: "Avec des profils vérifiés dans un cadre respectueux.",
             },
             {
-              icon: <BookOpen />,
-              title: "4. Du discernement vers L'âme sœur",
-              desc: "On ne force rien. On vous aide à avancer avec lucidité vers quelqu'un avec qui bâtir, pas juste chatter.",
+              icon: <Heart />,
+              title: "4. Discernement",
+              desc: "Prenez le temps de connaître la bonne personne avant de construire votre avenir.",
             },
           ].map((step, i) => (
             <div
@@ -249,8 +269,17 @@ export default function Home() {
             </div>
           ))}
         </div>
+        <p className="text-center text-muted-foreground mt-10 max-w-xl mx-auto gsap-fade-up">
+          Destination : commencez une histoire qui a du sens.
+        </p>
+        <div className="flex justify-center mt-6 gsap-fade-up">
+          <MagneticButton href="/register" variant="primary">
+            Créer gratuitement mon profil
+          </MagneticButton>
+        </div>
       </section>
 
+      {/* Comparatif */}
       <section className="compare-container relative py-28 px-6 sm:px-12 lg:px-20 bg-primary text-primary-foreground">
         <div className="absolute inset-0 opacity-15">
           <Image
@@ -267,25 +296,28 @@ export default function Home() {
               Soyons clairs
             </span>
             <h2 className="text-4xl sm:text-5xl font-serif font-bold text-white">
-              Ce que vous fuyez. Ce que vous trouvez ici.
+              Pourquoi nos membres ne reviennent plus aux applications classiques
             </h2>
             <p className="text-lg text-white/85">
-              Deux logiques. Deux résultats. Choisissez celle qui respecte votre saison.
+              Les applications de rencontre ont été conçues pour créer toujours plus
+              d&apos;interactions. KELIAA a été conçue pour favoriser une rencontre qui peut durer
+              toute une vie.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 lg:gap-10">
             <div className="compare-card p-8 sm:p-10 rounded-lg border border-white/15 bg-black/35 backdrop-blur-md">
               <h3 className="text-xl font-sans font-semibold text-white/55 mb-8 uppercase tracking-wide">
-                Apps classiques
+                Applications classiques
               </h3>
               <ul className="space-y-5">
                 {[
-                  "Le visage décide avant la conversation",
-                  "Le swipe remplace le discernement",
-                  "Les échanges glissent vite hors sujet",
-                  "Peu de filtre sur les intentions",
-                  "Confidentialité souvent secondaire",
+                  "Le premier jugement se fait sur une photo",
+                  "Des centaines de profils à faire défiler",
+                  "Des intentions souvent floues",
+                  "Peu de vérification des profils",
+                  "Des conversations superficielles",
+                  "On cherche à attirer l'attention",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-3 text-white/70 text-base sm:text-lg">
                     <span className="mt-2 h-2 w-2 rounded-full bg-white/30 shrink-0" />
@@ -301,24 +333,28 @@ export default function Home() {
               </h3>
               <ul className="space-y-5">
                 {[
-                  "La vision du mariage avant le spectacle",
-                  "Matching fondé sur des tests réels",
-                  "Profils vérifiés, process sérieux",
-                  "Cadre digne pour parler vrai",
-                  "Vie privée traitée comme un engagement",
+                  "La compatibilité passe avant l'apparence",
+                  "Une sélection fondée sur vos valeurs et votre projet de vie",
+                  "Une communauté orientée vers le mariage",
+                  "Des profils vérifiés et un cadre sécurisé",
+                  "Des échanges qui parlent de foi, de vision et d'avenir",
+                  "On apprend à discerner la bonne personne",
                 ].map((item) => (
                   <li
                     key={item}
                     className="flex items-start gap-3 text-foreground text-base sm:text-lg font-medium"
                   >
-                    <span className="mt-2 h-2 w-2 rounded-full bg-accent shrink-0" />
+                    <Check className="mt-1 h-5 w-5 text-accent shrink-0" />
                     {item}
                   </li>
                 ))}
               </ul>
-              <div className="mt-10">
+              <p className="mt-8 text-sm text-muted-foreground leading-relaxed">
+                Parce que votre futur mariage mérite mieux qu&apos;une rencontre laissée au hasard.
+              </p>
+              <div className="mt-8">
                 <MagneticButton href="/register" variant="primary" className="w-full sm:w-auto">
-                  Créer mon compte
+                  Créer gratuitement mon profil
                 </MagneticButton>
               </div>
             </div>
@@ -327,68 +363,37 @@ export default function Home() {
       </section>
 
       <TestimonialsCarousel />
-      <ShareRecommendSection />
 
-      <section className="py-28 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-16 gsap-fade-up">
-          <span className="text-sm font-sans font-semibold text-primary uppercase tracking-widest">
-            Ce que vous construisez
-          </span>
-          <h2 className="text-4xl sm:text-5xl font-serif font-bold text-foreground">
-            Pas une série de rendez-vous. Une direction.
+      {/* Imaginez votre histoire */}
+      <section className="py-28 px-6 sm:px-12 relative overflow-hidden bg-[#1C1412] text-white">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-40"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 50% 20%, rgba(184,149,74,0.22), transparent 45%), radial-gradient(circle at 80% 80%, rgba(92,31,40,0.35), transparent 40%)",
+          }}
+        />
+        <div className="relative z-10 max-w-3xl mx-auto space-y-8 gsap-fade-up text-center">
+          <h2 className="font-serif text-3xl sm:text-5xl font-bold leading-tight">
+            Imaginez votre histoire dans quelques mois…
           </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
-          <div className="md:col-span-2 md:row-span-2 rounded-3xl overflow-hidden relative group shadow-card gsap-fade-up">
-            <Image
-              src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=2000&auto=format&fit=crop"
-              alt="Cheminer ensemble"
-              fill
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-            <div className="absolute bottom-0 left-0 p-8 z-20">
-              <h3 className="text-white font-serif text-3xl font-bold mb-2">Marcher dans la même direction</h3>
-              <p className="text-white/80">Foi, valeurs, projet de foyer — avant le décor.</p>
-            </div>
+          <div className="space-y-4 text-white/85 text-base sm:text-lg leading-relaxed text-left sm:text-center max-w-2xl mx-auto">
+            <p>Vous ouvrez KELIAA.</p>
+            <p>Une nouvelle compatibilité vous est proposée.</p>
+            <p>Vous commencez à échanger.</p>
+            <p>Les conversations parlent de foi, de projets de vie, de famille.</p>
+            <p>Les semaines passent.</p>
+            <p>Vous priez ensemble.</p>
+            <p>Vous discernez.</p>
+            <p>
+              Puis un jour, vous réalisez que cette rencontre pourrait être celle que vous
+              attendiez depuis longtemps.
+            </p>
           </div>
-          <div className="rounded-3xl overflow-hidden relative group shadow-card gsap-fade-up">
-            <Image
-              src="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?q=80&w=1000&auto=format&fit=crop"
-              alt="Prendre le temps"
-              fill
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-            <div className="absolute bottom-0 left-0 p-8 z-20">
-              <h3 className="text-white font-serif text-xl font-bold">Prendre le temps</h3>
-            </div>
-          </div>
-          <div className="rounded-3xl overflow-hidden relative group shadow-card gsap-fade-up">
-            <Image
-              src="https://images.unsplash.com/photo-1596484552993-277579177196?q=80&w=1000&auto=format&fit=crop"
-              alt="S'engager"
-              fill
-              className="object-cover opacity-90"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-primary/40 to-transparent" />
-            <div className="absolute bottom-0 left-0 p-8 z-20">
-              <h3 className="text-white font-serif text-xl font-bold">S&apos;engager pour de vrai</h3>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-28 px-6 sm:px-12 relative overflow-hidden bg-primary text-white">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=2000&auto=format&fit=crop')] opacity-10 bg-cover bg-center mix-blend-overlay" />
-        <div className="relative z-10 text-center max-w-3xl mx-auto space-y-8 gsap-fade-up">
-          <h2 className="font-serif text-4xl sm:text-6xl font-bold leading-tight">
-            Si vous en avez assez de chercher au hasard
-          </h2>
-          <p className="text-white/90 text-lg sm:text-xl max-w-xl mx-auto">
-            Rejoignez KELIAA. Créez votre espace, complétez votre profil, et avancez avec une méthode
-            qui respecte ce que vous croyez.
+          <p className="text-accent font-serif text-xl sm:text-2xl italic leading-snug pt-2">
+            Toutes les grandes histoires commencent par une première décision. Aujourd&apos;hui,
+            cette décision peut être de créer votre profil.
           </p>
           <MagneticButton
             href="/register"
@@ -396,7 +401,32 @@ export default function Home() {
             size="lg"
             className="px-10 py-6 text-lg bg-white text-primary border-none hover:bg-white/90 shadow-elevated"
           >
-            Créer mon espace
+            Créer gratuitement mon profil
+          </MagneticButton>
+        </div>
+      </section>
+
+      <ShareRecommendSection />
+
+      {/* CTA final */}
+      <section className="py-28 px-6 sm:px-12 relative overflow-hidden bg-primary text-white">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=2000&auto=format&fit=crop')] opacity-10 bg-cover bg-center mix-blend-overlay" />
+        <div className="relative z-10 text-center max-w-3xl mx-auto space-y-8 gsap-fade-up">
+          <h2 className="font-serif text-4xl sm:text-6xl font-bold leading-tight">
+            Vous ne cherchez probablement qu&apos;une seule personne.
+          </h2>
+          <p className="text-white/90 text-lg sm:text-xl max-w-xl mx-auto">
+            Alors prenez le temps de la rencontrer dans le bon cadre. Rejoignez une communauté de
+            célibataires chrétiens qui souhaitent construire un mariage fondé sur la foi, des
+            valeurs communes et une véritable compatibilité.
+          </p>
+          <MagneticButton
+            href="/register"
+            variant="outline"
+            size="lg"
+            className="px-10 py-6 text-lg bg-white text-primary border-none hover:bg-white/90 shadow-elevated"
+          >
+            Créer gratuitement mon profil
           </MagneticButton>
         </div>
       </section>

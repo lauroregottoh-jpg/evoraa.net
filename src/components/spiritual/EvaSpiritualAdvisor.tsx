@@ -38,9 +38,16 @@ const PREDEFINED_TOPICS: QAPair[] = [
 
 type Props = {
   dailyLimit?: number;
+  /** Masque le compteur quota (pages marketing contact) */
+  showQuota?: boolean;
+  topicsLabel?: string;
 };
 
-export function EvaSpiritualAdvisor({ dailyLimit = 3 }: Props) {
+export function EvaSpiritualAdvisor({
+  dailyLimit = 3,
+  showQuota = true,
+  topicsLabel = "Questions de Discernement",
+}: Props) {
   const [selectedTopic, setSelectedTopic] = React.useState<QAPair | null>(
     PREDEFINED_TOPICS[0]
   );
@@ -102,11 +109,13 @@ export function EvaSpiritualAdvisor({ dailyLimit = 3 }: Props) {
         <div className="flex items-center justify-between gap-2">
           <h3 className="font-serif text-lg font-bold text-foreground flex items-center gap-2">
             <HelpCircle className="h-4 w-4 text-accent" />
-            Questions de Discernement
+            {topicsLabel}
           </h3>
-          <span className="text-[11px] text-muted-foreground whitespace-nowrap">
-            {remaining}/{limit} aujourd&apos;hui
-          </span>
+          {showQuota ? (
+            <span className="text-[11px] text-muted-foreground whitespace-nowrap">
+              {remaining}/{limit} aujourd&apos;hui
+            </span>
+          ) : null}
         </div>
 
         {quotaError && (

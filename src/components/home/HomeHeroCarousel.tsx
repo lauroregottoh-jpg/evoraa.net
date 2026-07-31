@@ -5,24 +5,24 @@ import * as React from "react";
 const SLIDES = [
   {
     brand: "KELIAA",
-    title: "Vous ne cherchez pas un match.",
-    highlight: "Vous cherchez une alliance.",
+    title: "Vous recherchez",
+    highlight: "LA bonne personne.",
     subtitle:
-      "Ici, on ne swipe pas des visages. On prend le temps de comprendre qui vous \u00eates, ce que vous croyez, et vers quel foyer vous voulez avancer.",
+      "KELIAA aide les célibataires chrétiens à rencontrer un futur conjoint grâce à une méthode fondée sur la compatibilité, la foi et le discernement. Parce qu'un mariage solide commence bien avant la première rencontre.",
   },
   {
     brand: "KELIAA",
-    title: "Rencontrer L'\u00e2me s\u0153ur",
-    highlight: "dans un cadre digne.",
+    title: "Et si votre futur conjoint",
+    highlight: "se trouvait à une décision de vous ?",
     subtitle:
-      "Des c\u00e9libataires chr\u00e9tiens s\u00e9rieux, un processus clair, et la place pour discerner sans pression \u2014 ni spectacle, ni ambigu\u00eft\u00e9.",
+      "Chez KELIAA, nous ne cherchons pas à multiplier les matchs. Nous aidons des célibataires chrétiens sérieux à construire une rencontre qui peut conduire à un mariage.",
   },
   {
     brand: "KELIAA",
-    title: "La compatibilit\u00e9 d'abord.",
-    highlight: "L'apparence ensuite.",
+    title: "Les meilleures histoires",
+    highlight: "commencent rarement par un swipe.",
     subtitle:
-      "Tests, \u00e9tude de compatibilit\u00e9, profils v\u00e9rifi\u00e9s, confidentialit\u00e9. Ce n'est pas magique : c'est m\u00e9thodique \u2014 et \u00e7a change tout.",
+      "Elles commencent par une vision commune, des valeurs partagées et le désir sincère de construire un foyer. C'est exactement ce que KELIAA vous aide à trouver.",
   },
 ];
 
