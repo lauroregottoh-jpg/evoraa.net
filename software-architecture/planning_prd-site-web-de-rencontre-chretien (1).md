@@ -38,8 +38,7 @@ Accès limité aux opérations de modération : profils, photos, signalements, r
 - Profil et questionnaires.
 - 3 suggestions par jour.
 - 5 nouvelles conversations par mois.
-- 5 messages par conversation initiée.
-- Réponse sans limite aux messages reçus.
+- 5 messages envoyés par conversation.
 - EVA : 3 questions par jour.
 - Journal, ressources et Bouclier de bienveillance.
 

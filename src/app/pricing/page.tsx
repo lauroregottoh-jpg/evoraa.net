@@ -10,6 +10,8 @@ import {
   Check,
   CheckCircle2,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Heart,
   Home,
   Leaf,
@@ -102,8 +104,16 @@ const TESTIMONIALS = [
 
 export default function PricingPage() {
   const [openFaq, setOpenFaq] = React.useState<number | null>(0);
+  const [testimonialIndex, setTestimonialIndex] = React.useState(0);
 
   const plans = PUBLIC_PLAN_ORDER.map((id) => PLANS[id]);
+
+  React.useEffect(() => {
+    const id = window.setInterval(() => {
+      setTestimonialIndex((current) => (current + 1) % TESTIMONIALS.length);
+    }, 5500);
+    return () => window.clearInterval(id);
+  }, []);
 
   const faqs = [
     {
@@ -359,22 +369,63 @@ export default function PricingPage() {
             Ils avancent avec Alliance
           </h2>
         </div>
-        <div className="grid sm:grid-cols-2 gap-6">
-          {TESTIMONIALS.map((t) => (
-            <figure
-              key={t.name}
-              className="p-6 rounded-2xl border border-border bg-white shadow-card space-y-4"
+        <div className="mx-auto max-w-3xl">
+          <figure className="relative min-h-[270px] rounded-3xl border border-border bg-white p-7 shadow-elevated sm:min-h-[240px] sm:p-10">
+            <Quote className="h-8 w-8 text-accent" />
+            <div
+              key={testimonialIndex}
+              className="animate-in fade-in slide-in-from-right-3 duration-500"
             >
-              <Quote className="h-6 w-6 text-accent" />
-              <blockquote className="text-sm text-foreground leading-relaxed italic">
-                « {t.quote} »
+              <blockquote className="mt-6 font-serif text-xl italic leading-relaxed text-foreground sm:text-2xl">
+                « {TESTIMONIALS[testimonialIndex].quote} »
               </blockquote>
-              <figcaption className="text-sm font-semibold text-primary">
-                {t.name}
-                <span className="block font-normal text-muted-foreground mt-0.5">{t.meta}</span>
+              <figcaption className="mt-6 text-sm font-semibold text-primary">
+                {TESTIMONIALS[testimonialIndex].name}
+                <span className="ml-2 font-normal text-muted-foreground">
+                  · {TESTIMONIALS[testimonialIndex].meta}
+                </span>
               </figcaption>
-            </figure>
-          ))}
+            </div>
+          </figure>
+
+          <div className="mt-5 flex items-center justify-center gap-4">
+            <button
+              type="button"
+              aria-label="Témoignage précédent"
+              onClick={() =>
+                setTestimonialIndex(
+                  (current) => (current - 1 + TESTIMONIALS.length) % TESTIMONIALS.length
+                )
+              }
+              className="rounded-full border border-border bg-white p-2 text-primary hover:bg-secondary"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <div className="flex gap-2">
+              {TESTIMONIALS.map((testimonial, index) => (
+                <button
+                  key={testimonial.name}
+                  type="button"
+                  aria-label={`Voir le témoignage ${index + 1}`}
+                  onClick={() => setTestimonialIndex(index)}
+                  className={cn(
+                    "h-2 rounded-full transition-all",
+                    index === testimonialIndex ? "w-8 bg-accent" : "w-2 bg-border"
+                  )}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              aria-label="Témoignage suivant"
+              onClick={() =>
+                setTestimonialIndex((current) => (current + 1) % TESTIMONIALS.length)
+              }
+              className="rounded-full border border-border bg-white p-2 text-primary hover:bg-secondary"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </section>
 

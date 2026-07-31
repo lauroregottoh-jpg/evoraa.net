@@ -33,8 +33,6 @@ export type ConversationRoomDTO = {
   /** Messages envoyés par moi (pour quota) */
   messageCount: number
   freeLimit: number
-  /** Free : répondre sans plafond si le partenaire a déjà écrit */
-  replyUnlimited?: boolean
 }
 
 function formatListTime(iso: string | null): string {
@@ -354,7 +352,6 @@ export async function getConversationRoom(conversationId: string): Promise<{
   const entitlements = await getUserEntitlements(user.id)
   const messageLimit = entitlements.limits.messagesPerConversation
   const myMessageCount = mapped.filter((m) => m.isMine).length
-  const partnerHasWritten = mapped.some((m) => !m.isMine)
 
   return {
     room: {
@@ -366,7 +363,6 @@ export async function getConversationRoom(conversationId: string): Promise<{
       messages: mapped,
       messageCount: myMessageCount,
       freeLimit: messageLimit,
-      replyUnlimited: partnerHasWritten && !entitlements.isPaid,
     },
   }
 }
@@ -406,19 +402,10 @@ export async function sendMessageAction(
     .eq("conversation_id", conversationId)
     .eq("sender_id", user.id)
 
-  const { count: partnerCount } = await supabase
-    .from("messages")
-    .select("id", { count: "exact", head: true })
-    .eq("conversation_id", conversationId)
-    .neq("sender_id", user.id)
-
   const entitlements = await getUserEntitlements(user.id)
   const messageLimit = entitlements.limits.messagesPerConversation
-  const partnerHasWritten = (partnerCount ?? 0) > 0
-  // Free : répondre illimité si l'autre a déjà écrit (style Farata)
-  const replyUnlimited = partnerHasWritten && !entitlements.isPaid
 
-  if (!replyUnlimited && (myCount ?? 0) >= messageLimit) {
+  if ((myCount ?? 0) >= messageLimit) {
     return {
       error: `Limite de messages atteinte pour votre offre ${entitlements.planName}. Passez Alliance sur /billing.`,
     }

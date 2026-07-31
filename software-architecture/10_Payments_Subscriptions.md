@@ -10,8 +10,7 @@
 - 0 FCFA.
 - 3 suggestions par jour.
 - 5 conversations initiées par mois.
-- 5 messages par conversation initiée.
-- Réponses sans limite aux messages reçus.
+- 5 messages envoyés par conversation.
 - EVA : 3 questions par jour.
 
 ### Alliance

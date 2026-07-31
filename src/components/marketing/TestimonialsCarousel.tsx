@@ -18,6 +18,24 @@ const TESTIMONIALS = [
     name: "Jonathan",
     meta: "34 ans · Paris",
   },
+  {
+    quote:
+      "Les questionnaires m'ont aidée à mieux me connaître avant même de rencontrer quelqu'un. Je comprends aujourd'hui pourquoi certaines relations ne fonctionnaient pas.",
+    name: "Esther",
+    meta: "29 ans · Douala",
+  },
+  {
+    quote:
+      "Le système de compatibilité nous a permis d'aborder des sujets essentiels dès le début : notre foi, notre vision du foyer, notre manière de gérer les conflits. Cela nous a fait gagner énormément de temps.",
+    name: "Samuel",
+    meta: "36 ans · Abidjan",
+  },
+  {
+    quote:
+      "Passer à l'offre Alliance a complètement changé mon expérience. Les profils proposés correspondaient davantage à ce que je recherchais et j'ai pu échanger avec des personnes vraiment engagées dans une démarche de mariage.",
+    name: "Grâce",
+    meta: "32 ans · Alliance",
+  },
 ];
 
 export function TestimonialsCarousel() {
@@ -44,7 +62,7 @@ export function TestimonialsCarousel() {
           </h2>
         </div>
 
-        <div className="relative min-h-[240px] flex flex-col items-center justify-center">
+        <div className="relative min-h-[290px] sm:min-h-[240px] flex flex-col items-center justify-center">
           {TESTIMONIALS.map((t, i) => (
             <figure
               key={t.name}
@@ -68,7 +86,11 @@ export function TestimonialsCarousel() {
           ))}
         </div>
 
-        <div className="flex justify-center gap-2 pt-4">
+        <div className="flex items-center justify-center gap-3 pt-4">
+          <span className="text-xs tabular-nums text-muted-foreground">
+            {String(index + 1).padStart(2, "0")} / {String(TESTIMONIALS.length).padStart(2, "0")}
+          </span>
+          <div className="flex justify-center gap-2">
           {TESTIMONIALS.map((_, i) => (
             <button
               key={i}
@@ -81,6 +103,7 @@ export function TestimonialsCarousel() {
               )}
             />
           ))}
+          </div>
         </div>
         <p className="sr-only">Actuellement : {current.name}</p>
       </div>

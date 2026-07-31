@@ -93,8 +93,10 @@ export default function HowItWorksPage() {
         title="Le parcours qui vous connecte à"
         highlight="votre âme sœur"
         subtitle="Ici, chaque étape est pensée pour vous aider à rencontrer LA personne compatible avec votre foi, vos valeurs et votre projet de mariage — sans hasard et sans perdre votre temps."
-        imageSrc="https://images.unsplash.com/photo-1511285560929-80b456fe3b4f?q=80&w=2000&auto=format&fit=crop"
-        imageAlt="Parcours de rencontre chrétienne"
+        imageSrc="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=85&w=2000&auto=format&fit=crop"
+        imageAlt="Communauté de personnes réunies dans un cadre chaleureux"
+        imageClassName="object-center"
+        overlayClassName="from-black/75 via-black/40 to-black/20"
       >
         <div className="space-y-5 pt-2">
           <div className="flex flex-wrap items-center gap-4 sm:gap-6">

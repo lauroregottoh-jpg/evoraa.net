@@ -6,6 +6,7 @@ import { CinematicNavbar } from "@/components/layout/CinematicNavbar";
 import { CinematicFooter } from "@/components/layout/CinematicFooter";
 import { HeroBackground3D } from "@/components/home/HeroBackground3D";
 import { HomeHeroCarousel } from "@/components/home/HomeHeroCarousel";
+import { StoryJourneyCard } from "@/components/home/StoryJourneyCard";
 import { TestimonialsCarousel } from "@/components/marketing/TestimonialsCarousel";
 import { ShareRecommendSection } from "@/components/marketing/ShareRecommendSection";
 import { MagneticButton } from "@/components/ui/magnetic-button";
@@ -374,35 +375,34 @@ export default function Home() {
               "radial-gradient(circle at 50% 20%, rgba(184,149,74,0.22), transparent 45%), radial-gradient(circle at 80% 80%, rgba(92,31,40,0.35), transparent 40%)",
           }}
         />
-        <div className="relative z-10 max-w-3xl mx-auto space-y-8 gsap-fade-up text-center">
-          <h2 className="font-serif text-3xl sm:text-5xl font-bold leading-tight">
-            Imaginez votre histoire dans quelques mois…
-          </h2>
-          <div className="space-y-4 text-white/85 text-base sm:text-lg leading-relaxed text-left sm:text-center max-w-2xl mx-auto">
-            <p>Vous ouvrez KELIAA.</p>
-            <p>Une nouvelle compatibilité vous est proposée.</p>
-            <p>Vous commencez à échanger.</p>
-            <p>Les conversations parlent de foi, de projets de vie, de famille.</p>
-            <p>Les semaines passent.</p>
-            <p>Vous priez ensemble.</p>
-            <p>Vous discernez.</p>
-            <p>
-              Puis un jour, vous réalisez que cette rencontre pourrait être celle que vous
-              attendiez depuis longtemps.
+        <div className="relative z-10 mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[0.85fr_1.15fr]">
+          <div className="space-y-6 gsap-fade-up">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-accent">
+              Votre histoire peut commencer ici
             </p>
+            <h2 className="font-serif text-4xl font-bold leading-tight sm:text-5xl">
+              Imaginez votre histoire dans quelques mois…
+            </h2>
+            <p className="text-base leading-relaxed text-white/75 sm:text-lg">
+              Une compatibilité vous est proposée. Les échanges parlent de foi, de famille et de
+              projet de vie. Vous prenez le temps de prier, de vous connaître et de discerner.
+            </p>
+            <p className="font-serif text-xl italic leading-snug text-accent sm:text-2xl">
+              Puis un jour, cette rencontre pourrait devenir celle que vous attendiez depuis
+              longtemps.
+            </p>
+            <MagneticButton
+              href="/register"
+              variant="outline"
+              size="lg"
+              className="bg-white px-8 py-6 text-base text-primary border-none hover:bg-white/90 shadow-elevated"
+            >
+              Découvrir mes compatibilités
+            </MagneticButton>
           </div>
-          <p className="text-accent font-serif text-xl sm:text-2xl italic leading-snug pt-2">
-            Toutes les grandes histoires commencent par une première décision. Aujourd&apos;hui,
-            cette décision peut être de créer votre profil.
-          </p>
-          <MagneticButton
-            href="/register"
-            variant="outline"
-            size="lg"
-            className="px-10 py-6 text-lg bg-white text-primary border-none hover:bg-white/90 shadow-elevated"
-          >
-            Créer gratuitement mon profil
-          </MagneticButton>
+          <div className="gsap-fade-up">
+            <StoryJourneyCard />
+          </div>
         </div>
       </section>
 

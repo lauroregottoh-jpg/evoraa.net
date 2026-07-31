@@ -11,6 +11,8 @@ type PageHeroProps = {
   imageAlt?: string;
   eyebrow?: string;
   className?: string;
+  imageClassName?: string;
+  overlayClassName?: string;
   children?: React.ReactNode;
 };
 
@@ -23,6 +25,8 @@ export function PageHero({
   imageAlt = "",
   eyebrow,
   className,
+  imageClassName,
+  overlayClassName,
   children,
 }: PageHeroProps) {
   return (
@@ -37,10 +41,15 @@ export function PageHero({
         alt={imageAlt}
         fill
         priority
-        className="object-cover"
+        className={cn("object-cover", imageClassName)}
         sizes="100vw"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/35" />
+      <div
+        className={cn(
+          "absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/35",
+          overlayClassName
+        )}
+      />
       <div className="absolute inset-0 bg-primary/25 mix-blend-multiply" />
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 pb-14 pt-36 space-y-4">
         {eyebrow && (

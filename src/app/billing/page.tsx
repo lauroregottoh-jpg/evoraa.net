@@ -155,8 +155,7 @@ export default async function BillingPage() {
           <p>
             {free.limits.conversationsPerMonth} conversations / mois ·{" "}
             {free.limits.messagesPerConversation} messages / conversation ·{" "}
-            {free.limits.evaQuestionsPerDay} questions EVA / jour. Vous pouvez toujours répondre aux
-            messages reçus.
+            {free.limits.evaQuestionsPerDay} questions EVA / jour.
           </p>
           <Link href="/premium" className="inline-flex items-center text-primary font-semibold text-xs">
             Voir la page Alliance / Boost <ArrowRight className="h-3 w-3 ml-1" />

@@ -62,13 +62,12 @@ Each message stores:
 ## Découverte
 
 - Up to 5 conversations per month
-- Up to 5 messages per conversation
-- Unlimited replies to messages received
+- Up to 5 sent messages per conversation
 
 ## Alliance
 
 - Up to 25 new conversations per month
-- Up to 100 messages per initiated conversation
+- Up to 100 messages per conversation
 
 ## Essentiel (legacy, non public)
 

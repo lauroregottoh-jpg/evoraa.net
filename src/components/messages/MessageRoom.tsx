@@ -82,8 +82,6 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
             return {
               ...prev,
               messageCount: isMine ? prev.messageCount + 1 : prev.messageCount,
-              replyUnlimited:
-                prev.replyUnlimited || row.sender_id === room.partnerUserId,
             }
           })
         }
@@ -134,15 +132,9 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
     await doSend()
   }
 
-  const remaining = room.replyUnlimited
-    ? Number.MAX_SAFE_INTEGER
-    : Math.max(0, room.freeLimit - room.messageCount)
-
-  const remainingLabel = room.replyUnlimited
-    ? "réponses illimitées"
-    : remaining > 10000
-      ? "illimité"
-      : `${remaining} msg restants`
+  const remaining = Math.max(0, room.freeLimit - room.messageCount)
+  const messageQuotaReached = remaining <= 0
+  const remainingLabel = `${remaining} msg restants`
 
   return (
     <div className="space-y-6 py-4">
@@ -265,13 +257,13 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
             setInput(e.target.value)
             if (showShieldWarning) setShowShieldWarning(false)
           }}
-          disabled={remaining <= 0 || isSending}
+          disabled={messageQuotaReached || isSending}
           className="h-12 rounded-xl bg-background border-border/80 text-sm focus:ring-accent"
         />
 
         <Button
           type="submit"
-          disabled={remaining <= 0 || isSending}
+          disabled={messageQuotaReached || isSending}
           className="h-12 px-6 rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground font-medium shadow-sm shrink-0"
         >
           <span className="flex items-center gap-2">
