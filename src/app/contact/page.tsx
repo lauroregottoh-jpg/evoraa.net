@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { Suspense } from "react";
-import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { CinematicLayout } from "@/components/layout/CinematicLayout";
 import { PageHero } from "@/components/marketing/PageHero";
@@ -14,8 +13,6 @@ import {
   ShieldCheck,
   Send,
   CheckCircle2,
-  Headphones,
-  HelpCircle,
   Sparkles,
 } from "lucide-react";
 import { submitContactAction } from "@/app/actions/contact";
@@ -87,8 +84,9 @@ function ContactPageInner() {
         title="Vous n'êtes jamais seul"
         highlight="dans votre parcours."
         subtitle="Que vous ayez une question sur KELIAA, besoin d'un conseil ou souhaitiez signaler une situation, notre équipe est là pour vous accompagner avec bienveillance, confidentialité et respect."
-        imageSrc="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=2000&auto=format&fit=crop"
-        imageAlt="Équipe à l'écoute"
+        imageSrc="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=85&w=2000&auto=format&fit=crop"
+        imageAlt="Conseillère KELIAA disponible pour accompagner les membres"
+        imageClassName="object-center"
       >
         <div className="pt-6 space-y-4">
           <div className="flex flex-wrap items-center gap-3">
@@ -111,111 +109,47 @@ function ContactPageInner() {
         </div>
       </PageHero>
 
-      {/* 1. Trouvez rapidement votre réponse */}
-      <section className="py-16 px-6 sm:px-12 lg:px-20 max-w-5xl mx-auto">
-        <div className="text-center space-y-3 mb-10">
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-foreground">
-            Trouvez rapidement votre réponse
-          </h2>
-        </div>
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="p-8 rounded-2xl border border-border bg-white shadow-card space-y-4">
-            <div className="h-11 w-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-              <HelpCircle className="h-5 w-5" />
+      {/* Contact humain : coordonnées + formulaire */}
+      <section id="form" className="py-20 px-6 sm:px-12 lg:px-20 max-w-6xl mx-auto scroll-mt-24">
+        <div className="grid lg:grid-cols-[0.8fr_1.2fr] gap-8 items-stretch">
+          <div className="rounded-3xl bg-primary p-8 sm:p-10 text-white shadow-elevated flex flex-col">
+            <div className="h-12 w-12 rounded-2xl bg-white/12 flex items-center justify-center">
+              <Mail className="h-6 w-6" />
             </div>
-            <h3 className="font-serif text-xl font-bold text-foreground">FAQ</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              Consultez les réponses aux questions les plus fréquentes.
+            <h2 className="mt-7 font-serif text-3xl font-bold">Besoin d&apos;un échange humain ?</h2>
+            <p className="mt-4 text-sm leading-relaxed text-white/75">
+              Écrivez-nous simplement. Votre demande sera lue par une personne de notre équipe et
+              la réponse vous sera envoyée par e-mail.
             </p>
-            <MagneticButton href="/how-it-works" variant="outline" size="md">
-              Voir la FAQ
-            </MagneticButton>
-          </div>
-          <div className="p-8 rounded-2xl border border-accent/30 bg-accent/5 shadow-card space-y-4">
-            <div className="h-11 w-11 rounded-xl bg-accent/20 text-accent flex items-center justify-center">
-              <Sparkles className="h-5 w-5" />
-            </div>
-            <h3 className="font-serif text-xl font-bold text-foreground">EVA</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              Obtenez une réponse immédiate grâce à notre assistante intelligente.
-            </p>
-            <MagneticButton href="#eva" variant="primary" size="md">
-              Discuter avec EVA
-            </MagneticButton>
-          </div>
-        </div>
-      </section>
 
-      {/* 2. Besoin d'un échange humain ? */}
-      <section className="py-12 px-6 sm:px-12 lg:px-20 max-w-6xl mx-auto">
-        <div className="text-center max-w-2xl mx-auto space-y-4 mb-10">
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-foreground">
-            Besoin d&apos;un échange humain ?
-          </h2>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            Certaines questions méritent une écoute attentive. Notre équipe de coachs, de
-            conseillers et de support est disponible pour vous répondre avec discrétion et
-            bienveillance.
-          </p>
-        </div>
+            <div className="mt-8 space-y-5">
+              <div className="border-t border-white/15 pt-5">
+                <p className="text-xs font-bold uppercase tracking-wider text-accent">Question générale</p>
+                <a href="mailto:contact@keliaa.net" className="mt-1 inline-block font-semibold hover:text-accent">
+                  contact@keliaa.net
+                </a>
+              </div>
+              <div className="border-t border-white/15 pt-5">
+                <p className="text-xs font-bold uppercase tracking-wider text-accent">Conseil &amp; parcours</p>
+                <a href="mailto:conseil@keliaa.net" className="mt-1 inline-block font-semibold hover:text-accent">
+                  conseil@keliaa.net
+                </a>
+              </div>
+              <div className="border-t border-white/15 pt-5">
+                <p className="text-xs font-bold uppercase tracking-wider text-accent">Éthique &amp; signalement</p>
+                <a href="mailto:ethique@keliaa.net" className="mt-1 inline-block font-semibold hover:text-accent">
+                  ethique@keliaa.net
+                </a>
+              </div>
+            </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl border border-border bg-white shadow-card space-y-3">
-            <div className="p-3 rounded-md bg-primary/10 text-primary w-fit">
-              <Mail className="h-5 w-5" />
+            <div className="mt-auto pt-10 flex items-center gap-2 text-xs text-white/70">
+              <ShieldCheck className="h-4 w-4 text-accent" />
+              Réponse sous 24 h · Échange confidentiel
             </div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-foreground">Support</h4>
-            <p className="text-sm text-muted-foreground">
-              Questions liées à votre compte, votre abonnement ou au fonctionnement de KELIAA.
-            </p>
-            <a href="mailto:contact@keliaa.net" className="text-sm text-primary font-semibold">
-              contact@keliaa.net
-            </a>
           </div>
-          <div className="p-6 rounded-2xl border border-border bg-white shadow-card space-y-3">
-            <div className="p-3 rounded-md bg-accent/15 text-accent w-fit">
-              <Headphones className="h-5 w-5" />
-            </div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-foreground">
-              Coachs &amp; conseillers
-            </h4>
-            <p className="text-sm text-muted-foreground">
-              Des questions concernant votre parcours, le discernement ou votre expérience sur la
-              plateforme.
-            </p>
-            <a href="mailto:conseil@keliaa.net" className="text-sm text-primary font-semibold">
-              conseil@keliaa.net
-            </a>
-          </div>
-          <div className="p-6 rounded-2xl border border-border bg-white shadow-card space-y-3">
-            <div className="p-3 rounded-md bg-primary/10 text-primary w-fit">
-              <ShieldCheck className="h-5 w-5" />
-            </div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-foreground">
-              Éthique &amp; signalement
-            </h4>
-            <p className="text-sm text-muted-foreground">
-              Signalez un comportement inapproprié ou une situation qui vous préoccupe.
-            </p>
-            <a href="mailto:ethique@keliaa.net" className="text-sm text-primary font-semibold">
-              ethique@keliaa.net
-            </a>
-          </div>
-        </div>
-      </section>
 
-      {/* 3. Formulaire */}
-      <section id="form" className="py-16 px-6 sm:px-12 lg:px-20 max-w-3xl mx-auto scroll-mt-24">
-        <div className="p-8 sm:p-10 rounded-lg border border-border bg-white shadow-card relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-40 h-40 opacity-10 pointer-events-none">
-            <Image
-              src="https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=400&auto=format&fit=crop"
-              alt=""
-              fill
-              className="object-cover"
-              aria-hidden
-            />
-          </div>
+          <div className="p-8 sm:p-10 rounded-3xl border border-border bg-white shadow-card">
           {submitted ? (
             <div className="py-12 text-center space-y-4 relative z-10">
               <div className="h-14 w-14 rounded-full bg-accent/15 text-primary flex items-center justify-center mx-auto">
@@ -239,13 +173,10 @@ function ContactPageInner() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
               <div>
-                <h3 className="font-serif text-2xl font-bold text-foreground">Écrivez-nous</h3>
+                <span className="text-xs font-bold uppercase tracking-[0.2em] text-primary">Formulaire de contact</span>
+                <h3 className="mt-2 font-serif text-3xl font-bold text-foreground">Comment pouvons-nous vous aider ?</h3>
                 <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
-                  Expliquez-nous votre demande. Nous reviendrons vers vous dans les meilleurs
-                  délais.
-                </p>
-                <p className="text-xs text-muted-foreground mt-2">
-                  Plus votre message est précis, plus notre réponse pourra être adaptée.
+                  Remplissez ces quelques champs. Nous vous répondrons directement par e-mail.
                 </p>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -310,13 +241,16 @@ function ContactPageInner() {
               </MagneticButton>
             </form>
           )}
+          </div>
         </div>
       </section>
 
-      {/* 4. EVA — framing adouci */}
-      <section id="eva" className="py-12 px-6 sm:px-12 lg:px-20 max-w-4xl mx-auto space-y-6 scroll-mt-24">
+      {/* EVA : réponse immédiate */}
+      <section id="eva" className="py-16 px-6 sm:px-12 lg:px-20 max-w-4xl mx-auto space-y-6 scroll-mt-24">
         <div className="text-center space-y-2">
-          <span className="text-xs font-semibold uppercase tracking-widest text-primary">EVA</span>
+          <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary">
+            <Sparkles className="h-4 w-4" /> EVA
+          </span>
           <h2 className="font-serif text-3xl font-bold text-foreground">
             Besoin d&apos;une réponse immédiate ?
           </h2>

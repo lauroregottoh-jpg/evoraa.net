@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { CinematicLayout } from "@/components/layout/CinematicLayout";
 import { PageHero } from "@/components/marketing/PageHero";
 import { MagneticButton } from "@/components/ui/magnetic-button";
@@ -23,6 +22,7 @@ import { cn } from "@/utils/cn";
 
 export default function HowItWorksPage() {
   const [openFaq, setOpenFaq] = React.useState<number | null>(0);
+  const [activeStep, setActiveStep] = React.useState(0);
 
   const steps = [
     {
@@ -31,7 +31,7 @@ export default function HowItWorksPage() {
       desc: "Créer votre compte ne prend que quelques minutes. Vous rejoignez une communauté de célibataires chrétiens engagés dans une démarche sérieuse vers le mariage.",
       highlights: ["Inscription en quelques minutes", "Célibataires chrétiens engagés", "Démarche sérieuse vers le mariage"],
       icon: <ShieldCheck className="h-6 w-6 text-primary" />,
-      image: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?q=80&w=800&auto=format&fit=crop",
+      shortTitle: "Je m'inscris",
     },
     {
       step: "02",
@@ -39,7 +39,7 @@ export default function HowItWorksPage() {
       desc: "Au-delà d'une photo, racontez votre parcours de foi, votre vision du mariage, vos aspirations et ce qui est essentiel pour vous.",
       highlights: ["Parcours de foi", "Vision du mariage", "Ce qui est essentiel pour vous"],
       icon: <BookOpen className="h-6 w-6 text-accent" />,
-      image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=800&auto=format&fit=crop",
+      shortTitle: "Je me présente",
     },
     {
       step: "03",
@@ -47,7 +47,7 @@ export default function HowItWorksPage() {
       desc: "Nos questionnaires explorent votre manière de communiquer, votre personnalité, votre maturité relationnelle, votre pratique de la foi et votre vision du couple afin de proposer des compatibilités plus pertinentes.",
       highlights: ["Communication et personnalité", "Maturité relationnelle", "Pratique de la foi et vision du couple"],
       icon: <Sparkles className="h-6 w-6 text-primary" />,
-      image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=800&auto=format&fit=crop",
+      shortTitle: "Je me découvre",
     },
     {
       step: "04",
@@ -55,7 +55,7 @@ export default function HowItWorksPage() {
       desc: "Vous recevez progressivement des profils dont les valeurs, les objectifs et le projet de vie sont proches des vôtres.",
       highlights: ["Profils proposés progressivement", "Valeurs et objectifs proches", "Projet de vie aligné"],
       icon: <Heart className="h-6 w-6 text-accent" />,
-      image: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=800&auto=format&fit=crop",
+      shortTitle: "Je matche",
     },
     {
       step: "05",
@@ -63,7 +63,7 @@ export default function HowItWorksPage() {
       desc: "Échangez dans un environnement pensé pour favoriser des discussions sincères, respectueuses et orientées vers une véritable construction.",
       highlights: ["Discussions sincères", "Cadre respectueux", "Construction relationnelle"],
       icon: <UserCheck className="h-6 w-6 text-primary" />,
-      image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=800&auto=format&fit=crop",
+      shortTitle: "Nous échangeons",
     },
   ];
 
@@ -85,6 +85,13 @@ export default function HowItWorksPage() {
       a: "Oui. Nous mettons progressivement en place des procédures de vérification afin de garantir un environnement de confiance.",
     },
   ];
+
+  React.useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActiveStep((current) => (current + 1) % steps.length);
+    }, 2800);
+    return () => window.clearInterval(timer);
+  }, [steps.length]);
 
   return (
     <CinematicLayout>
@@ -129,6 +136,81 @@ export default function HowItWorksPage() {
 
       {/* 5 ÉTAPES DU PARCOURS */}
       <section className="py-16 px-6 sm:px-12 lg:px-20 max-w-6xl mx-auto space-y-16">
+        <div className="space-y-7">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <span className="text-xs font-bold uppercase tracking-[0.22em] text-primary">
+              Votre parcours en un regard
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-foreground">
+              De votre profil à une rencontre qui a du sens
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              KELIAA vous accompagne progressivement, sans vous faire perdre votre temps.
+            </p>
+          </div>
+
+          <div className="rounded-3xl border border-border bg-white px-5 py-8 sm:px-8 shadow-card overflow-hidden">
+            <div className="relative grid grid-cols-5 gap-2 sm:gap-5">
+              <div className="absolute left-[10%] right-[10%] top-6 h-0.5 bg-border" />
+              <div
+                className="absolute left-[10%] top-6 h-0.5 bg-gradient-to-r from-primary to-accent transition-[width] duration-700 ease-out"
+                style={{ width: `${activeStep * 20}%` }}
+              />
+              {steps.map((item, idx) => {
+                const isActive = idx === activeStep;
+                const isPassed = idx < activeStep;
+                return (
+                  <button
+                    key={item.step}
+                    type="button"
+                    onClick={() => setActiveStep(idx)}
+                    className="relative z-10 flex flex-col items-center gap-3 text-center group"
+                    aria-label={`Étape ${item.step} : ${item.shortTitle}`}
+                  >
+                    <span
+                      className={cn(
+                        "flex h-12 w-12 items-center justify-center rounded-full border-2 bg-white transition-all duration-500",
+                        isActive && "scale-110 border-primary bg-primary text-white shadow-[0_0_0_7px_rgba(86,63,126,0.12)]",
+                        isPassed && "border-accent bg-accent/10",
+                        !isActive && !isPassed && "border-border group-hover:border-primary/40"
+                      )}
+                    >
+                      {isPassed ? (
+                        <CheckCircle2 className="h-5 w-5 text-accent" />
+                      ) : (
+                        React.cloneElement(item.icon, {
+                          className: cn("h-5 w-5", isActive ? "text-white" : "text-primary"),
+                        })
+                      )}
+                    </span>
+                    <span
+                      className={cn(
+                        "hidden sm:block text-xs font-semibold transition-colors",
+                        isActive ? "text-primary" : "text-muted-foreground"
+                      )}
+                    >
+                      {item.shortTitle}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div
+              key={activeStep}
+              className="mt-8 rounded-2xl bg-gradient-to-br from-primary/8 via-secondary/60 to-accent/10 border border-primary/10 p-6 sm:p-8 text-center animate-in fade-in slide-in-from-bottom-2 duration-500"
+            >
+              <span className="text-xs font-bold text-primary">ÉTAPE {steps[activeStep].step}</span>
+              <h3 className="mt-2 font-serif text-xl sm:text-2xl font-bold text-foreground">
+                {steps[activeStep].title}
+              </h3>
+              <p className="mt-2 text-sm text-muted-foreground max-w-2xl mx-auto">
+                {steps[activeStep].desc}
+              </p>
+            </div>
+          </div>
+        </div>
+
         <div className="space-y-8">
           {steps.map((item, idx) => (
             <div
@@ -136,9 +218,6 @@ export default function HowItWorksPage() {
               className="p-8 sm:p-12 rounded-lg bg-white border border-border shadow-card grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
             >
               <div className="lg:col-span-4 space-y-4">
-                <div className="relative h-40 w-full rounded-xl overflow-hidden border border-border">
-                  <Image src={item.image} alt="" fill className="object-cover" sizes="320px" />
-                </div>
                 <div className="flex items-center gap-3">
                   <span className="font-serif text-5xl font-bold text-muted-foreground/30">{item.step}</span>
                   <div className="p-3 rounded-xl bg-secondary border border-border">
