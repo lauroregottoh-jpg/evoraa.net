@@ -16,6 +16,7 @@ import {
   GraduationCap,
   Settings,
   MoreHorizontal,
+  Share2,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { ThemeToggle } from "@/components/evoraa/ThemeToggle";
@@ -41,6 +42,7 @@ const BOTTOM_PRIMARY = [
 const MORE_LINKS = [
   { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
   { href: "/premium", label: "Alliance", icon: Crown },
+  { href: "/dashboard#invite", label: "Inviter", icon: Share2 },
   { href: "/notifications", label: "Alertes", icon: Bell },
   { href: "/profile", label: "Profil", icon: User },
   { href: "/help", label: "Aide", icon: HelpCircle },

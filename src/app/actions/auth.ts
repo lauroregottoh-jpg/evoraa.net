@@ -65,6 +65,10 @@ export async function registerAction(formData: FormData) {
   const city = String(formData.get("city") ?? "").trim()
   const address = String(formData.get("address") ?? "").trim()
   const charterAccepted = formData.get("charter_accepted") === "true"
+  const referredByCode = String(formData.get("ref") ?? "").trim().slice(0, 32)
+  const utmSource = String(formData.get("utm_source") ?? "").trim().slice(0, 64)
+  const utmMedium = String(formData.get("utm_medium") ?? "").trim().slice(0, 64)
+  const utmCampaign = String(formData.get("utm_campaign") ?? "").trim().slice(0, 64)
 
   if (!email || !password || !firstName) {
     return { error: "Prénom, email et mot de passe sont requis." }
@@ -96,6 +100,10 @@ export async function registerAction(formData: FormData) {
         address: address || null,
         charter_accepted: true,
         charter_accepted_at: new Date().toISOString(),
+        referred_by_code: referredByCode || null,
+        utm_source: utmSource || null,
+        utm_medium: utmMedium || null,
+        utm_campaign: utmCampaign || null,
       },
     },
   })
@@ -105,17 +113,37 @@ export async function registerAction(formData: FormData) {
   }
 
   if (data.user) {
-    await supabase
-      .from("profiles")
-      .update({
-        first_name: firstName,
-        last_name: lastName || null,
-        city: city || null,
-        onboarding_status: "step1_account",
-        completion_percentage: 10,
-        email_verified: Boolean(data.user.email_confirmed_at),
+    const referralCode = data.user.id.replace(/-/g, "").slice(0, 8)
+    const profilePatch: Record<string, unknown> = {
+      first_name: firstName,
+      last_name: lastName || null,
+      city: city || null,
+      onboarding_status: "step1_account",
+      completion_percentage: 10,
+      email_verified: Boolean(data.user.email_confirmed_at),
+      referral_code: referralCode,
+    }
+    if (referredByCode) profilePatch.referred_by_code = referredByCode
+    if (utmSource) profilePatch.utm_source = utmSource
+    if (utmMedium) profilePatch.utm_medium = utmMedium
+    if (utmCampaign) profilePatch.utm_campaign = utmCampaign
+
+    await supabase.from("profiles").update(profilePatch).eq("user_id", data.user.id)
+
+    // Best-effort welcome email when Resend is configured
+    try {
+      const { sendEmailNotificationStub } = await import("@/app/actions/notifications")
+      await sendEmailNotificationStub({
+        to: email,
+        subject: "Bienvenue sur KELIAA",
+        html: `<p>Bonjour ${firstName},</p>
+<p>Bienvenue dans la communauté KELIAA. Prochaine étape : compléter votre profil et vos questionnaires pour recevoir des suggestions pertinentes.</p>
+<p><a href="${appUrl}/onboarding">Continuer mon inscription</a></p>
+<p>L'équipe KELIAA</p>`,
       })
-      .eq("user_id", data.user.id)
+    } catch {
+      /* optional */
+    }
   }
 
   // Confirmation email activée : pas de session immédiate

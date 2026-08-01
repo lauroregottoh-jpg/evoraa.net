@@ -179,18 +179,21 @@ export function EvaSpiritualAdvisor({
             <div className="flex items-center gap-2 text-accent">
               <Sparkles className="h-4 w-4 fill-accent" />
               <span className="text-xs uppercase tracking-wider font-semibold">
-                EVA — coach &amp; conseil
+                EVA — assistant guidé
               </span>
             </div>
             <CardTitle className="font-serif text-xl sm:text-2xl text-foreground">
               {selectedTopic?.question || "Sélectionnez un sujet"}
             </CardTitle>
+            <p className="text-[11px] text-muted-foreground leading-relaxed">
+              Réponses préparées pour vous orienter. EVA ne remplace ni un pasteur, ni un conseiller.
+            </p>
           </CardHeader>
 
           <CardContent className="p-6 sm:p-8 space-y-6 flex-1 flex flex-col justify-between">
             {isTyping ? (
               <div className="py-12 text-center text-muted-foreground text-sm font-serif italic animate-pulse">
-                EVA recherche la sagesse biblique pour vous accompagner...
+                EVA prépare une réponse guidée…
               </div>
             ) : (
               <>

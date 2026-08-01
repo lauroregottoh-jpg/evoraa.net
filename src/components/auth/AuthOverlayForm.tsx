@@ -47,7 +47,8 @@ export function AuthOverlayForm({ initialMode = "login" }: { initialMode?: Mode 
       const url = new URL(window.location.href);
       url.pathname = next === "login" ? "/login" : "/register";
       url.searchParams.delete("mode");
-      window.history.replaceState({}, "", url.pathname);
+      // Preserve growth attribution when switching login ↔ register
+      window.history.replaceState({}, "", `${url.pathname}${url.search}`);
     }
   };
 
@@ -262,6 +263,11 @@ export function AuthOverlayForm({ initialMode = "login" }: { initialMode?: Mode 
                   placeholder="8 caractères minimum"
                 />
               </div>
+
+              <input type="hidden" name="ref" value={searchParams.get("ref") || ""} />
+              <input type="hidden" name="utm_source" value={searchParams.get("utm_source") || ""} />
+              <input type="hidden" name="utm_medium" value={searchParams.get("utm_medium") || ""} />
+              <input type="hidden" name="utm_campaign" value={searchParams.get("utm_campaign") || ""} />
 
               <Button
                 type="submit"

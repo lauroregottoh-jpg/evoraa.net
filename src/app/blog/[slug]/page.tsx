@@ -62,7 +62,32 @@ export default function BlogReadingPage() {
             <span>
               Rédigé par <strong className="text-foreground">{article.author}</strong>
             </span>
-            <button type="button" className="flex items-center gap-1.5 hover:text-accent transition-colors">
+            <button
+              type="button"
+              onClick={async () => {
+                const url =
+                  typeof window !== "undefined"
+                    ? window.location.href
+                    : `https://evoraa-net.vercel.app/blog/${article.slug}`
+                const text = `${article.title} — ${url}`
+                try {
+                  if (navigator.share) {
+                    await navigator.share({ title: article.title, text: article.subtitle, url })
+                  } else {
+                    await navigator.clipboard.writeText(text)
+                    alert("Lien de l'article copié.")
+                  }
+                } catch {
+                  try {
+                    await navigator.clipboard.writeText(text)
+                    alert("Lien de l'article copié.")
+                  } catch {
+                    /* ignore */
+                  }
+                }
+              }}
+              className="flex items-center gap-1.5 hover:text-accent transition-colors"
+            >
               <Share2 className="h-4 w-4" /> Partager
             </button>
           </div>

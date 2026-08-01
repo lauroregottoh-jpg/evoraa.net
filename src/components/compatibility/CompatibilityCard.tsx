@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Sparkles, MapPin, Heart, Eye, EyeOff, ArrowRight } from "lucide-react";
+import { Sparkles, MapPin, Eye, EyeOff, ArrowRight } from "lucide-react";
 
 export interface CompatibilityProfile {
   id: string;
@@ -22,10 +22,17 @@ export interface CompatibilityProfile {
 interface CompatibilityCardProps {
   profile: CompatibilityProfile;
   defaultBlurred?: boolean;
+  allowReveal?: boolean;
 }
 
-export function CompatibilityCard({ profile, defaultBlurred = true }: CompatibilityCardProps) {
-  const [isBlurred, setIsBlurred] = React.useState(profile.isBlurred !== undefined ? profile.isBlurred : defaultBlurred);
+export function CompatibilityCard({
+  profile,
+  defaultBlurred = true,
+  allowReveal = true,
+}: CompatibilityCardProps) {
+  const [isBlurred, setIsBlurred] = React.useState(
+    profile.isBlurred !== undefined ? profile.isBlurred : defaultBlurred
+  );
 
   React.useEffect(() => {
     if (profile.isBlurred !== undefined) {
@@ -33,46 +40,68 @@ export function CompatibilityCard({ profile, defaultBlurred = true }: Compatibil
     }
   }, [profile.isBlurred]);
 
+  const initial = (profile.name?.[0] || "?").toUpperCase();
+
   return (
     <Card className="rounded-2xl border-border/60 bg-background/90 backdrop-blur-md shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden group">
-      
-      {/* Top Banner with Harmony Score & Blur indicator */}
       <div className="relative h-48 sm:h-56 bg-secondary/80 overflow-hidden border-b border-border/40">
-        {/* Simulated Avatar or Photo */}
-        <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 via-accent/15 to-secondary transition-all duration-500 ${isBlurred ? "filter blur-xl scale-110" : ""}`}>
-          <span className="font-serif text-6xl text-primary/40 select-none">
-            {profile.name[0]}
+        {profile.photoUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={profile.photoUrl}
+            alt=""
+            className={`absolute inset-0 h-full w-full object-cover transition-all duration-500 ${
+              isBlurred ? "scale-110 blur-xl" : "scale-100 blur-0"
+            }`}
+          />
+        ) : (
+          <div
+            className={`w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 via-accent/15 to-secondary transition-all duration-500 ${
+              isBlurred ? "filter blur-xl scale-110" : ""
+            }`}
+          >
+            <span className="font-serif text-6xl text-primary/40 select-none">{initial}</span>
+          </div>
+        )}
+
+        {!profile.photoUrl && (
+          <div className="absolute inset-x-0 bottom-3 text-center">
+            <span className="inline-flex rounded-full bg-background/90 px-2.5 py-1 text-[10px] font-semibold text-muted-foreground border border-border">
+              Photo en attente
+            </span>
+          </div>
+        )}
+
+        <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-background/95 backdrop-blur-md px-3 py-1.5 rounded-full border border-accent/40 shadow-xs">
+          <Sparkles className="h-4 w-4 text-accent fill-accent" />
+          <span className="font-serif font-bold text-sm text-foreground">
+            {profile.harmonyScore}% d&apos;harmonie
           </span>
         </div>
 
-        {/* Harmony Score Badge */}
-        <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-background/95 backdrop-blur-md px-3 py-1.5 rounded-full border border-accent/40 shadow-xs">
-          <Sparkles className="h-4 w-4 text-accent fill-accent" />
-          <span className="font-serif font-bold text-sm text-foreground">{profile.harmonyScore}% d&apos;harmonie</span>
-        </div>
-
-        {/* Privacy Blur Toggle */}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            setIsBlurred(!isBlurred);
-          }}
-          className="absolute top-3 right-3 flex items-center gap-1 bg-background/80 backdrop-blur-md hover:bg-background px-2.5 py-1.5 rounded-full border border-border/60 text-xs font-medium text-muted-foreground transition-colors"
-          title={isBlurred ? "Afficher la photo (démo)" : "Flouter la photo"}
-        >
-          {isBlurred ? (
-            <>
-              <EyeOff className="h-3.5 w-3.5 text-accent" />
-              <span>Floutée (Respect V1)</span>
-            </>
-          ) : (
-            <>
-              <Eye className="h-3.5 w-3.5 text-emerald-500" />
-              <span>Photo Nette</span>
-            </>
-          )}
-        </button>
+        {allowReveal && profile.photoUrl && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              setIsBlurred(!isBlurred);
+            }}
+            className="absolute top-3 right-3 flex items-center gap-1 bg-background/80 backdrop-blur-md hover:bg-background px-2.5 py-1.5 rounded-full border border-border/60 text-xs font-medium text-muted-foreground transition-colors"
+            title={isBlurred ? "Afficher la photo" : "Flouter la photo"}
+          >
+            {isBlurred ? (
+              <>
+                <EyeOff className="h-3.5 w-3.5 text-accent" />
+                <span>Floutée</span>
+              </>
+            ) : (
+              <>
+                <Eye className="h-3.5 w-3.5 text-emerald-500" />
+                <span>Visible</span>
+              </>
+            )}
+          </button>
+        )}
       </div>
 
       <CardHeader className="space-y-1 pb-3 pt-4 px-5">
@@ -80,7 +109,10 @@ export function CompatibilityCard({ profile, defaultBlurred = true }: Compatibil
           <h3 className="font-serif text-2xl font-bold text-foreground">
             {profile.name}, {profile.age} ans
           </h3>
-          <Badge variant="outline" className="text-[10px] uppercase font-sans border-border/80 text-muted-foreground">
+          <Badge
+            variant="outline"
+            className="text-[10px] uppercase font-sans border-border/80 text-muted-foreground"
+          >
             {profile.community}
           </Badge>
         </div>
@@ -107,7 +139,10 @@ export function CompatibilityCard({ profile, defaultBlurred = true }: Compatibil
 
       <CardFooter className="px-5 pt-2 pb-5 border-t border-border/30 bg-secondary/20">
         <Link href={`/compatibility/${profile.id}`} className="w-full">
-          <Button variant="outline" className="w-full rounded-xl h-10 text-xs font-medium border-border/80 hover:bg-primary hover:text-primary-foreground transition-all">
+          <Button
+            variant="outline"
+            className="w-full rounded-xl h-10 text-xs font-medium border-border/80 hover:bg-primary hover:text-primary-foreground transition-all"
+          >
             <span>Consulter le Diagnostic d&apos;EVA</span>
             <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
           </Button>

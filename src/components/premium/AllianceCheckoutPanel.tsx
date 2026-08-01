@@ -46,15 +46,15 @@ export function AllianceCheckoutPanel({
     setInfo("")
     try {
       if (durationId !== "1m") {
-        setInfo(
-          "Les offres 3 et 6 mois seront bientôt facturables. Pour l'instant, le paiement active Alliance 30 jours au tarif en vigueur."
+        setError(
+          "Pour l'instant, seul Alliance 1 mois est payable en ligne. Les offres 3 et 6 mois arrivent bientôt."
         )
+        setLoading(false)
+        return
       }
       if (promo.trim()) {
-        setInfo((prev) =>
-          prev
-            ? `${prev} Code promo enregistré pour suivi commercial.`
-            : "Code promo noté. Les remises promo seront appliquées dans une prochaine version."
+        setInfo(
+          "Les codes promo seront appliqués automatiquement dans une prochaine version. Votre paiement se fait au tarif affiché."
         )
       }
       const result = await startCheckoutAction(
@@ -120,7 +120,14 @@ export function AllianceCheckoutPanel({
                     )}
                   />
                   <div className="min-w-0">
-                    <p className="font-semibold text-foreground">{opt.label}</p>
+                    <p className="font-semibold text-foreground">
+                      {opt.label}
+                      {opt.id !== "1m" && (
+                        <span className="ml-2 text-[10px] uppercase tracking-wide text-muted-foreground font-bold">
+                          Bientôt
+                        </span>
+                      )}
+                    </p>
                     <p className="text-xs text-muted-foreground mt-0.5">
                       {perMonth.toLocaleString("fr-FR")} FCFA/mois
                       {opt.months > 1 && (

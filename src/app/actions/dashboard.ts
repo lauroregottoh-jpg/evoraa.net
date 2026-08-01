@@ -29,6 +29,7 @@ export type DashboardMission = {
 
 export type DashboardData = {
   firstName: string
+  userId: string
   completionPercentage: number
   isVerified: boolean
   retreatMode: boolean
@@ -274,6 +275,7 @@ export async function getDashboardData(): Promise<{
   return {
     data: {
       firstName: profile.first_name || "Membre",
+      userId: user.id,
       completionPercentage: completion,
       isVerified: Boolean(profile.is_verified || profile.identity_verified),
       retreatMode: Boolean(privacy.retreat_mode),

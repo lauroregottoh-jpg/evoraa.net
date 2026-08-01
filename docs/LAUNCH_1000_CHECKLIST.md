@@ -1,0 +1,17 @@
+-- ==========================================
+-- Soft-launch checklist (ops) — apply after code deploy
+-- ==========================================
+-- 1) Apply migrations through 00017 (referral)
+-- 2) Vercel env:
+--    NEXT_PUBLIC_APP_URL=https://evoraa-net.vercel.app
+--    PAYMENTS_DEMO_MODE=false (only after 1 real Bictorys test)
+--    BICTORYS_* or CINETPAY_*
+--    RESEND_API_KEY + RESEND_FROM_EMAIL + CONTACT_INBOX_EMAIL
+--    NEXT_PUBLIC_GA_MEASUREMENT_ID or NEXT_PUBLIC_PLAUSIBLE_DOMAIN
+--    CRON_SECRET
+-- 3) Supabase Auth redirect URLs include /auth/callback
+-- 4) Storage bucket `avatars` public-read for approved photos
+-- 5) Realtime enabled on `messages`
+-- 6) Seed 20–50 real H+F complete profiles (no fake users in prod)
+-- 7) Admin photo SLA same day
+-- 8) First Alliance webhook live test

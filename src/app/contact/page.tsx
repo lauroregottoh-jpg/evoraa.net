@@ -255,9 +255,9 @@ function ContactPageInner() {
             Besoin d&apos;une réponse immédiate ?
           </h2>
           <p className="text-sm text-muted-foreground max-w-xl mx-auto leading-relaxed">
-            Posez votre question à EVA. Elle peut vous aider à comprendre le fonctionnement de
-            KELIAA, répondre à vos questions sur le discernement chrétien et vous orienter vers les
-            bonnes ressources.
+            Posez votre question à EVA, notre assistant guidé. Elle propose des réponses préparées
+            sur le fonctionnement de KELIAA et le discernement — sans remplacer un conseiller
+            humain.
           </p>
         </div>
         <EvaSpiritualAdvisor showQuota={false} topicsLabel="Suggestions de questions" />

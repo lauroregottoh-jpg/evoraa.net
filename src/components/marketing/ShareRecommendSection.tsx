@@ -2,19 +2,26 @@
 
 import { Share2, MessageCircle } from "lucide-react";
 import { MagneticButton } from "@/components/ui/magnetic-button";
+import { INVITE_MESSAGE, buildPublicShareUrl } from "@/lib/growth/invite";
+import { trackEvent } from "@/components/analytics/AnalyticsScripts";
 
-function shareUrl() {
-  if (typeof window !== "undefined") return window.location.origin;
-  return process.env.NEXT_PUBLIC_APP_URL || "https://keliaa.net";
-}
-
-const MESSAGE =
-  "Je te recommande KELIAA \u2014 rencontres chr\u00e9tiennes fond\u00e9es sur le discernement, pas sur le swipe. Rejoins-nous : ";
-
-export function ShareRecommendSection() {
+export function ShareRecommendSection({
+  inviteUrl,
+}: {
+  /** Optional member invite URL; falls back to public share with UTM */
+  inviteUrl?: string;
+}) {
   const openShare = (channel: "whatsapp" | "twitter" | "facebook" | "native") => {
-    const url = shareUrl();
-    const text = MESSAGE + url;
+    const url =
+      inviteUrl ||
+      buildPublicShareUrl("/", {
+        utm_source: channel === "whatsapp" ? "whatsapp" : channel,
+        utm_medium: "social",
+        utm_campaign: "recommend_home",
+      });
+    const text = INVITE_MESSAGE + url;
+    trackEvent("share_recommend", { channel });
+
     if (channel === "whatsapp") {
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
       return;
@@ -36,7 +43,7 @@ export function ShareRecommendSection() {
       return;
     }
     if (navigator.share) {
-      void navigator.share({ title: "KELIAA", text: MESSAGE, url });
+      void navigator.share({ title: "KELIAA", text: INVITE_MESSAGE, url });
     } else {
       void navigator.clipboard?.writeText(text);
       alert("Lien copié — collez-le sur Instagram ou vos réseaux.");
@@ -51,7 +58,8 @@ export function ShareRecommendSection() {
           Recommandez KELIAA
         </h2>
         <p className="text-muted-foreground max-w-xl mx-auto leading-relaxed">
-          {"Un ami cherche une rencontre digne, alignée sur les valeurs du Royaume ? Partagez la plateforme en un clic."}
+          Un ami cherche une rencontre digne, alignée sur les valeurs du Royaume ? Partagez la
+          plateforme en un clic.
         </p>
         <div className="flex flex-wrap justify-center gap-3 pt-2">
           <MagneticButton
@@ -73,7 +81,8 @@ export function ShareRecommendSection() {
           </MagneticButton>
         </div>
         <p className="text-xs text-muted-foreground">
-          {"Instagram n'offre pas de partage web direct : le bouton copie le message à coller en story ou DM."}
+          Instagram n&apos;offre pas de partage web direct : le bouton copie le message à coller en
+          story ou DM.
         </p>
       </div>
     </section>

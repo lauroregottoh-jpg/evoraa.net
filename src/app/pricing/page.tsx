@@ -363,11 +363,15 @@ export default function PricingPage() {
       <section className="py-12 px-6 sm:px-12 lg:px-20 max-w-6xl mx-auto">
         <div className="text-center space-y-2 mb-10">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-            Résultats
+            Soft launch
           </span>
           <h2 className="font-serif text-2xl sm:text-3xl font-bold text-foreground">
             Ils avancent avec Alliance
           </h2>
+          <p className="text-sm text-muted-foreground max-w-xl mx-auto">
+            Exemples de parcours inspirés des retours de la communauté. Les témoignages vérifiés
+            remplacent progressivement ces exemples.
+          </p>
         </div>
         <div className="mx-auto max-w-3xl">
           <figure className="relative min-h-[270px] rounded-3xl border border-border bg-white p-7 shadow-elevated sm:min-h-[240px] sm:p-10">

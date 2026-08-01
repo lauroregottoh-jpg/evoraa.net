@@ -15,6 +15,7 @@ import {
 } from "@/components/dashboard/FarataHomeBlocks"
 import { PresenceStreak } from "@/components/dashboard/PresenceStreak"
 import { PillarBadges } from "@/components/assessments/PillarBadges"
+import { InviteShareCard } from "@/components/growth/InviteShareCard"
 
 export default async function DashboardPage() {
   const { data, error } = await getDashboardData()
@@ -128,6 +129,8 @@ export default async function DashboardPage() {
           social={data.social}
           isPaid={usage.isPaid}
         />
+
+        <InviteShareCard userId={data.userId} />
 
         <DailyQuotaCard usage={usage} />
 

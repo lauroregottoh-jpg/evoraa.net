@@ -14,14 +14,17 @@ interface CompatibilityGridProps {
   initialSuggestions: CompatibilityListItem[];
   error?: string;
   needsOnboarding?: boolean;
+  /** From platform_settings.default_photo_blur */
+  defaultBlurred?: boolean;
 }
 
 export function CompatibilityGrid({
   initialSuggestions,
   error,
   needsOnboarding,
+  defaultBlurred = true,
 }: CompatibilityGridProps) {
-  const [globalBlur, setGlobalBlur] = React.useState(true);
+  const [globalBlur, setGlobalBlur] = React.useState(defaultBlurred);
   const [suggestions, setSuggestions] = React.useState(initialSuggestions);
   const [isRefreshing, setIsRefreshing] = React.useState(false);
   const [localError, setLocalError] = React.useState(error ?? "");
@@ -73,7 +76,9 @@ export function CompatibilityGrid({
             <Shield className="h-5 w-5 text-accent shrink-0" />
             <div className="text-xs">
               <span className="font-semibold block text-foreground">Confidentialité Photos</span>
-              <span className="text-muted-foreground">Respect de l&apos;image V1</span>
+              <span className="text-muted-foreground">
+                {defaultBlurred ? "Flou par défaut (réglage plateforme)" : "Photos visibles"}
+              </span>
             </div>
             <button
               type="button"
