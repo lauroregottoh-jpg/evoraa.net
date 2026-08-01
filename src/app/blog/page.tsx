@@ -7,6 +7,7 @@ import { PageHero } from "@/components/marketing/PageHero";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { Search, BookOpen, Clock, ArrowRight, MessageCircle } from "lucide-react";
 import { cn } from "@/utils/cn";
+import { getAllBlogArticles } from "@/lib/blog/articles";
 
 /** Copy source: software-architecture/KELIA - Page d'accueil.docx — PAGE BLOG */
 export default function BlogListPage() {
@@ -14,75 +15,7 @@ export default function BlogListPage() {
   const [activeCategory, setActiveCategory] = React.useState("Tous");
 
   const categories = ["Tous", "Foi & Mariage", "Discernement", "Témoignages", "Conseils"];
-
-  const articles = [
-    {
-      slug: "comment-reconnaitre-la-bonne-personne-selon-la-bible",
-      title: "Comment reconnaître LA bonne personne selon les principes bibliques ?",
-      excerpt:
-        "Au-delà des émotions passagères, la Bible nous donne des critères de discernement spirituel clairs pour bâtir une alliance conjugale solide et éternelle.",
-      category: "Discernement",
-      readTime: "6 min de lecture",
-      date: "18 Juillet 2026",
-      image:
-        "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      slug: "pourquoi-le-floutage-des-photos-transforme-les-rencontres",
-      title: "Pourquoi le floutage des photos révolutionne les rencontres chrétiennes",
-      excerpt:
-        "En mettant l'accent sur l'âme, la foi et le projet de vie avant l'apparence physique, KELIAA restaure la dignité du dialogue conjugal.",
-      category: "Foi & Mariage",
-      readTime: "5 min de lecture",
-      date: "14 Juillet 2026",
-      image:
-        "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      slug: "le-role-de-la-prieres-dans-le-parcours-de-celibat",
-      title: "Le rôle de la prière dans la saison du célibat : attente ou préparation ?",
-      excerpt:
-        "Le célibat n'est pas une salle d'attente passive. C'est un espace de croissance où Dieu forme notre cœur à aimer selon Son standard.",
-      category: "Conseils",
-      readTime: "7 min de lecture",
-      date: "10 Juillet 2026",
-      image:
-        "https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      slug: "temoignage-sarah-et-david-une-connexion-fondee-sur-la-vision",
-      title: "Témoignage : « Nous avions exactement la même vision de l'hospitalité »",
-      excerpt:
-        "Découvrez l'histoire touchante de Sarah et David, qui se sont rencontrés sur KELIAA grâce à leur diagnostic spirituel commun sur l'accueil et le ministère.",
-      category: "Témoignages",
-      readTime: "8 min de lecture",
-      date: "05 Juillet 2026",
-      image:
-        "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      slug: "gerer-les-finances-dans-le-couple-chretien",
-      title: "Gérer les finances dans le couple chrétien : 4 principes de sagesse",
-      excerpt:
-        "L'argent est l'une des premières sources de tensions conjugales. Pourquoi l'un de nos 9 questionnaires spirituels y est entièrement consacré.",
-      category: "Foi & Mariage",
-      readTime: "6 min de lecture",
-      date: "28 Juin 2026",
-      image:
-        "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      slug: "l-importance-du-conseil-avant-le-mariage",
-      title: "L'importance du conseil avant de s'engager dans le mariage",
-      excerpt:
-        "Dans une société individualiste, inviter un mentor ou un conseiller de confiance dans son discernement conjugal est une preuve de maturité.",
-      category: "Conseils",
-      readTime: "5 min de lecture",
-      date: "20 Juin 2026",
-      image:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=800&q=80",
-    },
-  ];
+  const articles = getAllBlogArticles();
 
   const filteredArticles = articles.filter((art) => {
     const matchesCat = activeCategory === "Tous" || art.category === activeCategory;
