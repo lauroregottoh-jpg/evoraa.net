@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { startConversationFromProfile } from "@/app/actions/messaging";
 import { FavoriteButton } from "@/components/social/FavoriteButton";
+import type { DomainScore, MatchInsight } from "@/lib/matching/types";
 
 export type CompatibilityDetailData = {
   id: string;
@@ -33,6 +34,8 @@ export type CompatibilityDetailData = {
     familyVision: string;
     dialogue: string;
   };
+  domainScores?: DomainScore[];
+  insights?: MatchInsight[];
   answers: { question: string; answer: string }[];
   isVerified: boolean;
 };
@@ -128,7 +131,7 @@ export function CompatibilityDetailView({
               « {profile.bio} »
             </p>
             <p className="text-xs text-muted-foreground">
-              Score expliqué ci-dessous — foi, foyer et dialogue croisés avec vos réponses.
+              Score détaillé ci-dessous — domaines, interactions et points de vigilance.
             </p>
             <Button
               onClick={handleStart}
@@ -151,6 +154,8 @@ export function CompatibilityDetailView({
         partnerName={profile.name}
         harmonyScore={profile.harmonyScore}
         pillars={profile.pillars}
+        domainScores={profile.domainScores}
+        insights={profile.insights}
       />
 
       <Card className="rounded-2xl bg-card">

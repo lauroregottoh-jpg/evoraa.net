@@ -118,6 +118,7 @@ export async function getAdminDashboardData() {
       retention: null,
       ops: null as AdminOpsFlags | null,
       breakdowns: null as AdminBreakdowns | null,
+      matchingIntelligence: null as import("@/lib/admin/matchingIntelligence").MatchingIntelligence | null,
       matches: [] as Array<{
         id: string
         score: number | null
@@ -160,7 +161,7 @@ export async function getAdminDashboardData() {
   const { data: profiles } = await supabase
     .from("profiles")
     .select(
-      "id, user_id, first_name, last_name, city, country, gender, birth_date, denomination, church_attended, pastor_name, pastor_contact, completion_percentage, role, moderation_status, onboarding_status, is_verified, identity_verified, created_at, avatar_url, psychometric_results, trust_score, warning_count, sanction_status, sanction_until"
+      "id, user_id, first_name, last_name, city, country, gender, birth_date, denomination, church_attended, pastor_name, pastor_contact, completion_percentage, role, moderation_status, onboarding_status, is_verified, identity_verified, created_at, avatar_url, psychometric_results, matching_indicators, trust_score, warning_count, sanction_status, sanction_until"
     )
     .order("created_at", { ascending: false })
     .limit(500)
@@ -209,7 +210,7 @@ export async function getAdminDashboardData() {
     .from("matches")
     .select("id, user_one, user_two, compatibility_score, status, created_at")
     .order("created_at", { ascending: false })
-    .limit(60)
+    .limit(200)
 
   const recoRes = await supabase
     .from("church_recommendations")
@@ -465,6 +466,32 @@ export async function getAdminDashboardData() {
     hasYoutube: Boolean(process.env.YOUTUBE_API_KEY),
   }
 
+  const { buildMatchingIntelligence } = await import(
+    "@/lib/admin/matchingIntelligence"
+  )
+  const matchingIntelligence = buildMatchingIntelligence(
+    (profiles ?? []).map((p) => ({
+      id: p.id as string,
+      user_id: p.user_id as string,
+      first_name: (p.first_name as string) || null,
+      last_name: (p.last_name as string) || null,
+      city: (p.city as string) || null,
+      country: (p.country as string) || null,
+      gender: (p.gender as string) || null,
+      birth_date: (p.birth_date as string) || null,
+      denomination: (p.denomination as string) || null,
+      completion_percentage: (p.completion_percentage as number) || null,
+      moderation_status: (p.moderation_status as string) || null,
+      psychometric_results: p.psychometric_results,
+      matching_indicators: (p as { matching_indicators?: unknown }).matching_indicators,
+    })),
+    (matchRows ?? []).map((m) => ({
+      compatibility_score:
+        m.compatibility_score != null ? Number(m.compatibility_score) : null,
+      created_at: (m.created_at as string) || null,
+    }))
+  )
+
   return {
     users,
     reports: reports ?? [],
@@ -541,6 +568,7 @@ export async function getAdminDashboardData() {
     },
     retention,
     breakdowns,
+    matchingIntelligence,
     ops,
     viewerRole: gate.role,
   }
@@ -744,6 +772,7 @@ export async function adminUpdatePlatformSetting(key: string, value: unknown) {
     "eva_config",
     "youtube_config",
     "integrations",
+    "campaign_segments",
   ])
   if (!allowed.has(key)) return { error: "Cle non autorisee." }
 
@@ -759,6 +788,51 @@ export async function adminUpdatePlatformSetting(key: string, value: unknown) {
   revalidatePath("/dashboard")
   revalidatePath("/academie-mariage")
   return { success: true }
+}
+
+export type SavedCampaignSegment = {
+  id: string
+  name: string
+  createdAt: string
+  filter: import("@/lib/admin/matchingIntelligence").CampaignSegmentFilter
+  memberCount: number
+  draftTitle: string
+  draftBody: string
+}
+
+/** Enregistre / met à jour les segments campagne (full admin). */
+export async function adminSaveCampaignSegments(segments: SavedCampaignSegment[]) {
+  return adminUpdatePlatformSetting("campaign_segments", segments)
+}
+
+/** Envoie une notification in-app aux userIds ciblés (campagne matching). */
+export async function adminBroadcastSegmentNotification(input: {
+  userIds: string[]
+  title: string
+  body: string
+}) {
+  const gate = await requireFullAdmin()
+  if (gate.error || !gate.supabase) return { error: gate.error || "Acces refuse." }
+
+  const title = input.title.trim().slice(0, 120)
+  const body = input.body.trim().slice(0, 800)
+  const ids = [...new Set(input.userIds.filter(Boolean))].slice(0, 200)
+
+  if (!title || !body) return { error: "Titre et message requis." }
+  if (ids.length === 0) return { error: "Aucun destinataire dans le segment." }
+
+  const rows = ids.map((userId) => ({
+    user_id: userId,
+    title,
+    body,
+    is_read: false,
+  }))
+
+  const { error } = await gate.supabase.from("notifications").insert(rows)
+  if (error) return { error: error.message }
+
+  revalidatePath("/admin")
+  return { success: true, sent: ids.length }
 }
 
 /** Diagnostic service-role (sans exposer la cle). */

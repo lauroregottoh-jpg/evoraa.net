@@ -5,7 +5,7 @@ import Link from "next/link"
 export default async function AdminPage() {
   const data = await getAdminDashboardData()
 
-  if (data.error || !data.stats || !data.retention || !data.ops || !data.breakdowns) {
+  if (data.error || !data.stats || !data.retention || !data.ops || !data.breakdowns || !data.matchingIntelligence) {
     return (
       <div className="min-h-screen flex items-center justify-center p-6 bg-[#F4F6F5]">
         <div className="max-w-md text-center space-y-3 rounded-2xl border border-border bg-card p-8 shadow-sm">
@@ -43,6 +43,7 @@ export default async function AdminPage() {
       matches={data.matches}
       recommendations={data.recommendations}
       moderationEvents={data.moderationEvents}
+      matchingIntelligence={data.matchingIntelligence!}
     />
   )
 }

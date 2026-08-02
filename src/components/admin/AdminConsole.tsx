@@ -45,12 +45,14 @@ import {
   SanctionRulesEditor,
   YoutubeConfigEditor,
 } from "@/components/admin/AdminOpsV2Panels"
+import { MatchingIntelligencePanel } from "@/components/admin/AdminMatchingIntelligence"
 import {
   BictorysSandboxPanel,
   PaymentsAuditPanel,
 } from "@/components/admin/AdminPaymentsPanels"
 import { DistBars, SparkColumns } from "@/components/admin/AdminCharts"
 import { cn } from "@/utils/cn"
+import type { MatchingIntelligence } from "@/lib/admin/matchingIntelligence"
 
 type Props = {
   stats: {
@@ -158,6 +160,7 @@ type Props = {
     reason: string | null
     createdAt: string | null
   }>
+  matchingIntelligence: MatchingIntelligence
 }
 
 function planLabel(plan: string) {
@@ -304,6 +307,50 @@ export function AdminConsole(props: Props) {
               hint={`${props.stats.pendingPhotos} photos · ${props.stats.openReports} signalements`}
             />
           </div>
+
+          <SectionCard title="Matching Intelligence — aperçu">
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-3">
+              <div className="rounded-xl bg-secondary/60 px-3 py-2.5">
+                <p className="text-[11px] text-muted-foreground">Tests 5/5</p>
+                <p className="font-serif text-xl font-bold">
+                  {props.matchingIntelligence.assessmentsDoneAll}
+                </p>
+              </div>
+              <div className="rounded-xl bg-secondary/60 px-3 py-2.5">
+                <p className="text-[11px] text-muted-foreground">Sans test</p>
+                <p className="font-serif text-xl font-bold">
+                  {props.matchingIntelligence.assessmentsNone}
+                </p>
+              </div>
+              <div className="rounded-xl bg-secondary/60 px-3 py-2.5">
+                <p className="text-[11px] text-muted-foreground">Score moyen</p>
+                <p className="font-serif text-xl font-bold">
+                  {props.matchingIntelligence.avgMatchScore != null
+                    ? `${props.matchingIntelligence.avgMatchScore}%`
+                    : "—"}
+                </p>
+              </div>
+              <div className="rounded-xl bg-secondary/60 px-3 py-2.5">
+                <p className="text-[11px] text-muted-foreground">Matches ≥85%</p>
+                <p className="font-serif text-xl font-bold">
+                  {props.matchingIntelligence.highScoreMatches}
+                </p>
+              </div>
+              <div className="rounded-xl bg-secondary/60 px-3 py-2.5">
+                <p className="text-[11px] text-muted-foreground">Thème faible #1</p>
+                <p className="font-serif text-sm font-bold truncate">
+                  {props.matchingIntelligence.weakThemes[0]?.name ?? "—"}
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setNav("matching")}
+              className="text-sm font-semibold text-primary hover:underline"
+            >
+              Ouvrir Matching Intelligence + segments campagne →
+            </button>
+          </SectionCard>
 
           <div className="grid lg:grid-cols-3 gap-4">
             <SectionCard title="Équilibre H / F" className="lg:col-span-2">
@@ -724,75 +771,81 @@ export function AdminConsole(props: Props) {
         </div>
       )}
 
-      {/* ——— 6. MATCHING ——— */}
+      {/* ——— 6. MATCHING INTELLIGENCE ——— */}
       {nav === "matching" && (
-        <div className="space-y-6">
-          <div>
-            <h1 className="font-serif text-3xl font-bold">Matching & conversations</h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              Santé du matching · audit conversations.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            <KpiCard label="Matches 30j" value={props.retention.matches30d} />
-            <KpiCard label="Conversations 30j" value={props.retention.conversations30d} />
-            <KpiCard
-              label="Taux matching"
-              value={`${props.breakdowns.matchingRatePct}%`}
-              tone="green"
-            />
-            <KpiCard label="Hommes / Femmes" value={`${props.retention.menCount}/${props.retention.womenCount}`} />
-          </div>
-          {Math.abs(props.retention.menCount - props.retention.womenCount) > 5 &&
-            menTotal > 0 && (
-              <p className="text-sm rounded-xl border border-amber-200 bg-amber-50 text-amber-900 px-4 py-3">
-                Alerte matching : déséquilibre H/F important. Invitez le côté minoritaire.
+        <div className="space-y-8">
+          <MatchingIntelligencePanel
+            intelligence={props.matchingIntelligence}
+            settings={props.settings}
+            isFullAdmin={isFullAdmin}
+            busy={busy}
+            run={run}
+          />
+
+          <div className="border-t border-border pt-6 space-y-4">
+            <div>
+              <h2 className="font-serif text-2xl font-bold">Ops matching & conversations</h2>
+              <p className="text-sm text-muted-foreground mt-1">
+                Santé temps réel · audit des appariements et conversations.
               </p>
-            )}
-          <div className="grid lg:grid-cols-2 gap-4">
-            <SectionCard title="Matches récents (score IA / règles)">
-              <div className="divide-y divide-border max-h-96 overflow-y-auto">
-                {props.matches.length === 0 && (
-                  <p className="text-sm text-muted-foreground py-4">Aucun match.</p>
-                )}
-                {props.matches.map((m) => (
-                  <div key={m.id} className="py-3 text-sm space-y-1">
-                    <div className="flex justify-between gap-2">
-                      <p className="font-semibold">
-                        Compatibilité {m.score != null ? `${Math.round(m.score)}%` : "—"}
+            </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+              <KpiCard label="Matches 30j" value={props.retention.matches30d} />
+              <KpiCard label="Conversations 30j" value={props.retention.conversations30d} />
+              <KpiCard
+                label="Taux matching"
+                value={`${props.breakdowns.matchingRatePct}%`}
+                tone="green"
+              />
+              <KpiCard
+                label="Hommes / Femmes"
+                value={`${props.retention.menCount}/${props.retention.womenCount}`}
+              />
+            </div>
+            {Math.abs(props.retention.menCount - props.retention.womenCount) > 5 &&
+              menTotal > 0 && (
+                <p className="text-sm rounded-xl border border-amber-200 bg-amber-50 text-amber-900 px-4 py-3">
+                  Alerte matching : déséquilibre H/F important. Invitez le côté minoritaire.
+                </p>
+              )}
+            <div className="grid lg:grid-cols-2 gap-4">
+              <SectionCard title="Matches récents (score)">
+                <div className="divide-y divide-border max-h-96 overflow-y-auto">
+                  {props.matches.length === 0 && (
+                    <p className="text-sm text-muted-foreground py-4">Aucun match.</p>
+                  )}
+                  {props.matches.map((m) => (
+                    <div key={m.id} className="py-3 text-sm space-y-1">
+                      <div className="flex justify-between gap-2">
+                        <p className="font-semibold">
+                          Compatibilité {m.score != null ? `${Math.round(m.score)}%` : "—"}
+                        </p>
+                        <Badge variant="outline">{m.status || "—"}</Badge>
+                      </div>
+                      <p className="text-[11px] font-mono text-muted-foreground">
+                        {m.userOne.slice(0, 8)}… ↔ {m.userTwo.slice(0, 8)}…
                       </p>
-                      <Badge variant="outline">{m.status || "—"}</Badge>
                     </div>
-                    <p className="text-[11px] font-mono text-muted-foreground">
-                      {m.userOne.slice(0, 8)}… ↔ {m.userTwo.slice(0, 8)}…
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      Raisons typiques : piliers EVA, dénomination, géographie, vision couple.
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </SectionCard>
-            <SectionCard title="Conversations (ops)">
-              <div className="divide-y divide-border max-h-96 overflow-y-auto">
-                {props.conversations.length === 0 && (
-                  <p className="text-sm text-muted-foreground py-4">Aucune.</p>
-                )}
-                {props.conversations.map((c) => (
-                  <div key={c.id} className="py-3 text-xs font-mono space-y-0.5">
-                    <p>convo {c.id}</p>
-                    <p className="text-muted-foreground">match {c.matchId}</p>
-                    <p className="text-muted-foreground">
-                      {c.createdAt ? new Date(c.createdAt).toLocaleString("fr-FR") : "—"}
-                    </p>
-                  </div>
-                ))}
-              </div>
-              <p className="text-xs text-muted-foreground mt-3">
-                Rapport thématique EVA : activez « Analyser les conversations » dans Coach EVA.
-                Scan mots interdits : onglet Modération.
-              </p>
-            </SectionCard>
+                  ))}
+                </div>
+              </SectionCard>
+              <SectionCard title="Conversations (ops)">
+                <div className="divide-y divide-border max-h-96 overflow-y-auto">
+                  {props.conversations.length === 0 && (
+                    <p className="text-sm text-muted-foreground py-4">Aucune.</p>
+                  )}
+                  {props.conversations.map((c) => (
+                    <div key={c.id} className="py-3 text-xs font-mono space-y-0.5">
+                      <p>convo {c.id}</p>
+                      <p className="text-muted-foreground">match {c.matchId}</p>
+                      <p className="text-muted-foreground">
+                        {c.createdAt ? new Date(c.createdAt).toLocaleString("fr-FR") : "—"}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </SectionCard>
+            </div>
           </div>
         </div>
       )}

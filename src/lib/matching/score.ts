@@ -1,4 +1,4 @@
-import type { MatchableProfile, MatchingIndicators } from "./types"
+import type { MatchableProfile, MatchingIndicators, DomainScore } from "./types"
 import {
   MIN_RECOMMENDED_SCORE,
   type ScoredMatch,
@@ -234,20 +234,45 @@ function buildReasons(
   return reasons.slice(0, 4)
 }
 
-function buildPillars(viewer: MatchableProfile, candidate: MatchableProfile, hits: string[]) {
+function buildPillars(
+  viewer: MatchableProfile,
+  candidate: MatchableProfile,
+  hits: string[],
+  domainScores: ScoredMatch["domainScores"]
+) {
   const cInd = candidate.matching_indicators
   const vInd = viewer.matching_indicators
+  const domainLine = (id: DomainScore["id"], fallback: string) => {
+    const d = domainScores.find((x) => x.id === id)
+    if (!d) return fallback
+    const tone =
+      d.status === "strong"
+        ? "Point fort"
+        : d.status === "watch"
+          ? "À approfondir"
+          : "Vigilance"
+    return `${tone} (${d.score}%) — ${fallback}`
+  }
 
   return {
-    spirituality: hits.includes("practice")
-      ? `Pratique spirituelle alignée (${cInd?.spiritual_practice ?? candidate.attendance_frequency ?? "non précisée"}). ${candidate.denomination ? `Communauté : ${candidate.denomination}.` : ""}`
-      : `${candidate.denomination ? `Issu(e) de la communauté « ${candidate.denomination} ». ` : ""}La proximité de foi reste à approfondir dans le dialogue.`,
-    familyVision: hits.includes("family") || hits.includes("marriage")
-      ? `Vision du foyer proche de la vôtre${cInd?.family_project ? ` : « ${cInd.family_project.slice(0, 140)}${cInd.family_project.length > 140 ? "…" : ""} »` : "."}`
-      : `Projet familial déclaré${cInd?.family_project ? ` : « ${cInd.family_project.slice(0, 140)}${cInd.family_project.length > 140 ? "…" : ""} »` : " encore à préciser ensemble."}`,
-    dialogue: hits.includes("dialogue")
-      ? `Même approche du dialogue (${cInd?.communication_style ?? "non précisé"}), en harmonie avec votre style (${vInd?.communication_style ?? "non précisé"}).`
-      : `Style de communication : ${cInd?.communication_style ?? "non précisé"}. Un échange respectueux permettra de vérifier l'alignement.`,
+    spirituality: domainLine(
+      "spiritual",
+      hits.includes("practice")
+        ? `Pratique spirituelle alignée (${cInd?.spiritual_practice ?? candidate.attendance_frequency ?? "non précisée"}). ${candidate.denomination ? `Communauté : ${candidate.denomination}.` : ""}`
+        : `${candidate.denomination ? `Issu(e) de la communauté « ${candidate.denomination} ». ` : ""}La proximité de foi reste à approfondir dans le dialogue.`
+    ),
+    familyVision: domainLine(
+      "couple_life",
+      hits.includes("family") || hits.includes("marriage")
+        ? `Vision du foyer proche de la vôtre${cInd?.family_project ? ` : « ${cInd.family_project.slice(0, 140)}${cInd.family_project.length > 140 ? "…" : ""} »` : "."}`
+        : `Projet familial déclaré${cInd?.family_project ? ` : « ${cInd.family_project.slice(0, 140)}${cInd.family_project.length > 140 ? "…" : ""} »` : " encore à préciser ensemble."}`
+    ),
+    dialogue: domainLine(
+      "relationship",
+      hits.includes("dialogue")
+        ? `Même approche du dialogue (${cInd?.communication_style ?? "non précisé"}), en harmonie avec votre style (${vInd?.communication_style ?? "non précisé"}).`
+        : `Style de communication : ${cInd?.communication_style ?? "non précisé"}. Un échange respectueux permettra de vérifier l'alignement.`
+    ),
   }
 }
 
@@ -275,8 +300,15 @@ export function scorePair(viewer: MatchableProfile, candidate: MatchableProfile)
   )
 
   let score: number
+  const domainScores = psych?.domainScores ?? []
+  const insights = (psych?.insights ?? []).map((i) => ({
+    id: i.id,
+    severity: i.severity,
+    title: i.title,
+    message: i.message,
+  }))
+
   if (psych != null) {
-    // Plus de dimensions qui matchent → score plus haut (jusqu'à 100 %).
     const psychWeight = Math.min(0.85, 0.4 + psych.sharedPillars * 0.09)
     const blended = Math.round(profileScore * (1 - psychWeight) + psych.score * psychWeight)
     score = applyMatchConfidenceCaps(blended, psych.sharedPillars, psych.matchRatio)
@@ -293,19 +325,37 @@ export function scorePair(viewer: MatchableProfile, candidate: MatchableProfile)
     age,
   })
   if (psych != null) {
-    const pct = Math.round(psych.matchRatio * 100)
-    reasons.unshift(
-      psych.sharedPillars >= 5
-        ? `${pct}% des dimensions alignées sur les 5 questionnaires`
-        : `${pct}% des dimensions alignées (${psych.sharedPillars}/5 questionnaires)`
-    )
+    const strong = domainScores.filter((d) => d.status === "strong").length
+    const watch = domainScores.filter((d) => d.status !== "strong").length
+    if (strong > 0) {
+      reasons.unshift(
+        strong >= 3
+          ? `${strong} domaines en résonance forte`
+          : `${strong} domaine${strong > 1 ? "s" : ""} en résonance forte`
+      )
+    } else {
+      const pct = Math.round(psych.matchRatio * 100)
+      reasons.unshift(
+        psych.sharedPillars >= 5
+          ? `${pct}% des dimensions croisées favorables`
+          : `${pct}% des dimensions croisées (${psych.sharedPillars}/5 questionnaires)`
+      )
+    }
+    if (watch > 0 && insights.some((i) => i.severity === "risk" || i.severity === "watch")) {
+      const top = insights[0]
+      if (top && reasons.length < 4) {
+        reasons.push(top.title)
+      }
+    }
   }
 
   return {
     profile: candidate,
     score,
     reasons: reasons.slice(0, 4),
-    pillars: buildPillars(viewer, candidate, indicators.hits),
+    pillars: buildPillars(viewer, candidate, indicators.hits, domainScores),
+    domainScores,
+    insights: insights.slice(0, 5),
     level: compatibilityLevel(score),
   }
 }

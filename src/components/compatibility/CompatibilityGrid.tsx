@@ -54,9 +54,10 @@ export function CompatibilityGrid({
             Vos Rencontres en Résonance
           </h1>
           <p className="text-muted-foreground text-base max-w-2xl leading-relaxed">
-            Suggestions calculées à partir de votre profil et de vos questionnaires (foi,
-            localisation, vision du foyer, piliers). Seuls les profils ≥ 60&nbsp;% d&apos;harmonie
-            vous sont présentés.
+            Suggestions calculées à partir de votre profil et de vos questionnaires. Chaque
+            proposition affiche la compatibilité par domaine (foi, communication, foyer, finances…)
+            et les points d&apos;attention. Seuls les profils ≥ 60&nbsp;% d&apos;harmonie vous sont
+            présentés.
           </p>
         </div>
 
@@ -103,7 +104,7 @@ export function CompatibilityGrid({
 
       <EvaCompanion
         title="EVA - Présentation transparente"
-        message="Chaque score s'explique : communauté de foi, proximité, rythme spirituel et vision du mariage croisés avec vos réponses et vos 5 piliers de discernement."
+        message="Chaque score s'explique par domaine : foi, personnalité, communication, foyer et finances — avec les interactions à surveiller, pas seulement un pourcentage global."
         variant="default"
       />
 
@@ -159,6 +160,7 @@ export function CompatibilityGrid({
                 community: profile.community,
                 harmonyScore: profile.harmonyScore,
                 reasons: profile.reasons,
+                domainScores: profile.domainScores,
                 photoUrl: profile.photoUrl,
                 isBlurred: globalBlur,
               }}

@@ -87,7 +87,7 @@ export function AdminShell({
       icon: Crown,
       badge: badges.renewals || undefined,
     },
-    { id: "matching", label: "Matching & convos", icon: MessageCircle },
+    { id: "matching", label: "Matching Intelligence", icon: MessageCircle },
     { id: "academy", label: "Académie", icon: GraduationCap },
     { id: "eva", label: "Coach EVA", icon: Sparkles },
     { id: "marketing", label: "Contenu & marketing", icon: Megaphone },

@@ -146,6 +146,8 @@ export type CompatibilityListItem = {
   community: string
   harmonyScore: number
   reasons: string[]
+  domainScores: ScoredMatch["domainScores"]
+  insights: ScoredMatch["insights"]
   photoUrl?: string
   isVerified: boolean
   level: ScoredMatch["level"]
@@ -231,6 +233,8 @@ export async function getCompatibilitySuggestions(limit?: number): Promise<{
       community: match.profile.denomination || "Communauté non précisée",
       harmonyScore: match.score,
       reasons: match.reasons,
+      domainScores: match.domainScores,
+      insights: match.insights,
       photoUrl: match.profile.avatar_url ?? undefined,
       isVerified: Boolean(match.profile.is_verified),
       level: match.level,
@@ -249,6 +253,8 @@ export async function getCompatibilityDetail(profileId: string): Promise<{
     harmonyScore: number
     bio: string
     pillars: ScoredMatch["pillars"]
+    domainScores: ScoredMatch["domainScores"]
+    insights: ScoredMatch["insights"]
     answers: { question: string; answer: string }[]
     isVerified: boolean
   }
@@ -316,6 +322,8 @@ export async function getCompatibilityDetail(profileId: string): Promise<{
         candidate.testimony ||
         "Ce membre n'a pas encore rédigé de présentation longue.",
       pillars: scored.pillars,
+      domainScores: scored.domainScores,
+      insights: scored.insights,
       isVerified: Boolean(candidate.is_verified),
       answers: [
         {

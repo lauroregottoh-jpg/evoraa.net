@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Sparkles, MapPin, Eye, EyeOff, ArrowRight } from "lucide-react";
+import type { DomainScore } from "@/lib/matching/types";
 
 export interface CompatibilityProfile {
   id: string;
@@ -15,6 +16,7 @@ export interface CompatibilityProfile {
   community: string;
   harmonyScore: number;
   reasons: string[];
+  domainScores?: DomainScore[];
   photoUrl?: string;
   isBlurred?: boolean;
 }
@@ -23,6 +25,12 @@ interface CompatibilityCardProps {
   profile: CompatibilityProfile;
   defaultBlurred?: boolean;
   allowReveal?: boolean;
+}
+
+function statusDot(status: DomainScore["status"]) {
+  if (status === "strong") return "bg-emerald-500";
+  if (status === "watch") return "bg-amber-500";
+  return "bg-rose-500";
 }
 
 export function CompatibilityCard({
@@ -41,6 +49,7 @@ export function CompatibilityCard({
   }, [profile.isBlurred]);
 
   const initial = (profile.name?.[0] || "?").toUpperCase();
+  const domains = (profile.domainScores ?? []).slice(0, 5);
 
   return (
     <Card className="rounded-2xl border-border/60 bg-background/90 backdrop-blur-md shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden group">
@@ -121,19 +130,52 @@ export function CompatibilityCard({
         </p>
       </CardHeader>
 
-      <CardContent className="px-5 pb-4 space-y-2">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground block">
-          Explicabilité d&apos;harmonie :
-        </span>
-        <div className="flex flex-wrap gap-1.5">
-          {profile.reasons.map((reason, idx) => (
-            <span
-              key={idx}
-              className="text-xs bg-accent/10 text-accent-foreground dark:text-accent font-medium px-2.5 py-1 rounded-lg border border-accent/20 flex items-center gap-1"
-            >
-              ✓ {reason}
+      <CardContent className="px-5 pb-4 space-y-3">
+        {domains.length > 0 && (
+          <div className="space-y-1.5">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground block">
+              Compatibilité par domaine
             </span>
-          ))}
+            <div className="grid grid-cols-1 gap-1.5">
+              {domains.map((d) => (
+                <div key={d.id} className="flex items-center gap-2 text-xs">
+                  <span className={`h-1.5 w-1.5 rounded-full shrink-0 ${statusDot(d.status)}`} />
+                  <span className="text-muted-foreground w-[7.5rem] truncate">{d.label}</span>
+                  <div className="flex-1 h-1.5 rounded-full bg-secondary overflow-hidden">
+                    <div
+                      className={`h-full rounded-full ${
+                        d.status === "strong"
+                          ? "bg-emerald-500/80"
+                          : d.status === "watch"
+                            ? "bg-amber-500/80"
+                            : "bg-rose-500/70"
+                      }`}
+                      style={{ width: `${Math.max(6, Math.min(100, d.score))}%` }}
+                    />
+                  </div>
+                  <span className="font-serif font-semibold w-8 text-right tabular-nums">
+                    {d.score}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="space-y-2">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground block">
+            Points clés
+          </span>
+          <div className="flex flex-wrap gap-1.5">
+            {profile.reasons.map((reason, idx) => (
+              <span
+                key={idx}
+                className="text-xs bg-accent/10 text-accent-foreground dark:text-accent font-medium px-2.5 py-1 rounded-lg border border-accent/20 flex items-center gap-1"
+              >
+                ✓ {reason}
+              </span>
+            ))}
+          </div>
         </div>
       </CardContent>
 

@@ -43,6 +43,20 @@ export type MatchableProfile = {
   avatar_url: string | null
 }
 
+export type DomainScore = {
+  id: "personality" | "spiritual" | "relationship" | "couple_life" | "finances"
+  label: string
+  score: number
+  status: "strong" | "watch" | "risk"
+}
+
+export type MatchInsight = {
+  id: string
+  severity: "info" | "watch" | "risk"
+  title: string
+  message: string
+}
+
 export type ScoredMatch = {
   profile: MatchableProfile
   score: number
@@ -52,6 +66,10 @@ export type ScoredMatch = {
     familyVision: string
     dialogue: string
   }
+  /** Compatibilité par domaine (si questionnaires croisés). */
+  domainScores: DomainScore[]
+  /** Alertes d'interaction détectées. */
+  insights: MatchInsight[]
   level: "excellent" | "high" | "moderate" | "low"
 }
 
