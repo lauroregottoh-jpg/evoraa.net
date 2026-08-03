@@ -4,6 +4,10 @@ import { revalidatePath } from "next/cache"
 import { createClient } from "@/utils/supabase/server"
 import {
   parseAgeRange,
+  parseDesireChildren,
+  parseMarriageTimeline,
+  type DesireChildrenPref,
+  type MarriageTimeline,
   type SettingsData,
 } from "@/lib/settings"
 
@@ -34,7 +38,7 @@ export async function getMySettings(): Promise<{
 
   const { data: prefs } = await supabase
     .from("user_preferences")
-    .select("age_min, age_max, max_distance")
+    .select("age_min, age_max, max_distance, vision_of_marriage, desire_children")
     .eq("user_id", profile.id)
     .maybeSingle()
 
@@ -44,6 +48,8 @@ export async function getMySettings(): Promise<{
       maxDistance: prefs?.max_distance ?? 100,
       ageMin: prefs?.age_min ?? 26,
       ageMax: prefs?.age_max ?? 36,
+      marriageTimeline: parseMarriageTimeline(prefs?.vision_of_marriage),
+      desireChildren: parseDesireChildren(prefs?.desire_children),
     },
   }
 }
@@ -52,6 +58,8 @@ export async function saveSettingsAction(payload: {
   retreatMode: boolean
   maxDistance: string
   ageRange: string
+  marriageTimeline: MarriageTimeline
+  desireChildren: DesireChildrenPref
 }): Promise<{ error?: string; success?: boolean }> {
   const supabase = await createClient()
   const {
@@ -95,6 +103,8 @@ export async function saveSettingsAction(payload: {
       age_min: ageMin,
       age_max: ageMax,
       max_distance: Number.isFinite(maxDistance) ? maxDistance : 100,
+      vision_of_marriage: payload.marriageTimeline,
+      desire_children: payload.desireChildren,
       updated_by: user.id,
       updated_at: new Date().toISOString(),
       created_by: user.id,

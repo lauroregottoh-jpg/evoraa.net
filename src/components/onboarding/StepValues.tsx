@@ -22,10 +22,22 @@ export function StepValues({ onNext, onBack, defaultValues, isSubmitting = false
   const [communicationStyle, setCommunicationStyle] = React.useState(
     defaultValues?.communicationStyle || "dialogue_doux"
   );
+  const [marriageTimeline, setMarriageTimeline] = React.useState(
+    defaultValues?.marriageTimeline || "1_year"
+  );
+  const [partnerChildren, setPartnerChildren] = React.useState(
+    defaultValues?.partnerChildren || "open"
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onNext({ marriageVision, familyProject, communicationStyle });
+    onNext({
+      marriageVision,
+      familyProject,
+      communicationStyle,
+      marriageTimeline,
+      partnerChildren,
+    });
   };
 
   return (
@@ -63,6 +75,38 @@ export function StepValues({ onNext, onBack, defaultValues, isSubmitting = false
           className="rounded-xl min-h-24 bg-background border-border/80 text-sm leading-relaxed"
           required
         />
+      </div>
+
+      <div className="space-y-2 pt-2">
+        <label className="text-sm font-medium text-foreground flex items-center gap-2">
+          <Home className="h-4 w-4 text-accent" /> Horizon de projet de mariage
+        </label>
+        <select
+          value={marriageTimeline}
+          onChange={(e) => setMarriageTimeline(e.target.value)}
+          className="w-full h-11 px-3.5 rounded-xl bg-background border border-border/80 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+        >
+          <option value="3_months">Dans les 3 mois</option>
+          <option value="6_months">Dans les 6 mois</option>
+          <option value="1_year">Dans l&apos;année</option>
+          <option value="2_years">Dans les 2 ans</option>
+          <option value="open">Sans échéance précise</option>
+        </select>
+      </div>
+
+      <div className="space-y-2 pt-2">
+        <label className="text-sm font-medium text-foreground flex items-center gap-2">
+          <Home className="h-4 w-4 text-accent" /> Partenaire avec enfants déjà présents ?
+        </label>
+        <select
+          value={partnerChildren}
+          onChange={(e) => setPartnerChildren(e.target.value)}
+          className="w-full h-11 px-3.5 rounded-xl bg-background border border-border/80 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+        >
+          <option value="without">Je préfère sans enfants déjà présents</option>
+          <option value="with">Ouvert(e) à un partenaire avec enfants</option>
+          <option value="open">Pas de préférence</option>
+        </select>
       </div>
 
       <div className="space-y-2 pt-2">

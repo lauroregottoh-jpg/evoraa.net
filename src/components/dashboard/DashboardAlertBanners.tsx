@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { X, Camera, Crown, ArrowRight } from "lucide-react"
+import { X, Camera, Crown, ArrowRight, ClipboardList } from "lucide-react"
 import { cn } from "@/utils/cn"
 
 type Banner = {
@@ -42,6 +42,7 @@ export function DashboardAlertBanners({ banners }: { banners: Banner[] }) {
       {visible.map((b) => {
         const isGold = b.tone === "photo"
         const isGreen = b.tone === "upgrade" || b.tone === "renew"
+        const isTests = b.tone === "tests" || b.tone === "profile"
         return (
           <div
             key={b.id}
@@ -49,7 +50,8 @@ export function DashboardAlertBanners({ banners }: { banners: Banner[] }) {
               "relative rounded-2xl px-4 py-3.5 flex flex-col sm:flex-row sm:items-center gap-3 justify-between",
               isGold && "bg-[#F7F0E0] border border-accent/40",
               isGreen && "bg-primary text-primary-foreground border border-primary",
-              !isGold && !isGreen && "bg-card border border-border"
+              isTests && "bg-primary/10 border border-primary/30",
+              !isGold && !isGreen && !isTests && "bg-card border border-border"
             )}
           >
             <button
@@ -69,10 +71,17 @@ export function DashboardAlertBanners({ banners }: { banners: Banner[] }) {
                   "h-10 w-10 rounded-xl flex items-center justify-center shrink-0",
                   isGold && "bg-accent/25 text-accent-foreground",
                   isGreen && "bg-accent text-accent-foreground",
-                  !isGold && !isGreen && "bg-secondary text-primary"
+                  isTests && "bg-primary text-primary-foreground",
+                  !isGold && !isGreen && !isTests && "bg-secondary text-primary"
                 )}
               >
-                {isGold ? <Camera className="h-5 w-5" /> : <Crown className="h-5 w-5" />}
+                {isGold ? (
+                  <Camera className="h-5 w-5" />
+                ) : isTests ? (
+                  <ClipboardList className="h-5 w-5" />
+                ) : (
+                  <Crown className="h-5 w-5" />
+                )}
               </div>
               <div className="min-w-0">
                 <p className="font-semibold text-sm leading-snug">{b.title}</p>

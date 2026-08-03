@@ -13,10 +13,10 @@ export const BOOST_PACKS: BoostPack[] = [
   {
     id: "boost_24h",
     label: "Boost 24h",
-    durationLabel: "24h",
+    durationLabel: "24 heures",
     hours: 24,
     amountXof: 1500,
-    description: "Visibilité prioritaire pendant une journée.",
+    description: "Votre profil est mis en avant 24 h auprès des membres compatibles.",
   },
   {
     id: "boost_3d",
@@ -24,7 +24,7 @@ export const BOOST_PACKS: BoostPack[] = [
     durationLabel: "3 jours",
     hours: 72,
     amountXof: 3000,
-    description: "Idéal pour un week-end de suggestions.",
+    description: "Visibilité prioritaire pendant un week-end entier de suggestions.",
   },
   {
     id: "boost_7d",
@@ -32,7 +32,7 @@ export const BOOST_PACKS: BoostPack[] = [
     durationLabel: "7 jours",
     hours: 168,
     amountXof: 5000,
-    description: "Une semaine en tête des recherches.",
+    description: "Une semaine en tête des profils proposés aux membres alignés.",
   },
 ]
 

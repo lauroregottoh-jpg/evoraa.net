@@ -72,13 +72,9 @@ export function PremiumSocialProof() {
     <div className="space-y-8">
       <section className="rounded-2xl border border-accent/25 bg-accent/10 p-5 sm:p-7 space-y-4">
         <div className="text-center space-y-2">
-          <span className="inline-flex rounded-full bg-accent/30 px-3 py-1 text-[11px] font-semibold">
-            Soft launch
-          </span>
           <h2 className="font-serif text-2xl font-bold">Ils avancent avec Alliance</h2>
           <p className="text-xs text-muted-foreground max-w-md mx-auto">
-            Exemples de parcours inspirés des retours de la communauté. Les témoignages vérifiés
-            remplacent progressivement ces exemples.
+            Des membres qui ont choisi d&apos;accélérer leur discernement avec Alliance.
           </p>
         </div>
         <figure className="text-center space-y-4 min-h-[160px] flex flex-col justify-center">

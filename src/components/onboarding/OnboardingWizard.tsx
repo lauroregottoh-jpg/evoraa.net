@@ -51,13 +51,13 @@ export function OnboardingWizard() {
         variant="suggestion"
         message={
           step === 1
-            ? "Ces premières informations posent la base de votre profil (60%). Elles nous permettent de vérifier la cohérence et l'ancrage spirituel de votre démarche."
-            : "Magnifique. Nous atteignons ici le cœur de Keliaa (78%). Votre vision du foyer et du mariage est ce qui permettra un vrai discernement conjugal."
+            ? "Ces informations posent seulement la base (environ 12–15 % après l’onboarding). Les 5 questionnaires feront vraiment avancer votre Matching."
+            : "Votre vision du foyer compte beaucoup. Ensuite : les tests. Sans eux, le Matching ne peut pas vraiment travailler pour vous."
         }
       />
 
-      {/* Infinite Profile Progress Component right in the wizard */}
-      <ProfileProgress percentage={step === 1 ? 60 : 78} />
+      {/* Progression réelle produit : onboarding ≠ profil complet */}
+      <ProfileProgress percentage={step === 1 ? 12 : 15} />
 
       {error && (
         <Alert variant="destructive" className="rounded-xl border-destructive/40 bg-destructive/10 text-destructive text-xs">

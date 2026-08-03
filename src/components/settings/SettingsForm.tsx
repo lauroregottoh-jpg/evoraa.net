@@ -4,9 +4,13 @@ import * as React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Moon, Sliders, CheckCircle2 } from "lucide-react";
+import { Moon, Sliders, CheckCircle2, Search } from "lucide-react";
 import {
   ageRangeLabel,
+  DESIRE_CHILDREN_OPTIONS,
+  MARRIAGE_TIMELINE_OPTIONS,
+  type DesireChildrenPref,
+  type MarriageTimeline,
   type SettingsData,
 } from "@/lib/settings";
 import { saveSettingsAction } from "@/app/actions/settings";
@@ -16,6 +20,12 @@ export function SettingsForm({ initial }: { initial: SettingsData }) {
   const [maxDistance, setMaxDistance] = React.useState(String(initial.maxDistance));
   const [ageRange, setAgeRange] = React.useState(
     ageRangeLabel(initial.ageMin, initial.ageMax)
+  );
+  const [marriageTimeline, setMarriageTimeline] = React.useState<MarriageTimeline>(
+    initial.marriageTimeline
+  );
+  const [desireChildren, setDesireChildren] = React.useState<DesireChildrenPref>(
+    initial.desireChildren
   );
   const [saved, setSaved] = React.useState(false);
   const [error, setError] = React.useState("");
@@ -30,6 +40,8 @@ export function SettingsForm({ initial }: { initial: SettingsData }) {
       retreatMode,
       maxDistance,
       ageRange,
+      marriageTimeline,
+      desireChildren,
     });
     setSaving(false);
     if (result.error) {
@@ -53,7 +65,7 @@ export function SettingsForm({ initial }: { initial: SettingsData }) {
           <div className="flex items-center justify-between flex-wrap gap-2">
             <CardTitle className="font-serif text-2xl text-foreground flex items-center gap-2">
               <Moon className="h-5 w-5 text-accent" />
-              Mode Retraite Spirituelle (Discrétion)
+              Respect de votre intimité
             </CardTitle>
             <Badge
               className={
@@ -62,11 +74,12 @@ export function SettingsForm({ initial }: { initial: SettingsData }) {
                   : "bg-secondary text-muted-foreground"
               }
             >
-              {retreatMode ? "Retraite Activée (Profil Masqué)" : "Recherche Active"}
+              {retreatMode ? "Pause activée (profil masqué)" : "Recherche active"}
             </Badge>
           </div>
           <CardDescription className="text-xs text-muted-foreground">
-            Mettez votre profil en pause temporaire sans perdre vos conversations.
+            Besoin de retraite ou de silence ? Masquez temporairement votre profil sans perdre vos
+            conversations.
           </CardDescription>
         </CardHeader>
 
@@ -90,7 +103,7 @@ export function SettingsForm({ initial }: { initial: SettingsData }) {
                 : "border-border/80"
             }`}
           >
-            {retreatMode ? "Désactiver la retraite" : "Activer la retraite"}
+            {retreatMode ? "Reprendre la recherche" : "Activer la pause"}
           </Button>
         </CardContent>
       </Card>
@@ -98,15 +111,19 @@ export function SettingsForm({ initial }: { initial: SettingsData }) {
       <Card className="rounded-2xl border-border/60 bg-background/90 backdrop-blur-md shadow-xs">
         <CardHeader className="border-b border-border/40 pb-4">
           <CardTitle className="font-serif text-2xl text-foreground flex items-center gap-2">
-            <Sliders className="h-5 w-5 text-accent" />
-            Critères d&apos;Harmonie & Distance
+            <Search className="h-5 w-5 text-accent" />
+            Critères de recherche
           </CardTitle>
+          <CardDescription className="text-xs text-muted-foreground">
+            Affinez qui peut vous être proposé. Ces filtres aident le Matching — ils ne remplacent
+            pas les questionnaires.
+          </CardDescription>
         </CardHeader>
         <CardContent className="p-6 space-y-5">
           <div className="grid gap-6 sm:grid-cols-2">
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
-                Rayon géographique maximum (km)
+                Rayon géographique maximum
               </label>
               <select
                 value={maxDistance}
@@ -114,8 +131,8 @@ export function SettingsForm({ initial }: { initial: SettingsData }) {
                 className="w-full h-11 px-3.5 rounded-xl bg-background border border-border/80 text-sm text-foreground focus:ring-accent"
               >
                 <option value="50">50 km autour de ma ville</option>
-                <option value="100">100 km (Région proche)</option>
-                <option value="300">300 km (Inter-régional)</option>
+                <option value="100">100 km (région proche)</option>
+                <option value="300">300 km (inter-régional)</option>
                 <option value="1000">Ouverture large (1000 km)</option>
               </select>
             </div>
@@ -135,7 +152,47 @@ export function SettingsForm({ initial }: { initial: SettingsData }) {
                 <option value="38-55">38 - 55 ans</option>
               </select>
             </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">
+                Projet de mariage (horizon)
+              </label>
+              <select
+                value={marriageTimeline}
+                onChange={(e) => setMarriageTimeline(e.target.value as MarriageTimeline)}
+                className="w-full h-11 px-3.5 rounded-xl bg-background border border-border/80 text-sm text-foreground focus:ring-accent"
+              >
+                {MARRIAGE_TIMELINE_OPTIONS.map((o) => (
+                  <option key={o.id} value={o.id}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">
+                Partenaire avec enfants déjà présents ?
+              </label>
+              <select
+                value={desireChildren}
+                onChange={(e) => setDesireChildren(e.target.value as DesireChildrenPref)}
+                className="w-full h-11 px-3.5 rounded-xl bg-background border border-border/80 text-sm text-foreground focus:ring-accent"
+              >
+                {DESIRE_CHILDREN_OPTIONS.map((o) => (
+                  <option key={o.id} value={o.id}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
+
+          <p className="text-[11px] text-muted-foreground flex items-start gap-2">
+            <Sliders className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+            Le genre recherché suit votre profil (homme ↔ femme). D&apos;autres filtres arriveront
+            progressivement.
+          </p>
         </CardContent>
       </Card>
 
@@ -149,13 +206,12 @@ export function SettingsForm({ initial }: { initial: SettingsData }) {
         ) : (
           <div />
         )}
-
         <Button
           type="submit"
           disabled={saving}
-          className="h-11 px-8 rounded-xl font-medium bg-primary hover:bg-primary/90 text-primary-foreground shadow-xs shrink-0 ml-auto"
+          className="rounded-xl h-11 px-6 font-semibold"
         >
-          {saving ? "Enregistrement…" : "Enregistrer mes paramètres"}
+          {saving ? "Enregistrement…" : "Enregistrer"}
         </Button>
       </div>
     </form>

@@ -144,16 +144,16 @@ export async function getDashboardData(): Promise<{
   if (assessmentsDone < 5) {
     nextSteps.push({
       id: "tests",
-      title: `${assessmentsDone}/5 questionnaires — ${completion}% du profil`,
-      body: "Les questionnaires représentent l’essentiel de votre progression. Sans eux, le Matching reste incomplet.",
+      title: `Urgent : ${assessmentsDone}/5 tests — profil à ${completion}%`,
+      body: "Sans les questionnaires, impossible de rencontrer quelqu’un qui correspond vraiment à votre vision. Complétez-les pour activer le Matching.",
       href: "/assessments",
-      cta: "Continuer les tests",
+      cta: "Faire les tests",
       tone: "tests",
     })
   } else if (completion < 100) {
     nextSteps.push({
       id: "profile",
-      title: `Profil à ${completion}%`,
+      title: `Profil à ${completion}% — presque prêt`,
       body: "Ajoutez une photo claire pour finaliser votre visibilité.",
       href: "/profile",
       cta: "Compléter",
@@ -249,7 +249,7 @@ export async function getDashboardData(): Promise<{
 
   return {
     data: {
-      firstName: (profile.first_name || "").trim() || "ami(e)",
+      firstName: (profile.first_name || "").trim(),
       userId: user.id,
       completionPercentage: completion,
       isVerified: Boolean(profile.is_verified || profile.identity_verified),

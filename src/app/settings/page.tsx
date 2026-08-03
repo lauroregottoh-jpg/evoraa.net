@@ -24,14 +24,14 @@ export default async function SettingsPage() {
             Préférences de votre compte
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Ajustez vos critères et activez le mode retraite à tout moment.
+            Critères de recherche, pause intimité, et accès à votre compte.
           </p>
         </div>
 
         <EvaCompanion
-          title="EVA - Le Respect des Saisons spirituelles"
+          title="Vos critères, votre rythme"
           variant="reflection"
-          message="Sur Keliaa, il y a des temps de recherche active et des temps de silence. Le Mode Retraite masque votre profil en toute paix."
+          message="Affinez qui peut vous être proposé. Si vous avez besoin de silence, activez la pause : votre profil est masqué sans perdre vos conversations."
         />
 
         {error || !data ? (

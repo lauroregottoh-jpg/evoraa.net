@@ -45,7 +45,7 @@ export function DemoPaymentPanel({
       <CardHeader className="border-b border-border/40">
         <CardTitle className="font-serif text-2xl">Paiement {planName}</CardTitle>
         <p className="text-sm text-muted-foreground">
-          Mode démo soft launch. En production, vous serez redirigé vers un
+          Mode démo. En production, vous serez redirigé vers un
           paiement sécurisé (Mobile Money ou carte).
         </p>
       </CardHeader>

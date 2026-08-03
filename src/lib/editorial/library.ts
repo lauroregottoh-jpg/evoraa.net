@@ -411,21 +411,39 @@ export function getDailyEditorialPack(date = new Date()): DailyEditorialPack {
   }
 }
 
+/**
+ * Aperçu limité de la bibliothèque (10–15 contenus).
+ * Le reste se découvre au fil des jours via « aujourd’hui ».
+ */
+export function getBrowsableEditorialPreview(limit = 12): EditorialItem[] {
+  const quotas: Partial<Record<EditorialCategory, number>> = {
+    pensee: 2,
+    conversation: 2,
+    astuce: 2,
+    conseil: 2,
+    defi: 1,
+    question: 1,
+    verset: 1,
+    encouragement: 1,
+  }
+  const out: EditorialItem[] = []
+  for (const [cat, n] of Object.entries(quotas) as Array<[EditorialCategory, number]>) {
+    const pool = getEditorialByCategory(cat)
+    for (let i = 0; i < Math.min(n, pool.length); i++) {
+      out.push(pool[i])
+      if (out.length >= limit) return out
+    }
+  }
+  return out.slice(0, limit)
+}
+
 export const EDITORIAL_FILTERS: Array<{ id: EditorialCategory | "all"; label: string }> = [
   { id: "all", label: "Tout" },
   { id: "pensee", label: "Pensées" },
   { id: "conseil", label: "Conseils" },
-  { id: "conseil_coach", label: "Coach" },
+  { id: "conversation", label: "Conversations" },
+  { id: "astuce", label: "Astuces" },
   { id: "defi", label: "Défis" },
   { id: "question", label: "Questions" },
-  { id: "conversation", label: "Conversations" },
-  { id: "erreur", label: "Erreurs" },
-  { id: "astuce", label: "Astuces" },
-  { id: "a_mediter", label: "À méditer" },
   { id: "verset", label: "Versets" },
-  { id: "verset_explique", label: "Verset +" },
-  { id: "preparation", label: "Mariage" },
-  { id: "encouragement", label: "Encouragements" },
-  { id: "citation", label: "Citations" },
-  { id: "saviez_vous", label: "Le saviez-vous ?" },
 ]

@@ -36,7 +36,14 @@ export default async function DashboardPage() {
 
   const { usage } = data
   const banners = data.nextSteps
-    .filter((s) => s.tone === "photo" || s.tone === "upgrade" || s.tone === "renew")
+    .filter(
+      (s) =>
+        s.tone === "photo" ||
+        s.tone === "upgrade" ||
+        s.tone === "renew" ||
+        s.tone === "tests" ||
+        s.tone === "profile"
+    )
     .map((s) => ({
       id: s.id,
       title: s.title,
@@ -108,34 +115,36 @@ export default async function DashboardPage() {
         <div className="space-y-3">
           <div className="flex items-end justify-between gap-3 px-1">
             <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
-              Contenu du jour · {data.dailyPrimary.label}
+              Astuce relationnelle
             </p>
             <Link
               href="/inspiration"
               className="text-xs font-semibold text-primary hover:underline underline-offset-2"
             >
-              Bibliothèque →
+              Voir plus →
             </Link>
           </div>
           <DailyEditorialCard item={data.dailyPrimary} featured />
         </div>
 
         {!data.hasAvatar || data.assessmentsDone < 5 ? (
-          <div className="rounded-2xl border border-border bg-card p-5 space-y-3">
-            <p className="text-sm font-semibold text-foreground">
-              EVA vous rappelle
-            </p>
-            <p className="text-sm text-muted-foreground">
+          <div className="rounded-2xl border border-primary/25 bg-primary/5 p-5 space-y-3">
+            <p className="text-sm font-bold text-foreground">
               {data.assessmentsDone < 5
-                ? `Vous avez complété ${data.assessmentsDone}/5 questionnaires. C’est ce qui fait avancer votre profil (actuellement ${data.completionPercentage}%). Sans les questionnaires, le Matching ne peut pas vraiment vous aider.`
-                : "Ajoutez une photo claire pour devenir visible auprès des profils compatibles."}
+                ? "Sans Matching, pas de rencontre juste"
+                : "Devenez visible dès maintenant"}
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {data.assessmentsDone < 5
+                ? `Votre profil est à ${data.completionPercentage}% seulement (${data.assessmentsDone}/5 questionnaires). L’onboarding ne suffit pas : sans les tests, le Matching ne peut pas trouver la personne qui correspond à votre foi, vos valeurs et votre projet de mariage.`
+                : "Ajoutez une photo claire : sans portrait, vous restez difficile à découvrir pour les profils compatibles."}
             </p>
             <Link
               href={data.assessmentsDone < 5 ? "/assessments" : "/profile"}
               className="flex items-center justify-center w-full rounded-xl bg-primary text-primary-foreground h-11 text-sm font-semibold"
             >
               {data.assessmentsDone < 5
-                ? "Continuer mes questionnaires →"
+                ? "Compléter mes questionnaires →"
                 : "Ajouter ma photo →"}
             </Link>
           </div>

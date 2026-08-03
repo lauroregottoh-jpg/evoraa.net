@@ -45,7 +45,7 @@ export function PremiumHeroCarousel({
   intervalMs?: number
 }) {
   const [index, setIndex] = React.useState(0)
-  const name = firstName?.trim() || "Cher(e) membre"
+  const name = firstName?.trim() || ""
 
   React.useEffect(() => {
     const id = window.setInterval(() => {
@@ -58,13 +58,17 @@ export function PremiumHeroCarousel({
 
   return (
     <section className="text-center space-y-5 max-w-3xl mx-auto px-1">
-      <div key={index} className="space-y-4 animate-in fade-in duration-500">
+      <div key={index} className="space-y-4">
         <span className="inline-flex items-center rounded-full bg-accent/20 text-accent-foreground border border-accent/30 px-3 py-1 text-[11px] font-semibold tracking-wide">
           {slide.badge}
         </span>
         <h1 className="font-serif text-3xl sm:text-4xl font-bold text-foreground leading-tight">
-          <span className="italic font-semibold">{name}</span>
-          {", "}
+          {name ? (
+            <>
+              <span className="italic font-semibold">{name}</span>
+              {", "}
+            </>
+          ) : null}
           <span className="text-accent">{slide.highlight}</span> {slide.title}
         </h1>
         <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto">

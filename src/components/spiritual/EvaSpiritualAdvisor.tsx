@@ -150,7 +150,7 @@ export function EvaSpiritualAdvisor({
 
         <form onSubmit={handleAskCustom} className="pt-3 space-y-2">
           <label className="text-xs font-semibold text-muted-foreground block">
-            Poser une question spirituelle à EVA
+            Poser une question à EVA
           </label>
           <div className="flex gap-2">
             <Input

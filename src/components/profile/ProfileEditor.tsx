@@ -89,15 +89,15 @@ export function ProfileEditor({ initial }: { initial: ProfileEditorData }) {
       <form onSubmit={handleSave} className="space-y-6">
         <Card className="rounded-2xl border-border/60 bg-background/90 backdrop-blur-md shadow-sm">
           <CardHeader className="border-b border-border/40 pb-4">
-            <CardTitle className="font-serif text-2xl text-foreground flex items-center gap-2">
-              <Heart className="h-5 w-5 text-accent" />
-              Témoignage & Parcours de Foi
-            </CardTitle>
-          </CardHeader>
+              <CardTitle className="font-serif text-2xl text-foreground flex items-center gap-2">
+                <Heart className="h-5 w-5 text-accent" />
+                Parcours de foi
+              </CardTitle>
+            </CardHeader>
           <CardContent className="p-6 space-y-5">
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
-                Votre témoignage spirituel en quelques phrases
+                Votre parcours spirituel en quelques phrases
               </label>
               <Textarea
                 value={testimony}

@@ -6,21 +6,22 @@ import { MemberShell } from "@/components/layout/MemberShell"
 import { DailyEditorialCard } from "@/components/dashboard/FarataHomeBlocks"
 import {
   EDITORIAL_FILTERS,
-  EDITORIAL_LIBRARY,
+  getBrowsableEditorialPreview,
   getDailyEditorialPack,
   type EditorialCategory,
 } from "@/lib/editorial/library"
 import { cn } from "@/utils/cn"
-import { BookOpen, Sparkles } from "lucide-react"
+import { BookOpen, Sparkles, Lock } from "lucide-react"
 
 export default function InspirationPage() {
   const today = React.useMemo(() => getDailyEditorialPack(), [])
+  const preview = React.useMemo(() => getBrowsableEditorialPreview(12), [])
   const [filter, setFilter] = React.useState<EditorialCategory | "all">("all")
 
   const items = React.useMemo(() => {
-    if (filter === "all") return EDITORIAL_LIBRARY
-    return EDITORIAL_LIBRARY.filter((i) => i.category === filter)
-  }, [filter])
+    if (filter === "all") return preview
+    return preview.filter((i) => i.category === filter)
+  }, [filter, preview])
 
   return (
     <MemberShell dense>
@@ -28,15 +29,15 @@ export default function InspirationPage() {
         <header className="space-y-2 px-1 pt-1">
           <p className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-1.5">
             <BookOpen className="h-3.5 w-3.5" />
-            Bibliothèque éditoriale
+            Inspiration
           </p>
           <h1 className="font-serif text-3xl font-bold text-foreground">
             Inspiration du jour
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
-            Chaque jour, <strong>un seul contenu</strong> s&apos;affiche (pensée, conseil,
-            défi, question…). Formats en alternance. La bibliothèque complète est
-            disponible ci-dessous.
+            Chaque jour, un contenu nouveau vous est proposé. Ci-dessous, un aperçu limité
+            (environ une douzaine) — le reste se découvre au fil des jours, pour garder chaque
+            lecture utile.
           </p>
         </header>
 
@@ -50,8 +51,8 @@ export default function InspirationPage() {
 
         <section className="space-y-3">
           <div className="flex items-end justify-between gap-3 px-1">
-            <h2 className="font-serif text-xl font-bold">Parcourir</h2>
-            <p className="text-xs text-muted-foreground">{items.length} contenu(s)</p>
+            <h2 className="font-serif text-xl font-bold">Aperçu</h2>
+            <p className="text-xs text-muted-foreground">{items.length} contenus ouverts</p>
           </div>
 
           <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-thin">
@@ -76,6 +77,15 @@ export default function InspirationPage() {
             {items.map((item) => (
               <DailyEditorialCard key={item.id} item={item} />
             ))}
+          </div>
+
+          <div className="rounded-2xl border border-dashed border-border bg-secondary/30 px-4 py-5 text-center space-y-2">
+            <Lock className="h-4 w-4 mx-auto text-muted-foreground" />
+            <p className="text-sm font-semibold text-foreground">Le reste arrive au fil des jours</p>
+            <p className="text-xs text-muted-foreground max-w-md mx-auto leading-relaxed">
+              Revenez demain pour un nouveau contenu. Pour aller plus loin dans la préparation :
+              Académie du mariage.
+            </p>
           </div>
         </section>
 

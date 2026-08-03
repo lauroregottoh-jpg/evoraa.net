@@ -16,6 +16,8 @@ export type OnboardingPayload = {
   marriageVision: string
   familyProject: string
   communicationStyle: string
+  marriageTimeline: string
+  partnerChildren: string
 }
 
 const PRACTICE_TO_ATTENDANCE: Record<
@@ -54,10 +56,12 @@ export async function saveOnboardingAction(payload: OnboardingPayload) {
     marriage_vision: payload.marriageVision,
     family_project: payload.familyProject,
     communication_style: payload.communicationStyle,
+    marriage_timeline: payload.marriageTimeline,
+    partner_children: payload.partnerChildren,
     age_declared: Number.parseInt(payload.age, 10) || null,
   }
 
-  const { error } = await supabase
+  const { data: profile, error } = await supabase
     .from("profiles")
     .update({
       gender: payload.gender === "M" ? "M" : "F",
@@ -76,9 +80,25 @@ export async function saveOnboardingAction(payload: OnboardingPayload) {
       updated_at: new Date().toISOString(),
     })
     .eq("user_id", user.id)
+    .select("id")
+    .maybeSingle()
 
   if (error) {
     return { error: error.message }
+  }
+
+  if (profile?.id) {
+    await supabase.from("user_preferences").upsert(
+      {
+        user_id: profile.id,
+        vision_of_marriage: payload.marriageTimeline || "open",
+        desire_children: payload.partnerChildren || "open",
+        updated_by: user.id,
+        updated_at: new Date().toISOString(),
+        created_by: user.id,
+      },
+      { onConflict: "user_id" }
+    )
   }
 
   revalidatePath("/", "layout")
