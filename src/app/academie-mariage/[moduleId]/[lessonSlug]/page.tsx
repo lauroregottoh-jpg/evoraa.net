@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { ArrowLeft, ArrowRight } from "lucide-react"
 import { MemberPage } from "@/components/layout/MemberPage"
 import { AcademyVideoSlot } from "@/components/academy/AcademyVideoSlot"
+import { AcademyLessonArticle } from "@/components/academy/AcademyLessonArticle"
 import { AcademyCoachingCta } from "@/components/academy/AcademyCoachingCta"
 import { MarkLessonDoneButton } from "@/components/academy/AcademyProgress"
 import { AcademySelfCheckBox } from "@/components/academy/AcademySelfCheck"
@@ -27,8 +28,8 @@ export default async function AcademyLessonPage({
 
   return (
     <MemberPage>
-      <div className="max-w-3xl mx-auto space-y-8 pb-12">
-        <div className="space-y-2">
+      <div className="max-w-2xl mx-auto space-y-8 pb-12">
+        <header className="space-y-3">
           <Link
             href={academyModulePath(mod.id)}
             className="inline-flex items-center text-xs text-muted-foreground hover:underline"
@@ -36,53 +37,46 @@ export default async function AcademyLessonPage({
             <ArrowLeft className="h-3.5 w-3.5 mr-1" /> {mod.title}
           </Link>
           <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
-            Leçon {index + 1}/{mod.lessons.length} · {lesson.durationMin} min
+            Module · Leçon {index + 1}/{mod.lessons.length}
           </p>
-          <h1 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
+          <h1 className="font-serif text-3xl sm:text-[2.5rem] font-bold leading-[1.15] tracking-tight">
             {lesson.title}
           </h1>
-          <p className="text-sm text-muted-foreground leading-relaxed">{lesson.subtitle}</p>
-        </div>
+          <p className="text-base text-muted-foreground leading-relaxed">{lesson.subtitle}</p>
+        </header>
 
         <AcademyVideoSlot lesson={lesson} />
 
-        {lesson.sections.map((section) => (
-          <section key={section.title} className="space-y-3">
-            <h2 className="font-serif text-xl font-bold">{section.title}</h2>
-            <ul className="space-y-2">
-              {section.points.map((p) => (
-                <li key={p} className="text-sm flex gap-2 leading-snug">
-                  <span className="text-accent font-bold shrink-0">·</span>
-                  <span>{p}</span>
-                </li>
+        <AcademyLessonArticle lesson={lesson}>
+          <section className="rounded-2xl border border-border bg-card/80 p-5 sm:p-6 space-y-3 relative overflow-hidden">
+            <div
+              className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-primary/10 blur-2xl"
+              aria-hidden
+            />
+            <h2 className="font-serif text-xl font-bold relative">À retenir</h2>
+            <div className="space-y-3 relative">
+              {lesson.keyPoints.map((p) => (
+                <p key={p.slice(0, 40)} className="text-[16px] leading-[1.75] text-foreground/90">
+                  {p}
+                </p>
               ))}
-            </ul>
+            </div>
           </section>
-        ))}
 
-        <section className="rounded-2xl border border-border bg-card p-5 space-y-3">
-          <h2 className="font-serif text-lg font-bold">Points clés</h2>
-          <ul className="space-y-2">
-            {lesson.keyPoints.map((p) => (
-              <li key={p} className="text-sm flex gap-2">
-                <span className="text-accent font-bold">·</span>
-                <span>{p}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="rounded-2xl border border-border bg-card p-5 space-y-3">
-          <h2 className="font-serif text-lg font-bold">Ressources pratiques</h2>
-          <ul className="space-y-3">
-            {lesson.resources.map((r) => (
-              <li key={r.label} className="text-sm">
-                <p className="font-semibold text-foreground">{r.label}</p>
-                <p className="text-muted-foreground mt-0.5 leading-snug">{r.detail}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
+          {lesson.resources.length > 0 ? (
+            <section className="rounded-2xl border border-border bg-card p-5 space-y-3">
+              <h2 className="font-serif text-lg font-bold">Ressources pratiques</h2>
+              <ul className="space-y-3">
+                {lesson.resources.map((r) => (
+                  <li key={r.label} className="text-sm">
+                    <p className="font-semibold text-foreground">{r.label}</p>
+                    <p className="text-muted-foreground mt-0.5 leading-snug">{r.detail}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+        </AcademyLessonArticle>
 
         <AcademySelfCheckBox
           moduleId={mod.id}
@@ -90,9 +84,9 @@ export default async function AcademyLessonPage({
           selfCheck={lesson.selfCheck}
         />
 
-        <section className="rounded-2xl border border-primary/20 bg-primary/5 p-5 space-y-2">
-          <h2 className="font-serif text-lg font-bold">Exercice de la semaine</h2>
-          <p className="text-sm leading-relaxed">{lesson.exercise}</p>
+        <section className="rounded-2xl border border-primary/20 bg-primary/5 p-5 sm:p-6 space-y-2">
+          <h2 className="font-serif text-xl font-bold">Exercice de la semaine</h2>
+          <p className="text-[16px] leading-[1.75]">{lesson.exercise}</p>
         </section>
 
         <div className="flex flex-col sm:flex-row gap-3">

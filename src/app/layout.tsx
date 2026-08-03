@@ -28,6 +28,10 @@ export const metadata: Metadata = {
   },
   description:
     "Plateforme de rencontres chrétiennes pour les célibataires qui souhaitent construire un mariage selon les standards bibliques. Matching fondé sur la foi, les valeurs et le projet de vie.",
+  icons: {
+    icon: [{ url: "/favicon-keliaa.png", type: "image/png" }],
+    apple: [{ url: "/apple-icon.png", type: "image/png" }],
+  },
   openGraph: {
     type: "website",
     locale: "fr_FR",

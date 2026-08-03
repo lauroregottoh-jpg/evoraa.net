@@ -7,25 +7,23 @@ type Props = {
   lesson: Pick<
     AcademyLesson,
     "title" | "videoUrl" | "videoProvider" | "durationMin" | "coverImage"
-  > & { coverImage?: string }
+  >
 }
 
-const DEFAULT_COVER =
-  "https://images.unsplash.com/photo-1511632765486-a01980e01d4e?q=80&w=1600&auto=format&fit=crop"
+const DEFAULT_COVER = "/academy/academy-foi.png"
 
 /**
- * Affiche la vidéo si une URL est renseignée.
- * Sinon : image d’ambiance (pas de texte technique YouTube/Vimeo).
+ * Vidéo si URL présente, sinon couverture thématique du module.
  */
 export function AcademyVideoSlot({ lesson }: Props) {
   const url = lesson.videoUrl?.trim()
-  const cover = (lesson as { coverImage?: string }).coverImage || DEFAULT_COVER
+  const cover = lesson.coverImage || DEFAULT_COVER
 
   if (url) {
     const embed = toEmbedUrl(url, lesson.videoProvider)
     if (embed) {
       return (
-        <div className="aspect-video w-full overflow-hidden rounded-2xl border border-border bg-black">
+        <div className="aspect-video w-full overflow-hidden rounded-2xl border border-border bg-black shadow-sm">
           <iframe
             src={embed}
             title={lesson.title}
@@ -38,7 +36,7 @@ export function AcademyVideoSlot({ lesson }: Props) {
     }
     if (lesson.videoProvider === "file" || url.endsWith(".mp4")) {
       return (
-        <div className="aspect-video w-full overflow-hidden rounded-2xl border border-border bg-black">
+        <div className="aspect-video w-full overflow-hidden rounded-2xl border border-border bg-black shadow-sm">
           <video controls className="h-full w-full" src={url}>
             Votre navigateur ne lit pas la vidéo.
           </video>
@@ -48,19 +46,25 @@ export function AcademyVideoSlot({ lesson }: Props) {
   }
 
   return (
-    <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-border">
+    <div className="relative aspect-[4/3] sm:aspect-video w-full overflow-hidden rounded-2xl border border-border shadow-sm group">
       <Image
         src={cover}
         alt=""
         fill
-        className="object-cover"
+        priority
+        className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
         sizes="(max-width: 768px) 100vw, 720px"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-      <p className="absolute bottom-3 left-4 right-4 text-white text-sm font-medium drop-shadow">
-        {lesson.title}
-        {lesson.durationMin ? ` · ~${lesson.durationMin} min` : ""}
-      </p>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
+        <p className="text-white/90 text-xs font-semibold uppercase tracking-widest mb-1">
+          Ambiance du thème
+        </p>
+        <p className="text-white text-sm sm:text-base font-medium leading-snug drop-shadow">
+          {lesson.title}
+          {lesson.durationMin ? ` · ~${lesson.durationMin} min de lecture` : ""}
+        </p>
+      </div>
     </div>
   )
 }

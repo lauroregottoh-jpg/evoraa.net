@@ -115,6 +115,27 @@
   }
 }
 
+@keyframes academyFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.academy-fade-up {
+  animation: academyFadeUp 0.55s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .academy-fade-up {
+    animation: none;
+  }
+}
+
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }

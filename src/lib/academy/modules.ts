@@ -10,7 +10,10 @@ export type AcademyModuleId =
 
 export type AcademySection = {
   title: string
-  points: string[]
+  /** Paragraphes de la leçon (contenu long) */
+  body?: string[]
+  /** Puces optionnelles (rétrocompat / CMS) */
+  points?: string[]
 }
 
 export type AcademyResource = {
@@ -28,7 +31,14 @@ export type AcademyLesson = {
   slug: string
   title: string
   subtitle: string
+  /** Temps de lecture estimé (minutes) */
   durationMin: number
+  /** Image de couverture thématique */
+  coverImage?: string
+  /** Introduction narrative */
+  intro?: string[]
+  /** Objectifs d'apprentissage */
+  learningGoals?: string[]
   sections: AcademySection[]
   keyPoints: string[]
   resources: AcademyResource[]
@@ -49,1276 +59,561 @@ export type AcademyModule = {
 export const ACADEMY_MODULES: AcademyModule[] = [
   {
     id: "foi",
-    title: "Foi au quotidien",
-    summary:
-      "Avant le mariage : construire une vie avec Dieu que vous pourrez un jour partager à deux, sans pression ni façade.",
+    title: "Construire sa vie spirituelle",
+    summary: "Cette leçon t'aidera à construire une habitude de prière simple, réaliste et durable. Tu découvriras qu'il vaut mieux quelques minutes vécues avec sincérité qu'une longue prière occasionnelle.",
     lessons: [
       {
-        slug: "rythme-priere",
-        title: "Prier un peu, mais vraiment",
-        subtitle: "Pas 1 heure par jour. 3 minutes qui tiennent la route.",
-        durationMin: 8,
+        slug: "prier-un-peu-mais-vraiment",
+        title: "Prier un peu… mais vraiment",
+        subtitle: "Avant de construire une vie à deux, il est important d'apprendre à construire une relation personnelle avec Dieu.",
+        durationMin: 10,
         isFreePreview: true,
+        coverImage: "/academy/academy-foi.png",
         videoUrl: null,
+        intro: [
+          "Avant de construire une vie à deux, il est important d'apprendre à construire une relation personnelle avec Dieu. Beaucoup de personnes pensent qu'il faut prier longtemps pour être de \"bons chrétiens\". Elles se fixent des objectifs difficiles à tenir, se découragent rapidement, puis finissent par abandonner complètement. Pourtant, la croissance spirituelle ne dépend pas de la durée de nos prières, mais de notre fidélité à revenir vers Dieu, jour après jour.",
+          "Cette leçon t'aidera à construire une habitude de prière simple, réaliste et durable. Tu découvriras qu'il vaut mieux quelques minutes vécues avec sincérité qu'une longue prière occasionnelle. L'objectif n'est pas d'impressionner Dieu, mais de développer une relation authentique qui fortifiera ta vie personnelle et préparera les fondations de ton futur foyer.",
+        ],
+        learningGoals: [
+          "Comprendre pourquoi la régularité est plus importante que la durée.",
+          "Mettre en place un temps de prière adapté à ton quotidien.",
+          "Identifier les habitudes qui favorisent une vie spirituelle stable.",
+          "Éviter les erreurs qui découragent le plus souvent.",
+        ],
         sections: [
           {
-            title: "Ce qui bloque souvent",
-            points: [
-              "Vous visez trop haut, puis vous abandonnez",
-              "Vous priez seulement quand ça va mal",
-              "Vous attendez le « bon partenaire » pour commencer à prier",
+            title: "Pourquoi la régularité compte davantage que la durée",
+            body: [
+              "Beaucoup de personnes commencent leur vie de prière avec de grandes ambitions. Elles décident de prier une heure par jour, puis abandonnent dès que leur emploi du temps change. Ce fonctionnement crée souvent de la frustration et un sentiment d'échec.",
+              "La Bible nous montre pourtant que la fidélité est plus importante que la performance. Une habitude simple, répétée chaque jour, construit une relation beaucoup plus solide qu'un effort intense mais irrégulier. L'objectif n'est donc pas de prier longtemps, mais de revenir vers Dieu avec constance.",
             ],
           },
           {
-            title: "Petits trucs qui marchent",
-            points: [
-              "Même heure, même coin (lit, chaise, trajet bus)",
-              "3 minutes chrono : merci → besoin → Amen",
-              "Un verset lu à voix haute, même court",
-              "Si vous fréquentez quelqu’un : proposez 1 prière courte le dimanche, pas tous les soirs dès le 1er mois",
+            title: "Construire une habitude de prière qui dure",
+            body: [
+              "Une bonne habitude est une habitude que tu peux réellement tenir. Choisis un moment précis de la journée, un endroit calme et une durée raisonnable. Cinq minutes vécues avec attention auront plus de valeur qu'un long moment passé dans la distraction.",
+              "Si tu manques une journée, ne culpabilise pas. Reprends simplement le lendemain. La persévérance est plus importante que la perfection.",
+            ],
+          },
+          {
+            title: "Les habitudes qui renforcent une vie spirituelle",
+            body: [
+              "La prière n'est pas la seule habitude qui nourrit ta relation avec Dieu. Lire quelques versets, prendre quelques instants pour remercier Dieu ou réfléchir à ce que tu as appris dans la journée sont également des moyens de grandir spirituellement.",
+              "Ces habitudes n'ont pas besoin d'être compliquées. Elles deviennent efficaces lorsqu'elles trouvent naturellement leur place dans ton quotidien.",
+            ],
+          },
+          {
+            title: "Les erreurs qui découragent le plus souvent",
+            body: [
+              "L'une des erreurs les plus fréquentes consiste à comparer sa vie spirituelle à celle des autres. Chacun avance à son rythme et vit une relation différente avec Dieu.",
+              "Une autre erreur est de croire qu'il faut attendre d'avoir envie de prier. Comme toute relation, la vie spirituelle se construit aussi dans la fidélité, même lorsque les émotions sont moins présentes.",
             ],
           },
         ],
         keyPoints: [
-          "La régularité compte plus que la longueur",
-          "Vous préparez le couple en étant déjà solide seul(e)",
-          "Dieu n’attend pas une performance",
+          "Une vie spirituelle solide ne se construit pas grâce à des efforts exceptionnels, mais grâce à des habitudes simples vécues avec fidélité. Ce qui compte n'est pas la longueur de tes prières, mais la régularité avec laquelle tu choisis de rencontrer Dieu.",
         ],
-        resources: [
-          {
-            label: "Modèle 3 minutes",
-            detail: "Merci (30 s) · Un besoin précis (1 min) · Une bénédiction (30 s).",
-          },
-          {
-            label: "Ancre biblique",
-            detail: "Matthieu 6.6 — la chambre fermée avant la scène publique.",
-          },
-        ],
+        resources: [],
         selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous (le reste = à travailler)",
+          prompt: "Fais le point — coche ce qui est déjà vrai pour toi",
           items: [
-            "J’ai un moment de prière cette semaine, même court",
-            "Mon objectif tient en 5 minutes max",
-            "Je ne compare pas ma vie spirituelle à celle des autres sur les réseaux",
+            "J'ai choisi un moment réaliste pour prier.",
+            "Je comprends pourquoi la régularité est essentielle.",
+            "J'ai identifié les habitudes qui peuvent nourrir ma vie spirituelle.",
+            "Je connais les erreurs qui risquent de me décourager.",
           ],
         },
-        exercise:
-          "Cette semaine : 3 soirs, 3 minutes. Notez juste : « fait / pas fait ». Pas de culpabilité, juste l’habitude.",
-      },
-      {
-        slug: "service-eglise",
-        title: "Servir sans s’épuiser",
-        subtitle: "L’église a besoin de vous — votre futur foyer aussi.",
-        durationMin: 7,
-        videoUrl: null,
-        sections: [
-          {
-            title: "Signaux à écouter",
-            points: [
-              "Vous dites oui par peur de décevoir le pasteur",
-              "Vous n’avez plus d’énergie pour vos amis, votre famille, ou un début de relation",
-              "Le dimanche devient une course, pas un repos",
-            ],
-          },
-          {
-            title: "Avant de vous engager (ou de vous marier)",
-            points: [
-              "Écrivez vos heures d’église / semaine (honnêtement)",
-              "Avant un nouvel engagement : une nuit de réflexion, puis une réponse claire",
-              "En fréquentation : dites tôt ce que vous faites à l’église — pour éviter la surprise plus tard",
-            ],
-          },
-        ],
-        keyPoints: [
-          "Dire non peut être sage",
-          "Un service trop lourd aujourd’hui peut devenir un conflit demain",
-          "Votre capacité a une limite — et c’est normal",
-        ],
-        resources: [
-          {
-            label: "Phrase pour un responsable",
-            detail: "« Pour cette saison, je peux X heures. Au-delà, je dois décliner. »",
-          },
-          {
-            label: "Liste rapide",
-            detail: "Activité · heures/semaine · joie (1–5) · fatigue (1–5).",
-          },
-        ],
-        selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
-          items: [
-            "Je sais combien d’heures je donne à l’église",
-            "J’ai le droit de dire non sans me justifier 10 minutes",
-            "Si je fréquente quelqu’un, il/elle connaît mes engagements",
-          ],
-        },
-        exercise:
-          "Listez vos engagements d’église. Entourez-en un que vous pourriez réduire 3 mois. Parlez-en à une personne de confiance.",
-      },
-      {
-        slug: "discerner-pasteur",
-        title: "Demander conseil sans se décharger",
-        subtitle: "Un aîné éclaire. Vous décidez.",
-        durationMin: 6,
-        videoUrl: null,
-        sections: [
-          {
-            title: "Quand y aller",
-            points: [
-              "Vous pensez sérieusement à une fréquentation ou à une rupture",
-              "Vous tournez en rond depuis des semaines",
-              "La famille ou l’église met une pression que vous n’arrivez plus à porter seul(e)",
-            ],
-          },
-          {
-            title: "Comment préparer le RDV",
-            points: [
-              "3 questions max, écrites sur le téléphone",
-              "Faits en 5 minutes (pas l’histoire complète depuis 2019)",
-              "Demandez de la sagesse, pas « dites-moi oui ou non à sa place »",
-            ],
-          },
-        ],
-        keyPoints: [
-          "Le conseiller n’épouse pas à votre place",
-          "Choisissez quelqu’un discret, mature, sans intérêt caché",
-          "Un avis qui vous met très mal à l’aise : prenez un second conseil",
-        ],
-        resources: [
-          {
-            label: "Mini fiche RDV",
-            detail: "Situation (5 lignes) · Ce que j’ai déjà fait · 3 questions · Ce que je crains.",
-          },
-          {
-            label: "Qui éviter",
-            detail: "Quelqu’un qui aime les ragots, ou qui veut vous « caser » à tout prix.",
-          },
-        ],
-        selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
-          items: [
-            "J’ai 3 questions précises à poser",
-            "Je peux entendre un avis différent du mien",
-            "Je sais que la décision finale reste la mienne",
-          ],
-        },
-        exercise:
-          "Écrivez vos 3 questions. Notez le nom d’une personne à contacter — même si le RDV est dans 2 semaines.",
+        exercise: "Pendant les cinq prochains jours, réserve cinq minutes à un moment fixe de la journée pour prier. À la fin de chaque temps, note en une phrase ce que tu retiens de cette rencontre avec Dieu.",
       },
     ],
   },
   {
     id: "dialogue",
-    title: "Dialogue & besoins",
-    summary:
-      "Apprendre à dire les choses tôt, clairement, sans attaquer — avant que le silence ne devienne une habitude de couple.",
+    title: "Mieux communiquer avant le mariage",
+    summary: "Apprendre à communiquer avant le mariage est une véritable préparation à la vie de couple. Il ne s'agit pas de tout dire, tout le temps, mais d'apprendre à exprimer ses besoins, ses inquiétudes et ses attentes avec respect.",
     lessons: [
       {
-        slug: "je-ressens",
-        title: "Dire ce que vous ressentez",
-        subtitle: "Une phrase simple vaut mieux qu’un silence de 3 semaines.",
-        durationMin: 8,
-        isFreePreview: true,
+        slug: "dire-ce-que-lon-ressent",
+        title: "Dire ce que l'on ressent... avant que le silence ne parle à notre place",
+        subtitle: "La communication est l'un des fondements d'une relation solide.",
+        durationMin: 10,
+        isFreePreview: false,
+        coverImage: "/academy/academy-dialogue.png",
         videoUrl: null,
+        intro: [
+          "La communication est l'un des fondements d'une relation solide. Pourtant, beaucoup de difficultés ne viennent pas d'un manque d'amour, mais d'un manque de dialogue. Par peur de blesser, d'être rejeté ou de provoquer une dispute, certaines personnes préfèrent garder leurs émotions pour elles. Sur le moment, cela semble plus simple. Avec le temps, ces silences deviennent pourtant une source de frustrations, de malentendus et d'éloignement.",
+          "Apprendre à communiquer avant le mariage est une véritable préparation à la vie de couple. Il ne s'agit pas de tout dire, tout le temps, mais d'apprendre à exprimer ses besoins, ses inquiétudes et ses attentes avec respect. Une bonne communication ne supprime pas les désaccords, mais elle permet de les traverser sans abîmer la relation.",
+        ],
+        learningGoals: [
+          "comprendre pourquoi les non-dits fragilisent une relation ;",
+          "reconnaître les freins qui t'empêchent d'exprimer ce que tu ressens ;",
+          "apprendre à parler avec respect, même lorsque le sujet est délicat ;",
+          "créer des habitudes de communication qui renforcent la confiance.",
+        ],
         sections: [
           {
-            title: "Ce qui fait mal",
-            points: [
-              "« Tu ne m’écoutes jamais » (attaque)",
-              "Attendre qu’il/elle « comprenne tout seul »",
-              "Tout sortir d’un coup après 10 petits non-dits",
+            title: "Pourquoi les non-dits deviennent des problèmes",
+            body: [
+              "Un sujet que l'on évite ne disparaît pas forcément. Bien souvent, il continue de grandir dans notre esprit. On interprète les paroles de l'autre, on imagine ses intentions et on accumule des frustrations sans jamais les vérifier. Le jour où tout finit par sortir, la réaction paraît souvent disproportionnée parce qu'elle ne concerne plus un seul événement, mais plusieurs semaines, voire plusieurs mois de silence.",
+              "Exprimer ce que l'on ressent ne signifie pas créer des conflits. Au contraire, c'est souvent la meilleure façon d'éviter qu'un petit problème ne devienne une grande blessure.",
             ],
           },
           {
-            title: "Formule à garder",
-            points: [
-              "Je ressens… (émotion)",
-              "Quand… (un fait précis, récent)",
-              "J’aimerais… (demande faisable)",
+            title: "Identifier ce qui t'empêche de parler",
+            body: [
+              "Certaines personnes ont grandi dans un environnement où il valait mieux se taire que s'exprimer. D'autres craignent de décevoir, de perdre la personne qu'elles aiment ou d'être mal comprises. Ces peurs sont réelles, mais elles ne doivent pas diriger la relation.",
+              "Prends le temps de te demander ce qui te retient lorsque tu hésites à parler. Est-ce la peur de la réaction de l'autre ? La difficulté à mettre des mots sur tes émotions ? Ou simplement l'habitude de tout garder pour toi ? Identifier ce frein est souvent la première étape vers une communication plus saine.",
+            ],
+          },
+          {
+            title: "Parler avec respect, même lorsqu'un sujet est difficile",
+            body: [
+              "Le choix des mots a une grande importance. Une même idée peut être entendue de manière très différente selon la façon dont elle est exprimée. Évite les phrases qui accusent ou généralisent, comme « Tu fais toujours… » ou « Tu ne m'écoutes jamais… ». Elles poussent souvent l'autre à se défendre plutôt qu'à écouter.",
+              "Privilégie des formulations qui parlent de ton ressenti : « Je me suis senti blessé lorsque… » ou « J'aimerais que nous en parlions ensemble. » Elles ouvrent davantage la porte au dialogue et permettent de chercher une solution sans transformer la discussion en affrontement.",
+            ],
+          },
+          {
+            title: "Construire des habitudes qui renforcent la confiance",
+            body: [
+              "Une bonne communication ne dépend pas uniquement des grandes conversations. Elle se construit aussi dans les échanges du quotidien. Prendre quelques minutes pour parler de sa journée, demander sincèrement comment l'autre va ou remercier pour une attention reçue contribue à créer un climat de confiance.",
+              "Lorsque ces habitudes sont présentes avant le mariage, elles deviennent des réflexes précieux pour traverser ensemble les défis de la vie de couple.",
             ],
           },
         ],
         keyPoints: [
-          "Un fait précis > une généralisation",
-          "Demander n’est pas ordonner",
-          "En fréquentation : mieux une petite phrase claire qu’une scène",
+          "Les non-dits ne protègent pas une relation. Ils repoussent simplement les difficultés à plus tard. Une communication sincère, respectueuse et régulière permet de construire une relation où chacun se sent écouté, compris et en sécurité.",
         ],
-        resources: [
-          {
-            label: "Exemple prêt",
-            detail:
-              "« Je me sens un peu mis(e) de côté quand on ne se parle pas 3 jours. J’aimerais un message même court le soir. »",
-          },
-          {
-            label: "Mots utiles",
-            detail: "Seul(e), inquiet(e), fatigué(e), blessé(e), content(e), confus(e)…",
-          },
-        ],
+        resources: [],
         selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
+          prompt: "Fais le point — coche ce qui est déjà vrai pour toi",
           items: [
-            "Ma phrase parle de moi, pas d’une attaque",
-            "Le fait est précis (pas « toujours / jamais »)",
-            "La demande tient en une action simple",
+            "Je comprends pourquoi les non-dits peuvent fragiliser une relation.",
+            "J'ai identifié ce qui m'empêche le plus souvent d'exprimer mes émotions.",
+            "Je sais formuler mon ressenti sans attaquer l'autre.",
+            "Je souhaite mettre en place de meilleures habitudes de communication au quotidien.",
           ],
         },
-        exercise:
-          "Prenez une frustration récente. Réécrivez-la en une phrase « je ressens / quand / j’aimerais ». Lisez-la à voix haute.",
-      },
-      {
-        slug: "feedback-difficile",
-        title: "Entendre une remarque qui pique",
-        subtitle: "Écouter d’abord. Se justifier après, si vraiment besoin.",
-        durationMin: 7,
-        videoUrl: null,
-        sections: [
-          {
-            title: "Réflexes qui cassent la relation",
-            points: [
-              "Couper la parole pour se défendre",
-              "Retourner la faute tout de suite",
-              "Disparaître 3 jours en silence",
-            ],
-          },
-          {
-            title: "Ce que vous pouvez faire",
-            points: [
-              "« Merci d’en parler. Laisse-moi digérer. »",
-              "Demander : tu veux que je comprenne, ou que je change quelque chose ?",
-              "Fixer un moment pour en reparler (même 24 h plus tard)",
-            ],
-          },
-        ],
-        keyPoints: [
-          "Pause ≠ rejet",
-          "Vous pouvez être en désaccord et rester respectueux",
-          "Le but n’est pas de « gagner » l’échange",
-        ],
-        resources: [
-          {
-            label: "3 questions utiles",
-            detail:
-              "1) Qu’as-tu besoin que je comprenne ? 2) Qu’attends-tu de moi ? 3) Quand on en reparle ?",
-          },
-          {
-            label: "Si c’est injuste",
-            detail: "Notez votre version à froid. Revenez avec des faits, pas la colère du moment.",
-          },
-        ],
-        selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
-          items: [
-            "Je peux écouter sans interrompre 1 minute",
-            "Je sais demander une pause sans fuir",
-            "Je peux revenir sur le sujet le lendemain",
-          ],
-        },
-        exercise:
-          "Repensez à la dernière remarque difficile. Écrivez ce que vous auriez pu dire en 2 phrases : « j’entends » + « j’ai besoin de… ».",
-      },
-      {
-        slug: "demander-clairement",
-        title: "Demander sans attendre qu’on devine",
-        subtitle: "La clarté n’est pas une faiblesse. C’est de l’amour anticipé.",
-        durationMin: 7,
-        videoUrl: null,
-        sections: [
-          {
-            title: "Le piège",
-            points: [
-              "« S’il/elle m’aimait, il/elle saurait »",
-              "Tester l’autre en silence pour voir s’il/elle « mérite »",
-              "Râler après coup au lieu d’avoir demandé avant",
-            ],
-          },
-          {
-            title: "Demander proprement",
-            points: [
-              "Une chose à la fois",
-              "Dire le besoin + une option concrète",
-              "Accepter un non — et en parler, pas punir",
-            ],
-          },
-        ],
-        keyPoints: [
-          "Deviner n’est pas un don biblique obligatoire",
-          "En fréquentation : dites tôt comment vous aimez être rassuré(e)",
-          "Un non clair vaut mieux qu’un oui forcé",
-        ],
-        resources: [
-          {
-            label: "Phrase type",
-            detail: "« J’ai besoin de X. Est-ce possible pour toi ce week-end ? »",
-          },
-          {
-            label: "3 besoins à clarifier tôt",
-            detail: "Temps · messages · prière / église · rythme de fréquentation.",
-          },
-        ],
-        selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
-          items: [
-            "Je peux nommer 1 besoin sans raconter toute mon histoire",
-            "Je demande avant de me vexer",
-            "Je laisse à l’autre le droit de dire non",
-          ],
-        },
-        exercise:
-          "Notez 1 besoin non dit. Formulez-le en une phrase. Si vous fréquentez quelqu’un : dites-le cette semaine. Sinon : dites-le à un ami proche.",
+        exercise: "Choisis une personne importante dans ta vie. Cette semaine, prends l'initiative d'avoir une conversation que tu repousses depuis quelque temps. Prépare-toi avec calme, exprime ton ressenti sans accuser et laisse à l'autre le temps de répondre. À la fin de l'échange, demande-toi : *Ai-je cherché à comprendre autant qu'à être compris ?*",
       },
     ],
   },
   {
     id: "conflits",
-    title: "Conflits & réconciliation",
-    summary:
-      "Le mariage n’efface pas les disputes. Apprenez dès maintenant à faire pause, revenir, et réparer.",
+    title: "Gérer les désaccords avec maturité",
+    summary: "Apprendre à gérer un conflit avant le mariage est une compétence précieuse. Si tu sais écouter, reconnaître tes torts, demander pardon et rechercher une solution plutôt qu'une victoire, tu poseras des bases solides pour ton futur foyer.",
     lessons: [
       {
-        slug: "regle-pause",
-        title: "La règle de pause",
-        subtitle: "S’arrêter pour ne pas blesser — puis revenir vraiment.",
-        durationMin: 8,
-        isFreePreview: true,
+        slug: "gerer-les-desaccords",
+        title: "Les conflits ne sont pas le problème... la manière de les gérer l'est.",
+        subtitle: "Beaucoup de personnes pensent qu'un couple solide est un couple qui ne se dispute jamais.",
+        durationMin: 10,
+        isFreePreview: false,
+        coverImage: "/academy/academy-conflits.png",
         videoUrl: null,
+        intro: [
+          "Beaucoup de personnes pensent qu'un couple solide est un couple qui ne se dispute jamais. Pourtant, les désaccords font partie de toute relation. Deux personnes ont des histoires, des sensibilités, des habitudes et des attentes différentes. Il est donc normal que des incompréhensions apparaissent. Ce qui fait la différence, ce n'est pas l'absence de conflit, mais la manière dont chacun choisit d'y réagir.",
+          "Apprendre à gérer un conflit avant le mariage est une compétence précieuse. Si tu sais écouter, reconnaître tes torts, demander pardon et rechercher une solution plutôt qu'une victoire, tu poseras des bases solides pour ton futur foyer. Un conflit bien géré peut même renforcer la confiance lorsqu'il devient une occasion de mieux se comprendre.",
+        ],
+        learningGoals: [
+          "comprendre pourquoi les conflits sont normaux dans une relation ;",
+          "identifier les réactions qui aggravent une dispute ;",
+          "apprendre à gérer un désaccord avec calme et respect ;",
+          "transformer un conflit en opportunité de grandir ensemble.",
+        ],
         sections: [
           {
-            title: "Quand faire pause",
-            points: [
-              "La voix monte, le cœur tape, vous voulez « gagner »",
-              "Vous êtes sur le point d’envoyer un message que vous regretterez",
-              "Il est trop tard le soir et vous êtes épuisés",
+            title: "Les conflits sont inévitables, mais ils ne sont pas dangereux",
+            body: [
+              "Avoir un désaccord ne signifie pas que la relation est en danger. Bien souvent, un conflit révèle simplement une différence de besoins, de valeurs ou de manière de voir les choses. Chercher à éviter toutes les discussions difficiles n'est pas une solution. Les sujets ignorés reviennent presque toujours, souvent avec plus de force.",
+              "Considère le conflit comme un signal. Il indique qu'un sujet mérite d'être écouté et compris. Lorsqu'il est abordé avec respect, il permet de mieux connaître l'autre et de renforcer la relation.",
             ],
           },
           {
-            title: "Comment le faire",
-            points: [
-              "Dire : « Je pause 20 minutes, je reviens. »",
-              "Pas de disparition 3 jours sans mot",
-              "Revenir : même 10 minutes, même maladroit",
+            title: "Les réactions qui font dégénérer une dispute",
+            body: [
+              "Dans une dispute, ce ne sont pas toujours les désaccords qui blessent le plus, mais la manière de les exprimer. Les paroles humiliantes, les cris, les accusations, les menaces ou le silence volontaire ferment la porte au dialogue. Chercher à avoir le dernier mot ou vouloir prouver que l'on a raison coûte souvent plus cher que le problème lui-même.",
+              "Lorsque les émotions prennent toute la place, il devient difficile d'écouter. Apprendre à faire une pause, respirer et reprendre la conversation plus tard est parfois le choix le plus sage.",
+            ],
+          },
+          {
+            title: "Comment traverser un désaccord avec maturité",
+            body: [
+              "Une discussion constructive commence par une écoute sincère. Avant de répondre, cherche d'abord à comprendre ce que l'autre ressent. Pose des questions, reformule ce que tu as entendu et évite d'interpréter ses intentions. Cette attitude réduit les malentendus et montre que tu accordes de la valeur à son point de vue.",
+              "Lorsque tu reconnais avoir commis une erreur, n'hésite pas à le dire. Demander pardon n'est pas un signe de faiblesse, mais de maturité. Dans une relation durable, préserver le lien est plus important que protéger son orgueil.",
+            ],
+          },
+          {
+            title: "Faire de chaque conflit une occasion de grandir",
+            body: [
+              "Après une dispute, prends le temps de revenir sur ce qui s'est passé. Demande-toi ce que cette situation t'a appris sur toi-même, sur l'autre et sur votre manière de communiquer. Chaque conflit peut devenir une occasion d'améliorer la relation si chacun accepte d'en tirer une leçon.",
+              "Avec le temps, cette manière d'aborder les désaccords crée un climat de confiance. Chacun sait qu'il peut exprimer son opinion sans craindre d'être rejeté ou méprisé.",
             ],
           },
         ],
         keyPoints: [
-          "Pause = protection, pas punition",
-          "Toujours fixer un retour",
-          "En fréquentation : testez ça tôt — ça révèle beaucoup",
+          "Les conflits ne détruisent pas une relation. Ce sont les paroles blessantes, le manque d'écoute et le refus de chercher une solution qui l'affaiblissent. Une relation solide n'est pas une relation sans disputes, mais une relation où chacun apprend à gérer les désaccords avec respect, humilité et bienveillance.",
         ],
-        resources: [
-          {
-            label: "Phrase de pause",
-            detail: "« Je m’énerve. Je reviens dans 20 min. On n’abandonne pas le sujet. »",
-          },
-          {
-            label: "Pendant la pause",
-            detail: "Boire de l’eau, marcher, prier 1 minute. Pas alimenter la rage sur WhatsApp.",
-          },
-        ],
+        resources: [],
         selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
+          prompt: "Fais le point — coche ce qui est déjà vrai pour toi",
           items: [
-            "J’ai une phrase de pause prête",
-            "Je sais revenir après, même gêné(e)",
-            "Je n’utilise pas le silence pour punir",
+            "Je comprends que les conflits font partie de toute relation.",
+            "Je sais reconnaître les réactions qui aggravent une dispute.",
+            "Je suis capable de faire une pause avant de répondre sous le coup de la colère.",
+            "Je suis prêt(e) à rechercher une solution plutôt qu'à vouloir absolument avoir raison.",
           ],
         },
-        exercise:
-          "Écrivez votre phrase de pause. Envoyez-la à un ami de confiance ou gardez-la dans les notes du téléphone.",
-      },
-      {
-        slug: "premier-pas",
-        title: "Faire le premier pas",
-        subtitle: "Dire « j’ai eu tort sur ça » n’est pas s’écraser.",
-        durationMin: 7,
-        videoUrl: null,
-        sections: [
-          {
-            title: "Ce que ce n’est pas",
-            points: [
-              "Tout accepter pour « garder la paix »",
-              "S’excuser juste pour que l’autre se taise",
-              "Attendre que l’autre plie en premier par orgueil",
-            ],
-          },
-          {
-            title: "Ce que c’est",
-            points: [
-              "Nommer votre part : un fait, une attitude",
-              "Demander pardon sur quelque chose de précis",
-              "Proposer une petite réparation (temps, message, changement)",
-            ],
-          },
-        ],
-        keyPoints: [
-          "Votre part existe presque toujours",
-          "Le premier pas désarme souvent l’autre",
-          "Pardon ≠ oublier le problème non traité",
-        ],
-        resources: [
-          {
-            label: "Phrase simple",
-            detail: "« Sur X, j’ai eu tort. Tu méritais mieux. Est-ce qu’on peut en reparler calmement ? »",
-          },
-          {
-            label: "Ancre",
-            detail: "Éphésiens 4.26 — la colère a une heure limite.",
-          },
-        ],
-        selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
-          items: [
-            "Je peux nommer ma part dans un conflit récent",
-            "Je peux demander pardon sans « mais toi aussi »",
-            "Je peux proposer une réparation concrète",
-          ],
-        },
-        exercise:
-          "Pensez à un conflit (ami, famille, fréquentation). Écrivez 1 phrase de responsabilité + 1 proposition de réparation. Envoyez-la si c’est sage.",
-      },
-      {
-        slug: "ne-pas-pourrir",
-        title: "Ne pas laisser pourrir",
-        subtitle: "Une conversation maladroite vaut mieux qu’une rancune de 6 mois.",
-        durationMin: 7,
-        videoUrl: null,
-        sections: [
-          {
-            title: "Signes que ça pourrit",
-            points: [
-              "Vous évitez le sujet, mais vous y pensez souvent",
-              "Ironie, froid, ou « tout va bien » forcé",
-              "Vous le racontez à tout le monde sauf à la personne concernée",
-            ],
-          },
-          {
-            title: "Débloquer",
-            points: [
-              "Choisir un moment calme (pas au milieu d’une dispute)",
-              "Dire : « Il y a quelque chose qui me reste. Est-ce qu’on peut en parler 10 minutes ? »",
-              "Si c’est trop lourd : mentor ou pasteur mature",
-            ],
-          },
-        ],
-        keyPoints: [
-          "Le temps seul ne guérit pas toujours",
-          "En fréquentation : une blessure non dite devient souvent une rupture brutale",
-          "Mieux tôt, même imparfait",
-        ],
-        resources: [
-          {
-            label: "Ouverture douce",
-            detail: "« Ce n’est pas pour attaquer. J’ai besoin d’être honnête pour qu’on avance bien. »",
-          },
-          {
-            label: "Limite saine",
-            detail: "Si l’autre refuse toute conversation pendant des semaines : c’est une info pour discerner.",
-          },
-        ],
-        selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
-          items: [
-            "Je sais nommer une blessure encore ouverte",
-            "Je peux en parler à la bonne personne (pas à tout le groupe)",
-            "Je n’attends pas « le moment parfait » depuis trop longtemps",
-          ],
-        },
-        exercise:
-          "Notez une chose non dite. Décidez : en parler cette semaine, ou la confier d’abord à un mentor.",
+        exercise: "Repense à un conflit récent, que ce soit avec une personne que tu fréquentes, un ami ou un membre de ta famille. Écris ce qui a déclenché la situation, ce que tu as ressenti et ce que tu aurais pu faire différemment. Si cela est possible, reprends cette conversation avec calme pour clarifier ce qui n'a pas été compris.",
       },
     ],
   },
   {
     id: "purete",
-    title: "Pureté & limites",
-    summary:
-      "Avant le mariage : des limites claires, des mots respectueux, et de l’honnêteté sans se mettre à nu trop tôt.",
+    title: "Respect, limites et intimité avant le mariage",
+    summary: "Les limites ne sont pas là pour créer de la distance ou refroidir les sentiments. Elles existent pour préserver ce qui est précieux.",
     lessons: [
       {
-        slug: "definir-limites",
-        title: "Définir vos limites avant",
-        subtitle: "Le flou crée la confusion. La clarté protège les deux.",
-        durationMin: 8,
-        isFreePreview: true,
+        slug: "poser-des-limites",
+        title: "Poser des limites n'est pas un manque d'amour",
+        subtitle: "Lorsque deux personnes commencent à se fréquenter, il est naturel qu'elles aient envie de passer du temps ensemble, de mieux se connaître et de construire une relation plus profonde.",
+        durationMin: 10,
+        isFreePreview: false,
+        coverImage: "/academy/academy-limites.png",
         videoUrl: null,
+        intro: [
+          "Lorsque deux personnes commencent à se fréquenter, il est naturel qu'elles aient envie de passer du temps ensemble, de mieux se connaître et de construire une relation plus profonde. Pourtant, l'amour ne grandit pas uniquement grâce à la proximité. Il grandit aussi grâce au respect. Des limites clairement définies protègent la relation, évitent les malentendus et permettent à chacun d'avancer en confiance.",
+          "Les limites ne sont pas là pour créer de la distance ou refroidir les sentiments. Elles existent pour préserver ce qui est précieux. Qu'il s'agisse de la manière de se parler, de la gestion des émotions, de la sexualité ou du respect de l'espace personnel, il est toujours plus facile de fixer des limites avant qu'une situation ne devienne compliquée. Une relation saine est une relation où chacun connaît les valeurs qui guident le couple et choisit de les respecter.",
+        ],
+        learningGoals: [
+          "comprendre pourquoi les limites protègent une relation ;",
+          "identifier les domaines dans lesquels il est important de fixer des limites avant le mariage ;",
+          "apprendre à communiquer ces limites avec respect et bienveillance ;",
+          "reconnaître les situations où une limite mérite d'être réaffirmée.",
+        ],
         sections: [
           {
-            title: "Pourquoi écrire vos limites",
-            points: [
-              "Sous émotion, on improvise mal",
-              "Chacun arrive avec une définition différente de « trop loin »",
-              "Vous pourrez en parler calmement, pas en urgence à 23 h",
+            title: "Pourquoi les limites sont indispensables",
+            body: [
+              "Les limites ne sont pas des barrières contre l'amour. Elles sont des repères qui permettent à chacun de savoir ce qui est acceptable ou non dans la relation. Lorsqu'elles sont claires, elles réduisent les incompréhensions, renforcent le respect mutuel et créent un climat de sécurité.",
+              "Attendre qu'un problème survienne pour parler de ses limites est souvent plus difficile. En les abordant dès le début de la relation, chacun sait sur quelles bases la confiance pourra se construire.",
             ],
           },
           {
-            title: "Comment faire",
-            points: [
-              "Seul(e) d’abord : listez ce qui est ok / pas ok pour vous",
-              "En fréquentation sérieuse : partagez tôt, sans jugement",
-              "Incluez aussi les écrans, les lieux, les heures tardives",
+            title: "Les limites importantes avant le mariage",
+            body: [
+              "Les limites concernent bien plus que la sexualité. Elles touchent également la manière de communiquer, le respect du temps de chacun, l'utilisation des réseaux sociaux, les fréquentations, les finances ou encore la place accordée aux familles. Tous ces sujets méritent d'être discutés avant de devenir des sources de tension.",
+              "Prendre le temps d'échanger sur ces questions permet de mieux connaître l'autre et d'éviter de nombreuses déceptions. Une limite clairement exprimée vaut toujours mieux qu'une attente silencieuse.",
+            ],
+          },
+          {
+            title: "Comment parler de ses limites",
+            body: [
+              "Exprimer une limite ne revient pas à imposer sa volonté. Il s'agit d'expliquer ce qui est important pour soi et pourquoi cela compte. Une conversation calme, honnête et respectueuse favorise davantage la compréhension qu'une réaction sous le coup de l'émotion.",
+              "Il est également important d'écouter les limites de l'autre avec la même attention. Le respect doit toujours être réciproque. Une relation équilibrée ne repose pas sur les exigences d'une seule personne, mais sur des décisions prises ensemble.",
+            ],
+          },
+          {
+            title: "Lorsque les limites ne sont pas respectées",
+            body: [
+              "Il peut arriver qu'une limite soit franchie, volontairement ou non. Dans ce cas, il est important d'en parler rapidement. Ignorer la situation ou espérer qu'elle ne se reproduira plus risque d'installer un malaise durable.",
+              "Si une personne refuse systématiquement de respecter les limites pourtant clairement exprimées, cela mérite une réflexion sérieuse. Le respect est l'une des bases d'une relation saine. Sans lui, la confiance finit par s'affaiblir.",
             ],
           },
         ],
         keyPoints: [
-          "Vos limites sont un cadeau, pas une accusation",
-          "Si l’autre pousse sans respect : c’est une info majeure",
-          "Les limites évoluent — mais pas sous pression",
+          "Les limites ne sont pas un signe de méfiance. Elles sont une preuve de maturité et de respect. Elles permettent de construire une relation où chacun se sent libre, écouté et en sécurité, tout en préparant des bases solides pour un futur mariage.",
         ],
-        resources: [
-          {
-            label: "Mini grille",
-            detail: "Toucher · bisous · solitude · nuit · contenus · alcool. Pour chacun : ok / pas ok / à discuter.",
-          },
-          {
-            label: "Phrase d’ouverture",
-            detail: "« Pour moi, pour honorer Dieu et nous respecter, j’aimerais qu’on soit clairs sur… »",
-          },
-        ],
+        resources: [],
         selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
+          prompt: "Fais le point — coche ce qui est déjà vrai pour toi",
           items: [
-            "J’ai écrit au moins 3 limites personnelles",
-            "Je peux les dire sans m’excuser 10 fois",
-            "Je sais que « non » n’a pas besoin d’un sermon",
+            "Je comprends que les limites protègent la relation.",
+            "J'ai identifié les limites qui sont importantes pour moi.",
+            "Je suis capable d'exprimer mes limites avec respect.",
+            "Je comprends que respecter les limites de l'autre est une preuve d'amour et de maturité.",
           ],
         },
-        exercise:
-          "Écrivez vos limites (ok / pas ok / à discuter). Gardez-les privées pour l’instant, ou partagez-les avec un mentor.",
-      },
-      {
-        slug: "parler-sexualite",
-        title: "Parler de sexualité avec respect",
-        subtitle: "Pudeur + clarté. Pas de détail inutile, pas de silence total.",
-        durationMin: 7,
-        videoUrl: null,
-        sections: [
-          {
-            title: "Mauvais moments",
-            points: [
-              "En pleine excitation, ou tard le soir",
-              "Par message pendant une dispute",
-              "Devant des amis « pour rire »",
-            ],
-          },
-          {
-            title: "Bon cadre",
-            points: [
-              "Jour, lieu calme, intention claire",
-              "Parler de valeurs, peurs, attentes — pas d’un inventaire cru",
-              "Si besoin : pastorat / counseling chrétien avant le mariage",
-            ],
-          },
-        ],
-        keyPoints: [
-          "Le silence total crée des surprises douloureuses",
-          "Trop de détails trop tôt peut blesser ou exciter sans sagesse",
-          "Un couple qui se prépare ose les sujets importants",
-        ],
-        resources: [
-          {
-            label: "Sujets utiles",
-            detail: "Attentes · peurs · passé (niveau adapté) · pureté · vision du mariage.",
-          },
-          {
-            label: "Si c’est tabou chez vous",
-            detail: "Commencez par un livre ou un aîné mature, puis en parlez à deux.",
-          },
-        ],
-        selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
-          items: [
-            "Je sais ce que je veux clarifier avant le mariage",
-            "Je peux en parler sans me moquer ni me cacher",
-            "Je sais vers qui aller si c’est trop lourd seul(e)",
-          ],
-        },
-        exercise:
-          "Notez 3 questions que vous aimeriez aborder avant un engagement. Choisissez le bon moment (ou un mentor d’abord).",
-      },
-      {
-        slug: "passe-guerison",
-        title: "Passé, guérison, transparence",
-        subtitle: "Honnêteté utile — pas forcément tous les détails le premier mois.",
-        durationMin: 8,
-        videoUrl: null,
-        sections: [
-          {
-            title: "Ordre sage",
-            points: [
-              "Guérir avec Dieu et un mentor avant de tout déverser",
-              "En fréquentation : timing adapté à la confiance réelle",
-              "Avant le mariage : transparence sur ce qui touche le foyer (santé, dettes, enfants, addictions…)",
-            ],
-          },
-          {
-            title: "Pièges",
-            points: [
-              "Tout cacher par honte → explosion plus tard",
-              "Tout raconter trop tôt → lien trop intense trop vite",
-              "Utiliser le passé de l’autre comme arme",
-            ],
-          },
-        ],
-        keyPoints: [
-          "La grâce de Dieu ne remplace pas la vérité",
-          "Certains sujets demandent un accompagnement",
-          "La transparence se gagne ; elle ne se force pas",
-        ],
-        resources: [
-          {
-            label: "Ce qui doit sortir avant le mariage",
-            detail: "Ce qui impacte la vie à deux : santé, finances, engagements, enfants, addictions.",
-          },
-          {
-            label: "Phrase humble",
-            detail: "« Il y a une part de mon passé que je veux partager avec sagesse. Est-ce qu’on peut choisir un bon moment ? »",
-          },
-        ],
-        selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
-          items: [
-            "Je travaille ma guérison (prière, mentor, counseling si besoin)",
-            "Je sais distinguer secret honteux et sagesse de timing",
-            "Je ne garde pas volontairement une bombe pour « après les fiançailles »",
-          ],
-        },
-        exercise:
-          "Écrivez (privé) : ce que je dois guérir · ce que je partagerai tôt · ce que je partagerai avant le mariage. Priez dessus.",
+        exercise: "Prends un moment pour réfléchir aux valeurs qui sont les plus importantes pour toi dans une relation. Identifie trois limites que tu considères essentielles avant le mariage et demande-toi si tu serais capable de les expliquer avec calme à la personne que tu fréquentes. Si tu es déjà en relation, choisissez un moment pour en parler ensemble avec bienveillance.",
       },
     ],
   },
   {
     id: "familles",
-    title: "Familles & foyer",
-    summary:
-      "Honorer père et mère, tout en préparant un foyer qui pourra respirer. Surtout avant de s’engager.",
+    title: "Préparer son futur foyer",
+    summary: "Préparer son futur foyer, c'est apprendre à honorer sa famille tout en construisant progressivement une nouvelle unité. Ce n'est pas choisir entre ses parents et son conjoint, mais comprendre que chaque relation a sa juste place.",
     lessons: [
       {
-        slug: "limites-familles",
-        title: "Limites saines avec la famille",
-        subtitle: "Honorer ≠ tout accepter. Aimer ≠ tout raconter.",
-        durationMin: 8,
-        isFreePreview: true,
+        slug: "construire-son-couple-et-sa-famille",
+        title: "Construire son couple sans oublier sa famille",
+        subtitle: "Le mariage ne réunit pas seulement deux personnes.",
+        durationMin: 10,
+        isFreePreview: false,
+        coverImage: "/academy/academy-familles.png",
         videoUrl: null,
+        intro: [
+          "Le mariage ne réunit pas seulement deux personnes. Il rapproche aussi deux histoires, deux éducations, deux cultures et parfois deux façons très différentes de voir la famille. Beaucoup de tensions dans les jeunes couples ne viennent pas d'un manque d'amour, mais d'attentes qui n'ont jamais été exprimées concernant les parents, les frères et sœurs, les visites, les conseils ou encore les responsabilités familiales.",
+          "Préparer son futur foyer, c'est apprendre à honorer sa famille tout en construisant progressivement une nouvelle unité. Ce n'est pas choisir entre ses parents et son conjoint, mais comprendre que chaque relation a sa juste place. Plus ces sujets sont abordés avant le mariage, plus il sera facile de préserver la paix une fois engagé.",
+        ],
+        learningGoals: [
+          "comprendre pourquoi la famille peut devenir une source de tensions dans le couple ;",
+          "distinguer le respect de sa famille de la dépendance familiale ;",
+          "apprendre à poser des limites saines avec bienveillance ;",
+          "préparer un foyer où chacun trouve sa place sans créer de conflits inutiles.",
+        ],
         sections: [
           {
-            title: "Principes simples",
-            points: [
-              "Vos parents comptent — votre futur couple aussi",
-              "Certaines décisions se prennent à deux, pas en comité familial",
-              "Le respect reste, même quand vous dites non",
+            title: "Comprendre l'influence de la famille sur le couple",
+            body: [
+              "Notre manière de voir le mariage est souvent influencée par ce que nous avons vécu dans notre propre famille. Certains ont grandi dans un environnement où tout se décidait en famille, tandis que d'autres ont appris à être très indépendants. Ces différences ne sont ni bonnes ni mauvaises, mais elles méritent d'être connues et discutées.",
+              "Prendre conscience de cette influence permet de mieux comprendre certaines réactions et d'éviter de juger trop rapidement son futur conjoint. Derrière une habitude se cache souvent une histoire.",
             ],
           },
           {
-            title: "En pratique (célibataire / en fréquentation)",
-            points: [
-              "Clarifiez tôt : qui décide quoi (logement, argent, dates)",
-              "Ne laissez pas la famille négocier votre relation à votre place",
-              "Une phrase polie et ferme vaut mieux qu’un mensonge pour « éviter le drame »",
+            title: "Honorer ses parents sans oublier son futur foyer",
+            body: [
+              "La Bible nous encourage à honorer nos parents. Cet honneur ne signifie pas que toutes les décisions du couple doivent leur appartenir. En grandissant et en préparant un foyer, chacun apprend progressivement à prendre ses responsabilités et à construire son propre cadre de vie.",
+              "Honorer sa famille, c'est continuer à lui témoigner du respect, de la reconnaissance et de l'amour, tout en comprenant que certaines décisions relèvent désormais du couple.",
+            ],
+          },
+          {
+            title: "Savoir poser des limites avec respect",
+            body: [
+              "Les limites ne servent pas à éloigner les familles, mais à protéger l'équilibre du futur foyer. Elles concernent par exemple la fréquence des visites, les conseils sollicités ou non, la gestion des conflits ou encore la place que chacun occupe dans les décisions importantes.",
+              "Une limite bien expliquée est souvent mieux acceptée qu'un silence qui finit par créer de la frustration. L'objectif n'est pas de blesser, mais de construire des relations saines avec tous.",
+            ],
+          },
+          {
+            title: "Construire une nouvelle équipe",
+            body: [
+              "Le mariage crée une nouvelle famille. Cela demande d'apprendre à prendre des décisions ensemble, à se soutenir mutuellement et à présenter un front uni face aux défis. Lorsque chacun sait que son partenaire le respecte et le soutient, les influences extérieures deviennent beaucoup plus faciles à gérer.",
+              "Préparer cette unité avant le mariage permet de construire un foyer où les liens familiaux restent précieux sans prendre la place de la relation de couple.",
             ],
           },
         ],
         keyPoints: [
-          "Genèse 2.24 : quitter / s’attacher — un processus, pas un scandale",
-          "Si la famille gouverne déjà tout : parlez-en avant le mariage",
-          "L’unité du couple se prépare dès la fréquentation",
+          "Aimer sa famille et construire son propre foyer ne sont pas deux objectifs opposés. Une relation équilibrée permet de préserver les liens familiaux tout en donnant au couple l'espace nécessaire pour grandir, prendre ses décisions et bâtir son avenir.",
         ],
-        resources: [
-          {
-            label: "Phrase polie",
-            detail: "« On entend votre avis. On va prier et décider ensemble. On vous tiendra au courant. »",
-          },
-          {
-            label: "Sujets à clarifier",
-            detail: "Visites · argent donné · secrets · qui vient habiter · qui choisit le conjoint.",
-          },
-        ],
+        resources: [],
         selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
+          prompt: "Fais le point — coche ce qui est déjà vrai pour toi",
           items: [
-            "Je peux dire non à un proche sans exploser",
-            "Je sais quels sujets restent privés en couple",
-            "Je n’utilise pas ma famille pour faire pression sur quelqu’un",
+            "Je comprends que chaque personne arrive avec une histoire familiale différente.",
+            "Je sais faire la différence entre honorer ma famille et dépendre de son avis.",
+            "Je comprends l'importance de poser des limites respectueuses.",
+            "Je suis prêt(e) à construire un foyer où le couple devient une véritable équipe.",
           ],
         },
-        exercise:
-          "Notez 1 limite familiale importante pour vous. Formulez-la en une phrase respectueuse. Entraînez-vous à voix haute.",
-      },
-      {
-        slug: "famille-elargie",
-        title: "Vivre près (ou avec) la famille",
-        subtitle: "Pas de jugement culturel — juste des yeux ouverts.",
-        durationMin: 7,
-        videoUrl: null,
-        sections: [
-          {
-            title: "Peser le pour / contre",
-            points: [
-              "Aide concrète vs manque d’intimité",
-              "Économie vs tensions quotidiennes",
-              "Honneur culturel vs besoin d’espace pour le couple",
-            ],
-          },
-          {
-            title: "Si c’est probable chez vous",
-            points: [
-              "En parler tôt en fréquentation (pas la veille du mariage)",
-              "Définir chambre, argent, horaires, visiteurs",
-              "Prévoir une date de revue (ex. dans 12 mois)",
-            ],
-          },
-        ],
-        keyPoints: [
-          "Le « on verra » finit souvent en crise",
-          "Deux visions opposées sans compromis = signal d’alarme",
-          "Un plan écrit réduit les disputes",
-        ],
-        resources: [
-          {
-            label: "Questions à poser",
-            detail: "Combien de temps ? Qui paie quoi ? Où se retirer pour parler à deux ?",
-          },
-          {
-            label: "Plan B",
-            detail: "Même si vous cohabitez : un espace couple (balade, prière, soirée).",
-          },
-        ],
-        selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
-          items: [
-            "Je sais ce que je veux / ne veux pas sur le logement familial",
-            "Je peux en parler sans mentir pour plaire",
-            "J’accepte que mon futur conjoint ait aussi une opinion",
-          ],
-        },
-        exercise:
-          "Écrivez votre préférence logement (idéal + acceptable + non négociable). Gardez-la pour les conversations sérieuses.",
-      },
-      {
-        slug: "pression-familiale",
-        title: "Quand la famille pousse fort",
-        subtitle: "Écouter sans abdiquer. Respecter sans se marier sous pression.",
-        durationMin: 7,
-        videoUrl: null,
-        sections: [
-          {
-            title: "Recevoir",
-            points: [
-              "Remercier pour l’intérêt (même si c’est lourd)",
-              "Séparer : conseil utile vs pression émotionnelle",
-              "Ne pas répondre à chaud si vous tremblez de colère",
-            ],
-          },
-          {
-            title: "Répondre",
-            points: [
-              "« On avance à notre rythme. Merci de prier pour nous. »",
-              "Ne promettez pas une date juste pour calmer",
-              "Si besoin : un aîné mature comme médiateur",
-            ],
-          },
-        ],
-        keyPoints: [
-          "Se marier pour faire taire la famille est dangereux",
-          "Votre « oui » doit être libre",
-          "La pression révèle souvent des attentes non dites",
-        ],
-        resources: [
-          {
-            label: "Phrase courte",
-            detail: "« Je vous aime. Sur ce point, la décision sera la mienne / la nôtre. »",
-          },
-          {
-            label: "Si ça devient toxique",
-            detail: "Limitez les appels, documentez, cherchez un accompagnement pastoral.",
-          },
-        ],
-        selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
-          items: [
-            "Je reconnais la différence entre conseil et pression",
-            "Je peux tenir une décision sans mentir",
-            "Je sais vers qui aller si la pression déborde",
-          ],
-        },
-        exercise:
-          "Écrivez votre réponse type à une pression (« à quel âge tu te maries ? »). Entraînez-vous une fois.",
+        exercise: "Prends quelques minutes pour réfléchir à la place qu'occupe ta famille dans tes décisions importantes. Quelles habitudes aimerais-tu conserver dans ton futur foyer ? Lesquelles souhaites-tu faire évoluer ? Si tu es en couple, prenez le temps d'échanger sur vos attentes concernant les familles, les visites, les fêtes et les décisions importantes.",
       },
     ],
   },
   {
     id: "finances",
-    title: "Finances & intendance",
-    summary:
-      "Avant de s’engager : savoir ce qu’on gagne, ce qu’on doit, et ce qu’on donne — sans surprise douloureuse.",
+    title: "Parler d'argent avant le mariage",
+    summary: "Parler d'argent ne signifie pas parler uniquement de salaire. C'est aussi parler de sa manière de gérer ses dépenses, de son rapport à l'épargne, de ses dettes éventuelles, de ses priorités et de sa vision de l'avenir.",
     lessons: [
       {
-        slug: "transparence-argent",
-        title: "Parler argent avant l’engagement",
-        subtitle: "Mieux un inventaire honnête tôt qu’une bombe après la bague.",
-        durationMin: 8,
-        isFreePreview: true,
+        slug: "parler-dargent",
+        title: "L'argent ne fait pas le bonheur... mais il mérite d'être discuté",
+        subtitle: "Beaucoup de couples évitent de parler d'argent pendant les fréquentations, par peur de créer un malaise ou de paraître trop exigeants.",
+        durationMin: 10,
+        isFreePreview: false,
+        coverImage: "/academy/academy-finances.png",
         videoUrl: null,
+        intro: [
+          "Beaucoup de couples évitent de parler d'argent pendant les fréquentations, par peur de créer un malaise ou de paraître trop exigeants. Pourtant, les questions financières ne disparaissent pas après le mariage. Elles deviennent souvent plus importantes, car elles touchent les projets, les responsabilités et les choix du quotidien. Mieux vaut découvrir ces différences avant de s'engager que de les subir plus tard.",
+          "Parler d'argent ne signifie pas parler uniquement de salaire. C'est aussi parler de sa manière de gérer ses dépenses, de son rapport à l'épargne, de ses dettes éventuelles, de ses priorités et de sa vision de l'avenir. Une conversation honnête sur ces sujets permet de construire une relation basée sur la confiance plutôt que sur les suppositions.",
+        ],
+        learningGoals: [
+          "comprendre pourquoi les finances doivent être abordées avant le mariage ;",
+          "identifier les sujets financiers importants à discuter avec ton futur conjoint ;",
+          "apprendre à parler d'argent avec transparence et respect ;",
+          "poser les bases d'une gestion financière saine pour votre futur foyer.",
+        ],
         sections: [
           {
-            title: "À mettre sur la table",
-            points: [
-              "Revenus approximatifs et stabilité",
-              "Dettes (banque, famille, études)",
-              "Habitudes : épargne, dons, dépenses impulsives",
+            title: "Pourquoi parler d'argent avant de s'engager",
+            body: [
+              "L'argent influence de nombreuses décisions dans un foyer : le logement, les projets, les enfants, les loisirs ou encore les responsabilités familiales. Lorsque ces sujets ne sont jamais abordés, chacun avance avec ses propres attentes, ce qui peut rapidement créer des frustrations.",
+              "Parler d'argent n'est pas un manque de confiance. C'est une preuve de maturité. Plus les choses sont claires dès le départ, moins il y aura de surprises une fois le mariage commencé.",
             ],
           },
           {
-            title: "Comment en parler",
-            points: [
-              "Jour calme, pas après une dispute",
-              "Faits d’abord, excuses après",
-              "Seul(e) d’abord : soyez honnête avec vous-même sur papier",
+            title: "Les conversations à ne pas éviter",
+            body: [
+              "Il est important d'échanger sur des sujets concrets : votre manière de gérer un budget, votre rapport aux dépenses, l'existence de dettes, vos objectifs d'épargne ou encore votre façon d'aider vos proches lorsque cela est nécessaire. Ces conversations ne servent pas à juger l'autre, mais à mieux comprendre son fonctionnement.",
+              "L'objectif n'est pas d'être identiques. Deux personnes peuvent avoir des habitudes différentes et construire malgré tout une excellente gestion financière, à condition d'apprendre à dialoguer et à prendre des décisions ensemble.",
+            ],
+          },
+          {
+            title: "La transparence construit la confiance",
+            body: [
+              "Cacher une difficulté financière ou minimiser une dette par peur de la réaction de l'autre fragilise la relation. La confiance se construit lorsque chacun ose parler avec honnêteté, même lorsque certains sujets sont inconfortables.",
+              "La transparence ne consiste pas à tout contrôler, mais à permettre à l'autre de prendre ses décisions en connaissant la réalité. Une relation solide repose sur la vérité, même lorsqu'elle demande du courage.",
+            ],
+          },
+          {
+            title: "Construire une vision commune",
+            body: [
+              "Un budget est un outil, pas une contrainte. Il permet de donner une direction à vos ressources en fonction de vos priorités. Parler de vos projets, de votre manière de consommer et de vos objectifs futurs vous aidera à avancer dans la même direction.",
+              "Le plus important n'est pas le montant que chacun gagne, mais la capacité du couple à gérer ensemble ce qui lui est confié avec responsabilité, sagesse et transparence.",
             ],
           },
         ],
         keyPoints: [
-          "Cacher une dette grave n’est pas de la pudeur",
-          "L’argent révèle des valeurs",
-          "Un partenaire mature préfère la vérité tôt",
+          "L'argent ne devrait jamais être un sujet tabou dans une relation. Les conversations que vous avez aujourd'hui peuvent éviter de nombreuses incompréhensions demain. Plus vous apprenez à parler de finances avec honnêteté avant le mariage, plus vous construirez un foyer fondé sur la confiance.",
         ],
-        resources: [
-          {
-            label: "Liste perso",
-            detail: "Revenus · dettes · dons habituels · 3 postes où je dépense trop.",
-          },
-          {
-            label: "Ouverture",
-            detail: "« Avant d’aller plus loin, je veux être transparent(e) sur mon argent. »",
-          },
-        ],
+        resources: [],
         selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
+          prompt: "Fais le point — coche ce qui est déjà vrai pour toi",
           items: [
-            "Je connais le montant approximatif de mes dettes",
-            "Je peux expliquer mes priorités d’argent en 2 minutes",
-            "Je n’attends pas « après le mariage » pour être honnête",
+            "Je comprends pourquoi il est important de parler d'argent avant le mariage.",
+            "Je connais les principaux sujets financiers à aborder avec mon futur conjoint.",
+            "Je suis prêt(e) à être transparent(e) concernant ma situation financière.",
+            "Je souhaite construire une gestion financière fondée sur la confiance et la responsabilité.",
           ],
         },
-        exercise:
-          "Faites votre inventaire sur une feuille (même approximatif). Priez. Si besoin, montrez-le à un mentor.",
-      },
-      {
-        slug: "budget-simple",
-        title: "Un budget simple (même seul)",
-        subtitle: "Une carte claire — pas une prison. Vous vous entraînez pour à deux.",
-        durationMin: 7,
-        videoUrl: null,
-        sections: [
-          {
-            title: "4 cases",
-            points: [
-              "Besoins (loyer, nourriture, transport)",
-              "Dons / église",
-              "Épargne (même petite)",
-              "Plaisir (sans culpabilité, avec plafond)",
-            ],
-          },
-          {
-            title: "Routine",
-            points: [
-              "1 fois / mois : 20 minutes sur le téléphone ou un carnet",
-              "En fréquentation sérieuse : comparer vos styles (épargnant vs dépensier)",
-              "Avant le mariage : décider comment vous gérerez les comptes",
-            ],
-          },
-        ],
-        keyPoints: [
-          "Petit budget tenu > grand budget imaginaire",
-          "Les styles d’argent se confrontent tôt ou tard",
-          "L’intendance commence célibataire",
-        ],
-        resources: [
-          {
-            label: "Rituel 20 min",
-            detail: "Entrées · sorties · 1 ajustement · Amen.",
-          },
-          {
-            label: "Question couple",
-            detail: "« Qu’est-ce qui te stresse le plus dans l’argent ? »",
-          },
-        ],
-        selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
-          items: [
-            "Je sais où part mon argent ce mois-ci",
-            "J’ai une petite épargne ou un début de plan",
-            "Je connais mon style (économe / généreux / impulsif)",
-          ],
-        },
-        exercise:
-          "Cette semaine : 20 minutes sur vos 4 cases. Notez 1 poste à ajuster le mois prochain.",
-      },
-      {
-        slug: "aider-famille",
-        title: "Aider la famille sans s’asphyxier",
-        subtitle: "La générosité a besoin d’un plafond — surtout avant le mariage.",
-        durationMin: 7,
-        videoUrl: null,
-        sections: [
-          {
-            title: "Tension classique",
-            points: [
-              "La famille compte sur vous (et parfois trop)",
-              "Un futur conjoint peut avoir une autre culture d’aide",
-              "Dire non fait culpabiliser — dire oui sans limite aussi",
-            ],
-          },
-          {
-            title: "Cadre utile",
-            points: [
-              "Fixez un montant / mois (ou % ) pour l’aide familiale",
-              "Distinguez urgence réelle et demande habituelle",
-              "En couple : décidez ensemble, pas sous appel émotionnel",
-            ],
-          },
-        ],
-        keyPoints: [
-          "Aider n’est pas se ruiner",
-          "Le plafond se discute avant les fiançailles",
-          "La culpabilité n’est pas un budget",
-        ],
-        resources: [
-          {
-            label: "Phrase",
-            detail: "« Ce mois-ci je peux X. Au-delà, je ne peux pas. »",
-          },
-          {
-            label: "À clarifier à deux",
-            detail: "Parents · frères/sœurs · urgences · dîmes / offrandes.",
-          },
-        ],
-        selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
-          items: [
-            "J’ai une idée de plafond pour l’aide familiale",
-            "Je peux dire non sans mentir",
-            "Je sais que mon futur foyer aura aussi besoin d’oxygène",
-          ],
-        },
-        exercise:
-          "Choisissez un plafond mensuel (même provisoire). Notez-le. Respectez-le 1 mois pour tester.",
+        exercise: "Prends un moment pour faire le point sur ta situation financière. Liste tes principales sources de revenus, tes dépenses régulières, tes éventuelles dettes et tes objectifs financiers. Si tu es en couple, choisissez un moment pour échanger sur votre vision de l'argent, sans chercher à convaincre l'autre, mais simplement à mieux vous comprendre.",
       },
     ],
   },
   {
     id: "emotions",
-    title: "Émotions & stress",
-    summary:
-      "Nommer ce qui se passe en vous, gérer la jalousie, et guérir avant de vous précipiter dans une nouvelle relation.",
+    title: "Mieux gérer ses émotions",
+    summary: "Avant de construire un mariage, il est important d'apprendre à mieux se connaître. Une personne qui comprend ses émotions, sait les exprimer avec maturité et prend le temps de guérir de son passé sera davantage capable de construire une relation équilibrée.",
     lessons: [
       {
-        slug: "nommer-emotion",
-        title: "Nommer l’émotion avant de répondre",
-        subtitle: "Ce qui est nommé se dirige mieux. Ce qui est nié dirige à votre place.",
-        durationMin: 7,
-        isFreePreview: true,
+        slug: "gerer-ses-emotions",
+        title: "Apprendre à gérer ses émotions avant de construire une relation durable",
+        subtitle: "Les émotions font partie de notre vie.",
+        durationMin: 10,
+        isFreePreview: false,
+        coverImage: "/academy/academy-emotions.png",
         videoUrl: null,
+        intro: [
+          "Les émotions font partie de notre vie. Elles nous renseignent sur ce que nous vivons, ce qui nous touche et ce qui compte pour nous. Pourtant, lorsqu'elles prennent toute la place, elles peuvent influencer nos décisions, nos paroles et nos réactions. Beaucoup de relations souffrent non pas parce que les personnes ne s'aiment pas, mais parce qu'elles réagissent sous l'effet de la colère, de la peur, de la jalousie ou de blessures qui n'ont jamais été guéries.",
+          "Avant de construire un mariage, il est important d'apprendre à mieux se connaître. Une personne qui comprend ses émotions, sait les exprimer avec maturité et prend le temps de guérir de son passé sera davantage capable de construire une relation équilibrée. Cette leçon t'aidera à reconnaître tes réactions émotionnelles et à développer des habitudes qui favorisent des relations plus sereines.",
+        ],
+        learningGoals: [
+          "comprendre l'influence de tes émotions sur tes relations ;",
+          "reconnaître les réactions émotionnelles qui fragilisent une relation ;",
+          "apprendre à exprimer tes émotions avec maturité ;",
+          "identifier les blessures qui méritent d'être guéries avant le mariage.",
+        ],
         sections: [
           {
-            title: "Sans nom = pilote auto",
-            points: [
-              "Vous répondez sèchement sans savoir pourquoi",
-              "Vous envoyez un message trop long à 1 h du matin",
-              "Vous priez « contre l’autre » au lieu de déposer votre cœur",
+            title: "Les émotions ne sont pas tes ennemies",
+            body: [
+              "Ressentir de la colère, de la tristesse, de la peur ou de la déception est parfaitement normal. Les émotions ne sont ni bonnes ni mauvaises. Elles révèlent souvent un besoin, une inquiétude ou une blessure. Le problème n'est donc pas de ressentir une émotion, mais de la laisser diriger chacune de nos réactions.",
+              "Prendre quelques instants pour identifier ce que tu ressens avant de répondre permet souvent d'éviter des paroles que tu pourrais regretter. Une émotion reconnue est plus facile à gérer qu'une émotion ignorée.",
             ],
           },
           {
-            title: "Micro-protocole",
-            points: [
-              "Stop 10 secondes",
-              "Dire (à vous) : « Je suis… (mot) »",
-              "Puis seulement : répondre, ou attendre",
+            title: "Les réactions qui fragilisent une relation",
+            body: [
+              "Sous l'effet des émotions, certaines personnes deviennent agressives, d'autres se renferment complètement. D'autres encore cherchent à contrôler leur partenaire ou interprètent chaque situation comme une menace pour la relation. Ces réactions ne résolvent pas les difficultés ; elles les amplifient.",
+              "Apprendre à prendre du recul avant de répondre est une compétence précieuse. Quelques minutes de calme peuvent éviter des disputes inutiles et permettre un dialogue plus constructif.",
+            ],
+          },
+          {
+            title: "Guérir avant de construire",
+            body: [
+              "Nos expériences passées influencent souvent notre manière d'aimer. Une trahison, un rejet ou une relation douloureuse peuvent créer des peurs qui continuent à peser sur les relations suivantes. Sans travail personnel, il est facile de demander à son partenaire de réparer des blessures qu'il n'a pas causées.",
+              "Prendre le temps de reconnaître ces blessures et de demander de l'aide lorsque c'est nécessaire est une démarche de maturité. Se préparer au mariage, c'est aussi choisir de ne pas laisser son passé diriger son avenir.",
+            ],
+          },
+          {
+            title: "Développer une maturité émotionnelle",
+            body: [
+              "La maturité émotionnelle consiste à reconnaître ce que l'on ressent, à l'exprimer avec respect et à rester responsable de ses réactions. Elle ne signifie pas ne plus ressentir d'émotions, mais apprendre à ne pas en devenir prisonnier.",
+              "Avec le temps, cette capacité favorise des échanges plus paisibles, une meilleure compréhension mutuelle et une relation où chacun se sent en sécurité pour exprimer ce qu'il vit.",
             ],
           },
         ],
         keyPoints: [
-          "L’émotion n’est pas un péché — la laisser tout piloter peut l’être",
-          "Un mot simple suffit : peur, tristesse, colère, honte",
-          "En fréquentation : « Je suis inquiet(e) » désamorce souvent",
+          "Les émotions sont des messagers, pas des décideurs. Plus tu apprends à les comprendre et à les gérer avec sagesse, plus tu seras capable de construire une relation stable, apaisée et durable.",
         ],
-        resources: [
-          {
-            label: "Liste courte",
-            detail: "Peur · colère · tristesse · honte · joie · fatigue · solitude.",
-          },
-          {
-            label: "Phrase",
-            detail: "« Là, je suis [émotion]. Laisse-moi 10 minutes. »",
-          },
-        ],
+        resources: [],
         selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
+          prompt: "Fais le point — coche ce qui est déjà vrai pour toi",
           items: [
-            "Je peux nommer mon émotion du jour en 1 mot",
-            "Je sais faire une pause avant de répondre",
-            "Je ne confonds pas émotion et vérité absolue",
+            "Je comprends que les émotions influencent mes réactions.",
+            "Je suis capable d'identifier ce que je ressens avant de répondre.",
+            "Je reconnais les blessures qui méritent encore d'être guéries.",
+            "Je souhaite développer une plus grande maturité émotionnelle avant de m'engager dans le mariage.",
           ],
         },
-        exercise:
-          "3 jours : le soir, écrivez 1 émotion dominante + 1 déclencheur. Pas d’analyse longue.",
-      },
-      {
-        slug: "jalousie-confiance",
-        title: "Jalousie : règles et confiance",
-        subtitle: "Besoin de sécurité ≠ droit de contrôler le téléphone.",
-        durationMin: 8,
-        videoUrl: null,
-        sections: [
-          {
-            title: "Deux lectures possibles",
-            points: [
-              "Besoin normal de clarté et de fidélité",
-              "Contrôle qui étouffe (mots de passe, interrogatoires)",
-            ],
-          },
-          {
-            title: "Cadre sain (même en fréquentation)",
-            points: [
-              "Dites ce qui vous rassure (et ce qui vous blesse)",
-              "Accords clairs sur amitiés / réseaux / transparence",
-              "Si la jalousie domine tout : travail perso + mentor",
-            ],
-          },
-        ],
-        keyPoints: [
-          "La confiance se construit, elle ne s’extorque pas",
-          "Cacher des choses « pour éviter la scène » empire tout",
-          "Un contrôle permanent n’est pas de l’amour",
-        ],
-        resources: [
-          {
-            label: "Questions honnêtes",
-            detail: "Qu’est-ce qui me rassure ? Qu’est-ce que je contrôle par peur ?",
-          },
-          {
-            label: "Accord type",
-            detail: "« On se dit les choses qui touchent notre relation. On ne fouille pas par panique. »",
-          },
-        ],
-        selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
-          items: [
-            "Je distingue besoin de sécurité et contrôle",
-            "Je peux parler de ma jalousie sans accuser",
-            "Je travaille ma part (pas seulement « l’autre doit changer »)",
-          ],
-        },
-        exercise:
-          "Notez 1 situation jalouse récente. Écrivez le besoin réel derrière (sécurité, respect, clarté).",
-      },
-      {
-        slug: "guerir-deception",
-        title: "Guérir d’une déception amoureuse",
-        subtitle: "Avant de rebondir : laisser le cœur se remettre.",
-        durationMin: 8,
-        videoUrl: null,
-        sections: [
-          {
-            title: "Pièges du rebond",
-            points: [
-              "Nouvelle relation pour prouver que « ça va »",
-              "Comparer chaque personne au précédent",
-              "Promettre trop vite pour combler le vide",
-            ],
-          },
-          {
-            title: "Chemin simple",
-            points: [
-              "Nommer la perte (même si « ce n’était pas un mariage »)",
-              "Limiter les scrolls sur son profil",
-              "Temps avec Dieu, amis sains, éventuellement counseling",
-            ],
-          },
-        ],
-        keyPoints: [
-          "Guérir n’est pas une faiblesse",
-          "KELIAA est un outil — pas un pansement émotionnel",
-          "Vous serez plus libre pour aimer après",
-        ],
-        resources: [
-          {
-            label: "Signes que vous avancez",
-            detail: "Moins d’obsession · sommeil · capacité à dire non · joie qui revient par moments.",
-          },
-          {
-            label: "Ancre",
-            detail: "Psaume 34.19 — Dieu près des cœurs brisés.",
-          },
-        ],
-        selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
-          items: [
-            "Je peux parler de ma déception sans m’effondrer chaque fois",
-            "Je ne cherche pas quelqu’un juste pour « remplacer »",
-            "J’ai au moins 1 personne de confiance dans mon parcours",
-          ],
-        },
-        exercise:
-          "Écrivez une lettre (non envoyée) : ce qui a blessé · ce que vous libérez · ce que vous demandez à Dieu. Puis rangez-la.",
+        exercise: "Pendant les sept prochains jours, prends quelques minutes chaque soir pour noter une émotion forte que tu as ressentie dans la journée. Écris ce qui l'a déclenchée, comment tu as réagi et ce que tu aurais pu faire différemment. Cet exercice t'aidera à mieux comprendre ton fonctionnement émotionnel.",
       },
     ],
   },
   {
     id: "projet",
-    title: "Projet de vie à deux",
-    summary:
-      "Enfants, rôles, objectifs : en parler assez tôt pour construire ensemble — pas découvrir trop tard des murs invisibles.",
+    title: "Construire un projet de vie à deux",
+    summary: "Construire un projet de vie à deux ne consiste pas à prévoir chaque détail de l'avenir. Il s'agit plutôt d'apprendre à partager ses aspirations, à écouter celles de l'autre et à rechercher une direction commune.",
     lessons: [
       {
-        slug: "projet-enfants",
-        title: "Parler du projet d’enfants",
-        subtitle: "Tôt, avec douceur. Pas comme un interrogatoire au 2e café.",
-        durationMin: 7,
-        isFreePreview: true,
+        slug: "projet-de-vie-a-deux",
+        title: "Le mariage ne se prépare pas seulement avec de l'amour, mais aussi avec une vision commune",
+        subtitle: "L'amour est une belle raison de se marier, mais il ne suffit pas à répondre aux grandes questions de la vie.",
+        durationMin: 10,
+        isFreePreview: false,
+        coverImage: "/academy/academy-projet.png",
         videoUrl: null,
+        intro: [
+          "L'amour est une belle raison de se marier, mais il ne suffit pas à répondre aux grandes questions de la vie. Avec le temps, un couple devra prendre des décisions importantes : où vivre, comment gérer les finances, avoir ou non des enfants, concilier vie professionnelle et vie familiale, servir Dieu ensemble, soutenir leurs proches ou encore poursuivre certains projets personnels. Lorsque ces sujets ne sont jamais abordés avant le mariage, ils deviennent souvent des sources d'incompréhension.",
+          "Construire un projet de vie à deux ne consiste pas à prévoir chaque détail de l'avenir. Il s'agit plutôt d'apprendre à partager ses aspirations, à écouter celles de l'autre et à rechercher une direction commune. Plus cette vision est claire avant l'engagement, plus le couple avancera avec confiance face aux décisions importantes.",
+        ],
+        learningGoals: [
+          "comprendre pourquoi il est important de parler de votre vision d'avenir avant le mariage ;",
+          "identifier les grands sujets qui méritent d'être abordés pendant les fréquentations ;",
+          "apprendre à construire des projets en tenant compte des attentes de chacun ;",
+          "développer une vision commune fondée sur le dialogue, le respect et la confiance.",
+        ],
         sections: [
           {
-            title: "Sujets à clarifier",
-            points: [
-              "Envie d’enfants : oui / non / plus tard / je ne sais pas encore",
-              "Nombre approximatif et timing",
-              "Peur, infertilité, adoption : des sujets possibles avec délicatesse",
+            title: "Pourquoi parler de l'avenir avant de s'engager",
+            body: [
+              "Certaines différences ne deviennent visibles qu'avec le temps. L'un rêve de vivre à l'étranger tandis que l'autre souhaite rester près de sa famille. L'un désire plusieurs enfants alors que l'autre n'est pas encore prêt à en avoir. Ces différences ne signifient pas que la relation est vouée à l'échec, mais elles doivent être connues avant de prendre un engagement.",
+              "Aborder ces sujets suffisamment tôt permet de mieux comprendre les attentes de chacun et d'éviter les mauvaises surprises. Une décision importante est toujours plus facile lorsqu'elle est prise ensemble que lorsqu'elle est imposée après le mariage.",
             ],
           },
           {
-            title: "Si désaccord",
-            points: [
-              "Ne forcez pas un « on verra » pour sauver la relation",
-              "Prenez le temps + conseil mature",
-              "Certains désaccords sont des non-compatibles — et c’est mieux de le savoir",
+            title: "Les conversations à ne pas repousser",
+            body: [
+              "Parlez de votre vision du mariage, de votre foi, de votre travail, de vos projets professionnels, de votre désir d'avoir des enfants, de votre manière de gérer l'argent, de votre implication auprès de vos familles et de vos priorités de vie. Ces échanges ne servent pas à vérifier si vous êtes identiques, mais à découvrir si vous êtes capables de construire un projet commun malgré vos différences.",
+              "Il n'est pas nécessaire d'avoir toutes les réponses immédiatement. L'essentiel est d'apprendre à dialoguer avec honnêteté et à accueillir le point de vue de l'autre avec respect.",
+            ],
+          },
+          {
+            title: "Construire une vision commune",
+            body: [
+              "Une relation solide avance plus facilement lorsque chacun sait où le couple souhaite aller. Cela demande parfois des compromis, des ajustements et beaucoup d'écoute. Construire une vision commune ne signifie pas abandonner tous ses rêves personnels, mais chercher un équilibre où chacun peut s'épanouir tout en contribuant au projet du couple.",
+              "Les décisions les plus importantes se prennent rarement dans l'urgence. Prenez le temps de réfléchir ensemble, de prier si vous partagez la même foi et de rechercher ce qui favorisera le bien du foyer sur le long terme.",
+            ],
+          },
+          {
+            title: "Grandir ensemble au fil des années",
+            body: [
+              "Les projets évolueront avec le temps. Certaines priorités changeront, de nouvelles responsabilités apparaîtront et des imprévus feront partie du parcours. Un couple qui a appris à dialoguer et à ajuster sa vision restera plus uni face à ces changements.",
+              "L'objectif n'est pas de tout contrôler, mais de développer une manière de prendre des décisions ensemble, dans le respect, la confiance et la recherche du bien commun.",
             ],
           },
         ],
         keyPoints: [
-          "Ce n’est pas un sujet « après le mariage seulement »",
-          "L’honnêteté aujourd’hui évite la rancune demain",
-          "Le désir peut évoluer — le silence, non",
+          "Le mariage est un chemin que l'on construit à deux. Plus vous prenez le temps de parler de votre avenir avant de vous engager, plus vous serez capables d'avancer ensemble avec confiance, même lorsque la vie vous réservera des surprises.",
         ],
-        resources: [
-          {
-            label: "Question douce",
-            detail: "« Comment tu imagines une famille dans 5–10 ans ? »",
-          },
-          {
-            label: "Timing",
-            detail: "Quand la relation devient sérieuse — pas au premier message.",
-          },
-        ],
+        resources: [],
         selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
+          prompt: "Fais le point — coche ce qui est déjà vrai pour toi",
           items: [
-            "Je connais mon désir actuel (même s’il est « je ne sais pas »)",
-            "Je peux en parler sans paniquer",
-            "Je n’utiliserai pas ce sujet pour manipuler quelqu’un",
+            "Je comprends l'importance de construire une vision commune avant le mariage.",
+            "J'ai identifié les principaux sujets à aborder avec mon futur conjoint.",
+            "Je suis prêt(e) à écouter les projets et les attentes de l'autre avec ouverture.",
+            "Je souhaite construire un avenir fondé sur le dialogue, la confiance et des objectifs partagés.",
           ],
         },
-        exercise:
-          "Écrivez votre vision (3 lignes). Si vous êtes en fréquentation sérieuse : choisissez un moment calme pour en parler.",
-      },
-      {
-        slug: "roles-foyer",
-        title: "Rôles au foyer",
-        subtitle: "Selon dons et saisons — pas selon TikTok ou la pression du quartier.",
-        durationMin: 7,
-        videoUrl: null,
-        sections: [
-          {
-            title: "Éviter la guerre idéologique",
-            points: [
-              "« Chez nous les hommes… / les femmes… » sans écoute",
-              "Copier un couple d’influenceurs",
-              "Tout décider seul(e) « parce que c’est la tradition »",
-            ],
-          },
-          {
-            title: "Répartir",
-            points: [
-              "Lister tâches + compétences + charges mentales",
-              "Revoir chaque saison (bébé, déménagement, études)",
-              "En fréquentation : observer comment l’autre traite le service et le quotidien",
-            ],
-          },
-        ],
-        keyPoints: [
-          "Le service mutuel vaut mieux que le score",
-          "Les rôles se discutent, ils ne s’imposent pas en silence",
-          "Un bon partenaire parle de la vie concrète",
-        ],
-        resources: [
-          {
-            label: "Liste à co-créer",
-            detail: "Courses · cuisine · lessive · factures · enfants · prière · contacts familles.",
-          },
-          {
-            label: "Question",
-            detail: "« Qu’est-ce qui te fatigue le plus dans le quotidien ? »",
-          },
-        ],
-        selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
-          items: [
-            "J’ai une idée de ce que je peux porter / ce qui me pèse",
-            "Je peux négocier sans mépriser l’autre",
-            "Je n’attends pas un « rôle magique » sans conversation",
-          ],
-        },
-        exercise:
-          "Listez 5 tâches de foyer. Notez : j’aime / je peux / j’évite. Gardez pour une discussion sérieuse.",
-      },
-      {
-        slug: "objectifs-12-mois",
-        title: "Objectifs concrets (12 mois)",
-        subtitle: "Une vision sans petit pas reste un rêve. Même célibataire.",
-        durationMin: 8,
-        videoUrl: null,
-        sections: [
-          {
-            title: "Choisir 1 objectif",
-            points: [
-              "Spirituel, relationnel, pro, santé, ou finance — un seul d’abord",
-              "Mesurable (ex. : « 3 soirées prière / semaine », pas « être meilleur »)",
-              "Lié à la préparation du mariage si c’est votre saison",
-            ],
-          },
-          {
-            title: "Le découper",
-            points: [
-              "12 mois → 90 jours → cette semaine",
-              "Un témoin (ami, mentor) pour rendre compte",
-              "En couple : 1 objectif commun + 1 personnel chacun",
-            ],
-          },
-        ],
-        keyPoints: [
-          "Petit et tenu > grand et abandonné",
-          "Vous préparez le mariage en devenant quelqu’un de fiable",
-          "Dieu bénit aussi la discipline humble",
-        ],
-        resources: [
-          {
-            label: "Fiche 1 page",
-            detail: "Objectif · pourquoi · 1ère étape cette semaine · qui m’encourage.",
-          },
-          {
-            label: "Revue",
-            detail: "Chaque dimanche soir : 5 minutes — avancé / bloqué / prochain pas.",
-          },
-        ],
-        selfCheck: {
-          prompt: "Cochez ce qui est déjà vrai pour vous",
-          items: [
-            "J’ai 1 objectif clair pour les 12 mois",
-            "J’ai une première étape cette semaine",
-            "Quelqu’un peut me demander des nouvelles",
-          ],
-        },
-        exercise:
-          "Écrivez votre objectif 12 mois + l’étape de cette semaine. Envoyez-la à une personne de confiance.",
+        exercise: "Prends une feuille et écris les cinq projets qui comptent le plus pour toi dans les cinq prochaines années. Si tu es en couple, partagez ensuite vos listes et échangez sur vos priorités. Cherchez les points qui vous rapprochent, ceux qui demandent encore des discussions et les décisions que vous pourriez commencer à préparer dès aujourd'hui.",
       },
     ],
   },

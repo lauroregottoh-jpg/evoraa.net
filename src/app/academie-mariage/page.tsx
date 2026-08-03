@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 import {
   BookOpen,
@@ -9,6 +10,7 @@ import {
   Sparkles,
   Compass,
   ChevronRight,
+  Clock,
 } from "lucide-react"
 import { MemberPage } from "@/components/layout/MemberPage"
 import { getMyGrowthAxes } from "@/app/actions/assessments"
@@ -58,8 +60,8 @@ export default async function AcademieMariagePage() {
             Grandir avant (et pour) l&apos;alliance
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
-            Leçons courtes (texte + exercice). Les emplacements vidéo sont prêts : les médias
-            s&apos;ajouteront au fur et à mesure. Sans jugement — avec clarté.
+            Huit modules, une leçon profonde chacun. Lis à ton rythme, fais l&apos;exercice,
+            coche ton point — sans jugement.
           </p>
           <div className="flex flex-wrap gap-3 pt-2">
             <Link href="/assessments" className="text-sm font-semibold text-primary underline">
@@ -97,7 +99,8 @@ export default async function AcademieMariagePage() {
         <AcademyCoachingCta moduleId="dialogue" moduleTitle="Académie du mariage" />
 
         <p className="text-xs text-muted-foreground text-center">
-          {ACADEMY_MODULES.reduce((n, m) => n + m.lessons.length, 0)} leçons disponibles.
+          {ACADEMY_MODULES.length} modules ·{" "}
+          {ACADEMY_MODULES.reduce((n, m) => n + m.lessons.length, 0)} leçons
         </p>
       </div>
     </MemberPage>
@@ -113,63 +116,91 @@ function ModuleCard({
 }) {
   const Icon = ICONS[mod.id]
   const first = mod.lessons[0]
+  const cover = first?.coverImage
 
   return (
     <section
       id={mod.id}
       className={cn(
-        "scroll-mt-24 rounded-2xl border p-5 sm:p-6 space-y-4",
+        "scroll-mt-24 overflow-hidden rounded-2xl border",
         highlight ? "border-2 border-primary/30 bg-primary/5" : "border-border bg-card"
       )}
     >
-      <div className="flex items-start gap-3">
-        <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
-          <Icon className="h-5 w-5" />
+      {cover ? (
+        <div className="relative h-36 sm:h-44 w-full overflow-hidden">
+          <Image
+            src={cover}
+            alt=""
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 720px"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+          <div className="absolute bottom-3 left-4 right-4 flex items-center gap-2 text-white">
+            <Icon className="h-4 w-4 opacity-90" />
+            {highlight && (
+              <span className="text-[10px] font-bold uppercase tracking-widest">Pour vous</span>
+            )}
+          </div>
         </div>
-        <div className="min-w-0 flex-1">
-          {highlight && (
-            <p className="text-[10px] font-bold uppercase tracking-widest text-primary">Pour vous</p>
-          )}
-          <h2 className="font-serif text-xl font-bold">{mod.title}</h2>
-          <p className="text-sm text-muted-foreground mt-1">{mod.summary}</p>
+      ) : null}
+
+      <div className="p-5 sm:p-6 space-y-4">
+        <div className="flex items-start gap-3">
+          {!cover ? (
+            <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+              <Icon className="h-5 w-5" />
+            </div>
+          ) : null}
+          <div className="min-w-0 flex-1">
+            <h2 className="font-serif text-xl font-bold">{mod.title}</h2>
+            <p className="text-sm text-muted-foreground mt-1 leading-relaxed line-clamp-3">
+              {mod.summary}
+            </p>
+            {first ? (
+              <p className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-primary">
+                <Clock className="h-3.5 w-3.5" />~{first.durationMin} min de lecture
+              </p>
+            ) : null}
+          </div>
         </div>
-      </div>
 
-      <ModuleProgressBar
-        moduleId={mod.id}
-        lessonSlugs={mod.lessons.map((l) => l.slug)}
-      />
+        <ModuleProgressBar
+          moduleId={mod.id}
+          lessonSlugs={mod.lessons.map((l) => l.slug)}
+        />
 
-      <ul className="space-y-1">
-        {mod.lessons.map((lesson, i) => (
-          <li key={lesson.slug}>
-            <Link
-              href={academyLessonPath(mod.id, lesson.slug)}
-              className="text-sm flex items-center gap-2 py-1.5 hover:text-primary"
-            >
-              <span className="text-accent font-bold">{i + 1}.</span>
-              <span className="flex-1">{lesson.title}</span>
-              <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-            </Link>
-          </li>
-        ))}
-      </ul>
+        <ul className="space-y-1">
+          {mod.lessons.map((lesson, i) => (
+            <li key={lesson.slug}>
+              <Link
+                href={academyLessonPath(mod.id, lesson.slug)}
+                className="text-sm flex items-center gap-2 py-1.5 hover:text-primary"
+              >
+                <span className="text-accent font-bold">{i + 1}.</span>
+                <span className="flex-1">{lesson.title}</span>
+                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
+              </Link>
+            </li>
+          ))}
+        </ul>
 
-      <div className="flex flex-wrap gap-2 pt-1">
-        <Link
-          href={academyModulePath(mod.id)}
-          className="inline-flex h-9 items-center px-4 rounded-xl border border-border text-xs font-semibold"
-        >
-          Voir le module
-        </Link>
-        {first && (
+        <div className="flex flex-wrap gap-2 pt-1">
           <Link
-            href={academyLessonPath(mod.id, first.slug)}
-            className="inline-flex h-9 items-center px-4 rounded-xl bg-primary text-primary-foreground text-xs font-semibold"
+            href={academyModulePath(mod.id)}
+            className="inline-flex h-9 items-center px-4 rounded-xl border border-border text-xs font-semibold"
           >
-            Commencer
+            Voir le module
           </Link>
-        )}
+          {first && (
+            <Link
+              href={academyLessonPath(mod.id, first.slug)}
+              className="inline-flex h-9 items-center px-4 rounded-xl bg-primary text-primary-foreground text-xs font-semibold"
+            >
+              Commencer
+            </Link>
+          )}
+        </div>
       </div>
     </section>
   )
