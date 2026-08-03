@@ -83,10 +83,7 @@ export async function bictorysCreateCharge(args: {
   appBaseUrl: string
 }) {
   const merchantCountry = process.env.BICTORYS_MERCHANT_COUNTRY || "SN"
-  const webhookSecret = process.env.BICTORYS_WEBHOOK_SECRET
-  const notifyUrl = webhookSecret
-    ? `${args.appBaseUrl}/api/payments/bictorys/notify?token=${encodeURIComponent(webhookSecret)}`
-    : `${args.appBaseUrl}/api/payments/bictorys/notify`
+  const notifyUrl = `${args.appBaseUrl}/api/payments/bictorys/notify`
   const returnUrl = `${args.appBaseUrl}/checkout/success?payment=${args.paymentId}`
   const cancelUrl = `${args.appBaseUrl}/checkout/cancel?payment=${args.paymentId}`
 

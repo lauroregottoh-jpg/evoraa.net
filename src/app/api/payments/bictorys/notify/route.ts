@@ -7,8 +7,8 @@ function verifyTokenOrSignature(request: NextRequest, rawBody: string) {
   const secret = process.env.BICTORYS_WEBHOOK_SECRET
   if (!secret) return { ok: false as const, error: "BICTORYS_WEBHOOK_SECRET manquant" }
 
-  const staticToken =
-    request.headers.get("x-secret-key") || request.nextUrl.searchParams.get("token") || ""
+  // Header only — never accept ?token= (leaks in logs / Referer).
+  const staticToken = request.headers.get("x-secret-key") || ""
   if (staticToken) {
     const a = Buffer.from(staticToken)
     const b = Buffer.from(secret)

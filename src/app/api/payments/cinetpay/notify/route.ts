@@ -1,30 +1,35 @@
 import { createClient } from "@supabase/supabase-js"
-import { createHmac, timingSafeEqual } from "crypto"
+import { timingSafeEqual } from "crypto"
 import { NextRequest, NextResponse } from "next/server"
 
 function verifyCinetPayWebhook(request: NextRequest, body: Record<string, unknown>) {
-  const secret = process.env.CINETPAY_SECRET_KEY
-  if (!secret) {
-    return { ok: false as const, error: "CINETPAY_SECRET_KEY manquant" }
+  // Prefer dedicated webhook token (not the payment API secret).
+  const webhookToken =
+    process.env.CINETPAY_WEBHOOK_TOKEN?.trim() ||
+    process.env.CINETPAY_SECRET_KEY?.trim() ||
+    ""
+
+  if (!webhookToken) {
+    // No shared secret configured: allow notify through; activation still requires
+    // live verification via CinetPay check API below.
+    return { ok: true as const, mode: "api_check_only" as const }
   }
 
-  // Shared secret via header or query (configure the same value in CinetPay notify URL)
-  const token =
-    request.headers.get("x-cinetpay-secret") ||
-    request.nextUrl.searchParams.get("token") ||
-    String(body.secret || body.token || "")
-
-  if (!token) {
-    return { ok: false as const, error: "Secret webhook manquant" }
+  // Header only — never query string or body.secret (logged / forgeable).
+  const presented = request.headers.get("x-cinetpay-secret") || ""
+  if (!presented) {
+    // CinetPay dashboards often cannot set custom headers. If a token is configured
+    // but not sent, fall through to API check only (still require transaction verify).
+    return { ok: true as const, mode: "api_check_only" as const }
   }
 
-  const a = Buffer.from(token)
-  const b = Buffer.from(secret)
+  const a = Buffer.from(presented)
+  const b = Buffer.from(webhookToken)
   if (a.length !== b.length || !timingSafeEqual(a, b)) {
     return { ok: false as const, error: "Secret webhook invalide" }
   }
 
-  return { ok: true as const }
+  return { ok: true as const, mode: "header" as const }
 }
 
 async function verifyTransactionWithCinetPay(transactionId: string) {
@@ -60,8 +65,10 @@ async function verifyTransactionWithCinetPay(transactionId: string) {
 }
 
 /**
- * CinetPay notify URL example:
- * https://votre-domaine.com/api/payments/cinetpay/notify?token=YOUR_CINETPAY_SECRET_KEY
+ * CinetPay notify URL (sans secret dans l’URL) :
+ * https://votre-domaine.com/api/payments/cinetpay/notify
+ *
+ * L’activation exige une confirmation live via l’API CinetPay check.
  */
 export async function POST(request: NextRequest) {
   if (process.env.PAYMENTS_DEMO_MODE === "true") {
@@ -98,29 +105,27 @@ export async function POST(request: NextRequest) {
   }
 
   const transactionId = String(body.transaction_id || body.cpm_trans_id || "")
-  const paymentId = String(body.metadata || body.payment_id || "")
 
-  if (!transactionId && !paymentId) {
-    return NextResponse.json({ error: "transaction_id manquant" }, { status: 400 })
+  if (!transactionId) {
+    return NextResponse.json(
+      { error: "transaction_id manquant (vérification CinetPay obligatoire)" },
+      { status: 400 }
+    )
   }
 
-  if (transactionId) {
-    const check = await verifyTransactionWithCinetPay(transactionId)
-    if (!check.verified) {
-      return NextResponse.json(
-        { error: "Transaction non confirmée auprès de CinetPay", detail: check },
-        { status: 400 }
-      )
-    }
+  const check = await verifyTransactionWithCinetPay(transactionId)
+  if (!check.verified) {
+    return NextResponse.json(
+      { error: "Transaction non confirmée auprès de CinetPay", detail: check },
+      { status: 400 }
+    )
   }
 
   const admin = createClient(supabaseUrl, serviceKey)
-  let query = admin.from("payments").select("id, status, subscription_id, metadata")
-  if (transactionId) {
-    query = query.eq("transaction_reference", transactionId)
-  } else {
-    query = query.eq("id", paymentId)
-  }
+  const query = admin
+    .from("payments")
+    .select("id, status, subscription_id, metadata")
+    .eq("transaction_reference", transactionId)
 
   const { data: payment } = await query.maybeSingle()
   if (!payment) {
@@ -131,39 +136,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true, activated: true, already: true })
   }
 
-  const status = String(
-    body.status || body.cpm_trans_status || body.cpm_result || ""
-  ).toLowerCase()
-  const success =
-    status === "accepted" ||
-    status === "success" ||
-    status === "00" ||
-    status === "completed" ||
-    body.code === "00" ||
-    Boolean(transactionId)
-
-  if (!success) {
-    await admin
-      .from("payments")
-      .update({
-        status: "failed",
-        metadata: {
-          ...(typeof payment.metadata === "object" && payment.metadata
-            ? (payment.metadata as object)
-            : {}),
-          webhook: body,
-        },
-      })
-      .eq("id", payment.id)
-
-    await admin
-      .from("subscriptions")
-      .update({ status: "failed" })
-      .eq("id", payment.subscription_id)
-
-    return NextResponse.json({ ok: true, activated: false })
-  }
-
+  // Activation autorisée uniquement après verifyTransactionWithCinetPay (ci-dessus).
   const { data: subscription } = await admin
     .from("subscriptions")
     .select("id, user_id")
@@ -191,10 +164,6 @@ export async function POST(request: NextRequest) {
           : {}),
         webhook: body,
         activated_at: new Date().toISOString(),
-        hmac_note: createHmac("sha256", process.env.CINETPAY_SECRET_KEY || "x")
-          .update(String(payment.id))
-          .digest("hex")
-          .slice(0, 12),
       },
     })
     .eq("id", payment.id)

@@ -201,10 +201,7 @@ export async function startCheckoutAction(
         return { checkoutPath: result.checkoutUrl }
       }
 
-      const secret = process.env.CINETPAY_SECRET_KEY
-      const notifyUrl = secret
-        ? `${appBaseUrl()}/api/payments/cinetpay/notify?token=${encodeURIComponent(secret)}`
-        : `${appBaseUrl()}/api/payments/cinetpay/notify`
+      const notifyUrl = `${appBaseUrl()}/api/payments/cinetpay/notify`
       const returnUrl = `${appBaseUrl()}/checkout/success?payment=${payment.id}`
       const response = await fetch("https://api-checkout.cinetpay.com/v2/payment", {
         method: "POST",
