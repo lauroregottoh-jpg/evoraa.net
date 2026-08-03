@@ -5,10 +5,14 @@ import { createAdminClient } from "@/utils/supabase/admin"
 import { redirect } from "next/navigation"
 import { resolveAppUrl } from "@/lib/auth/appUrl"
 import { passwordResetEmailHtml } from "@/lib/email/templates"
+import { enforceRateLimit, RL } from "@/lib/security/rateLimit"
 
 export async function requestPasswordResetAction(formData: FormData) {
   const email = String(formData.get("email") ?? "").trim().toLowerCase()
   if (!email) return { error: "Email requis." }
+
+  const rl = await enforceRateLimit({ ...RL.passwordReset, subject: email })
+  if (!rl.ok) return { error: rl.error }
 
   const appUrl = await resolveAppUrl()
   const redirectTo = `${appUrl}/reset-password`

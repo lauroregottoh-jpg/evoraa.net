@@ -12,6 +12,7 @@ import {
   sanitizeNextPath,
 } from "@/lib/admin/consolePath"
 import { welcomeEmailHtml } from "@/lib/email/templates"
+import { enforceRateLimit, RL } from "@/lib/security/rateLimit"
 
 /**
  * Soft launch: confirm email via service role when Supabase Auth mail
@@ -156,6 +157,9 @@ export async function loginAction(formData: FormData) {
     return { error: "Email et mot de passe requis." }
   }
 
+  const rl = await enforceRateLimit({ ...RL.login, subject: email })
+  if (!rl.ok) return { error: rl.error }
+
   const supabase = await createClient()
 
   const { data, error } = await supabase.auth.signInWithPassword({
@@ -223,6 +227,9 @@ export async function registerAction(formData: FormData) {
   if (!email || !password || !firstName) {
     return { error: "Prénom, email et mot de passe sont requis." }
   }
+
+  const rl = await enforceRateLimit({ ...RL.register, subject: email })
+  if (!rl.ok) return { error: rl.error }
 
   if (password.length < 8) {
     return { error: "Le mot de passe doit contenir au moins 8 caractères." }

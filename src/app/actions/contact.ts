@@ -3,6 +3,7 @@
 import { sendResendEmail } from "@/lib/email/send"
 import { brandedEmailShell, contactAckEmailHtml } from "@/lib/email/templates"
 import { escapeHtml } from "@/lib/security/html"
+import { enforceRateLimit, RL } from "@/lib/security/rateLimit"
 
 const SUBJECT_LABELS: Record<string, string> = {
   question: "Question générale",
@@ -32,6 +33,9 @@ export async function submitContactAction(payload: {
   if (message.length < 20) {
     return { error: "Votre message doit faire au moins 20 caractères." }
   }
+
+  const rl = await enforceRateLimit({ ...RL.contact, subject: email })
+  if (!rl.ok) return { error: rl.error }
 
   const subjectLabel = SUBJECT_LABELS[subjectCode] || "Autre"
   const to = process.env.CONTACT_INBOX_EMAIL || "lauroregottoh@gmail.com"

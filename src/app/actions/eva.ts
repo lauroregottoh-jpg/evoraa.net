@@ -14,6 +14,7 @@ import {
   type EvaEngineResult,
 } from "@/lib/eva/engine"
 import { DEFAULT_EVA_CONFIG, parseEvaConfig } from "@/lib/admin/opsRules"
+import { enforceRateLimit, RL } from "@/lib/security/rateLimit"
 
 export async function getEvaQuotaAction() {
   const supabase = await createClient()
@@ -96,6 +97,9 @@ export async function askEvaAction(input: {
 
   const question = (input.question || "").trim().slice(0, 1200)
   if (!question) return { ok: false, error: "Question vide." }
+
+  const rl = await enforceRateLimit({ ...RL.eva, subject: user.id })
+  if (!rl.ok) return { ok: false, error: rl.error }
 
   const entitlements = await getUserEntitlements(user.id)
   const limit = entitlements.limits.evaQuestionsPerDay
