@@ -63,6 +63,11 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   const { pathname, search } = request.nextUrl
+
+  // Mot de passe oublié : ne jamais renvoyer vers onboarding/accueil
+  const isResetPassword =
+    pathname === '/reset-password' || pathname.startsWith('/reset-password/')
+
   const isAuthRoute = AUTH_ROUTES.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`)
   )
@@ -84,7 +89,7 @@ export async function updateSession(request: NextRequest) {
     return redirectWithCookies('/login')
   }
 
-  if (user && isAuthRoute) {
+  if (user && isAuthRoute && !isResetPassword) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('completion_percentage, onboarding_status')

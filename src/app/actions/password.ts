@@ -1,24 +1,52 @@
 "use server"
 
 import { createClient } from "@/utils/supabase/server"
+import { createAdminClient } from "@/utils/supabase/admin"
 import { redirect } from "next/navigation"
-import { resolveAppUrlSync } from "@/lib/auth/appUrl"
+import { resolveAppUrl } from "@/lib/auth/appUrl"
+import { passwordResetEmailHtml } from "@/lib/email/templates"
 
 export async function requestPasswordResetAction(formData: FormData) {
-  const email = String(formData.get("email") ?? "").trim()
+  const email = String(formData.get("email") ?? "").trim().toLowerCase()
   if (!email) return { error: "Email requis." }
 
-  const supabase = await createClient()
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${resolveAppUrlSync()}/auth/finish?next=/reset-password`,
-  })
+  const appUrl = await resolveAppUrl()
+  const redirectTo = `${appUrl}/reset-password`
 
-  if (error) return { error: error.message }
+  try {
+    const admin = createAdminClient()
+    const { data, error } = await admin.auth.admin.generateLink({
+      type: "recovery",
+      email,
+      options: { redirectTo },
+    })
+
+    if (!error) {
+      const actionLink = data.properties?.action_link
+      if (actionLink) {
+        const { sendEmailNotificationStub } = await import(
+          "@/app/actions/notifications"
+        )
+        await sendEmailNotificationStub({
+          to: email,
+          subject: "Réinitialisez votre mot de passe — KELIAA",
+          html: passwordResetEmailHtml({ appUrl, resetHref: actionLink }),
+        })
+      }
+    } else {
+      console.error("[password-reset]", error.message)
+    }
+  } catch (e) {
+    console.error("[password-reset] admin", e)
+    // Dernier recours : mail Auth Supabase (moins idéal)
+    const supabase = await createClient()
+    await supabase.auth.resetPasswordForEmail(email, { redirectTo })
+  }
 
   return {
     success: true,
     message:
-      "Si un compte existe pour cet email, un lien de réinitialisation vient d'être envoyé.",
+      "Si un compte existe pour cet email, un lien KELIAA vient d’être envoyé. Vérifiez aussi les spams.",
   }
 }
 
@@ -34,6 +62,16 @@ export async function updatePasswordAction(formData: FormData) {
   }
 
   const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) {
+    return {
+      error:
+        "Session expirée. Rouvrez le lien reçu par email, puis choisissez un nouveau mot de passe.",
+    }
+  }
+
   const { error } = await supabase.auth.updateUser({ password })
   if (error) return { error: error.message }
 

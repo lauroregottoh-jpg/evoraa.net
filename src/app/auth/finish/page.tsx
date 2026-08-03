@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation"
 import { createClient } from "@/utils/supabase/client"
 
 /**
- * Reçoit les liens Auth qui renvoient des tokens dans le hash (#access_token=…)
- * ou un code PKCE. Le serveur ne lit pas le hash ; on crée la session ici.
+ * Reçoit les liens Auth (code PKCE, token_hash, ou #access_token).
  */
 export default function AuthFinishPage() {
   const router = useRouter()
@@ -18,7 +17,12 @@ export default function AuthFinishPage() {
     async function run() {
       const hash = window.location.hash.replace(/^#/, "")
       const query = window.location.search.replace(/^\?/, "")
-      const params = new URLSearchParams(hash || query)
+      const hashParams = new URLSearchParams(hash)
+      const queryParams = new URLSearchParams(query)
+      const params = new URLSearchParams([
+        ...queryParams.entries(),
+        ...hashParams.entries(),
+      ])
 
       const access_token = params.get("access_token")
       const refresh_token = params.get("refresh_token")
@@ -26,6 +30,14 @@ export default function AuthFinishPage() {
       const error = params.get("error_description") || params.get("error")
       const code = params.get("code")
       const token_hash = params.get("token_hash")
+      const nextParam = params.get("next")
+
+      const preferredNext =
+        type === "recovery"
+          ? "/reset-password"
+          : nextParam?.startsWith("/")
+            ? nextParam
+            : "/onboarding"
 
       if (error) {
         setStatus("Lien invalide. Redirection…")
@@ -79,7 +91,7 @@ export default function AuthFinishPage() {
           data: { user },
         } = await supabase.auth.getUser()
 
-        if (user) {
+        if (user && type !== "recovery") {
           await supabase
             .from("profiles")
             .update({ email_verified: true })
@@ -87,8 +99,7 @@ export default function AuthFinishPage() {
         }
 
         setStatus("Accès ouvert. Redirection…")
-        const next = new URLSearchParams(window.location.search).get("next")
-        router.replace(next?.startsWith("/") ? next : "/onboarding")
+        router.replace(preferredNext)
         router.refresh()
       } catch (e) {
         const message =
@@ -98,7 +109,7 @@ export default function AuthFinishPage() {
         setStatus(message)
         router.replace(
           `/login?error=auth_callback&confirmed=1&msg=${encodeURIComponent(
-            `${message} Connectez-vous avec votre mot de passe — l’accès s’ouvre directement.`
+            `${message} Utilisez « Mot de passe oublié » pour retrouver l’accès.`
           )}`
         )
       }

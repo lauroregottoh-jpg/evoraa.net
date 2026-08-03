@@ -10,6 +10,7 @@ import { StoryJourneyCard } from "@/components/home/StoryJourneyCard";
 import { TestimonialsCarousel } from "@/components/marketing/TestimonialsCarousel";
 import { ShareRecommendSection } from "@/components/marketing/ShareRecommendSection";
 import { MagneticButton } from "@/components/ui/magnetic-button";
+import { AuthHashCatcher } from "@/components/auth/AuthHashCatcher";
 import {
   ArrowRight,
   Check,
@@ -120,6 +121,7 @@ export default function Home() {
 
   return (
     <div ref={containerRef} className="min-h-screen bg-background selection:bg-primary/20 overflow-hidden">
+      <AuthHashCatcher />
       <CinematicNavbar />
 
       <div className="relative">

@@ -70,12 +70,12 @@ export function welcomeEmailHtml(input: {
   const name = input.firstName.trim() || "ami(e)"
   return brandedEmailShell({
     title: `Bienvenue, ${name}`,
-    preheader: "Votre espace Keliaa est prêt — continuez votre inscription.",
+    preheader: "Votre espace Keliaa vous attend — connectez-vous pour continuer.",
     bodyHtml: `
       <p>Merci d’avoir rejoint <strong>Keliaa</strong>.</p>
-      <p>Ici, on ne multiplie pas les matchs superficiels. On aide des célibataires chrétiens à avancer avec clarté : foi, valeurs, communication et projet de foyer.</p>
-      <p><strong>Prochaine étape :</strong> confirmer votre email (si ce n’est pas déjà fait), puis compléter votre profil et vos questionnaires de discernement.</p>
-      <p>Plus votre profil est clair, plus le Matching KELIAA™ devient pertinent.</p>
+      <p>Ici, des célibataires chrétiens sérieux s’engagent vers le mariage, dans un cadre éthique fondé sur la foi, les valeurs et le respect.</p>
+      <p><strong>Pour accéder à votre espace :</strong> utilisez le bouton ci-dessous, puis connectez-vous avec <em>le même email et le mot de passe</em> choisis à l’inscription.</p>
+      <p>Si la connexion affiche « incorrect », cliquez sur <strong>Mot de passe oublié</strong> — un lien KELIAA vous permettra d’en choisir un nouveau.</p>
     `,
     ctaLabel: "Me connecter à mon espace",
     ctaHref: `${input.appUrl}/login?welcome=1`,
@@ -110,6 +110,23 @@ export function subscriptionReminderEmailHtml(input: {
     `,
     ctaLabel: "Gérer mon Alliance",
     ctaHref: `${input.appUrl}/billing`,
+  })
+}
+
+export function passwordResetEmailHtml(input: {
+  appUrl: string
+  resetHref: string
+}) {
+  return brandedEmailShell({
+    title: "Réinitialisez votre mot de passe",
+    preheader: "Lien sécurisé KELIAA pour créer un nouveau mot de passe.",
+    bodyHtml: `
+      <p>Vous avez demandé à réinitialiser le mot de passe de votre compte <strong>Keliaa</strong>.</p>
+      <p>Cliquez sur le bouton ci-dessous. Vous pourrez alors choisir un nouveau mot de passe et accéder à votre espace membre.</p>
+      <p style="font-size:13px;color:#6B7280">Si vous n’êtes pas à l’origine de cette demande, ignorez cet email.</p>
+    `,
+    ctaLabel: "Choisir un nouveau mot de passe",
+    ctaHref: input.resetHref,
   })
 }
 

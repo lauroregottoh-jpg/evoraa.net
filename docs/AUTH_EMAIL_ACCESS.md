@@ -1,29 +1,31 @@
-# Auth email — réglages Supabase (accès espace membre)
+# Auth email — réglages Supabase (keliaa.org)
 
-Si le mail arrive mais le clic n’ouvre pas l’espace :
+## URLs (Authentication → URL Configuration)
 
-## 1. URLs Auth (Supabase → Authentication → URL Configuration)
+**Site URL** : `https://keliaa.org`
 
-- **Site URL** : `https://evoraa-net.vercel.app` *(ou `https://keliaa.org` si le domaine pointe déjà vers Vercel)*
-- **Redirect URLs** (ajouter toutes) :
-  - `https://evoraa-net.vercel.app/auth/callback`
-  - `https://evoraa-net.vercel.app/auth/finish`
-  - `https://keliaa.org/auth/callback`
-  - `https://keliaa.org/auth/finish`
-  - `http://localhost:3000/auth/callback`
-  - `http://localhost:3000/auth/finish`
+**Redirect URLs** (toutes) :
 
-## 2. Template Confirm signup
+- `https://keliaa.org/auth/callback`
+- `https://keliaa.org/auth/finish`
+- `https://keliaa.org/reset-password`
+- `https://evoraa-net.vercel.app/auth/callback`
+- `https://evoraa-net.vercel.app/auth/finish`
+- `https://evoraa-net.vercel.app/reset-password`
 
-Coller le HTML de `docs/SUPABASE_CONFIRM_EMAIL.html`.
+## Template Confirm signup
 
-Le bouton doit utiliser :
+Coller `docs/SUPABASE_CONFIRM_EMAIL.html`.
+
+Bouton :
 
 `{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=signup`
 
-Pas seulement `{{ .ConfirmationURL }}` (souvent la session cookie n’est pas posée).
+## Mot de passe oublié
 
-## 3. Contournement immédiat
+L’app envoie maintenant l’email **via Resend au nom de KELIAA** (plus le mail générique « Supabase »).
 
-Même sans cliquer le lien : aller sur **/login**, taper email + mot de passe.
-L’app active le compte et ouvre l’onboarding / dashboard.
+## Compte déjà existant
+
+Si tu te réinscris avec le même email, Supabase **ne change pas** le mot de passe.
+→ Utiliser **Mot de passe oublié**, puis te connecter.

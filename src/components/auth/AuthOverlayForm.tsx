@@ -147,7 +147,7 @@ export function AuthOverlayForm({ initialMode = "login" }: { initialMode?: Mode 
           <p className="text-sm text-white/85">
             {mode === "login"
               ? "Retrouvez votre espace sécurisé"
-              : "Rejoignez une communauté de discernement"}
+              : "Rejoignez une communauté de célibataires chrétiens sérieux, engagés à se marier"}
           </p>
         </div>
 

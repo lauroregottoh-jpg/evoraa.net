@@ -104,7 +104,16 @@ export async function loginAction(formData: FormData) {
       return {
         error:
           unlocked.error ||
-          "Votre email n’est pas encore confirmé. Réessayez dans un instant, ou contactez le support.",
+          "Votre email n’est pas encore confirmé. Utilisez « Mot de passe oublié » puis reconnectez-vous.",
+      }
+    }
+    if (
+      msg.includes("invalid login credentials") ||
+      msg.includes("invalid_credentials")
+    ) {
+      return {
+        error:
+          "Email ou mot de passe incorrect. Si vous venez de vous réinscrire avec le même email, le compte existait déjà : utilisez « Mot de passe oublié » pour en créer un nouveau.",
       }
     }
     return { error: error.message }
@@ -171,7 +180,26 @@ export async function registerAction(formData: FormData) {
   })
 
   if (error) {
+    const msg = error.message.toLowerCase()
+    if (
+      msg.includes("already") ||
+      msg.includes("registered") ||
+      msg.includes("exists")
+    ) {
+      return {
+        error:
+          "Un compte existe déjà avec cet email. Connectez-vous, ou utilisez « Mot de passe oublié » si vous ne retrouvez pas le mot de passe.",
+      }
+    }
     return { error: error.message }
+  }
+
+  // Email déjà pris : Supabase renvoie un user sans identities (sans vraie création)
+  if (data.user && (data.user.identities?.length ?? 0) === 0) {
+    return {
+      error:
+        "Un compte existe déjà avec cet email. Connectez-vous, ou utilisez « Mot de passe oublié » pour créer un nouveau mot de passe.",
+    }
   }
 
   if (data.user) {
