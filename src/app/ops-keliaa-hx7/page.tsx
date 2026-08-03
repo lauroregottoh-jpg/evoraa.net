@@ -1,5 +1,6 @@
 import { AdminConsole } from "@/components/admin/AdminConsole"
 import { getAdminDashboardData } from "@/app/actions/admin"
+import { logoutAction } from "@/app/actions/auth"
 import Link from "next/link"
 import { OPS_CONSOLE_PATH } from "@/lib/admin/consolePath"
 
@@ -21,15 +22,25 @@ export default async function OpsConsolePage() {
           <p className="text-sm text-muted-foreground">
             {data.error || "Connectez-vous avec un compte habilité."}
           </p>
-          <Link
-            href={`/login?next=${encodeURIComponent(OPS_CONSOLE_PATH)}`}
-            className="text-primary underline text-sm inline-block mr-3"
-          >
-            Se connecter
-          </Link>
-          <Link href="/dashboard" className="text-primary underline text-sm inline-block">
-            Espace membre
-          </Link>
+          <p className="text-[11px] text-muted-foreground">
+            Console : {OPS_CONSOLE_PATH}
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <Link
+              href={`/login?next=${encodeURIComponent(OPS_CONSOLE_PATH)}`}
+              className="text-primary underline text-sm"
+            >
+              Se connecter
+            </Link>
+            <Link href="/dashboard" className="text-primary underline text-sm">
+              Espace membre
+            </Link>
+            <form action={logoutAction}>
+              <button type="submit" className="text-primary underline text-sm">
+                Se déconnecter
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     )

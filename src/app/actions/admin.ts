@@ -4,8 +4,9 @@ import { createClient } from "@/utils/supabase/server"
 import { createAdminClient } from "@/utils/supabase/admin"
 import { revalidatePath } from "next/cache"
 import {
-  isFullAdmin,
-  isStaffRole,
+  canAccessOpsConsole,
+  canFullAdminOps,
+  isOpsAdminEmail,
   OPS_CONSOLE_PATH,
   type StaffRole,
 } from "@/lib/admin/consolePath"
@@ -29,22 +30,42 @@ async function requireAdmin() {
     .eq("user_id", user.id)
     .maybeSingle()
 
-  if (!isStaffRole(profile?.role)) {
-    return { error: "Acces staff requis." as string, supabase: null, user: null, role: null }
+  if (!canAccessOpsConsole({ role: profile?.role, email: user.email })) {
+    return {
+      error: `Acces staff requis. (compte: ${user.email || "inconnu"}, role: ${profile?.role || "aucun"})` as string,
+      supabase: null,
+      user: null,
+      role: null,
+    }
+  }
+
+  // Auto-répare le rôle DB pour l'email principal (évite les boucles dashboard).
+  if (isOpsAdminEmail(user.email) && profile?.role !== "admin") {
+    try {
+      const admin = createAdminClient()
+      await admin
+        .from("profiles")
+        .update({ role: "admin" })
+        .eq("user_id", user.id)
+    } catch {
+      /* best-effort */
+    }
   }
 
   return {
     error: undefined as string | undefined,
     supabase,
     user,
-    role: (profile?.role as string) || null,
+    role: isOpsAdminEmail(user.email)
+      ? "admin"
+      : ((profile?.role as string) || null),
   }
 }
 
 async function requireFullAdmin() {
   const gate = await requireAdmin()
   if (gate.error || !gate.supabase) return gate
-  if (!isFullAdmin(gate.role)) {
+  if (!canFullAdminOps({ role: gate.role, email: gate.user?.email })) {
     return { ...gate, error: "Reserve a l'administrateur principal." }
   }
   return gate

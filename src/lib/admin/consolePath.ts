@@ -7,6 +7,26 @@ export const OPS_CONSOLE_PATH = "/ops-keliaa-hx7" as const
 /** Ancien chemin public — doit rester fermé (404). */
 export const LEGACY_ADMIN_PATH = "/admin" as const
 
+/**
+ * Emails toujours traités comme admin (filet de secours si `profiles.role`
+ * n'est pas lu correctement en middleware / RLS).
+ * Surcharge possible : OPS_ADMIN_EMAILS=a@x.com,b@y.com
+ */
+const DEFAULT_OPS_ADMIN_EMAILS = ["lauroregottoh@gmail.com"]
+
+export function getOpsAdminEmails(): string[] {
+  const fromEnv = (process.env.OPS_ADMIN_EMAILS || "")
+    .split(",")
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean)
+  return [...new Set([...DEFAULT_OPS_ADMIN_EMAILS, ...fromEnv])]
+}
+
+export function isOpsAdminEmail(email: string | null | undefined): boolean {
+  if (!email) return false
+  return getOpsAdminEmails().includes(email.trim().toLowerCase())
+}
+
 export const STAFF_ROLES = [
   "admin",
   "moderator",
@@ -34,9 +54,31 @@ export const STAFF_ROLE_DESCRIPTION: Record<StaffRole, string> = {
 }
 
 export function isStaffRole(role: string | null | undefined): boolean {
-  return role === "admin" || role === "moderator" || role === "editor" || role === "coach"
+  const r = String(role || "")
+    .trim()
+    .toLowerCase()
+  return r === "admin" || r === "moderator" || r === "editor" || r === "coach"
 }
 
 export function isFullAdmin(role: string | null | undefined): boolean {
-  return role === "admin"
+  return String(role || "")
+    .trim()
+    .toLowerCase() === "admin"
+}
+
+/** Rôle DB OU email allowlist → accès console. */
+export function canAccessOpsConsole(input: {
+  role?: string | null
+  email?: string | null
+}): boolean {
+  if (isOpsAdminEmail(input.email)) return true
+  return isStaffRole(input.role)
+}
+
+export function canFullAdminOps(input: {
+  role?: string | null
+  email?: string | null
+}): boolean {
+  if (isOpsAdminEmail(input.email)) return true
+  return isFullAdmin(input.role)
 }

@@ -1,7 +1,10 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 import { resolveSupabaseAnonKey, resolveSupabaseUrl } from '@/lib/config/supabase'
-import { isStaffRole, OPS_CONSOLE_PATH } from '@/lib/admin/consolePath'
+import {
+  canAccessOpsConsole,
+  OPS_CONSOLE_PATH,
+} from '@/lib/admin/consolePath'
 
 const AUTH_ROUTES = ['/login', '/register', '/forgot-password', '/reset-password']
 
@@ -96,7 +99,10 @@ export async function updateSession(request: NextRequest) {
       .maybeSingle()
 
     const nextParam = request.nextUrl.searchParams.get('next') || ''
-    if (nextParam.startsWith(OPS_CONSOLE_PATH) && isStaffRole(profile?.role)) {
+    if (
+      nextParam.startsWith(OPS_CONSOLE_PATH) &&
+      canAccessOpsConsole({ role: profile?.role, email: user.email })
+    ) {
       return redirectWithCookies(OPS_CONSOLE_PATH)
     }
 
@@ -139,13 +145,33 @@ export async function updateSession(request: NextRequest) {
   }
 
   if (user && isAdminRoute) {
+    // Filet email : même si la lecture de profiles.role échoue, le principal passe.
+    if (canAccessOpsConsole({ role: null, email: user.email })) {
+      return supabaseResponse
+    }
+
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('user_id', user.id)
       .maybeSingle()
 
-    if (!isStaffRole(profile?.role)) {
+    if (!canAccessOpsConsole({ role: profile?.role, email: user.email })) {
+      // Ne pas renvoyer silencieusement au dashboard : message explicite.
+      const url = request.nextUrl.clone()
+      url.pathname = OPS_CONSOLE_PATH
+      url.search = '?denied=1'
+      // Si déjà sur la console avec denied, laisser la page afficher l'erreur
+      if (pathname === OPS_CONSOLE_PATH && request.nextUrl.searchParams.get('denied') === '1') {
+        return supabaseResponse
+      }
+      if (pathname === OPS_CONSOLE_PATH) {
+        const deny = NextResponse.redirect(url)
+        supabaseResponse.cookies.getAll().forEach((cookie) => {
+          deny.cookies.set(cookie.name, cookie.value)
+        })
+        return deny
+      }
       return redirectWithCookies('/dashboard')
     }
   }
