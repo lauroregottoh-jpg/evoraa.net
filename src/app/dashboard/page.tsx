@@ -108,7 +108,7 @@ export default async function DashboardPage() {
         <div className="space-y-3">
           <div className="flex items-end justify-between gap-3 px-1">
             <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
-              Bibliothèque du jour
+              2 contenus du jour · formats en alternance
             </p>
             <Link
               href="/inspiration"

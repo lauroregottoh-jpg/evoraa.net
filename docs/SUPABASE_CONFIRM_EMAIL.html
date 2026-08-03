@@ -1,7 +1,9 @@
 <!--
   Supabase → Authentication → Email Templates → Confirm signup
   Subject: Confirmez votre email — Keliaa
-  Ne remplace PAS {{ .ConfirmationURL }} — Supabase l'injecte.
+
+  IMPORTANT : utilisez TokenHash (ci-dessous), pas seulement {{ .ConfirmationURL }},
+  pour que le lien ouvre bien la session sur Keliaa.
 -->
 <!DOCTYPE html>
 <html lang="fr">
@@ -25,13 +27,16 @@
             <td style="padding:28px">
               <h1 style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:22px;line-height:1.3;color:#1F4B3A">Confirmez votre adresse email</h1>
               <p style="font-size:15px;line-height:1.65;color:#333333">Merci de vous être inscrit(e) sur <strong>Keliaa</strong>.</p>
-              <p style="font-size:15px;line-height:1.65;color:#333333">Pour activer votre compte et accéder à votre espace membre, cliquez sur le bouton ci-dessous :</p>
+              <p style="font-size:15px;line-height:1.65;color:#333333">Pour activer votre compte et accéder à votre espace membre, cliquez sur le bouton :</p>
               <p style="margin:28px 0 8px;text-align:center">
-                <a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#1F4B3A;color:#ffffff;text-decoration:none;font-family:Georgia,'Times New Roman',serif;font-size:16px;font-weight:700;padding:14px 28px;border-radius:12px">
-                  Confirmer mon email
+                <a href="{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=signup" style="display:inline-block;background:#1F4B3A;color:#ffffff;text-decoration:none;font-family:Georgia,'Times New Roman',serif;font-size:16px;font-weight:700;padding:14px 28px;border-radius:12px">
+                  Ouvrir mon espace Keliaa
                 </a>
               </p>
-              <p style="font-size:12px;line-height:1.5;color:#6B7280;margin-top:24px">Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :<br/>{{ .ConfirmationURL }}</p>
+              <p style="font-size:13px;line-height:1.55;color:#4B5563;margin-top:20px">
+                Si le bouton ne fonctionne pas, connectez-vous simplement sur Keliaa avec le même email et le mot de passe choisi à l’inscription.
+              </p>
+              <p style="font-size:12px;line-height:1.5;color:#6B7280;margin-top:16px">Lien de secours :<br/>{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=signup</p>
               <p style="margin:24px 0 0;font-size:12px;line-height:1.5;color:#6B7280;border-top:1px solid #E5E7EB;padding-top:16px">
                 L’équipe Keliaa · Discernement, respect, projet de mariage
               </p>

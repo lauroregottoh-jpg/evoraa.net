@@ -42,11 +42,25 @@ export function AuthOverlayForm({ initialMode = "login" }: { initialMode?: Mode 
   React.useEffect(() => {
     const err = searchParams.get("error");
     const msg = searchParams.get("msg");
+    const confirmed =
+      searchParams.get("confirmed") === "1" || searchParams.get("welcome") === "1";
+
+    if (confirmed) {
+      setMode("login");
+      setError("");
+      setSuccessMessage(
+        msg
+          ? decodeURIComponent(msg)
+          : "Bienvenue. Entrez votre email et mot de passe pour ouvrir votre espace membre."
+      );
+      return;
+    }
+
     if (err === "auth_callback") {
       setError(
         msg
           ? decodeURIComponent(msg)
-          : "Le lien de confirmation a échoué. Connectez-vous après avoir confirmé votre email, ou demandez un nouvel email."
+          : "Le lien de confirmation a échoué. Connectez-vous avec votre mot de passe : l’accès s’ouvre automatiquement."
       );
     }
     if (searchParams.get("reset") === "1") {

@@ -34,8 +34,9 @@ export default function InspirationPage() {
             Inspiration du jour
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
-            Pensées, conseils, défis, questions et versets — un accompagnement concret,
-            comme un conseiller qui vous parle directement. Pas de citations génériques.
+            Chaque jour, au plus <strong>deux contenus</strong> s&apos;affichent en
+            alternance (pensée, conseil, défi, question…). Vous pouvez aussi
+            parcourir la bibliothèque complète ci-dessous.
           </p>
         </header>
 

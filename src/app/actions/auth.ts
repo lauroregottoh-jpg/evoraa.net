@@ -154,7 +154,7 @@ export async function registerAction(formData: FormData) {
     email,
     password,
     options: {
-      emailRedirectTo: `${appUrl}/auth/callback`,
+      emailRedirectTo: `${appUrl}/auth/finish`,
       data: {
         first_name: firstName,
         last_name: lastName || null,
@@ -241,7 +241,7 @@ export async function resendConfirmationAction(formData: FormData) {
   const { error } = await supabase.auth.resend({
     type: "signup",
     email,
-    options: { emailRedirectTo: `${appUrl}/auth/callback` },
+    options: { emailRedirectTo: `${appUrl}/auth/finish` },
   })
 
   if (error) {

@@ -77,8 +77,8 @@ export function welcomeEmailHtml(input: {
       <p><strong>Prochaine étape :</strong> confirmer votre email (si ce n’est pas déjà fait), puis compléter votre profil et vos questionnaires de discernement.</p>
       <p>Plus votre profil est clair, plus le Matching KELIAA™ devient pertinent.</p>
     `,
-    ctaLabel: "Continuer mon inscription",
-    ctaHref: `${input.appUrl}/onboarding`,
+    ctaLabel: "Me connecter à mon espace",
+    ctaHref: `${input.appUrl}/login?welcome=1`,
   })
 }
 
