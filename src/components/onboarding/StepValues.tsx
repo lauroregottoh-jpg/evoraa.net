@@ -6,27 +6,33 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Sparkles, HeartHandshake, Home, MessageCircle } from "lucide-react";
 
 interface StepValuesProps {
-  onNext: (data: any) => void | Promise<void>;
+  onNext: (data: Record<string, unknown>) => void | Promise<void>;
   onBack: () => void;
-  defaultValues?: any;
+  defaultValues?: Record<string, unknown>;
   isSubmitting?: boolean;
 }
 
 export function StepValues({ onNext, onBack, defaultValues, isSubmitting = false }: StepValuesProps) {
   const [marriageVision, setMarriageVision] = React.useState(
-    defaultValues?.marriageVision || "Un engagement sacré, un partenariat fondé sur la prière commune et le soutien mutuel dans toutes les saisons."
+    String(
+      defaultValues?.marriageVision ||
+        "Un engagement sacré, un partenariat fondé sur la prière commune et le soutien mutuel dans toutes les saisons."
+    )
   );
   const [familyProject, setFamilyProject] = React.useState(
-    defaultValues?.familyProject || "Désir d'accueillir des enfants et d'instaurer un foyer chaleureux et hospitalier."
+    String(
+      defaultValues?.familyProject ||
+        "Désir d'accueillir des enfants et d'instaurer un foyer chaleureux et hospitalier."
+    )
   );
   const [communicationStyle, setCommunicationStyle] = React.useState(
-    defaultValues?.communicationStyle || "dialogue_doux"
+    String(defaultValues?.communicationStyle || "dialogue_doux")
   );
   const [marriageTimeline, setMarriageTimeline] = React.useState(
-    defaultValues?.marriageTimeline || "1_year"
+    String(defaultValues?.marriageTimeline || "1_year")
   );
   const [partnerChildren, setPartnerChildren] = React.useState(
-    defaultValues?.partnerChildren || "open"
+    String(defaultValues?.partnerChildren || "open")
   );
 
   const handleSubmit = (e: React.FormEvent) => {

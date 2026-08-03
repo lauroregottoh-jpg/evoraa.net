@@ -6,23 +6,23 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Calendar, Heart, User } from "lucide-react";
 
 interface StepEssentialProps {
-  onNext: (data: any) => void;
-  defaultValues?: any;
+  onNext: (data: Record<string, unknown>) => void;
+  defaultValues?: Record<string, unknown>;
 }
 
 export function StepEssential({ onNext, defaultValues }: StepEssentialProps) {
-  const [age, setAge] = React.useState(defaultValues?.age || "28");
-  const [gender, setGender] = React.useState(defaultValues?.gender || "F");
-  const [city, setCity] = React.useState(defaultValues?.city || "");
-  const [country, setCountry] = React.useState(defaultValues?.country || "Côte d'Ivoire");
-  const [practice, setPractice] = React.useState(defaultValues?.practice || "regulier");
+  const [age, setAge] = React.useState(String(defaultValues?.age || "28"));
+  const [gender, setGender] = React.useState(String(defaultValues?.gender || "F"));
+  const [city, setCity] = React.useState(String(defaultValues?.city || ""));
+  const [country, setCountry] = React.useState(String(defaultValues?.country || "Côte d'Ivoire"));
+  const [practice, setPractice] = React.useState(String(defaultValues?.practice || "regulier"));
   const [community, setCommunity] = React.useState(
-    defaultValues?.community || "Protestant Évangélique"
+    String(defaultValues?.community || "Protestant Évangélique")
   );
-  const [churchName, setChurchName] = React.useState(defaultValues?.churchName || "");
-  const [pastorName, setPastorName] = React.useState(defaultValues?.pastorName || "");
+  const [churchName, setChurchName] = React.useState(String(defaultValues?.churchName || ""));
+  const [pastorName, setPastorName] = React.useState(String(defaultValues?.pastorName || ""));
   const [pastorContact, setPastorContact] = React.useState(
-    defaultValues?.pastorContact || ""
+    String(defaultValues?.pastorContact || "")
   );
 
   const handleSubmit = (e: React.FormEvent) => {

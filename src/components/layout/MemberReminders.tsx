@@ -61,10 +61,10 @@ export function MemberReminders({
         )}
 
         {showTrial && !showRenew && (
-          <a
-            href="/compatibility"
+          <button
+            type="button"
             onClick={onNavigate("/compatibility")}
-            className="flex items-center justify-between gap-3 rounded-xl border border-accent/40 bg-accent/10 px-3 py-2 text-xs sm:text-sm cursor-pointer"
+            className="w-full flex items-center justify-between gap-3 rounded-xl border border-accent/40 bg-accent/10 px-3 py-2 text-xs sm:text-sm cursor-pointer text-left"
           >
             <span className="font-medium truncate">
               Découverte enrichie : {trialDaysRemaining} jour
@@ -72,7 +72,7 @@ export function MemberReminders({
               {trialDaysRemaining === 1 ? "" : "s"}
             </span>
             <span className="shrink-0 font-semibold text-accent">Explorer</span>
-          </a>
+          </button>
         )}
 
         {showTasks && (

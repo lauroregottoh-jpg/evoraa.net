@@ -47,16 +47,16 @@ export function getPublishedLesson(
   lessonSlug: string,
   overrides: AcademyOverrides
 ) {
-  const module = getPublishedModule(moduleId, overrides)
-  if (!module) return undefined
-  const index = module.lessons.findIndex((l) => l.slug === lessonSlug)
+  const academyModule = getPublishedModule(moduleId, overrides)
+  if (!academyModule) return undefined
+  const index = academyModule.lessons.findIndex((l) => l.slug === lessonSlug)
   if (index < 0) return undefined
-  const lesson = module.lessons[index]
+  const lesson = academyModule.lessons[index]
   return {
-    module,
+    module: academyModule,
     lesson,
     index,
-    prev: index > 0 ? module.lessons[index - 1] : null,
-    next: index < module.lessons.length - 1 ? module.lessons[index + 1] : null,
+    prev: index > 0 ? academyModule.lessons[index - 1] : null,
+    next: index < academyModule.lessons.length - 1 ? academyModule.lessons[index + 1] : null,
   }
 }
