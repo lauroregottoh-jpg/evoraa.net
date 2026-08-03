@@ -2,15 +2,11 @@
 
 import { revalidatePath } from "next/cache"
 import { createClient } from "@/utils/supabase/server"
-
-const REASON_LABELS: Record<string, string> = {
-  propos_deplaces:
-    "Propos déplacés, impatients ou contraires au respect chrétien",
-  authenticite_suspecte: "Doute sur la véracité du profil ou des photos",
-  sollicitation_commerciale:
-    "Sollicitation commerciale ou demande financière suspecte",
-  pression_externe: "Pression insistante pour échanger hors de Keliaa",
-}
+import {
+  labelForReason,
+  MEMBER_REPORT_REASONS,
+} from "@/lib/admin/moderationCatalog"
+import { OPS_CONSOLE_PATH } from "@/lib/admin/consolePath"
 
 export async function submitSafetyReportAction(payload: {
   reportedUserId: string
@@ -32,9 +28,11 @@ export async function submitSafetyReportAction(payload: {
   }
 
   const label =
-    REASON_LABELS[payload.reasonCode] || payload.reasonCode || "Autre motif"
+    labelForReason(MEMBER_REPORT_REASONS, payload.reasonCode) ||
+    payload.reasonCode ||
+    "Autre motif"
   const details = (payload.details || "").trim()
-  const reason = details ? `${label} — ${details}` : label
+  const reason = details ? `[${payload.reasonCode}] ${label} — ${details}` : `[${payload.reasonCode}] ${label}`
 
   const { error } = await supabase.from("reports").insert({
     reporter_id: user.id,
@@ -45,7 +43,8 @@ export async function submitSafetyReportAction(payload: {
 
   if (error) return { error: error.message }
 
-  revalidatePath("/admin")
+  revalidatePath(OPS_CONSOLE_PATH)
   revalidatePath("/moderation")
+  revalidatePath("/messages")
   return { success: true }
 }

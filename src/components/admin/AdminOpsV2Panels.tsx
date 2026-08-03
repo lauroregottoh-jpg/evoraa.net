@@ -31,6 +31,7 @@ import {
   type YoutubeConfig,
 } from "@/lib/admin/opsRules"
 import { cn } from "@/utils/cn"
+import { PendingProfilesQueue } from "@/components/admin/PendingProfilesQueue"
 
 type UserRow = {
   id: string
@@ -281,7 +282,15 @@ export function ProfilesHubPanel({
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <KpiCard label="En attente" value={pending.length} tone="gold" />
+        <button
+          type="button"
+          className="text-left"
+          onClick={() =>
+            document.getElementById("hub-pending")?.scrollIntoView({ behavior: "smooth" })
+          }
+        >
+          <KpiCard label="En attente — cliquer" value={pending.length} tone="gold" />
+        </button>
         <KpiCard label="Avec avertissements" value={reported.length} />
         <KpiCard label="Pénalisés" value={sanctioned.length} tone="red" />
         <KpiCard
@@ -289,6 +298,12 @@ export function ProfilesHubPanel({
           value={recommendations.filter((r) => r.status === "pending").length}
           tone="green"
         />
+      </div>
+
+      <div id="hub-pending">
+        <SectionCard title={`File d’attente — ${pending.length} profil(s)`}>
+          <PendingProfilesQueue users={pending} busy={busy} run={run} />
+        </SectionCard>
       </div>
 
       <SectionCard title="Recommandations pasteur / responsable">

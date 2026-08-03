@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { submitSafetyReportAction } from "@/app/actions/reports";
+import { MEMBER_REPORT_REASONS } from "@/lib/admin/moderationCatalog";
 
 interface SafetyReportModalProps {
   partnerName: string;
@@ -81,10 +82,11 @@ export function SafetyReportModal({
                 onChange={(e) => setReason(e.target.value)}
                 className="w-full h-11 px-3.5 rounded-xl bg-background border border-border/80 text-sm text-foreground focus:ring-destructive"
               >
-                <option value="propos_deplaces">Propos déplacés, impatients ou contraires au respect chrétien</option>
-                <option value="authenticite_suspecte">Doute sur la véracité du profil ou des photos</option>
-                <option value="sollicitation_commerciale">Sollicitation commerciale ou demande financière suspecte</option>
-                <option value="pression_externe">Pression insistante pour échanger hors de Keliaa</option>
+                {MEMBER_REPORT_REASONS.map((r) => (
+                  <option key={r.id} value={r.id}>
+                    {r.label}
+                  </option>
+                ))}
               </select>
             </div>
 

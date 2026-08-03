@@ -47,6 +47,8 @@ import {
 } from "@/components/admin/AdminOpsV2Panels"
 import { MatchingIntelligencePanel } from "@/components/admin/AdminMatchingIntelligence"
 import { AdminStaffTeamPanel } from "@/components/admin/AdminStaffTeamPanel"
+import { PendingProfilesQueue } from "@/components/admin/PendingProfilesQueue"
+import { PHOTO_REJECT_REASONS } from "@/lib/admin/moderationCatalog"
 import {
   BictorysSandboxPanel,
   PaymentsAuditPanel,
@@ -580,24 +582,47 @@ export function AdminConsole(props: Props) {
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={ph.photo_url} alt="" className="w-full aspect-square object-cover" />
-                  <div className="p-3 flex gap-2">
-                    <Button
-                      size="sm"
-                      className="flex-1"
-                      disabled={busy === ph.id}
-                      onClick={() => run(ph.id, () => adminModeratePhoto(ph.id, "approved"))}
+                  <div className="p-3 space-y-2">
+                    <select
+                      id={`photo-reason-${ph.id}`}
+                      className="w-full rounded-xl border border-border bg-background px-2 py-1.5 text-[11px]"
+                      defaultValue={PHOTO_REJECT_REASONS[0].id}
                     >
-                      OK
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="flex-1"
-                      disabled={busy === ph.id}
-                      onClick={() => run(ph.id, () => adminModeratePhoto(ph.id, "rejected"))}
-                    >
-                      Refuser
-                    </Button>
+                      {PHOTO_REJECT_REASONS.map((r) => (
+                        <option key={r.id} value={r.id}>
+                          {r.label}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        className="flex-1"
+                        disabled={busy === ph.id}
+                        onClick={() => run(ph.id, () => adminModeratePhoto(ph.id, "approved"))}
+                      >
+                        OK
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="flex-1"
+                        disabled={busy === ph.id}
+                        onClick={() => {
+                          const sel = document.getElementById(
+                            `photo-reason-${ph.id}`
+                          ) as HTMLSelectElement | null
+                          const code = sel?.value || PHOTO_REJECT_REASONS[0].id
+                          const label =
+                            PHOTO_REJECT_REASONS.find((r) => r.id === code)?.label || code
+                          return run(ph.id, () =>
+                            adminModeratePhoto(ph.id, "rejected", label)
+                          )
+                        }}
+                      >
+                        Refuser
+                      </Button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -656,45 +681,7 @@ export function AdminConsole(props: Props) {
           )}
 
           {modTab === "pending" && (
-            <div className="rounded-2xl border border-border bg-card shadow-sm divide-y divide-border">
-              {pendingUsers.length === 0 && (
-                <p className="p-5 text-sm text-muted-foreground">Aucun profil pending.</p>
-              )}
-              {pendingUsers.map((u) => (
-                <div
-                  key={u.id}
-                  className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
-                >
-                  <div>
-                    <p className="font-semibold text-sm">{u.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {u.city} · {u.completion}%
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      disabled={busy === u.id}
-                      onClick={() =>
-                        run(u.id, () => adminUpdateModerationStatus(u.id, "approved"))
-                      }
-                    >
-                      Approuver
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      disabled={busy === u.id}
-                      onClick={() =>
-                        run(u.id, () => adminUpdateModerationStatus(u.id, "rejected"))
-                      }
-                    >
-                      Rejeter
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <PendingProfilesQueue users={pendingUsers} busy={busy} run={run} />
           )}
         </div>
       )}
@@ -703,24 +690,36 @@ export function AdminConsole(props: Props) {
       {nav === "alliance" && (
         <div className="space-y-6">
           <div>
-            <h1 className="font-serif text-3xl font-bold">Alliance & paiements</h1>
+            <h1 className="font-serif text-3xl font-bold">Alliance, Boosts & paiements</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Abonnements, revenus, renouvellements J-7.
+              Abonnements Alliance, packs Boost (visibilite), revenus et renouvellements.
             </p>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            <KpiCard label="Alliance" value={props.retention.activeAlliance} tone="green" />
+            <KpiCard label="Alliance actives" value={props.retention.activeAlliance} tone="green" />
             <KpiCard label="Legacy 2 500" value={props.retention.activeLegacyPremium} />
             <KpiCard
-              label="Revenus"
+              label="Revenus Alliance (estim.)"
               value={`${props.stats.revenueXof.toLocaleString("fr-FR")} F`}
               tone="gold"
+              hint="Paiements completed — majoritairement Alliance tant que les Boosts ne sont pas en ligne"
             />
             <KpiCard
-              label="J-7 à rappeler"
-              value={props.retention.renewalsDue7d}
-              tone={props.retention.renewalsDue7d > 0 ? "red" : "default"}
+              label="Boosts vendus"
+              value={0}
+              hint="Paiement Boost encore « bientôt » côté membre — KPI prêt"
             />
+          </div>
+          <div className="rounded-xl border border-border bg-card px-4 py-3 text-xs text-muted-foreground space-y-1.5">
+            <p>
+              <strong className="text-foreground">Séparation produits :</strong> Alliance =
+              abonnement mensuel ({PLANS.premium_plus.amountXof.toLocaleString("fr-FR")} FCFA).
+              Boosts = packs ponctuels 1 500 / 3 000 / 5 000 FCFA (24h / 3j / 7j) — affichage
+              commercial déjà prêt, checkout Boost à brancher ensuite.
+            </p>
+            <p>
+              J-7 à rappeler : <strong>{props.retention.renewalsDue7d}</strong>
+            </p>
           </div>
           <p className="text-xs rounded-xl border border-border bg-card px-3 py-2">
             Paiements démo :{" "}
@@ -780,6 +779,12 @@ export function AdminConsole(props: Props) {
       {/* ——— 6. MATCHING INTELLIGENCE ——— */}
       {nav === "matching" && (
         <div className="space-y-8">
+          <div className="rounded-xl border border-border bg-card px-4 py-3 text-sm text-muted-foreground leading-relaxed">
+            <strong className="text-foreground">Matching Intelligence</strong> = où le moteur
+            peine (tests incomplets, axes faibles, équilibre H/F, âge). Utilisez les campagnes /
+            messages pour relancer les membres concernés. Les KPI ci-dessous mesurent
+            l’activité réelle (matches, conversations).
+          </div>
           <MatchingIntelligencePanel
             intelligence={props.matchingIntelligence}
             settings={props.settings}
@@ -863,9 +868,11 @@ export function AdminConsole(props: Props) {
             <div>
               <h1 className="font-serif text-3xl font-bold">Académie</h1>
               <p className="text-sm text-muted-foreground mt-1">
-                Éditer titres, résumés, vidéos, exercices ·{" "}
+                Éditer titres, sous-titres, résumés, URL vidéo, exercices, points clés ·{" "}
                 {ACADEMY_MODULES.length} modules ·{" "}
-                {ACADEMY_MODULES.reduce((n, m) => n + m.lessons.length, 0)} leçons
+                {ACADEMY_MODULES.reduce((n, m) => n + m.lessons.length, 0)} leçons. Les contenus
+                de base vivent aussi dans <code className="text-xs">docs/ACADEMIE…</code> /
+                `src/lib/academy`.
               </p>
             </div>
             <Link href="/academie-mariage" className="text-sm font-semibold text-primary">

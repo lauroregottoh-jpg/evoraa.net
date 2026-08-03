@@ -21,6 +21,22 @@ const CRISIS_PATTERNS =
 const FORBIDDEN =
   /crypto|bitcoin|parti politique|vote pour|nudes?|sexe gratuit|escort/i
 
+function extraForbiddenFromNotes(adminNotes?: string): RegExp | null {
+  if (!adminNotes) return null
+  const m = adminNotes.match(/Sujets interdits \(ops\):\s*(.+)/i)
+  if (!m?.[1]) return null
+  const parts = m[1]
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s) => s.length > 2)
+  if (!parts.length) return null
+  try {
+    return new RegExp(parts.map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|"), "i")
+  } catch {
+    return null
+  }
+}
+
 function docsDir() {
   return path.join(process.cwd(), "docs", "eva")
 }
@@ -269,7 +285,7 @@ export async function runEvaEngine(input: {
     }
   }
 
-  if (FORBIDDEN.test(question)) {
+  if (FORBIDDEN.test(question) || extraForbiddenFromNotes(input.adminNotes)?.test(question)) {
     return {
       answer:
         "Je ne peux pas traiter ce sujet ici. Sur KELIAA, on reste dans le respect, la pudeur et le discernement. En quoi puis-je vous aider concernant votre parcours relationnel ou la plateforme ?",

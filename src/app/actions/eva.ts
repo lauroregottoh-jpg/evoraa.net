@@ -119,7 +119,14 @@ export async function askEvaAction(input: {
       .eq("key", "eva_config")
       .maybeSingle()
     const cfg = parseEvaConfig(data?.value ?? DEFAULT_EVA_CONFIG)
-    adminNotes = [cfg.systemPrompt, cfg.knowledgeNotes, `Ton: ${cfg.tone}`]
+    adminNotes = [
+      cfg.systemPrompt,
+      cfg.knowledgeNotes,
+      `Ton: ${cfg.tone}`,
+      cfg.forbiddenTopics?.length
+        ? `Sujets interdits (ops): ${cfg.forbiddenTopics.join(", ")}`
+        : "",
+    ]
       .filter(Boolean)
       .join("\n\n")
       .slice(0, 4000)

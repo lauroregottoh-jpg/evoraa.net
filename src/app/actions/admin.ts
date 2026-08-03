@@ -654,17 +654,90 @@ export async function getAdminDashboardData() {
 
 export async function adminUpdateModerationStatus(
   profileId: string,
-  status: "approved" | "rejected" | "pending"
+  status: "approved" | "rejected" | "pending",
+  reasonCode?: string,
+  feedbackNote?: string
 ) {
   const gate = await requireAdmin()
   if (gate.error || !gate.supabase) return { error: gate.error || "Acces refuse." }
 
-  const { error } = await gate.supabase
-    .from("profiles")
-    .update({ moderation_status: status })
-    .eq("id", profileId)
+  const { labelForReason, PROFILE_REJECT_REASONS } = await import(
+    "@/lib/admin/moderationCatalog"
+  )
+  const reasonLabel = reasonCode
+    ? labelForReason(PROFILE_REJECT_REASONS, reasonCode)
+    : null
 
-  if (error) return { error: error.message }
+  const patch: Record<string, unknown> = {
+    moderation_status: status,
+    updated_at: new Date().toISOString(),
+  }
+  if (status === "rejected" && reasonLabel) {
+    patch.moderation_rejection_reason = reasonLabel
+  }
+  if (status === "approved") {
+    patch.moderation_rejection_reason = null
+  }
+
+  const { error } = await gate.supabase.from("profiles").update(patch).eq("id", profileId)
+
+  if (error) {
+    // Colonnes optionnelles absentes sur certains schémas → fallback simple
+    const { error: e2 } = await gate.supabase
+      .from("profiles")
+      .update({ moderation_status: status })
+      .eq("id", profileId)
+    if (e2) return { error: e2.message }
+  }
+
+  try {
+    await gate.supabase.from("moderation_events").insert({
+      profile_id: profileId,
+      kind: status === "approved" ? "profile_approved" : status === "rejected" ? "profile_rejected" : "profile_pending",
+      reason: reasonLabel || feedbackNote || null,
+      created_by: gate.user?.id || null,
+    })
+  } catch {
+    /* table optionnelle */
+  }
+
+  revalidateOps()
+  return { success: true }
+}
+
+/** Feedback ops → notification membre (best-effort). */
+export async function adminSendMemberFeedback(input: {
+  profileId: string
+  userId: string
+  message: string
+}) {
+  const gate = await requireAdmin()
+  if (gate.error || !gate.supabase) return { error: gate.error || "Acces refuse." }
+
+  const message = input.message.trim().slice(0, 2000)
+  if (!message) return { error: "Message vide." }
+
+  const { error } = await gate.supabase.from("notifications").insert({
+    user_id: input.userId,
+    title: "Message de l’équipe KELIAA",
+    body: message,
+    is_read: false,
+  })
+
+  if (error) {
+    // Fallback: event de modération seulement
+    try {
+      await gate.supabase.from("moderation_events").insert({
+        profile_id: input.profileId,
+        kind: "ops_feedback",
+        reason: message,
+        created_by: gate.user?.id || null,
+      })
+    } catch {
+      return { error: error.message }
+    }
+  }
+
   revalidateOps()
   return { success: true }
 }

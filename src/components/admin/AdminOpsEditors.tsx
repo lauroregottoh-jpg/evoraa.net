@@ -23,6 +23,7 @@ import {
   type AppTexts,
   type AutoModerationConfig,
 } from "@/lib/admin/cms"
+import { AD_PLACEMENTS } from "@/lib/admin/moderationCatalog"
 import { SectionCard } from "@/components/admin/AdminShell"
 import { cn } from "@/utils/cn"
 
@@ -372,14 +373,27 @@ export function AdsEditor({
 
   return (
     <SectionCard title="Publicités / bannières sponsorisées">
+      <div className="rounded-xl border border-border bg-secondary/40 px-3 py-2.5 text-xs text-muted-foreground mb-4 space-y-2">
+        <p className="font-semibold text-foreground text-sm">Où placer une pub ?</p>
+        <ul className="space-y-1.5 list-disc pl-4">
+          {AD_PLACEMENTS.map((p) => (
+            <li key={p.id}>
+              <strong>{p.label}</strong> — {p.where}
+              <span className="block text-[11px]">{p.format}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
       <div className="space-y-4">
         {ads.length === 0 && (
-          <p className="text-sm text-muted-foreground">Aucune pub. Ajoutez un slot.</p>
+          <p className="text-sm text-muted-foreground">Aucune pub. Ajoutez un emplacement.</p>
         )}
-        {ads.map((ad) => (
+        {ads.map((ad) => {
+          const meta = AD_PLACEMENTS.find((p) => p.id === ad.slot)
+          return (
           <div key={ad.id} className="rounded-xl border border-border p-3 space-y-2">
             <div className="flex items-center justify-between gap-2">
-              <Badge variant="outline">{ad.slot}</Badge>
+              <Badge variant="outline">{meta?.label || ad.slot}</Badge>
               <label className="text-xs flex items-center gap-1.5">
                 <input
                   type="checkbox"
@@ -390,20 +404,31 @@ export function AdsEditor({
                 Active
               </label>
             </div>
+            {meta && (
+              <p className="text-[11px] text-muted-foreground leading-relaxed">
+                {meta.where} · {meta.format}
+              </p>
+            )}
             <div className="grid sm:grid-cols-2 gap-2">
-              <select
-                value={ad.slot}
-                disabled={!isFullAdmin}
-                onChange={(e) =>
-                  update(ad.id, { slot: e.target.value as AdSlot["slot"] })
-                }
-                className="rounded-xl border border-border bg-background px-3 py-2 text-sm"
-              >
-                <option value="dashboard">Dashboard</option>
-                <option value="discover">Discover</option>
-                <option value="messages">Messages</option>
-                <option value="global">Global</option>
-              </select>
+              <div className="space-y-1">
+                <label className="text-[11px] font-semibold text-muted-foreground uppercase">
+                  Emplacement sur le site membre
+                </label>
+                <select
+                  value={ad.slot}
+                  disabled={!isFullAdmin}
+                  onChange={(e) =>
+                    update(ad.id, { slot: e.target.value as AdSlot["slot"] })
+                  }
+                  className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
+                >
+                  {AD_PLACEMENTS.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <Field
                 label="Titre"
                 value={ad.title}
@@ -445,7 +470,8 @@ export function AdsEditor({
               </Button>
             )}
           </div>
-        ))}
+          )
+        })}
       </div>
       {isFullAdmin && (
         <div className="flex flex-wrap gap-2 mt-3">
@@ -488,9 +514,22 @@ export function AutoModerationPanel({
   return (
     <div className="space-y-4">
       <SectionCard title="IA de discernement (règles automatiques)">
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs text-amber-950 mb-3 space-y-1.5 leading-relaxed">
+          <p>
+            <strong>Auto-acceptation</strong> = si un profil en attente atteint vos seuils
+            (complétion %, photo, nom…), le système peut le passer en « approuvé » sans clic
+            manuel — <em>quand vous lancez</em> l’analyse / l’application, ou si la règle est
+            active. Ce n’est <strong>pas</strong> un LLM payant.
+          </p>
+          <p>
+            <strong>Auto-OK photos principales</strong> = si la photo principale passe les
+            règles techniques (poids, nom de fichier…), elle peut être validée sans revue
+            visuelle humaine.
+          </p>
+        </div>
         <p className="text-xs text-muted-foreground mb-3">
           Analyse les profils en attente (photo, complétion, nom) et peut les accepter
-          automatiquement. Ce n’est pas un LLM facturé — règles transparentes et contrôlables.
+          automatiquement selon les curseurs ci-dessous.
         </p>
         <label className="flex items-center gap-2 text-sm font-medium mb-3">
           <input
@@ -499,12 +538,12 @@ export function AutoModerationPanel({
             disabled={!isFullAdmin}
             onChange={(e) => setCfg((c) => ({ ...c, enabled: e.target.checked }))}
           />
-          Activer l’auto-acceptation
+          Activer l’auto-acceptation des profils
         </label>
         <div className="grid sm:grid-cols-2 gap-3">
           <div>
             <label className="text-[11px] font-semibold text-muted-foreground uppercase">
-              Complétion mini ({cfg.minCompletion}%)
+              Complétion mini pour auto-valider ({cfg.minCompletion}%)
             </label>
             <input
               type="range"
@@ -517,6 +556,9 @@ export function AutoModerationPanel({
               }
               className="w-full accent-primary mt-2"
             />
+            <p className="text-[11px] text-muted-foreground mt-1">
+              Ex. 70 % = le profil doit être bien rempli avant acceptation auto.
+            </p>
           </div>
           <label className="flex items-center gap-2 text-sm self-end pb-2">
             <input
@@ -525,18 +567,24 @@ export function AutoModerationPanel({
               disabled={!isFullAdmin}
               onChange={(e) => setCfg((c) => ({ ...c, requirePhoto: e.target.checked }))}
             />
-            Photo obligatoire
+            Photo obligatoire pour auto-valider
           </label>
-          <label className="flex items-center gap-2 text-sm">
+          <label className="flex items-start gap-2 text-sm sm:col-span-2">
             <input
               type="checkbox"
+              className="mt-1"
               checked={cfg.autoApprovePhotosIfPrimary}
               disabled={!isFullAdmin}
               onChange={(e) =>
                 setCfg((c) => ({ ...c, autoApprovePhotosIfPrimary: e.target.checked }))
               }
             />
-            Auto-OK photos principales
+            <span>
+              Auto-OK des photos principales (si conformes aux règles techniques)
+              <span className="block text-[11px] text-muted-foreground mt-0.5">
+                Utile en soft launch — désactivez si vous voulez tout valider à l’œil.
+              </span>
+            </span>
           </label>
         </div>
         {isFullAdmin && (
