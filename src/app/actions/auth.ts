@@ -4,7 +4,13 @@ import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
 import { createAdminClient } from "@/utils/supabase/admin"
-import { resolveAppUrl, resolvePostAuthPath } from "@/lib/auth/appUrl"
+import { resolveAppUrl } from "@/lib/auth/appUrl"
+import {
+  canAccessOpsConsole,
+  OPS_CONSOLE_PATH,
+  resolveAuthEmail,
+  sanitizeNextPath,
+} from "@/lib/admin/consolePath"
 import { welcomeEmailHtml } from "@/lib/email/templates"
 
 /**
@@ -77,9 +83,66 @@ async function confirmEmailAndSignIn(
   }
 }
 
+async function resolveLoginDestination(input: {
+  userId: string
+  email: string | null
+  nextRaw?: string | null
+}): Promise<string> {
+  const next = sanitizeNextPath(input.nextRaw)
+
+  // Service role : rôle sûr + auto-admin pour emails allowlist
+  try {
+    const admin = createAdminClient()
+    const { data: profile } = await admin
+      .from("profiles")
+      .select("role, completion_percentage, onboarding_status")
+      .eq("user_id", input.userId)
+      .maybeSingle()
+
+    if (isOpsAdminEmailSafe(input.email) && profile?.role !== "admin") {
+      await admin.from("profiles").update({ role: "admin" }).eq("user_id", input.userId)
+    }
+
+    const role =
+      isOpsAdminEmailSafe(input.email) ? "admin" : profile?.role || null
+
+    if (canAccessOpsConsole({ role, email: input.email })) {
+      if (next?.startsWith(OPS_CONSOLE_PATH) || !next) {
+        return OPS_CONSOLE_PATH
+      }
+      // Staff peut aussi aller sur un deep-link membre s’il le demande
+      return next
+    }
+
+    if (next && !next.startsWith(OPS_CONSOLE_PATH)) {
+      return next
+    }
+
+    const completion = profile?.completion_percentage ?? 0
+    const status = profile?.onboarding_status
+    if (
+      completion < 70 ||
+      !status ||
+      status === "step1_account" ||
+      status === "step2_profile"
+    ) {
+      return "/onboarding"
+    }
+    return "/dashboard"
+  } catch {
+    if (isOpsAdminEmailSafe(input.email)) return OPS_CONSOLE_PATH
+    return "/dashboard"
+  }
+}
+
+function isOpsAdminEmailSafe(email: string | null) {
+  return canAccessOpsConsole({ role: null, email })
+}
+
 export async function loginAction(formData: FormData) {
   const email = String(formData.get("email") ?? "").trim()
   const password = String(formData.get("password") ?? "")
+  const nextRaw = String(formData.get("next") ?? "").trim()
 
   if (!email || !password) {
     return { error: "Email et mot de passe requis." }
@@ -97,7 +160,11 @@ export async function loginAction(formData: FormData) {
     if (msg.includes("email not confirmed") || msg.includes("not confirmed")) {
       const unlocked = await confirmEmailAndSignIn(supabase, email, password)
       if (unlocked.ok) {
-        const nextPath = await resolvePostAuthPath(unlocked.userId)
+        const nextPath = await resolveLoginDestination({
+          userId: unlocked.userId,
+          email: email.toLowerCase(),
+          nextRaw,
+        })
         revalidatePath("/", "layout")
         redirect(nextPath)
       }
@@ -123,7 +190,11 @@ export async function loginAction(formData: FormData) {
     return { error: "Impossible de démarrer la session." }
   }
 
-  const nextPath = await resolvePostAuthPath(data.user.id)
+  const nextPath = await resolveLoginDestination({
+    userId: data.user.id,
+    email: resolveAuthEmail(data.user) || email.toLowerCase(),
+    nextRaw,
+  })
   revalidatePath("/", "layout")
   redirect(nextPath)
 }

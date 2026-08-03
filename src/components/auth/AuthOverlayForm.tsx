@@ -164,6 +164,11 @@ export function AuthOverlayForm({ initialMode = "login" }: { initialMode?: Mode 
 
           {mode === "login" ? (
             <form onSubmit={handleLogin} className="space-y-5">
+              <input
+                type="hidden"
+                name="next"
+                value={searchParams.get("next") || ""}
+              />
               <div className="text-center space-y-1">
                 <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-accent/10 text-accent border border-accent/20 mb-2">
                   <Lock className="h-5 w-5" />

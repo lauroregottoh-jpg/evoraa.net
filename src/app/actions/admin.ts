@@ -8,6 +8,7 @@ import {
   canFullAdminOps,
   isOpsAdminEmail,
   OPS_CONSOLE_PATH,
+  resolveAuthEmail,
   type StaffRole,
 } from "@/lib/admin/consolePath"
 
@@ -24,31 +25,38 @@ async function requireAdmin() {
     return { error: "Non authentifie.." as string, supabase: null, user: null, role: null as string | null }
   }
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("user_id", user.id)
-    .maybeSingle()
+  const email = resolveAuthEmail(user)
 
-  if (!canAccessOpsConsole({ role: profile?.role, email: user.email })) {
+  // Lecture rôle via service role (bypass RLS / lecture floue middleware)
+  let role: string | null = null
+  try {
+    const admin = createAdminClient()
+    const { data: profile } = await admin
+      .from("profiles")
+      .select("role")
+      .eq("user_id", user.id)
+      .maybeSingle()
+    role = (profile?.role as string) || null
+
+    if (isOpsAdminEmail(email) && role !== "admin") {
+      await admin.from("profiles").update({ role: "admin" }).eq("user_id", user.id)
+      role = "admin"
+    }
+  } catch {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("user_id", user.id)
+      .maybeSingle()
+    role = (profile?.role as string) || null
+  }
+
+  if (!canAccessOpsConsole({ role, email })) {
     return {
-      error: `Acces staff requis. (compte: ${user.email || "inconnu"}, role: ${profile?.role || "aucun"})` as string,
+      error: `Acces staff requis. (compte: ${email || "inconnu"}, role: ${role || "aucun"}). Allez sur Paramètres → Console Admin, ou reconnectez-vous.` as string,
       supabase: null,
       user: null,
       role: null,
-    }
-  }
-
-  // Auto-répare le rôle DB pour l'email principal (évite les boucles dashboard).
-  if (isOpsAdminEmail(user.email) && profile?.role !== "admin") {
-    try {
-      const admin = createAdminClient()
-      await admin
-        .from("profiles")
-        .update({ role: "admin" })
-        .eq("user_id", user.id)
-    } catch {
-      /* best-effort */
     }
   }
 
@@ -56,16 +64,15 @@ async function requireAdmin() {
     error: undefined as string | undefined,
     supabase,
     user,
-    role: isOpsAdminEmail(user.email)
-      ? "admin"
-      : ((profile?.role as string) || null),
+    role: isOpsAdminEmail(email) ? "admin" : role,
   }
 }
 
 async function requireFullAdmin() {
   const gate = await requireAdmin()
   if (gate.error || !gate.supabase) return gate
-  if (!canFullAdminOps({ role: gate.role, email: gate.user?.email })) {
+  const email = resolveAuthEmail(gate.user)
+  if (!canFullAdminOps({ role: gate.role, email })) {
     return { ...gate, error: "Reserve a l'administrateur principal." }
   }
   return gate
@@ -122,6 +129,46 @@ export type PlatformSettingRow = {
   key: string
   value: unknown
   description: string | null
+}
+
+export async function getOpsEntryAction(): Promise<{
+  show: boolean
+  href: string
+  label: string
+}> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return { show: false, href: OPS_CONSOLE_PATH, label: "" }
+
+  const email = resolveAuthEmail(user)
+  let role: string | null = null
+  try {
+    const admin = createAdminClient()
+    const { data: profile } = await admin
+      .from("profiles")
+      .select("role")
+      .eq("user_id", user.id)
+      .maybeSingle()
+    role = (profile?.role as string) || null
+    if (isOpsAdminEmail(email) && role !== "admin") {
+      await admin.from("profiles").update({ role: "admin" }).eq("user_id", user.id)
+      role = "admin"
+    }
+  } catch {
+    /* ignore */
+  }
+
+  if (!canAccessOpsConsole({ role, email })) {
+    return { show: false, href: OPS_CONSOLE_PATH, label: "" }
+  }
+
+  return {
+    show: true,
+    href: OPS_CONSOLE_PATH,
+    label: "Ouvrir la console Admin",
+  }
 }
 
 export async function getAdminDashboardData() {

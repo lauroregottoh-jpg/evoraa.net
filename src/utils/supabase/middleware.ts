@@ -4,6 +4,7 @@ import { resolveSupabaseAnonKey, resolveSupabaseUrl } from '@/lib/config/supabas
 import {
   canAccessOpsConsole,
   OPS_CONSOLE_PATH,
+  resolveAuthEmail,
 } from '@/lib/admin/consolePath'
 
 const AUTH_ROUTES = ['/login', '/register', '/forgot-password', '/reset-password']
@@ -66,6 +67,7 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   const { pathname, search } = request.nextUrl
+  const email = resolveAuthEmail(user)
 
   const isResetPassword =
     pathname === '/reset-password' || pathname.startsWith('/reset-password/')
@@ -74,12 +76,18 @@ export async function updateSession(request: NextRequest) {
     (route) => pathname === route || pathname.startsWith(`${route}/`)
   )
   const isProtected = matchesPrefix(pathname, PROTECTED_PREFIXES)
+  const isOpsConsole =
+    pathname === OPS_CONSOLE_PATH || pathname.startsWith(`${OPS_CONSOLE_PATH}/`)
   const isAdminRoute = matchesPrefix(pathname, ADMIN_PREFIXES)
 
-  const redirectWithCookies = (path: string) => {
+  const redirectWithCookies = (path: string, keepNext = false) => {
     const url = request.nextUrl.clone()
     url.pathname = path
-    url.search = path === '/login' ? `?next=${encodeURIComponent(pathname + search)}` : ''
+    if (path === '/login') {
+      url.search = `?next=${encodeURIComponent(pathname + search)}`
+    } else if (!keepNext) {
+      url.search = ''
+    }
     const redirectResponse = NextResponse.redirect(url)
     supabaseResponse.cookies.getAll().forEach((cookie) => {
       redirectResponse.cookies.set(cookie.name, cookie.value)
@@ -91,6 +99,12 @@ export async function updateSession(request: NextRequest) {
     return redirectWithCookies('/login')
   }
 
+  // Console ops : authentifié = on LAISSE passer. Le gate rôle est sur la page
+  // (plus de redirect silencieux vers /dashboard qui masquait le problème).
+  if (user && isOpsConsole) {
+    return supabaseResponse
+  }
+
   if (user && isAuthRoute && !isResetPassword) {
     const { data: profile } = await supabase
       .from('profiles')
@@ -100,10 +114,19 @@ export async function updateSession(request: NextRequest) {
 
     const nextParam = request.nextUrl.searchParams.get('next') || ''
     if (
-      nextParam.startsWith(OPS_CONSOLE_PATH) &&
-      canAccessOpsConsole({ role: profile?.role, email: user.email })
+      nextParam.startsWith(OPS_CONSOLE_PATH) ||
+      canAccessOpsConsole({ role: profile?.role, email })
     ) {
-      return redirectWithCookies(OPS_CONSOLE_PATH)
+      // Admin principal / staff déjà loggé sur /login → console ops
+      if (
+        canAccessOpsConsole({ role: profile?.role, email }) &&
+        (nextParam.startsWith(OPS_CONSOLE_PATH) || !nextParam)
+      ) {
+        return redirectWithCookies(OPS_CONSOLE_PATH)
+      }
+      if (nextParam.startsWith(OPS_CONSOLE_PATH)) {
+        return redirectWithCookies(OPS_CONSOLE_PATH)
+      }
     }
 
     const completion = profile?.completion_percentage ?? 0
@@ -144,34 +167,18 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
-  if (user && isAdminRoute) {
-    // Filet email : même si la lecture de profiles.role échoue, le principal passe.
-    if (canAccessOpsConsole({ role: null, email: user.email })) {
-      return supabaseResponse
-    }
-
+  // /moderation uniquement : staff required
+  if (
+    user &&
+    (pathname === '/moderation' || pathname.startsWith('/moderation/'))
+  ) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
       .eq('user_id', user.id)
       .maybeSingle()
 
-    if (!canAccessOpsConsole({ role: profile?.role, email: user.email })) {
-      // Ne pas renvoyer silencieusement au dashboard : message explicite.
-      const url = request.nextUrl.clone()
-      url.pathname = OPS_CONSOLE_PATH
-      url.search = '?denied=1'
-      // Si déjà sur la console avec denied, laisser la page afficher l'erreur
-      if (pathname === OPS_CONSOLE_PATH && request.nextUrl.searchParams.get('denied') === '1') {
-        return supabaseResponse
-      }
-      if (pathname === OPS_CONSOLE_PATH) {
-        const deny = NextResponse.redirect(url)
-        supabaseResponse.cookies.getAll().forEach((cookie) => {
-          deny.cookies.set(cookie.name, cookie.value)
-        })
-        return deny
-      }
+    if (!canAccessOpsConsole({ role: profile?.role, email })) {
       return redirectWithCookies('/dashboard')
     }
   }

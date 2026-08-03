@@ -1,6 +1,6 @@
 /**
  * Chemin secret du panneau opérationnel.
- * Ne pas le publier dans la nav membre / marketing.
+ * Ne pas le publier dans la nav marketing.
  */
 export const OPS_CONSOLE_PATH = "/ops-keliaa-hx7" as const
 
@@ -8,9 +8,8 @@ export const OPS_CONSOLE_PATH = "/ops-keliaa-hx7" as const
 export const LEGACY_ADMIN_PATH = "/admin" as const
 
 /**
- * Emails toujours traités comme admin (filet de secours si `profiles.role`
- * n'est pas lu correctement en middleware / RLS).
- * Surcharge possible : OPS_ADMIN_EMAILS=a@x.com,b@y.com
+ * Emails toujours traités comme admin.
+ * Surcharge : OPS_ADMIN_EMAILS=a@x.com,b@y.com
  */
 const DEFAULT_OPS_ADMIN_EMAILS = ["lauroregottoh@gmail.com"]
 
@@ -25,6 +24,24 @@ export function getOpsAdminEmails(): string[] {
 export function isOpsAdminEmail(email: string | null | undefined): boolean {
   if (!email) return false
   return getOpsAdminEmails().includes(email.trim().toLowerCase())
+}
+
+/** Extrait l'email même si `user.email` est vide en Edge. */
+export function resolveAuthEmail(user: {
+  email?: string | null
+  user_metadata?: Record<string, unknown> | null
+  identities?: Array<{ identity_data?: Record<string, unknown> | null }> | null
+} | null | undefined): string | null {
+  if (!user) return null
+  const metaEmail = user.user_metadata?.email
+  const identityEmail = user.identities?.[0]?.identity_data?.email
+  const raw =
+    user.email ||
+    (typeof metaEmail === "string" ? metaEmail : null) ||
+    (typeof identityEmail === "string" ? identityEmail : null) ||
+    ""
+  const email = raw.trim().toLowerCase()
+  return email || null
 }
 
 export const STAFF_ROLES = [
@@ -61,12 +78,13 @@ export function isStaffRole(role: string | null | undefined): boolean {
 }
 
 export function isFullAdmin(role: string | null | undefined): boolean {
-  return String(role || "")
-    .trim()
-    .toLowerCase() === "admin"
+  return (
+    String(role || "")
+      .trim()
+      .toLowerCase() === "admin"
+  )
 }
 
-/** Rôle DB OU email allowlist → accès console. */
 export function canAccessOpsConsole(input: {
   role?: string | null
   email?: string | null
@@ -81,4 +99,13 @@ export function canFullAdminOps(input: {
 }): boolean {
   if (isOpsAdminEmail(input.email)) return true
   return isFullAdmin(input.role)
+}
+
+/** next= interne sûr après login. */
+export function sanitizeNextPath(next: string | null | undefined): string | null {
+  if (!next) return null
+  const n = next.trim()
+  if (!n.startsWith("/") || n.startsWith("//") || n.includes("://")) return null
+  if (n.length > 200) return null
+  return n
 }

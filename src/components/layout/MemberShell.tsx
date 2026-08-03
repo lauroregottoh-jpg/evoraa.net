@@ -25,6 +25,7 @@ import { ThemeToggle } from "@/components/evoraa/ThemeToggle";
 import { DevSessionSwitcher } from "@/components/dev/DevSessionSwitcher";
 import { MemberReminders } from "@/components/layout/MemberReminders";
 import { logoutAction } from "@/app/actions/auth";
+import { OpsAdminEntryBanner } from "@/components/admin/OpsAdminEntryBanner";
 
 const NAV = [
   { href: "/dashboard", label: "Accueil", icon: LayoutGrid },
@@ -289,6 +290,9 @@ export function MemberShell({
         )}
       >
         {firstName ? <p className="sr-only">Espace de {firstName}</p> : null}
+        <div className="mb-4 max-w-3xl mx-auto">
+          <OpsAdminEntryBanner />
+        </div>
         {children}
       </main>
 
