@@ -50,3 +50,6 @@ next-env.d.ts
 /skills integration de paiement/
 __MACOSX/
 .DS_Store
+
+.vercel
+.env*

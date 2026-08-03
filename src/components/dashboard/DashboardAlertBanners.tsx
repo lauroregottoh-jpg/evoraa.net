@@ -19,7 +19,7 @@ export function DashboardAlertBanners({ banners }: { banners: Banner[] }) {
 
   React.useEffect(() => {
     try {
-      const raw = localStorage.getItem("KELLIA_dash_banners")
+      const raw = localStorage.getItem("KELIAA_dash_banners")
       if (raw) setDismissed(JSON.parse(raw) as string[])
     } catch {
       /* ignore */
@@ -29,7 +29,7 @@ export function DashboardAlertBanners({ banners }: { banners: Banner[] }) {
   const dismiss = (id: string) => {
     setDismissed((prev) => {
       const next = [...prev, id]
-      localStorage.setItem("KELLIA_dash_banners", JSON.stringify(next))
+      localStorage.setItem("KELIAA_dash_banners", JSON.stringify(next))
       return next
     })
   }

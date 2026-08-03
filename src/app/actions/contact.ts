@@ -33,7 +33,7 @@ export async function submitContactAction(payload: {
   }
 
   const subjectLabel = SUBJECT_LABELS[subjectCode] || subjectCode
-  const to = process.env.CONTACT_INBOX_EMAIL || "contact@kellia.org"
+  const to = process.env.CONTACT_INBOX_EMAIL || "lauroregottoh@gmail.com"
   const html = brandedEmailShell({
     title: `Contact — ${subjectLabel}`,
     bodyHtml: `
@@ -45,7 +45,7 @@ export async function submitContactAction(payload: {
 
   const result = await sendEmailNotificationStub({
     to,
-    subject: `[KELLIA Contact] ${subjectLabel} — ${name}`,
+    subject: `[KELIAA Contact] ${subjectLabel} — ${name}`,
     html,
     replyTo: email,
   })
@@ -53,7 +53,7 @@ export async function submitContactAction(payload: {
   if ("skipped" in result && result.skipped) {
     return {
       error:
-        "L’envoi automatique n’est pas encore configuré. Écrivez-nous à contact@kellia.org avec votre message.",
+        "L’envoi automatique n’est pas encore configuré. Écrivez-nous à lauroregottoh@gmail.com avec votre message.",
     }
   }
 
@@ -64,7 +64,7 @@ export async function submitContactAction(payload: {
   // Accusé de réception membre (best-effort)
   await sendEmailNotificationStub({
     to: email,
-    subject: "Kellia — nous avons bien reçu votre message",
+    subject: "Keliaa — nous avons bien reçu votre message",
     html: contactAckEmailHtml({ name }),
   })
 

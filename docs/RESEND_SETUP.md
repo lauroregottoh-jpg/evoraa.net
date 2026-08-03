@@ -29,9 +29,9 @@ Pour être autonome à ~99 % côté code + envoi :
 | Nom | Valeur |
 |-----|--------|
 | `RESEND_API_KEY` | `re_...` |
-| `RESEND_FROM_EMAIL` | `KELLIA <onboarding@resend.dev>` *(tests)* ou `KELLIA <noreply@kellia.org>` *(prod domaine vérifié)* |
-| `CONTACT_INBOX_EMAIL` | ton email de réception contact |
-| `NEXT_PUBLIC_APP_URL` | `https://kellia.org` *(ou ton URL live exacte)* |
+| `RESEND_FROM_EMAIL` | `KELLIA <contact@keliaa.org>` *(domaine keliaa.org uniquement — pas Maison du Conseil)* |
+| `CONTACT_INBOX_EMAIL` | `lauroregottoh@gmail.com` |
+| `NEXT_PUBLIC_APP_URL` | `https://keliaa.org` *(ou ton URL live exacte)* |
 
 5. **Redeploy** le projet Vercel
 

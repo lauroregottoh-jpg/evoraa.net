@@ -10,16 +10,16 @@ export default function ConfidentialitePage() {
           Politique de confidentialité
         </h1>
         <p className="text-sm text-muted-foreground !mt-0">
-          Dernière mise à jour : 24 juillet 2026 — Plateforme KELLIA
+          Dernière mise à jour : 24 juillet 2026 — Plateforme KELIAA
         </p>
 
         <section className="space-y-3 text-sm text-foreground/90 leading-relaxed">
           <h2 className="font-serif text-xl font-semibold">1. Responsable du traitement</h2>
           <p>
-            Le responsable du traitement des données personnelles collectées via KELLIA est
+            Le responsable du traitement des données personnelles collectées via KELIAA est
             l&apos;éditeur de la plateforme. Pour exercer vos droits ou poser une question :{" "}
-            <a href="mailto:contact@KELLIA.net" className="text-primary underline underline-offset-2">
-              contact@KELLIA.net
+            <a href="mailto:contact@KELIAA.net" className="text-primary underline underline-offset-2">
+              contact@KELIAA.net
             </a>{" "}
             ou via la{" "}
             <Link href="/contact" className="text-primary underline underline-offset-2">
@@ -36,7 +36,7 @@ export default function ConfidentialitePage() {
             <li>Profil (prénom, nom, ville, adresse le cas échéant, biographie, préférences, photos)</li>
             <li>Réponses aux questionnaires de compatibilité et scores associés</li>
             <li>Messages échangés sur la plateforme</li>
-            <li>Données de paiement (références transactionnelles ; pas de numéro de carte stocké Chez Kellia)</li>
+            <li>Données de paiement (références transactionnelles ; pas de numéro de carte stocké Chez Keliaa)</li>
             <li>Signalements, logs techniques et données de sécurité</li>
             <li>Données de navigation (cookies / équivalents, selon configuration)</li>
           </ul>
@@ -64,7 +64,8 @@ export default function ConfidentialitePage() {
         <section className="space-y-3 text-sm text-foreground/90 leading-relaxed">
           <h2 className="font-serif text-xl font-semibold">5. Destinataires et sous-traitants</h2>
           <p>
-            Hébergement et base de données (ex. Supabase), paiements (Bictorys ou CinetPay), emails
+            Hébergement et base de données (ex. Supabase), paiements (prestataires Mobile Money /
+            carte), emails
             transactionnels (ex. Resend), outils d&apos;analyse éventuels, et équipes internes
             (support, coachs/conseillers, modération). Aucune vente de données personnelles à des
             tiers à des fins publicitaires.
@@ -110,7 +111,7 @@ export default function ConfidentialitePage() {
           <p>
             Mesures techniques et organisationnelles : HTTPS, contrôle d&apos;accès, politiques RLS
             côté base de données, procédures de signalement. Aucune mesure n&apos;est absolue :
-            signalez tout incident suspect à ethique@KELLIA.net.
+            signalez tout incident suspect à ethique@KELIAA.net.
           </p>
         </section>
 

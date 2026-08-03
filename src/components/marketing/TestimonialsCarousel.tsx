@@ -8,7 +8,7 @@ import { cn } from "@/utils/cn";
 const TESTIMONIALS = [
   {
     quote:
-      "Après plusieurs années sur différentes applications, je commençais à perdre espoir. Sur Kellia, j'ai enfin rencontré des personnes qui partageaient réellement ma foi et ma vision du mariage. Les conversations étaient plus profondes dès les premiers échanges.",
+      "Après plusieurs années sur différentes applications, je commençais à perdre espoir. Sur Keliaa, j'ai enfin rencontré des personnes qui partageaient réellement ma foi et ma vision du mariage. Les conversations étaient plus profondes dès les premiers échanges.",
     name: "Sarah",
     meta: "31 ans · Lomé",
   },

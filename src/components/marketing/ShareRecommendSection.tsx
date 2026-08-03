@@ -43,7 +43,7 @@ export function ShareRecommendSection({
       return;
     }
     if (navigator.share) {
-      void navigator.share({ title: "KELLIA", text: INVITE_MESSAGE, url });
+      void navigator.share({ title: "KELIAA", text: INVITE_MESSAGE, url });
     } else {
       void navigator.clipboard?.writeText(text);
       alert("Lien copié — collez-le sur Instagram ou vos réseaux.");
@@ -55,10 +55,10 @@ export function ShareRecommendSection({
       <div className="encart-kelia p-8 sm:p-12 text-center space-y-6">
         <Share2 className="h-8 w-8 text-accent mx-auto" />
         <h2 className="font-serif text-3xl sm:text-4xl font-bold text-foreground">
-          Recommandez Kellia
+          Recommandez Keliaa
         </h2>
         <p className="text-muted-foreground max-w-xl mx-auto leading-relaxed">
-          Un ami cherche une rencontre digne, alignée sur les valeurs du Royaume ? Partagez la
+          Un ami cherche une rencontre respectueuse, alignée sur les valeurs du Royaume ? Partagez la
           plateforme en un clic.
         </p>
         <div className="flex flex-wrap justify-center gap-3 pt-2">

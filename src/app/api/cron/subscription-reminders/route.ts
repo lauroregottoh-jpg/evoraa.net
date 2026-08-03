@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
       const endsAtLabel = endsAt.toLocaleDateString("fr-FR")
       const mail = await sendEmailNotificationStub({
         to: email,
-        subject: `KELLIA — ${title}`,
+        subject: `KELIAA — ${title}`,
         html: subscriptionReminderEmailHtml({
           firstName,
           appUrl,

@@ -31,15 +31,15 @@ export default function DesignSystemShowcasePage() {
             Design System & Socle UI
           </h1>
           <p className="text-muted-foreground text-lg max-w-3xl leading-relaxed font-sans">
-            Validation visuelle des tokens, de la typographie, des thèmes (Clair / Sombre), et des composants natifs d&apos;Kellia (EVA & Profil Infini) avant le développement des écrans métier.
+            Validation visuelle des tokens, de la typographie, des thèmes (Clair / Sombre), et des composants natifs d&apos;Keliaa (EVA & Profil Infini) avant le développement des écrans métier.
           </p>
         </div>
 
-        {/* 1. KELLIA / EVA Companion Component Showcase */}
+        {/* 1. KELIAA / EVA Companion Component Showcase */}
         <section className="space-y-6">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <h2 className="text-2xl font-serif font-semibold">1. L&apos;Accompagnatrice (EVA / KELLIA)</h2>
+              <h2 className="text-2xl font-serif font-semibold">1. L&apos;Accompagnatrice (EVA / KELIAA)</h2>
               <p className="text-sm text-muted-foreground">Présence bienveillante, explicative et non intrusive.</p>
             </div>
             <div className="flex gap-2">
@@ -54,7 +54,7 @@ export default function DesignSystemShowcasePage() {
             {companionVariant === "default" && (
               <EvaCompanion
                 title="EVA"
-                message="Bonjour Laure 👋 Je suis EVA. Je serai votre guide tout au long de votre parcours sur Kellia. Prenez votre temps pour découvrir la plateforme."
+                message="Bonjour Laure 👋 Je suis EVA. Je serai votre guide tout au long de votre parcours sur Keliaa. Prenez votre temps pour découvrir la plateforme."
               />
             )}
             {companionVariant === "suggestion" && (
@@ -80,7 +80,7 @@ export default function DesignSystemShowcasePage() {
               <EvaCompanion
                 title="EVA - Vérification réussie"
                 variant="reassurance"
-                message="Parfait ! Votre photo de profil respecte notre charte de dignité et de visibilité. Elle est prête pour la validation humaine."
+                message="Parfait ! Votre photo de profil respecte notre charte de respect et de visibilité. Elle est prête pour la validation humaine."
               />
             )}
           </div>
@@ -160,7 +160,7 @@ export default function DesignSystemShowcasePage() {
                 <div className="flex items-center space-x-3 pt-2">
                   <Checkbox id="charter" className="rounded-md border-border/80 text-accent data-[state=checked]:bg-accent data-[state=checked]:border-accent" />
                   <label htmlFor="charter" className="text-sm font-normal leading-relaxed cursor-pointer">
-                    J&apos;accepte la <b>Charte de bienveillance, de respect et de dignité</b> d&apos;Kellia.
+                    J&apos;accepte la <b>Charte de bienveillance et de respect</b> d&apos;Keliaa.
                   </label>
                 </div>
 

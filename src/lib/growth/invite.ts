@@ -30,4 +30,4 @@ export function buildPublicShareUrl(path = "/", utm?: Record<string, string>) {
 }
 
 export const INVITE_MESSAGE =
-  "Je te recommande KELLIA — rencontres chrétiennes fondées sur le discernement, pas sur le swipe. Rejoins-nous : "
+  "Je te recommande KELIAA — rencontres chrétiennes fondées sur le discernement, pas sur le swipe. Rejoins-nous : "

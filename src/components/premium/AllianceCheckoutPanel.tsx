@@ -217,7 +217,7 @@ export function AllianceCheckoutPanel({
         Activation après confirmation du paiement · Renouvellement manuel
       </p>
       <p className="text-center text-[11px] font-medium text-primary">
-        Bictorys &amp; CinetPay · paiement sécurisé
+        Paiement sécurisé · renouvellement manuel
       </p>
       {info && <p className="text-xs text-muted-foreground text-center">{info}</p>}
       {error && <p className="text-xs text-destructive text-center">{error}</p>}

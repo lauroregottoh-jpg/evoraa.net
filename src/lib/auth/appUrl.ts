@@ -3,11 +3,7 @@ import { headers } from "next/headers"
 
 /** URL publique stable pour liens email / redirects Auth. */
 export async function resolveAppUrl(): Promise<string> {
-  const configured = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "").trim()
-  if (configured && !configured.includes("localhost")) {
-    return configured
-  }
-
+  // Prefer the host the member actually used (keliaa.org, vercel preview, etc.)
   try {
     const h = await headers()
     const host = h.get("x-forwarded-host") || h.get("host")
@@ -17,6 +13,11 @@ export async function resolveAppUrl(): Promise<string> {
     }
   } catch {
     /* headers() indisponible hors requête */
+  }
+
+  const configured = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "").trim()
+  if (configured && !configured.includes("localhost")) {
+    return configured
   }
 
   if (process.env.VERCEL_URL) {

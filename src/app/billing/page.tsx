@@ -35,7 +35,7 @@ export default async function BillingPage() {
       <div className="max-w-3xl mx-auto space-y-6">
         <div className="space-y-2">
           <p className="text-xs font-semibold uppercase tracking-widest text-primary">Abonnement</p>
-          <h1 className="font-serif text-3xl sm:text-4xl font-bold">Votre offre KELLIA</h1>
+          <h1 className="font-serif text-3xl sm:text-4xl font-bold">Votre offre KELIAA</h1>
           <p className="text-sm text-muted-foreground">
             Gratuit pour commencer. Alliance pour accélérer — matching sur 5 piliers, sans surprise
             de renouvellement automatique.

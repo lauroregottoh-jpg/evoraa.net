@@ -149,7 +149,7 @@ export function CinematicStickyProtocol() {
             03 / Rencontre Sereine
           </span>
           <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-tight">
-            Le temps du discernement, protégé dans la dignité.
+            Le temps du discernement, protégé dans le respect.
           </h2>
           <p className="font-sans text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Le floutage par défaut préserve la pudeur jusqu&apos;au déblocage mutuel. Le bouclier de courtoisie veille sur chaque mot échangé pour vous permettre de construire votre futur foyer en toute confiance.

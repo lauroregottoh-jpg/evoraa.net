@@ -19,7 +19,7 @@ export default async function PremiumPage() {
     return (
       <MemberPage>
         <div className="max-w-lg mx-auto text-center space-y-3 py-10">
-          <h1 className="font-serif text-3xl font-bold">Alliance KELLIA</h1>
+          <h1 className="font-serif text-3xl font-bold">Alliance KELIAA</h1>
           <p className="text-sm text-muted-foreground">
             Connectez-vous pour voir les offres Alliance, Boost et modes de paiement.
           </p>

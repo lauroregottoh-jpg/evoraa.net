@@ -23,7 +23,7 @@ export function ConversationsList({
             Messages
           </Badge>
           <h1 className="text-3xl sm:text-4xl font-serif font-bold text-foreground">
-            Vos Dialogues Dignes
+            Vos Dialogues Respectueux
           </h1>
         </div>
         <Badge className="bg-primary/10 text-primary dark:text-accent border border-primary/20 rounded-full px-3 py-1">

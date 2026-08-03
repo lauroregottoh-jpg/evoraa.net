@@ -31,7 +31,7 @@ export function AdminSettings() {
           </Badge>
         </div>
         <CardDescription className="text-xs text-muted-foreground">
-          Modifiez en direct les règles éthiques et les seuils de discernement de la plateforme Kellia.
+          Modifiez en direct les règles éthiques et les seuils de discernement de la plateforme Keliaa.
         </CardDescription>
       </CardHeader>
 
@@ -71,7 +71,7 @@ export function AdminSettings() {
                     <Badge variant="outline" className="text-[10px] text-emerald-500 border-emerald-500/40">Actif</Badge>
                   </div>
                   <p className="text-[11px] text-muted-foreground mt-1">
-                    Bloquer l&apos;accès à tout profil n&apos;ayant pas signé les 4 piliers de dignité.
+                    Bloquer l&apos;accès à tout profil n&apos;ayant pas signé les 4 piliers de respect.
                   </p>
                 </div>
                 <button

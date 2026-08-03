@@ -17,7 +17,7 @@ const EVENTS = [
       "Quatre jours pour clarifier vos attentes, échanger avec d'autres célibataires sérieux, et repartir avec des outils concrets — sans pression, sans spectacle.",
   },
   {
-    title: "Soirée échanges : le rythme d'une rencontre digne",
+    title: "Soirée échanges : le rythme d'une rencontre respectueuse",
     location: "Paris 17",
     date: "28 novembre 2026 · 19h30",
     type: "Rencontre en salle",
@@ -56,7 +56,7 @@ export default function CommunityNetworkPage() {
 
         <EvaCompanion
           title="EVA — hors ligne aussi"
-          message="KELLIA collabore avec des coachs et des organisateurs de confiance pour proposer des temps forts où vous pouvez vous rencontrer en personne, sans la pression d'un rendez-vous classique."
+          message="KELIAA collabore avec des coachs et des organisateurs de confiance pour proposer des temps forts où vous pouvez vous rencontrer en personne, sans la pression d'un rendez-vous classique."
           variant="reassurance"
         />
 

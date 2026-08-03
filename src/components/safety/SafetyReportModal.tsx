@@ -84,7 +84,7 @@ export function SafetyReportModal({
                 <option value="propos_deplaces">Propos déplacés, impatients ou contraires au respect chrétien</option>
                 <option value="authenticite_suspecte">Doute sur la véracité du profil ou des photos</option>
                 <option value="sollicitation_commerciale">Sollicitation commerciale ou demande financière suspecte</option>
-                <option value="pression_externe">Pression insistante pour échanger hors de Kellia</option>
+                <option value="pression_externe">Pression insistante pour échanger hors de Keliaa</option>
               </select>
             </div>
 

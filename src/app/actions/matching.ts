@@ -290,7 +290,7 @@ export async function getCompatibilityDetail(profileId: string): Promise<{
   if (!scored) {
     return {
       error:
-        "Ce profil n'atteint pas le seuil de compatibilité recommandé, ou ne passe pas les filtres de dignité.",
+        "Ce profil n'atteint pas le seuil de compatibilité recommandé, ou ne passe pas les filtres de respect.",
     }
   }
 

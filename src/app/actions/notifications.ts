@@ -70,11 +70,11 @@ export async function markAllNotificationsReadAction() {
 }
 
 function defaultFromAddress() {
-  // Resend: onboarding@resend.dev marche sans domaine vérifié (tests).
-  // En prod : RESEND_FROM_EMAIL = "KELLIA <noreply@votredomaine.org>"
+  // Prod Keliaa : domaine vérifié chez Resend → contact@keliaa.org
+  // Fallback tests Resend sans domaine : onboarding@resend.dev
   return (
     process.env.RESEND_FROM_EMAIL?.trim() ||
-    "KELLIA <onboarding@resend.dev>"
+    "KELIAA <contact@keliaa.org>"
   )
 }
 

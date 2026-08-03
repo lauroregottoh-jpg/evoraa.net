@@ -22,7 +22,7 @@ const INITIAL_REPORTS: SafetyReport[] = [
     reporterName: "Laure Regottoh",
     reportedName: "Suspect Spam",
     reportedEmail: "suspect.spam@kellia.org",
-    reason: "Demande immédiate de numéro WhatsApp et propos familiers contraires à la Charte d'Kellia.",
+    reason: "Demande immédiate de numéro WhatsApp et propos familiers contraires à la Charte d'Keliaa.",
     status: "pending",
     timestamp: "Aujourd'hui à 14h20",
   },
@@ -52,7 +52,7 @@ export function AdminReports() {
           </Badge>
         </div>
         <CardDescription className="text-xs text-muted-foreground">
-          Gérez les alertes confidentielles remontées par les membres via le bouton de signalement digne.
+          Gérez les alertes confidentielles remontées par les membres via le bouton de signalement respectueux.
         </CardDescription>
       </CardHeader>
 

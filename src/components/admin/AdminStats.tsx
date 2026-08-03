@@ -121,7 +121,7 @@ export function AdminStats() {
           </div>
 
           <div className="space-y-2 p-4 rounded-xl bg-secondary/40 border border-border/40">
-            <span className="text-xs font-semibold text-muted-foreground">Rétention en Salon Digne</span>
+            <span className="text-xs font-semibold text-muted-foreground">Rétention en Salon Respectueux</span>
             <div className="flex items-baseline justify-between">
               <span className="text-xl font-serif font-bold text-foreground">84.1%</span>
               <span className="text-[10px] text-primary font-semibold">Dialogue serein</span>

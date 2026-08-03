@@ -17,8 +17,8 @@ PAYMENTS_DEMO_MODE=true              # false + CinetPay si encaissement réel
 # CINETPAY_SITE_ID=
 # CINETPAY_SECRET_KEY=
 # RESEND_API_KEY=
-# RESEND_FROM_EMAIL=KELLIA <noreply@KELLIA.net>
-# CONTACT_INBOX_EMAIL=contact@KELLIA.net
+# RESEND_FROM_EMAIL=KELLIA <contact@keliaa.org>
+# CONTACT_INBOX_EMAIL=lauroregottoh@gmail.com
 # SUPABASE_DB_URL=...                # seulement pour run_migration.ps1
 ```
 

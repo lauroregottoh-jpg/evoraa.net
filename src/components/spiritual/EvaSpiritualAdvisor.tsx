@@ -18,7 +18,7 @@ const PREDEFINED_TOPICS: QAPair[] = [
   {
     question: "Quand et comment aborder la question des finances dans le couple ?",
     answer:
-      "Sur Kellia, nous conseillons d'aborder la question de la gestion matérielle dès que le discernement s'oriente vers un projet de fiançailles. Parlez-en non pas sous l'angle de l'avoir, mais sous l'angle de l'intendance chrétienne et de la générosité.",
+      "Sur Keliaa, nous conseillons d'aborder la question de la gestion matérielle dès que le discernement s'oriente vers un projet de fiançailles. Parlez-en non pas sous l'angle de l'avoir, mais sous l'angle de l'intendance chrétienne et de la générosité.",
     verse: "« Là où est votre trésor, là aussi sera votre cœur. » (Matthieu 6:21)",
   },
   {
@@ -93,7 +93,7 @@ export function EvaSpiritualAdvisor({
     setTimeout(() => {
       const newAnswer: QAPair = {
         question: customQuestion,
-        answer: `Merci pour cette question. Sur Kellia, on recommande souvent la même chose : clarifier vos intentions, avancer sans précipitation, et en parler avec des personnes de confiance qui vous connaissent vraiment — coach, conseiller, amis matures.`,
+        answer: `Merci pour cette question. Sur Keliaa, on recommande souvent la même chose : clarifier vos intentions, avancer sans précipitation, et en parler avec des personnes de confiance qui vous connaissent vraiment — coach, conseiller, amis matures.`,
         verse:
           "« La sagesse d'en haut est d'abord pure, ensuite pacifique, modérée, conciliante. » (Jacques 3:17)",
       };

@@ -21,7 +21,7 @@ export default function MentionsLegalesPage() {
         <section className="space-y-2 text-sm text-foreground/90 leading-relaxed">
           <h2 className="font-serif text-xl font-semibold">Éditeur</h2>
           <p>
-            <strong>KELLIA</strong> — service de mise en relation pour célibataires chrétiens.
+            <strong>KELIAA</strong> — service de mise en relation pour célibataires chrétiens.
             <br />
             Pays d’édition : <strong>Togo</strong>
             <br />
@@ -30,8 +30,8 @@ export default function MentionsLegalesPage() {
             RCCM / NIF (Togo) : à communiquer dès obtention
             <br />
             Contact :{" "}
-            <a href="mailto:contact@KELLIA.net" className="text-primary underline">
-              contact@KELLIA.net
+            <a href="mailto:contact@KELIAA.net" className="text-primary underline">
+              contact@KELIAA.net
             </a>
           </p>
           <p className="text-muted-foreground text-xs">
@@ -54,15 +54,15 @@ export default function MentionsLegalesPage() {
             <br />
             Base de données, authentification et stockage : <strong>Supabase Inc.</strong>
             <br />
-            Paiements Mobile Money (lorsqu’activés) : agrégateur <strong>CinetPay</strong> (Wave,
-            Orange Money, Moov, TMoney selon pays — au Togo notamment Moov Money et TMoney).
+            Paiements Mobile Money ou carte (lorsqu’activés) : prestataires de paiement sécurisés
+            (Wave, Orange Money, Moov, TMoney selon pays — au Togo notamment Moov Money et TMoney).
           </p>
         </section>
 
         <section className="space-y-2 text-sm text-foreground/90 leading-relaxed">
           <h2 className="font-serif text-xl font-semibold">Propriété intellectuelle</h2>
           <p>
-            Les contenus, marques et éléments graphiques de KELLIA sont protégés. Toute
+            Les contenus, marques et éléments graphiques de KELIAA sont protégés. Toute
             reproduction non autorisée est interdite.
           </p>
         </section>

@@ -44,7 +44,7 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
       "EVA : 3 questions / jour",
       "Journal & ressources",
       "Bouclier de bienveillance",
-      "Paiement Alliance par Mobile Money ou carte (Bictorys / CinetPay)",
+      "Paiement Alliance par Mobile Money ou carte bancaire",
     ],
     limits: {
       dailySuggestions: 3,

@@ -78,7 +78,7 @@ export default function BlogListPage() {
               </p>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Notre assistante EVA est disponible 24h/24 pour répondre à vos questions sur les
-                relations, la plateforme et votre parcours sur Kellia.
+                relations, la plateforme et votre parcours sur Keliaa.
               </p>
             </div>
           </div>

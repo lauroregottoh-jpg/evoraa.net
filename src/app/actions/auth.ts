@@ -3,8 +3,79 @@
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
+import { createAdminClient } from "@/utils/supabase/admin"
 import { resolveAppUrl, resolvePostAuthPath } from "@/lib/auth/appUrl"
 import { welcomeEmailHtml } from "@/lib/email/templates"
+
+/**
+ * Soft launch: confirm email via service role when Supabase Auth mail
+ * (SMTP) is not delivering, then open a session with password.
+ */
+async function confirmEmailAndSignIn(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  email: string,
+  password: string,
+  userId?: string
+): Promise<{ ok: true; userId: string } | { ok: false; error: string }> {
+  try {
+    const admin = createAdminClient()
+    let id = userId
+
+    if (!id) {
+      for (let page = 1; page <= 20; page += 1) {
+        const { data: listed, error: listError } = await admin.auth.admin.listUsers({
+          page,
+          perPage: 200,
+        })
+        if (listError) {
+          return { ok: false, error: listError.message }
+        }
+        const match = listed.users.find(
+          (u) => u.email?.toLowerCase() === email.toLowerCase()
+        )
+        if (match?.id) {
+          id = match.id
+          break
+        }
+        if (listed.users.length < 200) break
+      }
+    }
+
+    if (!id) {
+      return { ok: false, error: "Compte introuvable pour cette adresse email." }
+    }
+
+    const { error: confirmError } = await admin.auth.admin.updateUserById(id, {
+      email_confirm: true,
+    })
+    if (confirmError) {
+      return { ok: false, error: confirmError.message }
+    }
+
+    await admin
+      .from("profiles")
+      .update({ email_verified: true })
+      .eq("user_id", id)
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+    if (error || !data.user) {
+      return {
+        ok: false,
+        error: error?.message || "Connexion impossible après confirmation.",
+      }
+    }
+
+    return { ok: true, userId: data.user.id }
+  } catch (e) {
+    return {
+      ok: false,
+      error: e instanceof Error ? e.message : "Confirmation automatique impossible.",
+    }
+  }
+}
 
 export async function loginAction(formData: FormData) {
   const email = String(formData.get("email") ?? "").trim()
@@ -24,9 +95,16 @@ export async function loginAction(formData: FormData) {
   if (error) {
     const msg = error.message.toLowerCase()
     if (msg.includes("email not confirmed") || msg.includes("not confirmed")) {
+      const unlocked = await confirmEmailAndSignIn(supabase, email, password)
+      if (unlocked.ok) {
+        const nextPath = await resolvePostAuthPath(unlocked.userId)
+        revalidatePath("/", "layout")
+        redirect(nextPath)
+      }
       return {
         error:
-          "Votre email n’est pas encore confirmé. Ouvrez le lien reçu dans votre boîte mail, puis reconnectez-vous.",
+          unlocked.error ||
+          "Votre email n’est pas encore confirmé. Réessayez dans un instant, ou contactez le support.",
       }
     }
     return { error: error.message }
@@ -118,7 +196,7 @@ export async function registerAction(formData: FormData) {
       const { sendEmailNotificationStub } = await import("@/app/actions/notifications")
       await sendEmailNotificationStub({
         to: email,
-        subject: "Bienvenue sur Kellia — votre espace vous attend",
+        subject: "Bienvenue sur Keliaa — votre espace vous attend",
         html: welcomeEmailHtml({ firstName, appUrl }),
       })
     } catch {
@@ -126,17 +204,55 @@ export async function registerAction(formData: FormData) {
     }
   }
 
+  // Email de confirmation Supabase souvent non livré (SMTP non branché) :
+  // activer le compte et ouvrir l’espace membre immédiatement.
   if (data.user && !data.session) {
+    const unlocked = await confirmEmailAndSignIn(
+      supabase,
+      email,
+      password,
+      data.user.id
+    )
+    if (unlocked.ok) {
+      revalidatePath("/", "layout")
+      redirect("/onboarding")
+    }
     return {
       error: null,
       needsEmailConfirmation: true,
       message:
-        "Compte créé. Ouvrez l’email de confirmation Kellia : le bouton vous mène directement dans votre espace. Pensez à vérifier les spams.",
+        unlocked.error ||
+        "Compte créé. Si vous n’avez pas reçu d’email, reconnectez-vous avec le même mot de passe : l’accès s’ouvre automatiquement.",
     }
   }
 
   revalidatePath("/", "layout")
   redirect("/onboarding")
+}
+
+export async function resendConfirmationAction(formData: FormData) {
+  const email = String(formData.get("email") ?? "").trim()
+  if (!email) {
+    return { error: "Indiquez votre email." }
+  }
+
+  const supabase = await createClient()
+  const appUrl = await resolveAppUrl()
+  const { error } = await supabase.auth.resend({
+    type: "signup",
+    email,
+    options: { emailRedirectTo: `${appUrl}/auth/callback` },
+  })
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  return {
+    error: null,
+    message:
+      "Email renvoyé si un compte existe. Vérifiez boîte de réception et spams. Sinon, connectez-vous : l’accès peut s’ouvrir sans le lien.",
+  }
 }
 
 export async function logoutAction() {

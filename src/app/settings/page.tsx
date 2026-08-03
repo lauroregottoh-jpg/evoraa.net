@@ -30,7 +30,7 @@ export default async function SettingsPage() {
         <EvaCompanion
           title="EVA - Le Respect des Saisons spirituelles"
           variant="reflection"
-          message="Sur Kellia, il y a des temps de recherche active et des temps de silence. Le Mode Retraite masque votre profil en toute paix."
+          message="Sur Keliaa, il y a des temps de recherche active et des temps de silence. Le Mode Retraite masque votre profil en toute paix."
         />
 
         {error || !data ? (

@@ -115,7 +115,7 @@ export function AdminPhotoQueue() {
                       >
                         <option value="Photo trop sombre ou visage non reconnaissable.">Visage flou ou non visible</option>
                         <option value="Présence d'autres personnes ou enfants sur la photo.">Présence de tiers/enfants</option>
-                        <option value="Contenu inapproprié ou contraire à la dignité d'Kellia.">Contenu inapproprié</option>
+                        <option value="Contenu inapproprié ou contraire au respect sur Keliaa.">Contenu inapproprié</option>
                       </select>
                       <div className="flex gap-2">
                         <Button

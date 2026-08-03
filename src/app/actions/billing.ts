@@ -153,7 +153,7 @@ export async function startCheckoutAction(
           apiKey: process.env.BICTORYS_API_KEY,
           paymentId: payment.id,
           amount: plan.amountXof,
-          description: `KELLIA ${plan.name} — 30 jours`,
+          description: `KELIAA ${plan.name} — 30 jours`,
           customerName:
             (profile?.first_name as string) || user.user_metadata?.first_name || "Membre",
           customerEmail: user.email || "",
@@ -214,7 +214,7 @@ export async function startCheckoutAction(
           transaction_id: transactionRef,
           amount: plan.amountXof,
           currency: "XOF",
-          description: `KELLIA ${plan.name} — 30 jours`,
+          description: `KELIAA ${plan.name} — 30 jours`,
           notify_url: notifyUrl,
           return_url: returnUrl,
           channels: "ALL",

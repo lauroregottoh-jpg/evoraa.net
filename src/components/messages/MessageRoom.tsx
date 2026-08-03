@@ -209,7 +209,7 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
       <Card className="rounded-2xl border-border/60 bg-background/80 backdrop-blur-md shadow-xs min-h-[320px] max-h-[460px] overflow-y-auto p-5 space-y-4">
         {messages.length === 0 && (
           <p className="text-sm text-muted-foreground text-center py-10">
-            Premier message : posez une question digne sur la foi, le foyer ou le rythme de vie.
+            Premier message : posez une question respectueuse sur la foi, le foyer ou le rythme de vie.
           </p>
         )}
         {messages.map((m) => (
@@ -251,7 +251,7 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
       <form onSubmit={handleSendTrigger} className="flex items-center gap-3 pt-2">
         <Input
           type="text"
-          placeholder={`Écrire un message digne à ${room.partnerName}...`}
+          placeholder={`Écrire un message respectueux à ${room.partnerName}...`}
           value={input}
           onChange={(e) => {
             setInput(e.target.value)

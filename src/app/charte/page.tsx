@@ -11,7 +11,7 @@ const PILLARS = [
   },
   {
     icon: Eye,
-    title: "Dignité & pudeur",
+    title: "Respect & pudeur",
     body: "Les échanges restent respectueux. Pas de vente par l'apparence seule : la personne avant la photo.",
   },
   {
@@ -32,7 +32,7 @@ export default function ChartePage() {
       <PageHero
         eyebrow="Éthique"
         title="Notre charte"
-        highlight="KELLIA"
+        highlight="KELIAA"
         subtitle="Les piliers, valeurs et engagements qui fondent notre communauté de célibataires chrétiens."
         imageSrc="https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=2000&auto=format&fit=crop"
         imageAlt="Communauté en prière"
@@ -44,7 +44,7 @@ export default function ChartePage() {
             Pourquoi une charte ?
           </h2>
           <p className="text-muted-foreground leading-relaxed">
-            KELLIA n&apos;est pas une application de swipe. C&apos;est un espace de discernement. Cette
+            KELIAA n&apos;est pas une application de swipe. C&apos;est un espace de discernement. Cette
             charte rappelle ce que nous croyons, ce que nous exigeons, et ce à quoi chaque membre
             s&apos;engage en rejoignant la plateforme.
           </p>
@@ -69,20 +69,20 @@ export default function ChartePage() {
           <h3 className="font-serif text-2xl font-bold text-foreground">Engagements des membres</h3>
           <ul className="space-y-3 text-sm text-muted-foreground leading-relaxed list-disc pl-5">
             <li>Fournir des informations sincères et des photos récentes qui me représentent.</li>
-            <li>Respecter la dignité de chaque personne dans les messages et les intentions.</li>
+            <li>Respecter chaque personne dans les messages et les intentions.</li>
             <li>Ne pas utiliser la plateforme pour du harcèlement, du spam ou des sollicitations financières.</li>
             <li>Honorer la confidentialité des échanges et des données des autres membres.</li>
-            <li>Signaler tout comportement contraire à cette charte à ethique@KELLIA.net.</li>
+            <li>Signaler tout comportement contraire à cette charte à ethique@KELIAA.net.</li>
           </ul>
         </div>
 
         <div className="text-center space-y-6">
           <p className="text-sm text-muted-foreground max-w-xl mx-auto">
-            L&apos;acceptation de cette charte est requise à l&apos;inscription. KELLIA peut suspendre
+            L&apos;acceptation de cette charte est requise à l&apos;inscription. KELIAA peut suspendre
             tout compte qui la viole.
           </p>
           <MagneticButton href="/register" variant="primary" size="lg">
-            Rejoindre KELLIA
+            Rejoindre KELIAA
           </MagneticButton>
         </div>
       </section>

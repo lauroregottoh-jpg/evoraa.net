@@ -4,25 +4,25 @@ import * as React from "react";
 
 const SLIDES = [
   {
-    brand: "KELLIA",
+    brand: "KELIAA",
     title: "Vous recherchez",
     highlight: "LA bonne personne.",
     subtitle:
-      "Kellia aide les célibataires chrétiens à rencontrer un futur conjoint grâce à une méthode fondée sur la compatibilité, la foi et le discernement. Parce qu'un mariage solide commence bien avant la première rencontre.",
+      "Keliaa aide les célibataires chrétiens à rencontrer un futur conjoint grâce à une méthode fondée sur la compatibilité, la foi et le discernement. Parce qu'un mariage solide commence bien avant la première rencontre.",
   },
   {
-    brand: "KELLIA",
+    brand: "KELIAA",
     title: "Et si votre futur conjoint",
     highlight: "se trouvait à une décision de vous ?",
     subtitle:
-      "Chez Kellia, nous ne cherchons pas à multiplier les matchs. Nous aidons des célibataires chrétiens sérieux à construire une rencontre qui peut conduire à un mariage.",
+      "Chez Keliaa, nous ne cherchons pas à multiplier les matchs. Nous aidons des célibataires chrétiens sérieux à construire une rencontre qui peut conduire à un mariage.",
   },
   {
-    brand: "KELLIA",
+    brand: "KELIAA",
     title: "Les meilleures histoires",
     highlight: "commencent rarement par un swipe.",
     subtitle:
-      "Elles commencent par une vision commune, des valeurs partagées et le désir sincère de construire un foyer. C'est exactement ce que Kellia vous aide à trouver.",
+      "Elles commencent par une vision commune, des valeurs partagées et le désir sincère de construire un foyer. C'est exactement ce que Keliaa vous aide à trouver.",
   },
 ];
 

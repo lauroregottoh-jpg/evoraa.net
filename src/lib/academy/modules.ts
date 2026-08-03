@@ -1137,7 +1137,7 @@ export const ACADEMY_MODULES: AcademyModule[] = [
         ],
         keyPoints: [
           "Guérir n’est pas une faiblesse",
-          "KELLIA est un outil — pas un pansement émotionnel",
+          "KELIAA est un outil — pas un pansement émotionnel",
           "Vous serez plus libre pour aimer après",
         ],
         resources: [

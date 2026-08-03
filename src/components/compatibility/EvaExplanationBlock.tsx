@@ -194,7 +194,7 @@ export function EvaExplanationBlock({
           <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 not-italic" />
           <span>
             Cet appariement croise similarités, complémentarités et risques d&apos;interaction —
-            conformément à la méthode Kellia.
+            conformément à la méthode Keliaa.
           </span>
         </div>
       </CardContent>

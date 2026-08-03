@@ -51,7 +51,7 @@ export const DEFAULT_APP_TEXTS: AppTexts = {
   banner_alliance_title: "Passez Alliance",
   banner_alliance_body: "Plus de conversations, visiteurs et favoris.",
   home_greeting_prefix: "Bonjour",
-  selection_title: "La sélection Kellia",
+  selection_title: "La sélection Keliaa",
   selection_subtitle: "Des profils choisis pour vous",
 }
 

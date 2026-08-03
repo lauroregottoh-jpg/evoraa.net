@@ -30,7 +30,7 @@ export function CharterModal({ onAccept, isAccepted, className }: CharterModalPr
           <span className="text-xs uppercase tracking-widest font-sans font-semibold">Plateforme Éthique</span>
         </div>
         <CardTitle className="font-serif text-2xl text-foreground">
-          La Charte de Bienveillance & Dignité de KELLIA
+          La Charte de Bienveillance & Respect de KELIAA
         </CardTitle>
         <CardDescription className="text-sm text-muted-foreground leading-relaxed">
           Avant d&apos;entrer, chaque membre s&apos;engage solennellement à préserver cet espace de discernement chrétien.
@@ -43,7 +43,7 @@ export function CharterModal({ onAccept, isAccepted, className }: CharterModalPr
           <div className="space-y-2 p-3.5 rounded-xl bg-secondary/50 border border-border/40">
             <div className="flex items-center gap-2 text-primary dark:text-accent font-serif font-medium text-base">
               <Heart className="h-4 w-4 text-accent shrink-0" />
-              <span>1. Dignité & Respect</span>
+              <span>1. Respect mutuel</span>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
               Chaque personne est créée à l&apos;image de Dieu. Aucun mot blessant, jugement ou attitude consumériste n&apos;est toléré.
@@ -66,7 +66,7 @@ export function CharterModal({ onAccept, isAccepted, className }: CharterModalPr
               <span>3. Discernement & Sincérité</span>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              KELLIA n&apos;est pas un espace de collection de matches, mais de discernement sérieux en vue d&apos;un projet de vie conjugal.
+              KELIAA n&apos;est pas un espace de collection de matches, mais de discernement sérieux en vue d&apos;un projet de vie conjugal.
             </p>
           </div>
 
@@ -92,7 +92,7 @@ export function CharterModal({ onAccept, isAccepted, className }: CharterModalPr
             className="rounded-md border-accent text-accent data-[state=checked]:bg-accent"
           />
           <label htmlFor="accept-charter" className="text-sm font-medium text-foreground cursor-pointer select-none">
-            Je donne ma parole et j&apos;accepte les 4 piliers de la Charte de KELLIA.
+            Je donne ma parole et j&apos;accepte les 4 piliers de la Charte de KELIAA.
           </label>
         </div>
 

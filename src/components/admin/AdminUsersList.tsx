@@ -59,7 +59,7 @@ const INITIAL_USERS: UserRow[] = [
     verified: true,
     endorsement: true,
     plan: "Base (2500 F)",
-    lastEvaTopic: "Les 4 piliers de la charte de dignité",
+    lastEvaTopic: "Les 4 piliers de la charte de respect",
   },
   {
     id: "4",

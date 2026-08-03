@@ -62,7 +62,7 @@ export default function MagicScreenPage() {
               <div className="flex items-center gap-3 text-sm">
                 <CheckCircle2 className={`h-5 w-5 shrink-0 transition-colors duration-500 ${analyzingStep >= 2 ? "text-emerald-500" : "text-muted-foreground/30 animate-pulse"}`} />
                 <span className={analyzingStep >= 2 ? "font-medium text-foreground" : "text-muted-foreground"}>
-                  Mise en résonance avec les profils vérifiés de KELLIA
+                  Mise en résonance avec les profils vérifiés de KELIAA
                 </span>
               </div>
             </div>

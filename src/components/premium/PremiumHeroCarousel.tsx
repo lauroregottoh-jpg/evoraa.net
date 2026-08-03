@@ -17,7 +17,7 @@ const DEFAULT_SLIDES: PremiumHeroSlide[] = [
     title: "mérite plus que le hasard.",
     highlight: "Votre futur conjoint",
     subtitle:
-      "Alliance vous donne accès à toute la puissance du Matching KELLIA™ à 5 piliers pour recevoir davantage de profils réellement compatibles avec votre foi, vos valeurs et votre projet de mariage.",
+      "Alliance vous donne accès à toute la puissance du Matching KELIAA™ à 5 piliers pour recevoir davantage de profils réellement compatibles avec votre foi, vos valeurs et votre projet de mariage.",
   },
   {
     badge: "Compatibilités détaillées",
@@ -31,7 +31,7 @@ const DEFAULT_SLIDES: PremiumHeroSlide[] = [
     title: "vous perdez moins de temps, vous avancez plus sereinement.",
     highlight: "Avec Alliance,",
     subtitle:
-      "Parce que rencontrer la bonne personne ne dépend pas uniquement du nombre de profils consultés — vous échangez avec des profils plus pertinents grâce au Matching KELLIA™.",
+      "Parce que rencontrer la bonne personne ne dépend pas uniquement du nombre de profils consultés — vous échangez avec des profils plus pertinents grâce au Matching KELIAA™.",
   },
 ]
 

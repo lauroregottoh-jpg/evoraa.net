@@ -11,7 +11,7 @@ export function CinematicFooter() {
           <div className="lg:col-span-5 space-y-6">
             <Link href="/" className="inline-flex items-center gap-2.5">
               <span className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-primary">
-                KELLIA
+                KELIAA
               </span>
             </Link>
             <p className="font-serif text-base sm:text-lg text-muted-foreground max-w-md leading-relaxed italic">
@@ -99,7 +99,7 @@ export function CinematicFooter() {
 
         <div className="text-center text-xs text-muted-foreground">
           <p className="font-serif">
-            © 2026 KELLIA. Tous droits réservés. Conçu avec amour pour les célibataires chrétiens.
+            © 2026 KELIAA. Tous droits réservés. Conçu avec amour pour les célibataires chrétiens.
           </p>
         </div>
       </div>
