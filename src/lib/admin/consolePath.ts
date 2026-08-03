@@ -26,22 +26,22 @@ export function isOpsAdminEmail(email: string | null | undefined): boolean {
   return getOpsAdminEmails().includes(email.trim().toLowerCase())
 }
 
-/** Extrait l'email même si `user.email` est vide en Edge. */
+/**
+ * Email d’auth pour privilèges.
+ * Préfère `user.email` (Auth) — ne pas se fier à user_metadata (modifiable).
+ */
 export function resolveAuthEmail(user: {
   email?: string | null
   user_metadata?: Record<string, unknown> | null
   identities?: Array<{ identity_data?: Record<string, unknown> | null }> | null
 } | null | undefined): string | null {
   if (!user) return null
-  const metaEmail = user.user_metadata?.email
+  if (user.email?.trim()) return user.email.trim().toLowerCase()
   const identityEmail = user.identities?.[0]?.identity_data?.email
-  const raw =
-    user.email ||
-    (typeof metaEmail === "string" ? metaEmail : null) ||
-    (typeof identityEmail === "string" ? identityEmail : null) ||
-    ""
-  const email = raw.trim().toLowerCase()
-  return email || null
+  if (typeof identityEmail === "string" && identityEmail.trim()) {
+    return identityEmail.trim().toLowerCase()
+  }
+  return null
 }
 
 export const STAFF_ROLES = [

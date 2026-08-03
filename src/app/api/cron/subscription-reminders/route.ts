@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createAdminClient } from "@/utils/supabase/admin"
-import { sendEmailNotificationStub } from "@/app/actions/notifications"
+import { sendResendEmail } from "@/lib/email/send"
 import { subscriptionReminderEmailHtml } from "@/lib/email/templates"
 import { resolveAppUrlSync } from "@/lib/auth/appUrl"
 
@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
         (user.user_metadata?.first_name as string | undefined) || ""
       const appUrl = resolveAppUrlSync()
       const endsAtLabel = endsAt.toLocaleDateString("fr-FR")
-      const mail = await sendEmailNotificationStub({
+      const mail = await sendResendEmail({
         to: email,
         subject: `KELIAA — ${title}`,
         html: subscriptionReminderEmailHtml({

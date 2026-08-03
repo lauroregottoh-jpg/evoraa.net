@@ -16,6 +16,7 @@ import { welcomeEmailHtml } from "@/lib/email/templates"
 /**
  * Soft launch: confirm email via service role when Supabase Auth mail
  * (SMTP) is not delivering, then open a session with password.
+ * Opt-in only: set ALLOW_SOFT_EMAIL_CONFIRM=true on Vercel.
  */
 async function confirmEmailAndSignIn(
   supabase: Awaited<ReturnType<typeof createClient>>,
@@ -23,6 +24,13 @@ async function confirmEmailAndSignIn(
   password: string,
   userId?: string
 ): Promise<{ ok: true; userId: string } | { ok: false; error: string }> {
+  if (process.env.ALLOW_SOFT_EMAIL_CONFIRM !== "true") {
+    return {
+      ok: false,
+      error:
+        "Confirmez votre email via le lien reçu (ou activez ALLOW_SOFT_EMAIL_CONFIRM pour le soft-launch).",
+    }
+  }
   try {
     const admin = createAdminClient()
     let id = userId
@@ -292,8 +300,8 @@ export async function registerAction(formData: FormData) {
     await supabase.from("profiles").update(profilePatch).eq("user_id", data.user.id)
 
     try {
-      const { sendEmailNotificationStub } = await import("@/app/actions/notifications")
-      await sendEmailNotificationStub({
+      const { sendResendEmail } = await import("@/lib/email/send")
+      await sendResendEmail({
         to: email,
         subject: "Bienvenue sur Keliaa — votre espace vous attend",
         html: welcomeEmailHtml({ firstName, appUrl }),

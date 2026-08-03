@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { createClient } from "@/utils/supabase/server"
+import { createAdminClient } from "@/utils/supabase/admin"
 import { getActiveSubscription, getUserEntitlements } from "@/lib/billing/entitlements"
 import { isPaidPlan, PLANS, type PlanId } from "@/lib/billing/plans"
 import {
@@ -317,13 +318,13 @@ export async function confirmDemoPaymentAction(paymentId: string): Promise<{
   if (pending.error || !pending.payment) return { error: pending.error || "Paiement invalide." }
   if (pending.payment.status === "completed") return { success: true }
 
-  const { error } = await supabase.rpc(
-    "activate_pending_payment" as never,
-    {
-      p_payment_id: paymentId,
-      p_transaction_ref: pending.payment.transactionReference || `DEMO-${Date.now()}`,
-    } as never
-  )
+  // service_role only — client JWT must not call this RPC (free Alliance bypass).
+  const admin = createAdminClient()
+  const { error } = await admin.rpc("activate_pending_payment" as never, {
+    p_payment_id: paymentId,
+    p_transaction_ref:
+      pending.payment.transactionReference || `DEMO-${Date.now()}`,
+  } as never)
 
   if (error) {
     return { error: error.message }

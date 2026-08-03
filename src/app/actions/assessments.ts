@@ -225,7 +225,6 @@ export async function submitAssessmentAction(
   await supabase.from("profiles").update(profileUpdate).eq("user_id", user.id)
 
   await createNotification({
-    userId: user.id,
     title: `Questionnaire « ${bank.name} » validé`,
     body: `Profil enrichi (${scored.normalized}%). ${
       completedCount >= 5

@@ -24,10 +24,8 @@ export async function requestPasswordResetAction(formData: FormData) {
     if (!error) {
       const actionLink = data.properties?.action_link
       if (actionLink) {
-        const { sendEmailNotificationStub } = await import(
-          "@/app/actions/notifications"
-        )
-        await sendEmailNotificationStub({
+        const { sendResendEmail } = await import("@/lib/email/send")
+        await sendResendEmail({
           to: email,
           subject: "Réinitialisez votre mot de passe — KELIAA",
           html: passwordResetEmailHtml({ appUrl, resetHref: actionLink }),

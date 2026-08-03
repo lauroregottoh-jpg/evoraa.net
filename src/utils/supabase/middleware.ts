@@ -99,9 +99,24 @@ export async function updateSession(request: NextRequest) {
     return redirectWithCookies('/login')
   }
 
-  // Console ops : authentifié = on LAISSE passer. Le gate rôle est sur la page
-  // (plus de redirect silencieux vers /dashboard qui masquait le problème).
+  // Console ops : staff only (sinon 404 pour ne pas révéler le chemin).
   if (user && isOpsConsole) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('user_id', user.id)
+      .maybeSingle()
+
+    if (!canAccessOpsConsole({ role: profile?.role, email })) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/admin'
+      url.search = ''
+      const denied = NextResponse.rewrite(url)
+      supabaseResponse.cookies.getAll().forEach((c) => {
+        denied.cookies.set(c.name, c.value)
+      })
+      return denied
+    }
     return supabaseResponse
   }
 

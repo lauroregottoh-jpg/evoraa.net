@@ -4,17 +4,22 @@ import { revalidatePath } from "next/cache"
 import { createClient } from "@/utils/supabase/server"
 
 export async function createNotification(input: {
-  userId: string
   title: string
   body: string
 }) {
   const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return { error: "Non authentifié." }
+
   await supabase.from("notifications").insert({
-    user_id: input.userId,
+    user_id: user.id,
     title: input.title,
     body: input.body,
     is_read: false,
   })
+  return { success: true as const }
 }
 
 export async function listMyNotifications() {
@@ -67,52 +72,4 @@ export async function markAllNotificationsReadAction() {
 
   revalidatePath("/notifications")
   return { success: true }
-}
-
-function defaultFromAddress() {
-  // Prod Keliaa : domaine vérifié chez Resend → contact@keliaa.org
-  // Fallback tests Resend sans domaine : onboarding@resend.dev
-  return (
-    process.env.RESEND_FROM_EMAIL?.trim() ||
-    "KELIAA <contact@keliaa.org>"
-  )
-}
-
-/** Email brandé via Resend (ignore silencieusement si clé absente). */
-export async function sendEmailNotificationStub(input: {
-  to: string
-  subject: string
-  html: string
-  replyTo?: string
-}) {
-  const key = process.env.RESEND_API_KEY
-  if (!key) {
-    return { skipped: true as const, reason: "RESEND_API_KEY absent" }
-  }
-  try {
-    const payload: Record<string, unknown> = {
-      from: defaultFromAddress(),
-      to: [input.to],
-      subject: input.subject,
-      html: input.html,
-    }
-    if (input.replyTo) payload.reply_to = input.replyTo
-
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${key}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    })
-    if (!res.ok) {
-      const detail = await res.text()
-      console.error("[resend]", detail)
-      return { error: detail }
-    }
-    return { success: true as const }
-  } catch (e) {
-    return { error: e instanceof Error ? e.message : "email_failed" }
-  }
 }
