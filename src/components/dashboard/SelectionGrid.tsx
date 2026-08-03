@@ -77,7 +77,7 @@ export function SelectionGrid({ items }: { items: SelectionCard[] }) {
 }
 
 export function SelectionHeader({
-  title = "La sélection Keliaa",
+  title = "La sélection KELIAA",
   subtitle = "Des profils choisis pour vous",
 }: {
   title?: string

@@ -1,36 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { ChevronDown, Quote } from "lucide-react"
+import { ChevronDown } from "lucide-react"
 import { cn } from "@/utils/cn"
-
-/** Témoignages + FAQ Alliance — KELIA Page d'accueil.docx */
-const ALLIANCE_TESTIMONIALS = [
-  {
-    quote:
-      "Je pensais simplement avoir plus de profils. En réalité, j'ai surtout reçu des recommandations beaucoup plus pertinentes. Chaque conversation semblait partir sur de meilleures bases.",
-    name: "Grâce",
-    meta: "Alliance depuis 4 mois",
-  },
-  {
-    quote:
-      "Le score de compatibilité nous a permis d'aborder rapidement les sujets essentiels. Nous savions déjà que nous partagions les mêmes convictions.",
-    name: "David",
-    meta: "Alliance",
-  },
-  {
-    quote:
-      "Je considère aujourd'hui Alliance comme un investissement dans mon avenir, pas comme une dépense supplémentaire.",
-    name: "Rachel",
-    meta: "Alliance",
-  },
-  {
-    quote:
-      "J'ai perdu moins de temps avec des échanges sans lendemain. Les profils proposés correspondaient réellement à ce que je recherchais.",
-    name: "Samuel",
-    meta: "Alliance",
-  },
-]
 
 const FAQS = [
   {
@@ -57,50 +29,16 @@ const FAQS = [
 
 export function PremiumSocialProof() {
   const [open, setOpen] = React.useState<number | null>(0)
-  const [tIndex, setTIndex] = React.useState(0)
-
-  React.useEffect(() => {
-    const id = window.setInterval(() => {
-      setTIndex((i) => (i + 1) % ALLIANCE_TESTIMONIALS.length)
-    }, 5500)
-    return () => window.clearInterval(id)
-  }, [])
-
-  const t = ALLIANCE_TESTIMONIALS[tIndex]
 
   return (
     <div className="space-y-8">
-      <section className="rounded-2xl border border-accent/25 bg-accent/10 p-5 sm:p-7 space-y-4">
-        <div className="text-center space-y-2">
-          <h2 className="font-serif text-2xl font-bold">Ils avancent avec Alliance</h2>
-          <p className="text-xs text-muted-foreground max-w-md mx-auto">
-            Des membres qui ont choisi d&apos;accélérer leur discernement avec Alliance.
-          </p>
-        </div>
-        <figure className="text-center space-y-4 min-h-[160px] flex flex-col justify-center">
-          <Quote className="h-7 w-7 text-accent mx-auto" />
-          <blockquote className="font-serif text-lg sm:text-xl italic text-foreground leading-relaxed">
-            « {t.quote} »
-          </blockquote>
-          <figcaption className="text-sm font-semibold text-primary">
-            {t.name}
-            <span className="block font-normal text-muted-foreground mt-1">{t.meta}</span>
-          </figcaption>
-        </figure>
-        <div className="flex justify-center gap-2">
-          {ALLIANCE_TESTIMONIALS.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              aria-label={`Témoignage ${i + 1}`}
-              onClick={() => setTIndex(i)}
-              className={cn(
-                "h-2 rounded-full transition-all",
-                i === tIndex ? "w-7 bg-accent" : "w-2 bg-border"
-              )}
-            />
-          ))}
-        </div>
+      <section className="rounded-2xl border border-accent/25 bg-accent/10 p-5 sm:p-7 space-y-3 text-center">
+        <h2 className="font-serif text-2xl font-bold">Alliance, sans artifice</h2>
+        <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
+          Soft launch : nous publierons des témoignages membres authentiques dès qu&apos;ils
+          seront disponibles. En attendant, comparez les quotas Decouverte / Alliance et
+          choisissez au rythme de votre discernement.
+        </p>
       </section>
 
       <section className="space-y-3">

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next"
 
 const BASE =
-  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "https://evoraa-net.vercel.app"
+  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "https://keliaa.org"
 
 export default function robots(): MetadataRoute.Robots {
   return {

@@ -18,7 +18,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 const APP_URL =
-  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "https://evoraa-net.vercel.app";
+  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "https://keliaa.org";
 
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),

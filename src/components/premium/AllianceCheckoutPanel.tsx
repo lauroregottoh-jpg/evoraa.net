@@ -141,20 +141,13 @@ export function AllianceCheckoutPanel({
                       )}
                     </p>
                     <p className="text-[11px] text-primary font-medium mt-1.5 leading-snug">
-                      Inclut {opt.bonusBoosts} boost
-                      {opt.bonusBoosts > 1 ? "s" : ""} profil
-                      {opt.bonusBoosts > 1 ? "" : ""} (visibilité prioritaire
-                      {opt.bonusBoosts === 1
-                        ? " 24h"
-                        : opt.bonusBoosts === 3
-                          ? " — ex. 3 × 24h"
-                          : " — ex. 6 × 24h"}
-                      )
+                      Quotas Alliance : 15 suggestions/j, 25 conversations/mois, 100
+                      messages/convo, Eva 20/j
                     </p>
                   </div>
                 </div>
                 <span className="shrink-0 rounded-full bg-primary/10 text-primary text-[11px] font-semibold px-2.5 py-1">
-                  +{opt.bonusBoosts} boost{opt.bonusBoosts > 1 ? "s" : ""}
+                  {opt.id === "1m" ? "Payable" : "Bientôt"}
                 </span>
               </div>
             </button>

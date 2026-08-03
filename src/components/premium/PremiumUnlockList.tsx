@@ -38,17 +38,17 @@ const FEATURES = [
   },
   {
     icon: Zap,
-    title: "Score de compatibilité détaillé",
-    free: "Basique",
-    alliance: "Complet (5 piliers)",
-    locked: true,
+    title: "Lecture des 5 piliers de compatibilité",
+    free: "Aperçu",
+    alliance: "Accès étendu",
+    locked: false,
   },
   {
     icon: Crown,
-    title: "Badge Alliance + priorité soft",
-    free: "Bloqué",
-    alliance: "Débloqué",
-    locked: true,
+    title: "Badge Alliance",
+    free: "—",
+    alliance: "Visible sur le profil",
+    locked: false,
   },
 ] as const
 

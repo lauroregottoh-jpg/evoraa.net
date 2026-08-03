@@ -10,12 +10,9 @@ import {
   Check,
   CheckCircle2,
   ChevronDown,
-  ChevronLeft,
-  ChevronRight,
   Heart,
   Home,
   Leaf,
-  Quote,
   Sparkles,
   Users,
 } from "lucide-react";
@@ -75,45 +72,10 @@ const ALLIANCE_COMPARE_ROWS = [
   },
 ];
 
-const TESTIMONIALS = [
-  {
-    quote:
-      "Lorsque je suis passée à Alliance, j'ai immédiatement compris la différence. Les profils proposés correspondaient réellement à ce que je recherchais. Les conversations étaient plus naturelles parce que nous avions déjà beaucoup de points communs.",
-    name: "Grâce",
-    meta: "Lomé",
-  },
-  {
-    quote:
-      "Le score de compatibilité m'a permis d'aller au-delà des premières impressions. Nous avons découvert très tôt que nous partagions la même vision du mariage et de la famille.",
-    name: "David",
-    meta: "Abidjan",
-  },
-  {
-    quote:
-      "Avant, je passais des heures à parcourir des profils. Aujourd'hui, je préfère recevoir moins de recommandations, mais qu'elles soient réellement pertinentes.",
-    name: "Samuel",
-    meta: "Paris",
-  },
-  {
-    quote:
-      "Alliance m'a surtout fait gagner du temps. Au lieu de discuter avec beaucoup de personnes sans lendemain, j'ai rencontré des profils qui partageaient déjà mes convictions essentielles.",
-    name: "Esther",
-    meta: "Douala",
-  },
-];
-
 export default function PricingPage() {
   const [openFaq, setOpenFaq] = React.useState<number | null>(0);
-  const [testimonialIndex, setTestimonialIndex] = React.useState(0);
 
   const plans = PUBLIC_PLAN_ORDER.map((id) => PLANS[id]);
-
-  React.useEffect(() => {
-    const id = window.setInterval(() => {
-      setTestimonialIndex((current) => (current + 1) % TESTIMONIALS.length);
-    }, 5500);
-    return () => window.clearInterval(id);
-  }, []);
 
   const faqs = [
     {
@@ -359,73 +321,15 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Témoignages */}
-      <section className="py-12 px-6 sm:px-12 lg:px-20 max-w-6xl mx-auto">
-        <div className="text-center space-y-2 mb-10">
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-foreground">
-            Ils avancent avec Alliance
-          </h2>
-          <p className="text-sm text-muted-foreground max-w-xl mx-auto">
-            Des membres qui ont choisi d&apos;accélérer leur discernement avec Alliance.
+      {/* Soft launch — pas de témoignages inventés */}
+      <section className="py-10 px-6 sm:px-12 lg:px-20 max-w-3xl mx-auto">
+        <div className="rounded-2xl border border-accent/25 bg-accent/10 p-6 text-center space-y-2">
+          <h2 className="font-serif text-xl font-bold text-foreground">Alliance, sans artifice</h2>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Soft launch : les témoignages membres authentiques arriveront dès qu&apos;ils seront
+            disponibles. Comparez les quotas Découverte / Alliance et avancez au rythme de votre
+            discernement.
           </p>
-        </div>
-        <div className="mx-auto max-w-3xl">
-          <figure className="relative min-h-[270px] rounded-3xl border border-border bg-white p-7 shadow-elevated sm:min-h-[240px] sm:p-10">
-            <Quote className="h-8 w-8 text-accent" />
-            <div
-              key={testimonialIndex}
-              className="animate-in fade-in slide-in-from-right-3 duration-500"
-            >
-              <blockquote className="mt-6 font-serif text-xl italic leading-relaxed text-foreground sm:text-2xl">
-                « {TESTIMONIALS[testimonialIndex].quote} »
-              </blockquote>
-              <figcaption className="mt-6 text-sm font-semibold text-primary">
-                {TESTIMONIALS[testimonialIndex].name}
-                <span className="ml-2 font-normal text-muted-foreground">
-                  · {TESTIMONIALS[testimonialIndex].meta}
-                </span>
-              </figcaption>
-            </div>
-          </figure>
-
-          <div className="mt-5 flex items-center justify-center gap-4">
-            <button
-              type="button"
-              aria-label="Témoignage précédent"
-              onClick={() =>
-                setTestimonialIndex(
-                  (current) => (current - 1 + TESTIMONIALS.length) % TESTIMONIALS.length
-                )
-              }
-              className="rounded-full border border-border bg-white p-2 text-primary hover:bg-secondary"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            <div className="flex gap-2">
-              {TESTIMONIALS.map((testimonial, index) => (
-                <button
-                  key={testimonial.name}
-                  type="button"
-                  aria-label={`Voir le témoignage ${index + 1}`}
-                  onClick={() => setTestimonialIndex(index)}
-                  className={cn(
-                    "h-2 rounded-full transition-all",
-                    index === testimonialIndex ? "w-8 bg-accent" : "w-2 bg-border"
-                  )}
-                />
-              ))}
-            </div>
-            <button
-              type="button"
-              aria-label="Témoignage suivant"
-              onClick={() =>
-                setTestimonialIndex((current) => (current + 1) % TESTIMONIALS.length)
-              }
-              className="rounded-full border border-border bg-white p-2 text-primary hover:bg-secondary"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
         </div>
       </section>
 

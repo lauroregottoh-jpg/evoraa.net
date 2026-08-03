@@ -8,7 +8,7 @@ import { cn } from "@/utils/cn"
 /**
  * Un Boost = visibilité prioritaire temporaire du profil
  * dans les suggestions aux membres compatibles.
- * Achetable seul (même en Découverte) ou offert avec Alliance 1/3/6 mois.
+ * Tarifs définis ; paiement en ligne à brancher après Alliance.
  */
 export function BoostSection() {
   const [selected, setSelected] = React.useState(BOOST_PACKS[0].id)
@@ -21,9 +21,9 @@ export function BoostSection() {
           <p className="text-xs font-semibold uppercase tracking-widest text-primary">Boost profil</p>
           <h2 className="font-serif text-2xl font-bold">Apparaître en priorité</h2>
           <p className="text-sm text-muted-foreground max-w-xl leading-relaxed">
-            Pendant la durée choisie, votre profil est mis en avant auprès des membres
-            compatibles : plus de chances d&apos;être vu, sans changer votre Matching.
-            Disponible seul ou en bonus avec Alliance (1 / 3 / 6 mois).
+            Pendant la durée choisie, votre profil sera mis en avant auprès des membres
+            compatibles — sans changer votre Matching. Tarifs affichés ; l&apos;achat en
+            ligne n&apos;est pas encore ouvert (soft launch).
           </p>
         </div>
         <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary shrink-0">

@@ -3,7 +3,7 @@
 export function appBaseUrl() {
   return (
     process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ||
-    (typeof window !== "undefined" ? window.location.origin : "https://evoraa-net.vercel.app")
+    (typeof window !== "undefined" ? window.location.origin : "https://keliaa.org")
   )
 }
 
