@@ -19,6 +19,7 @@ import {
   Bell,
   UserCircle2,
   Home,
+  UsersRound,
 } from "lucide-react"
 import { cn } from "@/utils/cn"
 import { logoutAction } from "@/app/actions/auth"
@@ -34,6 +35,7 @@ export type AdminNavId =
   | "academy"
   | "eva"
   | "marketing"
+  | "team"
   | "settings"
 
 type NavItem = {
@@ -94,6 +96,7 @@ export function AdminShell({
   ]
 
   const menuGeneral: NavItem[] = [
+    { id: "team", label: "Équipe & rôles", icon: UsersRound },
     { id: "settings", label: "Paramètres", icon: Settings },
   ]
 

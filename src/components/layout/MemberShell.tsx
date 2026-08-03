@@ -375,7 +375,7 @@ export function MemberShell({
         )}
       </nav>
 
-      {process.env.NODE_ENV === "development" && <DevSessionSwitcher />}
+      {false && process.env.NODE_ENV === "development" && <DevSessionSwitcher />}
     </div>
   );
 }

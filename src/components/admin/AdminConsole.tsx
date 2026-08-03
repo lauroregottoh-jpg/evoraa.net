@@ -46,6 +46,7 @@ import {
   YoutubeConfigEditor,
 } from "@/components/admin/AdminOpsV2Panels"
 import { MatchingIntelligencePanel } from "@/components/admin/AdminMatchingIntelligence"
+import { AdminStaffTeamPanel } from "@/components/admin/AdminStaffTeamPanel"
 import {
   BictorysSandboxPanel,
   PaymentsAuditPanel,
@@ -891,9 +892,35 @@ export function AdminConsole(props: Props) {
           <div>
             <h1 className="font-serif text-3xl font-bold">Coach EVA</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Consignes, base de connaissances, quotas, rapports — pas de « Sarah Coach ».
+              État réel du coach — pas de survente.
             </p>
           </div>
+          <SectionCard title="Niveau opérationnel (audit)">
+            <ul className="text-sm space-y-2 text-muted-foreground leading-relaxed">
+              <li>
+                <strong className="text-foreground">Aujourd&apos;hui :</strong> FAQ locale +
+                réponses préparées (pas une conseillère LLM live). Quota : Free 3/j · Alliance 20/j.
+              </li>
+              <li>
+                <strong className="text-foreground">Architecture docs :</strong> dossier{" "}
+                <code className="text-xs">docs/eva/</code> (identité, KB, scénarios, prompt V2)
+                prêt à brancher.
+              </li>
+              <li>
+                <strong className="text-foreground">Pas encore :</strong> mémoire de session
+                serveur, détection d&apos;intention, outils (plans/tests/académie), escalade crise
+                automatisée.
+              </li>
+              <li>
+                OpenAI :{" "}
+                <strong className="text-foreground">
+                  {props.ops.hasOpenAI
+                    ? "clé détectée (non branchée au chat membre)"
+                    : "absente — mode Local FAQ"}
+                </strong>
+              </li>
+            </ul>
+          </SectionCard>
           <div className="grid sm:grid-cols-3 gap-3">
             <KpiCard
               label="Quota Free / jour"
@@ -907,9 +934,9 @@ export function AdminConsole(props: Props) {
               hint="Alliance"
             />
             <KpiCard
-              label="OpenAI"
-              value={props.ops.hasOpenAI ? "Prêt" : "Local FAQ"}
-              hint={props.ops.hasOpenAI ? "Clé détectée" : "FAQ locale V1"}
+              label="Moteur"
+              value={props.ops.hasOpenAI ? "Prêt API" : "Local FAQ"}
+              hint="Chat membre = FAQ V1"
             />
           </div>
           <EvaConfigEditor
@@ -980,6 +1007,19 @@ export function AdminConsole(props: Props) {
               </Button>
             )}
           </SectionCard>
+        </div>
+      )}
+
+      {/* ——— 9b. ÉQUIPE ——— */}
+      {nav === "team" && (
+        <div className="space-y-6">
+          <div>
+            <h1 className="font-serif text-3xl font-bold">Équipe & rôles</h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Nommez des modérateurs, éditeurs de contenu ou coachs — sans exposer de lien public.
+            </p>
+          </div>
+          <AdminStaffTeamPanel canManage={isFullAdmin} />
         </div>
       )}
 
@@ -1249,7 +1289,7 @@ function MemberDetailPanel({
                 Rôle
               </p>
               <div className="flex flex-wrap gap-2">
-                {(["member", "moderator", "admin"] as const).map((r) => (
+                {(["member", "moderator", "editor", "coach", "admin"] as const).map((r) => (
                   <Button
                     key={r}
                     size="sm"

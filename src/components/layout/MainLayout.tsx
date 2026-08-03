@@ -51,20 +51,12 @@ export function MainLayout({
 
           <div className="flex items-center gap-4">
             {process.env.NODE_ENV === "development" && (
-              <>
-                <Link
-                  href="/admin"
-                  className="text-xs font-semibold text-accent hover:underline hidden sm:inline-block"
-                >
-                  Admin
-                </Link>
-                <Link
-                  href="/design-system"
-                  className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline-block"
-                >
-                  Design system
-                </Link>
-              </>
+              <Link
+                href="/design-system"
+                className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:inline-block"
+              >
+                Design system
+              </Link>
             )}
             <ThemeToggle />
           </div>
@@ -82,7 +74,7 @@ export function MainLayout({
         {children}
       </main>
 
-      {process.env.NODE_ENV === "development" && <DevSessionSwitcher />}
+      {false && process.env.NODE_ENV === "development" && <DevSessionSwitcher />}
 
       {showFooter && (
         <footer className="w-full border-t border-border/40 bg-background py-8 text-xs text-muted-foreground">

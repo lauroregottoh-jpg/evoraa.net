@@ -1,6 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 import { resolveSupabaseAnonKey, resolveSupabaseUrl } from '@/lib/config/supabase'
+import { isStaffRole, OPS_CONSOLE_PATH } from '@/lib/admin/consolePath'
 
 const AUTH_ROUTES = ['/login', '/register', '/forgot-password', '/reset-password']
 
@@ -11,7 +12,7 @@ const PROTECTED_PREFIXES = [
   '/onboarding',
   '/compatibility',
   '/messages',
-  '/admin',
+  OPS_CONSOLE_PATH,
   '/moderation',
   '/checkout',
   '/assessments',
@@ -23,7 +24,7 @@ const PROTECTED_PREFIXES = [
   '/premium',
 ]
 
-const ADMIN_PREFIXES = ['/admin', '/moderation']
+const ADMIN_PREFIXES = [OPS_CONSOLE_PATH, '/moderation']
 
 function matchesPrefix(pathname: string, prefixes: string[]) {
   return prefixes.some(
@@ -57,14 +58,12 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  // IMPORTANT: keep getUser() immediately after createServerClient
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
   const { pathname, search } = request.nextUrl
 
-  // Mot de passe oublié : ne jamais renvoyer vers onboarding/accueil
   const isResetPassword =
     pathname === '/reset-password' || pathname.startsWith('/reset-password/')
 
@@ -92,9 +91,14 @@ export async function updateSession(request: NextRequest) {
   if (user && isAuthRoute && !isResetPassword) {
     const { data: profile } = await supabase
       .from('profiles')
-      .select('completion_percentage, onboarding_status')
+      .select('completion_percentage, onboarding_status, role')
       .eq('user_id', user.id)
       .maybeSingle()
+
+    const nextParam = request.nextUrl.searchParams.get('next') || ''
+    if (nextParam.startsWith(OPS_CONSOLE_PATH) && isStaffRole(profile?.role)) {
+      return redirectWithCookies(OPS_CONSOLE_PATH)
+    }
 
     const completion = profile?.completion_percentage ?? 0
     const status = profile?.onboarding_status
@@ -107,8 +111,14 @@ export async function updateSession(request: NextRequest) {
     return redirectWithCookies(needsOnboarding ? '/onboarding' : '/dashboard')
   }
 
-  // Gate onboarding on product routes (except onboarding + settings)
-  if (user && isProtected && pathname !== '/onboarding' && !pathname.startsWith('/onboarding/') && pathname !== '/settings' && !pathname.startsWith('/settings/')) {
+  if (
+    user &&
+    isProtected &&
+    pathname !== '/onboarding' &&
+    !pathname.startsWith('/onboarding/') &&
+    pathname !== '/settings' &&
+    !pathname.startsWith('/settings/')
+  ) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('completion_percentage, onboarding_status, role')
@@ -135,8 +145,7 @@ export async function updateSession(request: NextRequest) {
       .eq('user_id', user.id)
       .maybeSingle()
 
-    const role = profile?.role
-    if (role !== 'admin' && role !== 'moderator') {
+    if (!isStaffRole(profile?.role)) {
       return redirectWithCookies('/dashboard')
     }
   }

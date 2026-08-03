@@ -3,6 +3,16 @@
 import { createClient } from "@/utils/supabase/server"
 import { createAdminClient } from "@/utils/supabase/admin"
 import { revalidatePath } from "next/cache"
+import {
+  isFullAdmin,
+  isStaffRole,
+  OPS_CONSOLE_PATH,
+  type StaffRole,
+} from "@/lib/admin/consolePath"
+
+function revalidateOps() {
+  revalidatePath(OPS_CONSOLE_PATH)
+}
 
 async function requireAdmin() {
   const supabase = await createClient()
@@ -19,8 +29,8 @@ async function requireAdmin() {
     .eq("user_id", user.id)
     .maybeSingle()
 
-  if (profile?.role !== "admin" && profile?.role !== "moderator") {
-    return { error: "Acces admin requis." as string, supabase: null, user: null, role: null }
+  if (!isStaffRole(profile?.role)) {
+    return { error: "Acces staff requis." as string, supabase: null, user: null, role: null }
   }
 
   return {
@@ -34,8 +44,8 @@ async function requireAdmin() {
 async function requireFullAdmin() {
   const gate = await requireAdmin()
   if (gate.error || !gate.supabase) return gate
-  if (gate.role !== "admin") {
-    return { ...gate, error: "Reserve aux administrateurs (pas moderateurs)." }
+  if (!isFullAdmin(gate.role)) {
+    return { ...gate, error: "Reserve a l'administrateur principal." }
   }
   return gate
 }
@@ -587,7 +597,7 @@ export async function adminUpdateModerationStatus(
     .eq("id", profileId)
 
   if (error) return { error: error.message }
-  revalidatePath("/admin")
+  revalidateOps()
   return { success: true }
 }
 
@@ -605,13 +615,13 @@ export async function adminSetVerified(profileId: string, verified: boolean) {
     .eq("id", profileId)
 
   if (error) return { error: error.message }
-  revalidatePath("/admin")
+  revalidateOps()
   return { success: true }
 }
 
 export async function adminSetRole(
   profileId: string,
-  role: "admin" | "moderator" | "member"
+  role: StaffRole
 ) {
   const gate = await requireFullAdmin()
   if (gate.error || !gate.supabase || !gate.user) {
@@ -634,8 +644,96 @@ export async function adminSetRole(
     .eq("id", profileId)
 
   if (error) return { error: error.message }
-  revalidatePath("/admin")
+  revalidateOps()
   return { success: true }
+}
+
+/** Nomme un membre staff par email (admin principal uniquement). */
+export async function adminAssignStaffByEmail(input: {
+  email: string
+  role: Exclude<StaffRole, "member">
+}) {
+  const gate = await requireFullAdmin()
+  if (gate.error || !gate.supabase) {
+    return { error: gate.error || "Acces refuse." }
+  }
+
+  const email = input.email.trim().toLowerCase()
+  if (!email || !email.includes("@")) {
+    return { error: "Email invalide." }
+  }
+
+  let admin
+  try {
+    admin = createAdminClient()
+  } catch {
+    return { error: "Service role indisponible." }
+  }
+
+  const { data: listed, error: listErr } = await admin.auth.admin.listUsers({
+    page: 1,
+    perPage: 200,
+  })
+  if (listErr) return { error: listErr.message }
+
+  const authUser = (listed?.users || []).find(
+    (u) => (u.email || "").toLowerCase() === email
+  )
+  if (!authUser) {
+    return { error: "Aucun compte avec cet email. La personne doit d'abord s'inscrire." }
+  }
+
+  const { data: profile, error: pe } = await gate.supabase
+    .from("profiles")
+    .select("id, role, first_name")
+    .eq("user_id", authUser.id)
+    .maybeSingle()
+
+  if (pe) return { error: pe.message }
+  if (!profile) return { error: "Profil introuvable pour cet utilisateur." }
+
+  const { error } = await gate.supabase
+    .from("profiles")
+    .update({ role: input.role, updated_at: new Date().toISOString() })
+    .eq("id", profile.id)
+
+  if (error) return { error: error.message }
+  revalidateOps()
+  return {
+    success: true,
+    profileId: profile.id,
+    name: profile.first_name,
+    role: input.role,
+  }
+}
+
+export async function adminListStaff() {
+  const gate = await requireFullAdmin()
+  if (gate.error || !gate.supabase) {
+    return { error: gate.error || "Acces refuse.", staff: [] as Array<{
+      id: string
+      userId: string
+      firstName: string
+      role: string
+    }> }
+  }
+
+  const { data, error } = await gate.supabase
+    .from("profiles")
+    .select("id, user_id, first_name, role")
+    .in("role", ["admin", "moderator", "editor", "coach"])
+    .order("role")
+
+  if (error) return { error: error.message, staff: [] }
+
+  return {
+    staff: (data || []).map((p) => ({
+      id: p.id as string,
+      userId: p.user_id as string,
+      firstName: (p.first_name as string) || "—",
+      role: (p.role as string) || "member",
+    })),
+  }
 }
 
 export async function adminGrantAlliance(userId: string, days = 30) {
@@ -679,7 +777,7 @@ export async function adminGrantAlliance(userId: string, days = 30) {
     if (error) return { error: error.message }
   }
 
-  revalidatePath("/admin")
+  revalidateOps()
   revalidatePath("/billing")
   return { success: true }
 }
@@ -697,7 +795,7 @@ export async function adminResolveReport(
     .eq("id", reportId)
 
   if (error) return { error: error.message }
-  revalidatePath("/admin")
+  revalidateOps()
   return { success: true }
 }
 
@@ -746,7 +844,7 @@ export async function adminModeratePhoto(
     })
   }
 
-  revalidatePath("/admin")
+  revalidateOps()
   revalidatePath("/profile")
   return { success: true }
 }
@@ -784,7 +882,7 @@ export async function adminUpdatePlatformSetting(key: string, value: unknown) {
   })
 
   if (error) return { error: error.message }
-  revalidatePath("/admin")
+  revalidateOps()
   revalidatePath("/dashboard")
   revalidatePath("/academie-mariage")
   return { success: true }
@@ -831,7 +929,7 @@ export async function adminBroadcastSegmentNotification(input: {
   const { error } = await gate.supabase.from("notifications").insert(rows)
   if (error) return { error: error.message }
 
-  revalidatePath("/admin")
+  revalidateOps()
   return { success: true, sent: ids.length }
 }
 
@@ -912,7 +1010,7 @@ export async function adminCreateMember(input: {
       if (error) return { error: error.message, userId }
     }
 
-    revalidatePath("/admin")
+    revalidateOps()
     return { success: true, userId }
   } catch (e) {
     return { error: e instanceof Error ? e.message : "Erreur creation membre." }
@@ -1002,7 +1100,7 @@ export async function adminRunAutoModeration() {
     }
   }
 
-  revalidatePath("/admin")
+  revalidateOps()
   return {
     success: true,
     approved,
@@ -1210,7 +1308,7 @@ export async function adminApplySanction(
     created_by: gate.user.id,
   })
 
-  revalidatePath("/admin")
+  revalidateOps()
   return { success: true, sanctionStatus, warningCount, trust }
 }
 
@@ -1267,7 +1365,7 @@ export async function adminReviewChurchRecommendation(
       .eq("id", reco.profile_id)
   }
 
-  revalidatePath("/admin")
+  revalidateOps()
   return { success: true }
 }
 
@@ -1446,7 +1544,7 @@ export async function adminBictorysSandboxCharge(input: {
     payload: { transactionId: result.txId, checkoutUrl: result.checkoutUrl },
   })
 
-  revalidatePath("/admin")
+  revalidateOps()
   return {
     success: true,
     paymentId: payment.id,
