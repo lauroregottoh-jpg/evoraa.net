@@ -18,11 +18,13 @@ import {
   MoreHorizontal,
   Share2,
   BookHeart,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { ThemeToggle } from "@/components/evoraa/ThemeToggle";
 import { DevSessionSwitcher } from "@/components/dev/DevSessionSwitcher";
 import { MemberReminders } from "@/components/layout/MemberReminders";
+import { logoutAction } from "@/app/actions/auth";
 
 const NAV = [
   { href: "/dashboard", label: "Accueil", icon: LayoutGrid },
@@ -216,6 +218,16 @@ export function MemberShell({
             >
               <User className="h-4 w-4" />
             </a>
+            <form action={logoutAction} className="hidden md:block">
+              <button
+                type="submit"
+                className="p-2 rounded-full hover:bg-destructive/10 text-muted-foreground hover:text-destructive"
+                aria-label="Se déconnecter"
+                title="Se déconnecter"
+              >
+                <LogOut className="h-4 w-4" />
+              </button>
+            </form>
             <ThemeToggle />
           </div>
         </div>
@@ -243,6 +255,15 @@ export function MemberShell({
                 );
               }
             )}
+            <form action={logoutAction} className="pt-2">
+              <button
+                type="submit"
+                className="flex w-full items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-destructive hover:bg-destructive/10"
+              >
+                <LogOut className="h-4 w-4" />
+                Se déconnecter
+              </button>
+            </form>
           </div>
         )}
 
@@ -340,6 +361,15 @@ export function MemberShell({
                   );
                 })}
               </div>
+              <form action={logoutAction} className="mt-1 pt-1 border-t border-border">
+                <button
+                  type="submit"
+                  className="w-full flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-semibold text-destructive hover:bg-destructive/10"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Se déconnecter
+                </button>
+              </form>
             </div>
           </>
         )}

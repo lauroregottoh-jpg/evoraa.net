@@ -1,18 +1,25 @@
 "use client"
 
-import { Play, VideoOff } from "lucide-react"
+import Image from "next/image"
 import type { AcademyLesson } from "@/lib/academy/modules"
 
 type Props = {
-  lesson: Pick<AcademyLesson, "title" | "videoUrl" | "videoProvider" | "durationMin">
+  lesson: Pick<
+    AcademyLesson,
+    "title" | "videoUrl" | "videoProvider" | "durationMin" | "coverImage"
+  > & { coverImage?: string }
 }
 
+const DEFAULT_COVER =
+  "https://images.unsplash.com/photo-1511632765486-a01980e01d4e?q=80&w=1600&auto=format&fit=crop"
+
 /**
- * Emplacement vidéo prêt pour YouTube / Vimeo / fichier.
- * Tant que videoUrl est vide : placeholder de test (pas de média).
+ * Affiche la vidéo si une URL est renseignée.
+ * Sinon : image d’ambiance (pas de texte technique YouTube/Vimeo).
  */
 export function AcademyVideoSlot({ lesson }: Props) {
   const url = lesson.videoUrl?.trim()
+  const cover = (lesson as { coverImage?: string }).coverImage || DEFAULT_COVER
 
   if (url) {
     const embed = toEmbedUrl(url, lesson.videoProvider)
@@ -41,17 +48,19 @@ export function AcademyVideoSlot({ lesson }: Props) {
   }
 
   return (
-    <div className="aspect-video w-full rounded-2xl border border-dashed border-border bg-secondary/40 flex flex-col items-center justify-center gap-3 px-6 text-center">
-      <div className="h-12 w-12 rounded-full bg-primary/10 text-primary flex items-center justify-center">
-        {url ? <Play className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
-      </div>
-      <div className="space-y-1 max-w-sm">
-        <p className="text-sm font-semibold">Vidéo à venir (~{lesson.durationMin} min)</p>
-        <p className="text-xs text-muted-foreground leading-relaxed">
-          L&apos;emplacement est prêt. Dès qu&apos;une URL YouTube / Vimeo (ou un fichier) est
-          ajoutée dans le catalogue, elle s&apos;affiche ici automatiquement.
-        </p>
-      </div>
+    <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-border">
+      <Image
+        src={cover}
+        alt=""
+        fill
+        className="object-cover"
+        sizes="(max-width: 768px) 100vw, 720px"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+      <p className="absolute bottom-3 left-4 right-4 text-white text-sm font-medium drop-shadow">
+        {lesson.title}
+        {lesson.durationMin ? ` · ~${lesson.durationMin} min` : ""}
+      </p>
     </div>
   )
 }

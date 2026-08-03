@@ -29,7 +29,7 @@ export function ProfileProgressHero({
         </div>
         <div className="min-w-0 flex-1">
           <h1 className="font-serif text-2xl sm:text-3xl font-bold leading-tight">
-            Bonjour, {firstName}
+            Bonjour{firstName ? `, ${firstName}` : ""}
           </h1>
           <p className="text-xs text-primary-foreground/70 mt-1">
             {isVerified ? "Membre vérifié(e)" : "Profil en maturité"} · Cliquez pour compléter

@@ -97,8 +97,7 @@ export default async function AcademieMariagePage() {
         <AcademyCoachingCta moduleId="dialogue" moduleTitle="Académie du mariage" />
 
         <p className="text-xs text-muted-foreground text-center">
-          {ACADEMY_MODULES.reduce((n, m) => n + m.lessons.length, 0)} leçons disponibles en version
-          texte. Vidéos : à brancher quand elles sont prêtes (YouTube / Vimeo).
+          {ACADEMY_MODULES.reduce((n, m) => n + m.lessons.length, 0)} leçons disponibles.
         </p>
       </div>
     </MemberPage>

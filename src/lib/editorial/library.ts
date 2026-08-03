@@ -396,22 +396,18 @@ export function pickFromCategory(
 
 export type DailyEditorialPack = {
   primary: EditorialItem
-  secondary: EditorialItem
   dayIndex: number
 }
 
-/** Deux formats différents chaque jour pour animer l'accueil. */
+/** Un seul contenu par jour — le format alterne (pensée, conseil, défi…). */
 export function getDailyEditorialPack(date = new Date()): DailyEditorialPack {
   const dayIndex = dayOfYearUTC(date)
   const primaryCat =
     DAILY_CATEGORY_ROTATION[dayIndex % DAILY_CATEGORY_ROTATION.length]
-  const secondaryCat =
-    DAILY_CATEGORY_ROTATION[(dayIndex + 7) % DAILY_CATEGORY_ROTATION.length]
 
   return {
     dayIndex,
     primary: pickFromCategory(primaryCat, dayIndex * 3 + 1),
-    secondary: pickFromCategory(secondaryCat, dayIndex * 5 + 11),
   }
 }
 

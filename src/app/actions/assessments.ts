@@ -198,6 +198,8 @@ export async function submitAssessmentAction(
 
   const completedCount = psychometric.pillars_completed
 
+  const { computeProfileCompletion } = await import("@/lib/profile/completion")
+
   const { data: currentProfile } = await supabase
     .from("profiles")
     .select("trial_ends_at")
@@ -207,7 +209,10 @@ export async function submitAssessmentAction(
   const profileUpdate: Record<string, unknown> = {
     psychometric_results: psychometric,
     onboarding_status: completedCount >= 5 ? "active" : "step3_tests",
-    completion_percentage: completedCount >= 5 ? 95 : Math.min(90, 70 + completedCount * 4),
+    completion_percentage: computeProfileCompletion({
+      onboardingDone: true,
+      assessmentsDone: completedCount,
+    }),
     updated_at: new Date().toISOString(),
   }
 

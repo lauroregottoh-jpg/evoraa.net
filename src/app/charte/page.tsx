@@ -72,7 +72,7 @@ export default function ChartePage() {
             <li>Respecter chaque personne dans les messages et les intentions.</li>
             <li>Ne pas utiliser la plateforme pour du harcèlement, du spam ou des sollicitations financières.</li>
             <li>Honorer la confidentialité des échanges et des données des autres membres.</li>
-            <li>Signaler tout comportement contraire à cette charte à ethique@KELIAA.net.</li>
+            <li>Signaler tout comportement contraire à cette charte à contact@keliaa.org.</li>
           </ul>
         </div>
 

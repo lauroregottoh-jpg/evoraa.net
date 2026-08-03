@@ -71,7 +71,7 @@ export async function saveOnboardingAction(payload: OnboardingPayload) {
       birth_date: birthDate,
       matching_indicators: matchingIndicators,
       onboarding_status: "step3_tests",
-      completion_percentage: 78,
+      completion_percentage: 15,
       updated_by: user.id,
       updated_at: new Date().toISOString(),
     })

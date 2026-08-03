@@ -61,7 +61,6 @@ export type DashboardData = {
   social: SocialInsights
   nextSteps: DashboardNextStep[]
   dailyPrimary: EditorialItem
-  dailySecondary: EditorialItem
   mission: DashboardMission
   selectionTitle: string
   selectionSubtitle: string
@@ -82,7 +81,7 @@ export async function getDashboardData(): Promise<{
   const { data: profile } = await supabase
     .from("profiles")
     .select(
-      "first_name, completion_percentage, is_verified, identity_verified, privacy_settings, avatar_url"
+      "first_name, completion_percentage, is_verified, identity_verified, privacy_settings, avatar_url, onboarding_status"
     )
     .eq("user_id", user.id)
     .maybeSingle()
@@ -115,7 +114,20 @@ export async function getDashboardData(): Promise<{
   const assessmentsDone = progress.filter((p) => p.completed).length
 
   const hasAvatar = Boolean(profile.avatar_url)
-  const completion = profile.completion_percentage ?? 0
+  const { computeProfileCompletion, isOnboardingProfileDone } = await import(
+    "@/lib/profile/completion"
+  )
+  const completion = computeProfileCompletion({
+    onboardingDone: isOnboardingProfileDone(profile.onboarding_status as string | null),
+    assessmentsDone,
+  })
+  // Keep DB in sync when legacy % was inflated (e.g. 78 without tests)
+  if ((profile.completion_percentage ?? 0) !== completion) {
+    void supabase
+      .from("profiles")
+      .update({ completion_percentage: completion })
+      .eq("user_id", user.id)
+  }
   const texts = cms.texts
 
   const nextSteps: DashboardNextStep[] = []
@@ -129,24 +141,23 @@ export async function getDashboardData(): Promise<{
       tone: "photo",
     })
   }
-  if (completion < 70) {
-    nextSteps.push({
-      id: "profile",
-      title: `Profil complété à ${completion}%`,
-      body: "Plus votre profil est clair, plus le matching sur vos 5 piliers est précis.",
-      href: "/profile",
-      cta: "Compléter",
-      tone: "profile",
-    })
-  }
   if (assessmentsDone < 5) {
     nextSteps.push({
       id: "tests",
-      title: `${assessmentsDone}/5 questionnaires de discernement`,
-      body: "Personnalité, foi, conflits, vision du couple, finances — profils plus précis.",
+      title: `${assessmentsDone}/5 questionnaires — ${completion}% du profil`,
+      body: "Les questionnaires représentent l’essentiel de votre progression. Sans eux, le Matching reste incomplet.",
       href: "/assessments",
-      cta: "Continuer",
+      cta: "Continuer les tests",
       tone: "tests",
+    })
+  } else if (completion < 100) {
+    nextSteps.push({
+      id: "profile",
+      title: `Profil à ${completion}%`,
+      body: "Ajoutez une photo claire pour finaliser votre visibilité.",
+      href: "/profile",
+      cta: "Compléter",
+      tone: "profile",
     })
   }
   if (usage.isTrialBoost && usage.trialDaysRemaining != null) {
@@ -238,7 +249,7 @@ export async function getDashboardData(): Promise<{
 
   return {
     data: {
-      firstName: profile.first_name || "Membre",
+      firstName: (profile.first_name || "").trim() || "ami(e)",
       userId: user.id,
       completionPercentage: completion,
       isVerified: Boolean(profile.is_verified || profile.identity_verified),
@@ -267,7 +278,6 @@ export async function getDashboardData(): Promise<{
       social,
       nextSteps: nextSteps.slice(0, 3),
       dailyPrimary: editorial.primary,
-      dailySecondary: editorial.secondary,
       mission,
       selectionTitle: texts.selection_title,
       selectionSubtitle: texts.selection_subtitle,

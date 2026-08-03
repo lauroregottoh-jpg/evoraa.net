@@ -34,9 +34,9 @@ export default function InspirationPage() {
             Inspiration du jour
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
-            Chaque jour, au plus <strong>deux contenus</strong> s&apos;affichent en
-            alternance (pensée, conseil, défi, question…). Vous pouvez aussi
-            parcourir la bibliothèque complète ci-dessous.
+            Chaque jour, <strong>un seul contenu</strong> s&apos;affiche (pensée, conseil,
+            défi, question…). Formats en alternance. La bibliothèque complète est
+            disponible ci-dessous.
           </p>
         </header>
 
@@ -46,7 +46,6 @@ export default function InspirationPage() {
             <h2 className="font-semibold text-sm">Aujourd&apos;hui pour vous</h2>
           </div>
           <DailyEditorialCard item={today.primary} featured />
-          <DailyEditorialCard item={today.secondary} />
         </section>
 
         <section className="space-y-3">

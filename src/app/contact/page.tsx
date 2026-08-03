@@ -124,22 +124,21 @@ function ContactPageInner() {
 
             <div className="mt-8 space-y-5">
               <div className="border-t border-white/15 pt-5">
-                <p className="text-xs font-bold uppercase tracking-wider text-accent">Question générale</p>
-                <a href="mailto:contact@KELIAA.net" className="mt-1 inline-block font-semibold hover:text-accent">
-                  contact@KELIAA.net
+                <p className="text-xs font-bold uppercase tracking-wider text-accent">Contact</p>
+                <a href="mailto:contact@keliaa.org" className="mt-1 inline-block font-semibold hover:text-accent">
+                  contact@keliaa.org
                 </a>
+                <p className="mt-2 text-xs text-white/65 leading-relaxed">
+                  Une seule adresse pour toutes vos demandes (questions, coaching payant,
+                  signalement).
+                </p>
               </div>
-              <div className="border-t border-white/15 pt-5">
-                <p className="text-xs font-bold uppercase tracking-wider text-accent">Conseil &amp; parcours</p>
-                <a href="mailto:conseil@KELIAA.net" className="mt-1 inline-block font-semibold hover:text-accent">
-                  conseil@KELIAA.net
-                </a>
-              </div>
-              <div className="border-t border-white/15 pt-5">
-                <p className="text-xs font-bold uppercase tracking-wider text-accent">Éthique &amp; signalement</p>
-                <a href="mailto:ethique@KELIAA.net" className="mt-1 inline-block font-semibold hover:text-accent">
-                  ethique@KELIAA.net
-                </a>
+              <div className="border-t border-white/15 pt-5 space-y-2">
+                <p className="text-xs font-bold uppercase tracking-wider text-accent">
+                  Coaching payant
+                </p>
+                <p className="text-sm text-white/80">Séance 45–60 min — <strong>15 000 FCFA</strong></p>
+                <p className="text-sm text-white/80">Pack 3 séances — <strong>40 000 FCFA</strong></p>
               </div>
             </div>
 
@@ -208,10 +207,10 @@ function ContactPageInner() {
                   onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                   className="w-full px-4 py-3 rounded-md bg-background border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                 >
-                  <option value="question">Fonctionnement</option>
-                  <option value="coaching">Conseil / coaching</option>
-                  <option value="billing">Abonnements</option>
-                  <option value="report">Éthique / signalement</option>
+                  <option value="question">Question générale</option>
+                  <option value="coaching">Coaching payant</option>
+                  <option value="billing">Abonnements Alliance</option>
+                  <option value="report">Signalement</option>
                 </select>
               </div>
               <div className="space-y-1.5">

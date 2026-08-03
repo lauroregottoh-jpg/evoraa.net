@@ -18,8 +18,8 @@ export default function ConfidentialitePage() {
           <p>
             Le responsable du traitement des données personnelles collectées via KELIAA est
             l&apos;éditeur de la plateforme. Pour exercer vos droits ou poser une question :{" "}
-            <a href="mailto:contact@KELIAA.net" className="text-primary underline underline-offset-2">
-              contact@KELIAA.net
+            <a href="mailto:contact@keliaa.org" className="text-primary underline underline-offset-2">
+              contact@keliaa.org
             </a>{" "}
             ou via la{" "}
             <Link href="/contact" className="text-primary underline underline-offset-2">
@@ -111,7 +111,7 @@ export default function ConfidentialitePage() {
           <p>
             Mesures techniques et organisationnelles : HTTPS, contrôle d&apos;accès, politiques RLS
             côté base de données, procédures de signalement. Aucune mesure n&apos;est absolue :
-            signalez tout incident suspect à ethique@KELIAA.net.
+            signalez tout incident suspect à contact@keliaa.org.
           </p>
         </section>
 

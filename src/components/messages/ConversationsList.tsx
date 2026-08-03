@@ -44,14 +44,32 @@ export function ConversationsList({
       )}
 
       {!error && conversations.length === 0 && (
-        <div className="rounded-2xl border border-border/60 bg-secondary/30 p-8 text-center space-y-3">
-          <p className="font-serif text-xl text-foreground">Aucun dialogue pour le moment</p>
-          <p className="text-sm text-muted-foreground">
-            Ouvrez une fiche compatible et cliquez sur « Écrire ».
+        <div className="rounded-2xl border border-border/60 bg-secondary/30 p-8 text-center space-y-4">
+          <p className="font-serif text-xl text-foreground">Aucun message pour le moment</p>
+          <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
+            C&apos;est normal au début. En attendant une conversation, invitez un ami sérieux
+            ou avancez dans l&apos;Académie du mariage.
           </p>
-          <Link href="/compatibility" className="text-accent font-semibold underline underline-offset-2 text-sm">
-            Voir mes compatibilités
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-2 justify-center pt-1">
+            <Link
+              href="/dashboard#invite"
+              className="inline-flex items-center justify-center h-10 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-semibold"
+            >
+              Inviter un ami
+            </Link>
+            <Link
+              href="/academie-mariage"
+              className="inline-flex items-center justify-center h-10 px-4 rounded-xl border border-border text-sm font-semibold"
+            >
+              Académie du mariage
+            </Link>
+            <Link
+              href="/compatibility"
+              className="inline-flex items-center justify-center h-10 px-4 rounded-xl border border-border text-sm font-semibold"
+            >
+              Voir mes compatibilités
+            </Link>
+          </div>
         </div>
       )}
 

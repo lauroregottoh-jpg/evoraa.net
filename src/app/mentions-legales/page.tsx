@@ -30,8 +30,8 @@ export default function MentionsLegalesPage() {
             RCCM / NIF (Togo) : à communiquer dès obtention
             <br />
             Contact :{" "}
-            <a href="mailto:contact@KELIAA.net" className="text-primary underline">
-              contact@KELIAA.net
+            <a href="mailto:contact@keliaa.org" className="text-primary underline">
+              contact@keliaa.org
             </a>
           </p>
           <p className="text-muted-foreground text-xs">

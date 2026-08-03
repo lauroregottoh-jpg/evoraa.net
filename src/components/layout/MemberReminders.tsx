@@ -31,7 +31,7 @@ export function MemberReminders({
   isPaid,
   onNavigate,
 }: MemberRemindersProps) {
-  const profileIncomplete = completionPercentage < 95
+  const profileIncomplete = assessmentsDone < assessmentsTotal || completionPercentage < 100
   const testsLeft = assessmentsDone < assessmentsTotal
   const showTasks = !hasAvatar || profileIncomplete || testsLeft
   const showRenew = renewSoon && daysRemaining != null && daysRemaining <= 7
@@ -113,7 +113,11 @@ export function MemberReminders({
                   Profil
                 </p>
                 <p className="text-xs font-semibold truncate">
-                  {completionPercentage >= 95 ? "Presque complet" : "À compléter"}
+                  {completionPercentage >= 100
+                    ? "Complet"
+                    : testsLeft
+                      ? `${assessmentsDone}/${assessmentsTotal} tests`
+                      : "À compléter"}
                 </p>
               </div>
             </a>

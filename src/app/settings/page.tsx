@@ -1,13 +1,14 @@
-import { MemberPage } from "@/components/layout/MemberPage";
-import { EvaCompanion } from "@/components/evoraa/EvaCompanion";
-import { Badge } from "@/components/ui/badge";
-import { SettingsForm } from "@/components/settings/SettingsForm";
-import { getMySettings } from "@/app/actions/settings";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { MemberPage } from "@/components/layout/MemberPage"
+import { EvaCompanion } from "@/components/evoraa/EvaCompanion"
+import { Badge } from "@/components/ui/badge"
+import { SettingsForm } from "@/components/settings/SettingsForm"
+import { getMySettings } from "@/app/actions/settings"
+import { logoutAction } from "@/app/actions/auth"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
 
 export default async function SettingsPage() {
-  const { data, error } = await getMySettings();
+  const { data, error } = await getMySettings()
 
   return (
     <MemberPage>
@@ -35,7 +36,9 @@ export default async function SettingsPage() {
 
         {error || !data ? (
           <div className="space-y-3">
-            <p className="text-sm text-destructive">{error || "Impossible de charger les réglages."}</p>
+            <p className="text-sm text-destructive">
+              {error || "Impossible de charger les réglages."}
+            </p>
             <Link href="/login">
               <Button variant="outline" className="rounded-xl">
                 Se connecter
@@ -43,9 +46,20 @@ export default async function SettingsPage() {
             </Link>
           </div>
         ) : (
-          <SettingsForm initial={data} />
+          <>
+            <SettingsForm initial={data} />
+            <form action={logoutAction} className="pt-4 border-t border-border">
+              <Button
+                type="submit"
+                variant="outline"
+                className="rounded-xl text-destructive border-destructive/30"
+              >
+                Se déconnecter
+              </Button>
+            </form>
+          </>
         )}
       </div>
     </MemberPage>
-  );
+  )
 }

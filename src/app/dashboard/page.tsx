@@ -108,30 +108,35 @@ export default async function DashboardPage() {
         <div className="space-y-3">
           <div className="flex items-end justify-between gap-3 px-1">
             <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
-              2 contenus du jour · formats en alternance
+              Contenu du jour · {data.dailyPrimary.label}
             </p>
             <Link
               href="/inspiration"
               className="text-xs font-semibold text-primary hover:underline underline-offset-2"
             >
-              Voir toute la bibliothèque →
+              Bibliothèque →
             </Link>
           </div>
           <DailyEditorialCard item={data.dailyPrimary} featured />
-          <DailyEditorialCard item={data.dailySecondary} />
         </div>
 
-        {!data.hasAvatar || data.completionPercentage < 70 ? (
+        {!data.hasAvatar || data.assessmentsDone < 5 ? (
           <div className="rounded-2xl border border-border bg-card p-5 space-y-3">
+            <p className="text-sm font-semibold text-foreground">
+              EVA vous rappelle
+            </p>
             <p className="text-sm text-muted-foreground">
-              Personne ne peut vraiment découvrir votre profil tant qu&apos;il n&apos;est pas
-              assez complet. Remplissez-le pour devenir visible.
+              {data.assessmentsDone < 5
+                ? `Vous avez complété ${data.assessmentsDone}/5 questionnaires. C’est ce qui fait avancer votre profil (actuellement ${data.completionPercentage}%). Sans les questionnaires, le Matching ne peut pas vraiment vous aider.`
+                : "Ajoutez une photo claire pour devenir visible auprès des profils compatibles."}
             </p>
             <Link
-              href="/profile"
+              href={data.assessmentsDone < 5 ? "/assessments" : "/profile"}
               className="flex items-center justify-center w-full rounded-xl bg-primary text-primary-foreground h-11 text-sm font-semibold"
             >
-              Compléter mon profil →
+              {data.assessmentsDone < 5
+                ? "Continuer mes questionnaires →"
+                : "Ajouter ma photo →"}
             </Link>
           </div>
         ) : null}
