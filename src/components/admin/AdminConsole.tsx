@@ -273,9 +273,14 @@ export function AdminConsole(props: Props) {
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
             <div>
-              <h1 className="font-serif text-3xl font-bold tracking-tight">Dashboard</h1>
+              <p className="text-[11px] font-bold uppercase tracking-widest text-[#8B6914] mb-1">
+                Console ops — pas le dashboard membre
+              </p>
+              <h1 className="font-serif text-3xl font-bold tracking-tight">
+                Bienvenue Admin
+              </h1>
               <p className="text-sm text-muted-foreground mt-1">
-                Vue d&apos;ensemble ops — style DASHBOARD 1–4, données Keliaa live.
+                Pilotage KELIAA : membres, modération, Alliance, matching, EVA.
               </p>
             </div>
             <p className="text-xs text-muted-foreground">
