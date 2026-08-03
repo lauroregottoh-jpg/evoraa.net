@@ -6,7 +6,7 @@ import { EvaCompanion } from "@/components/evoraa/EvaCompanion";
 import { SafetyReportModal } from "@/components/safety/SafetyReportModal";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ShieldCheck, Lock, UserCheck, AlertCircle, Sparkles, HeartHandshake } from "lucide-react";
+import { ShieldCheck, Lock, Sparkles } from "lucide-react";
 
 export default function ModerationPage() {
   const [showDemoReport, setShowDemoReport] = React.useState(false);

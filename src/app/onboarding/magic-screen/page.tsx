@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { EvaCompanion } from "@/components/evoraa/EvaCompanion";
 import { ProfileProgress } from "@/components/evoraa/ProfileProgress";
-import { Sparkles, CheckCircle2, ArrowRight, ShieldCheck, Heart } from "lucide-react";
+import { Sparkles, CheckCircle2, ArrowRight, Heart } from "lucide-react";
 
 export default function MagicScreenPage() {
   const router = useRouter();

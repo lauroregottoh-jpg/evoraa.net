@@ -6,7 +6,7 @@ import { EvaCompanion } from "@/components/evoraa/EvaCompanion";
 import { EvaSpiritualAdvisor } from "@/components/spiritual/EvaSpiritualAdvisor";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen, Sparkles, HeartHandshake, Compass, ArrowRight } from "lucide-react";
+import { BookOpen, Compass, ArrowRight } from "lucide-react";
 
 const GUIDES = [
   {

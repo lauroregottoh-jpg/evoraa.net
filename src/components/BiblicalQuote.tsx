@@ -37,7 +37,7 @@ export function BiblicalQuote({ className }: { className?: string }) {
         )}
       >
         <p className="text-xl md:text-2xl text-white font-serif italic leading-relaxed shadow-sm">
-          "{currentVerse.quote}"
+          &ldquo;{currentVerse.quote}&rdquo;
         </p>
         <footer className="text-sm md:text-base font-medium text-white/80 uppercase tracking-widest">
           — {currentVerse.reference}

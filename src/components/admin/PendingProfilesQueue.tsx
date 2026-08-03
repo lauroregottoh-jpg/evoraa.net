@@ -37,7 +37,7 @@ export function PendingProfilesQueue({
   run: (key: string, fn: () => Promise<{ error?: string; success?: boolean }>) => Promise<void>
 }) {
   const [openId, setOpenId] = React.useState<string | null>(users[0]?.id ?? null)
-  const [rejectReason, setRejectReason] = React.useState(PROFILE_REJECT_REASONS[0].id)
+  const [rejectReason, setRejectReason] = React.useState<string>(PROFILE_REJECT_REASONS[0].id)
   const [feedback, setFeedback] = React.useState(
     "Merci pour votre inscription. Complétez votre photo et votre témoignage pour accélérer la validation."
   )

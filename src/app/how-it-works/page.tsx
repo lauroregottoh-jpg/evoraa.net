@@ -12,7 +12,6 @@ import {
   Heart,
   UserCheck,
   BookOpen,
-  Award,
   ArrowRight,
   ChevronDown,
   Flag,

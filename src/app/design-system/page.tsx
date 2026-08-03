@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { EvaCompanion } from "@/components/evoraa/EvaCompanion";
 import { ProfileProgress } from "@/components/evoraa/ProfileProgress";
-import { Sparkles, CheckCircle2, AlertTriangle, ShieldCheck } from "lucide-react";
+import { Sparkles, ShieldCheck } from "lucide-react";
 
 export default function DesignSystemShowcasePage() {
   const [profilePct, setProfilePct] = React.useState(78);
