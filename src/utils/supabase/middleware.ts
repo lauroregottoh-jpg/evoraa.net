@@ -30,6 +30,14 @@ const PROTECTED_PREFIXES = [
 
 const ADMIN_PREFIXES = [OPS_CONSOLE_PATH, '/moderation']
 
+/** API surface fermée : seules ces routes existent côté public réseau. */
+const ALLOWED_API_PREFIXES = [
+  '/api/payments/bictorys/notify',
+  '/api/payments/cinetpay/notify',
+  '/api/cron/subscription-reminders',
+  '/api/health/config',
+]
+
 function matchesPrefix(pathname: string, prefixes: string[]) {
   return prefixes.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
@@ -40,6 +48,15 @@ export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   })
+
+  const { pathname, search } = request.nextUrl
+
+  // Deny unknown /api/* early (nouveaux endpoints oubliés = 404 par défaut).
+  if (pathname.startsWith('/api/')) {
+    if (!matchesPrefix(pathname, ALLOWED_API_PREFIXES)) {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    }
+  }
 
   const supabase = createServerClient(
     resolveSupabaseUrl(),
@@ -66,8 +83,17 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  const { pathname, search } = request.nextUrl
   const email = resolveAuthEmail(user)
+
+  // Showcase /design-system : pas public en production.
+  if (
+    process.env.NODE_ENV === 'production' &&
+    (pathname === '/design-system' || pathname.startsWith('/design-system/'))
+  ) {
+    if (!user) {
+      return NextResponse.redirect(new URL('/', request.url))
+    }
+  }
 
   const isResetPassword =
     pathname === '/reset-password' || pathname.startsWith('/reset-password/')
