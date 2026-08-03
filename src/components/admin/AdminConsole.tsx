@@ -910,25 +910,24 @@ export function AdminConsole(props: Props) {
           <SectionCard title="Niveau opérationnel (audit)">
             <ul className="text-sm space-y-2 text-muted-foreground leading-relaxed">
               <li>
-                <strong className="text-foreground">Aujourd&apos;hui :</strong> FAQ locale +
-                réponses préparées (pas une conseillère LLM live). Quota : Free 3/j · Alliance 20/j.
+                <strong className="text-foreground">Aujourd&apos;hui :</strong> chat membre
+                branché (`askEvaAction`) — lit <code className="text-xs">docs/eva/</code> + notes
+                ops. Sans OpenAI = moteur local ; avec clé = LLM.
               </li>
               <li>
-                <strong className="text-foreground">Architecture docs :</strong> dossier{" "}
-                <code className="text-xs">docs/eva/</code> (identité, KB, scénarios, prompt V2)
-                prêt à brancher.
+                <strong className="text-foreground">Sujets interdits ops :</strong> fusionnés dans
+                les garde-fous Eva.
               </li>
               <li>
-                <strong className="text-foreground">Pas encore :</strong> mémoire de session
-                serveur, détection d&apos;intention, outils (plans/tests/académie), escalade crise
-                automatisée.
+                <strong className="text-foreground">Quota :</strong> Free 3/j · Alliance{" "}
+                {PLANS.premium_plus.limits.evaQuestionsPerDay}/j.
               </li>
               <li>
                 OpenAI :{" "}
                 <strong className="text-foreground">
                   {props.ops.hasOpenAI
-                    ? "clé détectée (non branchée au chat membre)"
-                    : "absente — mode Local FAQ"}
+                    ? "clé détectée — utilisable par Eva"
+                    : "absente — mode knowledge docs local"}
                 </strong>
               </li>
             </ul>
