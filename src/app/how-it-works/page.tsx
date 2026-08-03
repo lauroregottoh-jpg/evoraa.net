@@ -145,7 +145,7 @@ export default function HowItWorksPage() {
               De votre profil à une rencontre qui a du sens
             </h2>
             <p className="text-sm text-muted-foreground">
-              KELIAA vous accompagne progressivement, sans vous faire perdre votre temps.
+              KELLIA vous accompagne progressivement, sans vous faire perdre votre temps.
             </p>
           </div>
 
@@ -318,7 +318,7 @@ export default function HowItWorksPage() {
             },
             {
               title: "Une communauté respectueuse",
-              desc: "Chaque membre accepte la Charte KELIAA, socle de notre communauté et garantie d'un environnement respectueux.",
+              desc: "Chaque membre accepte la Charte Kellia, socle de notre communauté et garantie d'un environnement respectueux.",
               icon: <Users className="h-6 w-6 text-primary" />,
             },
           ].map((item, idx) => (
@@ -383,7 +383,7 @@ export default function HowItWorksPage() {
         <p className="text-muted-foreground text-lg max-w-xl mx-auto leading-relaxed">
           Vous n&apos;avez pas besoin de rencontrer des centaines de personnes. Vous avez besoin de
           rencontrer celle avec qui construire un foyer. Commencez aujourd&apos;hui votre parcours sur
-          KELIAA et avancez avec une méthode pensée pour les célibataires chrétiens qui désirent un
+          KELLIA et avancez avec une méthode pensée pour les célibataires chrétiens qui désirent un
           mariage durable.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-6 pt-4">

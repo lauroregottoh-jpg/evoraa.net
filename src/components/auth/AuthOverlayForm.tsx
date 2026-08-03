@@ -108,7 +108,7 @@ export function AuthOverlayForm({ initialMode = "login" }: { initialMode?: Mode 
       <div className="relative z-10 w-full max-w-md">
         <div className="mb-8 text-center space-y-2">
           <Link href="/" className="font-serif text-3xl font-bold text-white drop-shadow-lg">
-            KELIAA
+            KELLIA
           </Link>
           <p className="text-sm text-white/85">
             {mode === "login"
@@ -135,7 +135,7 @@ export function AuthOverlayForm({ initialMode = "login" }: { initialMode?: Mode 
                   <Lock className="h-5 w-5" />
                 </div>
                 <h1 className="font-serif text-2xl font-bold text-foreground">Connexion</h1>
-                <p className="text-xs text-muted-foreground">Entrez vos identifiants KELIAA</p>
+                <p className="text-xs text-muted-foreground">Entrez vos identifiants Kellia</p>
               </div>
 
               {error && (

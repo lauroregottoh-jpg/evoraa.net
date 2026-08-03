@@ -1,4 +1,4 @@
-# Design Brief — KELIAA
+# Design Brief — KELLIA
 
 **Version :** 2.0
 **Dernière mise à jour :** 30 juillet 2026
@@ -6,9 +6,9 @@
 
 ## 1. Le projet
 
-KELIAA est une plateforme web de rencontres chrétiennes sérieuses pour l’Afrique francophone, l’UEMOA et la diaspora. L’expérience aide les célibataires à discerner une relation durable grâce à cinq piliers de compatibilité, à un cadre de confiance et à un accompagnement spirituel.
+KELLIA est une plateforme web de rencontres chrétiennes sérieuses pour l’Afrique francophone, l’UEMOA et la diaspora. L’expérience aide les célibataires à discerner une relation durable grâce à cinq piliers de compatibilité, à un cadre de confiance et à un accompagnement spirituel.
 
-KELIAA n’est pas une application de swipe. Le produit privilégie la profondeur, la compatibilité expliquée, la sécurité, la progression personnelle et la construction d’un projet de mariage.
+KELLIA n’est pas une application de swipe. Le produit privilégie la profondeur, la compatibilité expliquée, la sécurité, la progression personnelle et la construction d’un projet de mariage.
 
 ## 2. Public et contraintes
 
@@ -21,7 +21,7 @@ KELIAA n’est pas une application de swipe. Le produit privilégie la profondeu
 
 ## 3. Positionnement
 
-La promesse de KELIAA repose sur :
+La promesse de KELLIA repose sur :
 
 1. **Le discernement** : cinq questionnaires structurés au lieu d’un choix superficiel.
 2. **La compatibilité expliquée** : scores et axes compréhensibles.
@@ -33,14 +33,14 @@ La promesse de KELIAA repose sur :
 
 | Élément | Nom officiel |
 |---|---|
-| Marque | **KELIAA** |
+| Marque | **KELLIA** |
 | Offre gratuite | **Découverte** |
 | Offre payante publique | **Alliance** |
 | Ancien plan interne | **Essentiel (legacy)**, non commercialisé |
 | Assistant | **Coach EVA** ou **EVA** |
 | Espace pédagogique | **Académie du mariage** |
 | Suggestions | **Découvrir** / **Compatibilités** |
-| Questionnaires | **5 piliers KELIAA** / **Questionnaires de discernement** |
+| Questionnaires | **5 piliers KELLIA** / **Questionnaires de discernement** |
 | Protection conversationnelle | **Bouclier de bienveillance** |
 
 Ne plus employer l’ancienne graphie de la marque sans le second « A », ni « Evoraa », « Eden.net », « Premium » ou « Premium+ » dans l’interface publique, sauf mention technique ou historique explicitement marquée.
@@ -116,7 +116,7 @@ Le back-office permet notamment : création de membres, validation des profils, 
 
 ## 8. Direction visuelle
 
-KELIAA doit évoquer un espace sacré moderne : chaleureux, éditorial, premium et humain.
+KELLIA doit évoquer un espace sacré moderne : chaleureux, éditorial, premium et humain.
 
 ### Palette active
 

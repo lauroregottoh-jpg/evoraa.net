@@ -52,7 +52,7 @@ const map = [
   ["Sanction ${action} ? ${sanctionStatus}", "Sanction ${action} -> ${sanctionStatus}"],
   ["Impossible de cr?er l'abonnement test.", "Impossible de creer l'abonnement test."],
   ["Impossible de cr?er le paiement test.", "Impossible de creer le paiement test."],
-  ["KELIAA sandbox test ? ${amount} XOF", "KELIAA sandbox test - ${amount} XOF"],
+  ["KELLIA sandbox test ? ${amount} XOF", "KELLIA sandbox test - ${amount} XOF"],
 ]
 
 for (const [from, to] of map) {

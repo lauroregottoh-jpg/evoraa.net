@@ -22,7 +22,7 @@ export default async function ProfilePage() {
             Édition de votre profil
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Enrichissez votre témoignage et vos photos. Tout est sauvegardé dans votre compte KELIAA.
+            Enrichissez votre témoignage et vos photos. Tout est sauvegardé dans votre compte KELLIA.
           </p>
         </div>
 

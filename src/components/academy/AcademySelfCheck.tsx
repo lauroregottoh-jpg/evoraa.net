@@ -12,7 +12,7 @@ export function AcademySelfCheckBox({
   lessonSlug: string
   selfCheck: AcademySelfCheck
 }) {
-  const storageKey = `keliaa_academy_check:${moduleId}:${lessonSlug}`
+  const storageKey = `KELLIA_academy_check:${moduleId}:${lessonSlug}`
   const [checked, setChecked] = React.useState<boolean[]>(() =>
     selfCheck.items.map(() => false)
   )

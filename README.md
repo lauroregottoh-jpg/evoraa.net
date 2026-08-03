@@ -1,6 +1,6 @@
-# KELIAA — Plateforme de rencontre chrétienne (Afrique francophone)
+# KELLIA — Plateforme de rencontre chrétienne (Afrique francophone)
 
-**KELIAA** (`keliaa.net`) est une PWA de discernement relationnel : matching à 3 piliers, messagerie, EVA (coach local), abonnement Alliance via Mobile Money (CinetPay).
+**KELLIA** (`KELLIA.net`) est une PWA de discernement relationnel : matching à 3 piliers, messagerie, EVA (coach local), abonnement Alliance via Mobile Money (CinetPay).
 
 ## Démarrage rapide (développeur)
 

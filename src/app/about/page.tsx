@@ -8,7 +8,7 @@ export default function AboutPage() {
     <CinematicLayout>
       <PageHero
         eyebrow="Notre histoire"
-        title="KELIAA n'est pas née d'une idée marketing."
+        title="KELLIA n'est pas née d'une idée marketing."
         highlight="Elle est née d'une fatigue."
         subtitle="Celle des célibataires chrétiens qui veulent se marier — et qui n'en peuvent plus des apps où l'on se vend avant de se connaître."
         imageSrc="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=2000&auto=format&fit=crop"
@@ -22,7 +22,7 @@ export default function AboutPage() {
           manque de cadre. Trop d&apos;outils poussent la vitesse, l&apos;image et l&apos;ambiguïté.
         </p>
         <p>
-          Nous avons construit KELIAA pour inverser la logique. D&apos;abord la vision. Ensuite la
+          Nous avons construit KELLIA pour inverser la logique. D&apos;abord la vision. Ensuite la
           compatibilité. Puis le dialogue — dans un espace où la dignité n&apos;est pas une option
           décorative, mais une règle du jeu.
         </p>

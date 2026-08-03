@@ -19,7 +19,7 @@ const INITIAL_QUEUE: PendingPhoto[] = [
   {
     id: "photo-1",
     userName: "Suspect Spam",
-    userEmail: "suspect.spam@evoraa.net",
+    userEmail: "suspect.spam@kellia.org",
     photoUrl: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=500&auto=format&fit=crop",
     isPrimary: true,
     uploadedAt: "Il y a 12 minutes",
@@ -27,7 +27,7 @@ const INITIAL_QUEUE: PendingPhoto[] = [
   {
     id: "photo-2",
     userName: "Thomas Bernard",
-    userEmail: "thomas.bernard@evoraa.net",
+    userEmail: "thomas.bernard@kellia.org",
     photoUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop",
     isPrimary: false,
     uploadedAt: "Il y a 2 heures",
@@ -115,7 +115,7 @@ export function AdminPhotoQueue() {
                       >
                         <option value="Photo trop sombre ou visage non reconnaissable.">Visage flou ou non visible</option>
                         <option value="Présence d'autres personnes ou enfants sur la photo.">Présence de tiers/enfants</option>
-                        <option value="Contenu inapproprié ou contraire à la dignité d'Evoraa.">Contenu inapproprié</option>
+                        <option value="Contenu inapproprié ou contraire à la dignité d'Kellia.">Contenu inapproprié</option>
                       </select>
                       <div className="flex gap-2">
                         <Button

@@ -23,13 +23,13 @@ export default function ModerationPage() {
             Modération & Protection Éthique
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Découvrez comment Evoraa garantit un environnement de confiance absolue à travers nos 3 cercles de protection.
+            Découvrez comment Kellia garantit un environnement de confiance absolue à travers nos 3 cercles de protection.
           </p>
         </div>
 
         <EvaCompanion
           title="EVA - Veille Éthique Continue"
-          message="Je travaille avec l'équipe de modération et les coachs de KELIAA pour veiller sur la sincérité des profils. Harcèlement, pression et manque de respect n'ont pas leur place ici."
+          message="Je travaille avec l'équipe de modération et les coachs de KELLIA pour veiller sur la sincérité des profils. Harcèlement, pression et manque de respect n'ont pas leur place ici."
           variant="reassurance"
         />
 

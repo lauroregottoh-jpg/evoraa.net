@@ -274,7 +274,7 @@ export function AdminConsole(props: Props) {
             <div>
               <h1 className="font-serif text-3xl font-bold tracking-tight">Dashboard</h1>
               <p className="text-sm text-muted-foreground mt-1">
-                Vue d&apos;ensemble ops — style DASHBOARD 1–4, données KELIAA live.
+                Vue d&apos;ensemble ops — style DASHBOARD 1–4, données Kellia live.
               </p>
             </div>
             <p className="text-xs text-muted-foreground">

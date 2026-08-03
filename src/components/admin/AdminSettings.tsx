@@ -31,7 +31,7 @@ export function AdminSettings() {
           </Badge>
         </div>
         <CardDescription className="text-xs text-muted-foreground">
-          Modifiez en direct les règles éthiques et les seuils de discernement de la plateforme Evoraa.
+          Modifiez en direct les règles éthiques et les seuils de discernement de la plateforme Kellia.
         </CardDescription>
       </CardHeader>
 

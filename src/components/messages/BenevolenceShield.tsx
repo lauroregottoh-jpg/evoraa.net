@@ -50,7 +50,7 @@ export function BenevolenceShield({
               Bouclier de Bienveillance EVA
             </AlertTitle>
             <AlertDescription className="text-xs sm:text-sm leading-relaxed mt-1 opacity-90">
-              Votre message semble solliciter une réponse rapide ou une transition immédiate vers un réseau externe (ex: numéro, messagerie instantanée). Sur Evoraa, nous préservons un rythme apaisé pour laisser grandir la confiance.
+              Votre message semble solliciter une réponse rapide ou une transition immédiate vers un réseau externe (ex: numéro, messagerie instantanée). Sur Kellia, nous préservons un rythme apaisé pour laisser grandir la confiance.
             </AlertDescription>
           </div>
 

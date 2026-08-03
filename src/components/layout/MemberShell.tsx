@@ -145,7 +145,7 @@ export function MemberShell({
               onClick={go("/dashboard")}
               className="font-serif text-2xl font-bold text-primary tracking-tight shrink-0"
             >
-              KELIAA
+              KELLIA
             </a>
           </div>
 

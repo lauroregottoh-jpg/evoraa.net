@@ -24,8 +24,8 @@ import { PLANS, PUBLIC_PLAN_ORDER } from "@/lib/billing/plans";
 
 /** Copy source: software-architecture/KELIA - Page d'accueil.docx — PAGE TARIFS */
 const PLAN_DESCRIPTIONS: Record<string, string> = {
-  free: "Essayez gratuitement la méthode KELIAA.",
-  premium_plus: "Profitez de toute la puissance du Matching KELIAA™.",
+  free: "Essayez gratuitement la méthode Kellia.",
+  premium_plus: "Profitez de toute la puissance du Matching KELLIA™.",
 };
 
 const PILLARS = [
@@ -59,7 +59,7 @@ const PILLARS = [
 const ALLIANCE_COMPARE_ROWS = [
   {
     decouverte: "Premières recommandations",
-    alliance: "Toutes les capacités du Matching KELIAA™",
+    alliance: "Toutes les capacités du Matching KELLIA™",
   },
   {
     decouverte: "Compatibilité simplifiée",
@@ -144,7 +144,7 @@ export default function PricingPage() {
         eyebrow="Tarifs"
         title="Trouver la bonne personne"
         highlight="vaut bien plus qu'un abonnement."
-        subtitle="Alliance vous donne accès à toute la puissance du Matching KELIAA™ à 5 piliers : une méthode unique qui va bien au-delà des photos et des critères superficiels pour vous proposer des personnes réellement compatibles avec votre foi, vos valeurs et votre projet de mariage."
+        subtitle="Alliance vous donne accès à toute la puissance du Matching KELLIA™ à 5 piliers : une méthode unique qui va bien au-delà des photos et des critères superficiels pour vous proposer des personnes réellement compatibles avec votre foi, vos valeurs et votre projet de mariage."
         imageSrc="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=2000&auto=format&fit=crop"
         imageAlt="Engagement"
       >
@@ -180,7 +180,7 @@ export default function PricingPage() {
           </h2>
           <p className="text-muted-foreground leading-relaxed">
             Les applications classiques vous proposent des profils principalement selon votre âge,
-            votre localisation ou vos préférences visibles. Chez KELIAA, chaque recommandation
+            votre localisation ou vos préférences visibles. Chez Kellia, chaque recommandation
             repose sur notre Matching à 5 piliers, conçu pour identifier les bases d&apos;une
             relation durable.
           </p>
@@ -208,7 +208,7 @@ export default function PricingPage() {
           <div className="p-6 sm:p-8 rounded-2xl border-2 border-accent bg-white shadow-elevated">
             <h3 className="font-serif text-xl font-bold text-primary mb-4 flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-accent" />
-              KELIAA
+              KELLIA
             </h3>
             <ul className="space-y-3 text-sm text-foreground">
               {[
@@ -228,7 +228,7 @@ export default function PricingPage() {
 
         <div className="space-y-8">
           <h3 className="font-serif text-2xl sm:text-3xl font-bold text-center text-foreground">
-            Les 5 piliers du Matching KELIAA™
+            Les 5 piliers du Matching KELLIA™
           </h3>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {PILLARS.map((pillar, i) => (

@@ -20,7 +20,7 @@ export default async function AssessmentsHubPage() {
       <div className="space-y-8 py-2 max-w-4xl mx-auto">
         <div className="space-y-2 border-b border-border/40 pb-6">
           <Badge variant="outline" className="text-accent border-accent/40">
-            5 piliers KELIAA
+            5 piliers KELLIA
           </Badge>
           <h1 className="font-serif text-4xl font-bold">Questionnaires de discernement</h1>
           <p className="text-muted-foreground text-sm max-w-2xl leading-relaxed">

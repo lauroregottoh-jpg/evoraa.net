@@ -1,16 +1,16 @@
 /**
- * URL publique Supabase du projet KELIAA.
+ * URL publique Supabase du projet KELLIA.
  * Utilisée en secours si Vercel a une mauvaise variable d'environnement
  * (ex. URL preview vercel.app au lieu de *.supabase.co).
  */
-export const KELIAA_SUPABASE_URL = "https://rrjwhrdtokncfrzxtfoa.supabase.co"
+export const KELLIA_SUPABASE_URL = "https://rrjwhrdtokncfrzxtfoa.supabase.co"
 
 export function resolveSupabaseUrl(): string {
   const configured = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()
-  if (!configured) return KELIAA_SUPABASE_URL
+  if (!configured) return KELLIA_SUPABASE_URL
   // Mauvaise config fréquente : URL Vercel preview/prod à la place de Supabase
   if (configured.includes("vercel.app") || !configured.includes("supabase.co")) {
-    return KELIAA_SUPABASE_URL
+    return KELLIA_SUPABASE_URL
   }
   return configured
 }

@@ -1,4 +1,4 @@
-# PRD — KELIAA
+# PRD — KELLIA
 
 **Version :** 2.0
 **Dernière mise à jour :** 30 juillet 2026
@@ -6,7 +6,7 @@
 
 ## 1. Vision
 
-KELIAA est une plateforme web de rencontres chrétiennes sérieuses destinée à l’Afrique francophone, à l’UEMOA et à la diaspora. Elle aide les célibataires à construire une relation orientée vers le mariage grâce à cinq piliers de discernement, une compatibilité expliquée, une modération active et un accompagnement spirituel.
+KELLIA est une plateforme web de rencontres chrétiennes sérieuses destinée à l’Afrique francophone, à l’UEMOA et à la diaspora. Elle aide les célibataires à construire une relation orientée vers le mariage grâce à cinq piliers de discernement, une compatibilité expliquée, une modération active et un accompagnement spirituel.
 
 ### Principes produit
 
@@ -58,7 +58,7 @@ Accès limité aux opérations de modération : profils, photos, signalements, r
 
 Ancien plan interne à 2 500 FCFA, conservé uniquement pour compatibilité avec d’anciens abonnements. Il n’est pas affiché aux nouveaux utilisateurs.
 
-## 4. Les cinq piliers KELIAA
+## 4. Les cinq piliers KELLIA
 
 1. Personnalité et stress
 2. Foi et vie spirituelle

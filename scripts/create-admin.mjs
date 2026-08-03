@@ -1,5 +1,5 @@
 /**
- * Crée ou promeut un compte admin KELIAA (usage local uniquement).
+ * Crée ou promeut un compte admin KELLIA (usage local uniquement).
  * Usage: node scripts/create-admin.mjs [email]
  */
 import { readFileSync } from "fs"

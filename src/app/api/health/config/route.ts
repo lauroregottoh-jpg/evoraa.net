@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { KELIAA_SUPABASE_URL, resolveSupabaseUrl } from "@/lib/config/supabase"
+import { KELLIA_SUPABASE_URL, resolveSupabaseUrl } from "@/lib/config/supabase"
 
 /** Diagnostic public — aide à repérer une mauvaise config Vercel. */
 export async function GET() {
@@ -12,7 +12,7 @@ export async function GET() {
     supabase: {
       configured: configured ? configured.replace(/\/$/, "") : null,
       resolved: resolved.replace(/\/$/, ""),
-      expected: KELIAA_SUPABASE_URL,
+      expected: KELLIA_SUPABASE_URL,
       misconfigured: Boolean(configured && configured !== resolved),
     },
     app: {

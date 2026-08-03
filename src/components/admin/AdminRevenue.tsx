@@ -20,7 +20,7 @@ const SUB_DATA: SubscriptionRow[] = [
   {
     id: "sub-1",
     userName: "Laure Regottoh",
-    userEmail: "laure.regottoh@keliaa.net",
+    userEmail: "laure.regottoh@KELLIA.net",
     planName: "Alliance (5 000 FCFA)",
     amount: 5000,
     status: "active",
@@ -29,7 +29,7 @@ const SUB_DATA: SubscriptionRow[] = [
   {
     id: "sub-2",
     userName: "Alexandre Dumas",
-    userEmail: "alexandre.dumas@keliaa.net",
+    userEmail: "alexandre.dumas@KELLIA.net",
     planName: "Alliance (5 000 FCFA)",
     amount: 5000,
     status: "active",
@@ -38,7 +38,7 @@ const SUB_DATA: SubscriptionRow[] = [
   {
     id: "sub-3",
     userName: "Thomas Bernard",
-    userEmail: "thomas.bernard@keliaa.net",
+    userEmail: "thomas.bernard@KELLIA.net",
     planName: "Essentiel legacy (2 500 FCFA)",
     amount: 2500,
     status: "active",
@@ -47,7 +47,7 @@ const SUB_DATA: SubscriptionRow[] = [
   {
     id: "sub-4",
     userName: "Marc Inconnu",
-    userEmail: "suspect.spam@keliaa.net",
+    userEmail: "suspect.spam@KELLIA.net",
     planName: "Essentiel legacy (2 500 FCFA)",
     amount: 2500,
     status: "canceled",

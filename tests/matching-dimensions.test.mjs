@@ -24,7 +24,7 @@ function scoreDimensionPair(mode, a, b) {
   return clamp(Math.round(floor * 0.78 + avg * 0.12 + (100 - gap) * 0.1))
 }
 
-describe("KELIAA dimension modes", () => {
+describe("KELLIA dimension modes", () => {
   it("penalizes faith-like align gaps harder than complement gaps", () => {
     const alignGap = scoreDimensionPair("align", 90, 50)
     const complementGap = scoreDimensionPair("complement", 90, 50)
@@ -47,7 +47,7 @@ describe("KELIAA dimension modes", () => {
   })
 })
 
-describe("KELIAA interaction smoke", () => {
+describe("KELLIA interaction smoke", () => {
   it("flags anxious-style faith mismatch pattern", () => {
     const faithGap =
       (90 >= 75 && 40 <= 50) || (40 >= 75 && 90 <= 50)

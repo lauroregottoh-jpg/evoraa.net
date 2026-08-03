@@ -9,7 +9,7 @@ Il manque surtout : **migrations appliquées ?**, **réglages Auth/Storage/Realt
 
 ## Étape 1 — Appliquer les migrations Supabase
 
-1. Ouvre PowerShell dans le dossier du projet `evoraa.net`.
+1. Ouvre PowerShell dans le dossier du projet `Kellia.net`.
 2. Lance :
 
 ```powershell
@@ -50,7 +50,7 @@ Il manque surtout : **migrations appliquées ?**, **réglages Auth/Storage/Realt
 
 ## Étape 4 — Mettre le site en ligne (Vercel)
 
-1. Va sur [vercel.com](https://vercel.com) → Import le repo GitHub `evoraa.net`.
+1. Va sur [vercel.com](https://vercel.com) → Import le repo GitHub `Kellia.net`.
 2. Dans **Environment Variables**, colle (mêmes valeurs que `.env.local`, **sauf** `SUPABASE_DB_URL`) :
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
@@ -116,7 +116,7 @@ Le matching montre l’**autre genre**. Il faut les deux.
    - finir l’onboarding  
    - mettre une photo  
 3. Toi : `/admin` → Photos → approuver rapidement.  
-4. Support : un WhatsApp ou `contact@keliaa.net` pour la cohorte.
+4. Support : un WhatsApp ou `contact@KELLIA.net` pour la cohorte.
 
 **Tu as fini quand :** au moins quelques H et quelques F ont un profil + photo OK, et Découvrir montre des suggestions.
 

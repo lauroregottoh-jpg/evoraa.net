@@ -1407,9 +1407,9 @@ export async function adminBictorysSandboxCharge(input: {
     apiKey,
     paymentId: payment.id,
     amount,
-    description: `KELIAA sandbox test - ${amount} XOF`,
+    description: `KELLIA sandbox test - ${amount} XOF`,
     customerName: "Admin Sandbox",
-    customerEmail: gate.user.email || "sandbox@keliaa.app",
+    customerEmail: gate.user.email || "sandbox@KELLIA.app",
     paymentMode,
     appBaseUrl: appUrl,
   })

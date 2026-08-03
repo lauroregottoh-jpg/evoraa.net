@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Flame } from "lucide-react"
 
-const STORAGE_KEY = "keliaa_presence_days"
+const STORAGE_KEY = "KELLIA_presence_days"
 
 function todayKey() {
   const d = new Date()

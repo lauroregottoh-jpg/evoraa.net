@@ -10,19 +10,19 @@ export default function CguPage() {
           Conditions Générales d&apos;Utilisation
         </h1>
         <p className="text-sm text-muted-foreground !mt-0">
-          Dernière mise à jour : 24 juillet 2026 — Plateforme KELIAA
+          Dernière mise à jour : 24 juillet 2026 — Plateforme KELLIA
         </p>
 
         <section className="space-y-3 text-sm text-foreground/90 leading-relaxed">
           <h2 className="font-serif text-xl font-semibold">1. Objet et éditeur</h2>
           <p>
             Les présentes Conditions Générales d&apos;Utilisation (CGU) régissent l&apos;accès et
-            l&apos;utilisation de la plateforme KELIAA, service de mise en relation destiné aux
+            l&apos;utilisation de la plateforme KELLIA, service de mise en relation destiné aux
             célibataires chrétiens souhaitant construire une relation fondée sur la foi, la dignité,
             la compatibilité et le respect. En créant un compte ou en utilisant le service, vous
             acceptez sans réserve les présentes CGU ainsi que la{" "}
             <Link href="/charte" className="text-primary underline underline-offset-2">
-              Charte KELIAA
+              Charte Kellia
             </Link>
             .
           </p>
@@ -41,7 +41,7 @@ export default function CguPage() {
         <section className="space-y-3 text-sm text-foreground/90 leading-relaxed">
           <h2 className="font-serif text-xl font-semibold">3. Description du service</h2>
           <p>
-            KELIAA propose notamment : création de profil, questionnaires de compatibilité,
+            KELLIA propose notamment : création de profil, questionnaires de compatibilité,
             suggestions de profils, messagerie, outils d&apos;accompagnement (dont l&apos;assistant
             EVA), et offres d&apos;abonnement. Le service vise le discernement et le projet de
             mariage ; il ne constitue ni un cabinet de coaching institutionnel, ni un conseil juridique ou médical.
@@ -53,7 +53,7 @@ export default function CguPage() {
           <p>
             Sont notamment interdits : le harcèlement, les propos déplacés ou discriminatoires, les
             sollicitations financières, les profils faux ou usurpés, le partage de contenus illicites,
-            et toute pression inappropriée. KELIAA peut suspendre ou résilier un compte sans préavis
+            et toute pression inappropriée. KELLIA peut suspendre ou résilier un compte sans préavis
             en cas de manquement, sans remboursement au prorata sauf obligation légale contraire.
           </p>
         </section>
@@ -72,9 +72,9 @@ export default function CguPage() {
           <h2 className="font-serif text-xl font-semibold">6. Contenu et propriété intellectuelle</h2>
           <p>
             Les photos, textes et autres contenus publiés par l&apos;utilisateur restent sa propriété.
-            L&apos;utilisateur concède à KELIAA une licence non exclusive, mondiale et gratuite
+            L&apos;utilisateur concède à KELLIA une licence non exclusive, mondiale et gratuite
             d&apos;affichage, reproduction et adaptation technique strictement nécessaire au
-            fonctionnement du service. Les éléments de la plateforme (marque KELIAA, design, logiciels)
+            fonctionnement du service. Les éléments de la plateforme (marque KELLIA, design, logiciels)
             sont protégés et ne peuvent être reproduits sans autorisation.
           </p>
         </section>
@@ -82,7 +82,7 @@ export default function CguPage() {
         <section className="space-y-3 text-sm text-foreground/90 leading-relaxed">
           <h2 className="font-serif text-xl font-semibold">7. Modération</h2>
           <p>
-            KELIAA se réserve le droit de modérer profils, photos et messages, et de retirer tout
+            KELLIA se réserve le droit de modérer profils, photos et messages, et de retirer tout
             contenu contraire aux CGU ou à la Charte. Les signalements sont traités confidentiellement
             dans la mesure du possible.
           </p>
@@ -91,10 +91,10 @@ export default function CguPage() {
         <section className="space-y-3 text-sm text-foreground/90 leading-relaxed">
           <h2 className="font-serif text-xl font-semibold">8. Limitation de responsabilité</h2>
           <p>
-            KELIAA facilite la mise en relation mais n&apos;est pas responsable des interactions hors
+            KELLIA facilite la mise en relation mais n&apos;est pas responsable des interactions hors
             plateforme, ni du succès d&apos;une relation, ni des décisions prises par les utilisateurs.
             Le service est fourni « en l&apos;état ». Dans les limites autorisées par la loi, la
-            responsabilité de KELIAA est limitée aux dommages directs et prévisibles.
+            responsabilité de KELLIA est limitée aux dommages directs et prévisibles.
           </p>
         </section>
 
@@ -102,7 +102,7 @@ export default function CguPage() {
           <h2 className="font-serif text-xl font-semibold">9. Résiliation</h2>
           <p>
             L&apos;utilisateur peut supprimer son compte à tout moment depuis les paramètres ou via
-            Contact. KELIAA peut résilier l&apos;accès en cas de violation des présentes CGU.
+            Contact. KELLIA peut résilier l&apos;accès en cas de violation des présentes CGU.
           </p>
         </section>
 

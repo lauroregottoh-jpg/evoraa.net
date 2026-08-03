@@ -25,7 +25,7 @@ const INITIAL_USERS: UserRow[] = [
   {
     id: "1",
     name: "Laure Regottoh",
-    email: "laure.regottoh@evoraa.net",
+    email: "laure.regottoh@kellia.org",
     city: "Lyon",
     completion: 100,
     role: "member",
@@ -38,7 +38,7 @@ const INITIAL_USERS: UserRow[] = [
   {
     id: "2",
     name: "Alexandre Dumas",
-    email: "alexandre.dumas@evoraa.net",
+    email: "alexandre.dumas@kellia.org",
     city: "Lyon",
     completion: 94,
     role: "member",
@@ -51,7 +51,7 @@ const INITIAL_USERS: UserRow[] = [
   {
     id: "3",
     name: "Thomas Bernard",
-    email: "thomas.bernard@evoraa.net",
+    email: "thomas.bernard@kellia.org",
     city: "Grenoble",
     completion: 89,
     role: "member",
@@ -64,7 +64,7 @@ const INITIAL_USERS: UserRow[] = [
   {
     id: "4",
     name: "Suspect Spam",
-    email: "suspect.spam@evoraa.net",
+    email: "suspect.spam@kellia.org",
     city: "Marseille",
     completion: 45,
     role: "member",
@@ -77,7 +77,7 @@ const INITIAL_USERS: UserRow[] = [
   {
     id: "5",
     name: "Modération EVA",
-    email: "admin@evoraa.net",
+    email: "admin@kellia.org",
     city: "Paris",
     completion: 100,
     role: "admin",

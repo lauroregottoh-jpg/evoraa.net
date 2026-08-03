@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
     if (email) {
       const mail = await sendEmailNotificationStub({
         to: email,
-        subject: `KELIAA — ${title}`,
+        subject: `KELLIA — ${title}`,
         html: `<p>${body}</p><p><a href="${process.env.NEXT_PUBLIC_APP_URL || ""}/billing">Renouveler Alliance</a></p>`,
       })
       if ("success" in mail && mail.success) emailed++

@@ -103,5 +103,5 @@ export function EvaCompanion({
   );
 }
 
-// Alias to satisfy both names (EVA vs KELIAA) seamlessly
+// Alias to satisfy both names (EVA vs KELLIA) seamlessly
 export const KeliaCompanion = EvaCompanion;

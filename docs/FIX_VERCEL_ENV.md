@@ -28,13 +28,13 @@ Vercel bloque alors avec `Protected deployment`.
 ## Solution 2 — Connexion immédiate en local (en attendant)
 
 ```powershell
-cd evoraa.net
+cd Kellia.net
 npm run dev
 ```
 
 Puis : http://localhost:3000/login  
 Email : `lauroregottoh@gmail.com`  
-Mot de passe : `Keliaa-32fa2984!`
+Mot de passe : `KELLIA-32fa2984!`
 
 ## URL à utiliser en ligne
 

@@ -127,13 +127,13 @@ export default function Home() {
         <HomeHeroCarousel cta={heroCta} />
       </div>
 
-      {/* Pourquoi KELIAA existe */}
+      {/* Pourquoi KELLIA existe */}
       <section className="story-container py-28 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto overflow-hidden">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="story-text space-y-8">
             <div className="space-y-4">
               <span className="text-sm font-sans font-semibold text-primary uppercase tracking-widest">
-                Pourquoi KELIAA existe
+                Pourquoi KELLIA existe
               </span>
               <h2 className="text-4xl sm:text-5xl font-serif font-bold text-foreground leading-tight">
                 Vous méritez mieux que des rencontres sans lendemain.
@@ -158,7 +158,7 @@ export default function Home() {
                 ))}
               </ul>
               <p>
-                KELIAA est née pour répondre à cette réalité. Nous avons imaginé un espace où les
+                KELLIA est née pour répondre à cette réalité. Nous avons imaginé un espace où les
                 célibataires chrétiens peuvent se rencontrer autrement : avec respect, discernement
                 et une véritable recherche de compatibilité.
               </p>
@@ -301,7 +301,7 @@ export default function Home() {
             </h2>
             <p className="text-lg text-white/85">
               Les applications de rencontre ont été conçues pour créer toujours plus
-              d&apos;interactions. KELIAA a été conçue pour favoriser une rencontre qui peut durer
+              d&apos;interactions. KELLIA a été conçue pour favoriser une rencontre qui peut durer
               toute une vie.
             </p>
           </div>
@@ -330,7 +330,7 @@ export default function Home() {
 
             <div className="compare-card p-8 sm:p-10 rounded-lg border-2 border-accent bg-white text-foreground shadow-elevated">
               <h3 className="text-2xl sm:text-3xl font-serif font-bold text-primary mb-8 flex items-center gap-3">
-                <Sparkles className="w-6 h-6 text-accent" /> KELIAA
+                <Sparkles className="w-6 h-6 text-accent" /> KELLIA
               </h3>
               <ul className="space-y-5">
                 {[

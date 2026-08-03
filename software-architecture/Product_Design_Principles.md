@@ -1,10 +1,10 @@
-# Product Design Principles — La Charte KELIAA
+# Product Design Principles — La Charte KELLIA
 
 **Version :** 2.0
 **Dernière mise à jour :** 30 juillet 2026
 
 > **Boussole Stratégique :**
-> *KELIAA n'est pas une application de rencontre traditionnelle. C'est une plateforme qui aide les chrétiens à construire des rencontres fondées sur la compatibilité, les valeurs et un projet de vie commun.*
+> *KELLIA n'est pas une application de rencontre traditionnelle. C'est une plateforme qui aide les chrétiens à construire des rencontres fondées sur la compatibilité, les valeurs et un projet de vie commun.*
 >
 > *(Chaque fonctionnalité développée devra répondre à cette question : "Est-ce que cela aide réellement une personne à discerner une relation de qualité ?" Si la réponse est non, la fonctionnalité n'a pas sa place).*
 
@@ -12,7 +12,7 @@
 
 ## 1. L'Identité Émotionnelle
 
-L'expérience KELIAA doit provoquer 6 émotions clés :
+L'expérience KELLIA doit provoquer 6 émotions clés :
 1. **Dignité** : Chaque utilisateur doit se sentir considéré comme une personne, jamais comme un simple profil ou un produit de consommation.
 2. **Sérénité** : L'interface respire. Pas d'urgence, pas de pop-ups agressifs.
 3. **Confiance** : La plateforme est un espace sûr (confidentialité, modération assumée).
@@ -29,13 +29,13 @@ Cependant, EVA a un rôle strictement défini. Elle ne prend **jamais** de déci
 
 * **Ce qu'elle fait :** Elle explique, accompagne, encourage, suggère et rassure.
 * **Ce qu'elle ne fait jamais :** Elle ne juge jamais. Elle ne manipule jamais. Elle ne promet jamais.
-* **Le ton :** *« Bonjour Laure, je suis EVA. Je vous accompagne avec douceur tout au long de votre parcours KELIAA. »*
+* **Le ton :** *« Bonjour Laure, je suis EVA. Je vous accompagne avec douceur tout au long de votre parcours KELLIA. »*
 
 ---
 
 ## 3. Les Principes UX Fondamentaux
 
-### KELIAA est...
+### KELLIA est...
 * **Rassurant** avant d'être impressionnant.
 * **Humain** avant d'être technologique.
 * **Élégant** avant d'être spectaculaire.
@@ -65,7 +65,7 @@ Cependant, EVA a un rôle strictement défini. Elle ne prend **jamais** de déci
 * **Sécurité immédiate** : les photos passent par les règles automatiques configurées et restent révisables par un modérateur humain. Cette analyse n'est pas attribuée à EVA.
 
 ### La Messagerie (L'Authenticité avant tout)
-* **La règle d'or** : sur KELIAA, on échange avec des personnes, pas avec des messages générés par une IA. EVA n'écrit et ne suggère **aucun** message intime à la place de l'utilisateur.
+* **La règle d'or** : sur KELLIA, on échange avec des personnes, pas avec des messages générés par une IA. EVA n'écrit et ne suggère **aucun** message intime à la place de l'utilisateur.
 * **Le rôle bouclier d'EVA** : Elle protège les conversations sans les dénaturer. Si un message détecté est potentiellement insultant, harcelant, manipulateur ou de l'arnaque, EVA intervient.
   * *Intervention pédagogique* : *"Ce message pourrait être perçu comme blessant ou irrespectueux. Souhaitez-vous le modifier avant de l'envoyer ?"*
   * *Intervention ferme* : Blocage de l'envoi pour les cas graves et signalement à la modération.
@@ -74,7 +74,7 @@ Cependant, EVA a un rôle strictement défini. Elle ne prend **jamais** de déci
 
 ## 5. Les Principes de Confiance
 
-L'espace KELIAA est un sanctuaire sécurisé.
+L'espace KELLIA est un sanctuaire sécurisé.
 * **Confidentialité par défaut** (floutage optionnel).
 * **Consentement strict** avant toute interaction.
 * **Modération assumée** et bannissement immédiat des comportements toxiques.

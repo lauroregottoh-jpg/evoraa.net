@@ -1,6 +1,6 @@
-# KELIAA
+# KELLIA
 
-KELIAA est une plateforme web de rencontres chrétiennes sérieuses pour l’Afrique francophone, l’UEMOA et la diaspora.
+KELLIA est une plateforme web de rencontres chrétiennes sérieuses pour l’Afrique francophone, l’UEMOA et la diaspora.
 
 ## Produit
 
@@ -58,4 +58,4 @@ Commencer par :
 
 ## Vision
 
-KELIAA ne remplace pas le discernement. La plateforme aide les célibataires chrétiens à identifier des relations plus compatibles grâce à une technologie transparente, respectueuse et éthique.
+KELLIA ne remplace pas le discernement. La plateforme aide les célibataires chrétiens à identifier des relations plus compatibles grâce à une technologie transparente, respectueuse et éthique.

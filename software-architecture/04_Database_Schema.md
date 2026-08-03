@@ -1,7 +1,7 @@
 # 04_Database_Schema.md
-# Architecture de la Base de Données KELIAA
+# Architecture de la Base de Données KELLIA
 
-Ce document référence l'intégralité de la structure de données de l'application KELIAA, optimisée pour l'évolutivité, la sécurité (RLS) et la performance des algorithmes de matching.
+Ce document référence l'intégralité de la structure de données de l'application KELLIA, optimisée pour l'évolutivité, la sécurité (RLS) et la performance des algorithmes de matching.
 
 ## 1. Vue d'Ensemble
 La base de données est construite sur PostgreSQL via Supabase. Elle utilise fortement les types `JSONB` et les `Array` pour garantir une évolutivité sans migrations lourdes pour les petits attributs, tout en gardant des colonnes strictes pour les index de recherche (âge, pays, statut matrimonial).

@@ -117,7 +117,7 @@ export default function BlogReadingPage() {
             Continuez votre chemin avec discernement.
           </h3>
           <p className="text-sm text-muted-foreground max-w-xl mx-auto leading-relaxed">
-            Sur KELIAA, chaque étape est pensée pour les célibataires chrétiens qui veulent avancer
+            Sur Kellia, chaque étape est pensée pour les célibataires chrétiens qui veulent avancer
             vers une rencontre digne, fondée sur la foi, les valeurs et un vrai projet de mariage.
           </p>
           <div className="pt-2">

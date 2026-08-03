@@ -20,7 +20,7 @@ export interface DevUserSession {
 export const DEV_SESSIONS: Record<DevRole, DevUserSession> = {
   laure: {
     id: "22222222-2222-2222-2222-222222222222",
-    email: "laure.regottoh@evoraa.net",
+    email: "laure.regottoh@kellia.org",
     name: "Laure Regottoh (Membre)",
     role: "member",
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop",
@@ -29,7 +29,7 @@ export const DEV_SESSIONS: Record<DevRole, DevUserSession> = {
   },
   admin: {
     id: "11111111-1111-1111-1111-111111111111",
-    email: "admin@evoraa.net",
+    email: "admin@kellia.org",
     name: "Modération EVA (Admin)",
     role: "admin",
     avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop",
@@ -38,7 +38,7 @@ export const DEV_SESSIONS: Record<DevRole, DevUserSession> = {
   },
   alexandre: {
     id: "33333333-3333-3333-3333-333333333333",
-    email: "alexandre.dumas@evoraa.net",
+    email: "alexandre.dumas@kellia.org",
     name: "Alexandre Dumas (Compat. 94%)",
     role: "member",
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop",
@@ -47,7 +47,7 @@ export const DEV_SESSIONS: Record<DevRole, DevUserSession> = {
   },
   suspect: {
     id: "55555555-5555-5555-5555-555555555555",
-    email: "suspect.spam@evoraa.net",
+    email: "suspect.spam@kellia.org",
     name: "Suspect Spam (En modération)",
     role: "member",
     avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop",
@@ -58,7 +58,7 @@ export const DEV_SESSIONS: Record<DevRole, DevUserSession> = {
 
 export function getActiveDevSession(): DevUserSession {
   if (typeof window === "undefined") return DEV_SESSIONS.laure;
-  const savedKey = localStorage.getItem("evoraa_dev_active_role") as DevRole;
+  const savedKey = localStorage.getItem("kellia_dev_active_role") as DevRole;
   return savedKey && DEV_SESSIONS[savedKey] ? DEV_SESSIONS[savedKey] : DEV_SESSIONS.laure;
 }
 
@@ -67,14 +67,14 @@ export function DevSessionSwitcher() {
   const [isOpen, setIsOpen] = React.useState(false);
 
   React.useEffect(() => {
-    const saved = localStorage.getItem("evoraa_dev_active_role") as DevRole;
+    const saved = localStorage.getItem("kellia_dev_active_role") as DevRole;
     if (saved && DEV_SESSIONS[saved]) {
       setActiveRole(saved);
     }
   }, []);
 
   const handleSwitch = (roleKey: DevRole) => {
-    localStorage.setItem("evoraa_dev_active_role", roleKey);
+    localStorage.setItem("kellia_dev_active_role", roleKey);
     setActiveRole(roleKey);
     setIsOpen(false);
     // Reload window slightly to trigger updates across pages

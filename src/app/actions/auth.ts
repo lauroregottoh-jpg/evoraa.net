@@ -135,11 +135,11 @@ export async function registerAction(formData: FormData) {
       const { sendEmailNotificationStub } = await import("@/app/actions/notifications")
       await sendEmailNotificationStub({
         to: email,
-        subject: "Bienvenue sur KELIAA",
+        subject: "Bienvenue sur Kellia",
         html: `<p>Bonjour ${firstName},</p>
-<p>Bienvenue dans la communauté KELIAA. Prochaine étape : compléter votre profil et vos questionnaires pour recevoir des suggestions pertinentes.</p>
+<p>Bienvenue dans la communauté Kellia. Prochaine étape : compléter votre profil et vos questionnaires pour recevoir des suggestions pertinentes.</p>
 <p><a href="${appUrl}/onboarding">Continuer mon inscription</a></p>
-<p>L'équipe KELIAA</p>`,
+<p>L'équipe Kellia</p>`,
       })
     } catch {
       /* optional */

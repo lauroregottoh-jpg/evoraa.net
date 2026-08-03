@@ -1,4 +1,4 @@
-# KELIAA — Design System
+# KELLIA — Design System
 
 **Version :** 2.0
 **Dernière mise à jour :** 30 juillet 2026
@@ -6,7 +6,7 @@
 
 ## 1. Identité
 
-KELIAA associe foi, dignité, confiance et élégance. L’interface doit ressembler à un espace éditorial premium et humain, jamais à une application de swipe ou à un produit SaaS violet générique.
+KELLIA associe foi, dignité, confiance et élégance. L’interface doit ressembler à un espace éditorial premium et humain, jamais à une application de swipe ou à un produit SaaS violet générique.
 
 ### Ton
 

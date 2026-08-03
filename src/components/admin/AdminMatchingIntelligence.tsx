@@ -61,9 +61,9 @@ export function MatchingIntelligencePanel({
   const [pillarBelow, setPillarBelow] = React.useState<PillarKey | "">("")
   const [pillarBelowMax, setPillarBelowMax] = React.useState(60)
   const [city, setCity] = React.useState("")
-  const [draftTitle, setDraftTitle] = React.useState("KELIAA — un pas pour affiner votre matching")
+  const [draftTitle, setDraftTitle] = React.useState("KELLIA — un pas pour affiner votre matching")
   const [draftBody, setDraftBody] = React.useState(
-    "Bonjour, selon votre profil de discernement, nous vous invitons à compléter / retravailler un axe pour des suggestions plus justes. L'équipe KELIAA."
+    "Bonjour, selon votre profil de discernement, nous vous invitons à compléter / retravailler un axe pour des suggestions plus justes. L'équipe Kellia."
   )
   const [memberQuery, setMemberQuery] = React.useState("")
 

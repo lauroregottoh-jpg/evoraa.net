@@ -1,4 +1,4 @@
-# KELIAA
+# KELLIA
 # 12_Notifications.md
 
 **Version:** 1.0 (MVP)
@@ -7,7 +7,7 @@
 
 # Purpose
 
-This document defines the notification system for KELIAA MVP.
+This document defines the notification system for KELLIA MVP.
 
 The notification service keeps users informed about important activities while avoiding unnecessary interruptions.
 

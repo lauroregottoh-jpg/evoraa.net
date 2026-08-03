@@ -1,4 +1,4 @@
-# KELIAA — Implementation Roadmap
+# KELLIA — Implementation Roadmap
 
 **Version :** 2.0
 **Dernière mise à jour :** 30 juillet 2026
@@ -17,7 +17,7 @@
 - Supabase Auth/Postgres/RLS.
 - Déploiement Vercel.
 - Variables d’environnement.
-- Design system KELIAA.
+- Design system KELLIA.
 
 ## 2. Authentification — Implémenté
 
@@ -163,7 +163,7 @@
 
 ## Critères de lancement
 
-KELIAA peut être considérée prête lorsque :
+KELLIA peut être considérée prête lorsque :
 
 - un membre s’inscrit et termine son profil ;
 - il complète les cinq piliers ;

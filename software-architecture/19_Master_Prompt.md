@@ -1,10 +1,10 @@
 
-# KELIAA
+# KELLIA
 # 19_Master_Prompt.md
 
 ## Purpose
 
-This is the master prompt used to instruct an AI development agent (Claude Code, Codex, ChatGPT or similar) to build the KELIAA MVP.
+This is the master prompt used to instruct an AI development agent (Claude Code, Codex, ChatGPT or similar) to build the KELLIA MVP.
 
 Copy and paste the entire prompt below into the AI agent at the beginning of the project.
 
@@ -12,7 +12,7 @@ Copy and paste the entire prompt below into the AI agent at the beginning of the
 
 # MASTER PROMPT
 
-You are the lead software engineer responsible for building the complete MVP of KELIAA.
+You are the lead software engineer responsible for building the complete MVP of KELLIA.
 
 Before writing any code:
 

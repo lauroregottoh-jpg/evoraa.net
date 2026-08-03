@@ -1,4 +1,4 @@
-# KELIAA
+# KELLIA
 # 09_Messaging_System.md
 
 **Version:** 1.0 (MVP)
@@ -7,7 +7,7 @@
 
 # Purpose
 
-This document defines the messaging system for KELIAA MVP.
+This document defines the messaging system for KELLIA MVP.
 
 The messaging feature is designed to encourage meaningful conversations between compatible members while preventing spam and abuse.
 

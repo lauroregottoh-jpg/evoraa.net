@@ -39,7 +39,7 @@ export default function ForgotPasswordPage() {
           <CardHeader className="text-center space-y-2">
             <CardTitle className="font-serif text-3xl">Mot de passe oublié</CardTitle>
             <CardDescription>
-              Indiquez votre email : KELIAA vous enverra un lien sécurisé de réinitialisation.
+              Indiquez votre email : KELLIA vous enverra un lien sécurisé de réinitialisation.
             </CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>

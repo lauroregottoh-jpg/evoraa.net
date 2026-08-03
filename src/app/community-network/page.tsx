@@ -56,7 +56,7 @@ export default function CommunityNetworkPage() {
 
         <EvaCompanion
           title="EVA — hors ligne aussi"
-          message="KELIAA collabore avec des coachs et des organisateurs de confiance pour proposer des temps forts où vous pouvez vous rencontrer en personne, sans la pression d'un rendez-vous classique."
+          message="KELLIA collabore avec des coachs et des organisateurs de confiance pour proposer des temps forts où vous pouvez vous rencontrer en personne, sans la pression d'un rendez-vous classique."
           variant="reassurance"
         />
 

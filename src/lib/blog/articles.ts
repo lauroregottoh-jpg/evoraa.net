@@ -22,7 +22,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     category: "Discernement",
     readTime: "7 min de lecture",
     date: "18 Juillet 2026",
-    author: "Équipe conseil KELIAA",
+    author: "Équipe conseil KELLIA",
     image:
       "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&w=1600&q=80",
     content: `
@@ -48,7 +48,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
 
       <h3>En pratique, par où commencer ?</h3>
       <p>Avant de chercher « la bonne personne », prenez le temps de clarifier qui vous êtes devenu(e) en Christ : vos valeurs, vos blessures en guérison, votre vision du foyer, et ce que vous êtes réellement prêt(e) à offrir. Une rencontre sérieuse demande un cœur préparé, pas seulement un cœur disponible.</p>
-      <p>Sur KELIAA, nous croyons qu’une compatibilité durable repose sur la foi, les valeurs, le projet de vie et la maturité relationnelle — avant l’apparence. C’est dans cet esprit que nous vous invitons à avancer : sans précipitation, sans peur, et avec espérance.</p>
+      <p>Sur Kellia, nous croyons qu’une compatibilité durable repose sur la foi, les valeurs, le projet de vie et la maturité relationnelle — avant l’apparence. C’est dans cet esprit que nous vous invitons à avancer : sans précipitation, sans peur, et avec espérance.</p>
     `,
   },
   {
@@ -57,15 +57,15 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     subtitle:
       "Quand l’apparence cesse d’être le premier filtre, le dialogue retrouve sa dignité et la compatibilité reprend sa place.",
     excerpt:
-      "En mettant l'accent sur l'âme, la foi et le projet de vie avant l'apparence physique, KELIAA restaure la dignité du dialogue conjugal.",
+      "En mettant l'accent sur l'âme, la foi et le projet de vie avant l'apparence physique, KELLIA restaure la dignité du dialogue conjugal.",
     category: "Foi & Mariage",
     readTime: "6 min de lecture",
     date: "14 Juillet 2026",
-    author: "Équipe conseil KELIAA",
+    author: "Équipe conseil KELLIA",
     image:
       "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1600&q=80",
     content: `
-      <p class="lead">Dans beaucoup d’applications, tout commence par une photo. En quelques secondes, une personne est acceptée ou écartée. Sur KELIAA, nous avons choisi une autre voie : ralentir le regard pour laisser la compatibilité parler avant l’apparence.</p>
+      <p class="lead">Dans beaucoup d’applications, tout commence par une photo. En quelques secondes, une personne est acceptée ou écartée. Sur Kellia, nous avons choisi une autre voie : ralentir le regard pour laisser la compatibilité parler avant l’apparence.</p>
 
       <h3>Le problème d’un premier jugement purement visuel</h3>
       <p>L’apparence a sa place. Dieu a créé la beauté, et l’attirance n’est pas un péché. Mais lorsqu’elle devient le premier critère de sélection, elle écrase souvent ce qui construit réellement un foyer : la vision, le caractère, la foi vécue, la capacité à communiquer et à tenir dans la durée.</p>
@@ -96,7 +96,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     category: "Conseils",
     readTime: "7 min de lecture",
     date: "10 Juillet 2026",
-    author: "Équipe conseil KELIAA",
+    author: "Équipe conseil KELLIA",
     image:
       "https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=1600&q=80",
     content: `
@@ -127,7 +127,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     subtitle:
       "Sarah et David n’ont pas commencé par une photo parfaite. Ils ont commencé par une vision de foyer qui se ressemblait.",
     excerpt:
-      "Découvrez l'histoire touchante de Sarah et David, qui se sont rencontrés sur KELIAA grâce à leur diagnostic spirituel commun sur l'accueil et le ministère.",
+      "Découvrez l'histoire touchante de Sarah et David, qui se sont rencontrés sur Kellia grâce à leur diagnostic spirituel commun sur l'accueil et le ministère.",
     category: "Témoignages",
     readTime: "8 min de lecture",
     date: "05 Juillet 2026",
@@ -135,14 +135,14 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     image:
       "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1600&q=80",
     content: `
-      <p class="lead">Quand Sarah a créé son profil sur KELIAA, elle n’attendait plus « juste quelqu’un ». Elle cherchait une personne avec qui construire un foyer ouvert, enraciné dans la foi, capable d’accueillir. De son côté, David avançait avec la même conviction, sans savoir qu’une conversation allait bientôt tout changer.</p>
+      <p class="lead">Quand Sarah a créé son profil sur Kellia, elle n’attendait plus « juste quelqu’un ». Elle cherchait une personne avec qui construire un foyer ouvert, enraciné dans la foi, capable d’accueillir. De son côté, David avançait avec la même conviction, sans savoir qu’une conversation allait bientôt tout changer.</p>
 
       <h3>Un premier dialogue autour de l’essentiel</h3>
       <p>Ce qui les a rapprochés n’était pas une phrase de séduction, mais une convergence surprenante : la même vision de l’hospitalité. Pour Sarah, un foyer chrétien n’était pas seulement un espace privé. C’était un lieu où l’on peut accueillir, écouter, partager un repas, accompagner quelqu’un dans une saison difficile.</p>
       <p>David pensait exactement la même chose. Il parlait d’un couple qui sert ensemble, qui prie, qui reste attentif aux besoins autour de lui. « Quand j’ai lu sa manière d’exprimer cela, j’ai immédiatement senti une paix, raconte-t-il. Ce n’était pas du fantasme. C’était concret. »</p>
 
       <h3>Ce que le matching a rendu visible</h3>
-      <p>Sur KELIAA, leurs questionnaires ont mis en lumière des points de compatibilité que des applications classiques auraient facilement ignorés : vision du service, rapport à la communauté, rythme de vie, désir d’un mariage tourné vers le Royaume. L’apparence est arrivée ensuite. Le dialogue, lui, avait déjà une base solide.</p>
+      <p>Sur Kellia, leurs questionnaires ont mis en lumière des points de compatibilité que des applications classiques auraient facilement ignorés : vision du service, rapport à la communauté, rythme de vie, désir d’un mariage tourné vers le Royaume. L’apparence est arrivée ensuite. Le dialogue, lui, avait déjà une base solide.</p>
       <p>Sarah précise : « J’avais peur de retomber dans des conversations superficielles. Ici, dès le début, on parlait de ce qui compte vraiment. Pas pour tout régler en une semaine, mais pour voir si nos chemins pouvaient réellement se rejoindre. »</p>
 
       <blockquote>« Ce n’est pas parce que deux personnes croient en Dieu qu’elles avancent dans la même direction. Nous, nous avons découvert que nous rêvions du même type de foyer. »</blockquote>
@@ -166,7 +166,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     category: "Foi & Mariage",
     readTime: "7 min de lecture",
     date: "28 Juin 2026",
-    author: "Équipe conseil KELIAA",
+    author: "Équipe conseil KELLIA",
     image:
       "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1600&q=80",
     content: `
@@ -188,7 +188,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
 
       <h3>4. Accorder vision de foyer et générosité</h3>
       <p>Dans un couple chrétien, la question n’est pas seulement « Combien gagnons-nous ? » mais aussi « Que voulons-nous construire ? ». Soutenir l’Église, aider un proche, préparer l’avenir des enfants, investir dans un projet commun : tout cela demande une vision alignée.</p>
-      <p>Sur KELIAA, l’un des questionnaires explore précisément ces sujets, parce qu’une incompatibilité profonde sur l’argent peut fragiliser même une belle complicité spirituelle. Mieux vaut discerner tôt, avec douceur, que découvrir trop tard des divergences majeures.</p>
+      <p>Sur Kellia, l’un des questionnaires explore précisément ces sujets, parce qu’une incompatibilité profonde sur l’argent peut fragiliser même une belle complicité spirituelle. Mieux vaut discerner tôt, avec douceur, que découvrir trop tard des divergences majeures.</p>
 
       <h3>Pour ceux et celles qui cheminent</h3>
       <p>Si vous êtes célibataire aujourd’hui, commencez déjà à cultiver une relation saine avec l’argent : responsabilité, sobriété, générosité, clarté. Ce que vous apprenez maintenant préparera la qualité de vos futurs échanges de couple. Et lorsque le moment viendra d’en parler à quelqu’un, vous le ferez non comme un tabou, mais comme un terrain de maturité partagée.</p>
@@ -204,7 +204,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     category: "Conseils",
     readTime: "6 min de lecture",
     date: "20 Juin 2026",
-    author: "Équipe conseil KELIAA",
+    author: "Équipe conseil KELLIA",
     image:
       "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=1600&q=80",
     content: `
@@ -226,7 +226,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
 
       <h3>Pour les célibataires en chemin</h3>
       <p>Même avant de rencontrer quelqu’un, vous pouvez déjà bâtir un cercle de conseil autour de vous. Cultivez des amitiés matures. Acceptez d’être accompagné(e). Travaillez vos zones sensibles. Un cœur qui sait recevoir un regard extérieur sera mieux préparé le jour où une relation sérieuse commencera.</p>
-      <p>Sur KELIAA, nous croyons qu’une rencontre digne s’inscrit dans une communauté, une charte, un accompagnement et un discernement patient. Vous n’avez pas à tout porter seul(e). Et parfois, la plus grande sagesse consiste simplement à oser demander : « Qu’est-ce que tu vois que je ne vois peut-être pas encore ? »</p>
+      <p>Sur Kellia, nous croyons qu’une rencontre digne s’inscrit dans une communauté, une charte, un accompagnement et un discernement patient. Vous n’avez pas à tout porter seul(e). Et parfois, la plus grande sagesse consiste simplement à oser demander : « Qu’est-ce que tu vois que je ne vois peut-être pas encore ? »</p>
     `,
   },
 ]

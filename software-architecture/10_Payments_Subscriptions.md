@@ -1,4 +1,4 @@
-# KELIAA — Payments & Subscriptions
+# KELLIA — Payments & Subscriptions
 
 **Version :** 2.0
 **Dernière mise à jour :** 30 juillet 2026

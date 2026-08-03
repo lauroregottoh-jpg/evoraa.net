@@ -23,8 +23,8 @@ const APP_URL =
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: "KELIAA | Rencontres Chrétiennes",
-    template: "%s | KELIAA",
+    default: "KELLIA | Rencontres Chrétiennes",
+    template: "%s | KELLIA",
   },
   description:
     "Plateforme de rencontres chrétiennes pour les célibataires qui souhaitent construire un mariage selon les standards bibliques. Matching fondé sur la foi, les valeurs et le projet de vie.",
@@ -32,8 +32,8 @@ export const metadata: Metadata = {
     type: "website",
     locale: "fr_FR",
     url: APP_URL,
-    siteName: "KELIAA",
-    title: "KELIAA | Rencontres Chrétiennes",
+    siteName: "KELLIA",
+    title: "KELLIA | Rencontres Chrétiennes",
     description:
       "Rencontres chrétiennes fondées sur le discernement, pas sur le swipe. Créez gratuitement votre profil.",
     images: [
@@ -41,13 +41,13 @@ export const metadata: Metadata = {
         url: "/auth-bg-african.png",
         width: 1200,
         height: 630,
-        alt: "KELIAA — rencontres chrétiennes",
+        alt: "KELLIA — rencontres chrétiennes",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "KELIAA | Rencontres Chrétiennes",
+    title: "KELLIA | Rencontres Chrétiennes",
     description:
       "Rencontres chrétiennes fondées sur le discernement, pas sur le swipe.",
     images: ["/auth-bg-african.png"],

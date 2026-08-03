@@ -10,16 +10,16 @@ export default function ConfidentialitePage() {
           Politique de confidentialité
         </h1>
         <p className="text-sm text-muted-foreground !mt-0">
-          Dernière mise à jour : 24 juillet 2026 — Plateforme KELIAA
+          Dernière mise à jour : 24 juillet 2026 — Plateforme KELLIA
         </p>
 
         <section className="space-y-3 text-sm text-foreground/90 leading-relaxed">
           <h2 className="font-serif text-xl font-semibold">1. Responsable du traitement</h2>
           <p>
-            Le responsable du traitement des données personnelles collectées via KELIAA est
+            Le responsable du traitement des données personnelles collectées via KELLIA est
             l&apos;éditeur de la plateforme. Pour exercer vos droits ou poser une question :{" "}
-            <a href="mailto:contact@keliaa.net" className="text-primary underline underline-offset-2">
-              contact@keliaa.net
+            <a href="mailto:contact@KELLIA.net" className="text-primary underline underline-offset-2">
+              contact@KELLIA.net
             </a>{" "}
             ou via la{" "}
             <Link href="/contact" className="text-primary underline underline-offset-2">
@@ -36,7 +36,7 @@ export default function ConfidentialitePage() {
             <li>Profil (prénom, nom, ville, adresse le cas échéant, biographie, préférences, photos)</li>
             <li>Réponses aux questionnaires de compatibilité et scores associés</li>
             <li>Messages échangés sur la plateforme</li>
-            <li>Données de paiement (références transactionnelles ; pas de numéro de carte stocké chez KELIAA)</li>
+            <li>Données de paiement (références transactionnelles ; pas de numéro de carte stocké Chez Kellia)</li>
             <li>Signalements, logs techniques et données de sécurité</li>
             <li>Données de navigation (cookies / équivalents, selon configuration)</li>
           </ul>
@@ -110,7 +110,7 @@ export default function ConfidentialitePage() {
           <p>
             Mesures techniques et organisationnelles : HTTPS, contrôle d&apos;accès, politiques RLS
             côté base de données, procédures de signalement. Aucune mesure n&apos;est absolue :
-            signalez tout incident suspect à ethique@keliaa.net.
+            signalez tout incident suspect à ethique@KELLIA.net.
           </p>
         </section>
 

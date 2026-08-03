@@ -73,11 +73,11 @@ const AFFIRMATIONS = [
   },
   {
     text: "Le discernement prend du temps. Aujourd'hui, une conversation honnête vaut mieux que dix swipes.",
-    source: "KELIAA — rappel du jour",
+    source: "KELLIA — rappel du jour",
   },
   {
     text: "Vous n'êtes pas en retard. Vous construisez quelque chose de digne.",
-    source: "KELIAA — rappel du jour",
+    source: "KELLIA — rappel du jour",
   },
   {
     text: "La paix de Dieu, qui surpasse toute intelligence, gardera vos cœurs.",
@@ -100,7 +100,7 @@ const DAILY_TIPS = [
   },
   {
     title: "Les 5 piliers avant la précipitation",
-    body: "Complète tes questionnaires : le matching KELIAA devient vraiment utile.",
+    body: "Complète tes questionnaires : le matching Kellia devient vraiment utile.",
   },
 ]
 
@@ -188,7 +188,7 @@ export async function getDashboardData(): Promise<{
     nextSteps.push({
       id: "trial",
       title: `Période découverte enrichie — ${usage.trialDaysRemaining} jour(s) restant(s)`,
-      body: "Quotas boostés : plus de conversations et suggestions. Profitez-en pour tester KELIAA.",
+      body: "Quotas boostés : plus de conversations et suggestions. Profitez-en pour tester Kellia.",
       href: "/compatibility",
       cta: "Explorer",
       tone: "tests",

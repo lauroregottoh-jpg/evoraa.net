@@ -17,8 +17,8 @@ PAYMENTS_DEMO_MODE=true              # false + CinetPay si encaissement réel
 # CINETPAY_SITE_ID=
 # CINETPAY_SECRET_KEY=
 # RESEND_API_KEY=
-# RESEND_FROM_EMAIL=KELIAA <noreply@keliaa.net>
-# CONTACT_INBOX_EMAIL=contact@keliaa.net
+# RESEND_FROM_EMAIL=KELLIA <noreply@KELLIA.net>
+# CONTACT_INBOX_EMAIL=contact@KELLIA.net
 # SUPABASE_DB_URL=...                # seulement pour run_migration.ps1
 ```
 
@@ -39,7 +39,7 @@ Importer le repo, coller les env, pointer le domaine.
 
 ### 4. Paiements (Togo)
 
-KELIAA utilise **CinetPay** (Moov Money + TMoney au Togo ; Wave/Orange ailleurs).  
+KELLIA utilise **CinetPay** (Moov Money + TMoney au Togo ; Wave/Orange ailleurs).  
 Compte marchand : [cinetpay.com](https://cinetpay.com) — le code est déjà prêt.
 
 Notify URL :

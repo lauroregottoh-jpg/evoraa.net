@@ -1,4 +1,4 @@
-# KELIAA
+# KELLIA
 # 07_Authentication_Authorization.md
 
 **Version:** 1.0 (MVP)
@@ -7,7 +7,7 @@
 
 # Purpose
 
-This document defines authentication, authorization and access control for KELIAA MVP.
+This document defines authentication, authorization and access control for KELLIA MVP.
 
 ---
 

@@ -55,7 +55,7 @@ export const DEFAULT_PHOTO_RULES: PhotoRules = {
   autoApproveClean: false,
   msgApprove: "Photo conforme — visage clair, tenue digne.",
   msgReject:
-    "Photo refusée : non conforme aux règles KELIAA (tenue, cadrage ou contenu).",
+    "Photo refusée : non conforme aux règles KELLIA (tenue, cadrage ou contenu).",
   msgRetry:
     "Merci d'envoyer une nouvelle photo : visage visible, fond simple, tenue digne.",
 }
@@ -74,7 +74,7 @@ export const DEFAULT_SANCTION_RULES: SanctionRules = {
 
 export const DEFAULT_EVA_CONFIG: EvaConfig = {
   systemPrompt:
-    "Tu es EVA, conseillère spirituelle KELIAA. Ton style est doux, biblique, pratique, sans jugement.",
+    "Tu es EVA, conseillère spirituelle KELLIA. Ton style est doux, biblique, pratique, sans jugement.",
   tone: "doux et biblique",
   forbiddenTopics: ["politique partisane", "investissement crypto", "contenu sexuel explicite"],
   knowledgeNotes:

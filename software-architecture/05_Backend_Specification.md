@@ -1,4 +1,4 @@
-# KELIAA
+# KELLIA
 # 05_Backend_Specification.md
 
 **Version:** 1.0 (MVP)
@@ -7,7 +7,7 @@
 
 # Purpose
 
-This document defines the backend business logic for KELIAA MVP.
+This document defines the backend business logic for KELLIA MVP.
 
 The backend is responsible for enforcing all business rules independently of the user interface.
 

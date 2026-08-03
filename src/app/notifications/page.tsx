@@ -11,7 +11,7 @@ export default async function NotificationsPage() {
         <div className="border-b border-border/40 pb-4">
           <h1 className="font-serif text-3xl font-bold">Notifications</h1>
           <p className="text-sm text-muted-foreground">
-            Alertes KELIAA : questionnaires, messages et abonnements.
+            Alertes KELLIA : questionnaires, messages et abonnements.
           </p>
         </div>
         {error && <p className="text-sm text-destructive">{error}</p>}

@@ -83,9 +83,9 @@ function ContactPageInner() {
         eyebrow="Contact"
         title="Vous n'êtes jamais seul"
         highlight="dans votre parcours."
-        subtitle="Que vous ayez une question sur KELIAA, besoin d'un conseil ou souhaitiez signaler une situation, notre équipe est là pour vous accompagner avec bienveillance, confidentialité et respect."
+        subtitle="Que vous ayez une question sur Kellia, besoin d'un conseil ou souhaitiez signaler une situation, notre équipe est là pour vous accompagner avec bienveillance, confidentialité et respect."
         imageSrc="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=85&w=2000&auto=format&fit=crop"
-        imageAlt="Conseillère KELIAA disponible pour accompagner les membres"
+        imageAlt="Conseillère KELLIA disponible pour accompagner les membres"
         imageClassName="object-center"
       >
         <div className="pt-6 space-y-4">
@@ -125,20 +125,20 @@ function ContactPageInner() {
             <div className="mt-8 space-y-5">
               <div className="border-t border-white/15 pt-5">
                 <p className="text-xs font-bold uppercase tracking-wider text-accent">Question générale</p>
-                <a href="mailto:contact@keliaa.net" className="mt-1 inline-block font-semibold hover:text-accent">
-                  contact@keliaa.net
+                <a href="mailto:contact@KELLIA.net" className="mt-1 inline-block font-semibold hover:text-accent">
+                  contact@KELLIA.net
                 </a>
               </div>
               <div className="border-t border-white/15 pt-5">
                 <p className="text-xs font-bold uppercase tracking-wider text-accent">Conseil &amp; parcours</p>
-                <a href="mailto:conseil@keliaa.net" className="mt-1 inline-block font-semibold hover:text-accent">
-                  conseil@keliaa.net
+                <a href="mailto:conseil@KELLIA.net" className="mt-1 inline-block font-semibold hover:text-accent">
+                  conseil@KELLIA.net
                 </a>
               </div>
               <div className="border-t border-white/15 pt-5">
                 <p className="text-xs font-bold uppercase tracking-wider text-accent">Éthique &amp; signalement</p>
-                <a href="mailto:ethique@keliaa.net" className="mt-1 inline-block font-semibold hover:text-accent">
-                  ethique@keliaa.net
+                <a href="mailto:ethique@KELLIA.net" className="mt-1 inline-block font-semibold hover:text-accent">
+                  ethique@KELLIA.net
                 </a>
               </div>
             </div>
@@ -256,7 +256,7 @@ function ContactPageInner() {
           </h2>
           <p className="text-sm text-muted-foreground max-w-xl mx-auto leading-relaxed">
             Posez votre question à EVA, notre assistant guidé. Elle propose des réponses préparées
-            sur le fonctionnement de KELIAA et le discernement — sans remplacer un conseiller
+            sur le fonctionnement de Kellia et le discernement — sans remplacer un conseiller
             humain.
           </p>
         </div>
@@ -267,7 +267,7 @@ function ContactPageInner() {
       <section className="py-16 px-6 text-center space-y-6 max-w-2xl mx-auto border-t border-border">
         <MessageSquare className="h-8 w-8 text-accent mx-auto" />
         <h3 className="font-serif text-2xl sm:text-3xl font-bold text-foreground">
-          Derrière KELIAA, il y a des personnes qui vous écoutent.
+          Derrière Kellia, il y a des personnes qui vous écoutent.
         </h3>
         <p className="text-sm text-muted-foreground leading-relaxed">
           Même si EVA peut répondre à de nombreuses questions, certaines situations méritent une

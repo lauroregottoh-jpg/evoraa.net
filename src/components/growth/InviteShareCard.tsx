@@ -41,7 +41,7 @@ export function InviteShareCard({ userId }: { userId: string }) {
         <h2 className="font-serif text-lg font-bold text-foreground">Invitez un ami</h2>
       </div>
       <p className="text-sm text-muted-foreground leading-relaxed">
-        KELIAA grandit mieux à deux genres équilibrés. Partagez votre lien personnel — chaque
+        Kellia grandit mieux à deux genres équilibrés. Partagez votre lien personnel — chaque
         inscription via ce lien est attribuée à votre invitation.
       </p>
       <p className="text-[11px] font-mono break-all rounded-xl bg-background border border-border px-3 py-2 text-muted-foreground">

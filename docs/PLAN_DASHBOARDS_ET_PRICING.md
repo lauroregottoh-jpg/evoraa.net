@@ -1,4 +1,4 @@
-# KELIAA — Plan dashboards + stratégie pricing
+# KELLIA — Plan dashboards + stratégie pricing
 
 > **Statut :** validé Free + Alliance — Phase 0–2 en cours d'exécution  
 > **Dernière mise à jour :** 25 juillet 2026  
@@ -55,7 +55,7 @@ Fichiers liés :
 
 ### 1.2bis Concurrent niche — Farata Pointe (rencontres musulmanes)
 
-Source : page tarifs Farata (copiée par le fondateur KELIAA). Positionnement proche : **app de rencontre confessionnelle**, Free pour commencer / Premium pour accélérer.
+Source : page tarifs Farata (copiée par le fondateur KELLIA). Positionnement proche : **app de rencontre confessionnelle**, Free pour commencer / Premium pour accélérer.
 
 #### Ce qu’ils vendent (lecture produit)
 
@@ -81,9 +81,9 @@ Source : page tarifs Farata (copiée par le fondateur KELIAA). Positionnement pr
 5. **Illimité côté Premium** sur les frictions Free (contacts + coach + messages) = sensation « j’ai enfin les clés ».
 6. **Niche assumée** : filtres madhhab / hijra, coach nommé (« Cheikh Moussa »), Académie du mariage — la foi n’est pas un badge, c’est le produit.
 
-#### Ce qu’ils font bien (à retenir pour KELIAA)
+#### Ce qu’ils font bien (à retenir pour KELLIA)
 
-| Pratique Farata | Application KELIAA |
+| Pratique Farata | Application KELLIA |
 |-----------------|-------------------|
 | Free utile mais plafonné **par jour** | Preférer des plafonds **journaliers** (suggestions, initiatives, EVA) en plus des plafonds mensuels |
 | Coach IA nommé + quota Free | EVA locale plafonnée (ex. 3/jour Free) plutôt que seulement 20/mois |
@@ -94,7 +94,7 @@ Source : page tarifs Farata (copiée par le fondateur KELIAA). Positionnement pr
 
 #### Ce qu’il ne faut pas copier tel quel
 
-| Farata | Risque pour KELIAA |
+| Farata | Risque pour KELLIA |
 |--------|-------------------|
 | Prix 5 900 / ancrage 9 900 | OK comme **référence** ; notre cible historique est 5 000 — on peut monter à **5 900** au lancement si le marché le porte |
 | Illimité total dès le 1er payant | OK s’il n’y a **qu’un** tier payant ; moins OK si on veut garder un 10 000 au-dessus |
@@ -123,7 +123,7 @@ Après Farata, la recommandation évolue :
 
 ## 1.2ter Avis stratégique — 1 Premium (Farata) vs 2 500 + 5 000
 
-> Clarification : Farata sert d’**inspiration** (friction Free, FOMO, page simple), **pas** d’un modèle à recopier. KELIAA se différencie par le matching à **3 piliers** (personnalité · foi/valeurs · relationnel) — beaucoup plus poussé qu’un simple listing + coach IA.
+> Clarification : Farata sert d’**inspiration** (friction Free, FOMO, page simple), **pas** d’un modèle à recopier. KELLIA se différencie par le matching à **3 piliers** (personnalité · foi/valeurs · relationnel) — beaucoup plus poussé qu’un simple listing + coach IA.
 
 ### La vraie question
 
@@ -154,7 +154,7 @@ Deux options propres :
 1. **Recommandée — Soft launch :** pas de colonne 2 500. Uniquement Free + Alliance (5 000 ou 5 900, prix barré). Offre de lancement = **réduction temporaire** (ex. 5 900 → 4 900 les 200 premiers), pas un 2ᵉ produit.
 2. **Si vous tenez au 2 500 :** uniquement **100–200 places**, quotas **volontairement plus bas** que aujourd’hui, disparition annoncée. Sinon il mangera le 5 000.
 
-Pourquoi ça colle à KELIAA mieux qu’à un copier-coller Farata :
+Pourquoi ça colle à KELLIA mieux qu’à un copier-coller Farata :
 - Votre valeur n’est pas « plus de likes » : c’est **tests + matching 3 piliers**. Le Premium doit débloquer *l’usage sérieux* de ce matching (plus de suggestions, conversations, détail de compatibilité, priorisation) — pas seulement des gadgets FOMO.
 - Les features Farata (visiteurs, favoris) sont d’excellents **accélérateurs de conversion**, à ajouter en P1, sans remplacer votre cœur produit.
 
@@ -292,7 +292,7 @@ KPIs rétention : inscriptions, % profils complets, % tests, conversion Free→5
 - [x] Accueil complet  
 - [x] Next-step Free  
 - [x] EVA locale + lien Aide  
-- [x] Design élégant KELIAA (inspiré Farata, non copié)
+- [x] Design élégant KELLIA (inspiré Farata, non copié)
 
 ### Phase 2 — Pricing Free + Alliance
 - [x] Grille publique Free + Alliance uniquement  

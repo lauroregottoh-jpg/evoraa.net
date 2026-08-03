@@ -52,7 +52,7 @@ export function CinematicNavbar() {
                 scrolled || pathname !== "/" ? "text-primary" : "text-white"
               )}
             >
-              KELIAA
+              KELLIA
             </span>
           </Link>
 
@@ -126,7 +126,7 @@ export function CinematicNavbar() {
             onClick={() => setMobileOpen(false)}
             className="font-serif text-4xl font-bold tracking-tight text-primary mb-4"
           >
-            KELIAA
+            KELLIA
           </Link>
 
           <div className="flex flex-col items-center gap-6 text-center">

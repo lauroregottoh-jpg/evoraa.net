@@ -1,9 +1,9 @@
-# KELIAA
+# KELLIA
 ## 03 - Tech Stack (Version MVP économique)
 
 ## Philosophie
 
-Objectif : lancer KELIAA avec **le moins de coûts possible**, tout en gardant une architecture évolutive.
+Objectif : lancer KELLIA avec **le moins de coûts possible**, tout en gardant une architecture évolutive.
 
 ### Principes
 

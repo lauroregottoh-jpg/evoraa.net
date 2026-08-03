@@ -150,7 +150,7 @@ export function AdminShell({
             K
           </div>
           <div>
-            <p className="font-serif text-lg font-bold text-primary leading-none">KELIAA</p>
+            <p className="font-serif text-lg font-bold text-primary leading-none">KELLIA</p>
             <p className="text-[11px] text-muted-foreground mt-1 flex items-center gap-1">
               <ShieldCheck className="h-3 w-3 text-emerald-600" />
               Admin · {viewerRole || "—"}
@@ -232,7 +232,7 @@ export function AdminShell({
                 A
               </span>
               <div className="hidden md:block leading-tight pr-1">
-                <p className="text-xs font-semibold">KELIAA Ops</p>
+                <p className="text-xs font-semibold">KELLIA Ops</p>
                 <p className="text-[10px] text-muted-foreground capitalize">
                   {viewerRole || "admin"}
                 </p>

@@ -35,7 +35,7 @@ const ALLIANCE_TESTIMONIALS = [
 const FAQS = [
   {
     q: "Pourquoi devenir membre Alliance ?",
-    a: "Parce que vous profitez de toute la puissance du Matching KELIAA™ et d'une expérience complète pour avancer plus sereinement dans votre recherche.",
+    a: "Parce que vous profitez de toute la puissance du Matching KELLIA™ et d'une expérience complète pour avancer plus sereinement dans votre recherche.",
   },
   {
     q: "Puis-je arrêter quand je le souhaite ?",

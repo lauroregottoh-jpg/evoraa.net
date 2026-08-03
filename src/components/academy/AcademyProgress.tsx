@@ -5,7 +5,7 @@ import { CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/utils/cn"
 
-const STORAGE_KEY = "keliaa_academy_progress"
+const STORAGE_KEY = "KELLIA_academy_progress"
 
 function readProgress(): Record<string, boolean> {
   try {
