@@ -9,8 +9,7 @@ import {
   AcademyTeaser,
   CoachFab,
   DailyQuotaCard,
-  DailyReminderCard,
-  DailyTipCard,
+  DailyEditorialCard,
   QuickAccessGrid,
 } from "@/components/dashboard/FarataHomeBlocks"
 import { PresenceStreak } from "@/components/dashboard/PresenceStreak"
@@ -106,8 +105,21 @@ export default async function DashboardPage() {
           </div>
         )}
 
-        <DailyReminderCard text={data.affirmation} source={data.affirmationSource} />
-        <DailyTipCard title={data.dailyTip.title} body={data.dailyTip.body} />
+        <div className="space-y-3">
+          <div className="flex items-end justify-between gap-3 px-1">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
+              Bibliothèque du jour
+            </p>
+            <Link
+              href="/inspiration"
+              className="text-xs font-semibold text-primary hover:underline underline-offset-2"
+            >
+              Voir toute la bibliothèque →
+            </Link>
+          </div>
+          <DailyEditorialCard item={data.dailyPrimary} featured />
+          <DailyEditorialCard item={data.dailySecondary} />
+        </div>
 
         {!data.hasAvatar || data.completionPercentage < 70 ? (
           <div className="rounded-2xl border border-border bg-card p-5 space-y-3">

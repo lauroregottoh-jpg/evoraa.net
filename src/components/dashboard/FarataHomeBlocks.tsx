@@ -2,7 +2,6 @@ import Link from "next/link"
 import {
   BookOpen,
   Lightbulb,
-  RefreshCw,
   MessageCircle,
   Heart,
   Eye,
@@ -10,11 +9,87 @@ import {
   Lock,
   Send,
   GraduationCap,
+  Sparkles,
+  HelpCircle,
+  Target,
+  AlertTriangle,
+  Quote,
+  MessageSquareHeart,
 } from "lucide-react"
 import { cn } from "@/utils/cn"
 import type { UsageSnapshot } from "@/lib/billing/usage"
 import type { SocialInsights } from "@/app/actions/social"
+import type { EditorialItem } from "@/lib/editorial/library"
 
+function EditorialIcon({ category }: { category: EditorialItem["category"] }) {
+  const common = "h-3.5 w-3.5"
+  switch (category) {
+    case "defi":
+      return <Target className={common} />
+    case "question":
+    case "conversation":
+      return <HelpCircle className={common} />
+    case "verset":
+    case "verset_explique":
+      return <BookOpen className={common} />
+    case "erreur":
+      return <AlertTriangle className={common} />
+    case "conseil":
+    case "conseil_coach":
+    case "astuce":
+      return <Lightbulb className={common} />
+    case "citation":
+      return <Quote className={common} />
+    case "encouragement":
+      return <Heart className={common} />
+    default:
+      return <Sparkles className={common} />
+  }
+}
+
+export function DailyEditorialCard({
+  item,
+  featured = false,
+}: {
+  item: EditorialItem
+  featured?: boolean
+}) {
+  const quoteStyle =
+    item.category === "verset" ||
+    item.category === "citation" ||
+    item.category === "pensee"
+
+  return (
+    <section
+      className={cn(
+        "rounded-2xl border border-border bg-card p-5 space-y-2",
+        featured && "border-primary/25 bg-gradient-to-br from-secondary/50 to-card"
+      )}
+    >
+      <p className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-1.5">
+        <EditorialIcon category={item.category} />
+        {item.label}
+      </p>
+      {item.title ? (
+        <p className="font-semibold text-sm text-foreground">{item.title}</p>
+      ) : null}
+      <p
+        className={cn(
+          "leading-relaxed text-foreground",
+          featured ? "font-serif text-base sm:text-lg" : "text-sm",
+          quoteStyle && "italic"
+        )}
+      >
+        {quoteStyle ? `« ${item.body} »` : item.body}
+      </p>
+      {item.source ? (
+        <p className="text-xs text-primary font-medium">{item.source}</p>
+      ) : null}
+    </section>
+  )
+}
+
+/** Legacy — prefer DailyEditorialCard */
 export function DailyReminderCard({
   text,
   source,
@@ -23,33 +98,30 @@ export function DailyReminderCard({
   source: string
 }) {
   return (
-    <section className="rounded-2xl border border-border bg-card p-5 space-y-2">
-      <p className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-1.5">
-        <BookOpen className="h-3.5 w-3.5" /> Rappel du jour
-      </p>
-      <p className="font-serif text-base sm:text-lg italic leading-relaxed text-foreground">
-        « {text} »
-      </p>
-      <p className="text-xs text-primary font-medium">{source}</p>
-    </section>
+    <DailyEditorialCard
+      featured
+      item={{
+        id: "legacy-reminder",
+        category: "pensee",
+        label: "Pensée du jour",
+        body: text,
+        source,
+      }}
+    />
   )
 }
 
 export function DailyTipCard({ title, body }: { title: string; body: string }) {
   return (
-    <section className="rounded-2xl border border-border bg-card p-4 flex items-start gap-3">
-      <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
-        <Lightbulb className="h-5 w-5" />
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
-          Conseil du jour
-        </p>
-        <p className="font-semibold text-sm mt-0.5">{title}</p>
-        <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{body}</p>
-      </div>
-      <RefreshCw className="h-4 w-4 text-muted-foreground/50 shrink-0 mt-1" aria-hidden />
-    </section>
+    <DailyEditorialCard
+      item={{
+        id: "legacy-tip",
+        category: "conseil",
+        label: "Conseil du jour",
+        title,
+        body,
+      }}
+    />
   )
 }
 
@@ -80,6 +152,14 @@ export function QuickAccessGrid({
       lock: false,
     },
     {
+      href: "/inspiration",
+      label: "Inspiration",
+      sub: "Bibliothèque",
+      icon: MessageSquareHeart,
+      tone: "bg-teal-500/15 text-teal-800",
+      lock: false,
+    },
+    {
       href: isPaid ? "/compatibility" : "/billing",
       label: "Visiteurs",
       sub: isPaid ? `${social.visitorCount}` : "Alliance",
@@ -98,7 +178,7 @@ export function QuickAccessGrid({
   ] as const
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
       {items.map((item) => {
         const Icon = item.icon
         return (

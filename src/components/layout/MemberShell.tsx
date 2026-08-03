@@ -17,6 +17,7 @@ import {
   Settings,
   MoreHorizontal,
   Share2,
+  BookHeart,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { ThemeToggle } from "@/components/evoraa/ThemeToggle";
@@ -40,6 +41,7 @@ const BOTTOM_PRIMARY = [
 ] as const;
 
 const MORE_LINKS = [
+  { href: "/inspiration", label: "Inspiration", icon: BookHeart },
   { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
   { href: "/premium", label: "Alliance", icon: Crown },
   { href: "/dashboard#invite", label: "Inviter", icon: Share2 },

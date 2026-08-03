@@ -8,6 +8,10 @@ import { getUsageSnapshot, type UsageSnapshot } from "@/lib/billing/usage"
 import { getSocialInsights, type SocialInsights } from "@/app/actions/social"
 import { loadPublicCms } from "@/lib/admin/loadCms"
 import type { AdSlot } from "@/lib/admin/cms"
+import {
+  getDailyEditorialPack,
+  type EditorialItem,
+} from "@/lib/editorial/library"
 
 export type DashboardNextStep = {
   id: string
@@ -56,53 +60,14 @@ export type DashboardData = {
   usage: UsageSnapshot
   social: SocialInsights
   nextSteps: DashboardNextStep[]
-  affirmation: string
-  affirmationSource: string
-  dailyTip: { title: string; body: string }
+  dailyPrimary: EditorialItem
+  dailySecondary: EditorialItem
   mission: DashboardMission
   selectionTitle: string
   selectionSubtitle: string
   greetingPrefix: string
   sponsoredAds: AdSlot[]
 }
-
-const AFFIRMATIONS = [
-  {
-    text: "Que tout ce que vous faites soit fait avec amour.",
-    source: "1 Corinthiens 16.14",
-  },
-  {
-    text: "Le discernement prend du temps. Aujourd'hui, une conversation honnête vaut mieux que dix swipes.",
-    source: "KELIAA — rappel du jour",
-  },
-  {
-    text: "Vous n'êtes pas en retard. Vous construisez quelque chose de respectueux.",
-    source: "KELIAA — rappel du jour",
-  },
-  {
-    text: "La paix de Dieu, qui surpasse toute intelligence, gardera vos cœurs.",
-    source: "Philippiens 4.7",
-  },
-]
-
-const DAILY_TIPS = [
-  {
-    title: "Implique ta famille avec sagesse",
-    body: "Le mariage concerne aussi les familles. Garde-les informés, sans tout décider sous pression.",
-  },
-  {
-    title: "Une photo claire change tout",
-    body: "Un visage visible inspire confiance et te rend trouvable dans les suggestions.",
-  },
-  {
-    title: "Écoute avant de répondre",
-    body: "Dans un message délicat : 1 minute d'écoute intérieure, puis une phrase honnête.",
-  },
-  {
-    title: "Les 5 piliers avant la précipitation",
-    body: "Complète tes questionnaires : le matching Keliaa devient vraiment utile.",
-  },
-]
 
 export async function getDashboardData(): Promise<{
   data?: DashboardData
@@ -215,8 +180,7 @@ export async function getDashboardData(): Promise<{
     })
   }
 
-  const dayIndex = new Date().getDate() % AFFIRMATIONS.length
-  const tipIndex = new Date().getDate() % DAILY_TIPS.length
+  const editorial = getDailyEditorialPack()
   const assessmentProgress = progress.map((p) => ({
     slug: p.slug,
     completed: p.completed,
@@ -302,9 +266,8 @@ export async function getDashboardData(): Promise<{
       usage,
       social,
       nextSteps: nextSteps.slice(0, 3),
-      affirmation: AFFIRMATIONS[dayIndex].text,
-      affirmationSource: AFFIRMATIONS[dayIndex].source,
-      dailyTip: DAILY_TIPS[tipIndex],
+      dailyPrimary: editorial.primary,
+      dailySecondary: editorial.secondary,
       mission,
       selectionTitle: texts.selection_title,
       selectionSubtitle: texts.selection_subtitle,

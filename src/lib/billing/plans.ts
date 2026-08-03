@@ -42,7 +42,7 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
       "5 nouvelles conversations / mois",
       "5 messages envoyés / conversation",
       "EVA : 3 questions / jour",
-      "Journal & ressources",
+      "Inspiration & bibliothèque éditoriale",
       "Bouclier de bienveillance",
       "Paiement Alliance par Mobile Money ou carte bancaire",
     ],
