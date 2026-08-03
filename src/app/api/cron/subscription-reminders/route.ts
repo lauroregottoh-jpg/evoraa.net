@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createAdminClient } from "@/utils/supabase/admin"
 import { sendEmailNotificationStub } from "@/app/actions/notifications"
+import { subscriptionReminderEmailHtml } from "@/lib/email/templates"
+import { resolveAppUrlSync } from "@/lib/auth/appUrl"
 
 function authorizeCron(request: NextRequest) {
   const secret = process.env.CRON_SECRET
@@ -64,12 +66,21 @@ export async function GET(request: NextRequest) {
     notified++
 
     const { data: authUser } = await supabase.auth.admin.getUserById(sub.user_id as string)
-    const email = authUser?.user?.email
-    if (email) {
+    const user = authUser?.user
+    const email = user?.email
+    if (email && user) {
+      const firstName =
+        (user.user_metadata?.first_name as string | undefined) || ""
+      const appUrl = resolveAppUrlSync()
+      const endsAtLabel = endsAt.toLocaleDateString("fr-FR")
       const mail = await sendEmailNotificationStub({
         to: email,
         subject: `KELLIA — ${title}`,
-        html: `<p>${body}</p><p><a href="${process.env.NEXT_PUBLIC_APP_URL || ""}/billing">Renouveler Alliance</a></p>`,
+        html: subscriptionReminderEmailHtml({
+          firstName,
+          appUrl,
+          endsAtLabel,
+        }),
       })
       if ("success" in mail && mail.success) emailed++
     }

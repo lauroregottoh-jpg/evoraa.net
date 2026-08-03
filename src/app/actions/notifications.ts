@@ -69,34 +69,49 @@ export async function markAllNotificationsReadAction() {
   return { success: true }
 }
 
-/** Optional email via Resend when RESEND_API_KEY is set */
+function defaultFromAddress() {
+  // Resend: onboarding@resend.dev marche sans domaine vérifié (tests).
+  // En prod : RESEND_FROM_EMAIL = "KELLIA <noreply@votredomaine.org>"
+  return (
+    process.env.RESEND_FROM_EMAIL?.trim() ||
+    "KELLIA <onboarding@resend.dev>"
+  )
+}
+
+/** Email brandé via Resend (ignore silencieusement si clé absente). */
 export async function sendEmailNotificationStub(input: {
   to: string
   subject: string
   html: string
+  replyTo?: string
 }) {
   const key = process.env.RESEND_API_KEY
   if (!key) {
     return { skipped: true as const, reason: "RESEND_API_KEY absent" }
   }
   try {
+    const payload: Record<string, unknown> = {
+      from: defaultFromAddress(),
+      to: [input.to],
+      subject: input.subject,
+      html: input.html,
+    }
+    if (input.replyTo) payload.reply_to = input.replyTo
+
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${key}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        from: process.env.RESEND_FROM_EMAIL || "KELLIA <noreply@KELLIA.net>",
-        to: [input.to],
-        subject: input.subject,
-        html: input.html,
-      }),
+      body: JSON.stringify(payload),
     })
     if (!res.ok) {
-      return { error: await res.text() }
+      const detail = await res.text()
+      console.error("[resend]", detail)
+      return { error: detail }
     }
-    return { success: true }
+    return { success: true as const }
   } catch (e) {
     return { error: e instanceof Error ? e.message : "email_failed" }
   }

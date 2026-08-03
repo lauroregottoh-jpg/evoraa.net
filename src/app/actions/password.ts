@@ -2,12 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server"
 import { redirect } from "next/navigation"
-
-function appBaseUrl() {
-  if (process.env.NEXT_PUBLIC_APP_URL) return process.env.NEXT_PUBLIC_APP_URL
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`
-  return "http://localhost:3000"
-}
+import { resolveAppUrlSync } from "@/lib/auth/appUrl"
 
 export async function requestPasswordResetAction(formData: FormData) {
   const email = String(formData.get("email") ?? "").trim()
@@ -15,14 +10,15 @@ export async function requestPasswordResetAction(formData: FormData) {
 
   const supabase = await createClient()
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${appBaseUrl()}/auth/callback?next=/reset-password`,
+    redirectTo: `${resolveAppUrlSync()}/auth/callback?next=/reset-password`,
   })
 
   if (error) return { error: error.message }
 
   return {
     success: true,
-    message: "Si un compte existe pour cet email, un lien de réinitialisation vient d'être envoyé.",
+    message:
+      "Si un compte existe pour cet email, un lien de réinitialisation vient d'être envoyé.",
   }
 }
 

@@ -39,6 +39,21 @@ export function AuthOverlayForm({ initialMode = "login" }: { initialMode?: Mode 
     if (q === "register" || q === "login") setMode(q);
   }, [searchParams]);
 
+  React.useEffect(() => {
+    const err = searchParams.get("error");
+    const msg = searchParams.get("msg");
+    if (err === "auth_callback") {
+      setError(
+        msg
+          ? decodeURIComponent(msg)
+          : "Le lien de confirmation a échoué. Connectez-vous après avoir confirmé votre email, ou demandez un nouvel email."
+      );
+    }
+    if (searchParams.get("reset") === "1") {
+      setSuccessMessage("Mot de passe mis à jour. Vous pouvez vous connecter.");
+    }
+  }, [searchParams]);
+
   const switchMode = (next: Mode) => {
     setMode(next);
     setError("");

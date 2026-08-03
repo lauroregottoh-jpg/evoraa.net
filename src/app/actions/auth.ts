@@ -3,31 +3,8 @@
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
-
-async function resolvePostAuthPath(
-  userId: string
-): Promise<"/onboarding" | "/dashboard"> {
-  const supabase = await createClient()
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("completion_percentage, onboarding_status")
-    .eq("user_id", userId)
-    .maybeSingle()
-
-  const completion = profile?.completion_percentage ?? 0
-  const status = profile?.onboarding_status
-
-  if (
-    completion < 70 ||
-    !status ||
-    status === "step1_account" ||
-    status === "step2_profile"
-  ) {
-    return "/onboarding"
-  }
-
-  return "/dashboard"
-}
+import { resolveAppUrl, resolvePostAuthPath } from "@/lib/auth/appUrl"
+import { welcomeEmailHtml } from "@/lib/email/templates"
 
 export async function loginAction(formData: FormData) {
   const email = String(formData.get("email") ?? "").trim()
@@ -45,6 +22,13 @@ export async function loginAction(formData: FormData) {
   })
 
   if (error) {
+    const msg = error.message.toLowerCase()
+    if (msg.includes("email not confirmed") || msg.includes("not confirmed")) {
+      return {
+        error:
+          "Votre email n’est pas encore confirmé. Ouvrez le lien reçu dans votre boîte mail, puis reconnectez-vous.",
+      }
+    }
     return { error: error.message }
   }
 
@@ -86,7 +70,7 @@ export async function registerAction(formData: FormData) {
   }
 
   const supabase = await createClient()
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+  const appUrl = await resolveAppUrl()
 
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -130,29 +114,24 @@ export async function registerAction(formData: FormData) {
 
     await supabase.from("profiles").update(profilePatch).eq("user_id", data.user.id)
 
-    // Best-effort welcome email when Resend is configured
     try {
       const { sendEmailNotificationStub } = await import("@/app/actions/notifications")
       await sendEmailNotificationStub({
         to: email,
-        subject: "Bienvenue sur Kellia",
-        html: `<p>Bonjour ${firstName},</p>
-<p>Bienvenue dans la communauté Kellia. Prochaine étape : compléter votre profil et vos questionnaires pour recevoir des suggestions pertinentes.</p>
-<p><a href="${appUrl}/onboarding">Continuer mon inscription</a></p>
-<p>L'équipe Kellia</p>`,
+        subject: "Bienvenue sur Kellia — votre espace vous attend",
+        html: welcomeEmailHtml({ firstName, appUrl }),
       })
     } catch {
       /* optional */
     }
   }
 
-  // Confirmation email activée : pas de session immédiate
   if (data.user && !data.session) {
     return {
       error: null,
       needsEmailConfirmation: true,
       message:
-        "Compte créé. Vérifiez votre boîte mail pour confirmer votre adresse avant de vous connecter.",
+        "Compte créé. Ouvrez l’email de confirmation Kellia : le bouton vous mène directement dans votre espace. Pensez à vérifier les spams.",
     }
   }
 

@@ -1,0 +1,128 @@
+/** Templates email brandés Kellia / KELLIA™ (Resend). */
+
+export function brandedEmailShell(opts: {
+  title: string
+  preheader?: string
+  bodyHtml: string
+  ctaLabel?: string
+  ctaHref?: string
+}) {
+  const year = new Date().getFullYear()
+  const preheader = opts.preheader
+    ? `<div style="display:none;max-height:0;overflow:hidden;opacity:0">${opts.preheader}</div>`
+    : ""
+  const cta =
+    opts.ctaHref && opts.ctaLabel
+      ? `<p style="margin:28px 0 8px;text-align:center">
+          <a href="${opts.ctaHref}" style="display:inline-block;background:#1F4B3A;color:#ffffff;text-decoration:none;font-family:Georgia,'Times New Roman',serif;font-size:16px;font-weight:700;padding:14px 28px;border-radius:12px">
+            ${opts.ctaLabel}
+          </a>
+        </p>`
+      : ""
+
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>${opts.title}</title>
+</head>
+<body style="margin:0;padding:0;background:#EEF1EF;font-family:Arial,Helvetica,sans-serif;color:#1A1A1A">
+  ${preheader}
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#EEF1EF;padding:32px 12px">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" style="max-width:560px;background:#ffffff;border-radius:20px;overflow:hidden;border:1px solid #D9E0DC">
+          <tr>
+            <td style="background:linear-gradient(135deg,#1F4B3A,#2F6B52);padding:28px 28px 22px;text-align:center">
+              <div style="font-family:Georgia,'Times New Roman',serif;font-size:28px;font-weight:700;letter-spacing:0.04em;color:#ffffff">KELLIA</div>
+              <div style="margin-top:6px;font-size:12px;color:rgba(255,255,255,0.85);letter-spacing:0.08em;text-transform:uppercase">Rencontres chrétiennes</div>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:28px 28px 8px">
+              <h1 style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:22px;line-height:1.3;color:#1F4B3A">${opts.title}</h1>
+              <div style="font-size:15px;line-height:1.65;color:#333333">${opts.bodyHtml}</div>
+              ${cta}
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:8px 28px 28px">
+              <p style="margin:24px 0 0;font-size:12px;line-height:1.5;color:#6B7280;border-top:1px solid #E5E7EB;padding-top:16px">
+                L’équipe Kellia · Discernement, dignité, projet de mariage<br/>
+                Cet email concerne votre compte sur la plateforme KELLIA.<br/>
+                © ${year} KELLIA
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`
+}
+
+export function welcomeEmailHtml(input: {
+  firstName: string
+  appUrl: string
+}) {
+  const name = input.firstName.trim() || "ami(e)"
+  return brandedEmailShell({
+    title: `Bienvenue, ${name}`,
+    preheader: "Votre espace Kellia est prêt — continuez votre inscription.",
+    bodyHtml: `
+      <p>Merci d’avoir rejoint <strong>Kellia</strong>.</p>
+      <p>Ici, on ne multiplie pas les matchs superficiels. On aide des célibataires chrétiens à avancer avec clarté : foi, valeurs, communication et projet de foyer.</p>
+      <p><strong>Prochaine étape :</strong> confirmer votre email (si ce n’est pas déjà fait), puis compléter votre profil et vos questionnaires de discernement.</p>
+      <p>Plus votre profil est clair, plus le Matching KELLIA™ devient pertinent.</p>
+    `,
+    ctaLabel: "Continuer mon inscription",
+    ctaHref: `${input.appUrl}/onboarding`,
+  })
+}
+
+export function contactAckEmailHtml(input: { name: string }) {
+  return brandedEmailShell({
+    title: "Nous avons bien reçu votre message",
+    preheader: "L’équipe Kellia vous répondra avec soin.",
+    bodyHtml: `
+      <p>Bonjour ${input.name},</p>
+      <p>Votre message est arrivé. Un membre de l’équipe Kellia vous répondra dans les meilleurs délais, avec bienveillance et confidentialité.</p>
+      <p>En attendant, vous pouvez déjà avancer sur votre profil et vos questionnaires.</p>
+    `,
+  })
+}
+
+export function subscriptionReminderEmailHtml(input: {
+  firstName: string
+  appUrl: string
+  endsAtLabel: string
+}) {
+  const name = input.firstName.trim() || "ami(e)"
+  return brandedEmailShell({
+    title: "Votre Alliance arrive à échéance",
+    preheader: `Renouvellement possible avant le ${input.endsAtLabel}.`,
+    bodyHtml: `
+      <p>Bonjour ${name},</p>
+      <p>Votre abonnement <strong>Alliance</strong> se termine le <strong>${input.endsAtLabel}</strong>.</p>
+      <p>Pour continuer à profiter du Matching KELLIA™ et de vos quotas renforcés, renouvelez simplement depuis votre espace billing.</p>
+    `,
+    ctaLabel: "Gérer mon Alliance",
+    ctaHref: `${input.appUrl}/billing`,
+  })
+}
+
+/** Instructions collables dans Supabase → Auth → Email Templates (Confirm signup). */
+export function supabaseConfirmSignupTemplateHint(appUrl: string) {
+  return brandedEmailShell({
+    title: "Confirmez votre adresse email",
+    preheader: "Un clic pour activer votre espace Kellia.",
+    bodyHtml: `
+      <p>Bonjour,</p>
+      <p>Merci de vous être inscrit(e) sur <strong>Kellia</strong>. Pour sécuriser votre compte et accéder à votre espace membre, confirmez votre adresse email :</p>
+    `,
+    ctaLabel: "Confirmer mon email",
+    ctaHref: "{{ .ConfirmationURL }}",
+  }).replaceAll(appUrl, "{{ .SiteURL }}")
+}

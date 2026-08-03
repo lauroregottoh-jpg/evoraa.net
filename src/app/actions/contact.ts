@@ -1,6 +1,7 @@
 "use server"
 
 import { sendEmailNotificationStub } from "@/app/actions/notifications"
+import { brandedEmailShell, contactAckEmailHtml } from "@/lib/email/templates"
 
 const SUBJECT_LABELS: Record<string, string> = {
   question: "Question générale",
@@ -32,30 +33,40 @@ export async function submitContactAction(payload: {
   }
 
   const subjectLabel = SUBJECT_LABELS[subjectCode] || subjectCode
-  const to = process.env.CONTACT_INBOX_EMAIL || "contact@KELLIA.net"
-  const html = `
-    <p><strong>De :</strong> ${name} &lt;${email}&gt;</p>
-    <p><strong>Sujet :</strong> ${subjectLabel}</p>
-    <p>${message.replace(/\n/g, "<br/>")}</p>
-  `
+  const to = process.env.CONTACT_INBOX_EMAIL || "contact@kellia.org"
+  const html = brandedEmailShell({
+    title: `Contact — ${subjectLabel}`,
+    bodyHtml: `
+      <p><strong>De :</strong> ${name} &lt;${email}&gt;</p>
+      <p><strong>Sujet :</strong> ${subjectLabel}</p>
+      <p style="margin-top:16px">${message.replace(/\n/g, "<br/>")}</p>
+    `,
+  })
 
   const result = await sendEmailNotificationStub({
     to,
     subject: `[KELLIA Contact] ${subjectLabel} — ${name}`,
     html,
+    replyTo: email,
   })
 
   if ("skipped" in result && result.skipped) {
-    // Honest fallback: no fake success — ask user to email directly
     return {
       error:
-        "L’envoi automatique n’est pas encore configuré. Écrivez-nous à contact@KELLIA.net avec votre message.",
+        "L’envoi automatique n’est pas encore configuré. Écrivez-nous à contact@kellia.org avec votre message.",
     }
   }
 
   if ("error" in result && result.error) {
     return { error: result.error }
   }
+
+  // Accusé de réception membre (best-effort)
+  await sendEmailNotificationStub({
+    to: email,
+    subject: "Kellia — nous avons bien reçu votre message",
+    html: contactAckEmailHtml({ name }),
+  })
 
   return { success: true, emailed: true }
 }
