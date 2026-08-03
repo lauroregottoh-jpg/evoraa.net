@@ -68,7 +68,7 @@ La personne repart avec : **1 insight + 1 prochain pas clair**.
 | Matrice narrative | `subscription_matrix.md` |
 | Scénarios few-shot | échantillon de `07_scenarios.md` |
 | Règles éditoriales feed | distinctes — ne pas confondre longueur 60–180 du feed avec tout le chat |
-| V1 actuelle | FAQ locale ; ce prompt = **cible V2** |
+| Production | Chargé par `src/lib/eva/engine.ts` (+ OpenAI si clé) |
 
 ### Version
 

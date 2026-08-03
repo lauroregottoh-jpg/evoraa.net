@@ -1,13 +1,13 @@
 # Architecture EVA — KELIAA
 
-> **Statut :** cerveau documentaire V2 (à brancher sur un LLM plus tard)  
+> **Statut :** V2 **branché** sur le chat membre (`askEvaAction` + `src/lib/eva/engine.ts`)  
 > **Source de vérité produit :** code + pages + `src/lib/billing/plans.ts`  
 > **Règle d’or :** si une info n’est pas dans le projet → voir `00_missing_info.md` (ne pas inventer)
 
 ## Pourquoi ce dossier
 
-Aujourd’hui, EVA en production est une **FAQ locale** (`EvaSpiritualAdvisor`) + quotas + stub admin.  
-Ce dossier construit le **manuel d’entreprise** qu’une EVA LLM lira avant chaque conversation.
+Le chat membre (`EvaSpiritualAdvisor`) appelle le moteur qui charge `10_system_prompt.md` + FAQ/matrice/garde-fous, enrichi par `eva_config` admin.  
+Sans `OPENAI_API_KEY` → réponses locales (intention + base docs). Avec clé → LLM (`OPENAI_EVA_MODEL` ou `gpt-4o-mini`) + même prompt.
 
 ## Cartographie des fichiers
 
@@ -31,11 +31,12 @@ Ce dossier construit le **manuel d’entreprise** qu’une EVA LLM lira avant ch
 
 | Élément | État |
 |---------|------|
-| Chat LLM | **Non** (V1 soft launch, coût API = 0) |
+| Moteur chat | **Oui** — `askEvaAction` + mémoire session (court historique client) |
+| Chat LLM | Si `OPENAI_API_KEY` ; sinon moteur connaissance locale |
 | Quota EVA | Free 3/j · Legacy 10/j · Alliance 20/j |
-| Prompt admin stub | `opsRules.ts` → `DEFAULT_EVA_CONFIG` |
-| Surfaces | `/help`, companion cards, médiateur messages, réflexion hebdo |
-| Clé OpenAI | Flag admin seulement (« option V2 ») |
+| Prompt admin | `platform_settings.eva_config` → fusionné dans le system prompt |
+| Surfaces | `/help`, `/spiritual-resources`, `/contact` |
+| Docs runtime | `docs/eva/*.md` lus côté serveur (déployer avec le repo) |
 
 ## Glossaire de nommage
 
@@ -46,12 +47,12 @@ Ce dossier construit le **manuel d’entreprise** qu’une EVA LLM lira avant ch
 | **Evoraa / kellia** | Legacies techniques (dossiers, npm) — **jamais** en face utilisateur |
 | Domaine | `keliaa.org` · `contact@keliaa.org` |
 
-## Prochaine étape produit (hors ce dossier)
+## Suite produit
 
 1. Valider / remplir `00_missing_info.md`
 2. Enrichir `07_scenarios.md` jusqu’à 200–500
-3. Brancher un endpoint chat qui charge `10_system_prompt.md` + `subscription_matrix.md` + mémoire de session
-4. Remplacer le fallback générique de `EvaSpiritualAdvisor` par le moteur V2
+3. Poser `OPENAI_API_KEY` (+ optionnel `OPENAI_EVA_MODEL`) en prod pour le mode LLM
+4. Mémoire longue optionnelle (profil / DB) au-delà de la session
 
 ## Sources utilisées pour construire ces docs
 
