@@ -126,16 +126,17 @@ DROP POLICY IF EXISTS "Users can update their own photos" ON public.user_photos;
 CREATE POLICY "Users can update their own photos"
   ON public.user_photos FOR UPDATE
   USING (
-    EXISTS (
+    deleted_at IS NULL
+    AND EXISTS (
       SELECT 1 FROM public.profiles
-      WHERE profiles.id = user_photos.user_id
+      WHERE profiles.id = user_photos.profile_id
         AND profiles.user_id = auth.uid()
     )
   )
   WITH CHECK (
     EXISTS (
       SELECT 1 FROM public.profiles
-      WHERE profiles.id = user_photos.user_id
+      WHERE profiles.id = user_photos.profile_id
         AND profiles.user_id = auth.uid()
     )
   );
