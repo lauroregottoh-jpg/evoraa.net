@@ -16,17 +16,13 @@ export const registerSchema = z.object({
   password: z
     .string()
     .min(8, "Le mot de passe doit contenir au moins 8 caractères."),
-  firstName: z
-    .string()
-    .trim()
-    .min(1, "Prénom, email et mot de passe sont requis.")
-    .max(80),
+  /** Collected in post-signup onboarding essentials — optional at account creation. */
+  firstName: z.string().trim().max(80).optional().default(""),
   lastName: z.string().trim().max(80).optional().default(""),
   city: z.string().trim().max(120).optional().default(""),
   address: z.string().trim().max(240).optional().default(""),
-  charterAccepted: z.literal(true, {
-    error: "Vous devez accepter la Charte de Bienveillance avant de créer votre espace.",
-  }),
+  /** Charte signée à l’étape suivante (onboarding), pas à la création du compte. */
+  charterAccepted: z.boolean().optional().default(false),
   referredByCode: z.string().trim().max(32).optional().default(""),
   utmSource: z.string().trim().max(64).optional().default(""),
   utmMedium: z.string().trim().max(64).optional().default(""),
@@ -97,7 +93,7 @@ export const feedbackSchema = z.object({
   message: z
     .string()
     .trim()
-    .min(15, "Votre message doit faire au moins 15 caractères.")
+    .min(8, "Décrivez brièvement le problème.")
     .max(4000),
   pagePath: z.string().trim().max(200).optional().default(""),
 })

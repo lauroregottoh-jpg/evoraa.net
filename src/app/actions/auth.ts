@@ -167,8 +167,9 @@ export async function loginAction(formData: FormData) {
     }
     const { email, password, nextRaw } = parsed.data
 
-    // Rate limit best-effort — ne bloque jamais sur panne infra
-    await enforceRateLimit({ ...RL.login, subject: email })
+    // Honore le plafond ; fail-open seulement si l’infra rate-limit est down.
+    const loginRl = await enforceRateLimit({ ...RL.login, subject: email })
+    if (!loginRl.ok) return { error: loginRl.error }
 
     const supabase = await createClient()
 
@@ -188,7 +189,7 @@ export async function loginAction(formData: FormData) {
             nextRaw,
           })
           revalidatePath("/", "layout")
-          redirect(nextPath)
+          return { error: null, success: true, next: nextPath }
         }
         return {
           error:
@@ -218,9 +219,8 @@ export async function loginAction(formData: FormData) {
       nextRaw,
     })
     revalidatePath("/", "layout")
-    redirect(nextPath)
+    return { error: null, success: true, next: nextPath }
   } catch (e) {
-    // Laisser remonter redirect() Next.js
     const { isNextRedirectError } = await import("@/lib/auth/criticalPath")
     if (isNextRedirectError(e)) throw e
     console.error("[login] fatal", e)
@@ -258,24 +258,27 @@ export async function registerAction(formData: FormData) {
       lastName,
       city,
       address,
+      charterAccepted,
       referredByCode,
       utmSource,
       utmMedium,
       utmCampaign,
     } = parsed.data
 
-    // Best-effort only — never block registration on rate-limit infra
-    await enforceRateLimit({ ...RL.register, subject: email })
+    const registerRl = await enforceRateLimit({ ...RL.register, subject: email })
+    if (!registerRl.ok) return { error: registerRl.error }
 
     const supabase = await createClient()
     const appUrl = await resolveAppUrl()
     const userMeta = {
-      first_name: firstName,
+      first_name: firstName || null,
       last_name: lastName || null,
       city: city || null,
       address: address || null,
-      charter_accepted: true,
-      charter_accepted_at: new Date().toISOString(),
+      charter_accepted: Boolean(charterAccepted),
+      ...(charterAccepted
+        ? { charter_accepted_at: new Date().toISOString() }
+        : {}),
       referred_by_code: referredByCode || null,
       utm_source: utmSource || null,
       utm_medium: utmMedium || null,
@@ -396,7 +399,7 @@ export async function registerAction(formData: FormData) {
             console.error("[register] finalize session", e)
           }
           revalidatePath("/", "layout")
-          redirect("/onboarding")
+          return { error: null, success: true, next: "/onboarding" }
         }
       }
     }
@@ -432,7 +435,7 @@ export async function registerAction(formData: FormData) {
         await supabase.auth.signInWithPassword({ email, password })
       if (!signErr && signed.user) {
         revalidatePath("/", "layout")
-        redirect("/onboarding")
+        return { error: null, success: true, next: "/onboarding" }
       }
       const unlocked = await confirmEmailAndSignIn(
         supabase,
@@ -442,13 +445,14 @@ export async function registerAction(formData: FormData) {
       )
       if (unlocked.ok) {
         revalidatePath("/", "layout")
-        redirect("/onboarding")
+        return { error: null, success: true, next: "/onboarding" }
       }
       return {
         error: null,
         needsEmailConfirmation: false,
         message:
           "Compte créé. Connectez-vous avec le même email et mot de passe pour accéder à votre espace.",
+        next: "/login",
       }
     }
 
@@ -484,11 +488,12 @@ async function finalizeNewProfile(input: {
 }) {
   const referralCode = input.userId.replace(/-/g, "").slice(0, 8)
   const profilePatch: Record<string, unknown> = {
-    first_name: input.firstName,
+    first_name: input.firstName || null,
     last_name: input.lastName || null,
     city: input.city || null,
     onboarding_status: "step1_account",
-    completion_percentage: 10,
+    // Account created — essentials come next in /onboarding
+    completion_percentage: 5,
     email_verified: input.emailVerified,
     referral_code: referralCode,
   }
@@ -499,7 +504,22 @@ async function finalizeNewProfile(input: {
 
   try {
     const admin = createAdminClient()
-    await admin.from("profiles").update(profilePatch).eq("user_id", input.userId)
+    const { error } = await admin.from("profiles").upsert(
+      {
+        user_id: input.userId,
+        ...profilePatch,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "user_id" }
+    )
+    if (error) {
+      // Fallback update if upsert shape differs
+      await admin
+        .from("profiles")
+        .update(profilePatch)
+        .eq("user_id", input.userId)
+      console.error("[register] profile upsert", error.message)
+    }
   } catch (e) {
     console.error("[register] profile", e)
   }
@@ -510,7 +530,7 @@ async function finalizeNewProfile(input: {
       to: input.email,
       subject: "Bienvenue sur Keliaa — votre espace vous attend",
       html: welcomeEmailHtml({
-        firstName: input.firstName,
+        firstName: input.firstName || "ami(e)",
         appUrl: input.appUrl,
       }),
     })
@@ -632,4 +652,36 @@ export async function logoutAction() {
   await supabase.auth.signOut()
   revalidatePath("/", "layout")
   redirect("/login")
+}
+
+/** Persiste l’acceptation de la Charte après création du compte. */
+export async function acceptCharterAction(): Promise<{
+  error?: string
+  success?: boolean
+}> {
+  try {
+    const supabase = await createClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (!user) return { error: "Connectez-vous pour continuer." }
+
+    const { error } = await supabase.auth.updateUser({
+      data: {
+        charter_accepted: true,
+        charter_accepted_at: new Date().toISOString(),
+      },
+    })
+    if (error) return { error: error.message }
+
+    revalidatePath("/", "layout")
+    return { success: true }
+  } catch (e) {
+    return {
+      error:
+        e instanceof Error
+          ? e.message
+          : "Impossible d’enregistrer la charte. Réessayez.",
+    }
+  }
 }

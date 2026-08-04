@@ -50,6 +50,10 @@ export function FeedbackForm({
         message: String(fd.get("message") ?? ""),
         pagePath: pagePath || String(fd.get("page_path") ?? ""),
       })
+      if (!result) {
+        setError("Pas de réponse serveur. Vérifiez votre connexion et réessayez.")
+        return
+      }
       if (result.error) setError(result.error)
       else {
         setOk(true)

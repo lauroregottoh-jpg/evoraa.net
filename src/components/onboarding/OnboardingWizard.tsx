@@ -1,89 +1,229 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { useRouter } from "next/navigation";
-import { Card, CardContent } from "@/components/ui/card";
-import { ProfileProgress } from "@/components/evoraa/ProfileProgress";
-import { EvaCompanion } from "@/components/evoraa/EvaCompanion";
-import { StepEssential } from "@/components/onboarding/StepEssential";
-import { StepValues } from "@/components/onboarding/StepValues";
-import { saveOnboardingAction, type OnboardingPayload } from "@/app/actions/onboarding";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import * as React from "react"
+import { useRouter } from "next/navigation"
+import { Card, CardContent } from "@/components/ui/card"
+import { EvaCompanion } from "@/components/evoraa/EvaCompanion"
+import { StepBasics, type BasicsPayload } from "@/components/onboarding/StepBasics"
+import { StepFaith, type FaithPayload } from "@/components/onboarding/StepFaith"
+import { StepValues } from "@/components/onboarding/StepValues"
+import { StepCharter } from "@/components/register/StepCharter"
+import { acceptCharterAction } from "@/app/actions/auth"
+import {
+  saveOnboardingBasicsAction,
+  saveOnboardingAction,
+  type OnboardingPayload,
+} from "@/app/actions/onboarding"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { AlertCircle } from "lucide-react"
+import { cn } from "@/utils/cn"
 
-type OnboardingFormState = Partial<OnboardingPayload>;
+type Phase = "charter" | "basics" | "faith" | "values"
 
-export function OnboardingWizard() {
-  const router = useRouter();
-  const [step, setStep] = React.useState<1 | 2>(1);
-  const [formData, setFormData] = React.useState<OnboardingFormState>({});
-  const [error, setError] = React.useState("");
-  const [isSaving, setIsSaving] = React.useState(false);
+const PHASE_META: Record<
+  Exclude<Phase, "charter">,
+  { label: string; pct: number; index: number }
+> = {
+  basics: { label: "Essentiel", pct: 12, index: 0 },
+  faith: { label: "Foi", pct: 22, index: 1 },
+  values: { label: "Vision", pct: 35, index: 2 },
+}
 
-  const handleNextFromEssential = (data: Partial<OnboardingPayload>) => {
-    setFormData((prev) => ({ ...prev, ...data }));
-    setStep(2);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+export function OnboardingWizard({
+  needsCharter = true,
+}: {
+  needsCharter?: boolean
+}) {
+  const router = useRouter()
+  const [phase, setPhase] = React.useState<Phase>(
+    needsCharter ? "charter" : "basics"
+  )
+  const [charterAccepted, setCharterAccepted] = React.useState(false)
+  const [formData, setFormData] = React.useState<Partial<OnboardingPayload>>({})
+  const [error, setError] = React.useState("")
+  const [isSaving, setIsSaving] = React.useState(false)
 
-  const handleNextFromValues = async (data: Partial<OnboardingPayload>) => {
-    const finalData = { ...formData, ...data } as OnboardingPayload;
-    setError("");
-    setIsSaving(true);
-
+  const handleCharterContinue = async () => {
+    setError("")
+    setIsSaving(true)
     try {
-      const result = await saveOnboardingAction(finalData);
-      if (result?.error) {
-        setError(result.error);
-        return;
+      const result = await acceptCharterAction()
+      if (result.error) {
+        setError(result.error)
+        return
       }
-      router.push("/onboarding/magic-screen");
+      setPhase("basics")
+      window.scrollTo({ top: 0, behavior: "smooth" })
     } finally {
-      setIsSaving(false);
+      setIsSaving(false)
     }
-  };
+  }
+
+  const handleBasics = async (data: BasicsPayload) => {
+    setError("")
+    setIsSaving(true)
+    try {
+      const result = await saveOnboardingBasicsAction(data)
+      if (result?.error) {
+        setError(result.error)
+        return
+      }
+      setFormData((prev) => ({
+        ...prev,
+        firstName: data.firstName,
+        gender: data.gender,
+        birthDate: data.birthDate,
+        city: data.city,
+        country: data.country,
+      }))
+      setPhase("faith")
+      window.scrollTo({ top: 0, behavior: "smooth" })
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const handleFaith = (data: FaithPayload) => {
+    setFormData((prev) => ({ ...prev, ...data }))
+    setPhase("values")
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
+
+  const handleValues = async (data: Partial<OnboardingPayload>) => {
+    const finalData = {
+      ...formData,
+      ...data,
+      age: ageFromBirthDate(String(formData.birthDate || "")),
+    } as OnboardingPayload
+    setError("")
+    setIsSaving(true)
+    try {
+      const result = await saveOnboardingAction(finalData)
+      if (result?.error) {
+        setError(result.error)
+        return
+      }
+      router.push("/onboarding/magic-screen")
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const profilePhase = phase === "charter" ? null : PHASE_META[phase]
 
   return (
     <div className="space-y-8">
-      {/* Dynamic EVA message depending on step */}
+      {phase !== "charter" && profilePhase ? (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between text-xs text-muted-foreground">
+            <span>
+              Étape {profilePhase.index + 1} sur 3 · {profilePhase.label}
+            </span>
+            <span className="font-medium text-foreground">
+              {profilePhase.pct}%
+            </span>
+          </div>
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-all duration-700 ease-out"
+              style={{ width: `${profilePhase.pct}%` }}
+            />
+          </div>
+          <div className="flex gap-2">
+            {(["basics", "faith", "values"] as const).map((key) => (
+              <div
+                key={key}
+                className={cn(
+                  "h-1 flex-1 rounded-full transition-colors duration-500",
+                  PHASE_META[key].index <= profilePhase.index
+                    ? "bg-accent"
+                    : "bg-border"
+                )}
+              />
+            ))}
+          </div>
+        </div>
+      ) : null}
+
       <EvaCompanion
-        title={`EVA - Progression de votre Profil (${step === 1 ? "Étape 1/2" : "Étape 2/2"})`}
+        title="EVA vous accompagne"
         variant="suggestion"
         message={
-          step === 1
-            ? "Ces informations posent seulement la base (environ 12–15 % après l’onboarding). Les 5 questionnaires feront vraiment avancer votre Matching."
-            : "Votre vision du foyer compte beaucoup. Ensuite : les tests. Sans eux, le Matching ne peut pas vraiment travailler pour vous."
+          phase === "charter"
+            ? "Lisez la charte avec attention — c’est le socle de la communauté Keliaa."
+            : phase === "basics"
+              ? "Nom, prénom, sexe et pays : seulement l’essentiel pour démarrer."
+              : phase === "faith"
+                ? "Parlez un peu de votre ancrage spirituel — vous pourrez enrichir plus tard."
+                : "Votre vision du foyer compte beaucoup pour des compatibilités sincères."
         }
       />
 
-      {/* Progression réelle produit : onboarding ≠ profil complet */}
-      <ProfileProgress percentage={step === 1 ? 12 : 15} />
-
-      {error && (
-        <Alert variant="destructive" className="rounded-xl border-destructive/40 bg-destructive/10 text-destructive text-xs">
+      {error ? (
+        <Alert
+          variant="destructive"
+          className="rounded-xl border-destructive/40 bg-destructive/10 text-destructive text-xs"
+        >
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>{error}</AlertDescription>
         </Alert>
-      )}
+      ) : null}
 
-      {/* Form Steps Card */}
-      <Card className="rounded-2xl border-border/60 bg-background/90 backdrop-blur-md shadow-sm">
-        <CardContent className="p-6 sm:p-8">
-          {step === 1 ? (
-            <StepEssential
-              onNext={handleNextFromEssential}
-              defaultValues={formData}
+      <Card className="rounded-3xl border-border/50 bg-background/90 backdrop-blur-md shadow-sm">
+        <CardContent className="p-6 sm:p-10">
+          {phase === "charter" ? (
+            <StepCharter
+              accepted={charterAccepted}
+              onAcceptedChange={setCharterAccepted}
+              onContinue={() => {
+                if (isSaving) return
+                void handleCharterContinue()
+              }}
+              continueLabel={isSaving ? "Enregistrement…" : "J’accepte et je continue"}
             />
-          ) : (
-            <StepValues
-              onNext={handleNextFromValues}
-              onBack={() => setStep(1)}
+          ) : null}
+          {phase === "basics" ? (
+            <StepBasics
+              onNext={handleBasics}
+              defaultValues={{
+                firstName: formData.firstName,
+                gender: formData.gender,
+                birthDate: formData.birthDate,
+                city: formData.city,
+                country: formData.country,
+              }}
+              isSubmitting={isSaving}
+            />
+          ) : null}
+          {phase === "faith" ? (
+            <StepFaith
+              onNext={handleFaith}
+              onBack={() => setPhase("basics")}
               defaultValues={formData}
               isSubmitting={isSaving}
             />
-          )}
+          ) : null}
+          {phase === "values" ? (
+            <StepValues
+              onNext={handleValues}
+              onBack={() => setPhase("faith")}
+              defaultValues={formData}
+              isSubmitting={isSaving}
+            />
+          ) : null}
         </CardContent>
       </Card>
     </div>
-  );
+  )
+}
+
+function ageFromBirthDate(iso: string): string {
+  if (!iso) return "28"
+  const birth = new Date(iso)
+  if (Number.isNaN(birth.getTime())) return "28"
+  const now = new Date()
+  let age = now.getFullYear() - birth.getFullYear()
+  const m = now.getMonth() - birth.getMonth()
+  if (m < 0 || (m === 0 && now.getDate() < birth.getDate())) age -= 1
+  return String(Math.max(18, Math.min(99, age)))
 }

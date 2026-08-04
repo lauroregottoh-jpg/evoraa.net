@@ -1,8 +1,10 @@
 export function resolveLiveProvider() {
   const env = (process.env.PAYMENT_PROVIDER || "").toLowerCase()
   if (env === "bictorys" || env === "cinetpay") return env
+  // Keliaa primary: Bictorys (Mobile Money UEMOA). CinetPay reste fallback explicite.
   if (process.env.BICTORYS_API_KEY) return "bictorys"
-  return "cinetpay"
+  if (process.env.CINETPAY_API_KEY && process.env.CINETPAY_SITE_ID) return "cinetpay"
+  return "bictorys"
 }
 
 export function isDemoPaymentsEnv() {

@@ -28,6 +28,8 @@ export async function sendResendEmail(input: {
     }
     if (input.replyTo) payload.reply_to = input.replyTo
 
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), 12_000)
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -35,7 +37,8 @@ export async function sendResendEmail(input: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
-    })
+      signal: controller.signal,
+    }).finally(() => clearTimeout(timer))
     if (!res.ok) {
       const detail = await res.text()
       console.error("[resend]", detail.slice(0, 400))

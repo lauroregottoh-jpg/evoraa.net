@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createAdminClient } from "@/utils/supabase/admin"
-import { sendResendEmail } from "@/lib/email/send"
+import { sendEmailWithRetry } from "@/lib/email/outbox"
 import { subscriptionReminderEmailHtml } from "@/lib/email/templates"
 import { resolveAppUrlSync } from "@/lib/auth/appUrl"
 
@@ -65,7 +65,9 @@ export async function GET(request: NextRequest) {
     })
     notified++
 
-    const { data: authUser } = await supabase.auth.admin.getUserById(sub.user_id as string)
+    const { data: authUser } = await supabase.auth.admin.getUserById(
+      sub.user_id as string
+    )
     const user = authUser?.user
     const email = user?.email
     if (email && user) {
@@ -73,7 +75,7 @@ export async function GET(request: NextRequest) {
         (user.user_metadata?.first_name as string | undefined) || ""
       const appUrl = resolveAppUrlSync()
       const endsAtLabel = endsAt.toLocaleDateString("fr-FR")
-      const mail = await sendResendEmail({
+      const mail = await sendEmailWithRetry({
         to: email,
         subject: `KELIAA — ${title}`,
         html: subscriptionReminderEmailHtml({
@@ -82,7 +84,9 @@ export async function GET(request: NextRequest) {
           endsAtLabel,
         }),
       })
-      if ("success" in mail && mail.success) emailed++
+      if (("success" in mail && mail.success) || ("queued" in mail && mail.queued)) {
+        emailed++
+      }
     }
   }
 

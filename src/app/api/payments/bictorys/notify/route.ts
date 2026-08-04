@@ -2,6 +2,10 @@ import { createClient } from "@supabase/supabase-js"
 import { createHmac, timingSafeEqual } from "crypto"
 import { NextRequest, NextResponse } from "next/server"
 import { logPaymentEvent } from "@/lib/billing/paymentAudit"
+import { captureError } from "@/lib/observability/report"
+import { resolveAppUrlSync } from "@/lib/auth/appUrl"
+import { sendEmailWithRetry } from "@/lib/email/outbox"
+import { allianceActivatedEmailHtml } from "@/lib/email/templates"
 
 function verifyTokenOrSignature(request: NextRequest, rawBody: string) {
   const secret = process.env.BICTORYS_WEBHOOK_SECRET
@@ -13,6 +17,8 @@ function verifyTokenOrSignature(request: NextRequest, rawBody: string) {
     const a = Buffer.from(staticToken)
     const b = Buffer.from(secret)
     if (a.length === b.length && timingSafeEqual(a, b)) return { ok: true as const }
+    // Present but wrong → hard fail (do not fall through to HMAC).
+    return { ok: false as const, error: "Secret webhook invalide" }
   }
 
   const sig = request.headers.get("x-webhook-signature") || ""
@@ -35,6 +41,41 @@ function mapStatus(statusLike: string) {
   return "pending" as const
 }
 
+async function notifyAllianceActivated(
+  admin: {
+    auth: {
+      admin: {
+        getUserById: (
+          id: string
+        ) => Promise<{ data: { user: { email?: string; user_metadata?: Record<string, unknown> } | null } }>
+      }
+    }
+  },
+  userId: string
+) {
+  try {
+    const { data: authUser } = await admin.auth.admin.getUserById(userId)
+    const user = authUser?.user
+    const email = user?.email
+    if (!email || !user) return
+    const firstName =
+      (user.user_metadata?.first_name as string | undefined) || ""
+    const appUrl = resolveAppUrlSync() || "https://www.keliaa.org"
+    const endsAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+    await sendEmailWithRetry({
+      to: email,
+      subject: "KELIAA — Votre Alliance est active",
+      html: allianceActivatedEmailHtml({
+        firstName,
+        appUrl,
+        endsAtLabel: endsAt.toLocaleDateString("fr-FR"),
+      }),
+    })
+  } catch (e) {
+    captureError(e, { source: "bictorys_notify_email" })
+  }
+}
+
 export async function POST(request: NextRequest) {
   if (process.env.PAYMENTS_DEMO_MODE === "true") {
     return NextResponse.json({ error: "Webhook refusé : PAYMENTS_DEMO_MODE=true" }, { status: 403 })
@@ -43,12 +84,16 @@ export async function POST(request: NextRequest) {
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   if (!serviceKey || !supabaseUrl) {
+    captureError("bictorys_webhook_service_role_missing")
     return NextResponse.json({ error: "Service role non configuré" }, { status: 500 })
   }
 
   const raw = await request.text()
   const auth = verifyTokenOrSignature(request, raw)
-  if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: 401 })
+  if (!auth.ok) {
+    captureError(auth.error, { source: "bictorys_webhook_auth" })
+    return NextResponse.json({ error: auth.error }, { status: 401 })
+  }
 
   let body: Record<string, unknown> = {}
   try {
@@ -74,7 +119,10 @@ export async function POST(request: NextRequest) {
   else query = query.eq("transaction_reference", transactionId)
 
   const { data: payment } = await query.maybeSingle()
-  if (!payment) return NextResponse.json({ error: "Paiement introuvable" }, { status: 404 })
+  if (!payment) {
+    captureError("bictorys_payment_not_found", { paymentReference, transactionId })
+    return NextResponse.json({ error: "Paiement introuvable" }, { status: 404 })
+  }
 
   await logPaymentEvent({
     paymentId: payment.id,
@@ -109,6 +157,7 @@ export async function POST(request: NextRequest) {
         },
       })
       .eq("id", payment.id)
+      .eq("status", "pending")
     await admin.from("subscriptions").update({ status: "failed" }).eq("id", payment.subscription_id)
     await logPaymentEvent({
       paymentId: payment.id,
@@ -140,36 +189,42 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Abonnement introuvable" }, { status: 404 })
   }
 
-  await admin
-    .from("subscriptions")
-    .update({ status: "cancelled" })
-    .eq("user_id", subscription.user_id)
-    .eq("status", "active")
-    .neq("id", subscription.id)
+  // Atomic activation (pending-only) — race-safe against duplicate webhooks.
+  const { error: activateError } = await admin.rpc("activate_pending_payment" as never, {
+    p_payment_id: payment.id,
+    p_transaction_ref: transactionId || `bictorys-${payment.id}`,
+  } as never)
 
+  if (activateError) {
+    // Already activated by a concurrent webhook → treat as success.
+    const { data: refreshed } = await admin
+      .from("payments")
+      .select("status")
+      .eq("id", payment.id)
+      .maybeSingle()
+    if (refreshed?.status === "completed") {
+      return NextResponse.json({ ok: true, activated: true, already: true })
+    }
+    captureError(activateError.message, {
+      source: "bictorys_activate_pending_payment",
+      paymentId: payment.id,
+    })
+    return NextResponse.json({ error: "Activation impossible" }, { status: 500 })
+  }
+
+  // Enrich metadata with webhook payload (best-effort, after atomic activate).
   await admin
     .from("payments")
     .update({
-      status: "completed",
-      transaction_reference: transactionId || null,
       metadata: {
         ...(typeof payment.metadata === "object" && payment.metadata
           ? (payment.metadata as object)
           : {}),
         webhook: body,
-        activated_at: new Date().toISOString(),
+        provider: "bictorys",
       },
     })
     .eq("id", payment.id)
-
-  await admin
-    .from("subscriptions")
-    .update({
-      status: "active",
-      starts_at: new Date().toISOString(),
-      ends_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-    })
-    .eq("id", subscription.id)
 
   await logPaymentEvent({
     paymentId: payment.id,
@@ -178,6 +233,9 @@ export async function POST(request: NextRequest) {
     status: "completed",
     message: transactionId || undefined,
   })
+
+  // Best-effort email — await outbox enqueue (fast); never fail the webhook ACK on mail errors.
+  await notifyAllianceActivated(admin, subscription.user_id)
 
   return NextResponse.json({ ok: true, activated: true })
 }

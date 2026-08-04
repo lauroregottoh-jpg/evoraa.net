@@ -6,31 +6,26 @@ import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { CharterModal } from "@/components/auth/CharterModal"
 import { PasswordInput } from "@/components/auth/PasswordInput"
-import { loginAction, registerAction } from "@/app/actions/auth"
-import { FeedbackForm } from "@/components/feedback/FeedbackForm"
+import { loginAction } from "@/app/actions/auth"
 import { isNextRedirectError } from "@/lib/auth/criticalPath"
+import { startGoogleOAuth } from "@/lib/auth/oauthGoogle"
 import {
   Lock,
   Mail,
   ArrowRight,
   AlertCircle,
   CheckCircle,
-  User,
-  MapPin,
-  Home,
-  Sparkles,
-  LifeBuoy,
+  Loader2,
 } from "lucide-react"
 
-type Mode = "login" | "register"
-
-type AuthActionResult = {
-  error?: string | null
-  needsEmailConfirmation?: boolean
-  message?: string
-} | undefined
+type AuthActionResult =
+  | {
+      error?: string | null
+      needsEmailConfirmation?: boolean
+      message?: string
+    }
+  | undefined
 
 function StatusBanner({
   error,
@@ -50,8 +45,11 @@ function StatusBanner({
           </p>
           <p className="mt-1 text-xs leading-relaxed">{error}</p>
           <p className="mt-2 text-[11px] font-medium text-red-800">
-            Utilisez le formulaire « Écrivez-nous » ci-dessous pour nous
-            signaler le problème.
+            Problème persistant ?{" "}
+            <a href="/register/help" className="underline font-semibold">
+              Cliquez ici
+            </a>
+            .
           </p>
         </div>
       ) : null}
@@ -68,65 +66,47 @@ function StatusBanner({
   )
 }
 
-function AuthHelpPanel({
-  mode,
-  defaultEmail = "",
-}: {
-  mode: Mode
-  defaultEmail?: string
-}) {
+function GoogleIcon({ className }: { className?: string }) {
   return (
-    <div className="rounded-xl border-2 border-amber-400 bg-amber-50 p-4 space-y-3">
-      <div className="space-y-1">
-        <p className="text-sm font-bold text-amber-950 flex items-center gap-2">
-          <LifeBuoy className="h-4 w-4" />
-          {mode === "register"
-            ? "Vous n’arrivez pas à vous inscrire ?"
-            : "Vous n’arrivez pas à vous connecter ?"}
-        </p>
-        <p className="text-xs text-amber-900/90 leading-relaxed">
-          Décrivez le problème (message affiché, étape bloquée). Votre message
-          arrive directement à l’équipe Keliaa — onglet admin « Avis &
-          plaintes ».
-        </p>
-        <a
-          href="mailto:contact@keliaa.org?subject=Aide%20KELIAA%20auth"
-          className="inline-block text-xs font-semibold text-primary underline"
-        >
-          Ou écrivez à contact@keliaa.org
-        </a>
-      </div>
-      <FeedbackForm
-        compact
-        defaultEmail={defaultEmail}
-        defaultCategory={mode === "register" ? "signup_help" : "complaint"}
-        pagePath={mode === "register" ? "/register" : "/login"}
-        title="Envoyer un message à l’équipe"
-        subtitle="Plus vous donnez de détails, plus vite nous débloquons l’accès."
+    <svg className={className} viewBox="0 0 24 24" aria-hidden>
+      <path
+        fill="#4285F4"
+        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
       />
-    </div>
+      <path
+        fill="#34A853"
+        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-5.96-4.87H2.18v2.86A10.97 10.97 0 0 0 12 23z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M6.04 15.76A6.6 6.6 0 0 1 5.7 12c0-1.34.24-2.63.67-3.76V5.38H2.18A11 11 0 0 0 1 12c0 1.78.43 3.46 1.18 4.96l3.86-1.2z"
+      />
+      <path
+        fill="#EA4335"
+        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15A10.9 10.9 0 0 0 12 1 10.97 10.97 0 0 0 2.18 5.38l3.86 3C7.18 6.38 9.38 5.38 12 5.38z"
+      />
+    </svg>
   )
 }
 
 export function AuthOverlayForm({
   initialMode = "login",
 }: {
-  initialMode?: Mode
+  initialMode?: "login" | "register"
 }) {
   const searchParams = useSearchParams()
-  const [mode, setMode] = React.useState<Mode>(
-    searchParams.get("mode") === "register" ? "register" : initialMode
-  )
   const [error, setError] = React.useState("")
   const [successMessage, setSuccessMessage] = React.useState("")
   const [isLoading, setIsLoading] = React.useState(false)
-  const [isCharterAccepted, setIsCharterAccepted] = React.useState(false)
+  const [loadingGoogle, setLoadingGoogle] = React.useState(false)
   const [typedEmail, setTypedEmail] = React.useState("")
 
+  // Legacy /register links that still mount this shell → push to new flow
   React.useEffect(() => {
-    const q = searchParams.get("mode")
-    if (q === "register" || q === "login") setMode(q)
-  }, [searchParams])
+    if (initialMode === "register" && typeof window !== "undefined") {
+      window.location.replace("/register")
+    }
+  }, [initialMode])
 
   React.useEffect(() => {
     const err = searchParams.get("error")
@@ -136,7 +116,6 @@ export function AuthOverlayForm({
       searchParams.get("welcome") === "1"
 
     if (confirmed) {
-      setMode("login")
       setError("")
       setSuccessMessage(
         msg
@@ -158,79 +137,47 @@ export function AuthOverlayForm({
     }
   }, [searchParams])
 
-  const switchMode = (next: Mode) => {
-    setMode(next)
+  const handleGoogle = async () => {
     setError("")
-    setSuccessMessage("")
-    if (typeof window !== "undefined") {
-      const url = new URL(window.location.href)
-      url.pathname = next === "login" ? "/login" : "/register"
-      url.searchParams.delete("mode")
-      window.history.replaceState({}, "", `${url.pathname}${url.search}`)
+    setLoadingGoogle(true)
+    const next = searchParams.get("next") || "/onboarding"
+    const result = await startGoogleOAuth({ next })
+    if (result.error) {
+      setError(result.error)
+      setLoadingGoogle(false)
     }
   }
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    e.stopPropagation()
     setError("")
     setSuccessMessage("")
     setIsLoading(true)
     try {
       const formData = new FormData(e.currentTarget)
-      const result = (await loginAction(formData)) as AuthActionResult
+      const result = (await loginAction(formData)) as AuthActionResult & {
+        next?: string
+        success?: boolean
+      }
       if (result?.error) {
         setError(result.error)
         return
       }
-      // Pas de redirect ni d’erreur = réponse anormale
-      setError(
-        "Aucune réponse du serveur. Réessayez, ou envoyez-nous un message ci-dessous."
-      )
-    } catch (err) {
-      if (isNextRedirectError(err)) throw err
-      setError(
-        "Connexion interrompue. Réessayez, ou décrivez le problème dans « Écrivez-nous »."
-      )
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setError("")
-    setSuccessMessage("")
-    if (!isCharterAccepted) {
-      setError(
-        "Validez d’abord la Charte de Bienveillance ci-dessus, puis créez votre compte."
-      )
-      return
-    }
-    setIsLoading(true)
-    try {
-      const formData = new FormData(e.currentTarget)
-      formData.set("charter_accepted", "true")
-      const result = (await registerAction(formData)) as AuthActionResult
-
-      if (result?.error) {
-        setError(result.error)
-        return
-      }
-      if (result?.needsEmailConfirmation || result?.message) {
-        setMode("login")
-        setSuccessMessage(
-          result.message ??
-            "Compte créé. Connectez-vous avec le même email et mot de passe."
-        )
+      if (result?.next) {
+        window.location.assign(result.next)
         return
       }
       setError(
-        "Aucune réponse du serveur à l’inscription. Réessayez, ou écrivez-nous ci-dessous."
+        "Aucune réponse du serveur. Réessayez, ou utilisez « Cliquez ici » pour nous écrire."
       )
     } catch (err) {
-      if (isNextRedirectError(err)) throw err
+      if (isNextRedirectError(err)) {
+        window.location.assign("/onboarding")
+        return
+      }
       setError(
-        "Inscription interrompue. Réessayez, ou envoyez le détail à l’équipe ci-dessous."
+        "Connexion interrompue. Réessayez, ou utilisez « Cliquez ici » pour nous écrire."
       )
     } finally {
       setIsLoading(false)
@@ -258,284 +205,126 @@ export function AuthOverlayForm({
           >
             KELIAA
           </Link>
-          <p className="text-sm text-white/85">
-            {mode === "login"
-              ? "Retrouvez votre espace sécurisé"
-              : "Rejoignez une communauté de célibataires chrétiens sérieux, engagés à se marier"}
-          </p>
+          <p className="text-sm text-white/85">Retrouvez votre espace sécurisé</p>
         </div>
 
         <div className="rounded-2xl border border-white/20 bg-white/95 backdrop-blur-xl shadow-elevated p-6 sm:p-8 space-y-5">
-          {/* Toujours en haut : erreurs / succès visibles */}
           <StatusBanner error={error} success={successMessage} />
 
-          {mode === "register" && (
-            <CharterModal
-              isAccepted={isCharterAccepted}
-              onAccept={() => {
-                setIsCharterAccepted(true)
-                setError("")
-              }}
+          <div className="text-center space-y-1">
+            <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-accent/10 text-accent border border-accent/20 mb-2">
+              <Lock className="h-5 w-5" />
+            </div>
+            <h1 className="font-serif text-2xl font-bold text-foreground">
+              Connexion
+            </h1>
+          </div>
+
+          <Button
+            type="button"
+            onClick={handleGoogle}
+            disabled={loadingGoogle || isLoading}
+            className="h-11 w-full rounded-xl bg-white text-foreground border-2 border-border hover:bg-secondary/80 shadow-sm font-medium"
+          >
+            {loadingGoogle ? (
+              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+            ) : (
+              <GoogleIcon className="mr-3 h-5 w-5" />
+            )}
+            Continuer avec Google
+          </Button>
+
+          <div className="relative flex items-center gap-3">
+            <div className="h-px flex-1 bg-border" />
+            <span className="text-[11px] uppercase tracking-wider text-muted-foreground">
+              ou
+            </span>
+            <div className="h-px flex-1 bg-border" />
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-5">
+            <input
+              type="hidden"
+              name="next"
+              value={searchParams.get("next") || ""}
             />
-          )}
 
-          {mode === "login" ? (
-            <form onSubmit={handleLogin} className="space-y-5">
-              <input
-                type="hidden"
-                name="next"
-                value={searchParams.get("next") || ""}
+            <div className="space-y-2">
+              <label
+                htmlFor="email"
+                className="text-sm font-medium flex items-center gap-2"
+              >
+                <Mail className="h-4 w-4 text-muted-foreground" /> Email
+              </label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                required
+                autoComplete="email"
+                className="h-11 rounded-xl"
+                onChange={(ev) => setTypedEmail(ev.target.value)}
               />
-              <div className="text-center space-y-1">
-                <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-accent/10 text-accent border border-accent/20 mb-2">
-                  <Lock className="h-5 w-5" />
-                </div>
-                <h1 className="font-serif text-2xl font-bold text-foreground">
-                  Connexion
-                </h1>
-                <p className="text-xs text-muted-foreground">
-                  Entrez vos identifiants Keliaa
-                </p>
-              </div>
-
-              <div className="space-y-2">
+            </div>
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
                 <label
-                  htmlFor="email"
+                  htmlFor="password"
                   className="text-sm font-medium flex items-center gap-2"
                 >
-                  <Mail className="h-4 w-4 text-muted-foreground" /> Email
+                  <Lock className="h-4 w-4 text-muted-foreground" /> Mot de
+                  passe
                 </label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  autoComplete="email"
-                  className="h-11 rounded-xl"
-                  onChange={(ev) => setTypedEmail(ev.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <label
-                    htmlFor="password"
-                    className="text-sm font-medium flex items-center gap-2"
-                  >
-                    <Lock className="h-4 w-4 text-muted-foreground" /> Mot de
-                    passe
-                  </label>
-                  <Link
-                    href="/forgot-password"
-                    className="text-xs text-accent hover:underline"
-                  >
-                    Oublié ?
-                  </Link>
-                </div>
-                <PasswordInput
-                  id="password"
-                  name="password"
-                  required
-                  autoComplete="current-password"
-                />
-              </div>
-
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="w-full h-11 rounded-xl"
-              >
-                {isLoading ? (
-                  "Vérification…"
-                ) : (
-                  <span className="flex items-center gap-2">
-                    Accéder à mon espace <ArrowRight className="h-4 w-4" />
-                  </span>
-                )}
-              </Button>
-
-              <p className="text-center text-xs text-muted-foreground">
-                Vous n&apos;êtes pas encore inscrit ?{" "}
-                <button
-                  type="button"
-                  onClick={() => switchMode("register")}
-                  className="font-medium text-accent hover:underline"
+                <Link
+                  href="/forgot-password"
+                  className="text-xs text-accent hover:underline"
                 >
-                  Cliquez ici.
-                </button>
-              </p>
-            </form>
-          ) : (
-            <form onSubmit={handleRegister} className="space-y-4">
-              <div className="text-center space-y-1">
-                <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-primary/10 text-primary border border-primary/20 mb-2">
-                  <Sparkles className="h-5 w-5" />
-                </div>
-                <h1 className="font-serif text-2xl font-bold text-foreground">
-                  Inscription
-                </h1>
-                <p className="text-xs text-muted-foreground">
-                  {isCharterAccepted
-                    ? "Renseignez vos informations"
-                    : "Validez d’abord la charte ci-dessus, puis remplir le formulaire"}
-                </p>
+                  Oublié ?
+                </Link>
               </div>
+              <PasswordInput
+                id="password"
+                name="password"
+                required
+                autoComplete="current-password"
+              />
+            </div>
 
-              <div
-                className={
-                  !isCharterAccepted
-                    ? "space-y-4 opacity-70"
-                    : "space-y-4"
-                }
+            <Button
+              type="submit"
+              disabled={isLoading || loadingGoogle}
+              className="w-full h-11 rounded-xl"
+            >
+              {isLoading ? (
+                "Vérification…"
+              ) : (
+                <span className="flex items-center gap-2">
+                  Accéder à mon espace <ArrowRight className="h-4 w-4" />
+                </span>
+              )}
+            </Button>
+
+            <p className="text-center text-xs text-muted-foreground">
+              Vous n&apos;êtes pas encore inscrit ?{" "}
+              <Link
+                href="/register"
+                className="font-medium text-accent hover:underline"
               >
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <div className="space-y-1.5">
-                    <label
-                      htmlFor="first_name"
-                      className="text-xs font-medium flex items-center gap-1"
-                    >
-                      <User className="h-3.5 w-3.5" /> Prénom
-                    </label>
-                    <Input
-                      id="first_name"
-                      name="first_name"
-                      required
-                      disabled={!isCharterAccepted}
-                      className="h-10 rounded-xl"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label
-                      htmlFor="last_name"
-                      className="text-xs font-medium flex items-center gap-1"
-                    >
-                      <User className="h-3.5 w-3.5" /> Nom
-                    </label>
-                    <Input
-                      id="last_name"
-                      name="last_name"
-                      disabled={!isCharterAccepted}
-                      className="h-10 rounded-xl"
-                    />
-                  </div>
-                </div>
+                Créer un compte
+              </Link>
+            </p>
 
-                <div className="space-y-1.5">
-                  <label
-                    htmlFor="city"
-                    className="text-xs font-medium flex items-center gap-1"
-                  >
-                    <MapPin className="h-3.5 w-3.5" /> Ville
-                  </label>
-                  <Input
-                    id="city"
-                    name="city"
-                    disabled={!isCharterAccepted}
-                    className="h-10 rounded-xl"
-                    placeholder="Abidjan, Paris…"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label
-                    htmlFor="address"
-                    className="text-xs font-medium flex items-center gap-1"
-                  >
-                    <Home className="h-3.5 w-3.5" /> Adresse
-                  </label>
-                  <Input
-                    id="address"
-                    name="address"
-                    disabled={!isCharterAccepted}
-                    className="h-10 rounded-xl"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label
-                    htmlFor="reg_email"
-                    className="text-xs font-medium flex items-center gap-1"
-                  >
-                    <Mail className="h-3.5 w-3.5" /> Email
-                  </label>
-                  <Input
-                    id="reg_email"
-                    name="email"
-                    type="email"
-                    required
-                    disabled={!isCharterAccepted}
-                    className="h-10 rounded-xl"
-                    onChange={(ev) => setTypedEmail(ev.target.value)}
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label
-                    htmlFor="reg_password"
-                    className="text-xs font-medium flex items-center gap-1"
-                  >
-                    <Lock className="h-3.5 w-3.5" /> Mot de passe
-                  </label>
-                  <PasswordInput
-                    id="reg_password"
-                    name="password"
-                    minLength={8}
-                    required
-                    disabled={!isCharterAccepted}
-                    className="h-10"
-                    placeholder="8 caractères minimum"
-                  />
-                </div>
-              </div>
-
-              <input
-                type="hidden"
-                name="ref"
-                value={searchParams.get("ref") || ""}
-              />
-              <input
-                type="hidden"
-                name="utm_source"
-                value={searchParams.get("utm_source") || ""}
-              />
-              <input
-                type="hidden"
-                name="utm_medium"
-                value={searchParams.get("utm_medium") || ""}
-              />
-              <input
-                type="hidden"
-                name="utm_campaign"
-                value={searchParams.get("utm_campaign") || ""}
-              />
-
-              <Button
-                type="submit"
-                disabled={!isCharterAccepted || isLoading}
-                className="w-full h-11 rounded-xl"
+            <p className="text-center text-xs text-muted-foreground leading-relaxed">
+              Vous avez des problèmes pour vous connecter ?{" "}
+              <Link
+                href="/register/help"
+                className="font-semibold text-primary underline underline-offset-2 hover:opacity-90"
               >
-                {isLoading ? (
-                  "Création…"
-                ) : !isCharterAccepted ? (
-                  "Acceptez la charte pour continuer"
-                ) : (
-                  <span className="flex items-center gap-2">
-                    Créer mon compte <ArrowRight className="h-4 w-4" />
-                  </span>
-                )}
-              </Button>
-
-              <p className="text-center text-xs text-muted-foreground">
-                Vous avez déjà un compte ?{" "}
-                <button
-                  type="button"
-                  onClick={() => switchMode("login")}
-                  className="font-medium text-accent hover:underline"
-                >
-                  Se connecter
-                </button>
-              </p>
-            </form>
-          )}
-
-          {/* Toujours visible — login ET inscription */}
-          <AuthHelpPanel mode={mode} defaultEmail={typedEmail} />
+                Cliquez ici
+              </Link>
+              .
+            </p>
+          </form>
         </div>
       </div>
     </div>

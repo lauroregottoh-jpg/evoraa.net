@@ -552,18 +552,14 @@ export async function getAdminDashboardData() {
     pendingProfiles: pendingProfiles ?? 0,
   }
 
-  const demoRaw = process.env.PAYMENTS_DEMO_MODE
   const hasBictorys = Boolean(process.env.BICTORYS_API_KEY)
   const hasCinetPay = Boolean(process.env.CINETPAY_API_KEY && process.env.CINETPAY_SITE_ID)
-  const paymentProvider = hasBictorys
-    ? "bictorys"
-    : hasCinetPay
-      ? "cinetpay"
-      : process.env.PAYMENT_PROVIDER || "demo"
+  const { resolveLiveProvider, isDemoPaymentsEnv } = await import(
+    "@/lib/billing/provider"
+  )
+  const paymentProvider = resolveLiveProvider()
   const ops: AdminOpsFlags = {
-    paymentsDemoMode:
-      demoRaw === "true" ||
-      (demoRaw !== "false" && !hasCinetPay && !hasBictorys),
+    paymentsDemoMode: isDemoPaymentsEnv(),
     hasCinetPay,
     hasBictorys,
     paymentProvider,

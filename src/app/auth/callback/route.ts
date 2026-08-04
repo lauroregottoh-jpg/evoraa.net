@@ -3,6 +3,8 @@ import { createServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
 import type { EmailOtpType } from "@supabase/supabase-js"
 import { resolveSupabaseAnonKey, resolveSupabaseUrl } from "@/lib/config/supabase"
+import { ensureOAuthProfile } from "@/lib/auth/ensureOAuthProfile"
+import { CHARTER_COOKIE } from "@/lib/auth/charterCookie"
 
 function publicOrigin(request: Request): string {
   const url = new URL(request.url)
@@ -113,14 +115,31 @@ export async function GET(request: Request) {
     let next = nextParam.startsWith("/") ? nextParam : "/onboarding"
 
     if (user) {
+      const cookieStoreAfter = await cookies()
+      const charterAccepted =
+        cookieStoreAfter.get(CHARTER_COOKIE)?.value === "1" ||
+        user.user_metadata?.charter_accepted === true
+
+      const isOAuth =
+        Array.isArray(user.app_metadata?.providers) &&
+        (user.app_metadata.providers as string[]).includes("google")
+
       try {
-        await supabase
-          .from("profiles")
-          .update({
-            email_verified: true,
-            updated_at: new Date().toISOString(),
+        if (isOAuth || charterAccepted) {
+          await ensureOAuthProfile({
+            user,
+            charterAccepted: Boolean(charterAccepted),
+            supabase,
           })
-          .eq("user_id", user.id)
+        } else {
+          await supabase
+            .from("profiles")
+            .update({
+              email_verified: true,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("user_id", user.id)
+        }
       } catch {
         /* non-blocking */
       }
@@ -128,13 +147,19 @@ export async function GET(request: Request) {
       if (next !== "/reset-password" && !next.startsWith("/reset-password")) {
         const { data: profile } = await supabase
           .from("profiles")
-          .select("completion_percentage, onboarding_status")
+          .select("completion_percentage, onboarding_status, first_name, gender, birth_date, city")
           .eq("user_id", user.id)
           .maybeSingle()
 
         const completion = profile?.completion_percentage ?? 0
         const status = profile?.onboarding_status
+        const missingEssentials =
+          !profile?.first_name ||
+          !profile?.gender ||
+          !profile?.birth_date ||
+          !profile?.city
         const needsOnboarding =
+          missingEssentials ||
           completion < 70 ||
           !status ||
           status === "step1_account" ||
@@ -142,6 +167,13 @@ export async function GET(request: Request) {
 
         next = needsOnboarding ? "/onboarding" : "/dashboard"
       }
+
+      // Clear one-shot charter cookie
+      pendingCookies.push({
+        name: CHARTER_COOKIE,
+        value: "",
+        options: { path: "/", maxAge: 0 },
+      })
     }
 
     return redirectWithCookies(`${origin}${next}`, pendingCookies)

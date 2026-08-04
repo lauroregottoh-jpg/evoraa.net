@@ -50,7 +50,7 @@ export function StepValues({ onNext, onBack, defaultValues, isSubmitting = false
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-1">
         <h3 className="font-serif text-2xl font-medium text-foreground">
-          Étape 2 : Vision de la Relation & du Foyer
+          Étape 3 : Vision de la Relation & du Foyer
         </h3>
         <p className="text-sm text-muted-foreground">
           Ce sont ces éléments profonds qui permettent d&apos;éviter les rencontres superficielles et d&apos;aligner vos projets de vie.

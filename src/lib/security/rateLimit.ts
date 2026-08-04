@@ -85,7 +85,7 @@ export async function enforceRateLimit(input: {
   }
 }
 
-/** Presets Keliaa — login/register JAMAIS fail-closed (auth doit toujours passer). */
+/** Presets Keliaa — auth fail-open. Limites élargies pour soft-launch. */
 export const RL = {
   login: {
     action: "login",
@@ -101,10 +101,10 @@ export const RL = {
   },
   passwordReset: {
     action: "password_reset",
-    limit: 8,
+    limit: 12,
     windowSeconds: 60 * 60,
     failClosed: false,
   },
-  contact: { action: "contact", limit: 5, windowSeconds: 60 * 60, failClosed: true },
-  eva: { action: "eva", limit: 40, windowSeconds: 60 * 60, failClosed: false },
+  contact: { action: "contact", limit: 20, windowSeconds: 60 * 60, failClosed: false },
+  eva: { action: "eva", limit: 60, windowSeconds: 60 * 60, failClosed: false },
 } as const

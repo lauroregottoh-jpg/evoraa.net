@@ -113,6 +113,26 @@ export function subscriptionReminderEmailHtml(input: {
   })
 }
 
+export function allianceActivatedEmailHtml(input: {
+  firstName: string
+  appUrl: string
+  endsAtLabel: string
+}) {
+  const name = input.firstName.trim() || "ami(e)"
+  return brandedEmailShell({
+    title: "Votre Alliance est active",
+    preheader: `Paiement confirmé — Alliance active jusqu’au ${input.endsAtLabel}.`,
+    bodyHtml: `
+      <p>Bonjour ${name},</p>
+      <p>Votre paiement Mobile Money a bien été reçu. Votre abonnement <strong>Alliance</strong> est maintenant <strong>actif</strong>.</p>
+      <p>Valable jusqu’au <strong>${input.endsAtLabel}</strong> — Matching KELIAA™ et quotas renforcés sont débloqués.</p>
+      <p>Que ce nouveau chapitre serve votre discernement et votre projet de mariage.</p>
+    `,
+    ctaLabel: "Ouvrir mon espace",
+    ctaHref: `${input.appUrl}/dashboard`,
+  })
+}
+
 export function passwordResetEmailHtml(input: {
   appUrl: string
   resetHref: string

@@ -82,7 +82,7 @@ export async function bictorysCreateCharge(args: {
   paymentMode: BictorysPaymentMode
   appBaseUrl: string
 }) {
-  const merchantCountry = process.env.BICTORYS_MERCHANT_COUNTRY || "SN"
+  const merchantCountry = process.env.BICTORYS_MERCHANT_COUNTRY || "TG"
   const notifyUrl = `${args.appBaseUrl}/api/payments/bictorys/notify`
   const returnUrl = `${args.appBaseUrl}/checkout/success?payment=${args.paymentId}`
   const cancelUrl = `${args.appBaseUrl}/checkout/cancel?payment=${args.paymentId}`
@@ -91,9 +91,16 @@ export async function bictorysCreateCharge(args: {
     return {
       ok: false as const,
       error:
-        "Bictorys refuse localhost dans les URLs. Définissez NEXT_PUBLIC_APP_URL avec un domaine public.",
+        "Bictorys refuse localhost dans les URLs. Définissez NEXT_PUBLIC_APP_URL avec un domaine public (https://www.keliaa.org).",
     }
   }
+
+  const defaultCity =
+    merchantCountry === "TG"
+      ? "Lome"
+      : merchantCountry === "CI"
+        ? "Abidjan"
+        : "Dakar"
 
   const body = {
     amount: args.amount,
@@ -107,7 +114,7 @@ export async function bictorysCreateCharge(args: {
     customerObject: {
       name: args.customerName || "Customer",
       email: args.customerEmail,
-      city: args.customerCity || "Dakar",
+      city: args.customerCity || defaultCity,
       country: merchantCountry,
       locale: "fr-FR",
     },

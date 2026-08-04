@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
+const nextConfig = {
+  serverActions: {
+    bodySizeLimit: "6mb",
+  },
   images: {
     remotePatterns: [
       {
@@ -14,6 +17,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-};
+} as NextConfig;
 
 export default nextConfig;
