@@ -110,30 +110,50 @@ async function persistMatches(
   viewerUserId: string,
   matches: ScoredMatch[]
 ) {
-  for (const match of matches) {
-    const { data: existing } = await supabase
-      .from("matches")
-      .select("id")
-      .eq("user_one", viewerUserId)
-      .eq("user_two", match.profile.user_id)
-      .maybeSingle()
+  if (matches.length === 0) return
 
-    if (existing?.id) {
-      await supabase
-        .from("matches")
-        .update({
+  const partnerIds = matches.map((m) => m.profile.user_id)
+  const { data: existingRows } = await supabase
+    .from("matches")
+    .select("id, user_two")
+    .eq("user_one", viewerUserId)
+    .in("user_two", partnerIds)
+
+  const existingByPartner = new Map(
+    (existingRows ?? []).map((r) => [r.user_two as string, r.id as string])
+  )
+
+  const toInsert: Array<{
+    user_one: string
+    user_two: string
+    compatibility_score: number
+    status: string
+  }> = []
+
+  await Promise.all(
+    matches.map(async (match) => {
+      const existingId = existingByPartner.get(match.profile.user_id)
+      if (existingId) {
+        await supabase
+          .from("matches")
+          .update({
+            compatibility_score: match.score,
+            status: "pending",
+          })
+          .eq("id", existingId)
+      } else {
+        toInsert.push({
+          user_one: viewerUserId,
+          user_two: match.profile.user_id,
           compatibility_score: match.score,
           status: "pending",
         })
-        .eq("id", existing.id)
-    } else {
-      await supabase.from("matches").insert({
-        user_one: viewerUserId,
-        user_two: match.profile.user_id,
-        compatibility_score: match.score,
-        status: "pending",
-      })
-    }
+      }
+    })
+  )
+
+  if (toInsert.length > 0) {
+    await supabase.from("matches").insert(toInsert)
   }
 }
 
@@ -180,14 +200,25 @@ export async function getCompatibilitySuggestions(limit?: number): Promise<{
   const suggestionLimit =
     limit ?? entitlements.limits.dailySuggestions ?? FREE_DAILY_SUGGESTIONS
 
-  const { data: rows, error } = await loaded.supabase
+  const viewerGender = (viewer.gender || "").toUpperCase()
+  const targetGender =
+    viewerGender === "M" ? "F" : viewerGender === "F" ? "M" : null
+
+  let poolQuery = loaded.supabase
     .from("profiles")
     .select(PROFILE_SELECT)
     .is("deleted_at", null)
     .neq("user_id", viewer.user_id)
     .neq("moderation_status", "rejected")
     .gte("completion_percentage", 50)
-    .limit(80)
+    .order("completion_percentage", { ascending: false })
+    .limit(120)
+
+  if (targetGender) {
+    poolQuery = poolQuery.eq("gender", targetGender)
+  }
+
+  const { data: rows, error } = await poolQuery
 
   if (error) {
     return { error: error.message, suggestions: [] }

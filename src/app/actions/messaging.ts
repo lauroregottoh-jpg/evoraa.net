@@ -246,6 +246,30 @@ export async function listConversations(): Promise<{
 
   const profileByUser = new Map((profiles ?? []).map((p) => [p.user_id, p]))
 
+  const conversationIds = conversations.map((c) => c.id as string)
+  const { data: extras, error: extrasError } = await supabase.rpc(
+    "conversation_list_extras" as never,
+    {
+      p_user_id: user.id,
+      p_conversation_ids: conversationIds,
+    } as never
+  )
+
+  if (extrasError) {
+    console.error("[listConversations] extras", extrasError.message)
+  }
+
+  type ExtraRow = {
+    conversation_id: string
+    last_message: string | null
+    last_at: string | null
+    unread_count: number | string | null
+  }
+  const extraByConv = new Map<string, ExtraRow>()
+  for (const row of (extras as ExtraRow[] | null) ?? []) {
+    extraByConv.set(row.conversation_id, row)
+  }
+
   const items: ConversationListItem[] = []
 
   for (const conv of conversations) {
@@ -253,30 +277,18 @@ export async function listConversations(): Promise<{
     if (!match) continue
     const partnerUserId = match.user_one === user.id ? match.user_two : match.user_one
     const partner = profileByUser.get(partnerUserId)
-
-    const { data: lastMessages } = await supabase
-      .from("messages")
-      .select("message, created_at, sender_id, is_read")
-      .eq("conversation_id", conv.id)
-      .order("created_at", { ascending: false })
-      .limit(1)
-
-    const last = lastMessages?.[0]
-    const { count: unreadCount } = await supabase
-      .from("messages")
-      .select("id", { count: "exact", head: true })
-      .eq("conversation_id", conv.id)
-      .eq("is_read", false)
-      .neq("sender_id", user.id)
+    const extra = extraByConv.get(conv.id)
 
     items.push({
       id: conv.id,
       partnerName: partner?.first_name || "Membre",
       partnerProfileId: partner?.id || "",
       harmonyScore: Math.round(Number(match.compatibility_score ?? 0)),
-      lastMessage: last?.message || "Conversation ouverte — écrivez le premier message.",
-      timestamp: formatListTime(last?.created_at ?? conv.created_at),
-      unread: (unreadCount ?? 0) > 0,
+      lastMessage:
+        extra?.last_message ||
+        "Conversation ouverte — écrivez le premier message.",
+      timestamp: formatListTime(extra?.last_at ?? conv.created_at),
+      unread: Number(extra?.unread_count ?? 0) > 0,
     })
   }
 

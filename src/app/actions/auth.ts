@@ -19,6 +19,7 @@ import {
   registerSchema,
   resendConfirmationSchema,
 } from "@/lib/security/schemas"
+import { findAuthUserIdByEmail } from "@/lib/auth/findUserByEmail"
 
 /**
  * Soft launch: confirm email via service role when Supabase Auth mail
@@ -43,23 +44,11 @@ async function confirmEmailAndSignIn(
     let id = userId
 
     if (!id) {
-      for (let page = 1; page <= 20; page += 1) {
-        const { data: listed, error: listError } = await admin.auth.admin.listUsers({
-          page,
-          perPage: 200,
-        })
-        if (listError) {
-          return { ok: false, error: listError.message }
-        }
-        const match = listed.users.find(
-          (u) => u.email?.toLowerCase() === email.toLowerCase()
-        )
-        if (match?.id) {
-          id = match.id
-          break
-        }
-        if (listed.users.length < 200) break
+      const found = await findAuthUserIdByEmail(email)
+      if (found.error && !found.id) {
+        return { ok: false, error: found.error }
       }
+      id = found.id ?? undefined
     }
 
     if (!id) {
@@ -531,31 +520,23 @@ export async function resendConfirmationAction(formData: FormData) {
   if (softEmailConfirmEnabled()) {
     try {
       const admin = createAdminClient()
-      for (let page = 1; page <= 10; page += 1) {
-        const { data: listed } = await admin.auth.admin.listUsers({
-          page,
-          perPage: 200,
-        })
-        const match = listed?.users.find(
-          (u) => u.email?.toLowerCase() === email.toLowerCase()
-        )
-        if (match?.id) {
-          if (!match.email_confirmed_at) {
-            await admin.auth.admin.updateUserById(match.id, {
-              email_confirm: true,
-            })
-            await admin
-              .from("profiles")
-              .update({ email_verified: true })
-              .eq("user_id", match.id)
-          }
-          return {
-            error: null,
-            message:
-              "Compte activé. Connectez-vous avec votre email et mot de passe pour accéder à votre espace.",
-          }
+      const found = await findAuthUserIdByEmail(email)
+      if (found.id) {
+        const { data: userData } = await admin.auth.admin.getUserById(found.id)
+        if (!userData.user?.email_confirmed_at) {
+          await admin.auth.admin.updateUserById(found.id, {
+            email_confirm: true,
+          })
+          await admin
+            .from("profiles")
+            .update({ email_verified: true })
+            .eq("user_id", found.id)
         }
-        if (!listed || listed.users.length < 200) break
+        return {
+          error: null,
+          message:
+            "Compte activé. Connectez-vous avec votre email et mot de passe pour accéder à votre espace.",
+        }
       }
       return {
         error: null,

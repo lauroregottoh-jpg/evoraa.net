@@ -827,30 +827,23 @@ export async function adminAssignStaffByEmail(input: {
     return { error: "Email invalide." }
   }
 
-  let admin
   try {
-    admin = createAdminClient()
+    createAdminClient()
   } catch {
     return { error: "Service role indisponible." }
   }
 
-  const { data: listed, error: listErr } = await admin.auth.admin.listUsers({
-    page: 1,
-    perPage: 200,
-  })
-  if (listErr) return { error: listErr.message }
-
-  const authUser = (listed?.users || []).find(
-    (u) => (u.email || "").toLowerCase() === email
-  )
-  if (!authUser) {
+  const { findAuthUserIdByEmail } = await import("@/lib/auth/findUserByEmail")
+  const found = await findAuthUserIdByEmail(email)
+  if (found.error && !found.id) return { error: found.error }
+  if (!found.id) {
     return { error: "Aucun compte avec cet email. La personne doit d'abord s'inscrire." }
   }
 
   const { data: profile, error: pe } = await gate.supabase
     .from("profiles")
     .select("id, role, first_name")
-    .eq("user_id", authUser.id)
+    .eq("user_id", found.id)
     .maybeSingle()
 
   if (pe) return { error: pe.message }
