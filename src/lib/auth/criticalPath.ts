@@ -19,6 +19,11 @@ export const AUTH_CRITICAL = {
 /** Détecte l’exception interne de redirect() Next.js App Router. */
 export function isNextRedirectError(error: unknown): boolean {
   if (!error || typeof error !== "object") return false
-  const digest = (error as { digest?: unknown }).digest
-  return typeof digest === "string" && digest.startsWith("NEXT_REDIRECT")
+  const e = error as { digest?: unknown; message?: unknown; name?: unknown }
+  const digest = typeof e.digest === "string" ? e.digest : ""
+  const message = typeof e.message === "string" ? e.message : ""
+  if (digest.includes("NEXT_REDIRECT")) return true
+  if (message.includes("NEXT_REDIRECT")) return true
+  if (e.name === "RedirectError") return true
+  return false
 }
