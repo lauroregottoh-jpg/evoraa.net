@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { AnalyticsScripts } from "@/components/analytics/AnalyticsScripts";
 import "./globals.css";
 
@@ -73,8 +74,10 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="antialiased min-h-screen bg-background text-foreground">
-        <AnalyticsScripts />
-        <SmoothScroll>{children}</SmoothScroll>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+          <AnalyticsScripts />
+          <SmoothScroll>{children}</SmoothScroll>
+        </ThemeProvider>
       </body>
     </html>
   );

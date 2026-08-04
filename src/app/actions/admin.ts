@@ -222,6 +222,7 @@ export async function getAdminDashboardData() {
         reason: string | null
         createdAt: string | null
       }>,
+      feedbackItems: [] as import("@/app/actions/feedback").FeedbackRow[],
       viewerRole: null as string | null,
     }
   }
@@ -305,6 +306,27 @@ export async function getAdminDashboardData() {
     .order("created_at", { ascending: false })
     .limit(40)
   const modEventRows = modRes.error ? [] : modRes.data
+
+  const feedbackRes = await supabase
+    .from("user_feedback")
+    .select(
+      "id, user_id, name, email, category, message, page_path, status, admin_note, created_at, updated_at"
+    )
+    .order("created_at", { ascending: false })
+    .limit(200)
+  const feedbackItems = (feedbackRes.error ? [] : feedbackRes.data ?? []).map((f) => ({
+    id: f.id as string,
+    user_id: (f.user_id as string) || null,
+    name: (f.name as string) || null,
+    email: (f.email as string) || null,
+    category: (f.category as string) || "other",
+    message: (f.message as string) || "",
+    page_path: (f.page_path as string) || null,
+    status: (f.status as string) || "new",
+    admin_note: (f.admin_note as string) || null,
+    created_at: (f.created_at as string) || new Date().toISOString(),
+    updated_at: (f.updated_at as string) || null,
+  }))
 
   const { data: settings } = await supabase
     .from("platform_settings")
@@ -632,6 +654,7 @@ export async function getAdminDashboardData() {
       reason: (e.reason as string) || null,
       createdAt: e.created_at as string | null,
     })),
+    feedbackItems,
     settings: (settings ?? []).map((s) => ({
       key: s.key as string,
       value: s.value,

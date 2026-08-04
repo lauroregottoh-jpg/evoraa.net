@@ -20,6 +20,7 @@ import {
   UserCircle2,
   Home,
   UsersRound,
+  MessageSquareHeart,
 } from "lucide-react"
 import { cn } from "@/utils/cn"
 import { logoutAction } from "@/app/actions/auth"
@@ -30,6 +31,7 @@ export type AdminNavId =
   | "members"
   | "profiles"
   | "moderation"
+  | "feedback"
   | "alliance"
   | "matching"
   | "academy"
@@ -56,7 +58,12 @@ export function AdminShell({
 }: {
   active: AdminNavId
   onNavigate: (id: AdminNavId) => void
-  badges: { moderation: number; renewals: number; pendingProfiles?: number }
+  badges: {
+    moderation: number
+    renewals: number
+    pendingProfiles?: number
+    feedback?: number
+  }
   viewerRole: string | null
   search: string
   onSearch: (v: string) => void
@@ -79,6 +86,12 @@ export function AdminShell({
       label: "Modération",
       icon: ShieldAlert,
       badge: badges.moderation || undefined,
+    },
+    {
+      id: "feedback",
+      label: "Avis & plaintes",
+      icon: MessageSquareHeart,
+      badge: badges.feedback || undefined,
     },
   ]
 

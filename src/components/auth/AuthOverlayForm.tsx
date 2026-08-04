@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CharterModal } from "@/components/auth/CharterModal";
 import { PasswordInput } from "@/components/auth/PasswordInput";
 import { loginAction, registerAction } from "@/app/actions/auth";
+import { FeedbackForm } from "@/components/feedback/FeedbackForm";
 import {
   Lock,
   Mail,
@@ -20,6 +21,7 @@ import {
   MapPin,
   Home,
   Sparkles,
+  LifeBuoy,
 } from "lucide-react";
 
 type Mode = "login" | "register";
@@ -33,6 +35,7 @@ export function AuthOverlayForm({ initialMode = "login" }: { initialMode?: Mode 
   const [successMessage, setSuccessMessage] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const [isCharterAccepted, setIsCharterAccepted] = React.useState(false);
+  const [showSignupHelp, setShowSignupHelp] = React.useState(false);
 
   React.useEffect(() => {
     const q = searchParams.get("mode");
@@ -118,7 +121,10 @@ export function AuthOverlayForm({ initialMode = "login" }: { initialMode?: Mode 
         );
         return;
       }
-      if (result?.error) setError(result.error);
+      if (result?.error) {
+        setError(result.error);
+        setShowSignupHelp(true);
+      }
     } catch {
       /* redirect */
     } finally {
@@ -227,6 +233,7 @@ export function AuthOverlayForm({ initialMode = "login" }: { initialMode?: Mode 
               </p>
             </form>
           ) : (
+            <div className="space-y-4">
             <form
               onSubmit={handleRegister}
               className={`space-y-4 ${!isCharterAccepted ? "opacity-60 pointer-events-none" : ""}`}
@@ -331,6 +338,35 @@ export function AuthOverlayForm({ initialMode = "login" }: { initialMode?: Mode 
                 </button>
               </p>
             </form>
+
+            <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 space-y-2">
+              <p className="text-xs font-semibold text-amber-900 flex items-center gap-1.5">
+                <LifeBuoy className="h-3.5 w-3.5" />
+                Vous n’arrivez pas à vous inscrire ?
+              </p>
+              <p className="text-[11px] text-amber-900/80 leading-relaxed">
+                Écrivez-nous directement : votre message arrive dans l’espace
+                équipe (problèmes d’inscription).
+              </p>
+              <button
+                type="button"
+                onClick={() => setShowSignupHelp((v) => !v)}
+                className="text-[11px] font-bold text-primary underline"
+              >
+                {showSignupHelp ? "Masquer le formulaire" : "Nous écrire maintenant"}
+              </button>
+            </div>
+
+            {showSignupHelp && (
+              <FeedbackForm
+                compact
+                defaultCategory="signup_help"
+                pagePath="/register"
+                title="Support inscription"
+                subtitle="Décrivez ce qui bloque (message d’erreur, étape…). Nous vous répondons dès que possible."
+              />
+            )}
+            </div>
           )}
         </div>
       </div>

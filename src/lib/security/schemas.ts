@@ -77,6 +77,31 @@ export const contactSchema = z.object({
     .max(5000),
 })
 
+const FEEDBACK_CATEGORIES = [
+  "signup_help",
+  "complaint",
+  "suggestion",
+  "ux",
+  "other",
+] as const
+
+export const feedbackSchema = z.object({
+  name: z.string().trim().min(1, "Nom requis.").max(120),
+  email: emailSchema,
+  category: z.string().trim().transform((v) => {
+    if ((FEEDBACK_CATEGORIES as readonly string[]).includes(v)) {
+      return v as (typeof FEEDBACK_CATEGORIES)[number]
+    }
+    return "other" as const
+  }),
+  message: z
+    .string()
+    .trim()
+    .min(15, "Votre message doit faire au moins 15 caractères.")
+    .max(4000),
+  pagePath: z.string().trim().max(200).optional().default(""),
+})
+
 export const askEvaSchema = z.object({
   question: z
     .string()

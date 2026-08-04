@@ -15,10 +15,10 @@ import {
   X,
   GraduationCap,
   Settings,
-  MoreHorizontal,
   Share2,
   BookHeart,
   LogOut,
+  MessageSquareHeart,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { ThemeToggle } from "@/components/evoraa/ThemeToggle";
@@ -41,6 +41,7 @@ const BOTTOM_PRIMARY = [
   { href: "/compatibility", label: "Découvrir", icon: Compass },
   { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/assessments", label: "Tests", icon: ClipboardList },
+  { href: "/feedback", label: "Avis", icon: MessageSquareHeart },
 ] as const;
 
 const MORE_LINKS = [
@@ -50,6 +51,7 @@ const MORE_LINKS = [
   { href: "/dashboard#invite", label: "Inviter", icon: Share2 },
   { href: "/notifications", label: "Alertes", icon: Bell },
   { href: "/profile", label: "Profil", icon: User },
+  { href: "/feedback", label: "Avis", icon: MessageSquareHeart },
   { href: "/help", label: "Aide", icon: HelpCircle },
   { href: "/settings", label: "Paramètres", icon: Settings },
 ] as const;
@@ -88,32 +90,27 @@ export function MemberShell({
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
-  const [moreOpen, setMoreOpen] = React.useState(false);
 
   const isActive = (href: string) => {
-    if (href === "/dashboard") return pathname === "/dashboard"
+    if (href === "/dashboard") return pathname === "/dashboard";
     if (href === "/premium") {
       return (
         pathname === "/premium" ||
         pathname.startsWith("/premium/") ||
         pathname === "/billing" ||
         pathname.startsWith("/billing/")
-      )
+      );
     }
-    return pathname === href || pathname.startsWith(`${href}/`)
-  }
-
-  const moreActive = MORE_LINKS.some((l) => isActive(l.href));
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
 
   React.useEffect(() => {
     setOpen(false);
-    setMoreOpen(false);
   }, [pathname]);
 
   const go = (href: string) => (e?: React.MouseEvent) => {
     e?.preventDefault();
     setOpen(false);
-    setMoreOpen(false);
     router.push(href);
   };
 
@@ -136,10 +133,7 @@ export function MemberShell({
             <button
               type="button"
               className="md:hidden p-2 rounded-lg border border-border shrink-0"
-              onClick={() => {
-                setMoreOpen(false);
-                setOpen((v) => !v);
-              }}
+              onClick={() => setOpen((v) => !v)}
               aria-label="Ouvrir le menu"
               aria-expanded={open}
             >
@@ -174,7 +168,7 @@ export function MemberShell({
             })}
           </nav>
 
-          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+          <div className="flex items-center gap-0.5 sm:gap-1.5 shrink-0">
             <span
               className={cn(
                 "hidden sm:inline-flex text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border",
@@ -185,6 +179,15 @@ export function MemberShell({
             >
               {planLabel}
             </span>
+            <a
+              href="/feedback"
+              onClick={go("/feedback")}
+              className="hidden md:inline-flex p-2 rounded-full hover:bg-secondary text-muted-foreground"
+              aria-label="Avis"
+              title="Avis & améliorations"
+            >
+              <MessageSquareHeart className="h-4 w-4" />
+            </a>
             <a
               href="/help"
               onClick={go("/help")}
@@ -219,7 +222,7 @@ export function MemberShell({
             >
               <User className="h-4 w-4" />
             </a>
-            <form action={logoutAction} className="hidden md:block">
+            <form action={logoutAction}>
               <button
                 type="submit"
                 className="p-2 rounded-full hover:bg-destructive/10 text-muted-foreground hover:text-destructive"
@@ -240,7 +243,7 @@ export function MemberShell({
                 const Icon = item.icon;
                 return (
                   <a
-                    key={item.href}
+                    key={`${item.href}-${item.label}`}
                     href={item.href}
                     onClick={go(item.href)}
                     className={cn(
@@ -319,64 +322,7 @@ export function MemberShell({
               </a>
             );
           })}
-          <button
-            type="button"
-            onClick={() => {
-              setOpen(false);
-              setMoreOpen((v) => !v);
-            }}
-            className={cn(
-              "flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold",
-              moreOpen || moreActive ? "text-primary" : "text-muted-foreground"
-            )}
-          >
-            <MoreHorizontal className="h-5 w-5" />
-            Plus
-          </button>
         </div>
-
-        {moreOpen && (
-          <>
-            <button
-              type="button"
-              className="fixed inset-0 z-[55] bg-black/20"
-              aria-label="Fermer"
-              onClick={() => setMoreOpen(false)}
-            />
-            <div className="absolute bottom-16 inset-x-0 mx-3 mb-2 z-[65] rounded-2xl border border-border bg-card p-2">
-              <div className="grid grid-cols-3 gap-1">
-                {MORE_LINKS.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <a
-                      key={item.href}
-                      href={item.href}
-                      onClick={go(item.href)}
-                      className={cn(
-                        "flex flex-col items-center gap-1.5 rounded-xl px-2 py-3 text-[11px] font-medium cursor-pointer",
-                        isActive(item.href)
-                          ? "bg-primary/10 text-primary"
-                          : "text-foreground hover:bg-secondary"
-                      )}
-                    >
-                      <Icon className="h-4 w-4" />
-                      {item.label}
-                    </a>
-                  );
-                })}
-              </div>
-              <form action={logoutAction} className="mt-1 pt-1 border-t border-border">
-                <button
-                  type="submit"
-                  className="w-full flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-semibold text-destructive hover:bg-destructive/10"
-                >
-                  <LogOut className="h-4 w-4" />
-                  Se déconnecter
-                </button>
-              </form>
-            </div>
-          </>
-        )}
       </nav>
 
       {false && process.env.NODE_ENV === "development" && <DevSessionSwitcher />}

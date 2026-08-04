@@ -48,6 +48,7 @@ import {
 import { MatchingIntelligencePanel } from "@/components/admin/AdminMatchingIntelligence"
 import { AdminStaffTeamPanel } from "@/components/admin/AdminStaffTeamPanel"
 import { PendingProfilesQueue } from "@/components/admin/PendingProfilesQueue"
+import { AdminFeedbackPanel } from "@/components/admin/AdminFeedbackPanel"
 import { PHOTO_REJECT_REASONS } from "@/lib/admin/moderationCatalog"
 import {
   BictorysSandboxPanel,
@@ -56,6 +57,7 @@ import {
 import { DistBars, SparkColumns } from "@/components/admin/AdminCharts"
 import { cn } from "@/utils/cn"
 import type { MatchingIntelligence } from "@/lib/admin/matchingIntelligence"
+import type { FeedbackRow } from "@/app/actions/feedback"
 
 type Props = {
   stats: {
@@ -163,6 +165,7 @@ type Props = {
     reason: string | null
     createdAt: string | null
   }>
+  feedbackItems: FeedbackRow[]
   matchingIntelligence: MatchingIntelligence
 }
 
@@ -246,6 +249,7 @@ export function AdminConsole(props: Props) {
   const menPct = menTotal > 0 ? Math.round((props.retention.menCount / menTotal) * 100) : 50
   const moderationBadge =
     props.stats.pendingPhotos + props.stats.openReports + props.retention.pendingProfiles
+  const feedbackBadge = props.feedbackItems.filter((f) => f.status === "new").length
 
   React.useEffect(() => {
     if (search && nav !== "members") setNav("members")
@@ -259,6 +263,7 @@ export function AdminConsole(props: Props) {
         moderation: moderationBadge,
         renewals: props.retention.renewalsDue7d,
         pendingProfiles: props.retention.pendingProfiles,
+        feedback: feedbackBadge,
       }}
       viewerRole={props.viewerRole}
       search={search}
@@ -685,6 +690,8 @@ export function AdminConsole(props: Props) {
           )}
         </div>
       )}
+
+      {nav === "feedback" && <AdminFeedbackPanel items={props.feedbackItems} />}
 
       {/* ——— 5. ALLIANCE ——— */}
       {nav === "alliance" && (

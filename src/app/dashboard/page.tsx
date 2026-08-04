@@ -77,6 +77,26 @@ export default async function DashboardPage() {
           isVerified={data.isVerified}
         />
 
+        <Link
+          href="/feedback"
+          className="block rounded-2xl border border-primary/20 bg-primary/5 p-4 hover:border-primary/40 transition-colors"
+        >
+          <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
+            Améliorez Keliaa avec nous
+          </p>
+          <p className="font-serif text-lg font-bold mt-1">
+            Difficultés, plaintes ou idées ?
+          </p>
+          <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+            Plus vous nous écrivez, plus vite nous corrigeons l’inscription, les
+            questionnaires et l’expérience sur mobile. Vos retours vont
+            directement à l’équipe.
+          </p>
+          <span className="inline-block mt-2 text-xs font-bold text-primary">
+            Envoyer un avis →
+          </span>
+        </Link>
+
         <div className="px-1">
           <PresenceStreak />
         </div>

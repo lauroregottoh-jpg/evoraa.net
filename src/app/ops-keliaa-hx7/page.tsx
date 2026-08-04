@@ -64,6 +64,7 @@ export default async function OpsConsolePage() {
       matches={data.matches}
       recommendations={data.recommendations}
       moderationEvents={data.moderationEvents}
+      feedbackItems={data.feedbackItems ?? []}
       matchingIntelligence={data.matchingIntelligence!}
     />
   )

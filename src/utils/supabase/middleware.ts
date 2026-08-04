@@ -24,6 +24,7 @@ const PROTECTED_PREFIXES = [
   '/notifications',
   '/billing',
   '/help',
+  '/feedback',
   '/inspiration',
   '/premium',
 ]
