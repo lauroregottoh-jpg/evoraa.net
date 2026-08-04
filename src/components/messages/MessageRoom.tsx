@@ -11,6 +11,7 @@ import { Card } from "@/components/ui/card";
 import { ArrowLeft, Send, Sparkles, ShieldCheck, Flag } from "lucide-react";
 import {
   sendMessageAction,
+  loadOlderMessagesAction,
   type ChatMessageDTO,
   type ConversationRoomDTO,
 } from "@/app/actions/messaging";
@@ -33,12 +34,37 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
   const [error, setError] = React.useState("");
   const [isSending, setIsSending] = React.useState(false);
   const [showReport, setShowReport] = React.useState(false);
+  const [hasMoreOlder, setHasMoreOlder] = React.useState(
+    Boolean(initialRoom.hasMoreOlder)
+  );
+  const [loadingOlder, setLoadingOlder] = React.useState(false);
   const bottomRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     setRoom(initialRoom);
     setMessages(initialRoom.messages);
+    setHasMoreOlder(Boolean(initialRoom.hasMoreOlder));
   }, [initialRoom]);
+
+  const loadOlder = async () => {
+    if (!messages.length || loadingOlder) return;
+    setLoadingOlder(true);
+    try {
+      const res = await loadOlderMessagesAction(room.id, messages[0].createdAt);
+      if (res.error) {
+        setError(res.error);
+        return;
+      }
+      const older = res.messages ?? [];
+      setMessages((prev) => {
+        const ids = new Set(prev.map((m) => m.id));
+        return [...older.filter((m) => !ids.has(m.id)), ...prev];
+      });
+      setHasMoreOlder(Boolean(res.hasMoreOlder));
+    } finally {
+      setLoadingOlder(false);
+    }
+  };
 
   React.useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -207,6 +233,20 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
       {/* Photo unlock productisé plus tard — on n’affiche plus un faux succès local */}
 
       <Card className="rounded-2xl border-border/60 bg-background/80 backdrop-blur-md shadow-xs min-h-[320px] max-h-[460px] overflow-y-auto p-5 space-y-4">
+        {hasMoreOlder && (
+          <div className="flex justify-center">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="rounded-xl text-xs"
+              disabled={loadingOlder}
+              onClick={loadOlder}
+            >
+              {loadingOlder ? "Chargement…" : "Messages plus anciens"}
+            </Button>
+          </div>
+        )}
         {messages.length === 0 && (
           <p className="text-sm text-muted-foreground text-center py-10">
             Premier message : posez une question respectueuse sur la foi, le foyer ou le rythme de vie.

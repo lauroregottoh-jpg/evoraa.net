@@ -6,10 +6,18 @@ import { redirect } from "next/navigation"
 import { resolveAppUrl } from "@/lib/auth/appUrl"
 import { passwordResetEmailHtml } from "@/lib/email/templates"
 import { enforceRateLimit, RL } from "@/lib/security/rateLimit"
+import {
+  firstZodError,
+  passwordResetRequestSchema,
+  passwordUpdateSchema,
+} from "@/lib/security/schemas"
 
 export async function requestPasswordResetAction(formData: FormData) {
-  const email = String(formData.get("email") ?? "").trim().toLowerCase()
-  if (!email) return { error: "Email requis." }
+  const parsed = passwordResetRequestSchema.safeParse({
+    email: String(formData.get("email") ?? ""),
+  })
+  if (!parsed.success) return { error: firstZodError(parsed.error) }
+  const { email } = parsed.data
 
   const rl = await enforceRateLimit({ ...RL.passwordReset, subject: email })
   if (!rl.ok) return { error: rl.error }
@@ -28,8 +36,8 @@ export async function requestPasswordResetAction(formData: FormData) {
     if (!error) {
       const actionLink = data.properties?.action_link
       if (actionLink) {
-        const { sendResendEmail } = await import("@/lib/email/send")
-        await sendResendEmail({
+        const { sendEmailWithRetry } = await import("@/lib/email/outbox")
+        await sendEmailWithRetry({
           to: email,
           subject: "Réinitialisez votre mot de passe — KELIAA",
           html: passwordResetEmailHtml({ appUrl, resetHref: actionLink }),
@@ -53,15 +61,12 @@ export async function requestPasswordResetAction(formData: FormData) {
 }
 
 export async function updatePasswordAction(formData: FormData) {
-  const password = String(formData.get("password") ?? "")
-  const confirm = String(formData.get("confirm") ?? "")
-
-  if (password.length < 8) {
-    return { error: "Le mot de passe doit contenir au moins 8 caractères." }
-  }
-  if (password !== confirm) {
-    return { error: "Les mots de passe ne correspondent pas." }
-  }
+  const parsed = passwordUpdateSchema.safeParse({
+    password: String(formData.get("password") ?? ""),
+    confirm: String(formData.get("confirm") ?? ""),
+  })
+  if (!parsed.success) return { error: firstZodError(parsed.error) }
+  const { password } = parsed.data
 
   const supabase = await createClient()
   const {
@@ -75,7 +80,7 @@ export async function updatePasswordAction(formData: FormData) {
   }
 
   const { error } = await supabase.auth.updateUser({ password })
-  if (error) return { error: error.message }
+  if (error) return { error: "Impossible de mettre à jour le mot de passe." }
 
   redirect("/login?reset=1")
 }

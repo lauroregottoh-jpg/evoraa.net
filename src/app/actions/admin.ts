@@ -240,10 +240,21 @@ export async function getAdminDashboardData() {
   const { data: profiles } = await supabase
     .from("profiles")
     .select(
-      "id, user_id, first_name, last_name, city, country, gender, birth_date, denomination, church_attended, pastor_name, pastor_contact, completion_percentage, role, moderation_status, onboarding_status, is_verified, identity_verified, created_at, avatar_url, psychometric_results, matching_indicators, trust_score, warning_count, sanction_status, sanction_until"
+      "id, user_id, first_name, last_name, city, country, gender, birth_date, denomination, church_attended, pastor_name, pastor_contact, completion_percentage, role, moderation_status, onboarding_status, is_verified, identity_verified, created_at, avatar_url, trust_score, warning_count, sanction_status, sanction_until"
     )
     .order("created_at", { ascending: false })
-    .limit(500)
+    .limit(200)
+
+  const { data: matchingSample } = await supabase
+    .from("profiles")
+    .select(
+      "id, user_id, first_name, last_name, city, country, gender, birth_date, denomination, completion_percentage, moderation_status, psychometric_results, matching_indicators"
+    )
+    .is("deleted_at", null)
+    .neq("moderation_status", "rejected")
+    .gte("completion_percentage", 40)
+    .order("completion_percentage", { ascending: false })
+    .limit(150)
 
   const { data: reports } = await supabase
     .from("reports")
@@ -427,13 +438,13 @@ export async function getAdminDashboardData() {
     .select("id", { count: "exact", head: true })
     .eq("moderation_status", "pending")
 
-  const { data: allCompleted } = await supabase
-    .from("payments")
-    .select("amount")
-    .eq("status", "completed")
-    .limit(500)
-
-  const revenue = (allCompleted ?? []).reduce((sum, p) => sum + Number(p.amount || 0), 0)
+  const { data: revenueSum, error: revenueErr } = await supabase.rpc(
+    "sum_completed_payments" as never
+  )
+  if (revenueErr) {
+    console.error("[admin] revenue sum", revenueErr.message)
+  }
+  const revenue = Number(revenueSum ?? 0)
 
   const totalUsers = usersCount ?? 0
   const paidActive = (activeAlliance ?? 0) + (activeLegacyPremium ?? 0)
@@ -441,7 +452,7 @@ export async function getAdminDashboardData() {
     totalUsers > 0 ? Math.round((paidActive / totalUsers) * 1000) / 10 : 0
 
   let assessmentsDoneAll = 0
-  for (const p of profiles ?? []) {
+  for (const p of matchingSample ?? []) {
     const psy = p.psychometric_results
     if (!psy || typeof psy !== "object") continue
     const o = psy as Record<string, unknown>
@@ -570,7 +581,7 @@ export async function getAdminDashboardData() {
     "@/lib/admin/matchingIntelligence"
   )
   const matchingIntelligence = buildMatchingIntelligence(
-    (profiles ?? []).map((p) => ({
+    (matchingSample ?? []).map((p) => ({
       id: p.id as string,
       user_id: p.user_id as string,
       first_name: (p.first_name as string) || null,

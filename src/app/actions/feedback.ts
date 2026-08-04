@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache"
 import { createClient } from "@/utils/supabase/server"
 import { createAdminClient } from "@/utils/supabase/admin"
-import { sendResendEmail } from "@/lib/email/send"
+import { sendEmailWithRetry } from "@/lib/email/outbox"
 import { brandedEmailShell } from "@/lib/email/templates"
 import { escapeHtml } from "@/lib/security/html"
 import { enforceRateLimit, RL } from "@/lib/security/rateLimit"
@@ -77,7 +77,7 @@ export async function submitFeedbackAction(input: {
     `,
   })
 
-  await sendResendEmail({
+  await sendEmailWithRetry({
     to: inbox,
     subject: `[KELIAA Retour] ${label} — ${name}`,
     html,

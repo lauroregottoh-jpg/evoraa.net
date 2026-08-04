@@ -481,8 +481,8 @@ async function finalizeNewProfile(input: {
   }
 
   try {
-    const { sendResendEmail } = await import("@/lib/email/send")
-    await sendResendEmail({
+    const { sendEmailWithRetry } = await import("@/lib/email/outbox")
+    await sendEmailWithRetry({
       to: input.email,
       subject: "Bienvenue sur Keliaa — votre espace vous attend",
       html: welcomeEmailHtml({

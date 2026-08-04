@@ -36,6 +36,7 @@ const ALLOWED_API_PREFIXES = [
   '/api/payments/bictorys/notify',
   '/api/payments/cinetpay/notify',
   '/api/cron/subscription-reminders',
+  '/api/cron/email-outbox',
   '/api/health/config',
 ]
 

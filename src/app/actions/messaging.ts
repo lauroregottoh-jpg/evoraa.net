@@ -33,6 +33,7 @@ export type ConversationRoomDTO = {
   /** Messages envoyés par moi (pour quota) */
   messageCount: number
   freeLimit: number
+  hasMoreOlder: boolean
 }
 
 function formatListTime(iso: string | null): string {
@@ -334,15 +335,20 @@ export async function getConversationRoom(conversationId: string): Promise<{
     .eq("user_id", partnerUserId)
     .maybeSingle()
 
+  const PAGE = 80
   const { data: messages, error: msgError } = await supabase
     .from("messages")
     .select("id, sender_id, message, is_read, created_at")
     .eq("conversation_id", conversationId)
-    .order("created_at", { ascending: true })
+    .order("created_at", { ascending: false })
+    .limit(PAGE + 1)
 
   if (msgError) {
     return { error: msgError.message }
   }
+
+  const hasMoreOlder = (messages?.length ?? 0) > PAGE
+  const pageRows = (messages ?? []).slice(0, PAGE).reverse()
 
   // Mark partner messages as read
   await supabase
@@ -352,7 +358,7 @@ export async function getConversationRoom(conversationId: string): Promise<{
     .neq("sender_id", user.id)
     .eq("is_read", false)
 
-  const mapped: ChatMessageDTO[] = (messages ?? []).map((m) => ({
+  const mapped: ChatMessageDTO[] = pageRows.map((m) => ({
     id: m.id,
     senderId: m.sender_id,
     text: m.message,
@@ -363,7 +369,11 @@ export async function getConversationRoom(conversationId: string): Promise<{
 
   const entitlements = await getUserEntitlements(user.id)
   const messageLimit = entitlements.limits.messagesPerConversation
-  const myMessageCount = mapped.filter((m) => m.isMine).length
+  const { count: myMessageCount } = await supabase
+    .from("messages")
+    .select("id", { count: "exact", head: true })
+    .eq("conversation_id", conversationId)
+    .eq("sender_id", user.id)
 
   return {
     room: {
@@ -373,9 +383,60 @@ export async function getConversationRoom(conversationId: string): Promise<{
       partnerUserId,
       harmonyScore: Math.round(Number(match.compatibility_score ?? 0)),
       messages: mapped,
-      messageCount: myMessageCount,
+      messageCount: myMessageCount ?? mapped.filter((m) => m.isMine).length,
       freeLimit: messageLimit,
+      hasMoreOlder,
     },
+  }
+}
+
+export async function loadOlderMessagesAction(
+  conversationId: string,
+  beforeCreatedAt: string
+): Promise<{ error?: string; messages?: ChatMessageDTO[]; hasMoreOlder?: boolean }> {
+  const { supabase, user } = await getAuthUser()
+  if (!user) return { error: "Vous devez être connecté." }
+
+  const { data: conversation } = await supabase
+    .from("conversations")
+    .select("id, match_id")
+    .eq("id", conversationId)
+    .maybeSingle()
+  if (!conversation) return { error: "Conversation introuvable." }
+
+  const { data: match } = await supabase
+    .from("matches")
+    .select("user_one, user_two")
+    .eq("id", conversation.match_id)
+    .maybeSingle()
+  if (!match || (match.user_one !== user.id && match.user_two !== user.id)) {
+    return { error: "Accès non autorisé à cette conversation." }
+  }
+
+  const PAGE = 80
+  const { data: rows, error } = await supabase
+    .from("messages")
+    .select("id, sender_id, message, is_read, created_at")
+    .eq("conversation_id", conversationId)
+    .lt("created_at", beforeCreatedAt)
+    .order("created_at", { ascending: false })
+    .limit(PAGE + 1)
+
+  if (error) return { error: error.message }
+
+  const hasMoreOlder = (rows?.length ?? 0) > PAGE
+  const pageRows = (rows ?? []).slice(0, PAGE).reverse()
+
+  return {
+    messages: pageRows.map((m) => ({
+      id: m.id,
+      senderId: m.sender_id,
+      text: m.message,
+      createdAt: m.created_at ?? new Date().toISOString(),
+      isRead: Boolean(m.is_read),
+      isMine: m.sender_id === user.id,
+    })),
+    hasMoreOlder,
   }
 }
 
