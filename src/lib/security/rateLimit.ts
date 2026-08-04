@@ -88,7 +88,7 @@ export async function enforceRateLimit(input: {
 /** Presets Keliaa */
 export const RL = {
   login: { action: "login", limit: 10, windowSeconds: 15 * 60, failClosed: true },
-  register: { action: "register", limit: 5, windowSeconds: 60 * 60, failClosed: true },
+  register: { action: "register", limit: 12, windowSeconds: 60 * 60, failClosed: true },
   passwordReset: {
     action: "password_reset",
     limit: 5,
