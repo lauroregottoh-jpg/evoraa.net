@@ -1,8 +1,8 @@
 import { createAdminClient } from "@/utils/supabase/admin"
 
 /**
- * Resolve auth.users id by email without listUsers pagination
- * (soft-launch previously capped at ~4k users).
+ * Resolve auth.users id by email without brittle listUsers pagination.
+ * Fail soft: never throw — callers keep trying sign-in.
  */
 export async function findAuthUserIdByEmail(
   email: string
@@ -16,13 +16,24 @@ export async function findAuthUserIdByEmail(
       p_email: normalized,
     } as never)
 
-    if (error) {
-      console.error("[auth-lookup]", error.message)
-      return { id: null, error: error.message }
+    if (!error && typeof data === "string" && data.length > 0) {
+      return { id: data }
     }
 
-    if (typeof data === "string" && data.length > 0) {
-      return { id: data }
+    // Fallback : pagination Auth (jusqu’à ~10k) si RPC absente / KO
+    for (let page = 1; page <= 50; page += 1) {
+      const { data: listed, error: listError } = await admin.auth.admin.listUsers({
+        page,
+        perPage: 200,
+      })
+      if (listError) {
+        return { id: null, error: listError.message }
+      }
+      const match = listed.users.find(
+        (u) => u.email?.toLowerCase() === normalized
+      )
+      if (match?.id) return { id: match.id }
+      if (listed.users.length < 200) break
     }
     return { id: null }
   } catch (e) {

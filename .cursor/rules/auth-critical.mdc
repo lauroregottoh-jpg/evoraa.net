@@ -1,0 +1,22 @@
+---
+description: Auth critique Keliaa — inscription et connexion ne doivent jamais être bloquées par de l’infra secondaire.
+alwaysApply: true
+---
+
+# Auth critique (KELIAA)
+
+Inscription et connexion sont le chemin le plus important du produit.
+
+## Interdits
+
+- Ne jamais mettre `failClosed: true` sur rate-limit `login` / `register`.
+- Ne jamais faire échouer `registerAction` / `loginAction` parce que Resend, outbox, Sentry ou un RPC optionnel plantent.
+- Ne jamais `catch` sans rethrow des erreurs `NEXT_REDIRECT` dans les formulaires auth (sinon le redirect est avalé → « rien ne se passe »).
+- Ne jamais exiger des KPI admin complets pour autoriser l’accès ops : l’accès dépend du rôle/email, pas de `matchingIntelligence`.
+
+## Obligatoire
+
+- Soft-launch : `createUser` admin + `signInWithPassword` (email confirmé) avec fallback `signUp`.
+- Emails transactionnels = best-effort (`sendEmailWithRetry` / try-catch).
+- Toute nouvelle feature autour d’auth doit laisser un chemin de secours si service role / RPC KO.
+- Après modification de `auth.ts`, `AuthOverlayForm.tsx`, `rateLimit.ts`, `middleware.ts` : vérifier inscription + connexion manuellement avant push.

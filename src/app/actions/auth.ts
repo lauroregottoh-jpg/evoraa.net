@@ -40,32 +40,27 @@ async function confirmEmailAndSignIn(
     }
   }
   try {
-    const admin = createAdminClient()
     let id = userId
 
     if (!id) {
       const found = await findAuthUserIdByEmail(email)
-      if (found.error && !found.id) {
-        return { ok: false, error: found.error }
-      }
       id = found.id ?? undefined
     }
 
-    if (!id) {
-      return { ok: false, error: "Compte introuvable pour cette adresse email." }
+    // Si on a un id → confirmer. Sinon on tente quand même le sign-in
+    // (compte peut déjà être confirmé).
+    if (id) {
+      try {
+        const admin = createAdminClient()
+        await admin.auth.admin.updateUserById(id, { email_confirm: true })
+        await admin
+          .from("profiles")
+          .update({ email_verified: true })
+          .eq("user_id", id)
+      } catch (e) {
+        console.error("[confirmEmail] admin update", e)
+      }
     }
-
-    const { error: confirmError } = await admin.auth.admin.updateUserById(id, {
-      email_confirm: true,
-    })
-    if (confirmError) {
-      return { ok: false, error: confirmError.message }
-    }
-
-    await admin
-      .from("profiles")
-      .update({ email_verified: true })
-      .eq("user_id", id)
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
@@ -161,287 +156,316 @@ function softEmailConfirmEnabled(): boolean {
 }
 
 export async function loginAction(formData: FormData) {
-  const parsed = loginSchema.safeParse({
-    email: String(formData.get("email") ?? ""),
-    password: String(formData.get("password") ?? ""),
-    nextRaw: String(formData.get("next") ?? "").trim(),
-  })
-  if (!parsed.success) {
-    return { error: firstZodError(parsed.error) }
-  }
-  const { email, password, nextRaw } = parsed.data
-
-  const rl = await enforceRateLimit({ ...RL.login, subject: email })
-  if (!rl.ok) return { error: rl.error }
-
-  const supabase = await createClient()
-
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  })
-
-  if (error) {
-    const msg = error.message.toLowerCase()
-    if (msg.includes("email not confirmed") || msg.includes("not confirmed")) {
-      const unlocked = await confirmEmailAndSignIn(supabase, email, password)
-      if (unlocked.ok) {
-        const nextPath = await resolveLoginDestination({
-          userId: unlocked.userId,
-          email,
-          nextRaw,
-        })
-        revalidatePath("/", "layout")
-        redirect(nextPath)
-      } else {
-        return {
-          error:
-            unlocked.error ||
-            "Votre email n’est pas encore confirmé. Utilisez « Mot de passe oublié » puis reconnectez-vous.",
-        }
-      }
+  try {
+    const parsed = loginSchema.safeParse({
+      email: String(formData.get("email") ?? ""),
+      password: String(formData.get("password") ?? ""),
+      nextRaw: String(formData.get("next") ?? "").trim(),
+    })
+    if (!parsed.success) {
+      return { error: firstZodError(parsed.error) }
     }
-    if (
-      msg.includes("invalid login credentials") ||
-      msg.includes("invalid_credentials")
-    ) {
-      return {
-        error:
-          "Email ou mot de passe incorrect. Si vous venez de vous réinscrire avec le même email, le compte existait déjà : utilisez « Mot de passe oublié » pour en créer un nouveau.",
-      }
-    }
-    return { error: "Connexion impossible pour le moment." }
-  }
+    const { email, password, nextRaw } = parsed.data
 
-  if (!data.user) {
-    return { error: "Impossible de démarrer la session." }
-  }
+    // Rate limit best-effort — ne bloque jamais sur panne infra
+    await enforceRateLimit({ ...RL.login, subject: email })
 
-  const nextPath = await resolveLoginDestination({
-    userId: data.user.id,
-    email: resolveAuthEmail(data.user) || email,
-    nextRaw,
-  })
-  revalidatePath("/", "layout")
-  redirect(nextPath)
-}
+    const supabase = await createClient()
 
-export async function registerAction(formData: FormData) {
-  const parsed = registerSchema.safeParse({
-    email: String(formData.get("email") ?? ""),
-    password: String(formData.get("password") ?? ""),
-    firstName: String(formData.get("first_name") ?? ""),
-    lastName: String(formData.get("last_name") ?? ""),
-    city: String(formData.get("city") ?? ""),
-    address: String(formData.get("address") ?? ""),
-    charterAccepted: formData.get("charter_accepted") === "true",
-    referredByCode: String(formData.get("ref") ?? ""),
-    utmSource: String(formData.get("utm_source") ?? ""),
-    utmMedium: String(formData.get("utm_medium") ?? ""),
-    utmCampaign: String(formData.get("utm_campaign") ?? ""),
-  })
-  if (!parsed.success) {
-    return { error: firstZodError(parsed.error) }
-  }
-  const {
-    email,
-    password,
-    firstName,
-    lastName,
-    city,
-    address,
-    referredByCode,
-    utmSource,
-    utmMedium,
-    utmCampaign,
-  } = parsed.data
-
-  const rl = await enforceRateLimit({ ...RL.register, subject: email })
-  if (!rl.ok) return { error: rl.error }
-
-  const supabase = await createClient()
-  const appUrl = await resolveAppUrl()
-  const userMeta = {
-    first_name: firstName,
-    last_name: lastName || null,
-    city: city || null,
-    address: address || null,
-    charter_accepted: true,
-    charter_accepted_at: new Date().toISOString(),
-    referred_by_code: referredByCode || null,
-    utm_source: utmSource || null,
-    utm_medium: utmMedium || null,
-    utm_campaign: utmCampaign || null,
-  }
-
-  const alreadyExistsMessage =
-    "Un compte existe déjà avec cet email. Connectez-vous, ou utilisez « Mot de passe oublié » si vous ne retrouvez pas le mot de passe."
-
-  /**
-   * Chemin principal : Admin createUser (email déjà confirmé).
-   * Évite complètement le SMTP Auth Supabase → plus de "email rate limit exceeded".
-   * Bienvenue envoyée via Resend.
-   */
-  let userId: string | null = null
-  let usedAdminPath = false
-
-  if (softEmailConfirmEnabled()) {
-    try {
-      const admin = createAdminClient()
-      const { data: created, error: createErr } = await admin.auth.admin.createUser({
-        email,
-        password,
-        email_confirm: true,
-        user_metadata: userMeta,
-      })
-
-      if (createErr) {
-        const msg = createErr.message.toLowerCase()
-        if (
-          msg.includes("already") ||
-          msg.includes("registered") ||
-          msg.includes("exists") ||
-          msg.includes("duplicate")
-        ) {
-          return { error: alreadyExistsMessage }
-        }
-        console.error("[register] admin.createUser", createErr.message)
-      } else if (created.user?.id) {
-        userId = created.user.id
-        usedAdminPath = true
-      }
-    } catch (e) {
-      console.error("[register] admin path", e)
-    }
-  }
-
-  // Fallback : signUp classique (si soft-confirm off ou admin indisponible)
-  if (!userId) {
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
-      options: {
-        emailRedirectTo: `${appUrl}/auth/finish`,
-        data: userMeta,
-      },
     })
 
     if (error) {
       const msg = error.message.toLowerCase()
-      if (
-        msg.includes("already") ||
-        msg.includes("registered") ||
-        msg.includes("exists")
-      ) {
-        return { error: alreadyExistsMessage }
+      if (msg.includes("email not confirmed") || msg.includes("not confirmed")) {
+        const unlocked = await confirmEmailAndSignIn(supabase, email, password)
+        if (unlocked.ok) {
+          const nextPath = await resolveLoginDestination({
+            userId: unlocked.userId,
+            email,
+            nextRaw,
+          })
+          revalidatePath("/", "layout")
+          redirect(nextPath)
+        }
+        return {
+          error:
+            "Votre email n’est pas encore confirmé. Réessayez dans un instant, ou utilisez « Mot de passe oublié ».",
+        }
       }
-      if (isAuthEmailRateLimited(error.message)) {
-        // Dernier recours : créer via admin même hors soft-confirm flag
-        try {
-          const admin = createAdminClient()
-          const { data: created, error: createErr } =
-            await admin.auth.admin.createUser({
-              email,
-              password,
-              email_confirm: softEmailConfirmEnabled(),
-              user_metadata: userMeta,
-            })
-          if (createErr) {
-            const cmsg = createErr.message.toLowerCase()
-            if (
-              cmsg.includes("already") ||
-              cmsg.includes("registered") ||
-              cmsg.includes("exists")
-            ) {
-              return { error: alreadyExistsMessage }
-            }
-            return {
-              error:
-                "Trop d’inscriptions email pour le moment. Réessayez dans 10–15 minutes, ou utilisez « Mot de passe oublié » si le compte existe déjà.",
-            }
+      if (
+        msg.includes("invalid login credentials") ||
+        msg.includes("invalid_credentials")
+      ) {
+        return {
+          error:
+            "Email ou mot de passe incorrect. Si vous venez de vous réinscrire avec le même email, le compte existait déjà : utilisez « Mot de passe oublié » pour en créer un nouveau.",
+        }
+      }
+      console.error("[login]", error.message)
+      return { error: "Connexion impossible pour le moment. Réessayez." }
+    }
+
+    if (!data.user) {
+      return { error: "Impossible de démarrer la session." }
+    }
+
+    const nextPath = await resolveLoginDestination({
+      userId: data.user.id,
+      email: resolveAuthEmail(data.user) || email,
+      nextRaw,
+    })
+    revalidatePath("/", "layout")
+    redirect(nextPath)
+  } catch (e) {
+    // Laisser remonter redirect() Next.js
+    const { isNextRedirectError } = await import("@/lib/auth/criticalPath")
+    if (isNextRedirectError(e)) throw e
+    console.error("[login] fatal", e)
+    return {
+      error:
+        e instanceof Error
+          ? e.message
+          : "Connexion impossible. Réessayez dans un instant.",
+    }
+  }
+}
+
+export async function registerAction(formData: FormData) {
+  try {
+    const parsed = registerSchema.safeParse({
+      email: String(formData.get("email") ?? ""),
+      password: String(formData.get("password") ?? ""),
+      firstName: String(formData.get("first_name") ?? ""),
+      lastName: String(formData.get("last_name") ?? ""),
+      city: String(formData.get("city") ?? ""),
+      address: String(formData.get("address") ?? ""),
+      charterAccepted: formData.get("charter_accepted") === "true",
+      referredByCode: String(formData.get("ref") ?? ""),
+      utmSource: String(formData.get("utm_source") ?? ""),
+      utmMedium: String(formData.get("utm_medium") ?? ""),
+      utmCampaign: String(formData.get("utm_campaign") ?? ""),
+    })
+    if (!parsed.success) {
+      return { error: firstZodError(parsed.error) }
+    }
+    const {
+      email,
+      password,
+      firstName,
+      lastName,
+      city,
+      address,
+      referredByCode,
+      utmSource,
+      utmMedium,
+      utmCampaign,
+    } = parsed.data
+
+    // Best-effort only — never block registration on rate-limit infra
+    await enforceRateLimit({ ...RL.register, subject: email })
+
+    const supabase = await createClient()
+    const appUrl = await resolveAppUrl()
+    const userMeta = {
+      first_name: firstName,
+      last_name: lastName || null,
+      city: city || null,
+      address: address || null,
+      charter_accepted: true,
+      charter_accepted_at: new Date().toISOString(),
+      referred_by_code: referredByCode || null,
+      utm_source: utmSource || null,
+      utm_medium: utmMedium || null,
+      utm_campaign: utmCampaign || null,
+    }
+
+    const alreadyExistsMessage =
+      "Un compte existe déjà avec cet email. Connectez-vous, ou utilisez « Mot de passe oublié » si vous ne retrouvez pas le mot de passe."
+
+    let userId: string | null = null
+    let usedAdminPath = false
+
+    if (softEmailConfirmEnabled()) {
+      try {
+        const admin = createAdminClient()
+        const { data: created, error: createErr } =
+          await admin.auth.admin.createUser({
+            email,
+            password,
+            email_confirm: true,
+            user_metadata: userMeta,
+          })
+
+        if (createErr) {
+          const msg = createErr.message.toLowerCase()
+          if (
+            msg.includes("already") ||
+            msg.includes("registered") ||
+            msg.includes("exists") ||
+            msg.includes("duplicate")
+          ) {
+            return { error: alreadyExistsMessage }
           }
-          if (created.user?.id) {
-            userId = created.user.id
-            usedAdminPath = true
-          }
-        } catch {
-          return {
-            error:
-              "Trop d’inscriptions email pour le moment. Réessayez dans 10–15 minutes.",
+          console.error("[register] admin.createUser", createErr.message)
+        } else if (created.user?.id) {
+          userId = created.user.id
+          usedAdminPath = true
+        }
+      } catch (e) {
+        console.error("[register] admin path", e)
+      }
+    }
+
+    if (!userId) {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${appUrl}/auth/finish`,
+          data: userMeta,
+        },
+      })
+
+      if (error) {
+        const msg = error.message.toLowerCase()
+        if (
+          msg.includes("already") ||
+          msg.includes("registered") ||
+          msg.includes("exists")
+        ) {
+          return { error: alreadyExistsMessage }
+        }
+        if (isAuthEmailRateLimited(error.message)) {
+          try {
+            const admin = createAdminClient()
+            const { data: created, error: createErr } =
+              await admin.auth.admin.createUser({
+                email,
+                password,
+                email_confirm: true,
+                user_metadata: userMeta,
+              })
+            if (createErr) {
+              const cmsg = createErr.message.toLowerCase()
+              if (
+                cmsg.includes("already") ||
+                cmsg.includes("registered") ||
+                cmsg.includes("exists")
+              ) {
+                return { error: alreadyExistsMessage }
+              }
+              console.error("[register] rate-limit fallback", createErr.message)
+            } else if (created.user?.id) {
+              userId = created.user.id
+              usedAdminPath = true
+            }
+          } catch (e) {
+            console.error("[register] rate-limit admin", e)
           }
         }
-      } else {
-        return { error: "Impossible de créer le compte pour le moment." }
+        if (!userId) {
+          console.error("[register] signUp", error.message)
+          return {
+            error:
+              "Impossible de créer le compte pour le moment. Réessayez, ou utilisez « Écrivez-nous » ci-dessous.",
+          }
+        }
+      } else if (data.user && (data.user.identities?.length ?? 0) === 0) {
+        return { error: alreadyExistsMessage }
+      } else if (data.user) {
+        userId = data.user.id
+        if (data.session) {
+          try {
+            await finalizeNewProfile({
+              userId: data.user.id,
+              email,
+              firstName,
+              lastName,
+              city,
+              referredByCode,
+              utmSource,
+              utmMedium,
+              utmCampaign,
+              emailVerified: Boolean(data.user.email_confirmed_at),
+              appUrl,
+            })
+          } catch (e) {
+            console.error("[register] finalize session", e)
+          }
+          revalidatePath("/", "layout")
+          redirect("/onboarding")
+        }
       }
-    } else if (data.user && (data.user.identities?.length ?? 0) === 0) {
-      return { error: alreadyExistsMessage }
-    } else if (data.user) {
-      userId = data.user.id
-      // Session déjà ouverte (confirmations désactivées côté projet)
-      if (data.session) {
-        await finalizeNewProfile({
-          userId: data.user.id,
-          email,
-          firstName,
-          lastName,
-          city,
-          referredByCode,
-          utmSource,
-          utmMedium,
-          utmCampaign,
-          emailVerified: Boolean(data.user.email_confirmed_at),
-          appUrl,
-        })
+    }
+
+    if (!userId) {
+      return {
+        error:
+          "Impossible de créer le compte pour le moment. Réessayez dans une minute.",
+      }
+    }
+
+    try {
+      await finalizeNewProfile({
+        userId,
+        email,
+        firstName,
+        lastName,
+        city,
+        referredByCode,
+        utmSource,
+        utmMedium,
+        utmCampaign,
+        emailVerified: usedAdminPath || softEmailConfirmEnabled(),
+        appUrl,
+      })
+    } catch (e) {
+      console.error("[register] finalize", e)
+    }
+
+    // Session : sign-in direct (chemin admin déjà confirmé)
+    if (usedAdminPath || softEmailConfirmEnabled()) {
+      const { data: signed, error: signErr } =
+        await supabase.auth.signInWithPassword({ email, password })
+      if (!signErr && signed.user) {
         revalidatePath("/", "layout")
         redirect("/onboarding")
       }
+      const unlocked = await confirmEmailAndSignIn(
+        supabase,
+        email,
+        password,
+        userId
+      )
+      if (unlocked.ok) {
+        revalidatePath("/", "layout")
+        redirect("/onboarding")
+      }
+      return {
+        error: null,
+        needsEmailConfirmation: false,
+        message:
+          "Compte créé. Connectez-vous avec le même email et mot de passe pour accéder à votre espace.",
+      }
     }
-  }
 
-  if (!userId) {
-    return { error: "Impossible de créer le compte pour le moment." }
-  }
-
-  await finalizeNewProfile({
-    userId,
-    email,
-    firstName,
-    lastName,
-    city,
-    referredByCode,
-    utmSource,
-    utmMedium,
-    utmCampaign,
-    emailVerified: usedAdminPath || softEmailConfirmEnabled(),
-    appUrl,
-  })
-
-  // Ouvrir la session immédiatement
-  if (usedAdminPath || softEmailConfirmEnabled()) {
-    const unlocked = await confirmEmailAndSignIn(
-      supabase,
-      email,
-      password,
-      userId
-    )
-    if (unlocked.ok) {
-      revalidatePath("/", "layout")
-      redirect("/onboarding")
-    }
-    // Compte créé mais session échouée : l’utilisateur peut se connecter
     return {
       error: null,
-      needsEmailConfirmation: false,
+      needsEmailConfirmation: true,
       message:
-        "Compte créé. Connectez-vous avec le même email et mot de passe pour accéder à votre espace.",
+        "Compte créé. Si vous n’avez pas reçu d’email, reconnectez-vous avec le même mot de passe.",
     }
-  }
-
-  return {
-    error: null,
-    needsEmailConfirmation: true,
-    message:
-      "Compte créé. Si vous n’avez pas reçu d’email, reconnectez-vous avec le même mot de passe.",
+  } catch (e) {
+    const { isNextRedirectError } = await import("@/lib/auth/criticalPath")
+    if (isNextRedirectError(e)) throw e
+    console.error("[register] fatal", e)
+    return {
+      error:
+        "Impossible de créer le compte pour le moment. Réessayez, ou écrivez-nous via le support.",
+    }
   }
 }
 

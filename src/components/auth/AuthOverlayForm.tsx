@@ -11,6 +11,7 @@ import { CharterModal } from "@/components/auth/CharterModal";
 import { PasswordInput } from "@/components/auth/PasswordInput";
 import { loginAction, registerAction } from "@/app/actions/auth";
 import { FeedbackForm } from "@/components/feedback/FeedbackForm";
+import { isNextRedirectError } from "@/lib/auth/criticalPath";
 import {
   Lock,
   Mail,
@@ -92,8 +93,9 @@ export function AuthOverlayForm({ initialMode = "login" }: { initialMode?: Mode 
       const formData = new FormData(e.currentTarget);
       const result = await loginAction(formData);
       if (result?.error) setError(result.error);
-    } catch {
-      /* redirect */
+    } catch (err) {
+      if (isNextRedirectError(err)) throw err;
+      setError("Connexion interrompue. Réessayez.");
     } finally {
       setIsLoading(false);
     }
@@ -111,22 +113,35 @@ export function AuthOverlayForm({ initialMode = "login" }: { initialMode?: Mode 
     try {
       const formData = new FormData(e.currentTarget);
       formData.set("charter_accepted", "true");
-      const result = await registerAction(formData);
-      if (result?.needsEmailConfirmation) {
-        setMode("login");
-        setError("");
+      const result = (await registerAction(formData)) as
+        | {
+            error?: string | null
+            needsEmailConfirmation?: boolean
+            message?: string
+          }
+        | undefined
+      if (result?.needsEmailConfirmation || result?.message) {
+        if (result.error) {
+          setError(result.error)
+          setShowSignupHelp(true)
+          return
+        }
+        setMode("login")
+        setError("")
         setSuccessMessage(
           result.message ??
             "Compte créé. Connectez-vous avec le même email et mot de passe pour accéder à votre espace."
-        );
-        return;
+        )
+        return
       }
       if (result?.error) {
-        setError(result.error);
-        setShowSignupHelp(true);
+        setError(result.error)
+        setShowSignupHelp(true)
       }
-    } catch {
-      /* redirect */
+    } catch (err) {
+      if (isNextRedirectError(err)) throw err;
+      setError("Inscription interrompue. Réessayez, ou écrivez-nous ci-dessous.");
+      setShowSignupHelp(true);
     } finally {
       setIsLoading(false);
     }
