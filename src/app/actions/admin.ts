@@ -240,7 +240,7 @@ export async function getAdminDashboardData() {
   const { data: profiles } = await supabase
     .from("profiles")
     .select(
-      "id, user_id, first_name, last_name, city, country, gender, birth_date, denomination, church_attended, pastor_name, pastor_contact, completion_percentage, role, moderation_status, onboarding_status, is_verified, identity_verified, created_at, avatar_url, trust_score, warning_count, sanction_status, sanction_until, biography, testimony, marital_status"
+      "id, user_id, first_name, last_name, city, country, gender, birth_date, denomination, church_attended, pastor_name, pastor_contact, completion_percentage, role, moderation_status, onboarding_status, is_verified, identity_verified, created_at, avatar_url, trust_score, warning_count, sanction_status, sanction_until, biography, testimony, marital_status, psychometric_results, matching_indicators"
     )
     .order("created_at", { ascending: false })
     .limit(1000)
@@ -300,7 +300,7 @@ export async function getAdminDashboardData() {
     .from("matches")
     .select("id, user_one, user_two, compatibility_score, status, created_at")
     .order("created_at", { ascending: false })
-    .limit(200)
+    .limit(500)
 
   const recoRes = await supabase
     .from("church_recommendations")

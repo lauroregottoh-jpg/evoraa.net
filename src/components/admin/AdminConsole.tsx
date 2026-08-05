@@ -101,6 +101,17 @@ type Props = {
     email?: string | null
     firstName?: string
     lastName?: string
+    pillarsCompleted?: number
+    pillars?: Partial<
+      Record<
+        "personality" | "spiritual" | "relationship" | "couple_life" | "finances",
+        number | null
+      >
+    >
+    profileType?: string
+    weakDimensions?: string[]
+    spiritualPractice?: string | null
+    communicationStyle?: string | null
   }>
   reports: Array<{
     id: string
@@ -502,7 +513,14 @@ export function AdminConsole(props: Props) {
               hasTestimony: u.hasTestimony ?? false,
               hasMaritalStatus: u.hasMaritalStatus ?? false,
               missing: u.missing ?? [],
+              pillarsCompleted: u.pillarsCompleted ?? 0,
+              pillars: u.pillars ?? {},
+              profileType: u.profileType ?? "Sans questionnaire",
+              weakDimensions: u.weakDimensions ?? [],
+              spiritualPractice: u.spiritualPractice ?? null,
+              communicationStyle: u.communicationStyle ?? null,
             }))}
+            matches={props.matches}
             busy={busy}
             run={run}
           />

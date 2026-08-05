@@ -104,7 +104,7 @@ function num(v: unknown): number | null {
   return typeof v === "number" && Number.isFinite(v) ? v : null
 }
 
-function parsePillars(psy: unknown): {
+export function parsePillars(psy: unknown): {
   pillars: PsychoPillars
   dimensions: Record<string, number>
   completed: number

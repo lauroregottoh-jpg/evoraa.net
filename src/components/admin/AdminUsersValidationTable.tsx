@@ -21,6 +21,7 @@ import {
   type OpsUserExportColumnId,
   type OpsUserValidationRow,
 } from "@/lib/admin/userValidation"
+import { PILLAR_KEYS, PILLAR_LABELS } from "@/lib/admin/matchingIntelligence"
 import { cn } from "@/utils/cn"
 import {
   CheckCircle2,
@@ -32,7 +33,22 @@ import {
   XCircle,
 } from "lucide-react"
 
-type FilterStatus = "pending" | "all" | "approved" | "rejected" | "incomplete"
+type FilterStatus =
+  | "pending"
+  | "all"
+  | "approved"
+  | "rejected"
+  | "incomplete"
+  | "tests_incomplete"
+
+type MatchRow = {
+  id: string
+  score: number | null
+  status: string | null
+  createdAt: string | null
+  userOne: string
+  userTwo: string
+}
 
 function downloadTextFile(filename: string, content: string) {
   const blob = new Blob(["\uFEFF" + content], {
@@ -48,10 +64,12 @@ function downloadTextFile(filename: string, content: string) {
 
 export function AdminUsersValidationTable({
   users: initialUsers,
+  matches = [],
   busy,
   run,
 }: {
   users: OpsUserValidationRow[]
+  matches?: MatchRow[]
   busy: string
   run: (
     key: string,
@@ -72,9 +90,9 @@ export function AdminUsersValidationTable({
     VALIDATION_MESSAGE_TEMPLATES[0].id
   )
   const [message, setMessage] = React.useState("")
-  const [panel, setPanel] = React.useState<"message" | "export" | "import">(
-    "message"
-  )
+  const [panel, setPanel] = React.useState<
+    "message" | "tests" | "export" | "import"
+  >("message")
   const [exportCols, setExportCols] = React.useState<OpsUserExportColumnId[]>(
     () =>
       OPS_USER_EXPORT_COLUMNS.map((c) => c.id).filter(
@@ -105,6 +123,40 @@ export function AdminUsersValidationTable({
     setMessage(tpl.body(selected.missing))
   }, [selectedId, templateId, selected])
 
+  const nameByUserId = React.useMemo(() => {
+    const m = new Map<string, string>()
+    for (const u of rows) m.set(u.userId, u.name)
+    return m
+  }, [rows])
+
+  const matchesForSelected = React.useMemo(() => {
+    if (!selected) return []
+    return matches
+      .filter(
+        (m) => m.userOne === selected.userId || m.userTwo === selected.userId
+      )
+      .map((m) => {
+        const partnerId =
+          m.userOne === selected.userId ? m.userTwo : m.userOne
+        return {
+          ...m,
+          partnerId,
+          partnerName: nameByUserId.get(partnerId) || partnerId.slice(0, 8),
+        }
+      })
+      .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
+      .slice(0, 8)
+  }, [matches, selected, nameByUserId])
+
+  const matchCountByUser = React.useMemo(() => {
+    const map = new Map<string, number>()
+    for (const m of matches) {
+      map.set(m.userOne, (map.get(m.userOne) || 0) + 1)
+      map.set(m.userTwo, (map.get(m.userTwo) || 0) + 1)
+    }
+    return map
+  }, [matches])
+
   const filtered = React.useMemo(() => {
     const needle = q.trim().toLowerCase()
     const cityNeedle = cityFilter.trim().toLowerCase()
@@ -113,12 +165,14 @@ export function AdminUsersValidationTable({
       if (filter === "approved" && u.status !== "approved") return false
       if (filter === "rejected" && u.status !== "rejected") return false
       if (filter === "incomplete" && u.missing.length === 0) return false
+      if (filter === "tests_incomplete" && (u.pillarsCompleted ?? 0) >= 5)
+        return false
       if (noPhotoOnly && u.hasAvatar) return false
       if (u.completion < minCompletion) return false
       if (cityNeedle && !u.city.toLowerCase().includes(cityNeedle)) return false
       if (!needle) return true
       const blob =
-        `${u.name} ${u.email || ""} ${u.city} ${u.country} ${u.denomination} ${u.church} ${u.gender} ${u.onboarding || ""}`.toLowerCase()
+        `${u.name} ${u.email || ""} ${u.city} ${u.country} ${u.denomination} ${u.church} ${u.gender} ${u.onboarding || ""} ${u.profileType || ""}`.toLowerCase()
       return blob.includes(needle)
     })
   }, [rows, q, filter, cityFilter, noPhotoOnly, minCompletion])
@@ -278,6 +332,7 @@ export function AdminUsersValidationTable({
             [
               ["pending", `À valider (${pendingCount})`],
               ["incomplete", "Infos manquantes"],
+              ["tests_incomplete", "Tests incomplets"],
               ["approved", "Validés"],
               ["rejected", "Rejetés"],
               ["all", "Tous"],
@@ -398,7 +453,8 @@ export function AdminUsersValidationTable({
                   <th className="py-3 px-4 font-semibold">Nom</th>
                   <th className="py-3 px-4 font-semibold">E-mail</th>
                   <th className="py-3 px-4 font-semibold">Ville</th>
-                  <th className="py-3 px-4 font-semibold">Onboarding</th>
+                  <th className="py-3 px-4 font-semibold">Tests</th>
+                  <th className="py-3 px-4 font-semibold">Typologie</th>
                   <th className="py-3 px-4 font-semibold">Profil</th>
                   <th className="py-3 px-4 font-semibold">Manquant</th>
                   <th className="py-3 px-4 font-semibold">Statut</th>
@@ -409,7 +465,7 @@ export function AdminUsersValidationTable({
                 {filtered.length === 0 && (
                   <tr>
                     <td
-                      colSpan={9}
+                      colSpan={10}
                       className="py-12 px-4 text-center text-muted-foreground"
                     >
                       Aucun utilisateur dans ce filtre.
@@ -457,8 +513,19 @@ export function AdminUsersValidationTable({
                         {u.city}
                         {u.country && u.country !== "?" ? `, ${u.country}` : ""}
                       </td>
-                      <td className="py-3.5 px-4 text-xs">
-                        {u.onboarding || "—"}
+                      <td className="py-3.5 px-4">
+                        <p className="font-semibold tabular-nums text-xs">
+                          {u.pillarsCompleted ?? 0}/5
+                        </p>
+                        <p className="text-[10px] text-muted-foreground">
+                          {matchCountByUser.get(u.userId) || 0} match
+                          {(matchCountByUser.get(u.userId) || 0) !== 1
+                            ? "s"
+                            : ""}
+                        </p>
+                      </td>
+                      <td className="py-3.5 px-4 text-xs max-w-[140px]">
+                        {u.profileType || "—"}
                       </td>
                       <td className="py-3.5 px-4">
                         <div className="flex items-center gap-2">
@@ -587,6 +654,7 @@ export function AdminUsersValidationTable({
             {(
               [
                 ["message", "Message"],
+                ["tests", "Tests & matchs"],
                 ["export", "Exporter"],
                 ["import", "Importer"],
               ] as const
@@ -685,6 +753,117 @@ export function AdminUsersValidationTable({
                     Resend).
                   </p>
                 </>
+              )}
+            </>
+          )}
+
+          {panel === "tests" && (
+            <>
+              <h2 className="font-serif text-lg font-bold">Tests & matchs</h2>
+              {!selected ? (
+                <p className="text-sm text-muted-foreground">
+                  Sélectionnez un membre dans le tableau.
+                </p>
+              ) : (
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-sm font-semibold">{selected.name}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      {selected.profileType} · {selected.pillarsCompleted ?? 0}
+                      /5 tests
+                    </p>
+                    {selected.spiritualPractice && (
+                      <p className="text-[11px] mt-1">
+                        Pratique : {selected.spiritualPractice}
+                      </p>
+                    )}
+                    {selected.communicationStyle && (
+                      <p className="text-[11px]">
+                        Communication : {selected.communicationStyle}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="text-[11px] font-semibold uppercase text-muted-foreground">
+                      Questionnaires
+                    </p>
+                    {PILLAR_KEYS.map((key) => {
+                      const score = selected.pillars?.[key]
+                      const done = score != null
+                      return (
+                        <div
+                          key={key}
+                          className="flex items-center justify-between gap-2 rounded-lg border border-border px-3 py-2"
+                        >
+                          <span className="text-xs font-medium">
+                            {PILLAR_LABELS[key]}
+                          </span>
+                          {done ? (
+                            <span className="text-xs font-semibold tabular-nums text-emerald-700">
+                              {score}/100
+                            </span>
+                          ) : (
+                            <Badge className="text-[10px] bg-amber-100 text-amber-900">
+                              Manquant
+                            </Badge>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+
+                  {selected.weakDimensions &&
+                    selected.weakDimensions.length > 0 && (
+                      <div>
+                        <p className="text-[11px] font-semibold uppercase text-muted-foreground mb-1">
+                          Points fragiles
+                        </p>
+                        <p className="text-xs text-amber-900">
+                          {selected.weakDimensions.join(", ")}
+                        </p>
+                      </div>
+                    )}
+
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase text-muted-foreground mb-2">
+                      Matchs ({matchCountByUser.get(selected.userId) || 0})
+                    </p>
+                    {matchesForSelected.length === 0 ? (
+                      <p className="text-xs text-muted-foreground">
+                        Aucun match enregistré dans l’échantillon chargé.
+                      </p>
+                    ) : (
+                      <ul className="space-y-1.5">
+                        {matchesForSelected.map((m) => (
+                          <li
+                            key={m.id}
+                            className="flex items-center justify-between gap-2 text-xs rounded-lg bg-secondary/40 px-3 py-2"
+                          >
+                            <span className="truncate font-medium">
+                              {m.partnerName}
+                            </span>
+                            <span className="shrink-0 tabular-nums font-semibold">
+                              {m.score != null ? `${m.score}%` : "—"} ·{" "}
+                              {m.status || "pending"}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => {
+                      setTemplateId("need_tests")
+                      setPanel("message")
+                    }}
+                  >
+                    Préparer rappel questionnaires
+                  </Button>
+                </div>
               )}
             </>
           )}

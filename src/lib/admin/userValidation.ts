@@ -1,3 +1,9 @@
+import {
+  classifyProfileType,
+  DIMENSION_LABELS,
+  parsePillars,
+} from "@/lib/admin/matchingIntelligence"
+
 export type OpsUserValidationRow = {
   id: string
   userId: string
@@ -26,6 +32,17 @@ export type OpsUserValidationRow = {
   hasTestimony: boolean
   hasMaritalStatus: boolean
   missing: string[]
+  pillarsCompleted: number
+  pillars: Partial<
+    Record<
+      "personality" | "spiritual" | "relationship" | "couple_life" | "finances",
+      number | null
+    >
+  >
+  profileType: string
+  weakDimensions: string[]
+  spiritualPractice: string | null
+  communicationStyle: string | null
 }
 
 export type OpsUserExportColumnId =
@@ -48,6 +65,8 @@ export type OpsUserExportColumnId =
   | "missing"
   | "createdAt"
   | "trustScore"
+  | "pillarsCompleted"
+  | "profileType"
 
 export const OPS_USER_EXPORT_COLUMNS: Array<{
   id: OpsUserExportColumnId
@@ -65,6 +84,8 @@ export const OPS_USER_EXPORT_COLUMNS: Array<{
   { id: "church", label: "Église" },
   { id: "pastorName", label: "Pasteur" },
   { id: "completion", label: "% profil" },
+  { id: "pillarsCompleted", label: "Tests (/5)" },
+  { id: "profileType", label: "Typologie match" },
   { id: "status", label: "Statut modération" },
   { id: "onboarding", label: "Onboarding" },
   { id: "verified", label: "Vérifié" },
@@ -133,6 +154,21 @@ export function mapProfileToOpsUser(p: Record<string, unknown>): OpsUserValidati
     hasTestimony,
     hasMaritalStatus,
   })
+
+  const { pillars, dimensions, completed } = parsePillars(p.psychometric_results)
+  const weakDimensions = Object.entries(dimensions)
+    .filter(([, v]) => typeof v === "number" && v < 60)
+    .sort((a, b) => (a[1] as number) - (b[1] as number))
+    .slice(0, 3)
+    .map(([k]) => DIMENSION_LABELS[k] || k)
+
+  const ind =
+    p.matching_indicators &&
+    typeof p.matching_indicators === "object" &&
+    !Array.isArray(p.matching_indicators)
+      ? (p.matching_indicators as Record<string, unknown>)
+      : null
+
   return {
     id: p.id as string,
     userId: p.user_id as string,
@@ -161,11 +197,23 @@ export function mapProfileToOpsUser(p: Record<string, unknown>): OpsUserValidati
     hasTestimony,
     hasMaritalStatus,
     missing,
+    pillarsCompleted: completed,
+    pillars,
+    profileType: classifyProfileType(pillars, completed),
+    weakDimensions,
+    spiritualPractice:
+      typeof ind?.spiritual_practice === "string"
+        ? ind.spiritual_practice
+        : null,
+    communicationStyle:
+      typeof ind?.communication_style === "string"
+        ? ind.communication_style
+        : null,
   }
 }
 
 export const PROFILE_SELECT_FOR_OPS =
-  "id, user_id, first_name, last_name, city, country, gender, birth_date, denomination, church_attended, pastor_name, pastor_contact, completion_percentage, role, moderation_status, onboarding_status, is_verified, identity_verified, created_at, avatar_url, trust_score, warning_count, sanction_status, sanction_until, biography, testimony, marital_status"
+  "id, user_id, first_name, last_name, city, country, gender, birth_date, denomination, church_attended, pastor_name, pastor_contact, completion_percentage, role, moderation_status, onboarding_status, is_verified, identity_verified, created_at, avatar_url, trust_score, warning_count, sanction_status, sanction_until, biography, testimony, marital_status, psychometric_results, matching_indicators"
 
 export const VALIDATION_MESSAGE_TEMPLATES: Array<{
   id: string
@@ -185,6 +233,12 @@ export const VALIDATION_MESSAGE_TEMPLATES: Array<{
     label: "Photo de profil requise",
     body: () =>
       `Bonjour,\n\nPour valider votre profil, une photo claire de vous est indispensable (visage visible, photo récente).\n\nAjoutez-la depuis votre espace membre, puis répondez à ce message si besoin.\n\nL’équipe KELIAA`,
+  },
+  {
+    id: "need_tests",
+    label: "Rappel questionnaires",
+    body: () =>
+      `Bonjour,\n\nPour activer le matching, merci de compléter les 5 questionnaires (personnalité, foi, communication, foyer, finances) dans votre espace membre.\n\nL’équipe KELIAA`,
   },
   {
     id: "approved",
@@ -230,6 +284,8 @@ export function buildUsersCsv(
               return csvEscape(u[id] ? "oui" : "non")
             case "email":
               return csvEscape(u.email || "")
+            case "pillarsCompleted":
+              return csvEscape(`${u.pillarsCompleted}/5`)
             default:
               return csvEscape(
                 (u[id] as string | number | null | undefined) ?? ""
