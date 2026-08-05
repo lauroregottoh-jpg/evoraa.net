@@ -28,18 +28,26 @@ import { MemberReminders } from "@/components/layout/MemberReminders";
 import { logoutAction } from "@/app/actions/auth";
 import { OpsAdminEntryBanner } from "@/components/admin/OpsAdminEntryBanner";
 
+/** Onglets principaux — le reste vit sous Compte. */
 const PRIMARY = [
   { href: "/dashboard", label: "Accueil", icon: LayoutGrid },
-  { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/compatibility", label: "Découvrir", icon: Compass },
+  { href: "/messages", label: "Messages", icon: MessageCircle },
+  { href: "/assessments", label: "Tests", icon: ClipboardList },
+  { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
   { href: "/premium", label: "Alliance", icon: Crown, accent: true },
+] as const;
+
+const BOTTOM_PRIMARY = [
+  { href: "/dashboard", label: "Accueil", icon: LayoutGrid },
+  { href: "/compatibility", label: "Découvrir", icon: Compass },
+  { href: "/messages", label: "Messages", icon: MessageCircle },
+  { href: "/assessments", label: "Tests", icon: ClipboardList },
 ] as const;
 
 const ACCOUNT_LINKS = [
   { href: "/profile", label: "Profil", icon: User },
   { href: "/notifications", label: "Alertes", icon: Bell },
-  { href: "/assessments", label: "Tests", icon: ClipboardList },
-  { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
   { href: "/inspiration", label: "Inspiration", icon: BookHeart },
   { href: "/feedback", label: "Avis", icon: MessageSquareHeart },
   { href: "/help", label: "Aide", icon: HelpCircle },
@@ -47,7 +55,7 @@ const ACCOUNT_LINKS = [
   { href: "/settings", label: "Paramètres", icon: Settings },
 ] as const;
 
-const ACCOUNT_HREFS = ACCOUNT_LINKS.map((l) => l.href.split("#")[0]);
+const ACCOUNT_HREFS = ["/profile", "/notifications", "/inspiration", "/feedback", "/help", "/settings"];
 
 export type MemberShellProps = {
   children: React.ReactNode;
@@ -111,13 +119,18 @@ export function MemberShell({
 
   React.useEffect(() => {
     if (!accountOpen) return;
-    const onDoc = (e: MouseEvent) => {
+    const onDoc = (e: PointerEvent) => {
       if (!accountRef.current?.contains(e.target as Node)) {
         setAccountOpen(false);
       }
     };
-    document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
+    const t = window.setTimeout(() => {
+      document.addEventListener("pointerdown", onDoc);
+    }, 0);
+    return () => {
+      window.clearTimeout(t);
+      document.removeEventListener("pointerdown", onDoc);
+    };
   }, [accountOpen]);
 
   const go = (href: string) => (e?: React.MouseEvent) => {
@@ -131,11 +144,15 @@ export function MemberShell({
   const navLinkClass = (href: string, accent?: boolean) => {
     const active = isActive(href);
     return cn(
-      "inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-semibold transition-colors cursor-pointer",
-      accent && !active && "text-accent",
-      active
-        ? "bg-primary/10 text-primary"
-        : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
+      "inline-flex items-center gap-1.5 px-2.5 lg:px-3 py-2 rounded-full text-xs font-semibold transition-colors cursor-pointer",
+      accent &&
+        !active &&
+        "text-accent border border-accent/35 bg-accent/10 shadow-[0_0_0_1px_rgba(0,0,0,0.02)] animate-pulse",
+      accent && active && "bg-accent/20 text-accent border border-accent/40",
+      !accent &&
+        (active
+          ? "bg-primary/10 text-primary"
+          : "text-muted-foreground hover:text-foreground hover:bg-secondary/60")
     );
   };
 
@@ -176,7 +193,7 @@ export function MemberShell({
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-[60] border-b border-border/50 bg-background/95 backdrop-blur-md">
-        <div className="mx-auto flex h-14 sm:h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
+        <div className="mx-auto flex h-14 sm:h-16 max-w-6xl items-center justify-between gap-2 px-4 sm:px-6">
           <div className="flex items-center gap-3 min-w-0">
             <button
               type="button"
@@ -197,19 +214,20 @@ export function MemberShell({
           </div>
 
           <nav
-            className="hidden md:flex items-center gap-0.5 flex-1 justify-center"
+            className="hidden md:flex items-center gap-0.5 flex-1 justify-center min-w-0"
             aria-label="Navigation principale"
           >
             {PRIMARY.map((item) => {
               const Icon = item.icon;
+              const accent = "accent" in item && item.accent;
               return (
                 <a
                   key={item.href}
                   href={item.href}
                   onClick={go(item.href)}
-                  className={navLinkClass(item.href, "accent" in item && item.accent)}
+                  className={navLinkClass(item.href, accent)}
                 >
-                  <Icon className="h-3.5 w-3.5" />
+                  <Icon className={cn("h-3.5 w-3.5", accent && "text-accent")} />
                   <span className="hidden lg:inline">{item.label}</span>
                 </a>
               );
@@ -251,7 +269,7 @@ export function MemberShell({
           <div className="flex items-center gap-0.5 sm:gap-1.5 shrink-0">
             <span
               className={cn(
-                "hidden sm:inline-flex text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border",
+                "hidden xl:inline-flex text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border",
                 isPaid
                   ? "bg-accent/15 text-accent border-accent/30"
                   : "bg-secondary text-muted-foreground border-border"
@@ -259,14 +277,6 @@ export function MemberShell({
             >
               {planLabel}
             </span>
-            <a
-              href="/notifications"
-              onClick={go("/notifications")}
-              className="p-2 rounded-full hover:bg-secondary text-muted-foreground"
-              aria-label="Notifications"
-            >
-              <Bell className="h-4 w-4" />
-            </a>
             <ThemeToggle />
           </div>
         </div>
@@ -275,6 +285,7 @@ export function MemberShell({
           <div className="md:hidden border-t border-border bg-card px-4 py-3 space-y-1 max-h-[70vh] overflow-y-auto z-[70]">
             {PRIMARY.map((item) => {
               const Icon = item.icon;
+              const accent = "accent" in item && item.accent;
               return (
                 <a
                   key={item.href}
@@ -282,9 +293,11 @@ export function MemberShell({
                   onClick={go(item.href)}
                   className={cn(
                     "flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium cursor-pointer",
-                    isActive(item.href)
-                      ? "bg-primary/10 text-primary"
-                      : "text-foreground hover:bg-secondary"
+                    accent && "text-accent border border-accent/30 bg-accent/5",
+                    !accent &&
+                      (isActive(item.href)
+                        ? "bg-primary/10 text-primary"
+                        : "text-foreground hover:bg-secondary")
                   )}
                 >
                   <Icon className="h-4 w-4" />
@@ -352,7 +365,7 @@ export function MemberShell({
         aria-label="Navigation mobile"
       >
         <div className="mx-auto max-w-lg grid grid-cols-5 h-16">
-          {PRIMARY.map((item) => {
+          {BOTTOM_PRIMARY.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
             return (

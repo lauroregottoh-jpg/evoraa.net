@@ -3,13 +3,12 @@
 import * as React from "react";
 import { LogOut, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
 import { logoutAction } from "@/app/actions/auth";
 import { cn } from "@/utils/cn";
 
 /**
- * Soleil / lune → menu : bascule thème + Déconnexion.
- * Utilisé sur onboarding et pages MainLayout (pas MemberShell).
+ * Soleil / lune → menu : thème + Déconnexion (onboarding / MainLayout).
+ * Bouton natif (évite bugs Base UI sur le clic).
  */
 export function ThemeAccountMenu({ className }: { className?: string }) {
   const { resolvedTheme, setTheme } = useTheme();
@@ -23,16 +22,20 @@ export function ThemeAccountMenu({ className }: { className?: string }) {
 
   React.useEffect(() => {
     if (!open) return;
-    const onDoc = (e: MouseEvent) => {
+    const onDoc = (e: PointerEvent) => {
       if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
     };
-    document.addEventListener("mousedown", onDoc);
+    // pointerdown en capture après le toggle (évite fermeture immédiate)
+    const t = window.setTimeout(() => {
+      document.addEventListener("pointerdown", onDoc);
+    }, 0);
     document.addEventListener("keydown", onKey);
     return () => {
-      document.removeEventListener("mousedown", onDoc);
+      window.clearTimeout(t);
+      document.removeEventListener("pointerdown", onDoc);
       document.removeEventListener("keydown", onKey);
     };
   }, [open]);
@@ -40,26 +43,28 @@ export function ThemeAccountMenu({ className }: { className?: string }) {
   const isDark = mounted && resolvedTheme === "dark";
 
   return (
-    <div className={cn("relative", className)} ref={rootRef}>
-      <Button
+    <div className={cn("relative z-[90]", className)} ref={rootRef}>
+      <button
         type="button"
-        variant="outline"
-        size="icon"
-        onClick={() => setOpen((v) => !v)}
-        className="relative rounded-full w-9 h-9 border-border/60 bg-background/50 backdrop-blur-sm hover:bg-accent/10 transition-colors"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setOpen((v) => !v);
+        }}
+        className="relative inline-flex h-9 w-9 items-center justify-center rounded-full border border-border/60 bg-background/50 text-accent backdrop-blur-sm hover:bg-accent/10 transition-colors"
         title="Thème et compte"
-        aria-label="Thème et compte"
+        aria-label="Thème et déconnexion"
         aria-expanded={open}
         aria-haspopup="menu"
       >
-        <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-accent" />
-        <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-accent" />
-      </Button>
+        <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+        <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      </button>
 
-      {open && (
+      {open ? (
         <div
           role="menu"
-          className="absolute right-0 mt-2 w-52 rounded-xl border border-border bg-card shadow-lg z-[80] overflow-hidden py-1"
+          className="absolute right-0 top-full mt-2 w-56 rounded-xl border border-border bg-card shadow-lg overflow-hidden py-1"
         >
           <button
             type="button"
@@ -94,7 +99,7 @@ export function ThemeAccountMenu({ className }: { className?: string }) {
             </button>
           </form>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

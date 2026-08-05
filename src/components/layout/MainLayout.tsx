@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { ThemeAccountMenu } from "@/components/evoraa/ThemeAccountMenu";
+import { logoutAction } from "@/app/actions/auth";
 import { cn } from "@/utils/cn";
 
 import { DevSessionSwitcher } from "@/components/dev/DevSessionSwitcher";
@@ -49,7 +50,7 @@ export function MainLayout({
             </Link>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-3">
             {process.env.NODE_ENV === "development" && (
               <Link
                 href="/design-system"
@@ -58,6 +59,14 @@ export function MainLayout({
                 Design system
               </Link>
             )}
+            <form action={logoutAction}>
+              <button
+                type="submit"
+                className="text-xs font-semibold text-muted-foreground hover:text-destructive transition-colors px-2 py-1.5 rounded-lg hover:bg-destructive/10"
+              >
+                Se déconnecter
+              </button>
+            </form>
             <ThemeAccountMenu />
           </div>
         </div>
