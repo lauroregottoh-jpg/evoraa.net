@@ -141,8 +141,8 @@ export function AllianceCheckoutPanel({
                       )}
                     </p>
                     <p className="text-[11px] text-primary font-medium mt-1.5 leading-snug">
-                      Quotas Alliance : 15 suggestions/j, 25 conversations/mois, 100
-                      messages/convo, Eva 20/j
+                      Quotas Alliance : 15 suggestions/jour · 25 conversations/mois ·
+                      100 messages/conversation · Eva 20/jour · Mon bilan relationnel
                     </p>
                   </div>
                 </div>

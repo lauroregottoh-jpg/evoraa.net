@@ -1,16 +1,18 @@
 import Link from "next/link";
 import { MemberPage } from "@/components/layout/MemberPage";
-import { getAssessmentsProgress, getMyGrowthAxes } from "@/app/actions/assessments";
+import { getAssessmentsProgress, getMyGrowthAxes, getMyRelationBilan } from "@/app/actions/assessments";
 import { ASSESSMENT_RETAKE_COOLDOWN_DAYS } from "@/lib/assessments/constants";
 import { GrowthAxesCard } from "@/components/assessments/GrowthAxesCard";
+import { RelationBilanCard } from "@/components/matching/RelationBilanCard";
 import { PillarBadges } from "@/components/assessments/PillarBadges";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, Circle, Lock } from "lucide-react";
 
 export default async function AssessmentsHubPage() {
-  const [{ progress, allDone, error }, growth] = await Promise.all([
+  const [{ progress, allDone, error }, growth, bilan] = await Promise.all([
     getAssessmentsProgress(),
     getMyGrowthAxes(),
+    getMyRelationBilan(),
   ]);
 
   const completedAny = progress.some((p) => p.completed);
@@ -52,7 +54,8 @@ export default async function AssessmentsHubPage() {
           </div>
         )}
 
-        {completedAny && <GrowthAxesCard axes={growth.axes} />}
+        {completedAny && <RelationBilanCard report={bilan.report} />}
+        {completedAny && !bilan.isAlliance && <GrowthAxesCard axes={growth.axes} />}
 
         <div className="grid gap-4">
           {progress.map((item) => {

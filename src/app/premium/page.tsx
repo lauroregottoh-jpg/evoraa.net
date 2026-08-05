@@ -8,6 +8,8 @@ import { PremiumUnlockList } from "@/components/premium/PremiumUnlockList"
 import { AllianceCheckoutPanel } from "@/components/premium/AllianceCheckoutPanel"
 import { BoostSection } from "@/components/premium/BoostSection"
 import { PremiumSocialProof } from "@/components/premium/PremiumSocialProof"
+import { getMyRelationBilan } from "@/app/actions/assessments"
+import { RelationBilanCard } from "@/components/matching/RelationBilanCard"
 
 export default async function PremiumPage() {
   const supabase = await createClient()
@@ -34,10 +36,11 @@ export default async function PremiumPage() {
     )
   }
 
-  const [{ data: profile }, usage, checkoutHints] = await Promise.all([
+  const [{ data: profile }, usage, checkoutHints, bilan] = await Promise.all([
     supabase.from("profiles").select("first_name").eq("user_id", user.id).maybeSingle(),
     getUsageSnapshot(user.id),
     getCheckoutHints(),
+    getMyRelationBilan(),
   ])
 
   return (
@@ -46,6 +49,8 @@ export default async function PremiumPage() {
         <PremiumHeroCarousel firstName={profile?.first_name ?? undefined} />
 
         <PremiumUnlockList />
+
+        {bilan.report ? <RelationBilanCard report={bilan.report} compact /> : null}
 
         <AllianceCheckoutPanel
           showModePicker={checkoutHints?.showModePicker ?? true}

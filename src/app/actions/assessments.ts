@@ -16,6 +16,7 @@ import {
 } from "@/lib/assessments/retake"
 import { buildGrowthAxes } from "@/lib/assessments/growth"
 import { createNotification } from "@/app/actions/notifications"
+import { getUsageSnapshot } from "@/lib/billing/usage"
 
 const TEST_IDS: Record<AssessmentSlug, string> = {
   personality: "a1111111-1111-4111-8111-111111111111",
@@ -262,6 +263,35 @@ export async function getMyGrowthAxes() {
   } | null
 
   return { axes: buildGrowthAxes(psych) }
+}
+
+/** Mon bilan relationnel — Free = aperçu ; Alliance = résumé + domaines. */
+export async function getMyRelationBilan() {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) {
+    return { report: null as import("@/lib/matching/report/types").ProfileReport | null, error: "Non authentifié." }
+  }
+
+  const [{ data: profile }, usage] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("first_name, psychometric_results")
+      .eq("user_id", user.id)
+      .maybeSingle(),
+    getUsageSnapshot(user.id),
+  ])
+
+  const { buildProfileReport } = await import("@/lib/matching/report/buildProfileReport")
+  const report = buildProfileReport({
+    firstName: profile?.first_name as string | null,
+    psychometric: profile?.psychometric_results as Parameters<typeof buildProfileReport>[0]["psychometric"],
+    isAlliance: Boolean(usage?.isPaid),
+  })
+
+  return { report, error: undefined as string | undefined, isAlliance: Boolean(usage?.isPaid) }
 }
 
 function dominantDimension(dimensions: Record<string, number>) {

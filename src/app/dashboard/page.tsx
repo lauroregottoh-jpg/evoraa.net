@@ -16,9 +16,14 @@ import { EvaWeeklyReflection } from "@/components/dashboard/EvaWeeklyReflection"
 import { PresenceStreak } from "@/components/dashboard/PresenceStreak"
 import { PillarBadges } from "@/components/assessments/PillarBadges"
 import { InviteShareCard } from "@/components/growth/InviteShareCard"
+import { getMyRelationBilan } from "@/app/actions/assessments"
+import { RelationBilanCard } from "@/components/matching/RelationBilanCard"
 
 export default async function DashboardPage() {
-  const { data, error } = await getDashboardData()
+  const [{ data, error }, bilan] = await Promise.all([
+    getDashboardData(),
+    getMyRelationBilan(),
+  ])
 
   if (error || !data) {
     return (
@@ -77,6 +82,10 @@ export default async function DashboardPage() {
           hasAvatar={data.hasAvatar}
           isVerified={data.isVerified}
         />
+
+        {data.assessmentsDone > 0 && bilan.report ? (
+          <RelationBilanCard report={bilan.report} compact />
+        ) : null}
 
         <Link
           href="/feedback"

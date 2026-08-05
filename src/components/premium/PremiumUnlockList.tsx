@@ -3,52 +3,55 @@
 import * as React from "react"
 import {
   CheckCircle2,
+  ClipboardList,
   Crown,
   Heart,
   Lock,
   MessageCircle,
+  MessagesSquare,
   Sparkles,
   Unlock,
-  Zap,
 } from "lucide-react"
 import { cn } from "@/utils/cn"
 import { PLANS } from "@/lib/billing/plans"
 
+/** Comparaison Découverte → Alliance — quotas explicites (pas de flou). */
 const FEATURES = [
   {
     icon: Heart,
-    title: "Plus de compatibilités pertinentes",
+    title: "Suggestions de compatibilité",
     free: "3 / jour",
     alliance: "15 / jour",
-    locked: false,
   },
   {
     icon: MessageCircle,
-    title: "Plus de conversations sérieuses",
-    free: "5 / mois · 5 msg",
-    alliance: "25 / mois · 100 msg",
-    locked: false,
+    title: "Nouvelles conversations sérieuses",
+    free: "5 / mois",
+    alliance: "25 / mois",
+  },
+  {
+    icon: MessagesSquare,
+    title: "Messages par conversation",
+    free: "5 messages",
+    alliance: "100 messages",
   },
   {
     icon: Sparkles,
-    title: "Plus d’échanges avec EVA",
+    title: "Échanges avec Eva",
     free: "3 questions / jour",
-    alliance: "20 / jour",
-    locked: false,
+    alliance: "20 questions / jour",
   },
   {
-    icon: Zap,
-    title: "Lecture des 5 piliers de compatibilité",
-    free: "Aperçu",
-    alliance: "Accès étendu",
-    locked: false,
+    icon: ClipboardList,
+    title: "Mon bilan relationnel",
+    free: "Conseils légers",
+    alliance: "Résumé + points par domaine",
   },
   {
     icon: Crown,
     title: "Badge Alliance",
     free: "—",
     alliance: "Visible sur le profil",
-    locked: false,
   },
 ] as const
 
@@ -62,8 +65,15 @@ export function PremiumUnlockList() {
           Ce qu&apos;Alliance débloque pour vous
         </h2>
         <p className="text-sm text-muted-foreground">
-          Tout ce qui change pour avancer plus vite vers une rencontre sérieuse.
+          Les quotas exacts — Découverte vs Alliance — pour avancer avec plus de
+          conversations et d&apos;échanges sérieux.
         </p>
+      </div>
+
+      <div className="hidden sm:grid grid-cols-[1fr_7rem_7rem] gap-2 px-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+        <span>Avantage</span>
+        <span className="text-right">Découverte</span>
+        <span className="text-right text-primary">Alliance</span>
       </div>
 
       <ul className="space-y-3">
@@ -72,23 +82,27 @@ export function PremiumUnlockList() {
           return (
             <li
               key={f.title}
-              className="flex items-start gap-3 rounded-xl border border-border/80 bg-background/60 px-3 py-3 sm:px-4"
+              className="flex flex-col sm:grid sm:grid-cols-[1fr_7rem_7rem] sm:items-center gap-2 rounded-xl border border-border/80 bg-background/60 px-3 py-3 sm:px-4"
             >
-              <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent/15 text-accent">
-                <Icon className="h-5 w-5" />
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold text-foreground">{f.title}</p>
-                <div className="mt-2 flex flex-wrap items-center gap-3 text-xs">
-                  <span className="inline-flex items-center gap-1 text-muted-foreground line-through decoration-destructive/40">
-                    <Lock className="h-3 w-3 text-destructive/70" />
-                    {f.free}
-                  </span>
-                  <span className="inline-flex items-center gap-1 font-semibold text-primary">
-                    <Unlock className="h-3 w-3" />
-                    {f.alliance}
-                  </span>
-                </div>
+              <div className="flex items-start gap-3 min-w-0">
+                <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent/15 text-accent">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <p className="text-sm font-semibold text-foreground pt-2">{f.title}</p>
+              </div>
+              <div className="flex sm:block items-center justify-between gap-2 pl-13 sm:pl-0 sm:text-right">
+                <span className="sm:hidden text-[10px] uppercase text-muted-foreground">Découverte</span>
+                <span className="inline-flex items-center gap-1 text-xs text-muted-foreground line-through decoration-destructive/40 sm:justify-end">
+                  <Lock className="h-3 w-3 text-destructive/70 shrink-0" />
+                  {f.free}
+                </span>
+              </div>
+              <div className="flex sm:block items-center justify-between gap-2 pl-13 sm:pl-0 sm:text-right">
+                <span className="sm:hidden text-[10px] uppercase text-primary font-semibold">Alliance</span>
+                <span className="inline-flex items-center gap-1 text-xs font-bold text-primary sm:justify-end">
+                  <Unlock className="h-3 w-3 shrink-0" />
+                  {f.alliance}
+                </span>
               </div>
             </li>
           )
@@ -96,7 +110,7 @@ export function PremiumUnlockList() {
       </ul>
 
       <ul className="grid sm:grid-cols-2 gap-2 pt-1">
-        {alliance.features.slice(0, 6).map((feat) => (
+        {alliance.features.map((feat) => (
           <li key={feat} className="flex items-start gap-2 text-xs text-muted-foreground">
             <CheckCircle2 className={cn("h-3.5 w-3.5 mt-0.5 text-accent shrink-0")} />
             {feat}

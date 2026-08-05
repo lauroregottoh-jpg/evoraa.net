@@ -13,7 +13,7 @@ export type GrowthAxis = {
   academyHref: string
 }
 
-const DIMENSION_LABELS: Record<string, string> = {
+export const DIMENSION_LABELS: Record<string, string> = {
   emotional_stability: "Stabilité émotionnelle",
   communication: "Communication",
   openness: "Ouverture au changement",
