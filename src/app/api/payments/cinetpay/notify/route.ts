@@ -1,36 +1,9 @@
 import { createClient } from "@supabase/supabase-js"
-import { timingSafeEqual } from "crypto"
 import { NextRequest, NextResponse } from "next/server"
-
-function verifyCinetPayWebhook(request: NextRequest, body: Record<string, unknown>) {
-  // Prefer dedicated webhook token (not the payment API secret).
-  const webhookToken =
-    process.env.CINETPAY_WEBHOOK_TOKEN?.trim() ||
-    process.env.CINETPAY_SECRET_KEY?.trim() ||
-    ""
-
-  if (!webhookToken) {
-    // No shared secret configured: allow notify through; activation still requires
-    // live verification via CinetPay check API below.
-    return { ok: true as const, mode: "api_check_only" as const }
-  }
-
-  // Header only — never query string or body.secret (logged / forgeable).
-  const presented = request.headers.get("x-cinetpay-secret") || ""
-  if (!presented) {
-    // CinetPay dashboards often cannot set custom headers. If a token is configured
-    // but not sent, fall through to API check only (still require transaction verify).
-    return { ok: true as const, mode: "api_check_only" as const }
-  }
-
-  const a = Buffer.from(presented)
-  const b = Buffer.from(webhookToken)
-  if (a.length !== b.length || !timingSafeEqual(a, b)) {
-    return { ok: false as const, error: "Secret webhook invalide" }
-  }
-
-  return { ok: true as const, mode: "header" as const }
-}
+import { logPaymentEvent } from "@/lib/billing/paymentAudit"
+import { verifyCinetPayWebhookAuth } from "@/lib/billing/webhookAuth"
+import { captureError } from "@/lib/observability/report"
+import { assertPaymentsNotPaused } from "@/lib/platform/killSwitches"
 
 async function verifyTransactionWithCinetPay(transactionId: string) {
   const apikey = process.env.CINETPAY_API_KEY
@@ -65,10 +38,8 @@ async function verifyTransactionWithCinetPay(transactionId: string) {
 }
 
 /**
- * CinetPay notify URL (sans secret dans l’URL) :
- * https://votre-domaine.com/api/payments/cinetpay/notify
- *
- * L’activation exige une confirmation live via l’API CinetPay check.
+ * CinetPay notify — même barème Bictorys :
+ * check API obligatoire + activate_pending_payment atomique + audit events.
  */
 export async function POST(request: NextRequest) {
   if (process.env.PAYMENTS_DEMO_MODE === "true") {
@@ -78,10 +49,16 @@ export async function POST(request: NextRequest) {
     )
   }
 
+  const paused = await assertPaymentsNotPaused()
+  if (!paused.ok) {
+    return NextResponse.json({ error: paused.error }, { status: 503 })
+  }
+
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 
   if (!serviceKey || !supabaseUrl) {
+    captureError("cinetpay_webhook_service_role_missing")
     return NextResponse.json(
       { error: "Service role non configuré" },
       { status: 500 }
@@ -99,8 +76,16 @@ export async function POST(request: NextRequest) {
     })
   }
 
-  const auth = verifyCinetPayWebhook(request, body)
+  const webhookToken =
+    process.env.CINETPAY_WEBHOOK_TOKEN?.trim() ||
+    process.env.CINETPAY_SECRET_KEY?.trim() ||
+    ""
+  const auth = verifyCinetPayWebhookAuth({
+    webhookToken,
+    presentedHeader: request.headers.get("x-cinetpay-secret") || "",
+  })
   if (!auth.ok) {
+    captureError(auth.error, { source: "cinetpay_webhook_auth" })
     return NextResponse.json({ error: auth.error }, { status: 401 })
   }
 
@@ -115,6 +100,13 @@ export async function POST(request: NextRequest) {
 
   const check = await verifyTransactionWithCinetPay(transactionId)
   if (!check.verified) {
+    await logPaymentEvent({
+      provider: "cinetpay",
+      eventType: "webhook_ignored",
+      status: "unverified",
+      message: transactionId,
+      payload: { body, check },
+    })
     return NextResponse.json(
       { error: "Transaction non confirmée auprès de CinetPay", detail: check },
       { status: 400 }
@@ -122,21 +114,36 @@ export async function POST(request: NextRequest) {
   }
 
   const admin = createClient(supabaseUrl, serviceKey)
-  const query = admin
+  const { data: payment } = await admin
     .from("payments")
     .select("id, status, subscription_id, metadata")
     .eq("transaction_reference", transactionId)
+    .maybeSingle()
 
-  const { data: payment } = await query.maybeSingle()
   if (!payment) {
+    captureError("cinetpay_payment_not_found", { transactionId })
     return NextResponse.json({ error: "Paiement introuvable" }, { status: 404 })
   }
 
+  await logPaymentEvent({
+    paymentId: payment.id,
+    provider: "cinetpay",
+    eventType: "webhook_received",
+    status: auth.mode,
+    payload: body,
+  })
+
   if (payment.status === "completed") {
+    await logPaymentEvent({
+      paymentId: payment.id,
+      provider: "cinetpay",
+      eventType: "webhook_ignored",
+      status: "completed",
+      message: "Paiement déjà activé",
+    })
     return NextResponse.json({ ok: true, activated: true, already: true })
   }
 
-  // Activation autorisée uniquement après verifyTransactionWithCinetPay (ci-dessus).
   const { data: subscription } = await admin
     .from("subscriptions")
     .select("id, user_id")
@@ -147,35 +154,48 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Abonnement introuvable" }, { status: 404 })
   }
 
-  await admin
-    .from("subscriptions")
-    .update({ status: "cancelled" })
-    .eq("user_id", subscription.user_id)
-    .eq("status", "active")
-    .neq("id", subscription.id)
+  const { error: activateError } = await admin.rpc("activate_pending_payment" as never, {
+    p_payment_id: payment.id,
+    p_transaction_ref: transactionId,
+  } as never)
+
+  if (activateError) {
+    const { data: refreshed } = await admin
+      .from("payments")
+      .select("status")
+      .eq("id", payment.id)
+      .maybeSingle()
+    if (refreshed?.status === "completed") {
+      return NextResponse.json({ ok: true, activated: true, already: true })
+    }
+    captureError(activateError.message, {
+      source: "cinetpay_activate_pending_payment",
+      paymentId: payment.id,
+    })
+    return NextResponse.json({ error: "Activation impossible" }, { status: 500 })
+  }
 
   await admin
     .from("payments")
     .update({
-      status: "completed",
       metadata: {
         ...(typeof payment.metadata === "object" && payment.metadata
           ? (payment.metadata as object)
           : {}),
         webhook: body,
-        activated_at: new Date().toISOString(),
+        provider: "cinetpay",
+        auth_mode: auth.mode,
       },
     })
     .eq("id", payment.id)
 
-  await admin
-    .from("subscriptions")
-    .update({
-      status: "active",
-      starts_at: new Date().toISOString(),
-      ends_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-    })
-    .eq("id", subscription.id)
+  await logPaymentEvent({
+    paymentId: payment.id,
+    provider: "cinetpay",
+    eventType: "payment_completed",
+    status: "completed",
+    message: transactionId,
+  })
 
   return NextResponse.json({ ok: true, activated: true })
 }

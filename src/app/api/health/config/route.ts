@@ -75,7 +75,32 @@ export async function GET(request: Request) {
     },
     email: {
       hasResend: Boolean(process.env.RESEND_API_KEY),
+      outboxFailed:
+        wantProbe
+          ? await (async () => {
+              try {
+                const { countFailedEmailOutbox } = await import(
+                  "@/lib/email/outbox"
+                )
+                return await countFailedEmailOutbox()
+              } catch {
+                return null
+              }
+            })()
+          : undefined,
     },
+    killSwitches: wantProbe
+      ? await (async () => {
+          try {
+            const { getKillSwitches } = await import(
+              "@/lib/platform/killSwitches"
+            )
+            return await getKillSwitches()
+          } catch {
+            return null
+          }
+        })()
+      : undefined,
     ops: {
       hasCronSecret: Boolean(process.env.CRON_SECRET),
       hasServiceRole: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),

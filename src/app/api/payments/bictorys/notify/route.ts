@@ -1,38 +1,12 @@
 import { createClient } from "@supabase/supabase-js"
-import { createHmac, timingSafeEqual } from "crypto"
 import { NextRequest, NextResponse } from "next/server"
 import { logPaymentEvent } from "@/lib/billing/paymentAudit"
+import { readBictorysAuthFromRequest } from "@/lib/billing/webhookAuth"
 import { captureError } from "@/lib/observability/report"
 import { resolveAppUrlSync } from "@/lib/auth/appUrl"
 import { sendEmailWithRetry } from "@/lib/email/outbox"
 import { allianceActivatedEmailHtml } from "@/lib/email/templates"
-
-function verifyTokenOrSignature(request: NextRequest, rawBody: string) {
-  const secret = process.env.BICTORYS_WEBHOOK_SECRET
-  if (!secret) return { ok: false as const, error: "BICTORYS_WEBHOOK_SECRET manquant" }
-
-  // Header only — never accept ?token= (leaks in logs / Referer).
-  const staticToken = request.headers.get("x-secret-key") || ""
-  if (staticToken) {
-    const a = Buffer.from(staticToken)
-    const b = Buffer.from(secret)
-    if (a.length === b.length && timingSafeEqual(a, b)) return { ok: true as const }
-    // Present but wrong → hard fail (do not fall through to HMAC).
-    return { ok: false as const, error: "Secret webhook invalide" }
-  }
-
-  const sig = request.headers.get("x-webhook-signature") || ""
-  const ts = request.headers.get("x-webhook-timestamp") || ""
-  if (!sig || !ts) return { ok: false as const, error: "Signature webhook manquante" }
-
-  const expected = createHmac("sha256", secret).update(`${ts}.${rawBody}`).digest("hex")
-  const a = Buffer.from(sig)
-  const b = Buffer.from(expected)
-  if (a.length !== b.length || !timingSafeEqual(a, b)) {
-    return { ok: false as const, error: "Signature webhook invalide" }
-  }
-  return { ok: true as const }
-}
+import { assertPaymentsNotPaused } from "@/lib/platform/killSwitches"
 
 function mapStatus(statusLike: string) {
   const s = statusLike.toLowerCase()
@@ -81,6 +55,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Webhook refusé : PAYMENTS_DEMO_MODE=true" }, { status: 403 })
   }
 
+  const paused = await assertPaymentsNotPaused()
+  if (!paused.ok) {
+    return NextResponse.json({ error: paused.error }, { status: 503 })
+  }
+
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   if (!serviceKey || !supabaseUrl) {
@@ -89,7 +68,11 @@ export async function POST(request: NextRequest) {
   }
 
   const raw = await request.text()
-  const auth = verifyTokenOrSignature(request, raw)
+  const auth = readBictorysAuthFromRequest(
+    request,
+    raw,
+    process.env.BICTORYS_WEBHOOK_SECRET
+  )
   if (!auth.ok) {
     captureError(auth.error, { source: "bictorys_webhook_auth" })
     return NextResponse.json({ error: auth.error }, { status: 401 })

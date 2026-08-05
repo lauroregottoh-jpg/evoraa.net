@@ -73,6 +73,10 @@ export async function startCheckoutAction(
     return { error: "Offre invalide." }
   }
 
+  const { assertPaymentsNotPaused } = await import("@/lib/platform/killSwitches")
+  const gatePay = await assertPaymentsNotPaused()
+  if (!gatePay.ok) return { error: gatePay.error }
+
   const supabase = await createClient()
   const {
     data: { user },

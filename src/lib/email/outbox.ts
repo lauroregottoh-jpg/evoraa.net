@@ -120,3 +120,18 @@ export async function processEmailOutbox(limit = 25): Promise<{
     }
   }
 }
+
+/** Compteur DLQ (status failed) — ops / health. */
+export async function countFailedEmailOutbox(): Promise<number> {
+  try {
+    const admin = createAdminClient()
+    const { count, error } = await admin
+      .from("email_outbox")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "failed")
+    if (error) return -1
+    return count ?? 0
+  } catch {
+    return -1
+  }
+}

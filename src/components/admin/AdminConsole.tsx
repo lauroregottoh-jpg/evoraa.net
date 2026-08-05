@@ -228,6 +228,12 @@ export function AdminConsole(props: Props) {
   const [maintenance, setMaintenance] = React.useState(() =>
     settingBool(props.settings, "maintenance_mode", false)
   )
+  const [paymentsPaused, setPaymentsPaused] = React.useState(() =>
+    settingBool(props.settings, "payments_paused", false)
+  )
+  const [registrationsPaused, setRegistrationsPaused] = React.useState(() =>
+    settingBool(props.settings, "registrations_paused", false)
+  )
   const [blur, setBlur] = React.useState(() =>
     settingBool(props.settings, "default_photo_blur", true)
   )
@@ -1137,6 +1143,34 @@ export function AdminConsole(props: Props) {
                 if (isFullAdmin) {
                   void run("maint", () =>
                     adminUpdatePlatformSetting("maintenance_mode", next)
+                  )
+                }
+              }}
+            />
+            <ToggleRow
+              title="Pause paiements (Alliance)"
+              value={paymentsPaused}
+              disabled={!isFullAdmin}
+              onToggle={() => {
+                const next = !paymentsPaused
+                setPaymentsPaused(next)
+                if (isFullAdmin) {
+                  void run("paypause", () =>
+                    adminUpdatePlatformSetting("payments_paused", next)
+                  )
+                }
+              }}
+            />
+            <ToggleRow
+              title="Pause inscriptions (flag — enforcement AUTH UNLOCK)"
+              value={registrationsPaused}
+              disabled={!isFullAdmin}
+              onToggle={() => {
+                const next = !registrationsPaused
+                setRegistrationsPaused(next)
+                if (isFullAdmin) {
+                  void run("regpause", () =>
+                    adminUpdatePlatformSetting("registrations_paused", next)
                   )
                 }
               }}

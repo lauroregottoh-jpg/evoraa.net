@@ -1243,6 +1243,8 @@ export async function adminUpdatePlatformSetting(key: string, value: unknown) {
 
   const allowed = new Set([
     "maintenance_mode",
+    "payments_paused",
+    "registrations_paused",
     "min_compatibility_threshold",
     "default_photo_blur",
     "require_charter",
@@ -1268,6 +1270,13 @@ export async function adminUpdatePlatformSetting(key: string, value: unknown) {
   })
 
   if (error) return { error: error.message }
+  const { logAdminAction } = await import("@/lib/admin/audit")
+  await logAdminAction({
+    action: "platform_setting",
+    targetType: "setting",
+    targetId: key,
+    meta: { value },
+  })
   revalidateOps()
   revalidatePath("/dashboard")
   revalidatePath("/academie-mariage")
