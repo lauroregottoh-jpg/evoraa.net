@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ThemeToggle } from "@/components/evoraa/ThemeToggle";
+import { ThemeAccountMenu } from "@/components/evoraa/ThemeAccountMenu";
 import { cn } from "@/utils/cn";
 
 import { DevSessionSwitcher } from "@/components/dev/DevSessionSwitcher";
@@ -58,7 +58,7 @@ export function MainLayout({
                 Design system
               </Link>
             )}
-            <ThemeToggle />
+            <ThemeAccountMenu />
           </div>
         </div>
       </header>
