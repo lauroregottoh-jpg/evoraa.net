@@ -101,6 +101,9 @@ export async function updateSession(request: NextRequest) {
       cookieOptions: {
         path: '/',
         sameSite: 'lax',
+        secure:
+          process.env.VERCEL_ENV === 'production' ||
+          process.env.NODE_ENV === 'production',
         ...(authCookieDomain ? { domain: authCookieDomain } : {}),
       },
       cookies: {
@@ -115,6 +118,9 @@ export async function updateSession(request: NextRequest) {
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, {
               ...options,
+              secure:
+                process.env.VERCEL_ENV === 'production' ||
+                process.env.NODE_ENV === 'production',
               ...(authCookieDomain ? { domain: authCookieDomain } : {}),
             })
           )

@@ -22,8 +22,12 @@ export const AUTH_CRITICAL = {
   /** Host canonique prod — PKCE / cookies. */
   canonicalHost: "www.keliaa.org",
   cookieDomain: ".keliaa.org",
+  /** Cookies Secure en HTTPS prod. */
+  cookieSecureInProd: true,
   /** Retour OAuth Google (échange serveur). */
   oauthCallbackPath: "/auth/callback",
+  /** Soft-confirm off en VERCEL production sauf ALLOW_SOFT_EMAIL_CONFIRM=true. */
+  softConfirmProdDefaultOff: true,
   /** Marqueur freeze — ne pas supprimer. */
   frozen: true,
   frozenDoc: "docs/AUTH_FROZEN.md",

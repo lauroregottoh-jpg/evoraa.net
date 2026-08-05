@@ -9,6 +9,7 @@ import { PasswordInput } from "@/components/auth/PasswordInput"
 import { registerAction } from "@/app/actions/auth"
 import { isNextRedirectError } from "@/lib/auth/criticalPath"
 import { startGoogleOAuth } from "@/lib/auth/oauthGoogle"
+import { TurnstileField } from "@/components/auth/TurnstileField"
 import {
   AlertCircle,
   ArrowLeft,
@@ -48,6 +49,7 @@ export function StepAccount({ onBack }: { onBack: () => void }) {
   const [loadingGoogle, setLoadingGoogle] = React.useState(false)
   const [loadingEmail, setLoadingEmail] = React.useState(false)
   const [email, setEmail] = React.useState("")
+  const [turnstileToken, setTurnstileToken] = React.useState("")
 
   const handleGoogle = async () => {
     setError("")
@@ -55,6 +57,7 @@ export function StepAccount({ onBack }: { onBack: () => void }) {
     const result = await startGoogleOAuth({
       next: "/onboarding",
       charterAccepted: false,
+      registrationIntent: true,
     })
     if (result.error) {
       setError(result.error)
@@ -71,6 +74,9 @@ export function StepAccount({ onBack }: { onBack: () => void }) {
     try {
       const fd = new FormData(e.currentTarget)
       fd.set("charter_accepted", "false")
+      if (turnstileToken) {
+        fd.set("cf-turnstile-response", turnstileToken)
+      }
       const result = await registerAction(fd)
       if (!result) {
         setError(
@@ -216,11 +222,12 @@ export function StepAccount({ onBack }: { onBack: () => void }) {
               name="password"
               autoComplete="new-password"
               required
-              minLength={8}
-              placeholder="Au moins 8 caractères"
+              minLength={10}
+              placeholder="Au moins 10 caractères, lettre + chiffre"
               className="h-11 rounded-xl"
             />
           </div>
+          <TurnstileField onToken={setTurnstileToken} />
           <Button
             type="submit"
             disabled={loadingEmail || loadingGoogle}

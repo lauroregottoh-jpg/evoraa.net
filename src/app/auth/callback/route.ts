@@ -36,6 +36,9 @@ function redirectWithCookies(
     const opts = {
       path: "/",
       sameSite: "lax" as const,
+      secure:
+        process.env.VERCEL_ENV === "production" ||
+        process.env.NODE_ENV === "production",
       ...(domain ? { domain } : {}),
       ...(c.options || {}),
     }

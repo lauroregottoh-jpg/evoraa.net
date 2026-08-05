@@ -146,10 +146,11 @@ function isAuthEmailRateLimited(message: string): boolean {
 }
 
 function softEmailConfirmEnabled(): boolean {
-  // Soft-launch par défaut : inscriptions opérationnelles sans SMTP Auth Supabase.
-  // Désactiver explicitement avec ALLOW_SOFT_EMAIL_CONFIRM=false.
   const v = process.env.ALLOW_SOFT_EMAIL_CONFIRM
-  return v !== "false" && v !== "0"
+  if (v === "true" || v === "1") return true
+  if (v === "false" || v === "0") return false
+  // Prod : SMTP / Auth emails requis (défaut off). Preview/dev : soft on.
+  return process.env.VERCEL_ENV !== "production"
 }
 
 export async function loginAction(formData: FormData) {
@@ -158,11 +159,26 @@ export async function loginAction(formData: FormData) {
       email: String(formData.get("email") ?? ""),
       password: String(formData.get("password") ?? ""),
       nextRaw: String(formData.get("next") ?? "").trim(),
+      turnstileToken: String(formData.get("cf-turnstile-response") ?? ""),
     })
     if (!parsed.success) {
       return { error: firstZodError(parsed.error) }
     }
-    const { email, password, nextRaw } = parsed.data
+    const { email, password, nextRaw, turnstileToken } = parsed.data
+
+    const { verifyTurnstileToken } = await import("@/lib/auth/turnstile")
+    const captcha = await verifyTurnstileToken(turnstileToken)
+    if (!captcha.ok) return { error: captcha.error }
+
+    const { isLoginLockedOut, recordLoginFailure, clearLoginFailures } =
+      await import("@/lib/auth/lockout")
+    const locked = await isLoginLockedOut(email)
+    if (locked.locked) {
+      const mins = Math.ceil((locked.retryAfterSeconds || 900) / 60)
+      return {
+        error: `Trop d’échecs de connexion. Réessayez dans ${mins} min, ou utilisez « Mot de passe oublié ».`,
+      }
+    }
 
     // Honore le plafond ; fail-open seulement si l’infra rate-limit est down.
     const loginRl = await enforceRateLimit({ ...RL.login, subject: email })
@@ -180,6 +196,7 @@ export async function loginAction(formData: FormData) {
       if (msg.includes("email not confirmed") || msg.includes("not confirmed")) {
         const unlocked = await confirmEmailAndSignIn(supabase, email, password)
         if (unlocked.ok) {
+          await clearLoginFailures(email)
           const nextPath = await resolveLoginDestination({
             userId: unlocked.userId,
             email,
@@ -197,6 +214,7 @@ export async function loginAction(formData: FormData) {
         msg.includes("invalid login credentials") ||
         msg.includes("invalid_credentials")
       ) {
+        await recordLoginFailure(email)
         return {
           error:
             "Email ou mot de passe incorrect. Si vous venez de vous réinscrire avec le même email, le compte existait déjà : utilisez « Mot de passe oublié » pour en créer un nouveau.",
@@ -209,6 +227,8 @@ export async function loginAction(formData: FormData) {
     if (!data.user) {
       return { error: "Impossible de démarrer la session." }
     }
+
+    await clearLoginFailures(email)
 
     const nextPath = await resolveLoginDestination({
       userId: data.user.id,
@@ -244,6 +264,7 @@ export async function registerAction(formData: FormData) {
       utmSource: String(formData.get("utm_source") ?? ""),
       utmMedium: String(formData.get("utm_medium") ?? ""),
       utmCampaign: String(formData.get("utm_campaign") ?? ""),
+      turnstileToken: String(formData.get("cf-turnstile-response") ?? ""),
     })
     if (!parsed.success) {
       return { error: firstZodError(parsed.error) }
@@ -260,7 +281,25 @@ export async function registerAction(formData: FormData) {
       utmSource,
       utmMedium,
       utmCampaign,
+      turnstileToken,
     } = parsed.data
+
+    const { getKillSwitches } = await import("@/lib/platform/killSwitches")
+    const ks = await getKillSwitches()
+    if (ks.registrationsPaused || ks.maintenanceMode) {
+      return {
+        error:
+          "Les inscriptions sont temporairement fermées. Réessayez plus tard ou contactez le support.",
+      }
+    }
+
+    const { verifyTurnstileToken } = await import("@/lib/auth/turnstile")
+    const captcha = await verifyTurnstileToken(turnstileToken)
+    if (!captcha.ok) return { error: captcha.error }
+
+    const { assertPasswordNotPwned } = await import("@/lib/auth/hibp")
+    const hibp = await assertPasswordNotPwned(password)
+    if (!hibp.ok) return { error: hibp.error }
 
     const registerRl = await enforceRateLimit({ ...RL.register, subject: email })
     if (!registerRl.ok) return { error: registerRl.error }

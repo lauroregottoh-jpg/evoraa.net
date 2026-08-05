@@ -38,10 +38,20 @@ export function ensureWwwBeforeOAuth(): boolean {
 export async function startGoogleOAuth(options?: {
   next?: string
   charterAccepted?: boolean
+  /** true sur /register — pas sur /login */
+  registrationIntent?: boolean
 }): Promise<{ error?: string }> {
   try {
     if (ensureWwwBeforeOAuth()) {
       return {}
+    }
+
+    if (options?.registrationIntent || options?.charterAccepted) {
+      const { assertRegistrationOpenAction } = await import(
+        "@/app/actions/platformGate"
+      )
+      const gate = await assertRegistrationOpenAction()
+      if (gate.error) return { error: gate.error }
     }
 
     if (options?.charterAccepted) {

@@ -11,7 +11,12 @@
 | Site public | `https://www.keliaa.org` |
 | Redirection apex | `keliaa.org` → `www.keliaa.org` (308) |
 | Cookie domain | `.keliaa.org` |
+| Cookies Secure | oui en HTTPS / prod |
 | Google OAuth return | `/auth/callback` |
+| Soft email confirm | **off** en `VERCEL_ENV=production` sauf `ALLOW_SOFT_EMAIL_CONFIRM=true` |
+| Mot de passe | ≥10 car. + lettre + chiffre + HIBP (fail-open) |
+| Lockout login | 5 échecs / 15 min |
+| Turnstile | optionnel (si clés Cloudflare) |
 | Secours | inscription / login **email + mot de passe** |
 
 ## Supabase Dashboard (hors repo)

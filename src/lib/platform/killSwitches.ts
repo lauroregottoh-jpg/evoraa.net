@@ -3,7 +3,7 @@ import { createAdminClient } from "@/utils/supabase/admin"
 export type KillSwitches = {
   maintenanceMode: boolean
   paymentsPaused: boolean
-  /** Soft flag — enforcement registerAction nécessite AUTH UNLOCK. */
+  /** Soft flag — enforce via registerAction + Google registrationIntent. */
   registrationsPaused: boolean
 }
 

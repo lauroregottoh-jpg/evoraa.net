@@ -53,9 +53,13 @@ export function resolveAuthCookieDomain(
   hostHeader: string | null
 ): CookieOptions {
   const domain = cookieDomainFromHost(hostHeader)
+  const secure =
+    process.env.VERCEL_ENV === "production" ||
+    process.env.NODE_ENV === "production"
   return {
     path: "/",
     sameSite: "lax",
+    secure,
     ...(domain ? { domain } : {}),
   }
 }

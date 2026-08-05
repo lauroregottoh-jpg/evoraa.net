@@ -10,6 +10,7 @@ import { PasswordInput } from "@/components/auth/PasswordInput"
 import { loginAction } from "@/app/actions/auth"
 import { isNextRedirectError } from "@/lib/auth/criticalPath"
 import { startGoogleOAuth } from "@/lib/auth/oauthGoogle"
+import { TurnstileField } from "@/components/auth/TurnstileField"
 import {
   Lock,
   Mail,
@@ -100,6 +101,7 @@ export function AuthOverlayForm({
   const [isLoading, setIsLoading] = React.useState(false)
   const [loadingGoogle, setLoadingGoogle] = React.useState(false)
   const [typedEmail, setTypedEmail] = React.useState("")
+  const [turnstileToken, setTurnstileToken] = React.useState("")
 
   // Legacy /register links that still mount this shell → push to new flow
   React.useEffect(() => {
@@ -156,6 +158,9 @@ export function AuthOverlayForm({
     setIsLoading(true)
     try {
       const formData = new FormData(e.currentTarget)
+      if (turnstileToken) {
+        formData.set("cf-turnstile-response", turnstileToken)
+      }
       const result = (await loginAction(formData)) as AuthActionResult & {
         next?: string
         success?: boolean
@@ -289,6 +294,8 @@ export function AuthOverlayForm({
                 autoComplete="current-password"
               />
             </div>
+
+            <TurnstileField onToken={setTurnstileToken} />
 
             <Button
               type="submit"

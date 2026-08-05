@@ -38,7 +38,7 @@ Sans ces mots → **refuse de modifier** et propose un autre fichier / un workar
 
 ## Contrats à préserver (ne jamais « simplifier »)
 
-1. Cookies auth : domaine **`.keliaa.org`** (www + apex).
+1. Cookies auth : domaine **`.keliaa.org`** (www + apex) + **Secure** en prod HTTPS.
 2. Apex **`keliaa.org` → `www.keliaa.org`** (308) dans le middleware.
 3. Google OAuth → redirect **`/auth/callback`** (échange serveur), pas seulement client-only.
 4. Ne pas lancer `getUser` / refresh session middleware **sur** `/auth/callback`, `/auth/finish`, `/auth/logout`.
@@ -46,6 +46,8 @@ Sans ces mots → **refuse de modifier** et propose un autre fichier / un workar
 6. Emails Resend / outbox = **best-effort** — jamais bloquer `registerAction` si l’email plante.
 7. `NEXT_REDIRECT` : toujours **rethrow** dans les catch auth.
 8. Chemin de secours : **email + mot de passe** même si Google est down.
+9. Soft-confirm : off en production Vercel sauf `ALLOW_SOFT_EMAIL_CONFIRM=true`.
+10. HIBP / Turnstile : fail-open si le service tiers est down.
 
 ## Travail autorisé sans unlock
 

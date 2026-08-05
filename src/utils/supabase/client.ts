@@ -12,6 +12,9 @@ function cookieDomain(): string | undefined {
 
 export function createClient() {
   const domain = cookieDomain()
+  const secure =
+    typeof window !== "undefined" &&
+    window.location.protocol === "https:"
   return createBrowserClient(
     resolveSupabaseUrl(),
     resolveSupabaseAnonKey(),
@@ -19,6 +22,7 @@ export function createClient() {
       cookieOptions: {
         path: "/",
         sameSite: "lax",
+        secure,
         ...(domain ? { domain } : {}),
       },
     }

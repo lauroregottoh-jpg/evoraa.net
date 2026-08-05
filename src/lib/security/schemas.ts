@@ -5,17 +5,13 @@ const emailSchema = z
   .max(200)
   .transform((v) => v.trim().toLowerCase())
 
-export const loginSchema = z.object({
-  email: emailSchema,
-  password: z.string().min(1, "Email et mot de passe requis."),
-  nextRaw: z.string().max(500).optional().default(""),
-})
-
 export const registerSchema = z.object({
   email: emailSchema,
   password: z
     .string()
-    .min(8, "Le mot de passe doit contenir au moins 8 caractères."),
+    .min(10, "Le mot de passe doit contenir au moins 10 caractères.")
+    .regex(/[A-Za-z]/, "Ajoutez au moins une lettre.")
+    .regex(/[0-9]/, "Ajoutez au moins un chiffre."),
   /** Collected in post-signup onboarding essentials — optional at account creation. */
   firstName: z.string().trim().max(80).optional().default(""),
   lastName: z.string().trim().max(80).optional().default(""),
@@ -27,7 +23,29 @@ export const registerSchema = z.object({
   utmSource: z.string().trim().max(64).optional().default(""),
   utmMedium: z.string().trim().max(64).optional().default(""),
   utmCampaign: z.string().trim().max(64).optional().default(""),
+  turnstileToken: z.string().max(2048).optional().default(""),
 })
+
+export const loginSchema = z.object({
+  email: emailSchema,
+  password: z.string().min(1, "Email et mot de passe requis."),
+  nextRaw: z.string().max(500).optional().default(""),
+  turnstileToken: z.string().max(2048).optional().default(""),
+})
+
+export const passwordUpdateSchema = z
+  .object({
+    password: z
+      .string()
+      .min(10, "Le mot de passe doit contenir au moins 10 caractères.")
+      .regex(/[A-Za-z]/, "Ajoutez au moins une lettre.")
+      .regex(/[0-9]/, "Ajoutez au moins un chiffre."),
+    confirm: z.string(),
+  })
+  .refine((d) => d.password === d.confirm, {
+    message: "Les mots de passe ne correspondent pas.",
+    path: ["confirm"],
+  })
 
 export const resendConfirmationSchema = z.object({
   email: emailSchema,
@@ -36,18 +54,6 @@ export const resendConfirmationSchema = z.object({
 export const passwordResetRequestSchema = z.object({
   email: emailSchema,
 })
-
-export const passwordUpdateSchema = z
-  .object({
-    password: z
-      .string()
-      .min(8, "Le mot de passe doit contenir au moins 8 caractères."),
-    confirm: z.string(),
-  })
-  .refine((d) => d.password === d.confirm, {
-    message: "Les mots de passe ne correspondent pas.",
-    path: ["confirm"],
-  })
 
 const CONTACT_SUBJECTS = [
   "question",

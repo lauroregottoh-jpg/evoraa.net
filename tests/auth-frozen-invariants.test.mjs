@@ -31,22 +31,34 @@ describe("AUTH FROZEN — inscription / Google / PKCE", () => {
     assert.match(src, /oauthCallbackPath:\s*"\/auth\/callback"/)
     assert.match(src, /cookieDomain:\s*"\.keliaa\.org"/)
     assert.match(src, /canonicalHost:\s*"www\.keliaa\.org"/)
+    assert.match(src, /cookieSecureInProd:\s*true/)
+    assert.match(src, /softConfirmProdDefaultOff:\s*true/)
+  })
+
+  it("client browser cookies .keliaa.org + secure HTTPS", () => {
+    const src = read("src/utils/supabase/client.ts")
+    assert.match(src, /\.keliaa\.org/)
+    assert.match(src, /cookieOptions/)
+    assert.match(src, /secure/)
+  })
+
+  it("lot C : hibp + lockout + turnstile présents", () => {
+    assert.ok(existsSync(join(root, "src/lib/auth/hibp.ts")))
+    assert.ok(existsSync(join(root, "src/lib/auth/lockout.ts")))
+    assert.ok(existsSync(join(root, "src/lib/auth/turnstile.ts")))
+    const auth = read("src/app/actions/auth.ts")
+    assert.match(auth, /assertPasswordNotPwned|hibp/)
+    assert.match(auth, /isLoginLockedOut|recordLoginFailure/)
+    assert.match(auth, /registrationsPaused|getKillSwitches/)
   })
 
   it("rate-limit login/register fail-open", () => {
     const src = read("src/lib/security/rateLimit.ts")
-    // Extraire le bloc RL pour éviter un faux positif ailleurs
     const rlStart = src.indexOf("export const RL")
     assert.ok(rlStart >= 0, "export const RL manquant")
     const rl = src.slice(rlStart, rlStart + 800)
     assert.match(rl, /login:\s*\{[\s\S]*?failClosed:\s*false/)
     assert.match(rl, /register:\s*\{[\s\S]*?failClosed:\s*false/)
-  })
-
-  it("client browser cookies .keliaa.org", () => {
-    const src = read("src/utils/supabase/client.ts")
-    assert.match(src, /\.keliaa\.org/)
-    assert.match(src, /cookieOptions/)
   })
 
   it("middleware : apex→www + skip PKCE sur /auth/callback", () => {
