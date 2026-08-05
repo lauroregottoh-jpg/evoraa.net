@@ -25,7 +25,7 @@ Objectif : niveau béton Evoora (~84) **sans jamais casser** inscription / login
 |-----|---------|--------|
 | **D0** | Clés live (toi) | — |
 | **D1** | Cron `timingSafeEqual` partagé | **Fait** (août 2026) |
-| **D2** | Webhook idempotency durable | Moyen |
+| **D2** | Webhook idempotency durable | **Fait** (migration `00027` + claim/mark) |
 | **D3** | CSP stricte + nonce (créneau calme) | Élevé |
 | **D4** | Sentry client/edge | Faible |
 | **D5** | Admin audit list + RL admin | Moyen |

@@ -3,6 +3,11 @@ import { NextRequest, NextResponse } from "next/server"
 import { logPaymentEvent } from "@/lib/billing/paymentAudit"
 import { monerooVerifyPayment } from "@/lib/billing/monerooClient"
 import { verifyMonerooWebhookAuth } from "@/lib/billing/webhookAuth"
+import {
+  buildWebhookExternalKey,
+  claimWebhookDelivery,
+  markWebhookDeliveryProcessed,
+} from "@/lib/billing/webhookDedup"
 import { captureError } from "@/lib/observability/report"
 import { assertPaymentsNotPaused } from "@/lib/platform/killSwitches"
 
@@ -121,6 +126,36 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Paiement introuvable" }, { status: 404 })
   }
 
+  const terminalType =
+    verified.status === "success"
+      ? "completed"
+      : verified.status === "failed" || verified.status === "cancelled"
+        ? "failed"
+        : "pending"
+
+  const externalId = buildWebhookExternalKey({
+    transactionId: monerooId,
+    paymentId: payment.id,
+  })
+  const claim = await claimWebhookDelivery(admin, {
+    provider: "moneroo",
+    externalId,
+    eventType: terminalType,
+    paymentId: payment.id,
+  })
+  if (claim.status === "deduped") {
+    return NextResponse.json({
+      ok: true,
+      activated: terminalType === "completed",
+      deduped: true,
+    })
+  }
+  if (claim.status === "error") {
+    captureError(claim.message, { source: "moneroo_webhook_dedup" })
+  }
+  const deliveryId =
+    claim.status === "fresh" || claim.status === "retry" ? claim.id : null
+
   await logPaymentEvent({
     paymentId: payment.id,
     provider: "moneroo",
@@ -130,6 +165,7 @@ export async function POST(request: NextRequest) {
   })
 
   if (payment.status === "completed") {
+    if (deliveryId) await markWebhookDeliveryProcessed(admin, deliveryId)
     return NextResponse.json({ ok: true, activated: true, already: true })
   }
 
@@ -155,6 +191,7 @@ export async function POST(request: NextRequest) {
       eventType: "payment_failed",
       status: verified.status,
     })
+    if (deliveryId) await markWebhookDeliveryProcessed(admin, deliveryId)
     return NextResponse.json({ ok: true, activated: false })
   }
 
@@ -166,6 +203,7 @@ export async function POST(request: NextRequest) {
       status: verified.status,
       message: "État non terminal",
     })
+    if (deliveryId) await markWebhookDeliveryProcessed(admin, deliveryId)
     return NextResponse.json({ ok: true, activated: false, pending: true })
   }
 
@@ -192,6 +230,7 @@ export async function POST(request: NextRequest) {
       .eq("id", payment.id)
       .maybeSingle()
     if (refreshed?.status === "completed") {
+      if (deliveryId) await markWebhookDeliveryProcessed(admin, deliveryId)
       return NextResponse.json({ ok: true, activated: true, already: true })
     }
     captureError(activateError.message, {
@@ -223,5 +262,6 @@ export async function POST(request: NextRequest) {
     message: monerooId,
   })
 
+  if (deliveryId) await markWebhookDeliveryProcessed(admin, deliveryId)
   return NextResponse.json({ ok: true, activated: true })
 }

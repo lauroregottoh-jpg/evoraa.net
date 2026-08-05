@@ -2,6 +2,11 @@ import { createClient } from "@supabase/supabase-js"
 import { NextRequest, NextResponse } from "next/server"
 import { logPaymentEvent } from "@/lib/billing/paymentAudit"
 import { readBictorysAuthFromRequest } from "@/lib/billing/webhookAuth"
+import {
+  buildWebhookExternalKey,
+  claimWebhookDelivery,
+  markWebhookDeliveryProcessed,
+} from "@/lib/billing/webhookDedup"
 import { captureError } from "@/lib/observability/report"
 import { resolveAppUrlSync } from "@/lib/auth/appUrl"
 import { sendEmailWithRetry } from "@/lib/email/outbox"
@@ -107,6 +112,31 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Paiement introuvable" }, { status: 404 })
   }
 
+  const mapped = mapStatus(statusRaw)
+  const externalId = buildWebhookExternalKey({
+    transactionId,
+    paymentId: payment.id,
+  })
+  const claim = await claimWebhookDelivery(admin, {
+    provider: "bictorys",
+    externalId,
+    eventType: mapped,
+    paymentId: payment.id,
+  })
+  if (claim.status === "deduped") {
+    return NextResponse.json({
+      ok: true,
+      activated: mapped === "completed",
+      deduped: true,
+    })
+  }
+  if (claim.status === "error") {
+    captureError(claim.message, { source: "bictorys_webhook_dedup" })
+    // Fail-open: continue without durable claim (activate_pending_payment still race-safe)
+  }
+  const deliveryId =
+    claim.status === "fresh" || claim.status === "retry" ? claim.id : null
+
   await logPaymentEvent({
     paymentId: payment.id,
     provider: "bictorys",
@@ -123,10 +153,10 @@ export async function POST(request: NextRequest) {
       status: "completed",
       message: "Paiement déjà activé",
     })
+    if (deliveryId) await markWebhookDeliveryProcessed(admin, deliveryId)
     return NextResponse.json({ ok: true, activated: true, already: true })
   }
 
-  const mapped = mapStatus(statusRaw)
   if (mapped === "failed") {
     await admin
       .from("payments")
@@ -149,6 +179,7 @@ export async function POST(request: NextRequest) {
       status: "failed",
       message: statusRaw,
     })
+    if (deliveryId) await markWebhookDeliveryProcessed(admin, deliveryId)
     return NextResponse.json({ ok: true, activated: false })
   }
 
@@ -160,6 +191,7 @@ export async function POST(request: NextRequest) {
       status: "pending",
       message: "État non terminal",
     })
+    if (deliveryId) await markWebhookDeliveryProcessed(admin, deliveryId)
     return NextResponse.json({ ok: true, activated: false, pending: true })
   }
 
@@ -186,6 +218,7 @@ export async function POST(request: NextRequest) {
       .eq("id", payment.id)
       .maybeSingle()
     if (refreshed?.status === "completed") {
+      if (deliveryId) await markWebhookDeliveryProcessed(admin, deliveryId)
       return NextResponse.json({ ok: true, activated: true, already: true })
     }
     captureError(activateError.message, {
@@ -220,5 +253,6 @@ export async function POST(request: NextRequest) {
   // Best-effort email — await outbox enqueue (fast); never fail the webhook ACK on mail errors.
   await notifyAllianceActivated(admin, subscription.user_id)
 
+  if (deliveryId) await markWebhookDeliveryProcessed(admin, deliveryId)
   return NextResponse.json({ ok: true, activated: true })
 }

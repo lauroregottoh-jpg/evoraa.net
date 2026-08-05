@@ -16,7 +16,7 @@ Socle auth / headers / webhooks / kill switches déjà solides. Keliaa est **dev
 |-----|-------|---------|--------|
 | **D0** | Ops keys | Bictorys, Moneroo, Turnstile, Sentry, vérifier `CRON_SECRET` | Non |
 | **D1** | Cron harden | `verifyCronSecret` + `timingSafeEqual` (parity Evora) — **FAIT** `src/lib/security/cronAuth.ts` | Non |
-| **D2** | Webhook dedup | Table events traités + tx idempotente | Non |
+| **D2** | Webhook dedup | Table `webhook_deliveries` + claim/mark sur Bictorys/Moneroo — **FAIT** | Non |
 | **D3** | CSP nonce | Middleware nonce App Router — créneau calme | Adjacent |
 | **D4** | Sentry depth | `withSentryConfig` client/server/edge | Non |
 | **D5** | Admin surface | Audit list UI + RL admin + plus de mutations auditées | Non |
