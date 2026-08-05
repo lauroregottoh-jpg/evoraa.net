@@ -66,10 +66,43 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
+  // Canonique www : sinon le code_verifier PKCE est perdu entre apex et www
+  const incomingHost = (
+    request.headers.get('x-forwarded-host') ||
+    request.headers.get('host') ||
+    ''
+  ).split(':')[0]
+  if (incomingHost === 'keliaa.org') {
+    return NextResponse.redirect(
+      `https://www.keliaa.org${pathname}${search}`,
+      308
+    )
+  }
+
+  // Ne pas toucher aux cookies PKCE pendant l’échange OAuth
+  if (
+    pathname.startsWith('/auth/callback') ||
+    pathname.startsWith('/auth/finish') ||
+    pathname.startsWith('/auth/logout')
+  ) {
+    return supabaseResponse
+  }
+
+  const hostBare = incomingHost
+  const authCookieDomain =
+    hostBare === 'keliaa.org' || hostBare.endsWith('.keliaa.org')
+      ? '.keliaa.org'
+      : undefined
+
   const supabase = createServerClient(
     resolveSupabaseUrl(),
     resolveSupabaseAnonKey(),
     {
+      cookieOptions: {
+        path: '/',
+        sameSite: 'lax',
+        ...(authCookieDomain ? { domain: authCookieDomain } : {}),
+      },
       cookies: {
         getAll() {
           return request.cookies.getAll()
@@ -80,7 +113,10 @@ export async function updateSession(request: NextRequest) {
             request,
           })
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
+            supabaseResponse.cookies.set(name, value, {
+              ...options,
+              ...(authCookieDomain ? { domain: authCookieDomain } : {}),
+            })
           )
         },
       },

@@ -90,8 +90,8 @@ export default function RootLayout({
       var qs = new URLSearchParams();
       qs.set("code", code);
       qs.set("next", next);
-      // Échange PKCE côté client (auth/finish) — pas le route handler serveur
-      window.location.replace("/auth/finish?" + qs.toString());
+      // Échange PKCE serveur (cookies @supabase/ssr)
+      window.location.replace("/auth/callback?" + qs.toString());
       return;
     }
     if (err && (path === "/" || path === "")) {
@@ -100,7 +100,7 @@ export default function RootLayout({
       var qs2 = new URLSearchParams();
       qs2.set("error", err);
       qs2.set("next", next2);
-      window.location.replace("/auth/finish?" + qs2.toString());
+      window.location.replace("/auth/callback?" + qs2.toString());
     }
   } catch (e) {}
 })();

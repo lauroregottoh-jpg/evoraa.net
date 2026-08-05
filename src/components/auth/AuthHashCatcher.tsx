@@ -35,7 +35,7 @@ export function AuthHashCatcher() {
       const qs = new URLSearchParams()
       qs.set("code", code)
       qs.set("next", next)
-      window.location.replace(`/auth/finish?${qs.toString()}`)
+      window.location.replace(`/auth/callback?${qs.toString()}`)
       return
     }
 
@@ -44,7 +44,7 @@ export function AuthHashCatcher() {
       const qs = new URLSearchParams()
       qs.set("error", error)
       qs.set("next", next)
-      window.location.replace(`/auth/finish?${qs.toString()}`)
+      window.location.replace(`/auth/callback?${qs.toString()}`)
       return
     }
 

@@ -4,50 +4,60 @@ export { CHARTER_COOKIE }
 
 export function markCharterAcceptedClient() {
   if (typeof document === "undefined") return
-  document.cookie = `${CHARTER_COOKIE}=1; path=/; max-age=7200; SameSite=Lax`
+  const domain =
+    typeof window !== "undefined" &&
+    (window.location.hostname === "keliaa.org" ||
+      window.location.hostname.endsWith(".keliaa.org"))
+      ? "; domain=.keliaa.org"
+      : ""
+  document.cookie = `${CHARTER_COOKIE}=1; path=/; max-age=7200; SameSite=Lax${domain}`
 }
 
 export function clearCharterCookieClient() {
   if (typeof document === "undefined") return
   document.cookie = `${CHARTER_COOKIE}=; path=/; max-age=0; SameSite=Lax`
-}
-
-/** Toujours www en prod — évite perte du PKCE si Site URL / www divergent. */
-export function resolveOAuthOrigin(): string {
-  if (typeof window === "undefined") return ""
-  const host = window.location.hostname
-  if (host === "keliaa.org" || host === "www.keliaa.org") {
-    return "https://www.keliaa.org"
-  }
-  return window.location.origin
+  document.cookie = `${CHARTER_COOKIE}=; path=/; max-age=0; SameSite=Lax; domain=.keliaa.org`
 }
 
 /**
- * Starts Google OAuth (browser). Requires Google enabled in Supabase Auth providers.
- * Le code est échangé côté client (/auth/finish) pour garder le flow state PKCE.
+ * Canonique www avant Google — le code_verifier PKCE doit être écrit
+ * sur le même host que le retour OAuth.
+ */
+export function ensureWwwBeforeOAuth(): boolean {
+  if (typeof window === "undefined") return false
+  if (window.location.hostname !== "keliaa.org") return false
+  const dest = `https://www.keliaa.org${window.location.pathname}${window.location.search}`
+  window.location.replace(dest)
+  return true
+}
+
+/**
+ * Starts Google OAuth (browser).
+ * Échange côté serveur (/auth/callback) + cookies domaine .keliaa.org.
  */
 export async function startGoogleOAuth(options?: {
   next?: string
-  /** Set true on registration path after charter. */
   charterAccepted?: boolean
 }): Promise<{ error?: string }> {
   try {
+    if (ensureWwwBeforeOAuth()) {
+      return {}
+    }
+
     if (options?.charterAccepted) {
       markCharterAcceptedClient()
     }
 
     const { createClient } = await import("@/utils/supabase/client")
     const supabase = createClient()
-    const origin = resolveOAuthOrigin()
+    const origin = window.location.origin
     const next = options?.next?.startsWith("/") ? options.next : "/onboarding"
-    // Client handoff : conserve le code_verifier PKCE (évite invalid flow state)
-    const redirectTo = `${origin}/auth/finish?next=${encodeURIComponent(next)}`
+    const redirectTo = `${origin}/auth/callback?next=${encodeURIComponent(next)}`
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
         redirectTo,
-        skipBrowserRedirect: false,
         queryParams: {
           access_type: "offline",
           prompt: "select_account",
@@ -59,7 +69,7 @@ export async function startGoogleOAuth(options?: {
       console.error("[oauth/google]", error.message)
       return {
         error:
-          "Google n’est pas encore disponible. Utilisez l’inscription par e-mail, ou réessayez après configuration OAuth.",
+          "Google n’est pas disponible pour le moment. Utilisez l’inscription par e-mail.",
       }
     }
     return {}

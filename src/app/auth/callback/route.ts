@@ -13,16 +13,33 @@ function publicOrigin(request: Request): string {
   if (host.includes("localhost") || host.startsWith("127.")) {
     return url.origin
   }
+  // Canonique www pour cookies PKCE / session
+  const bare = host.split(":")[0]
+  if (bare === "keliaa.org") {
+    return "https://www.keliaa.org"
+  }
   return `${proto}://${host}`.replace(/\/$/, "")
 }
 
 function redirectWithCookies(
   url: string,
-  cookieJar: Array<{ name: string; value: string; options?: Record<string, unknown> }>
+  cookieJar: Array<{ name: string; value: string; options?: Record<string, unknown> }>,
+  requestHost?: string | null
 ) {
   const response = NextResponse.redirect(url)
+  const host = (requestHost || "").split(":")[0]
+  const domain =
+    host === "keliaa.org" || host.endsWith(".keliaa.org")
+      ? ".keliaa.org"
+      : undefined
   for (const c of cookieJar) {
-    response.cookies.set(c.name, c.value, c.options as never)
+    const opts = {
+      path: "/",
+      sameSite: "lax" as const,
+      ...(domain ? { domain } : {}),
+      ...(c.options || {}),
+    }
+    response.cookies.set(c.name, c.value, opts as never)
   }
   return response
 }
@@ -59,11 +76,26 @@ export async function GET(request: Request) {
     value: string
     options?: Record<string, unknown>
   }> = []
+  const requestHost =
+    request.headers.get("x-forwarded-host") ||
+    request.headers.get("host") ||
+    ""
+
+  const hostBare = requestHost.split(":")[0]
+  const authCookieDomain =
+    hostBare === "keliaa.org" || hostBare.endsWith(".keliaa.org")
+      ? ".keliaa.org"
+      : undefined
 
   const supabase = createServerClient(
     resolveSupabaseUrl(),
     resolveSupabaseAnonKey(),
     {
+      cookieOptions: {
+        path: "/",
+        sameSite: "lax",
+        ...(authCookieDomain ? { domain: authCookieDomain } : {}),
+      },
       cookies: {
         getAll() {
           return cookieStore.getAll()
@@ -75,7 +107,11 @@ export async function GET(request: Request) {
             } catch {
               /* ignore in edge cases */
             }
-            pendingCookies.push({ name, value, options: options as Record<string, unknown> })
+            pendingCookies.push({
+              name,
+              value,
+              options: options as Record<string, unknown>,
+            })
           })
         },
       },
@@ -167,18 +203,24 @@ export async function GET(request: Request) {
       })
     }
 
-    return redirectWithCookies(`${origin}${next}`, pendingCookies)
+    return redirectWithCookies(`${origin}${next}`, pendingCookies, requestHost)
   }
 
-  // Email confirmed on Supabase side but session cookie missing → login with clear message.
+  // Session manquante (souvent PKCE www/apex) → message clair + inscription email OK
+  const isPkce =
+    !!authError &&
+    /code verifier|pkce|flow state/i.test(authError)
   const loginMsg = encodeURIComponent(
-    authError
-      ? `Lien invalide ou expiré (${authError}). Connectez-vous avec votre mot de passe : l’accès s’ouvre même sans le lien.`
-      : "Email traité. Connectez-vous avec votre email et mot de passe pour ouvrir votre espace membre."
+    isPkce
+      ? "Connexion Google interrompue (navigateur / site www). Réessayez depuis https://www.keliaa.org/register, ou créez votre compte par e-mail."
+      : authError
+        ? `Lien invalide ou expiré. Connectez-vous avec votre e-mail et mot de passe, ou réessayez Google depuis www.keliaa.org.`
+        : "Email traité. Connectez-vous avec votre e-mail et mot de passe pour ouvrir votre espace membre."
   )
 
   return redirectWithCookies(
     `${origin}/login?error=auth_callback&msg=${loginMsg}&confirmed=1`,
-    pendingCookies
+    pendingCookies,
+    requestHost
   )
 }

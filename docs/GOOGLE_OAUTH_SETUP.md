@@ -49,7 +49,8 @@ Projet Supabase KELIAA : `rrjwhrdtokncfrzxtfoa`
 **Site URL** doit être exactement `https://www.keliaa.org` (avec www).  
 Toujours tester Google via `https://www.keliaa.org/...` (pas `keliaa.org` sans www).
 
-Erreur `invalid flow state` : en général **www vs non-www** ou cookies PKCE perdus — **pas** le passage Google « In production ».
+Erreur `invalid flow state` / `PKCE code verifier not found` : en général **www vs non-www** ou cookies PKCE perdus — **pas** le passage Google « In production ».  
+Le site force désormais `keliaa.org` → `www.keliaa.org` et partage les cookies sur `.keliaa.org`.
 
 Sans l’étape 2 (Enable Google), le bouton affichera toujours *unsupported provider*.
 
