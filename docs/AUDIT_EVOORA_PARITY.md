@@ -19,7 +19,7 @@ Socle auth / headers / webhooks / kill switches déjà solides. Keliaa est **dev
 | **D2** | Webhook dedup | Table `webhook_deliveries` + claim/mark sur Bictorys/Moneroo — **FAIT** | Non |
 | **D3** | CSP nonce | Middleware nonce App Router — créneau calme | Adjacent |
 | **D4** | Sentry depth | `withSentryConfig` client/server/edge | Non |
-| **D5** | Admin surface | Audit list UI + RL admin + plus de mutations auditées | Non |
+| **D5** | Admin surface | Audit list UI + RL 100/min userId + mutations journalisées — **FAIT** | Non |
 | **D6** | Auth polish | Timing parity (dummy bcrypt) | **AUTH UNLOCK** |
 | **D7** | Playwright smoke | Register / login / OAuth staging | Non |
 | **D8** | Privacy RLS | Reserrer SELECT profils | Non (DB) |

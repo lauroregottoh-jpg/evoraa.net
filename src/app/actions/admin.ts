@@ -60,6 +60,21 @@ async function requireAdmin() {
     }
   }
 
+  // D5 — rate-limit back-office per userId (parity Evora)
+  const { enforceRateLimit, RL } = await import("@/lib/security/rateLimit")
+  const rl = await enforceRateLimit({
+    ...RL.adminUserId,
+    subject: user.id,
+  })
+  if (!rl.ok) {
+    return {
+      error: rl.error,
+      supabase: null,
+      user: null,
+      role: null,
+    }
+  }
+
   return {
     error: undefined as string | undefined,
     supabase,
@@ -789,6 +804,13 @@ export async function adminUpdateModerationStatus(
   }
 
   revalidateOps()
+  const { logAdminAction } = await import("@/lib/admin/audit")
+  await logAdminAction({
+    action: "moderation_status",
+    targetType: "profile",
+    targetId: profileId,
+    meta: { status, reasonCode: reasonCode || null },
+  })
   return { success: true }
 }
 
@@ -1077,6 +1099,13 @@ export async function adminSetVerified(profileId: string, verified: boolean) {
     .eq("id", profileId)
 
   if (error) return { error: error.message }
+  const { logAdminAction } = await import("@/lib/admin/audit")
+  await logAdminAction({
+    action: "set_verified",
+    targetType: "profile",
+    targetId: profileId,
+    meta: { verified },
+  })
   revalidateOps()
   return { success: true }
 }
@@ -1161,6 +1190,13 @@ export async function adminAssignStaffByEmail(input: {
 
   if (error) return { error: error.message }
   revalidateOps()
+  const { logAdminAction } = await import("@/lib/admin/audit")
+  await logAdminAction({
+    action: "assign_staff",
+    targetType: "profile",
+    targetId: profile.id,
+    meta: { role: input.role, email },
+  })
   return {
     success: true,
     profileId: profile.id,
@@ -1196,6 +1232,29 @@ export async function adminListStaff() {
       role: (p.role as string) || "member",
     })),
   }
+}
+
+/** Journal ops (admin_audit_log) — lecture filtrée pour la console. */
+export async function adminListAuditLog(input?: {
+  action?: string
+  actorEmail?: string
+  limit?: number
+}) {
+  const gate = await requireAdmin()
+  if (gate.error) {
+    return { error: gate.error, rows: [] as Awaited<
+      ReturnType<typeof import("@/lib/admin/audit").listAdminAuditLog>
+    >["rows"] }
+  }
+
+  const { listAdminAuditLog } = await import("@/lib/admin/audit")
+  const result = await listAdminAuditLog({
+    action: input?.action || null,
+    actorEmail: input?.actorEmail || null,
+    limit: input?.limit ?? 40,
+  })
+  if (result.error) return { error: result.error, rows: result.rows }
+  return { rows: result.rows }
 }
 
 export async function adminGrantAlliance(userId: string, days = 30) {
@@ -1264,6 +1323,13 @@ export async function adminResolveReport(
     .eq("id", reportId)
 
   if (error) return { error: error.message }
+  const { logAdminAction } = await import("@/lib/admin/audit")
+  await logAdminAction({
+    action: "resolve_report",
+    targetType: "report",
+    targetId: reportId,
+    meta: { status },
+  })
   revalidateOps()
   return { success: true }
 }
@@ -1415,6 +1481,14 @@ export async function adminBroadcastSegmentNotification(input: {
   const { error } = await gate.supabase.from("notifications").insert(rows)
   if (error) return { error: error.message }
 
+  const { logAdminAction } = await import("@/lib/admin/audit")
+  await logAdminAction({
+    action: "broadcast_segment",
+    targetType: "campaign",
+    targetId: null,
+    meta: { sent: ids.length, title },
+  })
+
   revalidateOps()
   return { success: true, sent: ids.length }
 }
@@ -1497,6 +1571,13 @@ export async function adminCreateMember(input: {
     }
 
     revalidateOps()
+    const { logAdminAction } = await import("@/lib/admin/audit")
+    await logAdminAction({
+      action: "create_member",
+      targetType: "user",
+      targetId: userId,
+      meta: { email, approve: Boolean(input.approve) },
+    })
     return { success: true, userId }
   } catch (e) {
     return { error: e instanceof Error ? e.message : "Erreur creation membre." }
@@ -1858,6 +1939,14 @@ export async function adminReviewChurchRecommendation(
       })
       .eq("id", reco.profile_id)
   }
+
+  const { logAdminAction } = await import("@/lib/admin/audit")
+  await logAdminAction({
+    action: "review_church_reco",
+    targetType: "church_recommendation",
+    targetId: recoId,
+    meta: { status },
+  })
 
   revalidateOps()
   return { success: true }

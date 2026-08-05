@@ -28,7 +28,7 @@ Objectif : niveau béton Evoora (~84) **sans jamais casser** inscription / login
 | **D2** | Webhook idempotency durable | **Fait** (migration `00027` + claim/mark) |
 | **D3** | CSP stricte + nonce (créneau calme) | Élevé |
 | **D4** | Sentry client/edge | Faible |
-| **D5** | Admin audit list + RL admin | Moyen |
+| **D5** | Admin audit list + RL admin | **Fait** (list UI + 100/min userId + plus de mutations) |
 | **D6** | Timing parity auth | **AUTH UNLOCK** |
 | **D7** | Playwright smoke live | Faible |
 | **D8** | RLS profils resserrée | Moyen |

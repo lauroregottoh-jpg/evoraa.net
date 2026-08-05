@@ -107,4 +107,11 @@ export const RL = {
   },
   contact: { action: "contact", limit: 20, windowSeconds: 60 * 60, failClosed: false },
   eva: { action: "eva", limit: 60, windowSeconds: 60 * 60, failClosed: false },
+  /** Back-office — 100 req / min / userId (parity Evora D-ADMIN-05) */
+  adminUserId: {
+    action: "admin_userid",
+    limit: 100,
+    windowSeconds: 60,
+    failClosed: false,
+  },
 } as const

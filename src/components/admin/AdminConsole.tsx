@@ -55,6 +55,7 @@ import {
   BictorysSandboxPanel,
   PaymentsAuditPanel,
 } from "@/components/admin/AdminPaymentsPanels"
+import { AdminOpsAuditPanel } from "@/components/admin/AdminOpsAuditPanel"
 import { DistBars, SparkColumns } from "@/components/admin/AdminCharts"
 import { cn } from "@/utils/cn"
 import type { MatchingIntelligence } from "@/lib/admin/matchingIntelligence"
@@ -807,6 +808,7 @@ export function AdminConsole(props: Props) {
             payments={props.payments}
             paymentEvents={props.paymentEvents}
           />
+          <AdminOpsAuditPanel />
           <div className="grid lg:grid-cols-1 gap-4 max-w-2xl">
             <SectionCard title="Abonnements récents">
               <div className="divide-y divide-border max-h-96 overflow-y-auto">
