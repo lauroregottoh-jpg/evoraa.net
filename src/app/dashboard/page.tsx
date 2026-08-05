@@ -12,6 +12,7 @@ import {
   DailyEditorialCard,
   QuickAccessGrid,
 } from "@/components/dashboard/FarataHomeBlocks"
+import { EvaWeeklyReflection } from "@/components/dashboard/EvaWeeklyReflection"
 import { PresenceStreak } from "@/components/dashboard/PresenceStreak"
 import { PillarBadges } from "@/components/assessments/PillarBadges"
 import { InviteShareCard } from "@/components/growth/InviteShareCard"
@@ -149,6 +150,9 @@ export default async function DashboardPage() {
 
         {!data.hasAvatar || data.assessmentsDone < 5 ? (
           <div className="rounded-2xl border border-primary/25 bg-primary/5 p-5 space-y-3">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
+              Message d’Eva
+            </p>
             <p className="text-sm font-bold text-foreground">
               {data.assessmentsDone < 5
                 ? "Sans Matching, pas de rencontre juste"
@@ -156,7 +160,7 @@ export default async function DashboardPage() {
             </p>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {data.assessmentsDone < 5
-                ? `Votre profil est à ${data.completionPercentage}% seulement (${data.assessmentsDone}/5 questionnaires). L’onboarding ne suffit pas : sans les tests, le Matching ne peut pas trouver la personne qui correspond à votre foi, vos valeurs et votre projet de mariage.`
+                ? `${data.firstName ? `${data.firstName}, v` : "V"}otre profil est à ${data.completionPercentage}% (${data.assessmentsDone}/5 questionnaires). Sans les tests, je ne peux pas bien vous orienter vers quelqu’un qui partage votre foi et votre projet.`
                 : "Ajoutez une photo claire : sans portrait, vous restez difficile à découvrir pour les profils compatibles."}
             </p>
             <Link
@@ -169,6 +173,8 @@ export default async function DashboardPage() {
             </Link>
           </div>
         ) : null}
+
+        <EvaWeeklyReflection />
 
         <QuickAccessGrid
           unreadMessages={data.unreadMessages}

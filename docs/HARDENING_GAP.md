@@ -1,27 +1,27 @@
-# Hardening P0/P1/B — rapprochement Evoora (août 2026)
+# Hardening — écart vs Evoora (août 2026)
 
-Objectif : ~62 → ~75 (P0/P1) → **~79** (lot B) sans casser AUTH_FROZEN.
+Objectif : niveau béton Evoora (~84) **sans jamais casser** inscription / login / accès.
 
-## Fait
+## Fait (estim. ~82)
 
-| Item | Statut |
+| Lot | Contenu |
 |---|---|
-| Security headers | `next.config.ts` |
-| Sentry + instrumentation + env Zod | done |
-| Admin audit log | migration `00026` |
-| CinetPay = activate RPC + payment_events | lot B |
-| Webhook auth testable + anti-replay Bictorys | `webhookAuth.ts` + tests |
-| Kill switches `payments_paused` / flag inscriptions | ops console |
-| Outbox cron 6 h + DLQ count health | `vercel.json` |
-| Runbook incident | `docs/INCIDENT_PAYMENTS.md` |
+| P0/P1 | Headers sécurité, Sentry soft, env Zod, audit admin, CI shape |
+| B | CinetPay retiré, Moneroo + Bictorys, kill switches, outbox cron, runbooks |
+| C (AUTH UNLOCK) | Cookies secure, HIBP, lockout, Turnstile optionnel, soft-confirm prod off, `registrations_paused` |
+| Ops UX | Confirmation message admin + historique, nav membre 5 points, logout onboarding (soleil) |
+| Eva auto | Cron `profile-reminders` voix Eva + bandeaux dashboard / MemberReminders |
 
-## Lot C (AUTH UNLOCK)
+## En attente de **tes** clés API
 
-- Cookies `secure`, CAPTCHA, HIBP, soft-confirm off, enforce `registrations_paused`
+→ `docs/API_KEYS_WHEN_READY.md` (Bictorys, Moneroo, Turnstile, Sentry).
 
-## Humain
+## Lot D restant (code quand tu veux)
 
-1. Migration `00026` appliquée
-2. Ruleset GitHub Active + check `quality`
-3. `SENTRY_DSN` optionnel
-4. Hobby Vercel : cron toutes les 6 h peut exiger Pro — sinon repasser `0 9 * * *`
+- CSP stricte avec nonce App Router (risqué : on attend un créneau calme)
+- Smoke Playwright live (navigateur) — base Node déjà en `test:smoke`
+- Vercel Pro si crons &lt; 6 h nécessaires
+
+## Règle d’or
+
+Toute évolution auth = **`AUTH UNLOCK`** explicite + tests `auth-frozen-invariants`.

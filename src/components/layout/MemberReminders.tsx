@@ -18,7 +18,7 @@ type MemberRemindersProps = {
   onNavigate: NavHandler
 }
 
-/** Bandeau rappels : % profil, tâches restantes, Alliance J-7. */
+/** Bandeau rappels Eva : % profil, tâches restantes, Alliance J-7. */
 export function MemberReminders({
   completionPercentage,
   hasAvatar,
@@ -43,6 +43,11 @@ export function MemberReminders({
   return (
     <div className="border-t border-border/40 bg-secondary/40">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-2 space-y-2">
+        {showTasks && (
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground px-0.5">
+            Eva vous rappelle
+          </p>
+        )}
         {showRenew && (
           <a
             href="/billing"

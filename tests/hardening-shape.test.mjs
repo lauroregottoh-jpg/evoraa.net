@@ -96,4 +96,18 @@ describe("CI shape — hardening P0/P1", () => {
     const src = read(".github/CODEOWNERS")
     assert.match(src, /src\/app\/actions\/auth\.ts/)
   })
+
+  it("Eva reminders + checklist API keys présents", () => {
+    const rem = read("src/lib/eva/reminders.ts")
+    assert.match(rem, /buildEvaReminders/)
+    assert.match(rem, /pickPrimaryEvaReminder/)
+    assert.ok(existsSync(join(root, "docs/API_KEYS_WHEN_READY.md")))
+    assert.ok(existsSync(join(root, "docs/HARDENING_GAP.md")))
+  })
+
+  it("actions sensibles réservées requireFullAdmin", () => {
+    const src = read("src/app/actions/admin.ts")
+    assert.match(src, /async function requireFullAdmin/)
+    assert.match(src, /adminSetRole[\s\S]*?requireFullAdmin/)
+  })
 })
