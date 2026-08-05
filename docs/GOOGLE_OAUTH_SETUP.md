@@ -1,46 +1,70 @@
 # Connexion Google (OAuth) — KELIAA
 
-Le bouton **Continuer avec Google** est dans le code (`/register` et `/login`).
-Il fonctionne une fois Google activé dans Supabase + Google Cloud.
+Le bouton **Continuer avec Google** est déjà dans le code (`/register` et `/login`).
+L’erreur `unsupported provider` / `provider is not enabled` signifie que Google **n’est pas activé** dans Supabase (pas un bug du site).
 
-## 1. Google Cloud Console
+Projet Supabase KELIAA : `rrjwhrdtokncfrzxtfoa`
 
-1. Ouvrir [Google Cloud Console](https://console.cloud.google.com/) → APIs & Services → Credentials.
-2. Créer un **OAuth 2.0 Client ID** (type *Web application*).
-3. **Authorized JavaScript origins** :
+> **Différence avec le kit evoora** : evoora utilise son propre OAuth (`GOOGLE_CLIENT_ID` / `SECRET` / `REDIRECT_URI` → `/api/auth/oauth/google/callback`).  
+> **KELIAA garde Supabase Auth** : tu crées le même type d’OAuth Client Google Cloud, mais tu branches Client ID + Secret **dans Supabase → Authentication → Providers → Google**, et le Redirect URI Google Cloud pointe vers Supabase (`…supabase.co/auth/v1/callback`), **pas** vers une route Next.js. Ne colle pas les `GOOGLE_*` d’evoora dans Vercel pour KELIAA — ça ne branchera pas le bouton.
+
+---
+
+## 1. Google Cloud Console (~5–10 min)
+
+1. Ouvre [Google Cloud Console](https://console.cloud.google.com/) → crée un projet (ex. `Keliaa`) ou utilise un projet existant.
+2. **APIs & Services** → **OAuth consent screen** :
+   - Type **External**
+   - App name : `KELIAA`
+   - User support email + developer contact : ton email
+   - Enregistre (tu pourras publier plus tard ; en mode Test, ajoute les emails de test dans *Test users*)
+3. **APIs & Services** → **Credentials** → **Create Credentials** → **OAuth client ID**
+   - Application type : **Web application**
+   - Name : `KELIAA Web`
+4. **Authorized JavaScript origins** (ajouter) :
    - `http://localhost:3000`
-   - `https://keliaa.org` (et tout domaine de prod / preview Vercel si besoin)
-4. **Authorized redirect URIs** — utiliser l’URL de callback **Supabase** :
-   - `https://<PROJECT_REF>.supabase.co/auth/v1/callback`
-   - (remplacer `<PROJECT_REF>` par l’id du projet Supabase)
+   - `https://www.keliaa.org`
+   - `https://keliaa.org`
+5. **Authorized redirect URIs** — **uniquement** le callback Supabase (pas ton site) :
+   - `https://rrjwhrdtokncfrzxtfoa.supabase.co/auth/v1/callback`
+6. Créer → copier **Client ID** et **Client Secret**.
 
-Copier **Client ID** et **Client Secret**.
+---
 
-## 2. Supabase Dashboard
+## 2. Supabase Dashboard (obligatoire)
 
-1. Authentication → Providers → **Google** → Enable.
-2. Coller Client ID + Client Secret.
-3. Authentication → URL Configuration :
-   - **Site URL** : `https://keliaa.org` (ou `http://localhost:3000` en local)
-   - **Redirect URLs** (ajouter) :
-     - `http://localhost:3000/auth/callback`
+1. Ouvre [Supabase](https://supabase.com/dashboard) → projet KELIAA.
+2. **Authentication** → **Providers** → **Google** → **Enable**.
+3. Coller **Client ID** + **Client Secret** Google → **Save**.
+4. **Authentication** → **URL Configuration** :
+   - **Site URL** : `https://www.keliaa.org`
+   - **Redirect URLs** (ajouter toutes) :
+     - `https://www.keliaa.org/auth/callback`
      - `https://keliaa.org/auth/callback`
-     - éventuels previews : `https://*.vercel.app/auth/callback`
+     - `http://localhost:3000/auth/callback`
 
-## 3. Comportement produit
+Sans l’étape 2 (Enable Google), le bouton affichera toujours *unsupported provider*.
+
+---
+
+## 3. Test
+
+1. Ouvre https://www.keliaa.org/register → Bienvenue → **Continuer avec Google**.
+2. Tu dois être redirigé vers le choix de compte Google, puis revenir sur Keliaa (onboarding ou espace membre).
 
 | Cas | Résultat |
 |---|---|
-| Nouvel utilisateur Google | Compte créé → `/onboarding` (infos essentielles) |
-| Compte Google déjà existant | Session ouverte → dashboard ou onboarding si profil incomplet |
-| Charte acceptée juste avant Google | Cookie `keliaa_charter_accepted` → metadata `charter_accepted` |
+| Nouvel utilisateur Google | Compte créé → onboarding |
+| Compte déjà existant | Session → dashboard / onboarding si profil incomplet |
 
-Sans config Google, le bouton affiche un message d’erreur clair et l’**inscription e-mail** reste disponible.
+L’inscription **e-mail** reste disponible même sans Google.
 
-## 4. Test local
+---
 
-```bash
-npm run dev
-```
+## 4. Si ça échoue encore
 
-Ouvrir `/register` → Bienvenue → Charte → Continuer avec Google.
+- Vérifie que le provider Google est bien **Enabled** (toggle vert) et sauvegardé.
+- Vérifie que le Redirect URI Google Cloud est **exactement**  
+  `https://rrjwhrdtokncfrzxtfoa.supabase.co/auth/v1/callback` (pas `keliaa.org/...`).
+- En mode OAuth *Testing*, ton compte Gmail doit figurer dans **Test users**.
+- Hard refresh / autre navigateur après Save Supabase.

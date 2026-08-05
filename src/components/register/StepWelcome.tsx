@@ -14,11 +14,6 @@ export function StepWelcome({ onContinue }: { onContinue: () => void }) {
           Bienvenue sur{" "}
           <span className="text-primary">KELIAA</span>
         </h1>
-        <p className="mx-auto max-w-md text-base text-muted-foreground leading-relaxed">
-          Un espace de discernement pour celles et ceux qui cherchent un
-          projet de vie conjugal sincère, ancré dans la foi — sans pression,
-          sans superficialité.
-        </p>
       </div>
 
       <ul className="mx-auto grid max-w-lg gap-4">
