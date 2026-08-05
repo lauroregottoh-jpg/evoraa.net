@@ -25,14 +25,14 @@ Objectif : niveau béton Evoora (~84) **sans jamais casser** inscription / login
 |-----|---------|--------|
 | **D0** | Clés live (toi) | — |
 | **D1** | Cron `timingSafeEqual` partagé | **Fait** (août 2026) |
-| **D2** | Webhook idempotency durable | **Fait** (migration `00027` + claim/mark) |
+| **D2** | Webhook idempotency durable | **Fait** (migration `00027` **appliquée** + claim/mark) |
 | **D3** | CSP stricte + nonce (créneau calme) | Élevé |
 | **D4** | Sentry client/edge | Faible |
 | **D5** | Admin audit list + RL admin | **Fait** (list UI + 100/min userId + plus de mutations) |
 | **D6** | Timing parity auth | **AUTH UNLOCK** |
 | **D7** | Playwright smoke live | Faible |
 | **D8** | RLS profils resserrée | Moyen |
-| **D9** | Perf admin/cron | Faible |
+| **D9** | Perf admin/cron | **Partiel** — cron Alliance batch emails (`00028`) |
 | — | Vercel Pro si crons &lt; 6 h nécessaires | Ops |
 
 ## Règle d’or
