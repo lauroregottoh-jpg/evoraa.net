@@ -8,14 +8,7 @@ import { brandedEmailShell } from "@/lib/email/templates"
 import { escapeHtml } from "@/lib/security/html"
 import { enforceRateLimit, RL } from "@/lib/security/rateLimit"
 import { feedbackSchema, firstZodError } from "@/lib/security/schemas"
-
-export const FEEDBACK_CATEGORY_LABELS: Record<string, string> = {
-  signup_help: "Problème d’inscription",
-  complaint: "Plainte / difficulté",
-  suggestion: "Suggestion d’amélioration",
-  ux: "Expérience utilisateur",
-  other: "Autre",
-}
+import { FEEDBACK_CATEGORY_LABELS } from "@/lib/feedback/categories"
 
 export async function submitFeedbackAction(input: {
   name: string

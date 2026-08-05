@@ -3,9 +3,9 @@
 import * as React from "react"
 import {
   adminUpdateFeedbackStatus,
-  FEEDBACK_CATEGORY_LABELS,
   type FeedbackRow,
 } from "@/app/actions/feedback"
+import { FEEDBACK_CATEGORY_LABELS } from "@/lib/feedback/categories"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/utils/cn"
 import { MessageSquareHeart } from "lucide-react"

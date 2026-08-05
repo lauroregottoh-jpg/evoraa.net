@@ -5,6 +5,8 @@ import Link from "next/link"
 import { OPS_CONSOLE_PATH } from "@/lib/admin/consolePath"
 import type { MatchingIntelligence } from "@/lib/admin/matchingIntelligence"
 
+export const dynamic = "force-dynamic"
+
 export default async function OpsConsolePage() {
   let data: Awaited<ReturnType<typeof getAdminDashboardData>>
   try {
