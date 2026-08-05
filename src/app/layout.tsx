@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
@@ -74,6 +75,23 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="antialiased min-h-screen bg-background text-foreground">
+        <Script id="auth-oauth-handoff" strategy="beforeInteractive">{`
+(function () {
+  try {
+    var p = new URLSearchParams(window.location.search);
+    var code = p.get("code");
+    var err = p.get("error_description") || p.get("error");
+    if (!code && !err) return;
+    var next = p.get("next");
+    if (!next || next.charAt(0) !== "/") next = "/onboarding";
+    var qs = new URLSearchParams();
+    if (code) qs.set("code", code);
+    if (err) qs.set("error", err);
+    qs.set("next", next);
+    window.location.replace("/auth/callback?" + qs.toString());
+  } catch (e) {}
+})();
+        `}</Script>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <AnalyticsScripts />
           <SmoothScroll>{children}</SmoothScroll>
