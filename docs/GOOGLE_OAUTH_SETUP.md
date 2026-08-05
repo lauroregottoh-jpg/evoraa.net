@@ -61,10 +61,13 @@ L’inscription **e-mail** reste disponible même sans Google.
 
 ---
 
-## 4. Si ça échoue encore
+## 5. Nom affiché « rrjwhr….supabase.co » au lieu de KELIAA
 
-- Vérifie que le provider Google est bien **Enabled** (toggle vert) et sauvegardé.
-- Vérifie que le Redirect URI Google Cloud est **exactement**  
-  `https://rrjwhrdtokncfrzxtfoa.supabase.co/auth/v1/callback` (pas `keliaa.org/...`).
-- En mode OAuth *Testing*, ton compte Gmail doit figurer dans **Test users**.
-- Hard refresh / autre navigateur après Save Supabase.
+Normal avec Supabase : Google affiche le **domaine du callback** (`….supabase.co`), pas toujours le nom de l’app.
+
+Pour améliorer :
+1. Google Cloud → **API et services** → **Écran de consentement OAuth** → nom **KELIAA**, logo, lien confidentialité `https://www.keliaa.org/confidentialite`.
+2. Publier l’app (passer de **Test** à **En production**) quand tu es prêt.
+3. Pour masquer totalement `supabase.co` : domaine Auth personnalisé Supabase (plan payant) — optionnel plus tard.
+
+Le login fonctionne quand même ; c’est uniquement l’affichage Google.

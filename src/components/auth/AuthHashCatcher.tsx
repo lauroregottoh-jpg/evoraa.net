@@ -1,17 +1,15 @@
 "use client"
 
 import * as React from "react"
-import { useRouter } from "next/navigation"
 
 /**
- * Sur la home (et pages marketing) : récupère les retours Auth
- * (?code= PKCE ou #access_token) et envoie vers le bon handler,
- * au lieu de laisser l’utilisateur bloqué sur l’accueil.
+ * Sur la home : si retour Auth (?code= Google / #token), bascule IMMÉDIATEMENT
+ * vers le handler — évite 10 s bloqué sur l’accueil.
  */
 export function AuthHashCatcher() {
-  const router = useRouter()
+  const [pending, setPending] = React.useState(false)
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (typeof window === "undefined") return
 
     const url = new URL(window.location.href)
@@ -23,13 +21,14 @@ export function AuthHashCatcher() {
     const next =
       nextRaw && nextRaw.startsWith("/") ? nextRaw : "/onboarding"
 
-    // Flux PKCE OAuth (Google) : souvent renvoyé sur Site URL avec ?code=
     if (code || error) {
+      setPending(true)
       const qs = new URLSearchParams()
       if (code) qs.set("code", code)
       if (error) qs.set("error", error)
       qs.set("next", next)
-      router.replace(`/auth/callback?${qs.toString()}`)
+      // replace dur (plus fiable que router soft sur la home)
+      window.location.replace(`/auth/callback?${qs.toString()}`)
       return
     }
 
@@ -45,13 +44,22 @@ export function AuthHashCatcher() {
       return
     }
 
+    setPending(true)
     const type = params.get("type")
     const dest =
       type === "recovery" || type === "invite"
-        ? "/reset-password"
-        : `/auth/finish?next=${encodeURIComponent(next)}`
-    router.replace(`${dest}${window.location.hash}`)
-  }, [router])
+        ? `/reset-password${window.location.hash}`
+        : `/auth/finish?next=${encodeURIComponent(next)}${window.location.hash}`
+    window.location.replace(dest)
+  }, [])
 
-  return null
+  if (!pending) return null
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-primary text-white px-6">
+      <p className="font-serif text-xl text-center">
+        Connexion en cours… ouverture de votre espace
+      </p>
+    </div>
+  )
 }
