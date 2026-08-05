@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { PLANS, PUBLIC_PLAN_ORDER } from "@/lib/billing/plans";
+import { TestimonialsCarousel } from "@/components/marketing/TestimonialsCarousel";
 
 /** Copy source: software-architecture/KELIA - Page d'accueil.docx — PAGE TARIFS */
 const PLAN_DESCRIPTIONS: Record<string, string> = {
@@ -321,17 +322,7 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Soft launch — pas de témoignages inventés */}
-      <section className="py-10 px-6 sm:px-12 lg:px-20 max-w-3xl mx-auto">
-        <div className="rounded-2xl border border-accent/25 bg-accent/10 p-6 text-center space-y-2">
-          <h2 className="font-serif text-xl font-bold text-foreground">Alliance, sans artifice</h2>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            Soft launch : les témoignages membres authentiques arriveront dès qu&apos;ils seront
-            disponibles. Comparez les quotas Découverte / Alliance et avancez au rythme de votre
-            discernement.
-          </p>
-        </div>
-      </section>
+      <TestimonialsCarousel />
 
       <section className="py-12 px-6 max-w-3xl mx-auto space-y-4">
         <h2 className="font-serif text-2xl font-bold text-center">Questions fréquentes</h2>

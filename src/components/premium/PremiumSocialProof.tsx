@@ -1,8 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { ChevronDown } from "lucide-react"
+import { ChevronDown, Quote } from "lucide-react"
 import { cn } from "@/utils/cn"
+import { KELIAA_TESTIMONIALS } from "@/lib/marketing/testimonials"
 
 const FAQS = [
   {
@@ -29,16 +30,68 @@ const FAQS = [
 
 export function PremiumSocialProof() {
   const [open, setOpen] = React.useState<number | null>(0)
+  const [index, setIndex] = React.useState(0)
+
+  React.useEffect(() => {
+    const id = window.setInterval(() => {
+      setIndex((i) => (i + 1) % KELIAA_TESTIMONIALS.length)
+    }, 5500)
+    return () => window.clearInterval(id)
+  }, [])
+
+  const current = KELIAA_TESTIMONIALS[index]
 
   return (
     <div className="space-y-8">
-      <section className="rounded-2xl border border-accent/25 bg-accent/10 p-5 sm:p-7 space-y-3 text-center">
-        <h2 className="font-serif text-2xl font-bold">Alliance, sans artifice</h2>
-        <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
-          Soft launch : nous publierons des témoignages membres authentiques dès qu&apos;ils
-          seront disponibles. En attendant, comparez les quotas Decouverte / Alliance et
-          choisissez au rythme de votre discernement.
-        </p>
+      <section className="rounded-2xl border border-border bg-card p-5 sm:p-7 space-y-5">
+        <div className="text-center space-y-1">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
+            Témoignages
+          </p>
+          <h2 className="font-serif text-2xl font-bold">Des parcours qui parlent vrai</h2>
+        </div>
+
+        <div className="relative min-h-[220px] sm:min-h-[200px] flex flex-col items-center justify-center text-center px-2">
+          {KELIAA_TESTIMONIALS.map((t, i) => (
+            <figure
+              key={t.name}
+              className={cn(
+                "absolute inset-x-0 transition-all duration-700 ease-out px-2",
+                i === index
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-3 pointer-events-none"
+              )}
+              aria-hidden={i !== index}
+            >
+              <Quote className="h-6 w-6 text-accent mx-auto mb-4" />
+              <blockquote className="font-serif text-lg sm:text-xl text-foreground leading-relaxed italic">
+                « {t.quote} »
+              </blockquote>
+              <figcaption className="mt-4 text-sm font-semibold text-primary">
+                {t.name}
+                <span className="block font-normal text-muted-foreground mt-0.5">
+                  {t.meta}
+                </span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+
+        <div className="flex items-center justify-center gap-2">
+          {KELIAA_TESTIMONIALS.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              aria-label={`Témoignage ${i + 1}`}
+              onClick={() => setIndex(i)}
+              className={cn(
+                "h-2 rounded-full transition-all",
+                i === index ? "w-7 bg-primary" : "w-2 bg-border hover:bg-muted-foreground/40"
+              )}
+            />
+          ))}
+        </div>
+        <p className="sr-only">Actuellement : {current.name}</p>
       </section>
 
       <section className="space-y-3">
