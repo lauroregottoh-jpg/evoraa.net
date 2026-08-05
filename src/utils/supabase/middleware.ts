@@ -5,6 +5,7 @@ import {
   canAccessOpsConsole,
   OPS_CONSOLE_PATH,
   resolveAuthEmail,
+  sanitizeNextPath,
 } from '@/lib/admin/consolePath'
 
 const AUTH_ROUTES = ['/login', '/register', '/forgot-password', '/reset-password']
@@ -127,7 +128,7 @@ export async function updateSession(request: NextRequest) {
     return redirectWithCookies('/login')
   }
 
-  // Console ops : staff only (sinon 404 pour ne pas révéler le chemin).
+  // Console ops : staff only. Accès refusé → page « Accès réservé » (pas de 404).
   if (user && isOpsConsole) {
     const { data: profile } = await supabase
       .from('profiles')
@@ -136,18 +137,12 @@ export async function updateSession(request: NextRequest) {
       .maybeSingle()
 
     if (!canAccessOpsConsole({ role: profile?.role, email })) {
-      const url = request.nextUrl.clone()
-      url.pathname = '/admin'
-      url.search = ''
-      const denied = NextResponse.rewrite(url)
-      supabaseResponse.cookies.getAll().forEach((c) => {
-        denied.cookies.set(c.name, c.value)
-      })
-      return denied
+      return redirectWithCookies('/admin')
     }
     return supabaseResponse
   }
 
+  // Déjà connecté sur /login|/register : rediriger vers ops SEULEMENT si staff.
   if (user && isAuthRoute && !isResetPassword) {
     const { data: profile } = await supabase
       .from('profiles')
@@ -155,21 +150,29 @@ export async function updateSession(request: NextRequest) {
       .eq('user_id', user.id)
       .maybeSingle()
 
-    const nextParam = request.nextUrl.searchParams.get('next') || ''
-    if (
-      nextParam.startsWith(OPS_CONSOLE_PATH) ||
-      canAccessOpsConsole({ role: profile?.role, email })
-    ) {
-      // Admin principal / staff déjà loggé sur /login → console ops
-      if (
-        canAccessOpsConsole({ role: profile?.role, email }) &&
-        (nextParam.startsWith(OPS_CONSOLE_PATH) || !nextParam)
-      ) {
-        return redirectWithCookies(OPS_CONSOLE_PATH)
-      }
-      if (nextParam.startsWith(OPS_CONSOLE_PATH)) {
-        return redirectWithCookies(OPS_CONSOLE_PATH)
-      }
+    const nextParam = sanitizeNextPath(
+      request.nextUrl.searchParams.get('next')
+    )
+    const wantsOps =
+      !!nextParam &&
+      (nextParam === OPS_CONSOLE_PATH ||
+        nextParam.startsWith(`${OPS_CONSOLE_PATH}/`))
+    const isStaff = canAccessOpsConsole({
+      role: profile?.role,
+      email,
+    })
+
+    if (isStaff && (wantsOps || !nextParam)) {
+      return redirectWithCookies(OPS_CONSOLE_PATH)
+    }
+
+    // Membre déjà loggé qui demande la console → page claire, pas de boucle 404
+    if (wantsOps && !isStaff) {
+      return redirectWithCookies('/admin')
+    }
+
+    if (nextParam && !wantsOps) {
+      return redirectWithCookies(nextParam)
     }
 
     const completion = profile?.completion_percentage ?? 0
