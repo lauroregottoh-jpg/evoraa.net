@@ -78,17 +78,29 @@ export default function RootLayout({
         <Script id="auth-oauth-handoff" strategy="beforeInteractive">{`
 (function () {
   try {
+    var path = window.location.pathname || "/";
     var p = new URLSearchParams(window.location.search);
     var code = p.get("code");
     var err = p.get("error_description") || p.get("error");
-    if (!code && !err) return;
-    var next = p.get("next");
-    if (!next || next.charAt(0) !== "/") next = "/onboarding";
-    var qs = new URLSearchParams();
-    if (code) qs.set("code", code);
-    if (err) qs.set("error", err);
-    qs.set("next", next);
-    window.location.replace("/auth/callback?" + qs.toString());
+    // Uniquement le retour OAuth (code), ou une erreur Auth sur la home —
+    // jamais sur /login (sinon boucle error=auth_callback).
+    if (code) {
+      var next = p.get("next");
+      if (!next || next.charAt(0) !== "/") next = "/onboarding";
+      var qs = new URLSearchParams();
+      qs.set("code", code);
+      qs.set("next", next);
+      window.location.replace("/auth/callback?" + qs.toString());
+      return;
+    }
+    if (err && (path === "/" || path === "")) {
+      var next2 = p.get("next");
+      if (!next2 || next2.charAt(0) !== "/") next2 = "/onboarding";
+      var qs2 = new URLSearchParams();
+      qs2.set("error", err);
+      qs2.set("next", next2);
+      window.location.replace("/auth/callback?" + qs2.toString());
+    }
   } catch (e) {}
 })();
         `}</Script>

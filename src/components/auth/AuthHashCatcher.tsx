@@ -13,6 +13,15 @@ export function AuthHashCatcher() {
     if (typeof window === "undefined") return
 
     const url = new URL(window.location.href)
+    // Ne jamais intercepter /login|/register (évite boucle auth_callback).
+    if (
+      url.pathname.startsWith("/login") ||
+      url.pathname.startsWith("/register") ||
+      url.pathname.startsWith("/auth/")
+    ) {
+      return
+    }
+
     const code = url.searchParams.get("code")
     const error =
       url.searchParams.get("error_description") ||
@@ -21,13 +30,20 @@ export function AuthHashCatcher() {
     const next =
       nextRaw && nextRaw.startsWith("/") ? nextRaw : "/onboarding"
 
-    if (code || error) {
+    if (code) {
       setPending(true)
       const qs = new URLSearchParams()
-      if (code) qs.set("code", code)
-      if (error) qs.set("error", error)
+      qs.set("code", code)
       qs.set("next", next)
-      // replace dur (plus fiable que router soft sur la home)
+      window.location.replace(`/auth/callback?${qs.toString()}`)
+      return
+    }
+
+    if (error && (url.pathname === "/" || url.pathname === "")) {
+      setPending(true)
+      const qs = new URLSearchParams()
+      qs.set("error", error)
+      qs.set("next", next)
       window.location.replace(`/auth/callback?${qs.toString()}`)
       return
     }
