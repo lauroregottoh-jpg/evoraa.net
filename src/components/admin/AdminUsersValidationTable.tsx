@@ -9,6 +9,7 @@ import {
   adminBulkSendMemberFeedback,
   adminBulkUpdateModerationStatus,
   adminFindUsersByEmails,
+  adminListMemberTeamMessages,
   adminLoadMoreUsers,
   adminResolveUserEmails,
   adminSendMemberFeedback,
@@ -73,7 +74,7 @@ export function AdminUsersValidationTable({
   busy: string
   run: (
     key: string,
-    fn: () => Promise<{ error?: string; success?: boolean }>
+    fn: () => Promise<{ error?: string; success?: boolean; message?: string }>
   ) => Promise<void>
 }) {
   const [rows, setRows] = React.useState(initialUsers)
@@ -103,6 +104,12 @@ export function AdminUsersValidationTable({
   const [hasMore, setHasMore] = React.useState(initialUsers.length >= 1000)
   const [localBusy, setLocalBusy] = React.useState("")
   const [flash, setFlash] = React.useState<string | null>(null)
+  const [sentOk, setSentOk] = React.useState<string | null>(null)
+  const [historyTotal, setHistoryTotal] = React.useState(0)
+  const [history, setHistory] = React.useState<
+    Array<{ id: string; body: string; isRead: boolean; createdAt: string }>
+  >([])
+  const [historyLoading, setHistoryLoading] = React.useState(false)
   const fileRef = React.useRef<HTMLInputElement>(null)
 
   const selected = rows.find((u) => u.id === selectedId) ?? null
@@ -114,6 +121,31 @@ export function AdminUsersValidationTable({
     }
     return [...set].sort((a, b) => a.localeCompare(b, "fr"))
   }, [rows])
+
+  const loadHistory = React.useCallback(async (userId: string) => {
+    setHistoryLoading(true)
+    try {
+      const res = await adminListMemberTeamMessages(userId)
+      if (res.error) {
+        setHistory([])
+        setHistoryTotal(0)
+        return
+      }
+      setHistory(res.messages)
+      setHistoryTotal(res.total)
+    } finally {
+      setHistoryLoading(false)
+    }
+  }, [])
+
+  React.useEffect(() => {
+    if (!selected) {
+      setHistory([])
+      setHistoryTotal(0)
+      return
+    }
+    void loadHistory(selected.userId)
+  }, [selected?.userId, loadHistory])
 
   React.useEffect(() => {
     if (!selected) return
@@ -311,9 +343,29 @@ export function AdminUsersValidationTable({
         .map((u) => ({ profileId: u.id, userId: u.userId }))
       const res = await adminBulkSendMemberFeedback({ targets, message })
       if (res.error) return res
-      setFlash(`Message envoyé à ${res.sent ?? targets.length} membre(s)`)
-      return { success: true }
+      const okMsg = res.message || `Message envoyé à ${res.sent ?? targets.length} membre(s).`
+      setFlash(okMsg)
+      setSentOk(okMsg)
+      if (selected) void loadHistory(selected.userId)
+      return { success: true, message: okMsg }
     })
+
+  const sendToSelected = () => {
+    if (!selected) return
+    run(`${selected.id}-msg`, async () => {
+      const res = await adminSendMemberFeedback({
+        profileId: selected.id,
+        userId: selected.userId,
+        message,
+      })
+      if (res.error) return res
+      const okMsg = res.message || "Message envoyé au membre."
+      setFlash(okMsg)
+      setSentOk(okMsg)
+      void loadHistory(selected.userId)
+      return { success: true, message: okMsg }
+    })
+  }
 
   return (
     <div className="space-y-5">
@@ -356,7 +408,14 @@ export function AdminUsersValidationTable({
       </div>
 
       {flash && (
-        <p className="text-sm rounded-xl border border-border bg-secondary/40 px-4 py-2">
+        <p
+          className={cn(
+            "text-sm rounded-xl border px-4 py-2",
+            sentOk && flash === sentOk
+              ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-800 dark:text-emerald-200"
+              : "border-border bg-secondary/40"
+          )}
+        >
           {flash}
         </p>
       )}
@@ -704,6 +763,13 @@ export function AdminUsersValidationTable({
                       >
                         Ouvrir la fiche
                       </Link>
+                      <p className="text-[11px] text-muted-foreground mt-1">
+                        Messages équipe envoyés :{" "}
+                        <span className="font-semibold text-foreground">
+                          {historyLoading ? "…" : historyTotal}
+                        </span>
+                        {historyTotal > 0 ? " — vérifiez avant de renvoyer" : ""}
+                      </p>
                     </div>
                   )}
                   <div className="space-y-1.5">
@@ -728,21 +794,18 @@ export function AdminUsersValidationTable({
                     rows={9}
                     className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm leading-relaxed"
                   />
+                  {sentOk && (
+                    <p className="text-xs rounded-lg border border-emerald-500/40 bg-emerald-500/10 text-emerald-800 dark:text-emerald-200 px-3 py-2 font-medium">
+                      {sentOk}
+                    </p>
+                  )}
                   {selected && (
                     <Button
                       className="w-full"
                       disabled={
                         !message.trim() || busy === `${selected.id}-msg`
                       }
-                      onClick={() =>
-                        run(`${selected.id}-msg`, () =>
-                          adminSendMemberFeedback({
-                            profileId: selected.id,
-                            userId: selected.userId,
-                            message,
-                          })
-                        )
-                      }
+                      onClick={sendToSelected}
                     >
                       <Send className="h-4 w-4 mr-2" />
                       Envoyer à ce membre
@@ -757,6 +820,42 @@ export function AdminUsersValidationTable({
                     >
                       Envoyer à la sélection ({checkedIds.length})
                     </Button>
+                  )}
+                  {selected && (
+                    <div className="rounded-xl border border-border bg-secondary/30 p-3 space-y-2 max-h-56 overflow-y-auto">
+                      <p className="text-[11px] font-semibold uppercase text-muted-foreground">
+                        Historique envoyé
+                      </p>
+                      {historyLoading ? (
+                        <p className="text-xs text-muted-foreground flex items-center gap-2">
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                          Chargement…
+                        </p>
+                      ) : history.length === 0 ? (
+                        <p className="text-xs text-muted-foreground">
+                          Aucun message équipe encore envoyé à ce membre.
+                        </p>
+                      ) : (
+                        history.map((h) => (
+                          <div
+                            key={h.id}
+                            className="rounded-lg border border-border bg-card px-2.5 py-2 space-y-1"
+                          >
+                            <div className="flex items-center justify-between gap-2 text-[10px] text-muted-foreground">
+                              <span>
+                                {h.createdAt
+                                  ? new Date(h.createdAt).toLocaleString("fr-FR")
+                                  : "—"}
+                              </span>
+                              <span>{h.isRead ? "Lu" : "Non lu"}</span>
+                            </div>
+                            <p className="text-xs whitespace-pre-wrap line-clamp-4">
+                              {h.body}
+                            </p>
+                          </div>
+                        ))
+                      )}
+                    </div>
                   )}
                   <p className="text-[10px] text-muted-foreground">
                     Notification in-app uniquement (pas d’e-mail / 0 crédit

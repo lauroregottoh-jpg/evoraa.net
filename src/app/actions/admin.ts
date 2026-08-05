@@ -792,6 +792,8 @@ export async function adminUpdateModerationStatus(
   return { success: true }
 }
 
+const TEAM_FEEDBACK_TITLE = "Message de l’équipe KELIAA"
+
 /** Feedback ops → notification membre (best-effort). */
 export async function adminSendMemberFeedback(input: {
   profileId: string
@@ -806,7 +808,7 @@ export async function adminSendMemberFeedback(input: {
 
   const { error } = await gate.supabase.from("notifications").insert({
     user_id: input.userId,
-    title: "Message de l’équipe KELIAA",
+    title: TEAM_FEEDBACK_TITLE,
     body: message,
     is_read: false,
   })
@@ -825,8 +827,75 @@ export async function adminSendMemberFeedback(input: {
     }
   }
 
+  const { logAdminAction } = await import("@/lib/admin/audit")
+  await logAdminAction({
+    action: "member_feedback_send",
+    targetType: "profile",
+    targetId: input.profileId,
+    meta: {
+      userId: input.userId,
+      bodyPreview: message.slice(0, 240),
+      bodyLength: message.length,
+      channel: error ? "moderation_events" : "notifications",
+    },
+  })
+
   revalidateOps()
-  return { success: true }
+  return {
+    success: true,
+    message: "Message envoyé au membre.",
+    sent: 1 as const,
+  }
+}
+
+/** Historique des messages équipe → un membre (notifications in-app). */
+export async function adminListMemberTeamMessages(userId: string) {
+  const gate = await requireAdmin()
+  if (gate.error || !gate.supabase) {
+    return {
+      error: gate.error || "Acces refuse.",
+      messages: [] as Array<{
+        id: string
+        body: string
+        isRead: boolean
+        createdAt: string
+      }>,
+      total: 0,
+    }
+  }
+
+  const uid = (userId || "").trim()
+  if (!uid) {
+    return { error: "Membre invalide.", messages: [], total: 0 }
+  }
+
+  const { count } = await gate.supabase
+    .from("notifications")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", uid)
+    .eq("title", TEAM_FEEDBACK_TITLE)
+
+  const { data, error } = await gate.supabase
+    .from("notifications")
+    .select("id, body, is_read, created_at")
+    .eq("user_id", uid)
+    .eq("title", TEAM_FEEDBACK_TITLE)
+    .order("created_at", { ascending: false })
+    .limit(25)
+
+  if (error) {
+    return { error: error.message, messages: [], total: 0 }
+  }
+
+  return {
+    messages: (data ?? []).map((n) => ({
+      id: n.id as string,
+      body: (n.body as string) || "",
+      isRead: Boolean(n.is_read),
+      createdAt: (n.created_at as string) || "",
+    })),
+    total: count ?? (data ?? []).length,
+  }
 }
 
 /** Valider / rejeter plusieurs profils d’un coup. */
@@ -873,7 +942,7 @@ export async function adminBulkSendMemberFeedback(input: {
 
   const rows = targets.map((t) => ({
     user_id: t.userId,
-    title: "Message de l’équipe KELIAA",
+    title: TEAM_FEEDBACK_TITLE,
     body: message,
     is_read: false,
   }))
@@ -881,8 +950,25 @@ export async function adminBulkSendMemberFeedback(input: {
   const { error } = await gate.supabase.from("notifications").insert(rows)
   if (error) return { error: error.message }
 
+  const { logAdminAction } = await import("@/lib/admin/audit")
+  await logAdminAction({
+    action: "member_feedback_bulk_send",
+    targetType: "profiles",
+    targetId: targets[0]?.profileId ?? null,
+    meta: {
+      sent: targets.length,
+      profileIds: targets.map((t) => t.profileId).slice(0, 50),
+      bodyPreview: message.slice(0, 240),
+      bodyLength: message.length,
+    },
+  })
+
   revalidateOps()
-  return { success: true, sent: targets.length }
+  return {
+    success: true,
+    sent: targets.length,
+    message: `Message envoyé à ${targets.length} membre(s).`,
+  }
 }
 
 /** Hydrate e-mails Auth (max 80) pour export / affichage. */

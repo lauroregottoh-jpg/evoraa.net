@@ -19,6 +19,7 @@ import {
   BookHeart,
   LogOut,
   MessageSquareHeart,
+  ChevronDown,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { ThemeToggle } from "@/components/evoraa/ThemeToggle";
@@ -27,34 +28,26 @@ import { MemberReminders } from "@/components/layout/MemberReminders";
 import { logoutAction } from "@/app/actions/auth";
 import { OpsAdminEntryBanner } from "@/components/admin/OpsAdminEntryBanner";
 
-const NAV = [
+const PRIMARY = [
   { href: "/dashboard", label: "Accueil", icon: LayoutGrid },
-  { href: "/compatibility", label: "Découvrir", icon: Compass },
   { href: "/messages", label: "Messages", icon: MessageCircle },
-  { href: "/assessments", label: "Tests", icon: ClipboardList },
-  { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
+  { href: "/compatibility", label: "Découvrir", icon: Compass },
   { href: "/premium", label: "Alliance", icon: Crown, accent: true },
 ] as const;
 
-const BOTTOM_PRIMARY = [
-  { href: "/dashboard", label: "Accueil", icon: LayoutGrid },
-  { href: "/compatibility", label: "Découvrir", icon: Compass },
-  { href: "/messages", label: "Messages", icon: MessageCircle },
-  { href: "/assessments", label: "Tests", icon: ClipboardList },
-  { href: "/feedback", label: "Avis", icon: MessageSquareHeart },
-] as const;
-
-const MORE_LINKS = [
-  { href: "/inspiration", label: "Inspiration", icon: BookHeart },
-  { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
-  { href: "/premium", label: "Alliance", icon: Crown },
-  { href: "/dashboard#invite", label: "Inviter", icon: Share2 },
-  { href: "/notifications", label: "Alertes", icon: Bell },
+const ACCOUNT_LINKS = [
   { href: "/profile", label: "Profil", icon: User },
+  { href: "/notifications", label: "Alertes", icon: Bell },
+  { href: "/assessments", label: "Tests", icon: ClipboardList },
+  { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
+  { href: "/inspiration", label: "Inspiration", icon: BookHeart },
   { href: "/feedback", label: "Avis", icon: MessageSquareHeart },
   { href: "/help", label: "Aide", icon: HelpCircle },
+  { href: "/dashboard#invite", label: "Inviter", icon: Share2 },
   { href: "/settings", label: "Paramètres", icon: Settings },
 ] as const;
+
+const ACCOUNT_HREFS = ACCOUNT_LINKS.map((l) => l.href.split("#")[0]);
 
 export type MemberShellProps = {
   children: React.ReactNode;
@@ -89,11 +82,15 @@ export function MemberShell({
 }: MemberShellProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const [open, setOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [accountOpen, setAccountOpen] = React.useState(false);
+  const [mobileAccountOpen, setMobileAccountOpen] = React.useState(false);
+  const accountRef = React.useRef<HTMLDivElement>(null);
 
   const isActive = (href: string) => {
-    if (href === "/dashboard") return pathname === "/dashboard";
-    if (href === "/premium") {
+    const base = href.split("#")[0];
+    if (base === "/dashboard") return pathname === "/dashboard";
+    if (base === "/premium") {
       return (
         pathname === "/premium" ||
         pathname.startsWith("/premium/") ||
@@ -101,16 +98,33 @@ export function MemberShell({
         pathname.startsWith("/billing/")
       );
     }
-    return pathname === href || pathname.startsWith(`${href}/`);
+    return pathname === base || pathname.startsWith(`${base}/`);
   };
 
+  const accountActive = ACCOUNT_HREFS.some((href) => isActive(href));
+
   React.useEffect(() => {
-    setOpen(false);
+    setMobileOpen(false);
+    setAccountOpen(false);
+    setMobileAccountOpen(false);
   }, [pathname]);
+
+  React.useEffect(() => {
+    if (!accountOpen) return;
+    const onDoc = (e: MouseEvent) => {
+      if (!accountRef.current?.contains(e.target as Node)) {
+        setAccountOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, [accountOpen]);
 
   const go = (href: string) => (e?: React.MouseEvent) => {
     e?.preventDefault();
-    setOpen(false);
+    setMobileOpen(false);
+    setAccountOpen(false);
+    setMobileAccountOpen(false);
     router.push(href);
   };
 
@@ -125,6 +139,40 @@ export function MemberShell({
     );
   };
 
+  const accountMenu = (
+    <div className="py-1">
+      {ACCOUNT_LINKS.map((item) => {
+        const Icon = item.icon;
+        return (
+          <a
+            key={`${item.href}-${item.label}`}
+            href={item.href}
+            onClick={go(item.href)}
+            className={cn(
+              "flex items-center gap-2 px-3 py-2.5 text-sm font-medium cursor-pointer",
+              isActive(item.href)
+                ? "bg-primary/10 text-primary"
+                : "text-foreground hover:bg-secondary"
+            )}
+          >
+            <Icon className="h-4 w-4 shrink-0" />
+            {item.label}
+          </a>
+        );
+      })}
+      <div className="my-1 border-t border-border" />
+      <form action={logoutAction}>
+        <button
+          type="submit"
+          className="flex w-full items-center gap-2 px-3 py-2.5 text-sm font-semibold text-destructive hover:bg-destructive/10"
+        >
+          <LogOut className="h-4 w-4" />
+          Déconnexion
+        </button>
+      </form>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-[60] border-b border-border/50 bg-background/95 backdrop-blur-md">
@@ -133,11 +181,11 @@ export function MemberShell({
             <button
               type="button"
               className="md:hidden p-2 rounded-lg border border-border shrink-0"
-              onClick={() => setOpen((v) => !v)}
+              onClick={() => setMobileOpen((v) => !v)}
               aria-label="Ouvrir le menu"
-              aria-expanded={open}
+              aria-expanded={mobileOpen}
             >
-              {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </button>
             <a
               href="/dashboard"
@@ -152,7 +200,7 @@ export function MemberShell({
             className="hidden md:flex items-center gap-0.5 flex-1 justify-center"
             aria-label="Navigation principale"
           >
-            {NAV.map((item) => {
+            {PRIMARY.map((item) => {
               const Icon = item.icon;
               return (
                 <a
@@ -166,6 +214,38 @@ export function MemberShell({
                 </a>
               );
             })}
+
+            <div className="relative" ref={accountRef}>
+              <button
+                type="button"
+                onClick={() => setAccountOpen((v) => !v)}
+                className={cn(
+                  "inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-semibold transition-colors",
+                  accountActive || accountOpen
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
+                )}
+                aria-expanded={accountOpen}
+                aria-haspopup="menu"
+              >
+                <User className="h-3.5 w-3.5" />
+                <span className="hidden lg:inline">Compte</span>
+                <ChevronDown
+                  className={cn(
+                    "h-3 w-3 transition-transform",
+                    accountOpen && "rotate-180"
+                  )}
+                />
+              </button>
+              {accountOpen && (
+                <div
+                  role="menu"
+                  className="absolute right-0 mt-2 w-56 rounded-xl border border-border bg-card shadow-lg z-[70] overflow-hidden"
+                >
+                  {accountMenu}
+                </div>
+              )}
+            </div>
           </nav>
 
           <div className="flex items-center gap-0.5 sm:gap-1.5 shrink-0">
@@ -180,33 +260,6 @@ export function MemberShell({
               {planLabel}
             </span>
             <a
-              href="/feedback"
-              onClick={go("/feedback")}
-              className="hidden md:inline-flex p-2 rounded-full hover:bg-secondary text-muted-foreground"
-              aria-label="Avis"
-              title="Avis & améliorations"
-            >
-              <MessageSquareHeart className="h-4 w-4" />
-            </a>
-            <a
-              href="/help"
-              onClick={go("/help")}
-              className="hidden md:inline-flex p-2 rounded-full hover:bg-secondary text-muted-foreground"
-              aria-label="Aide"
-              title="Aide"
-            >
-              <HelpCircle className="h-4 w-4" />
-            </a>
-            <a
-              href="/settings"
-              onClick={go("/settings")}
-              className="hidden md:inline-flex p-2 rounded-full hover:bg-secondary text-muted-foreground"
-              aria-label="Paramètres"
-              title="Paramètres"
-            >
-              <Settings className="h-4 w-4" />
-            </a>
-            <a
               href="/notifications"
               onClick={go("/notifications")}
               className="p-2 rounded-full hover:bg-secondary text-muted-foreground"
@@ -214,60 +267,55 @@ export function MemberShell({
             >
               <Bell className="h-4 w-4" />
             </a>
-            <a
-              href="/profile"
-              onClick={go("/profile")}
-              className="p-2 rounded-full hover:bg-secondary text-muted-foreground"
-              aria-label="Profil"
-            >
-              <User className="h-4 w-4" />
-            </a>
-            <form action={logoutAction}>
-              <button
-                type="submit"
-                className="p-2 rounded-full hover:bg-destructive/10 text-muted-foreground hover:text-destructive"
-                aria-label="Se déconnecter"
-                title="Se déconnecter"
-              >
-                <LogOut className="h-4 w-4" />
-              </button>
-            </form>
             <ThemeToggle />
           </div>
         </div>
 
-        {open && (
+        {mobileOpen && (
           <div className="md:hidden border-t border-border bg-card px-4 py-3 space-y-1 max-h-[70vh] overflow-y-auto z-[70]">
-            {[...NAV, ...MORE_LINKS.filter((l) => !NAV.some((n) => n.href === l.href))].map(
-              (item) => {
-                const Icon = item.icon;
-                return (
-                  <a
-                    key={`${item.href}-${item.label}`}
-                    href={item.href}
-                    onClick={go(item.href)}
-                    className={cn(
-                      "flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium cursor-pointer",
-                      isActive(item.href)
-                        ? "bg-primary/10 text-primary"
-                        : "text-foreground hover:bg-secondary"
-                    )}
-                  >
-                    <Icon className="h-4 w-4" />
-                    {item.label}
-                  </a>
-                );
-              }
+            {PRIMARY.map((item) => {
+              const Icon = item.icon;
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  onClick={go(item.href)}
+                  className={cn(
+                    "flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium cursor-pointer",
+                    isActive(item.href)
+                      ? "bg-primary/10 text-primary"
+                      : "text-foreground hover:bg-secondary"
+                  )}
+                >
+                  <Icon className="h-4 w-4" />
+                  {item.label}
+                </a>
+              );
+            })}
+            <button
+              type="button"
+              onClick={() => setMobileAccountOpen((v) => !v)}
+              className={cn(
+                "flex w-full items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-sm font-medium",
+                accountActive
+                  ? "bg-primary/10 text-primary"
+                  : "text-foreground hover:bg-secondary"
+              )}
+            >
+              <span className="inline-flex items-center gap-2">
+                <User className="h-4 w-4" />
+                Compte
+              </span>
+              <ChevronDown
+                className={cn(
+                  "h-4 w-4 transition-transform",
+                  mobileAccountOpen && "rotate-180"
+                )}
+              />
+            </button>
+            {mobileAccountOpen && (
+              <div className="ml-2 border-l border-border pl-2">{accountMenu}</div>
             )}
-            <form action={logoutAction} className="pt-2">
-              <button
-                type="submit"
-                className="flex w-full items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-semibold text-destructive hover:bg-destructive/10"
-              >
-                <LogOut className="h-4 w-4" />
-                Se déconnecter
-              </button>
-            </form>
           </div>
         )}
 
@@ -304,7 +352,7 @@ export function MemberShell({
         aria-label="Navigation mobile"
       >
         <div className="mx-auto max-w-lg grid grid-cols-5 h-16">
-          {BOTTOM_PRIMARY.map((item) => {
+          {PRIMARY.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
             return (
@@ -322,6 +370,20 @@ export function MemberShell({
               </a>
             );
           })}
+          <button
+            type="button"
+            onClick={() => {
+              setMobileOpen(true);
+              setMobileAccountOpen(true);
+            }}
+            className={cn(
+              "flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold",
+              accountActive ? "text-primary" : "text-muted-foreground"
+            )}
+          >
+            <User className="h-5 w-5" />
+            Compte
+          </button>
         </div>
       </nav>
 

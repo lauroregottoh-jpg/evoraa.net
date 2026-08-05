@@ -34,13 +34,17 @@ export function PendingProfilesQueue({
 }: {
   users: PendingUser[]
   busy: string
-  run: (key: string, fn: () => Promise<{ error?: string; success?: boolean }>) => Promise<void>
+  run: (
+    key: string,
+    fn: () => Promise<{ error?: string; success?: boolean; message?: string }>
+  ) => Promise<void>
 }) {
   const [openId, setOpenId] = React.useState<string | null>(users[0]?.id ?? null)
   const [rejectReason, setRejectReason] = React.useState<string>(PROFILE_REJECT_REASONS[0].id)
   const [feedback, setFeedback] = React.useState(
     "Merci pour votre inscription. Complétez votre photo et votre témoignage pour accélérer la validation."
   )
+  const [sentFor, setSentFor] = React.useState<Record<string, string>>({})
 
   if (users.length === 0) {
     return (
@@ -114,18 +118,28 @@ export function PendingProfilesQueue({
                     variant="outline"
                     disabled={busy === `${u.id}-fb`}
                     onClick={() =>
-                      run(`${u.id}-fb`, () =>
-                        adminSendMemberFeedback({
+                      run(`${u.id}-fb`, async () => {
+                        const res = await adminSendMemberFeedback({
                           profileId: u.id,
                           userId: u.userId,
                           message: feedback,
                         })
-                      )
+                        if (res.error) return res
+                        const ok = res.message || "Message envoyé au membre."
+                        setSentFor((prev) => ({ ...prev, [u.id]: ok }))
+                        return { success: true, message: ok }
+                      })
                     }
                   >
                     Envoyer le message / feedback
                   </Button>
                 </div>
+
+                {sentFor[u.id] ? (
+                  <p className="text-xs rounded-lg border border-emerald-500/40 bg-emerald-500/10 text-emerald-800 dark:text-emerald-200 px-3 py-2 font-medium">
+                    {sentFor[u.id]}
+                  </p>
+                ) : null}
 
                 <div className="space-y-1.5">
                   <label className="text-[11px] font-semibold uppercase text-muted-foreground">

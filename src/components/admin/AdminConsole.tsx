@@ -258,13 +258,16 @@ export function AdminConsole(props: Props) {
     : []
   const pendingUsers = props.users.filter((u) => u.status === "pending")
 
-  const run = async (key: string, fn: () => Promise<{ error?: string; success?: boolean }>) => {
+  const run = async (
+    key: string,
+    fn: () => Promise<{ error?: string; success?: boolean; message?: string }>
+  ) => {
     setBusy(key)
     setMsg(null)
     try {
       const res = await fn()
       if (res.error) setMsg(res.error)
-      else setMsg("Enregistré.")
+      else setMsg(res.message || "Enregistré.")
     } finally {
       setBusy("")
     }
