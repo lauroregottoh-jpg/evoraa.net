@@ -240,10 +240,10 @@ export async function getAdminDashboardData() {
   const { data: profiles } = await supabase
     .from("profiles")
     .select(
-      "id, user_id, first_name, last_name, city, country, gender, birth_date, denomination, church_attended, pastor_name, pastor_contact, completion_percentage, role, moderation_status, onboarding_status, is_verified, identity_verified, created_at, avatar_url, trust_score, warning_count, sanction_status, sanction_until"
+      "id, user_id, first_name, last_name, city, country, gender, birth_date, denomination, church_attended, pastor_name, pastor_contact, completion_percentage, role, moderation_status, onboarding_status, is_verified, identity_verified, created_at, avatar_url, trust_score, warning_count, sanction_status, sanction_until, biography, testimony, marital_status"
     )
     .order("created_at", { ascending: false })
-    .limit(200)
+    .limit(500)
 
   const { data: matchingSample } = await supabase
     .from("profiles")
@@ -467,33 +467,67 @@ export async function getAdminDashboardData() {
     }
   }
 
+  const { computeMissingProfileFields } = await import(
+    "@/lib/admin/userValidation"
+  )
+
   const users = (profiles ?? []).map((p) => {
     let age: number | null = null
     if (p.birth_date) {
       const y = new Date(p.birth_date as string).getFullYear()
       if (Number.isFinite(y)) age = new Date().getFullYear() - y
     }
+    const name =
+      [p.first_name, p.last_name].filter(Boolean).join(" ") || "Sans nom"
+    const city = (p.city as string) || "?"
+    const gender = (p.gender as string) || "?"
+    const denomination = (p.denomination as string) || ""
+    const church = (p.church_attended as string) || ""
+    const hasAvatar = Boolean(p.avatar_url)
+    const hasBiography = Boolean(
+      typeof p.biography === "string" && p.biography.trim()
+    )
+    const hasTestimony = Boolean(
+      typeof p.testimony === "string" && p.testimony.trim()
+    )
+    const hasMaritalStatus = Boolean(p.marital_status)
+    const missing = computeMissingProfileFields({
+      name,
+      city,
+      gender,
+      age,
+      denomination,
+      church,
+      hasAvatar,
+      hasBiography,
+      hasTestimony,
+      hasMaritalStatus,
+    })
     return {
       id: p.id,
       userId: p.user_id as string,
-      name: [p.first_name, p.last_name].filter(Boolean).join(" ") || "Sans nom",
-      city: p.city || "?",
+      name,
+      city,
       country: (p.country as string) || "?",
-      gender: (p.gender as string) || "?",
+      gender,
       age,
-      denomination: (p.denomination as string) || "",
-      church: (p.church_attended as string) || "",
+      denomination,
+      church,
       pastorName: (p.pastor_name as string) || "",
       completion: p.completion_percentage ?? 0,
       role: (p.role as "admin" | "moderator" | "member") || "member",
       status: (p.moderation_status as string) || "pending",
       onboarding: p.onboarding_status as string | null,
       verified: Boolean(p.is_verified || p.identity_verified),
-      hasAvatar: Boolean(p.avatar_url),
+      hasAvatar,
       createdAt: p.created_at as string | null,
       trustScore: Number(p.trust_score ?? 50),
       warningCount: Number(p.warning_count ?? 0),
       sanctionStatus: (p.sanction_status as string) || "none",
+      hasBiography,
+      hasTestimony,
+      hasMaritalStatus,
+      missing,
     }
   })
 

@@ -49,6 +49,7 @@ import { MatchingIntelligencePanel } from "@/components/admin/AdminMatchingIntel
 import { AdminStaffTeamPanel } from "@/components/admin/AdminStaffTeamPanel"
 import { PendingProfilesQueue } from "@/components/admin/PendingProfilesQueue"
 import { AdminFeedbackPanel } from "@/components/admin/AdminFeedbackPanel"
+import { AdminUsersValidationTable } from "@/components/admin/AdminUsersValidationTable"
 import { PHOTO_REJECT_REASONS } from "@/lib/admin/moderationCatalog"
 import {
   BictorysSandboxPanel,
@@ -93,6 +94,10 @@ type Props = {
     trustScore: number
     warningCount: number
     sanctionStatus: string
+    hasBiography: boolean
+    hasTestimony: boolean
+    hasMaritalStatus: boolean
+    missing: string[]
   }>
   reports: Array<{
     id: string
@@ -197,7 +202,7 @@ function settingText(settings: PlatformSettingRow[], key: string, fallback = "")
 
 export function AdminConsole(props: Props) {
   const isFullAdmin = props.viewerRole === "admin"
-  const [nav, setNav] = React.useState<AdminNavId>("dashboard")
+  const [nav, setNav] = React.useState<AdminNavId>("members")
   const [modTab, setModTab] = React.useState<"photos" | "reports" | "pending">("photos")
   const [search, setSearch] = React.useState("")
   const [busy, setBusy] = React.useState("")
@@ -481,34 +486,42 @@ export function AdminConsole(props: Props) {
         />
       )}
 
-      {/* ——— 3. MEMBRES ——— */}
+      {/* ——— UTILISATEURS (validation type Excel) ——— */}
       {nav === "members" && (
-        <div className="space-y-4">
-          <div>
-            <h1 className="font-serif text-3xl font-bold">Membres</h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              Créer, filtrer, stats ville/pays, confiance.
-            </p>
-          </div>
-          <CreateMemberForm isFullAdmin={isFullAdmin} busy={busy} run={run} />
-          <MembersAdvancedPanel
+        <div className="space-y-6">
+          <AdminUsersValidationTable
             users={props.users}
-            subscriptions={props.subscriptions}
-            breakdowns={props.breakdowns}
-            isFullAdmin={isFullAdmin}
             busy={busy}
             run={run}
-            selectedUser={selectedUser}
-            setSelectedUser={setSelectedUser}
-          >
-            <MemberDetailPanel
-              selected={selected}
-              userSubs={userSubs}
-              busy={busy}
-              isFullAdmin={isFullAdmin}
-              run={run}
-            />
-          </MembersAdvancedPanel>
+          />
+          {isFullAdmin && (
+            <details className="rounded-xl border border-border bg-card p-4">
+              <summary className="cursor-pointer text-sm font-semibold text-muted-foreground">
+                Options avancées (créer un membre, stats)
+              </summary>
+              <div className="mt-4 space-y-4">
+                <CreateMemberForm isFullAdmin={isFullAdmin} busy={busy} run={run} />
+                <MembersAdvancedPanel
+                  users={props.users}
+                  subscriptions={props.subscriptions}
+                  breakdowns={props.breakdowns}
+                  isFullAdmin={isFullAdmin}
+                  busy={busy}
+                  run={run}
+                  selectedUser={selectedUser}
+                  setSelectedUser={setSelectedUser}
+                >
+                  <MemberDetailPanel
+                    selected={selected}
+                    userSubs={userSubs}
+                    busy={busy}
+                    isFullAdmin={isFullAdmin}
+                    run={run}
+                  />
+                </MembersAdvancedPanel>
+              </div>
+            </details>
+          )}
         </div>
       )}
 

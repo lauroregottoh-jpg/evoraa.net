@@ -74,12 +74,16 @@ export function AdminShell({
   const menuMain: NavItem[] = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "analytics", label: "Analytique", icon: BarChart3 },
-    { id: "members", label: "Membres", icon: Users },
+    {
+      id: "members",
+      label: "Utilisateurs",
+      icon: Users,
+      badge: badges.pendingProfiles || undefined,
+    },
     {
       id: "profiles",
-      label: "Profils",
+      label: "Profils & reco",
       icon: UserCircle2,
-      badge: badges.pendingProfiles || undefined,
     },
     {
       id: "moderation",
