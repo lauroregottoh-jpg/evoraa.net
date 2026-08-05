@@ -2,6 +2,8 @@
 
 Objectif : niveau béton Evoora (~84) **sans jamais casser** inscription / login / accès.
 
+> **Audit détaillé (août 2026) :** [`AUDIT_EVOORA_PARITY.md`](./AUDIT_EVOORA_PARITY.md) + canvas `keliaa-evoora-audit`.
+
 ## Fait (estim. ~82)
 
 | Lot | Contenu |
@@ -11,16 +13,27 @@ Objectif : niveau béton Evoora (~84) **sans jamais casser** inscription / login
 | C (AUTH UNLOCK) | Cookies secure, HIBP, lockout, Turnstile optionnel, soft-confirm prod off, `registrations_paused` |
 | Ops UX | Confirmation message admin + historique, nav membre 5 points, logout onboarding (soleil) |
 | Eva auto | Cron `profile-reminders` voix Eva + bandeaux dashboard / MemberReminders |
+| Rapport | DOSSIER RAPPORT + bilan individuel templates (pas matching paire) |
 
 ## En attente de **tes** clés API
 
 → `docs/API_KEYS_WHEN_READY.md` (Bictorys, Moneroo, Turnstile, Sentry).
 
-## Lot D restant (code quand tu veux)
+## Lots D restants (après audit)
 
-- CSP stricte avec nonce App Router (risqué : on attend un créneau calme)
-- Smoke Playwright live (navigateur) — base Node déjà en `test:smoke`
-- Vercel Pro si crons &lt; 6 h nécessaires
+| Lot | Contenu | Risque |
+|-----|---------|--------|
+| **D0** | Clés live (toi) | — |
+| **D1** | Cron `timingSafeEqual` partagé | **Fait** (août 2026) |
+| **D2** | Webhook idempotency durable | Moyen |
+| **D3** | CSP stricte + nonce (créneau calme) | Élevé |
+| **D4** | Sentry client/edge | Faible |
+| **D5** | Admin audit list + RL admin | Moyen |
+| **D6** | Timing parity auth | **AUTH UNLOCK** |
+| **D7** | Playwright smoke live | Faible |
+| **D8** | RLS profils resserrée | Moyen |
+| **D9** | Perf admin/cron | Faible |
+| — | Vercel Pro si crons &lt; 6 h nécessaires | Ops |
 
 ## Règle d’or
 

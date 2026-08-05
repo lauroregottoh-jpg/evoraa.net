@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { KELIAA_SUPABASE_URL, resolveSupabaseUrl } from "@/lib/config/supabase"
 import { resolveLiveProvider, isDemoPaymentsEnv } from "@/lib/billing/provider"
+import { verifyHealthSecret } from "@/lib/security/cronAuth"
 
 /**
  * Diagnostic config + readiness DB.
@@ -10,10 +11,7 @@ import { resolveLiveProvider, isDemoPaymentsEnv } from "@/lib/billing/provider"
  * ?probe=1 → inclut ping Auth Supabase (readyz).
  */
 export async function GET(request: Request) {
-  const secret =
-    process.env.HEALTH_CHECK_SECRET?.trim() || process.env.CRON_SECRET?.trim()
-  const auth = request.headers.get("authorization") || ""
-  if (!secret || auth !== `Bearer ${secret}`) {
+  if (!verifyHealthSecret(request)) {
     return new NextResponse(null, { status: 404 })
   }
 

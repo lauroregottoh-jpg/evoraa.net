@@ -3,22 +3,15 @@ import { createAdminClient } from "@/utils/supabase/admin"
 import { sendEmailWithRetry } from "@/lib/email/outbox"
 import { subscriptionReminderEmailHtml } from "@/lib/email/templates"
 import { resolveAppUrlSync } from "@/lib/auth/appUrl"
-
-function authorizeCron(request: NextRequest) {
-  const secret = process.env.CRON_SECRET
-  if (!secret) return false
-  const auth = request.headers.get("authorization")
-  return auth === `Bearer ${secret}`
-}
+import { verifyCronSecret } from "@/lib/security/cronAuth"
 
 /**
  * Vercel Cron — rappels J-7 / J-3 / J-1 avant expiration Alliance.
  * Configure CRON_SECRET sur Vercel + vercel.json crons.
  */
 export async function GET(request: NextRequest) {
-  if (!authorizeCron(request)) {
-    return NextResponse.json({ error: "Non autorisé" }, { status: 401 })
-  }
+  const denied = verifyCronSecret(request)
+  if (denied) return denied
 
   const supabase = createAdminClient()
   const now = Date.now()

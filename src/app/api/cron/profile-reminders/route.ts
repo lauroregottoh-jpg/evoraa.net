@@ -6,22 +6,15 @@ import {
   buildEvaReminders,
   pickPrimaryEvaReminder,
 } from "@/lib/eva/reminders"
-
-function authorizeCron(request: NextRequest) {
-  const secret = process.env.CRON_SECRET
-  if (!secret) return false
-  const auth = request.headers.get("authorization")
-  return auth === `Bearer ${secret}`
-}
+import { verifyCronSecret } from "@/lib/security/cronAuth"
 
 /**
  * Rappels Eva auto — profils / photo / tests incomplets (notification in-app).
  * Pas d’e-mail → 0 crédit Resend. Dédup 3 jours sur le titre Eva.
  */
 export async function GET(request: NextRequest) {
-  if (!authorizeCron(request)) {
-    return NextResponse.json({ error: "Non autorisé" }, { status: 401 })
-  }
+  const denied = verifyCronSecret(request)
+  if (denied) return denied
 
   const supabase = createAdminClient()
   const now = Date.now()

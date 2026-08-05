@@ -1,19 +1,12 @@
 import { NextRequest, NextResponse } from "next/server"
 import { processEmailOutbox } from "@/lib/email/outbox"
 import { captureError } from "@/lib/observability/report"
-
-function authorizeCron(request: NextRequest) {
-  const secret = process.env.CRON_SECRET
-  if (!secret) return false
-  const auth = request.headers.get("authorization")
-  return auth === `Bearer ${secret}`
-}
+import { verifyCronSecret } from "@/lib/security/cronAuth"
 
 /** Flush Resend outbox every few minutes (retry failed / deferred mail). */
 export async function GET(request: NextRequest) {
-  if (!authorizeCron(request)) {
-    return NextResponse.json({ error: "Non autorisé" }, { status: 401 })
-  }
+  const denied = verifyCronSecret(request)
+  if (denied) return denied
 
   try {
     const result = await processEmailOutbox(30)
