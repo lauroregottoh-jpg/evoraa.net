@@ -3,9 +3,11 @@ import { KELIAA_SUPABASE_URL, resolveSupabaseUrl } from "@/lib/config/supabase"
 import { resolveLiveProvider, isDemoPaymentsEnv } from "@/lib/billing/provider"
 
 /**
- * Diagnostic config — requires Authorization: Bearer CRON_SECRET (or HEALTH_CHECK_SECRET).
- * Returns 404 when unauthorized to avoid advertising the endpoint.
- * Never exposes secret values — only presence / mode flags.
+ * Diagnostic config + readiness DB.
+ * Auth : Authorization: Bearer CRON_SECRET | HEALTH_CHECK_SECRET
+ * 404 si non autorisé (ne pas exposer l’endpoint).
+ *
+ * ?probe=1 → inclut ping Auth Supabase (readyz).
  */
 export async function GET(request: Request) {
   const secret =
@@ -18,9 +20,37 @@ export async function GET(request: Request) {
   const configured = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""
   const resolved = resolveSupabaseUrl()
   const apiKey = process.env.BICTORYS_API_KEY || ""
+  const url = new URL(request.url)
+  const wantProbe = url.searchParams.get("probe") === "1"
+
+  let ready: { ok: boolean; latencyMs?: number; error?: string } | null = null
+  if (wantProbe) {
+    const started = Date.now()
+    try {
+      const res = await fetch(`${resolved.replace(/\/$/, "")}/auth/v1/health`, {
+        method: "GET",
+        headers: {
+          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
+        },
+        signal: AbortSignal.timeout(5000),
+      })
+      ready = {
+        ok: res.ok,
+        latencyMs: Date.now() - started,
+        error: res.ok ? undefined : `status_${res.status}`,
+      }
+    } catch (e) {
+      ready = {
+        ok: false,
+        latencyMs: Date.now() - started,
+        error: e instanceof Error ? e.message : "probe_failed",
+      }
+    }
+  }
 
   return NextResponse.json({
     ok: resolved.includes("supabase.co"),
+    ready: ready ?? undefined,
     supabase: {
       configured: configured ? configured.replace(/\/$/, "") : null,
       resolved: resolved.replace(/\/$/, ""),

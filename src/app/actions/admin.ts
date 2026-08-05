@@ -1020,12 +1020,16 @@ export async function adminSetRole(
     .eq("id", profileId)
 
   if (error) return { error: error.message }
+  const { logAdminAction } = await import("@/lib/admin/audit")
+  await logAdminAction({
+    action: "set_role",
+    targetType: "profile",
+    targetId: profileId,
+    meta: { role },
+  })
   revalidateOps()
   return { success: true }
 }
-
-/** Nomme un membre staff par email (admin principal uniquement). */
-export async function adminAssignStaffByEmail(input: {
   email: string
   role: Exclude<StaffRole, "member">
 }) {
@@ -1148,10 +1152,15 @@ export async function adminGrantAlliance(userId: string, days = 30) {
 
   revalidateOps()
   revalidatePath("/billing")
+  const { logAdminAction } = await import("@/lib/admin/audit")
+  await logAdminAction({
+    action: "grant_alliance",
+    targetType: "user",
+    targetId: userId,
+    meta: { days },
+  })
   return { success: true }
 }
-
-export async function adminResolveReport(
   reportId: string,
   status: "resolved" | "dismissed" | "pending"
 ) {
@@ -1212,6 +1221,14 @@ export async function adminModeratePhoto(
       created_by: gate.user?.id || null,
     })
   }
+
+  const { logAdminAction } = await import("@/lib/admin/audit")
+  await logAdminAction({
+    action: "moderate_photo",
+    targetType: "photo",
+    targetId: photoId,
+    meta: { status, reason: reason || null },
+  })
 
   revalidateOps()
   revalidatePath("/profile")
@@ -1675,6 +1692,14 @@ export async function adminApplySanction(
     kind,
     reason: `Sanction ${action} -> ${sanctionStatus}`,
     created_by: gate.user.id,
+  })
+
+  const { logAdminAction } = await import("@/lib/admin/audit")
+  await logAdminAction({
+    action: "apply_sanction",
+    targetType: "profile",
+    targetId: profileId,
+    meta: { action, sanctionStatus, warningCount },
   })
 
   revalidateOps()

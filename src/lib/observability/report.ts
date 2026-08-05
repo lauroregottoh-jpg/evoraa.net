@@ -1,6 +1,6 @@
 /**
- * Observabilité légère — Sentry optionnel via SENTRY_DSN.
- * Sans DSN : log serveur uniquement (pas de dépendance bloquante).
+ * Observabilité — préfère @sentry/nextjs si installé + SENTRY_DSN,
+ * sinon endpoint Store Sentry DIY (fire-and-forget).
  */
 
 export function captureError(
@@ -8,14 +8,31 @@ export function captureError(
   context?: Record<string, unknown>
 ) {
   const message =
-    error instanceof Error ? error.message : typeof error === "string" ? error : "unknown_error"
+    error instanceof Error
+      ? error.message
+      : typeof error === "string"
+        ? error
+        : "unknown_error"
   const stack = error instanceof Error ? error.stack : undefined
   console.error("[ops]", message, context ?? {}, stack ? `\n${stack}` : "")
 
   const dsn = process.env.SENTRY_DSN?.trim()
   if (!dsn) return
 
-  // Fire-and-forget ; never block the request path.
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const Sentry = require("@sentry/nextjs") as typeof import("@sentry/nextjs")
+    if (Sentry?.captureException) {
+      Sentry.captureException(
+        error instanceof Error ? error : new Error(message),
+        { extra: context }
+      )
+      return
+    }
+  } catch {
+    /* fall through DIY */
+  }
+
   void sendToSentry(dsn, message, stack, context).catch(() => {})
 }
 
@@ -25,7 +42,6 @@ async function sendToSentry(
   stack?: string,
   context?: Record<string, unknown>
 ) {
-  // DSN: https://<key>@<host>/<project>
   const match = dsn.match(/^https:\/\/([^@]+)@([^/]+)\/(\d+)/)
   if (!match) return
   const [, key, host, project] = match
@@ -43,7 +59,9 @@ async function sendToSentry(
             {
               type: "Error",
               value: message,
-              stacktrace: { frames: [{ filename: "app", function: "captureError" }] },
+              stacktrace: {
+                frames: [{ filename: "app", function: "captureError" }],
+              },
             },
           ],
         }
@@ -64,7 +82,22 @@ export function captureMessage(
 ) {
   console.info("[ops]", message, context ?? {})
   if (!process.env.SENTRY_DSN?.trim()) return
-  void sendToSentry(process.env.SENTRY_DSN.trim(), message, undefined, context).catch(
-    () => {}
-  )
+
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const Sentry = require("@sentry/nextjs") as typeof import("@sentry/nextjs")
+    if (Sentry?.captureMessage) {
+      Sentry.captureMessage(message, { extra: context })
+      return
+    }
+  } catch {
+    /* DIY */
+  }
+
+  void sendToSentry(
+    process.env.SENTRY_DSN.trim(),
+    message,
+    undefined,
+    context
+  ).catch(() => {})
 }
