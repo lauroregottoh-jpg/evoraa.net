@@ -94,7 +94,9 @@ async function resolveLoginDestination(input: {
     const admin = createAdminClient()
     const { data: profile } = await admin
       .from("profiles")
-      .select("role, completion_percentage, onboarding_status")
+      .select(
+        "role, completion_percentage, onboarding_status, first_name, last_name, gender, birth_date, city, church_attended"
+      )
       .eq("user_id", input.userId)
       .maybeSingle()
 
@@ -113,24 +115,19 @@ async function resolveLoginDestination(input: {
       return next
     }
 
+    const { profileNeedsOnboarding } = await import("@/lib/auth/onboardingGate")
+    if (profileNeedsOnboarding(profile)) {
+      return "/onboarding"
+    }
+
     if (next && !next.startsWith(OPS_CONSOLE_PATH)) {
       return next
     }
 
-    const completion = profile?.completion_percentage ?? 0
-    const status = profile?.onboarding_status
-    if (
-      completion < 70 ||
-      !status ||
-      status === "step1_account" ||
-      status === "step2_profile"
-    ) {
-      return "/onboarding"
-    }
     return "/dashboard"
   } catch {
     if (isOpsAdminEmailSafe(input.email)) return OPS_CONSOLE_PATH
-    return "/dashboard"
+    return "/onboarding"
   }
 }
 
@@ -652,6 +649,39 @@ export async function logoutAction() {
   await supabase.auth.signOut()
   revalidatePath("/", "layout")
   redirect("/login")
+}
+
+/** Après Google / OAuth : seed profil + noms depuis Auth metadata. */
+export async function syncOAuthProfileAction(): Promise<{
+  error?: string
+  success?: boolean
+}> {
+  try {
+    const supabase = await createClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (!user) return { error: "Session absente." }
+
+    const cookieStore = await (await import("next/headers")).cookies()
+    const { CHARTER_COOKIE } = await import("@/lib/auth/charterCookie")
+    const charterAccepted =
+      cookieStore.get(CHARTER_COOKIE)?.value === "1" ||
+      user.user_metadata?.charter_accepted === true
+
+    const { ensureOAuthProfile } = await import("@/lib/auth/ensureOAuthProfile")
+    await ensureOAuthProfile({
+      user,
+      charterAccepted: Boolean(charterAccepted),
+      supabase,
+    })
+    return { success: true }
+  } catch (e) {
+    console.error("[syncOAuthProfile]", e)
+    return {
+      error: e instanceof Error ? e.message : "Sync profil impossible.",
+    }
+  }
 }
 
 /** Persiste l’acceptation de la Charte après création du compte. */

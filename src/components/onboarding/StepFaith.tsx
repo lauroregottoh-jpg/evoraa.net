@@ -20,6 +20,17 @@ interface StepFaithProps {
   isSubmitting?: boolean
 }
 
+/** Six grandes familles + autre (nom libre). */
+const CHURCH_FAMILIES = [
+  "Catholique",
+  "Protestant",
+  "Protestant Évangélique",
+  "Assemblées de Dieu",
+  "Baptiste",
+  "Pentecôtiste",
+  "Autre",
+] as const
+
 export function StepFaith({
   onNext,
   onBack,
@@ -49,7 +60,7 @@ export function StepFaith({
         onNext({
           practice,
           community,
-          churchName,
+          churchName: churchName.trim(),
           pastorName,
           pastorContact,
         })
@@ -61,7 +72,8 @@ export function StepFaith({
           Votre chemin de foi
         </h3>
         <p className="text-sm text-muted-foreground leading-relaxed max-w-md">
-          Ces repères aident EVA à comprendre votre ancrage spirituel.
+          Choisissez votre famille d’églises, puis indiquez le nom de votre
+          assemblée locale.
         </p>
       </div>
 
@@ -78,33 +90,37 @@ export function StepFaith({
           <option value="regulier">Pratiquant régulier</option>
           <option value="cheminement">En cheminement actif</option>
           <option value="occasionnel">Occasionnel, foi centrale</option>
-          <option value="engagement_fort">Engagement ministériel / leadership</option>
+          <option value="engagement_fort">
+            Engagement ministériel / leadership
+          </option>
         </select>
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">Dénomination</label>
+        <label className="text-sm font-medium">
+          Famille d’églises (6 principales)
+        </label>
         <select
           value={community}
           onChange={(e) => setCommunity(e.target.value)}
           required
           className="w-full h-12 px-3.5 rounded-xl bg-background border border-border/80 text-sm"
         >
-          <option value="Catholique">Catholique</option>
-          <option value="Protestant">Protestant</option>
-          <option value="Protestant Évangélique">Protestant Évangélique</option>
-          <option value="Assemblées de Dieu">Assemblées de Dieu</option>
-          <option value="Baptiste">Baptiste</option>
-          <option value="Pentecôtiste">Pentecôtiste</option>
-          <option value="Autre chrétien">Autre chrétien</option>
+          {CHURCH_FAMILIES.map((c) => (
+            <option key={c} value={c === "Autre" ? "Autre chrétien" : c}>
+              {c}
+            </option>
+          ))}
         </select>
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">Église (optionnel pour l’instant)</label>
+        <label className="text-sm font-medium">Nom de votre église</label>
         <Input
           value={churchName}
           onChange={(e) => setChurchName(e.target.value)}
+          required
+          maxLength={160}
           placeholder="Ex. Église de la Grâce — Cocody"
           className="h-12 rounded-xl"
         />
@@ -112,7 +128,9 @@ export function StepFaith({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Pasteur / référent (optionnel)</label>
+          <label className="text-sm font-medium">
+            Pasteur / référent (optionnel)
+          </label>
           <Input
             value={pastorName}
             onChange={(e) => setPastorName(e.target.value)}

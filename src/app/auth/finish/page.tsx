@@ -3,10 +3,12 @@
 import * as React from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/utils/supabase/client"
+import { syncOAuthProfileAction } from "@/app/actions/auth"
+import { profileNeedsOnboarding } from "@/lib/auth/onboardingGate"
 
 /**
  * Reçoit les liens Auth (code PKCE, token_hash, ou #access_token).
- * Après Google / email : onboarding si profil incomplet, sinon dashboard.
+ * Après Google / email : toujours onboarding tant que les essentiels manquent.
  */
 export default function AuthFinishPage() {
   const router = useRouter()
@@ -31,7 +33,6 @@ export default function AuthFinishPage() {
       const error = params.get("error_description") || params.get("error")
       const code = params.get("code")
       const token_hash = params.get("token_hash")
-      const nextParam = params.get("next")
 
       if (error) {
         setStatus("Lien invalide. Redirection…")
@@ -86,46 +87,36 @@ export default function AuthFinishPage() {
         } = await supabase.auth.getUser()
 
         if (user && type !== "recovery") {
-          await supabase
-            .from("profiles")
-            .update({ email_verified: true })
-            .eq("user_id", user.id)
+          await syncOAuthProfileAction()
         }
 
-        let preferredNext =
-          type === "recovery"
-            ? "/reset-password"
-            : nextParam?.startsWith("/")
-              ? nextParam
-              : "/onboarding"
-
-        if (user && type !== "recovery" && preferredNext !== "/reset-password") {
-          const { data: profile } = await supabase
-            .from("profiles")
-            .select(
-              "completion_percentage, onboarding_status, first_name, gender, birth_date, city"
-            )
-            .eq("user_id", user.id)
-            .maybeSingle()
-
-          const completion = profile?.completion_percentage ?? 0
-          const statusOnboarding = profile?.onboarding_status
-          const missingEssentials =
-            !profile?.first_name ||
-            !profile?.gender ||
-            !profile?.birth_date ||
-            !profile?.city
-          const needsOnboarding =
-            missingEssentials ||
-            completion < 70 ||
-            !statusOnboarding ||
-            statusOnboarding === "step1_account" ||
-            statusOnboarding === "step2_profile"
-
-          preferredNext = needsOnboarding ? "/onboarding" : "/dashboard"
+        if (type === "recovery") {
+          setStatus("Accès ouvert. Redirection…")
+          router.replace("/reset-password")
+          router.refresh()
+          return
         }
 
-        setStatus("Accès ouvert. Redirection…")
+        const { data: profile } = user
+          ? await supabase
+              .from("profiles")
+              .select(
+                "completion_percentage, onboarding_status, first_name, last_name, gender, birth_date, city, church_attended"
+              )
+              .eq("user_id", user.id)
+              .maybeSingle()
+          : { data: null }
+
+        // Jamais dashboard tant que les infos de base manquent
+        const preferredNext = profileNeedsOnboarding(profile)
+          ? "/onboarding"
+          : "/dashboard"
+
+        setStatus(
+          preferredNext === "/onboarding"
+            ? "Complétez votre profil pour continuer…"
+            : "Accès ouvert. Redirection…"
+        )
         router.replace(preferredNext)
         router.refresh()
       } catch (e) {

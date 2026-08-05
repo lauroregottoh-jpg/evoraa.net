@@ -147,25 +147,16 @@ export async function GET(request: Request) {
       if (next !== "/reset-password" && !next.startsWith("/reset-password")) {
         const { data: profile } = await supabase
           .from("profiles")
-          .select("completion_percentage, onboarding_status, first_name, gender, birth_date, city")
+          .select(
+            "completion_percentage, onboarding_status, first_name, last_name, gender, birth_date, city, church_attended"
+          )
           .eq("user_id", user.id)
           .maybeSingle()
 
-        const completion = profile?.completion_percentage ?? 0
-        const status = profile?.onboarding_status
-        const missingEssentials =
-          !profile?.first_name ||
-          !profile?.gender ||
-          !profile?.birth_date ||
-          !profile?.city
-        const needsOnboarding =
-          missingEssentials ||
-          completion < 70 ||
-          !status ||
-          status === "step1_account" ||
-          status === "step2_profile"
-
-        next = needsOnboarding ? "/onboarding" : "/dashboard"
+        const { profileNeedsOnboarding } = await import(
+          "@/lib/auth/onboardingGate"
+        )
+        next = profileNeedsOnboarding(profile) ? "/onboarding" : "/dashboard"
       }
 
       // Clear one-shot charter cookie

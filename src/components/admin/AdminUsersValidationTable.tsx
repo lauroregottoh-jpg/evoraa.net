@@ -436,10 +436,10 @@ export function AdminUsersValidationTable({
         </div>
       )}
 
-      <div className="grid xl:grid-cols-[1fr_360px] gap-5 items-start">
+      <div className="grid lg:grid-cols-[1fr_340px] gap-5 items-start">
         <div className="rounded-xl border border-border bg-card overflow-hidden shadow-sm">
-          <div className="overflow-x-auto max-h-[min(75vh,820px)] overflow-y-auto">
-            <table className="w-full text-left text-sm border-collapse min-w-[1100px]">
+          <div className="overflow-x-auto max-h-[min(75vh,820px)] overflow-y-auto -webkit-overflow-scrolling-touch">
+            <table className="w-full text-left text-sm border-collapse min-w-0 md:min-w-[720px]">
               <thead className="sticky top-0 z-10 bg-[#E8EAEC] text-[11px] uppercase tracking-wider text-muted-foreground border-b border-border">
                 <tr>
                   <th className="py-3 px-3 w-10">
@@ -451,12 +451,22 @@ export function AdminUsersValidationTable({
                     />
                   </th>
                   <th className="py-3 px-4 font-semibold">Nom</th>
-                  <th className="py-3 px-4 font-semibold">E-mail</th>
-                  <th className="py-3 px-4 font-semibold">Ville</th>
+                  <th className="py-3 px-4 font-semibold hidden sm:table-cell">
+                    E-mail
+                  </th>
+                  <th className="py-3 px-4 font-semibold hidden md:table-cell">
+                    Ville
+                  </th>
                   <th className="py-3 px-4 font-semibold">Tests</th>
-                  <th className="py-3 px-4 font-semibold">Typologie</th>
-                  <th className="py-3 px-4 font-semibold">Profil</th>
-                  <th className="py-3 px-4 font-semibold">Manquant</th>
+                  <th className="py-3 px-4 font-semibold hidden lg:table-cell">
+                    Typologie
+                  </th>
+                  <th className="py-3 px-4 font-semibold hidden md:table-cell">
+                    Profil
+                  </th>
+                  <th className="py-3 px-4 font-semibold hidden xl:table-cell">
+                    Manquant
+                  </th>
                   <th className="py-3 px-4 font-semibold">Statut</th>
                   <th className="py-3 px-4 font-semibold text-right">Actions</th>
                 </tr>
@@ -506,10 +516,10 @@ export function AdminUsersValidationTable({
                           {u.pastorName ? ` · Past. ${u.pastorName}` : ""}
                         </p>
                       </td>
-                      <td className="py-3.5 px-4 text-xs text-muted-foreground max-w-[180px] truncate">
+                      <td className="py-3.5 px-4 text-xs text-muted-foreground max-w-[180px] truncate hidden sm:table-cell">
                         {u.email || "—"}
                       </td>
-                      <td className="py-3.5 px-4 text-muted-foreground">
+                      <td className="py-3.5 px-4 text-muted-foreground hidden md:table-cell">
                         {u.city}
                         {u.country && u.country !== "?" ? `, ${u.country}` : ""}
                       </td>
@@ -524,10 +534,10 @@ export function AdminUsersValidationTable({
                             : ""}
                         </p>
                       </td>
-                      <td className="py-3.5 px-4 text-xs max-w-[140px]">
+                      <td className="py-3.5 px-4 text-xs max-w-[140px] hidden lg:table-cell">
                         {u.profileType || "—"}
                       </td>
-                      <td className="py-3.5 px-4">
+                      <td className="py-3.5 px-4 hidden md:table-cell">
                         <div className="flex items-center gap-2">
                           <div className="w-16 h-2 rounded-full bg-secondary overflow-hidden">
                             <div
@@ -553,7 +563,7 @@ export function AdminUsersValidationTable({
                           )}
                         </div>
                       </td>
-                      <td className="py-3.5 px-4 max-w-[220px] text-xs leading-snug">
+                      <td className="py-3.5 px-4 max-w-[220px] text-xs leading-snug hidden xl:table-cell">
                         {u.missing.length === 0 ? (
                           <span className="text-emerald-700 font-medium">
                             Complet

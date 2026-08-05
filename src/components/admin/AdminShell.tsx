@@ -227,10 +227,10 @@ export function AdminShell({
 
       <div className="flex-1 min-w-0 flex flex-col">
         <div className="bg-[#0F1F1A] text-white px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3">
-          <p className="text-sm font-semibold tracking-wide">
-            Bienvenue Admin — console opérationnelle KELIAA
+          <p className="text-sm font-semibold tracking-wide truncate">
+            Console ops KELIAA
           </p>
-          <span className="hidden sm:inline text-[11px] text-white/60 font-mono">
+          <span className="hidden sm:inline text-[11px] text-white/60 font-mono shrink-0">
             ≠ espace membre
           </span>
         </div>

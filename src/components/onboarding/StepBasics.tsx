@@ -57,6 +57,7 @@ export function StepBasics({
   const [country, setCountry] = React.useState(
     String(defaultValues?.country || "Togo")
   )
+  const [city, setCity] = React.useState(String(defaultValues?.city || ""))
 
   const maxBirth = React.useMemo(() => {
     const d = new Date()
@@ -76,7 +77,7 @@ export function StepBasics({
       lastName,
       gender,
       birthDate,
-      city: country,
+      city: city.trim() || country,
       country,
     })
   }
@@ -88,8 +89,8 @@ export function StepBasics({
           Qui êtes-vous ?
         </h3>
         <p className="text-sm text-muted-foreground leading-relaxed max-w-md">
-          Nom, prénom, sexe et pays — le reste se complète ensuite, à votre
-          rythme.
+          Prénom, nom, sexe, date de naissance, pays et ville — nécessaires avant
+          l’accès à l’espace membre.
         </p>
       </div>
 
@@ -138,6 +139,24 @@ export function StepBasics({
           </select>
         </div>
         <div className="space-y-2">
+          <label className="text-sm font-medium">Date de naissance</label>
+          <Input
+            type="date"
+            value={birthDate}
+            min={minBirth}
+            max={maxBirth}
+            onChange={(e) => setBirthDate(e.target.value)}
+            required
+            className="h-12 rounded-xl"
+          />
+          <p className="text-[11px] text-muted-foreground">
+            Requis pour confirmer que vous avez 18 ans ou plus.
+          </p>
+        </div>
+      </div>
+
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div className="space-y-2">
           <label className="text-sm font-medium flex items-center gap-2">
             <MapPin className="h-4 w-4 text-muted-foreground" />
             Pays
@@ -155,22 +174,17 @@ export function StepBasics({
             ))}
           </select>
         </div>
-      </div>
-
-      <div className="space-y-2">
-        <label className="text-sm font-medium">Date de naissance</label>
-        <Input
-          type="date"
-          value={birthDate}
-          min={minBirth}
-          max={maxBirth}
-          onChange={(e) => setBirthDate(e.target.value)}
-          required
-          className="h-12 rounded-xl"
-        />
-        <p className="text-[11px] text-muted-foreground">
-          Requis pour confirmer que vous avez 18 ans ou plus.
-        </p>
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Ville</label>
+          <Input
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            required
+            maxLength={120}
+            placeholder="Ex. Lomé, Abidjan…"
+            className="h-12 rounded-xl text-base"
+          />
+        </div>
       </div>
 
       <Button

@@ -468,10 +468,91 @@ export async function getAdminDashboardData() {
   }
 
   const { mapProfileToOpsUser } = await import("@/lib/admin/userValidation")
+  const { namesFromAuthMetadata } = await import("@/lib/auth/ensureOAuthProfile")
 
-  const users = (profiles ?? []).map((p) =>
+  let users = (profiles ?? []).map((p) =>
     mapProfileToOpsUser(p as Record<string, unknown>)
   )
+
+  // Sync noms depuis Auth (Supabase Users) quand le profil dit « Sans nom »
+  try {
+    const needIds = users
+      .filter((u) => u.name === "Sans nom" || !u.firstName)
+      .map((u) => u.userId)
+    if (needIds.length > 0) {
+      const admin = createAdminClient()
+      const nameByUserId = new Map<
+        string,
+        { firstName: string | null; lastName: string | null; email: string | null }
+      >()
+      // Parcourir les pages Auth (max ~5k pour un soft launch)
+      for (let page = 1; page <= 5; page++) {
+        const { data, error } = await admin.auth.admin.listUsers({
+          page,
+          perPage: 1000,
+        })
+        if (error || !data?.users?.length) break
+        for (const au of data.users) {
+          const n = namesFromAuthMetadata(
+            au.user_metadata as Record<string, unknown>
+          )
+          nameByUserId.set(au.id, {
+            firstName: n.firstName,
+            lastName: n.lastName,
+            email: au.email ?? null,
+          })
+        }
+        if (data.users.length < 1000) break
+      }
+
+      const profilePatches: Array<{
+        user_id: string
+        first_name: string | null
+        last_name: string | null
+      }> = []
+
+      users = users.map((u) => {
+        const fromAuth = nameByUserId.get(u.userId)
+        if (!fromAuth) return u
+        const firstName = u.firstName || fromAuth.firstName || ""
+        const lastName = u.lastName || fromAuth.lastName || ""
+        const name =
+          [firstName, lastName].filter(Boolean).join(" ") ||
+          (u.name !== "Sans nom" ? u.name : "Sans nom")
+        if (
+          (fromAuth.firstName || fromAuth.lastName) &&
+          (!u.firstName || !u.lastName)
+        ) {
+          profilePatches.push({
+            user_id: u.userId,
+            first_name: firstName || null,
+            last_name: lastName || null,
+          })
+        }
+        return {
+          ...u,
+          firstName,
+          lastName,
+          name: name === "" ? "Sans nom" : name,
+          email: u.email || fromAuth.email,
+        }
+      })
+
+      // Écrire en base pour les prochaines charges (temps réel au prochain refresh)
+      for (const patch of profilePatches.slice(0, 200)) {
+        await admin
+          .from("profiles")
+          .update({
+            first_name: patch.first_name,
+            last_name: patch.last_name,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("user_id", patch.user_id)
+      }
+    }
+  } catch (e) {
+    console.error("[ops] hydrate names from Auth", e)
+  }
 
   const { aggregateTop, ageBucket, signupsByDay, matchingRate } = await import(
     "@/lib/admin/analytics"

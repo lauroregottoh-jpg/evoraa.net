@@ -42,21 +42,12 @@ export async function resolvePostAuthPath(
   const supabase = await createClient()
   const { data: profile } = await supabase
     .from("profiles")
-    .select("completion_percentage, onboarding_status")
+    .select(
+      "completion_percentage, onboarding_status, first_name, last_name, gender, birth_date, city, church_attended"
+    )
     .eq("user_id", userId)
     .maybeSingle()
 
-  const completion = profile?.completion_percentage ?? 0
-  const status = profile?.onboarding_status
-
-  if (
-    completion < 70 ||
-    !status ||
-    status === "step1_account" ||
-    status === "step2_profile"
-  ) {
-    return "/onboarding"
-  }
-
-  return "/dashboard"
+  const { profileNeedsOnboarding } = await import("@/lib/auth/onboardingGate")
+  return profileNeedsOnboarding(profile) ? "/onboarding" : "/dashboard"
 }

@@ -7,6 +7,10 @@ import {
   resolveAuthEmail,
   sanitizeNextPath,
 } from '@/lib/admin/consolePath'
+import {
+  ONBOARDING_GATE_SELECT,
+  profileNeedsOnboarding,
+} from '@/lib/auth/onboardingGate'
 
 const AUTH_ROUTES = ['/login', '/register', '/forgot-password', '/reset-password']
 
@@ -147,7 +151,7 @@ export async function updateSession(request: NextRequest) {
   if (user && isAuthRoute && !isResetPassword) {
     const { data: profile } = await supabase
       .from('profiles')
-      .select('completion_percentage, onboarding_status, role')
+      .select(`${ONBOARDING_GATE_SELECT}, role`)
       .eq('user_id', user.id)
       .maybeSingle()
 
@@ -172,19 +176,16 @@ export async function updateSession(request: NextRequest) {
       return redirectWithCookies('/admin')
     }
 
+    // Essentiels manquants → toujours onboarding (ignore next=/dashboard)
+    if (profileNeedsOnboarding(profile)) {
+      return redirectWithCookies('/onboarding')
+    }
+
     if (nextParam && !wantsOps) {
       return redirectWithCookies(nextParam)
     }
 
-    const completion = profile?.completion_percentage ?? 0
-    const status = profile?.onboarding_status
-    const needsOnboarding =
-      completion < 70 ||
-      !status ||
-      status === 'step1_account' ||
-      status === 'step2_profile'
-
-    return redirectWithCookies(needsOnboarding ? '/onboarding' : '/dashboard')
+    return redirectWithCookies('/dashboard')
   }
 
   if (
@@ -197,19 +198,11 @@ export async function updateSession(request: NextRequest) {
   ) {
     const { data: profile } = await supabase
       .from('profiles')
-      .select('completion_percentage, onboarding_status, role')
+      .select(`${ONBOARDING_GATE_SELECT}, role`)
       .eq('user_id', user.id)
       .maybeSingle()
 
-    const completion = profile?.completion_percentage ?? 0
-    const status = profile?.onboarding_status
-    const needsOnboarding =
-      completion < 70 ||
-      !status ||
-      status === 'step1_account' ||
-      status === 'step2_profile'
-
-    if (needsOnboarding && !isAdminRoute) {
+    if (profileNeedsOnboarding(profile) && !isAdminRoute) {
       return redirectWithCookies('/onboarding')
     }
   }
