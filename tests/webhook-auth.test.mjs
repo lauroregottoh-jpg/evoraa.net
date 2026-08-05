@@ -1,5 +1,5 @@
 /**
- * Unit tests — auth webhooks Bictorys / CinetPay (lot B).
+ * Unit tests — auth webhooks Bictorys / Moneroo.
  */
 import assert from "node:assert/strict"
 import { createHmac } from "node:crypto"
@@ -7,7 +7,7 @@ import { describe, it } from "node:test"
 import {
   safeEqualString,
   verifyBictorysWebhookAuth,
-  verifyCinetPayWebhookAuth,
+  verifyMonerooWebhookAuth,
 } from "../src/lib/billing/webhookAuth.ts"
 
 describe("webhookAuth — Bictorys", () => {
@@ -65,26 +65,35 @@ describe("webhookAuth — Bictorys", () => {
   })
 })
 
-describe("webhookAuth — CinetPay", () => {
-  it("api_check_only si pas de token configuré", () => {
-    const r = verifyCinetPayWebhookAuth({ webhookToken: "", presentedHeader: "" })
-    assert.equal(r.ok, true)
-    if (r.ok) assert.equal(r.mode, "api_check_only")
-  })
+describe("webhookAuth — Moneroo", () => {
+  const secret = "moneroo-whsec-test"
+  const rawBody = JSON.stringify({ event: "payment.success", data: { id: "pay_1" } })
 
-  it("header OK si secret match", () => {
-    const r = verifyCinetPayWebhookAuth({
-      webhookToken: "tok",
-      presentedHeader: "tok",
+  it("accepte signature HMAC body", () => {
+    const sig = createHmac("sha256", secret).update(rawBody).digest("hex")
+    const r = verifyMonerooWebhookAuth({
+      webhookSecret: secret,
+      signatureHeader: sig,
+      rawBody,
     })
     assert.equal(r.ok, true)
-    if (r.ok) assert.equal(r.mode, "header")
   })
 
-  it("refuse header incorrect", () => {
-    const r = verifyCinetPayWebhookAuth({
-      webhookToken: "tok",
-      presentedHeader: "bad",
+  it("accepte préfixe sha256=", () => {
+    const sig = createHmac("sha256", secret).update(rawBody).digest("hex")
+    const r = verifyMonerooWebhookAuth({
+      webhookSecret: secret,
+      signatureHeader: `sha256=${sig}`,
+      rawBody,
+    })
+    assert.equal(r.ok, true)
+  })
+
+  it("refuse signature incorrecte", () => {
+    const r = verifyMonerooWebhookAuth({
+      webhookSecret: secret,
+      signatureHeader: "deadbeef",
+      rawBody,
     })
     assert.equal(r.ok, false)
   })

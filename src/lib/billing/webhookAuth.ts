@@ -70,23 +70,26 @@ export function readBictorysAuthFromRequest(
 }
 
 /**
- * CinetPay : secret header si présent ; sinon mode api_check_only
- * (activation toujours conditionnée au Payment Check API).
+ * Moneroo : HMAC-SHA256 hex du raw body avec MONEROO_WEBHOOK_SECRET.
+ * Header : X-Moneroo-Signature
  */
-export function verifyCinetPayWebhookAuth(input: {
-  webhookToken: string
-  presentedHeader: string
-}):
-  | { ok: true; mode: "header" | "api_check_only" }
-  | { ok: false; error: string } {
-  if (!input.webhookToken) {
-    return { ok: true, mode: "api_check_only" }
+export function verifyMonerooWebhookAuth(input: {
+  webhookSecret: string
+  signatureHeader: string
+  rawBody: string
+}): { ok: true } | { ok: false; error: string } {
+  if (!input.webhookSecret) {
+    return { ok: false, error: "MONEROO_WEBHOOK_SECRET manquant" }
   }
-  if (!input.presentedHeader) {
-    return { ok: true, mode: "api_check_only" }
+  if (!input.signatureHeader) {
+    return { ok: false, error: "Signature Moneroo manquante" }
   }
-  if (!safeEqualString(input.presentedHeader, input.webhookToken)) {
-    return { ok: false, error: "Secret webhook invalide" }
+  const expected = createHmac("sha256", input.webhookSecret)
+    .update(input.rawBody)
+    .digest("hex")
+  const presented = input.signatureHeader.replace(/^sha256=/i, "").trim()
+  if (!safeEqualString(presented, expected)) {
+    return { ok: false, error: "Signature Moneroo invalide" }
   }
-  return { ok: true, mode: "header" }
+  return { ok: true }
 }

@@ -20,9 +20,11 @@ Console ops → Réglages :
 | Variable | Attendu |
 |---|---|
 | `PAYMENTS_DEMO_MODE` | `false` en prod |
-| `PAYMENT_PROVIDER` | `bictorys` (primair) |
+| `PAYMENT_PROVIDER` | `bictorys` ou `moneroo` |
 | `BICTORYS_API_KEY` | live `public-…` |
 | `BICTORYS_WEBHOOK_SECRET` | identique dashboard Bictorys |
+| `MONEROO_SECRET_KEY` | si provider Moneroo |
+| `MONEROO_WEBHOOK_SECRET` | signature webhook Moneroo |
 | `SUPABASE_SERVICE_ROLE_KEY` | présent |
 
 Health (secret CRON) :  

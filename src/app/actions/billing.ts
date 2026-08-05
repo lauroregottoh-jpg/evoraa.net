@@ -205,46 +205,63 @@ export async function startCheckoutAction(
         return { checkoutPath: result.checkoutUrl }
       }
 
-      const notifyUrl = `${appBaseUrl()}/api/payments/cinetpay/notify`
-      const returnUrl = `${appBaseUrl()}/checkout/success?payment=${payment.id}`
-      const response = await fetch("https://api-checkout.cinetpay.com/v2/payment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          apikey: process.env.CINETPAY_API_KEY,
-          site_id: process.env.CINETPAY_SITE_ID,
-          transaction_id: transactionRef,
-          amount: plan.amountXof,
-          currency: "XOF",
+      if (liveProvider === "moneroo") {
+        if (!process.env.MONEROO_SECRET_KEY) {
+          return { error: "MONEROO_SECRET_KEY manquant." }
+        }
+        const { monerooInitializePayment } = await import(
+          "@/lib/billing/monerooClient"
+        )
+        const result = await monerooInitializePayment({
+          secretKey: process.env.MONEROO_SECRET_KEY,
+          amountXof: plan.amountXof,
           description: `KELIAA ${plan.name} — 30 jours`,
-          notify_url: notifyUrl,
-          return_url: returnUrl,
-          channels: "ALL",
-          metadata: payment.id,
-        }),
-      })
-      const payload = await response.json()
-      const paymentUrl = payload?.data?.payment_url as string | undefined
-      if (paymentUrl) {
+          returnUrl: `${appBaseUrl()}/checkout/success?payment=${payment.id}`,
+          customerEmail: user.email || "",
+          customerFirstName:
+            (profile?.first_name as string) ||
+            user.user_metadata?.first_name ||
+            "Membre",
+          metadata: {
+            keliaa_payment_id: payment.id,
+            plan_id: plan.id,
+          },
+        })
+        if (!result.ok) {
+          await logPaymentEvent({
+            paymentId: payment.id,
+            provider: "moneroo",
+            eventType: "charge_failed",
+            status: "failed",
+            message: result.error,
+          })
+          return { error: result.error }
+        }
         await supabase
           .from("payments")
           .update({
+            transaction_reference: result.txId,
             metadata: {
               plan_id: plan.id,
               plan_name: plan.name,
-              provider: "cinetpay",
-              cinetpay: payload?.data ?? payload,
+              provider: "moneroo",
+              user_country: profile?.country || null,
+              moneroo: result.raw,
             },
           })
           .eq("id", payment.id)
         await logPaymentEvent({
           paymentId: payment.id,
-          provider: "cinetpay",
+          provider: "moneroo",
           eventType: "charge_initiated",
           status: "pending",
+          message: result.txId,
+          payload: { transactionId: result.txId },
         })
-        return { checkoutPath: paymentUrl }
+        return { checkoutPath: result.checkoutUrl }
       }
+
+      return { error: "Provider de paiement non configuré (bictorys | moneroo)." }
     } catch (err) {
       await logPaymentEvent({
         paymentId: payment.id,

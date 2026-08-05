@@ -112,7 +112,7 @@ export type AdminBreakdowns = {
 
 export type AdminOpsFlags = {
   paymentsDemoMode: boolean
-  hasCinetPay: boolean
+  hasMoneroo: boolean
   hasBictorys: boolean
   paymentProvider: string
   bictorysSandbox: boolean
@@ -610,14 +610,14 @@ export async function getAdminDashboardData() {
   }
 
   const hasBictorys = Boolean(process.env.BICTORYS_API_KEY)
-  const hasCinetPay = Boolean(process.env.CINETPAY_API_KEY && process.env.CINETPAY_SITE_ID)
+  const hasMoneroo = Boolean(process.env.MONEROO_SECRET_KEY)
   const { resolveLiveProvider, isDemoPaymentsEnv } = await import(
     "@/lib/billing/provider"
   )
   const paymentProvider = resolveLiveProvider()
   const ops: AdminOpsFlags = {
     paymentsDemoMode: isDemoPaymentsEnv(),
-    hasCinetPay,
+    hasMoneroo,
     hasBictorys,
     paymentProvider,
     bictorysSandbox: process.env.BICTORYS_API_KEY?.startsWith("test_") ?? false,

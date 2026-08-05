@@ -791,7 +791,7 @@ export function IntegrationsEditor({
   settings: PlatformSettingRow[]
   ops: {
     hasStripe: boolean
-    hasCinetPay: boolean
+    hasMoneroo: boolean
     hasBictorys: boolean
     hasResend: boolean
     hasOpenAI: boolean
@@ -810,7 +810,7 @@ export function IntegrationsEditor({
       <div className="grid sm:grid-cols-2 gap-2 text-sm mb-3">
         <p>Stripe env : <strong>{ops.hasStripe ? "oui" : "non"}</strong></p>
         <p>Bictorys : <strong>{ops.hasBictorys ? "oui" : "non"}</strong></p>
-        <p>CinetPay : <strong>{ops.hasCinetPay ? "oui" : "non"}</strong></p>
+        <p>Moneroo : <strong>{ops.hasMoneroo ? "oui" : "non"}</strong></p>
         <p>Resend : <strong>{ops.hasResend ? "oui" : "non"}</strong></p>
         <p>OpenAI : <strong>{ops.hasOpenAI ? "oui" : "non"}</strong></p>
         <p>YouTube API : <strong>{ops.hasYoutube ? "oui" : "non"}</strong></p>

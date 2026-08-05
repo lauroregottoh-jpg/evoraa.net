@@ -39,7 +39,7 @@ const ADMIN_PREFIXES = [OPS_CONSOLE_PATH, '/moderation']
 /** API surface fermée : seules ces routes existent côté public réseau. */
 const ALLOWED_API_PREFIXES = [
   '/api/payments/bictorys/notify',
-  '/api/payments/cinetpay/notify',
+  '/api/payments/moneroo/notify',
   '/api/cron/subscription-reminders',
   '/api/cron/email-outbox',
   '/api/cron/profile-reminders',

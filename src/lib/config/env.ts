@@ -14,12 +14,14 @@ const EnvSchema = z.object({
   NEXT_PUBLIC_APP_URL: z.string().optional(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
   PAYMENTS_DEMO_MODE: z.enum(["true", "false"]).optional(),
-  PAYMENT_PROVIDER: z.enum(["bictorys", "cinetpay"]).optional(),
+  PAYMENT_PROVIDER: z.enum(["bictorys", "moneroo"]).optional(),
   CRON_SECRET: z.string().optional(),
   SENTRY_DSN: z.string().optional(),
   RESEND_API_KEY: z.string().optional(),
   BICTORYS_API_KEY: z.string().optional(),
   BICTORYS_WEBHOOK_SECRET: z.string().optional(),
+  MONEROO_SECRET_KEY: z.string().optional(),
+  MONEROO_WEBHOOK_SECRET: z.string().optional(),
   NODE_ENV: z.enum(["development", "test", "production"]).optional(),
   VERCEL_ENV: z.enum(["development", "preview", "production"]).optional(),
 })
@@ -53,13 +55,15 @@ export function getEnv(): AppEnv {
     PAYMENTS_DEMO_MODE: process.env.PAYMENTS_DEMO_MODE as "true" | "false" | undefined,
     PAYMENT_PROVIDER: process.env.PAYMENT_PROVIDER as
       | "bictorys"
-      | "cinetpay"
+      | "moneroo"
       | undefined,
     CRON_SECRET: process.env.CRON_SECRET,
     SENTRY_DSN: process.env.SENTRY_DSN,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     BICTORYS_API_KEY: process.env.BICTORYS_API_KEY,
     BICTORYS_WEBHOOK_SECRET: process.env.BICTORYS_WEBHOOK_SECRET,
+    MONEROO_SECRET_KEY: process.env.MONEROO_SECRET_KEY,
+    MONEROO_WEBHOOK_SECRET: process.env.MONEROO_WEBHOOK_SECRET,
     NODE_ENV: process.env.NODE_ENV as AppEnv["NODE_ENV"],
     VERCEL_ENV: process.env.VERCEL_ENV as AppEnv["VERCEL_ENV"],
   })
@@ -77,9 +81,9 @@ export function getEnv(): AppEnv {
       !isPlaceholder(process.env.NEXT_PUBLIC_SUPABASE_URL))
 
   if (prod && process.env.PAYMENTS_DEMO_MODE !== "true") {
-    if (!process.env.BICTORYS_WEBHOOK_SECRET && !process.env.CINETPAY_WEBHOOK_TOKEN) {
+    if (!process.env.BICTORYS_WEBHOOK_SECRET && !process.env.MONEROO_WEBHOOK_SECRET) {
       console.warn(
-        "[env] Prod live payments: BICTORYS_WEBHOOK_SECRET (ou CINETPAY_WEBHOOK_TOKEN) recommandé"
+        "[env] Prod live payments: BICTORYS_WEBHOOK_SECRET ou MONEROO_WEBHOOK_SECRET recommandé"
       )
     }
   }

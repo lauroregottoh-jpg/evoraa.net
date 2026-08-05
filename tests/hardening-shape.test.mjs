@@ -51,15 +51,23 @@ describe("CI shape — hardening P0/P1", () => {
   it("webhookAuth + runbook incident présents", () => {
     const auth = read("src/lib/billing/webhookAuth.ts")
     assert.match(auth, /verifyBictorysWebhookAuth/)
-    assert.match(auth, /verifyCinetPayWebhookAuth/)
+    assert.match(auth, /verifyMonerooWebhookAuth/)
     assert.ok(existsSync(join(root, "docs/INCIDENT_PAYMENTS.md")))
+    assert.ok(existsSync(join(root, "docs/OPS_MONEROO.md")))
     assert.ok(existsSync(join(root, "tests/webhook-auth.test.mjs")))
   })
 
-  it("cinetpay notify utilise activate_pending_payment", () => {
-    const src = read("src/app/api/payments/cinetpay/notify/route.ts")
+  it("moneroo notify utilise activate_pending_payment", () => {
+    const src = read("src/app/api/payments/moneroo/notify/route.ts")
     assert.match(src, /activate_pending_payment/)
     assert.match(src, /logPaymentEvent/)
+    assert.match(src, /verifyMonerooWebhookAuth/)
+  })
+
+  it("middleware allowlist moneroo (plus cinetpay)", () => {
+    const src = read("src/utils/supabase/middleware.ts")
+    assert.match(src, /\/api\/payments\/moneroo\/notify/)
+    assert.doesNotMatch(src, /cinetpay/)
   })
 
   it("migrations timestamps uniques (pas de collision 00022/00023)", () => {

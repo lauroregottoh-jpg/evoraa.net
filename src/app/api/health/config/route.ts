@@ -71,7 +71,10 @@ export async function GET(request: Request) {
       hasCinetPay: Boolean(
         process.env.CINETPAY_API_KEY && process.env.CINETPAY_SITE_ID
       ),
+      hasMoneroo: Boolean(process.env.MONEROO_SECRET_KEY),
+      hasMonerooWebhook: Boolean(process.env.MONEROO_WEBHOOK_SECRET),
       webhookUrlHint: `${(process.env.NEXT_PUBLIC_APP_URL || "https://www.keliaa.org").replace(/\/$/, "")}/api/payments/bictorys/notify`,
+      monerooWebhookUrlHint: `${(process.env.NEXT_PUBLIC_APP_URL || "https://www.keliaa.org").replace(/\/$/, "")}/api/payments/moneroo/notify`,
     },
     email: {
       hasResend: Boolean(process.env.RESEND_API_KEY),

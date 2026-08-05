@@ -791,7 +791,7 @@ export function AdminConsole(props: Props) {
               </>
             )}
             {" · "}
-            CinetPay : <strong>{props.ops.hasCinetPay ? "configuré" : "non"}</strong>
+            Moneroo : <strong>{props.ops.hasMoneroo ? "configuré" : "non"}</strong>
           </p>
           <BictorysSandboxPanel
             ops={props.ops}
@@ -1230,7 +1230,7 @@ export function AdminConsole(props: Props) {
                 value={props.ops.paymentsDemoMode ? "ON" : "OFF"}
                 ok={!props.ops.paymentsDemoMode}
               />
-              <Flag label="CinetPay" value={props.ops.hasCinetPay ? "Oui" : "Non"} ok={props.ops.hasCinetPay} />
+              <Flag label="Moneroo" value={props.ops.hasMoneroo ? "Oui" : "Non"} ok={props.ops.hasMoneroo} />
               <Flag label="Resend" value={props.ops.hasResend ? "Oui" : "Non"} ok={props.ops.hasResend} />
               <Flag label="CRON" value={props.ops.hasCronSecret ? "Oui" : "Non"} ok={props.ops.hasCronSecret} />
               <Flag

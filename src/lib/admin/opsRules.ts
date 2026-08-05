@@ -41,6 +41,7 @@ export type YoutubeConfig = {
 export type IntegrationsConfig = {
   stripeNotes: string
   cinetpay: boolean
+  moneroo: boolean
   resend: boolean
   openaiNotes: string
   webhookUrl: string
@@ -91,8 +92,9 @@ export const DEFAULT_YOUTUBE: YoutubeConfig = {
 }
 
 export const DEFAULT_INTEGRATIONS: IntegrationsConfig = {
-  stripeNotes: "Stripe non branché en V1 — CinetPay / démo actifs.",
-  cinetpay: true,
+  stripeNotes: "Stripe non branché — Bictorys / Moneroo / démo.",
+  cinetpay: false,
+  moneroo: true,
   resend: true,
   openaiNotes: "Vision photo / LLM EVA = option V2 (clé API).",
   webhookUrl: "",
@@ -179,7 +181,8 @@ export function parseIntegrations(raw: unknown): IntegrationsConfig {
   const o = asObj(raw)
   return {
     stripeNotes: String(o.stripeNotes ?? DEFAULT_INTEGRATIONS.stripeNotes),
-    cinetpay: Boolean(o.cinetpay ?? DEFAULT_INTEGRATIONS.cinetpay),
+    cinetpay: false,
+    moneroo: Boolean(o.moneroo ?? DEFAULT_INTEGRATIONS.moneroo),
     resend: Boolean(o.resend ?? DEFAULT_INTEGRATIONS.resend),
     openaiNotes: String(o.openaiNotes ?? DEFAULT_INTEGRATIONS.openaiNotes),
     webhookUrl: String(o.webhookUrl ?? ""),

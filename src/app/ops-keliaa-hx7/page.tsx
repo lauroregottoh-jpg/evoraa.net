@@ -93,7 +93,7 @@ export default async function OpsConsolePage() {
 
   const emptyOps = {
     paymentsDemoMode: true,
-    hasCinetPay: false,
+    hasMoneroo: false,
     hasBictorys: false,
     paymentProvider: "demo",
     bictorysSandbox: false,
