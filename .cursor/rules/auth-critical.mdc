@@ -1,22 +1,60 @@
 ---
-description: Auth critique Keliaa — inscription et connexion ne doivent jamais être bloquées par de l’infra secondaire.
+description: ZONE AUTH GELÉE — inscription / Google / connexion. Ne pas modifier sans demande explicite.
 alwaysApply: true
 ---
 
-# Auth critique (KELIAA)
+# ZONE AUTH GELÉE (KELIAA)
 
-Inscription et connexion sont le chemin le plus important du produit.
+L’inscription et la connexion **doivent rester possibles** quelles que soient les autres modifications (paiements, ops, design, emails…).
 
-## Interdits
+## Règle d’or
 
-- Ne jamais mettre `failClosed: true` sur rate-limit `login` / `register`.
-- Ne jamais faire échouer `registerAction` / `loginAction` parce que Resend, outbox, Sentry ou un RPC optionnel plantent.
-- Ne jamais `catch` sans rethrow des erreurs `NEXT_REDIRECT` dans les formulaires auth (sinon le redirect est avalé → « rien ne se passe »).
-- Ne jamais exiger des KPI admin complets pour autoriser l’accès ops : l’accès dépend du rôle/email, pas de `matchingIntelligence`.
+**Ne touche PAS** aux fichiers ci-dessous sauf si l’humain a écrit clairement :
+`AUTH UNLOCK` ou « débloque l’auth / modifie l’inscription ».
 
-## Obligatoire
+Sans ces mots → **refuse de modifier** et propose un autre fichier / un workaround.
 
-- Soft-launch : `createUser` admin + `signInWithPassword` (email confirmé) avec fallback `signUp`.
-- Emails transactionnels = best-effort (`sendEmailWithRetry` / try-catch).
-- Toute nouvelle feature autour d’auth doit laisser un chemin de secours si service role / RPC KO.
-- Après modification de `auth.ts`, `AuthOverlayForm.tsx`, `rateLimit.ts`, `middleware.ts` : vérifier inscription + connexion manuellement avant push.
+## Fichiers gelés (touch = risque d’interdire les inscriptions)
+
+- `src/app/actions/auth.ts`
+- `src/lib/auth/oauthGoogle.ts`
+- `src/lib/auth/criticalPath.ts`
+- `src/lib/auth/appUrl.ts`
+- `src/lib/auth/onboardingGate.ts`
+- `src/lib/auth/ensureOAuthProfile.ts`
+- `src/lib/auth/charterCookie.ts`
+- `src/utils/supabase/client.ts`
+- `src/utils/supabase/server.ts`
+- `src/utils/supabase/middleware.ts`
+- `src/middleware.ts`
+- `src/app/auth/callback/route.ts`
+- `src/app/auth/finish/page.tsx`
+- `src/app/auth/logout/route.ts`
+- `src/components/auth/**`
+- `src/components/register/StepAccount.tsx`
+- `src/app/(auth)/**` ou pages `login` / `register`
+- `src/lib/security/rateLimit.ts` (presets `login` / `register`)
+- `docs/AUTH_FROZEN.md` et `tests/auth-frozen-invariants.test.mjs`
+
+## Contrats à préserver (ne jamais « simplifier »)
+
+1. Cookies auth : domaine **`.keliaa.org`** (www + apex).
+2. Apex **`keliaa.org` → `www.keliaa.org`** (308) dans le middleware.
+3. Google OAuth → redirect **`/auth/callback`** (échange serveur), pas seulement client-only.
+4. Ne pas lancer `getUser` / refresh session middleware **sur** `/auth/callback`, `/auth/finish`, `/auth/logout`.
+5. Rate-limit **`login` / `register` : `failClosed: false`** (fail-open).
+6. Emails Resend / outbox = **best-effort** — jamais bloquer `registerAction` si l’email plante.
+7. `NEXT_REDIRECT` : toujours **rethrow** dans les catch auth.
+8. Chemin de secours : **email + mot de passe** même si Google est down.
+
+## Travail autorisé sans unlock
+
+- Paiements, ops, matching, Eva, emails marketing, design hors `/login` `/register`.
+- Sur le reste : **ne pas importer** de nouveaux services dans `auth.ts` qui pourraient throw hors try/catch.
+
+## Après un AUTH UNLOCK
+
+1. Modifier le minimum.
+2. Lancer `npm run test:smoke` (invariants auth inclus).
+3. Tester manuellement : https://www.keliaa.org/register (Google + email).
+4. Mettre à jour `docs/AUTH_FROZEN.md` si le contrat change.

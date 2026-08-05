@@ -1,0 +1,14 @@
+# Zone AUTH — revue obligatoire avant merge (protéger inscriptions)
+# Nécessite branch protection GitHub pour forcer la revue.
+
+src/app/actions/auth.ts @lauroregottoh-jpg
+src/lib/auth/ @lauroregottoh-jpg
+src/utils/supabase/ @lauroregottoh-jpg
+src/middleware.ts @lauroregottoh-jpg
+src/app/auth/ @lauroregottoh-jpg
+src/components/auth/ @lauroregottoh-jpg
+src/components/register/ @lauroregottoh-jpg
+src/lib/security/rateLimit.ts @lauroregottoh-jpg
+docs/AUTH_FROZEN.md @lauroregottoh-jpg
+tests/auth-frozen-invariants.test.mjs @lauroregottoh-jpg
+.cursor/rules/auth-critical.mdc @lauroregottoh-jpg
