@@ -12,9 +12,19 @@ export function clearCharterCookieClient() {
   document.cookie = `${CHARTER_COOKIE}=; path=/; max-age=0; SameSite=Lax`
 }
 
+/** Toujours www en prod — évite perte du PKCE si Site URL / www divergent. */
+export function resolveOAuthOrigin(): string {
+  if (typeof window === "undefined") return ""
+  const host = window.location.hostname
+  if (host === "keliaa.org" || host === "www.keliaa.org") {
+    return "https://www.keliaa.org"
+  }
+  return window.location.origin
+}
+
 /**
  * Starts Google OAuth (browser). Requires Google enabled in Supabase Auth providers.
- * Existing Google accounts sign in; new ones create a user + profile trigger.
+ * Le code est échangé côté client (/auth/finish) pour garder le flow state PKCE.
  */
 export async function startGoogleOAuth(options?: {
   next?: string
@@ -28,10 +38,10 @@ export async function startGoogleOAuth(options?: {
 
     const { createClient } = await import("@/utils/supabase/client")
     const supabase = createClient()
-    const origin = window.location.origin
+    const origin = resolveOAuthOrigin()
     const next = options?.next?.startsWith("/") ? options.next : "/onboarding"
-    // Forcer le callback app (évite de retomber sur Site URL = accueil).
-    const redirectTo = `${origin}/auth/callback?next=${encodeURIComponent(next)}`
+    // Client handoff : conserve le code_verifier PKCE (évite invalid flow state)
+    const redirectTo = `${origin}/auth/finish?next=${encodeURIComponent(next)}`
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",

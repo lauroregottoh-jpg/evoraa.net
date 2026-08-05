@@ -40,8 +40,16 @@ Projet Supabase KELIAA : `rrjwhrdtokncfrzxtfoa`
    - **Site URL** : `https://www.keliaa.org`
    - **Redirect URLs** (ajouter toutes) :
      - `https://www.keliaa.org/auth/callback`
+     - `https://www.keliaa.org/auth/finish`
      - `https://keliaa.org/auth/callback`
+     - `https://keliaa.org/auth/finish`
      - `http://localhost:3000/auth/callback`
+     - `http://localhost:3000/auth/finish`
+
+**Site URL** doit être exactement `https://www.keliaa.org` (avec www).  
+Toujours tester Google via `https://www.keliaa.org/...` (pas `keliaa.org` sans www).
+
+Erreur `invalid flow state` : en général **www vs non-www** ou cookies PKCE perdus — **pas** le passage Google « In production ».
 
 Sans l’étape 2 (Enable Google), le bouton affichera toujours *unsupported provider*.
 
