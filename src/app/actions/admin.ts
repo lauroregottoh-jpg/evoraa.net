@@ -1116,6 +1116,9 @@ export async function adminSetRole(
   revalidateOps()
   return { success: true }
 }
+
+/** Nomme un membre staff par email (admin principal uniquement). */
+export async function adminAssignStaffByEmail(input: {
   email: string
   role: Exclude<StaffRole, "member">
 }) {
