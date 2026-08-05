@@ -1250,6 +1250,8 @@ export async function adminGrantAlliance(userId: string, days = 30) {
   })
   return { success: true }
 }
+
+export async function adminResolveReport(
   reportId: string,
   status: "resolved" | "dismissed" | "pending"
 ) {
