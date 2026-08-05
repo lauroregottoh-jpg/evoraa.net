@@ -243,7 +243,7 @@ export async function getAdminDashboardData() {
       "id, user_id, first_name, last_name, city, country, gender, birth_date, denomination, church_attended, pastor_name, pastor_contact, completion_percentage, role, moderation_status, onboarding_status, is_verified, identity_verified, created_at, avatar_url, trust_score, warning_count, sanction_status, sanction_until, biography, testimony, marital_status"
     )
     .order("created_at", { ascending: false })
-    .limit(500)
+    .limit(1000)
 
   const { data: matchingSample } = await supabase
     .from("profiles")
@@ -467,69 +467,11 @@ export async function getAdminDashboardData() {
     }
   }
 
-  const { computeMissingProfileFields } = await import(
-    "@/lib/admin/userValidation"
-  )
+  const { mapProfileToOpsUser } = await import("@/lib/admin/userValidation")
 
-  const users = (profiles ?? []).map((p) => {
-    let age: number | null = null
-    if (p.birth_date) {
-      const y = new Date(p.birth_date as string).getFullYear()
-      if (Number.isFinite(y)) age = new Date().getFullYear() - y
-    }
-    const name =
-      [p.first_name, p.last_name].filter(Boolean).join(" ") || "Sans nom"
-    const city = (p.city as string) || "?"
-    const gender = (p.gender as string) || "?"
-    const denomination = (p.denomination as string) || ""
-    const church = (p.church_attended as string) || ""
-    const hasAvatar = Boolean(p.avatar_url)
-    const hasBiography = Boolean(
-      typeof p.biography === "string" && p.biography.trim()
-    )
-    const hasTestimony = Boolean(
-      typeof p.testimony === "string" && p.testimony.trim()
-    )
-    const hasMaritalStatus = Boolean(p.marital_status)
-    const missing = computeMissingProfileFields({
-      name,
-      city,
-      gender,
-      age,
-      denomination,
-      church,
-      hasAvatar,
-      hasBiography,
-      hasTestimony,
-      hasMaritalStatus,
-    })
-    return {
-      id: p.id,
-      userId: p.user_id as string,
-      name,
-      city,
-      country: (p.country as string) || "?",
-      gender,
-      age,
-      denomination,
-      church,
-      pastorName: (p.pastor_name as string) || "",
-      completion: p.completion_percentage ?? 0,
-      role: (p.role as "admin" | "moderator" | "member") || "member",
-      status: (p.moderation_status as string) || "pending",
-      onboarding: p.onboarding_status as string | null,
-      verified: Boolean(p.is_verified || p.identity_verified),
-      hasAvatar,
-      createdAt: p.created_at as string | null,
-      trustScore: Number(p.trust_score ?? 50),
-      warningCount: Number(p.warning_count ?? 0),
-      sanctionStatus: (p.sanction_status as string) || "none",
-      hasBiography,
-      hasTestimony,
-      hasMaritalStatus,
-      missing,
-    }
-  })
+  const users = (profiles ?? []).map((p) =>
+    mapProfileToOpsUser(p as Record<string, unknown>)
+  )
 
   const { aggregateTop, ageBucket, signupsByDay, matchingRate } = await import(
     "@/lib/admin/analytics"
@@ -804,6 +746,154 @@ export async function adminSendMemberFeedback(input: {
 
   revalidateOps()
   return { success: true }
+}
+
+/** Valider / rejeter plusieurs profils d’un coup. */
+export async function adminBulkUpdateModerationStatus(input: {
+  profileIds: string[]
+  status: "approved" | "rejected" | "pending"
+  reasonCode?: string
+}) {
+  const gate = await requireAdmin()
+  if (gate.error || !gate.supabase) return { error: gate.error || "Acces refuse." }
+
+  const ids = [...new Set(input.profileIds)].filter(Boolean).slice(0, 200)
+  if (ids.length === 0) return { error: "Aucune sélection." }
+
+  let ok = 0
+  let failed = 0
+  for (const id of ids) {
+    const res = await adminUpdateModerationStatus(
+      id,
+      input.status,
+      input.reasonCode
+    )
+    if (res.error) failed += 1
+    else ok += 1
+  }
+
+  revalidateOps()
+  return { success: true, ok, failed }
+}
+
+/** Message groupé → notifications in-app. */
+export async function adminBulkSendMemberFeedback(input: {
+  targets: Array<{ profileId: string; userId: string }>
+  message: string
+}) {
+  const gate = await requireAdmin()
+  if (gate.error || !gate.supabase) return { error: gate.error || "Acces refuse." }
+
+  const message = input.message.trim().slice(0, 2000)
+  if (!message) return { error: "Message vide." }
+
+  const targets = input.targets.slice(0, 200)
+  if (targets.length === 0) return { error: "Aucune sélection." }
+
+  const rows = targets.map((t) => ({
+    user_id: t.userId,
+    title: "Message de l’équipe KELIAA",
+    body: message,
+    is_read: false,
+  }))
+
+  const { error } = await gate.supabase.from("notifications").insert(rows)
+  if (error) return { error: error.message }
+
+  revalidateOps()
+  return { success: true, sent: targets.length }
+}
+
+/** Hydrate e-mails Auth (max 80) pour export / affichage. */
+export async function adminResolveUserEmails(userIds: string[]) {
+  const gate = await requireAdmin()
+  if (gate.error || !gate.supabase) return { error: gate.error || "Acces refuse.", emails: {} as Record<string, string> }
+
+  try {
+    const admin = createAdminClient()
+    const emails: Record<string, string> = {}
+    const ids = [...new Set(userIds)].filter(Boolean).slice(0, 80)
+    for (const id of ids) {
+      try {
+        const { data } = await admin.auth.admin.getUserById(id)
+        if (data.user?.email) emails[id] = data.user.email
+      } catch {
+        /* skip */
+      }
+    }
+    return { emails }
+  } catch (e) {
+    return {
+      error: e instanceof Error ? e.message : "Impossible de résoudre les e-mails.",
+      emails: {} as Record<string, string>,
+    }
+  }
+}
+
+/** Page suivante d’utilisateurs (pagination ops). */
+export async function adminLoadMoreUsers(input: {
+  offset: number
+  limit?: number
+}) {
+  const gate = await requireAdmin()
+  if (gate.error || !gate.supabase) {
+    return { error: gate.error || "Acces refuse.", users: [] as Array<import("@/lib/admin/userValidation").OpsUserValidationRow> }
+  }
+
+  const { mapProfileToOpsUser, PROFILE_SELECT_FOR_OPS } = await import(
+    "@/lib/admin/userValidation"
+  )
+  const limit = Math.min(Math.max(input.limit ?? 200, 1), 500)
+  const offset = Math.max(input.offset, 0)
+
+  const { data, error } = await gate.supabase
+    .from("profiles")
+    .select(PROFILE_SELECT_FOR_OPS)
+    .order("created_at", { ascending: false })
+    .range(offset, offset + limit - 1)
+
+  if (error) return { error: error.message, users: [] }
+
+  return {
+    users: (data ?? []).map((p) =>
+      mapProfileToOpsUser(p as Record<string, unknown>)
+    ),
+    nextOffset: offset + (data?.length ?? 0),
+    hasMore: (data?.length ?? 0) >= limit,
+  }
+}
+
+/** Retrouve des profils existants à partir d’e-mails (import CSV). */
+export async function adminFindUsersByEmails(emails: string[]) {
+  const gate = await requireAdmin()
+  if (gate.error || !gate.supabase) {
+    return { error: gate.error || "Acces refuse.", matches: [] as Array<{ email: string; profileId: string; userId: string; name: string }> }
+  }
+
+  const { findAuthUserIdByEmail } = await import("@/lib/auth/findUserByEmail")
+  const unique = [...new Set(emails.map((e) => e.trim().toLowerCase()).filter(Boolean))].slice(0, 100)
+  const matches: Array<{ email: string; profileId: string; userId: string; name: string }> = []
+
+  for (const email of unique) {
+    const found = await findAuthUserIdByEmail(email)
+    if (!found.id) continue
+    const { data: profile } = await gate.supabase
+      .from("profiles")
+      .select("id, user_id, first_name, last_name")
+      .eq("user_id", found.id)
+      .maybeSingle()
+    if (!profile) continue
+    matches.push({
+      email,
+      profileId: profile.id as string,
+      userId: profile.user_id as string,
+      name:
+        [profile.first_name, profile.last_name].filter(Boolean).join(" ") ||
+        email,
+    })
+  }
+
+  return { matches }
 }
 
 export async function adminSetVerified(profileId: string, verified: boolean) {

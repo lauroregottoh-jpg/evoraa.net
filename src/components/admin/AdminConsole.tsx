@@ -94,10 +94,13 @@ type Props = {
     trustScore: number
     warningCount: number
     sanctionStatus: string
-    hasBiography: boolean
-    hasTestimony: boolean
-    hasMaritalStatus: boolean
-    missing: string[]
+    hasBiography?: boolean
+    hasTestimony?: boolean
+    hasMaritalStatus?: boolean
+    missing?: string[]
+    email?: string | null
+    firstName?: string
+    lastName?: string
   }>
   reports: Array<{
     id: string
@@ -490,7 +493,16 @@ export function AdminConsole(props: Props) {
       {nav === "members" && (
         <div className="space-y-6">
           <AdminUsersValidationTable
-            users={props.users}
+            users={props.users.map((u) => ({
+              ...u,
+              firstName: u.firstName ?? "",
+              lastName: u.lastName ?? "",
+              email: u.email ?? null,
+              hasBiography: u.hasBiography ?? false,
+              hasTestimony: u.hasTestimony ?? false,
+              hasMaritalStatus: u.hasMaritalStatus ?? false,
+              missing: u.missing ?? [],
+            }))}
             busy={busy}
             run={run}
           />

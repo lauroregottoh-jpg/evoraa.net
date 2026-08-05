@@ -2,6 +2,9 @@ export type OpsUserValidationRow = {
   id: string
   userId: string
   name: string
+  firstName: string
+  lastName: string
+  email: string | null
   city: string
   country: string
   gender: string
@@ -24,6 +27,52 @@ export type OpsUserValidationRow = {
   hasMaritalStatus: boolean
   missing: string[]
 }
+
+export type OpsUserExportColumnId =
+  | "name"
+  | "firstName"
+  | "lastName"
+  | "email"
+  | "city"
+  | "country"
+  | "gender"
+  | "age"
+  | "denomination"
+  | "church"
+  | "pastorName"
+  | "completion"
+  | "status"
+  | "onboarding"
+  | "verified"
+  | "hasAvatar"
+  | "missing"
+  | "createdAt"
+  | "trustScore"
+
+export const OPS_USER_EXPORT_COLUMNS: Array<{
+  id: OpsUserExportColumnId
+  label: string
+}> = [
+  { id: "name", label: "Nom complet" },
+  { id: "firstName", label: "Prénom" },
+  { id: "lastName", label: "Nom" },
+  { id: "email", label: "E-mail" },
+  { id: "city", label: "Ville" },
+  { id: "country", label: "Pays" },
+  { id: "gender", label: "Genre" },
+  { id: "age", label: "Âge" },
+  { id: "denomination", label: "Dénomination" },
+  { id: "church", label: "Église" },
+  { id: "pastorName", label: "Pasteur" },
+  { id: "completion", label: "% profil" },
+  { id: "status", label: "Statut modération" },
+  { id: "onboarding", label: "Onboarding" },
+  { id: "verified", label: "Vérifié" },
+  { id: "hasAvatar", label: "Photo" },
+  { id: "missing", label: "Champs manquants" },
+  { id: "createdAt", label: "Inscrit le" },
+  { id: "trustScore", label: "Confiance" },
+]
 
 /** Champs requis pour valider l’accès (revue humaine). */
 export function computeMissingProfileFields(input: {
@@ -50,6 +99,73 @@ export function computeMissingProfileFields(input: {
   if (!input.hasBiography && !input.hasTestimony) missing.push("Bio / témoignage")
   return missing
 }
+
+export function mapProfileToOpsUser(p: Record<string, unknown>): OpsUserValidationRow {
+  let age: number | null = null
+  if (p.birth_date) {
+    const y = new Date(p.birth_date as string).getFullYear()
+    if (Number.isFinite(y)) age = new Date().getFullYear() - y
+  }
+  const firstName = (p.first_name as string) || ""
+  const lastName = (p.last_name as string) || ""
+  const name = [firstName, lastName].filter(Boolean).join(" ") || "Sans nom"
+  const city = (p.city as string) || "?"
+  const gender = (p.gender as string) || "?"
+  const denomination = (p.denomination as string) || ""
+  const church = (p.church_attended as string) || ""
+  const hasAvatar = Boolean(p.avatar_url)
+  const hasBiography = Boolean(
+    typeof p.biography === "string" && (p.biography as string).trim()
+  )
+  const hasTestimony = Boolean(
+    typeof p.testimony === "string" && (p.testimony as string).trim()
+  )
+  const hasMaritalStatus = Boolean(p.marital_status)
+  const missing = computeMissingProfileFields({
+    name,
+    city,
+    gender,
+    age,
+    denomination,
+    church,
+    hasAvatar,
+    hasBiography,
+    hasTestimony,
+    hasMaritalStatus,
+  })
+  return {
+    id: p.id as string,
+    userId: p.user_id as string,
+    name,
+    firstName,
+    lastName,
+    email: null,
+    city,
+    country: (p.country as string) || "?",
+    gender,
+    age,
+    denomination,
+    church,
+    pastorName: (p.pastor_name as string) || "",
+    completion: Number(p.completion_percentage ?? 0),
+    role: (p.role as string) || "member",
+    status: (p.moderation_status as string) || "pending",
+    onboarding: (p.onboarding_status as string) || null,
+    verified: Boolean(p.is_verified || p.identity_verified),
+    hasAvatar,
+    createdAt: (p.created_at as string) || null,
+    trustScore: Number(p.trust_score ?? 50),
+    warningCount: Number(p.warning_count ?? 0),
+    sanctionStatus: (p.sanction_status as string) || "none",
+    hasBiography,
+    hasTestimony,
+    hasMaritalStatus,
+    missing,
+  }
+}
+
+export const PROFILE_SELECT_FOR_OPS =
+  "id, user_id, first_name, last_name, city, country, gender, birth_date, denomination, church_attended, pastor_name, pastor_contact, completion_percentage, role, moderation_status, onboarding_status, is_verified, identity_verified, created_at, avatar_url, trust_score, warning_count, sanction_status, sanction_until, biography, testimony, marital_status"
 
 export const VALIDATION_MESSAGE_TEMPLATES: Array<{
   id: string
@@ -85,3 +201,43 @@ export const VALIDATION_MESSAGE_TEMPLATES: Array<{
       }\n\nMettez à jour votre fiche puis contactez-nous si besoin.\n\nL’équipe KELIAA`,
   },
 ]
+
+export function csvEscape(value: string | number | boolean | null | undefined): string {
+  const s = value == null ? "" : String(value)
+  if (/[",\n\r]/.test(s)) return `"${s.replace(/"/g, '""')}"`
+  return s
+}
+
+export function buildUsersCsv(
+  rows: OpsUserValidationRow[],
+  columns: OpsUserExportColumnId[]
+): string {
+  const header = columns
+    .map(
+      (id) =>
+        OPS_USER_EXPORT_COLUMNS.find((c) => c.id === id)?.label || id
+    )
+    .join(",")
+  const body = rows
+    .map((u) =>
+      columns
+        .map((id) => {
+          switch (id) {
+            case "missing":
+              return csvEscape(u.missing.join("; "))
+            case "verified":
+            case "hasAvatar":
+              return csvEscape(u[id] ? "oui" : "non")
+            case "email":
+              return csvEscape(u.email || "")
+            default:
+              return csvEscape(
+                (u[id] as string | number | null | undefined) ?? ""
+              )
+          }
+        })
+        .join(",")
+    )
+    .join("\n")
+  return `${header}\n${body}`
+}

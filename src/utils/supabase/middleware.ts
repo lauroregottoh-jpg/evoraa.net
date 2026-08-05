@@ -38,6 +38,7 @@ const ALLOWED_API_PREFIXES = [
   '/api/payments/cinetpay/notify',
   '/api/cron/subscription-reminders',
   '/api/cron/email-outbox',
+  '/api/cron/profile-reminders',
   '/api/health/config',
 ]
 
