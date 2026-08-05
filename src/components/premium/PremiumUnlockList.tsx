@@ -45,7 +45,7 @@ const FEATURES = [
     icon: ClipboardList,
     title: "Mon bilan relationnel",
     free: "Conseils légers",
-    alliance: "Résumé + points par domaine",
+    alliance: "Axes d’amélioration + Académie",
   },
   {
     icon: Crown,

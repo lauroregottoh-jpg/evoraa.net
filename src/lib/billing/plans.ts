@@ -86,7 +86,7 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
       "25 nouvelles conversations sérieuses / mois (vs 5)",
       "100 messages / conversation (vs 5)",
       "EVA : 20 questions / jour (vs 3)",
-      "Mon bilan relationnel : résumé + points améliorés par domaine",
+      "Mon bilan relationnel : axes d’amélioration + Académie",
       "Score de compatibilité détaillé",
       "Badge Alliance",
       "Priorité soft dans les suggestions",

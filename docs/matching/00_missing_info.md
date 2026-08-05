@@ -14,11 +14,17 @@
 
 L’admin voit parfois un **libellé de profil** (ex. style relationnel) calculé depuis les tests.  
 **Exposer aux membres** = afficher ce libellé dans « Mon bilan relationnel ».  
-**Ta décision** : non pour l’instant ; on reste sur résumé + points améliorés par domaine via templates.
+**Ta décision** : non pour l’instant ; on reste sur axes d’amélioration (piliers dossier) via templates.
+
+## Source de vérité (août 2026)
+
+- Rapport individuel : [`docs/DOSSIER RAPPORT.md`](../DOSSIER RAPPORT.md)
+- Remap code ↔ piliers : [`docs/rapport/00_remap.md`](../rapport/00_remap.md)
+- Ce dossier `matching/` = archive / matching paire seulement
 
 ## Suite technique
 
-1. `buildProfileReport` templates locaux → **Mon bilan relationnel**  
+1. `buildProfileReport` + `src/lib/rapport/pillars.ts` → axes sur piliers dossier  
 2. Surfaces : assessments + dashboard + Alliance  
-3. Rework offre Alliance : quotas **lisibles** (15 / 25 / 100 / EVA 20 + bilan)  
+3. Brancher biblio reco `RELxxx` du dossier (remplacer progressivement `growth.ts`)  
 4. Plus tard : formulaire « témoigner / retour positif » membre
