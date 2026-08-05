@@ -30,12 +30,14 @@ export async function startGoogleOAuth(options?: {
     const supabase = createClient()
     const origin = window.location.origin
     const next = options?.next?.startsWith("/") ? options.next : "/onboarding"
+    // Forcer le callback app (évite de retomber sur Site URL = accueil).
     const redirectTo = `${origin}/auth/callback?next=${encodeURIComponent(next)}`
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
         redirectTo,
+        skipBrowserRedirect: false,
         queryParams: {
           access_type: "offline",
           prompt: "select_account",

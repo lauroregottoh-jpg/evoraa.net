@@ -6,6 +6,7 @@ import { createClient } from "@/utils/supabase/client"
 
 /**
  * Reçoit les liens Auth (code PKCE, token_hash, ou #access_token).
+ * Après Google / email : onboarding si profil incomplet, sinon dashboard.
  */
 export default function AuthFinishPage() {
   const router = useRouter()
@@ -31,13 +32,6 @@ export default function AuthFinishPage() {
       const code = params.get("code")
       const token_hash = params.get("token_hash")
       const nextParam = params.get("next")
-
-      const preferredNext =
-        type === "recovery"
-          ? "/reset-password"
-          : nextParam?.startsWith("/")
-            ? nextParam
-            : "/onboarding"
 
       if (error) {
         setStatus("Lien invalide. Redirection…")
@@ -96,6 +90,39 @@ export default function AuthFinishPage() {
             .from("profiles")
             .update({ email_verified: true })
             .eq("user_id", user.id)
+        }
+
+        let preferredNext =
+          type === "recovery"
+            ? "/reset-password"
+            : nextParam?.startsWith("/")
+              ? nextParam
+              : "/onboarding"
+
+        if (user && type !== "recovery" && preferredNext !== "/reset-password") {
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select(
+              "completion_percentage, onboarding_status, first_name, gender, birth_date, city"
+            )
+            .eq("user_id", user.id)
+            .maybeSingle()
+
+          const completion = profile?.completion_percentage ?? 0
+          const statusOnboarding = profile?.onboarding_status
+          const missingEssentials =
+            !profile?.first_name ||
+            !profile?.gender ||
+            !profile?.birth_date ||
+            !profile?.city
+          const needsOnboarding =
+            missingEssentials ||
+            completion < 70 ||
+            !statusOnboarding ||
+            statusOnboarding === "step1_account" ||
+            statusOnboarding === "step2_profile"
+
+          preferredNext = needsOnboarding ? "/onboarding" : "/dashboard"
         }
 
         setStatus("Accès ouvert. Redirection…")
