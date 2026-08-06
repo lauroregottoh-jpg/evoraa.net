@@ -7,14 +7,19 @@ import { Button } from "@/components/ui/button";
 import { Moon, Sliders, CheckCircle2, Search } from "lucide-react";
 import {
   ageRangeLabel,
+  DENOMINATION_OPEN_OPTIONS,
   DESIRE_CHILDREN_OPTIONS,
+  FAITH_PRACTICE_OPTIONS,
   MARRIAGE_TIMELINE_OPTIONS,
+  RELOCATE_OPTIONS,
   type DesireChildrenPref,
+  type DenominationOpenPref,
+  type FaithPracticePref,
   type MarriageTimeline,
+  type RelocatePref,
   type SettingsData,
 } from "@/lib/settings";
 import { saveSettingsAction } from "@/app/actions/settings";
-import { ThemeToggle } from "@/components/evoraa/ThemeToggle";
 
 export function SettingsForm({ initial }: { initial: SettingsData }) {
   const [retreatMode, setRetreatMode] = React.useState(initial.retreatMode);
@@ -27,6 +32,13 @@ export function SettingsForm({ initial }: { initial: SettingsData }) {
   );
   const [desireChildren, setDesireChildren] = React.useState<DesireChildrenPref>(
     initial.desireChildren
+  );
+  const [faithPractice, setFaithPractice] = React.useState<FaithPracticePref>(
+    initial.faithPractice
+  );
+  const [relocate, setRelocate] = React.useState<RelocatePref>(initial.relocate);
+  const [denominationOpen, setDenominationOpen] = React.useState<DenominationOpenPref>(
+    initial.denominationOpen
   );
   const [saved, setSaved] = React.useState(false);
   const [error, setError] = React.useState("");
@@ -43,6 +55,9 @@ export function SettingsForm({ initial }: { initial: SettingsData }) {
       ageRange,
       marriageTimeline,
       desireChildren,
+      faithPractice,
+      relocate,
+      denominationOpen,
     });
     setSaving(false);
     if (result.error) {
@@ -187,26 +202,66 @@ export function SettingsForm({ initial }: { initial: SettingsData }) {
                 ))}
               </select>
             </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">
+                Pratique de foi recherchée
+              </label>
+              <select
+                value={faithPractice}
+                onChange={(e) => setFaithPractice(e.target.value as FaithPracticePref)}
+                className="w-full h-11 px-3.5 rounded-xl bg-background border border-border/80 text-sm text-foreground focus:ring-accent"
+              >
+                {FAITH_PRACTICE_OPTIONS.map((o) => (
+                  <option key={o.id} value={o.id}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">
+                Famille d&apos;église / dénomination
+              </label>
+              <select
+                value={denominationOpen}
+                onChange={(e) =>
+                  setDenominationOpen(e.target.value as DenominationOpenPref)
+                }
+                className="w-full h-11 px-3.5 rounded-xl bg-background border border-border/80 text-sm text-foreground focus:ring-accent"
+              >
+                {DENOMINATION_OPEN_OPTIONS.map((o) => (
+                  <option key={o.id} value={o.id}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-2 sm:col-span-2">
+              <label className="text-sm font-medium text-foreground">
+                Mobilité géographique
+              </label>
+              <select
+                value={relocate}
+                onChange={(e) => setRelocate(e.target.value as RelocatePref)}
+                className="w-full h-11 px-3.5 rounded-xl bg-background border border-border/80 text-sm text-foreground focus:ring-accent"
+              >
+                {RELOCATE_OPTIONS.map((o) => (
+                  <option key={o.id} value={o.id}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <p className="text-[11px] text-muted-foreground flex items-start gap-2">
             <Sliders className="h-3.5 w-3.5 mt-0.5 shrink-0" />
-            Le genre recherché suit votre profil (homme ↔ femme). D&apos;autres filtres arriveront
-            progressivement.
+            Le genre recherché suit votre profil (homme ↔ femme). Les filtres foi / mobilité
+            affinent les propositions sans remplacer les questionnaires.
           </p>
-        </CardContent>
-      </Card>
-
-      <Card className="rounded-2xl border border-border/60 bg-background/90">
-        <CardHeader className="pb-3">
-          <CardTitle className="font-serif text-xl">Apparence</CardTitle>
-          <CardDescription className="text-xs">
-            Clair / sombre — le soleil en haut de l’espace membre sert à vous déconnecter.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex items-center justify-between gap-3">
-          <p className="text-sm text-muted-foreground">Thème de l’interface</p>
-          <ThemeToggle />
         </CardContent>
       </Card>
 

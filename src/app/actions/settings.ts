@@ -5,9 +5,15 @@ import { createClient } from "@/utils/supabase/server"
 import {
   parseAgeRange,
   parseDesireChildren,
+  parseDenominationOpen,
+  parseFaithPractice,
   parseMarriageTimeline,
+  parseRelocate,
   type DesireChildrenPref,
+  type DenominationOpenPref,
+  type FaithPracticePref,
   type MarriageTimeline,
+  type RelocatePref,
   type SettingsData,
 } from "@/lib/settings"
 
@@ -50,6 +56,17 @@ export async function getMySettings(): Promise<{
       ageMax: prefs?.age_max ?? 36,
       marriageTimeline: parseMarriageTimeline(prefs?.vision_of_marriage),
       desireChildren: parseDesireChildren(prefs?.desire_children),
+      faithPractice: parseFaithPractice(
+        typeof privacy.faith_practice === "string" ? privacy.faith_practice : null
+      ),
+      relocate: parseRelocate(
+        typeof privacy.relocate === "string" ? privacy.relocate : null
+      ),
+      denominationOpen: parseDenominationOpen(
+        typeof privacy.denomination_open === "string"
+          ? privacy.denomination_open
+          : null
+      ),
     },
   }
 }
@@ -60,6 +77,9 @@ export async function saveSettingsAction(payload: {
   ageRange: string
   marriageTimeline: MarriageTimeline
   desireChildren: DesireChildrenPref
+  faithPractice: FaithPracticePref
+  relocate: RelocatePref
+  denominationOpen: DenominationOpenPref
 }): Promise<{ error?: string; success?: boolean }> {
   const supabase = await createClient()
   const {
@@ -89,6 +109,9 @@ export async function saveSettingsAction(payload: {
       privacy_settings: {
         ...prevPrivacy,
         retreat_mode: payload.retreatMode,
+        faith_practice: payload.faithPractice,
+        relocate: payload.relocate,
+        denomination_open: payload.denominationOpen,
       },
       updated_by: user.id,
       updated_at: new Date().toISOString(),

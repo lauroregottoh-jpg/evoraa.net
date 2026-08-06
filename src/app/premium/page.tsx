@@ -5,6 +5,7 @@ import { getUsageSnapshot } from "@/lib/billing/usage"
 import { createClient } from "@/utils/supabase/server"
 import { PremiumHeroCarousel } from "@/components/premium/PremiumHeroCarousel"
 import { AllianceReportPitch } from "@/components/premium/AllianceReportPitch"
+import { SimulatedAllianceReport } from "@/components/premium/SimulatedAllianceReport"
 import { PremiumUnlockList } from "@/components/premium/PremiumUnlockList"
 import { AllianceCheckoutPanel } from "@/components/premium/AllianceCheckoutPanel"
 import { BoostSection } from "@/components/premium/BoostSection"
@@ -51,6 +52,8 @@ export default async function PremiumPage() {
         <PremiumHeroCarousel firstName={profile?.first_name ?? undefined} />
 
         <AllianceReportPitch />
+
+        <SimulatedAllianceReport />
 
         {bilan.report ? (
           <div className="space-y-2">

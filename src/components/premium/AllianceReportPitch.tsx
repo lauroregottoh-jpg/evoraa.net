@@ -1,9 +1,11 @@
 import {
+  BadgeCheck,
   BookOpen,
   ClipboardList,
   GraduationCap,
   Sparkles,
   Target,
+  Zap,
 } from "lucide-react"
 
 /** Bloc central Alliance — rapport individuel, pas un simple aperçu. */
@@ -12,22 +14,32 @@ export function AllianceReportPitch() {
     {
       icon: ClipboardList,
       title: "Rapport personnalisé complet",
-      body: "À partir de vos 5 questionnaires, Alliance ouvre le bilan détaillé : lecture claire de votre profil relationnel, pas seulement 1–2 conseils légers.",
+      body: "À partir de vos 5 questionnaires déjà faits, Alliance ouvre le bilan détaillé — sans nouveau test obligatoire. Lecture claire de votre profil relationnel.",
     },
     {
       icon: Target,
-      title: "Axes d’amélioration priorisés",
-      body: "Personnalité & stress, foi & valeurs, conflits & dialogue, vision du couple, finances & projet — chaque axe indique où travailler concrètement.",
+      title: "Axes d’amélioration + suggestion du jour",
+      body: "Personnalité, foi, conflits, vision du couple, finances — axes priorisés, avec une piste concrète à travailler.",
+    },
+    {
+      icon: BadgeCheck,
+      title: "Badge Alliance & priorité",
+      body: "Badge vérifié Alliance sur votre profil, et place prioritaire dans les suggestions auprès des membres compatibles.",
+    },
+    {
+      icon: Zap,
+      title: "Boost optionnel",
+      body: "Besoin d’être encore plus visible pour une période courte ? Ajoutez un Boost (24 h, 3 j ou 7 j) sans changer votre Matching.",
     },
     {
       icon: GraduationCap,
       title: "Lien direct avec l’Académie",
-      body: "Vos axes s’ancrent dans des modules Académie du mariage : vous avancez avec un plan, pas seulement une liste de points faibles.",
+      body: "Vos axes s’ancrent dans des modules Académie : un plan de croissance, pas seulement une liste de points faibles.",
     },
     {
       icon: BookOpen,
       title: "Base pour vos rencontres",
-      body: "Mieux vous connaître aide le Matching : suggestions plus pertinentes et échanges plus sérieux une fois Alliance active.",
+      body: "Mieux vous connaître aide le Matching : suggestions plus pertinentes et échanges plus sérieux.",
     },
   ]
 
@@ -72,8 +84,9 @@ export function AllianceReportPitch() {
 
       <p className="text-[11px] text-muted-foreground flex items-start gap-2 leading-relaxed">
         <Sparkles className="h-3.5 w-3.5 mt-0.5 text-accent shrink-0" />
-        Des options avancées (visibilité, packs coaching) arriveront plus tard —
-        sans remplacer Alliance mensuelle actuelle.
+        Après paiement : activation des quotas Alliance, génération du rapport depuis vos
+        tests existants, badge + priorité. Le Boost reste un ajout séparé pour la
+        visibilité ponctuelle.
       </p>
     </section>
   )

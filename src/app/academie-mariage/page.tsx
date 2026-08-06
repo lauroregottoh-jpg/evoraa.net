@@ -60,9 +60,31 @@ export default async function AcademieMariagePage() {
             Grandir avant (et pour) l&apos;alliance
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
-            Huit modules, une leçon profonde chacun. Lis à ton rythme, fais l&apos;exercice,
-            coche ton point — sans jugement.
+            Huit modules, une leçon profonde chacun. Lis à ton rythme — une partie
+            accessible gratuitement ; le parcours premium arrivera ensuite.
           </p>
+          <div className="grid sm:grid-cols-2 gap-3 pt-3">
+            <div className="rounded-xl border border-border bg-card px-4 py-3 space-y-1">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                Version gratuite
+              </p>
+              <p className="text-sm font-semibold">Accès de base aux modules</p>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Lire les leçons essentielles, progresser à votre rythme. Contenu en
+                consolidation.
+              </p>
+            </div>
+            <div className="rounded-xl border border-accent/40 bg-accent/5 px-4 py-3 space-y-1">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
+                Version premium
+              </p>
+              <p className="text-sm font-semibold">Parcours enrichi (bientôt)</p>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Modules avancés, exercices guidés et suivi — le détail du contenu arrive
+                prochainement.
+              </p>
+            </div>
+          </div>
           <div className="flex flex-wrap gap-3 pt-2">
             <Link href="/assessments" className="text-sm font-semibold text-primary underline">
               Voir mes axes (tests)

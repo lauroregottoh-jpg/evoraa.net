@@ -42,7 +42,7 @@ const SECONDARY = [
   { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
   { href: "/coaching", label: "Coaching", icon: Phone },
   { href: "/inspiration", label: "Inspiration", icon: BookHeart },
-  { href: "/dashboard#invite", label: "Inviter", icon: Share2 },
+  { href: "/dashboard#invite", label: "Recommander", icon: Share2 },
   { href: "/notifications", label: "Alertes", icon: Bell },
   { href: "/feedback", label: "Avis", icon: MessageSquareHeart },
   { href: "/help", label: "Aide", icon: HelpCircle },
@@ -184,10 +184,7 @@ export function MemberShell({
         );
       })}
 
-      <p className="px-3 pt-5 pb-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-        Plus
-      </p>
-      <div className="space-y-0.5 overflow-y-auto">
+      <div className="mt-3 space-y-0.5 overflow-y-auto">
         {SECONDARY.map((item) => {
           const Icon = item.icon;
           return (

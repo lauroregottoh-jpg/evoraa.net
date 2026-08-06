@@ -21,9 +21,9 @@ export function BoostSection() {
           <p className="text-xs font-semibold uppercase tracking-widest text-primary">Boost profil</p>
           <h2 className="font-serif text-2xl font-bold">Apparaître en priorité</h2>
           <p className="text-sm text-muted-foreground max-w-xl leading-relaxed">
-            Pendant la durée choisie, votre profil sera mis en avant auprès des membres
-            compatibles — sans changer votre Matching. Tarifs affichés ; l&apos;achat en
-            ligne n&apos;est pas encore ouvert (soft launch).
+            Pendant la durée choisie, votre profil est mis en avant auprès des membres
+            compatibles — idéal en plus de la priorité Alliance. Tarifs affichés ;
+            l&apos;achat en ligne n&apos;est pas encore ouvert (soft launch).
           </p>
         </div>
         <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary shrink-0">

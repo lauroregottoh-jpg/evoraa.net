@@ -5,6 +5,7 @@ import {
   CheckCircle2,
   ClipboardList,
   Crown,
+  Eye,
   Heart,
   Lock,
   MessageCircle,
@@ -56,9 +57,15 @@ const FEATURES = [
   },
   {
     icon: Crown,
-    title: "Badge Alliance",
+    title: "Badge Alliance vérifié",
     free: "—",
-    alliance: "Visible sur le profil",
+    alliance: "Sur le profil",
+  },
+  {
+    icon: Eye,
+    title: "Priorité dans les suggestions",
+    free: "Ordre standard",
+    alliance: "Membres Alliance d’abord",
   },
 ] as const
 

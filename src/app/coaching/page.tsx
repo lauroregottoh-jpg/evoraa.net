@@ -1,5 +1,6 @@
 import { MemberPage } from "@/components/layout/MemberPage"
 import { CoachingCheckoutPanel } from "@/components/coaching/CoachingCheckoutPanel"
+import { CoachingWhyGrid } from "@/components/coaching/CoachingWhyGrid"
 import { getCheckoutHints } from "@/app/actions/billing"
 import { COACHING_SESSION_MINUTES } from "@/lib/billing/coachingOffers"
 import Link from "next/link"
@@ -16,7 +17,7 @@ export default async function CoachingPage({
 
   return (
     <MemberPage>
-      <div className="max-w-2xl mx-auto space-y-6 pb-10">
+      <div className="max-w-3xl mx-auto space-y-8 pb-10">
         <header className="space-y-2">
           <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
             Coaching humain
@@ -24,9 +25,9 @@ export default async function CoachingPage({
           <h1 className="font-serif text-3xl sm:text-4xl font-bold">
             Séances de {COACHING_SESSION_MINUTES} minutes
           </h1>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            Accompagnement payant (hors Alliance) : préparation au mariage, discernement,
-            communication. Visio ou téléphone. Grille de 1 à 12 séances.
+          <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
+            Accompagnement payant (hors Alliance) pour débloquer un sujet précis :
+            préparation au mariage, discernement, communication. Visio ou téléphone.
           </p>
           {sp.moduleTitle ? (
             <p className="text-xs rounded-xl border border-border bg-secondary/40 px-3 py-2">
@@ -40,11 +41,16 @@ export default async function CoachingPage({
           ) : null}
         </header>
 
-        <CoachingCheckoutPanel
-          suggestedMode={hints?.suggestedMode ?? "mobile_money"}
-          moduleId={sp.module}
-          moduleTitle={sp.moduleTitle}
-        />
+        <CoachingWhyGrid />
+
+        <div className="space-y-2">
+          <h2 className="font-serif text-xl font-bold">Choisir votre formule</h2>
+          <CoachingCheckoutPanel
+            suggestedMode={hints?.suggestedMode ?? "mobile_money"}
+            moduleId={sp.module}
+            moduleTitle={sp.moduleTitle}
+          />
+        </div>
 
         <p className="text-center text-xs text-muted-foreground">
           <Link href="/academie-mariage" className="text-primary underline font-semibold">
