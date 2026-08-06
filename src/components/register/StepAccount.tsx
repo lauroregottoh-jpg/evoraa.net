@@ -266,10 +266,17 @@ export function StepAccount({ onBack }: { onBack: () => void }) {
       <p className="text-center text-xs text-muted-foreground leading-relaxed">
         Vous avez des problèmes pour vous inscrire ?{" "}
         <Link
+          href="/faq"
+          className="font-semibold text-primary underline underline-offset-2 hover:opacity-90"
+        >
+          FAQ compte
+        </Link>
+        {" · "}
+        <Link
           href="/register/help"
           className="font-semibold text-primary underline underline-offset-2 hover:opacity-90"
         >
-          Cliquez ici
+          Aide inscription
         </Link>
         .
       </p>
