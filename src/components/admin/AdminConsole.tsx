@@ -236,7 +236,7 @@ export function AdminConsole(props: Props) {
     settingBool(props.settings, "registrations_paused", false)
   )
   const [blur, setBlur] = React.useState(() =>
-    settingBool(props.settings, "default_photo_blur", true)
+    settingBool(props.settings, "default_photo_blur", false)
   )
   const [charter, setCharter] = React.useState(() =>
     settingBool(props.settings, "require_charter", true)

@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server"
 
-/** Lit platform_settings.default_photo_blur (défaut: true). */
+/** Lit platform_settings.default_photo_blur (défaut: false — photos visibles). */
 export async function getDefaultPhotoBlur(): Promise<boolean> {
   try {
     const supabase = await createClient()
@@ -10,9 +10,9 @@ export async function getDefaultPhotoBlur(): Promise<boolean> {
       .eq("key", "default_photo_blur")
       .maybeSingle()
 
-    if (!data) return true
+    if (!data) return false
     return data.value === true || data.value === "true"
   } catch {
-    return true
+    return false
   }
 }

@@ -81,11 +81,22 @@ export async function bictorysCreateCharge(args: {
   customerCity?: string
   paymentMode: BictorysPaymentMode
   appBaseUrl: string
+  /** Chemin relatif après paiement (défaut : checkout/success) */
+  successPath?: string
+  cancelPath?: string
 }) {
   const merchantCountry = process.env.BICTORYS_MERCHANT_COUNTRY || "TG"
   const notifyUrl = `${args.appBaseUrl}/api/payments/bictorys/notify`
-  const returnUrl = `${args.appBaseUrl}/checkout/success?payment=${args.paymentId}`
-  const cancelUrl = `${args.appBaseUrl}/checkout/cancel?payment=${args.paymentId}`
+  const successPath =
+    args.successPath || `/checkout/success?payment=${args.paymentId}`
+  const cancelPath =
+    args.cancelPath || `/checkout/cancel?payment=${args.paymentId}`
+  const returnUrl = successPath.startsWith("http")
+    ? successPath
+    : `${args.appBaseUrl}${successPath}`
+  const cancelUrl = cancelPath.startsWith("http")
+    ? cancelPath
+    : `${args.appBaseUrl}${cancelPath}`
 
   if (returnUrl.includes("localhost") || cancelUrl.includes("localhost")) {
     return {

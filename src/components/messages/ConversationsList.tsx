@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { EvaCompanion } from "@/components/evoraa/EvaCompanion";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, ChevronRight } from "lucide-react";
@@ -23,19 +22,13 @@ export function ConversationsList({
             Messages
           </Badge>
           <h1 className="text-3xl sm:text-4xl font-serif font-bold text-foreground">
-            Vos Dialogues Respectueux
+            Vos messages
           </h1>
         </div>
         <Badge className="bg-primary/10 text-primary dark:text-accent border border-primary/20 rounded-full px-3 py-1">
-          {conversations.length} échange{conversations.length > 1 ? "s" : ""} actif{conversations.length > 1 ? "s" : ""}
+          {conversations.length} conversation{conversations.length > 1 ? "s" : ""}
         </Badge>
       </div>
-
-      <EvaCompanion
-        title="EVA - Veille & Sérénité"
-        variant="reassurance"
-        message="Les conversations naissent depuis un profil compatible. Le Bouclier de bienveillance reste actif à l'envoi. Vos quotas du mois s'affichent ci-dessus."
-      />
 
       {error && (
         <div className="rounded-2xl border border-destructive/30 bg-destructive/5 p-5 text-sm text-destructive">

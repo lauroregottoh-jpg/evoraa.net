@@ -195,6 +195,63 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true, activated: false, pending: true })
   }
 
+  const paymentMeta =
+    typeof payment.metadata === "object" && payment.metadata
+      ? (payment.metadata as Record<string, unknown>)
+      : {}
+
+  // Coaching : marquer payé SANS activer Alliance (ne pas cancel d’autres abos).
+  if (paymentMeta.product === "coaching") {
+    const { error: coachPayErr } = await admin
+      .from("payments")
+      .update({
+        status: "completed",
+        transaction_reference: transactionId || payment.id,
+        metadata: {
+          ...paymentMeta,
+          webhook: body,
+          provider: "bictorys",
+          coaching_paid_at: new Date().toISOString(),
+        },
+      })
+      .eq("id", payment.id)
+      .eq("status", "pending")
+
+    if (coachPayErr) {
+      const { data: refreshed } = await admin
+        .from("payments")
+        .select("status")
+        .eq("id", payment.id)
+        .maybeSingle()
+      if (refreshed?.status === "completed") {
+        if (deliveryId) await markWebhookDeliveryProcessed(admin, deliveryId)
+        return NextResponse.json({ ok: true, activated: true, coaching: true, already: true })
+      }
+      captureError(coachPayErr.message, { source: "bictorys_coaching_complete" })
+      return NextResponse.json({ error: "Activation coaching impossible" }, { status: 500 })
+    }
+
+    await admin
+      .from("subscriptions")
+      .update({
+        status: "paid_coaching",
+        starts_at: new Date().toISOString(),
+        ends_at: null,
+      })
+      .eq("id", payment.subscription_id)
+
+    await logPaymentEvent({
+      paymentId: payment.id,
+      provider: "bictorys",
+      eventType: "payment_completed",
+      status: "completed",
+      message: `coaching:${String(paymentMeta.packId || "")}`,
+    })
+
+    if (deliveryId) await markWebhookDeliveryProcessed(admin, deliveryId)
+    return NextResponse.json({ ok: true, activated: true, coaching: true })
+  }
+
   const { data: subscription } = await admin
     .from("subscriptions")
     .select("id, user_id")

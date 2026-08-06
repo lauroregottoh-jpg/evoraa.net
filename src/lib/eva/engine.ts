@@ -181,7 +181,7 @@ function knowledgeHits(question: string): ScoredHit[] {
       intent: "coaching",
       keys: ["coach", "seance", "accompagn", "rendez-vous", "psy"],
       answer:
-        "Le coaching humain KELIAA : 15 000 FCFA / séance (45–60 min) ou pack 3 séances à 40 000 FCFA. Écrivez à contact@keliaa.org avec votre besoin et vos disponibilités. Eva ne remplace pas un psychologue clinique.",
+        "Le coaching humain KELIAA : séances de 30 min à partir de 15 000 FCFA (packs jusqu’à 12 séances). Paiement sur /coaching puis formulaire de brief. Eva ne remplace pas un psychologue clinique.",
       ctaHref: "/contact",
       ctaLabel: "Contacter",
     },

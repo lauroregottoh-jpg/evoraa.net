@@ -98,6 +98,8 @@ export function MemberShell({
   const pathname = usePathname();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [accountOpen, setAccountOpen] = React.useState(false);
+  const accountRef = React.useRef<HTMLDivElement>(null);
 
   const isActive = (href: string) => {
     const base = href.split("#")[0];
@@ -117,11 +119,29 @@ export function MemberShell({
 
   React.useEffect(() => {
     setMobileOpen(false);
+    setAccountOpen(false);
   }, [pathname]);
+
+  React.useEffect(() => {
+    if (!accountOpen) return;
+    const onDoc = (e: PointerEvent) => {
+      if (!accountRef.current?.contains(e.target as Node)) {
+        setAccountOpen(false);
+      }
+    };
+    const t = window.setTimeout(() => {
+      document.addEventListener("pointerdown", onDoc);
+    }, 0);
+    return () => {
+      window.clearTimeout(t);
+      document.removeEventListener("pointerdown", onDoc);
+    };
+  }, [accountOpen]);
 
   const go = (href: string) => (e?: React.MouseEvent) => {
     e?.preventDefault();
     setMobileOpen(false);
+    setAccountOpen(false);
     router.push(href);
   };
 
@@ -250,17 +270,52 @@ export function MemberShell({
                   Passer Alliance
                 </a>
               )}
-              {/* Soleil = déconnexion (demande produit) */}
-              <form action={logoutAction}>
+              {/* Soleil = menu compte / déconnexion */}
+              <div className="relative" ref={accountRef}>
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={() => setAccountOpen((v) => !v)}
                   className="inline-flex items-center justify-center rounded-full w-9 h-9 border border-border/60 bg-background/50 hover:bg-accent/10 transition-colors"
-                  title="Déconnexion"
-                  aria-label="Déconnexion"
+                  title="Compte"
+                  aria-label="Menu compte"
+                  aria-expanded={accountOpen}
                 >
                   <Sun className="h-4 w-4 text-accent" />
                 </button>
-              </form>
+                {accountOpen && (
+                  <div
+                    role="menu"
+                    className="absolute right-0 mt-2 w-52 rounded-xl border border-border bg-card shadow-lg z-[70] overflow-hidden py-1"
+                  >
+                    <a
+                      href="/profile"
+                      onClick={go("/profile")}
+                      className="flex items-center gap-2 px-3 py-2.5 text-sm font-medium hover:bg-secondary"
+                    >
+                      <User className="h-4 w-4" />
+                      Profil
+                    </a>
+                    <a
+                      href="/settings"
+                      onClick={go("/settings")}
+                      className="flex items-center gap-2 px-3 py-2.5 text-sm font-medium hover:bg-secondary"
+                    >
+                      <Settings className="h-4 w-4" />
+                      Paramètres
+                    </a>
+                    <div className="my-1 border-t border-border" />
+                    <form action={logoutAction}>
+                      <button
+                        type="submit"
+                        className="flex w-full items-center gap-2 px-3 py-2.5 text-sm font-semibold text-destructive hover:bg-destructive/10"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        Déconnexion
+                      </button>
+                    </form>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
