@@ -32,6 +32,11 @@ describe("CI shape — hardening P0/P1", () => {
     assert.match(src, /onRequestError/)
   })
 
+  it("docs invariants + FAQ plan présents", () => {
+    assert.ok(existsSync(join(root, "docs/INVARIANTS.md")))
+    assert.ok(existsSync(join(root, "docs/PLAN_IMPORT_EVORA_FAQ.md")))
+  })
+
   it(".env.local.example documente les clés critiques", () => {
     const src = read(".env.local.example")
     assert.match(src, /NEXT_PUBLIC_SUPABASE_URL/)

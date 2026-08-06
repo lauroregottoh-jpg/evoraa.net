@@ -93,6 +93,7 @@ export function MainLayout({
             </p>
             <div className="flex items-center gap-6">
               <Link href="/cgu" className="hover:underline">CGU</Link>
+              <Link href="/faq" className="hover:underline">FAQ</Link>
               <Link href="/confidentialite" className="hover:underline">Confidentialité</Link>
               <Link href="/moderation" className="hover:underline">Sécurité</Link>
             </div>

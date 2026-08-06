@@ -47,8 +47,12 @@ function StatusBanner({
           <p className="mt-1 text-xs leading-relaxed">{error}</p>
           <p className="mt-2 text-[11px] font-medium text-red-800">
             Problème persistant ?{" "}
+            <a href="/faq" className="underline font-semibold">
+              FAQ compte
+            </a>
+            {" · "}
             <a href="/register/help" className="underline font-semibold">
-              Cliquez ici
+              Aide inscription
             </a>
             .
           </p>
@@ -324,10 +328,17 @@ export function AuthOverlayForm({
             <p className="text-center text-xs text-muted-foreground leading-relaxed">
               Vous avez des problèmes pour vous connecter ?{" "}
               <Link
+                href="/faq"
+                className="font-semibold text-primary underline underline-offset-2 hover:opacity-90"
+              >
+                Voir la FAQ
+              </Link>
+              {" · "}
+              <Link
                 href="/register/help"
                 className="font-semibold text-primary underline underline-offset-2 hover:opacity-90"
               >
-                Cliquez ici
+                Aide inscription
               </Link>
               .
             </p>

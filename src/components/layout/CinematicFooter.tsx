@@ -47,6 +47,11 @@ export function CinematicFooter() {
                   </Link>
                 </li>
                 <li>
+                  <Link href="/faq" className="hover:text-primary transition-colors">
+                    FAQ compte
+                  </Link>
+                </li>
+                <li>
                   <Link href="/contact" className="hover:text-primary transition-colors">
                     Nous contacter
                   </Link>
