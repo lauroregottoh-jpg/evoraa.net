@@ -7,8 +7,12 @@ import { KELIAA_TESTIMONIALS } from "@/lib/marketing/testimonials"
 
 const FAQS = [
   {
+    q: "Qu’est-ce que le rapport personnalisé Alliance ?",
+    a: "C’est votre bilan individuel sur les 5 piliers KELIAA : lecture détaillée de vos réponses, axes d’amélioration priorisés, et orientation vers l’Académie du mariage. Sans Alliance, vous n’avez qu’un aperçu léger.",
+  },
+  {
     q: "Pourquoi devenir membre Alliance ?",
-    a: "Parce que vous profitez de toute la puissance du Matching KELIAA™ et d'une expérience complète pour avancer plus sereinement dans votre recherche.",
+    a: "Pour débloquer le rapport complet avec axes d’amélioration, puis accélérer avec plus de suggestions, de conversations et d’échanges Eva — toujours autour d’un Matching sérieux, pas du hasard.",
   },
   {
     q: "Puis-je arrêter quand je le souhaite ?",
@@ -19,12 +23,12 @@ const FAQS = [
     a: "Oui. Les paiements sont traités de façon sécurisée (Mobile Money ou carte bancaire).",
   },
   {
-    q: "Que se passe-t-il si je repasse en offre Découverte ?",
-    a: "Votre compte reste actif. Vous conservez votre profil et retrouvez simplement les fonctionnalités incluses dans l'offre gratuite.",
+    q: "Que se passe-t-il si je n’ai plus Alliance ?",
+    a: "Votre compte reste actif. Vous conservez votre profil et retrouvez les limites de l’offre gratuite ; le rapport complet et les axes détaillés restent réservés à Alliance.",
   },
   {
-    q: "Pourquoi proposer un abonnement ?",
-    a: "Parce que nous préférons investir dans la qualité des recommandations, la sécurité de la plateforme et l'amélioration continue de notre Matching plutôt que d'afficher de la publicité ou de vendre vos données.",
+    q: "Y aura-t-il d’autres options plus avancées ?",
+    a: "Oui, plus tard (visibilité, packs dédiés). Elles s’ajouteront à Alliance mensuelle — elles ne la remplacent pas.",
   },
 ]
 

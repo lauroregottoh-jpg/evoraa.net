@@ -10,35 +10,34 @@ export type PremiumHeroSlide = {
   subtitle: string
 }
 
-/** Source : KELIA - Page d'accueil.docx — section Alliance / Premium */
 const DEFAULT_SLIDES: PremiumHeroSlide[] = [
   {
-    badge: "Matching à 5 piliers",
-    title: "mérite plus que le hasard.",
-    highlight: "Votre futur conjoint",
+    badge: "Rapport personnalisé",
+    title: "votre rapport individuel avec axes d’amélioration.",
+    highlight: "Alliance débloque",
     subtitle:
-      "Alliance vous donne accès à toute la puissance du Matching KELIAA™ à 5 piliers pour recevoir davantage de profils réellement compatibles avec votre foi, vos valeurs et votre projet de mariage.",
+      "Lecture claire de vos 5 piliers Matching, axes prioritaires à travailler, et lien avec l’Académie du mariage — pour avancer concrètement, pas seulement consulter des profils.",
   },
   {
-    badge: "Compatibilités détaillées",
-    title: "toutes les chances à votre future rencontre.",
-    highlight: "Donnez",
+    badge: "Matching sérieux",
+    title: "plus de suggestions vraiment compatibles.",
+    highlight: "Ensuite,",
     subtitle:
-      "Passez à Alliance et profitez d'une expérience complète conçue pour vous aider à rencontrer une personne réellement compatible.",
+      "15 suggestions / jour, davantage de conversations et de messages : vous gagnez du temps avec des profils alignés sur votre foi et votre projet.",
   },
   {
     badge: "Renouvellement manuel",
-    title: "vous perdez moins de temps, vous avancez plus sereinement.",
-    highlight: "Avec Alliance,",
+    title: "restez maître de votre abonnement.",
+    highlight: "Toujours,",
     subtitle:
-      "Parce que rencontrer la bonne personne ne dépend pas uniquement du nombre de profils consultés — vous échangez avec des profils plus pertinents grâce au Matching KELIAA™.",
+      "Pas de prélèvement surprise. Vous renouvelez quand vous le décidez, Mobile Money ou carte bancaire.",
   },
 ]
 
 export function PremiumHeroCarousel({
   firstName,
   slides = DEFAULT_SLIDES,
-  intervalMs = 5000,
+  intervalMs = 6000,
 }: {
   firstName?: string
   slides?: PremiumHeroSlide[]
@@ -78,16 +77,18 @@ export function PremiumHeroCarousel({
 
       <div
         className="grid grid-cols-3 gap-2 sm:gap-4 rounded-2xl bg-accent/10 border border-accent/20 px-3 py-4 sm:px-6"
-        aria-label="Indicateurs Alliance"
+        aria-label="Ce qu’Alliance débloque"
       >
         {[
-          { value: "5", label: "piliers Matching" },
-          { value: "✓", label: "compatibilités détaillées" },
-          { value: "100 %", label: "renouvellement manuel" },
+          { value: "Rapport", label: "personnalisé complet" },
+          { value: "Axes", label: "d’amélioration + Académie" },
+          { value: "15", label: "suggestions / jour" },
         ].map((s) => (
           <div key={s.label} className="text-center">
-            <p className="font-serif text-xl sm:text-2xl font-bold text-foreground">{s.value}</p>
-            <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 leading-snug">{s.label}</p>
+            <p className="font-serif text-lg sm:text-2xl font-bold text-foreground">{s.value}</p>
+            <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 leading-snug">
+              {s.label}
+            </p>
           </div>
         ))}
       </div>

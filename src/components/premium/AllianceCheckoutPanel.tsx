@@ -79,10 +79,11 @@ export function AllianceCheckoutPanel({
     <section className="rounded-2xl border border-border bg-white p-5 sm:p-7 space-y-6 shadow-card">
       <div className="space-y-1">
         <h2 className="font-serif text-2xl font-bold">
-          {isPaid ? "Renouveler Alliance" : "Choisir votre Alliance"}
+          {isPaid ? "Renouveler Alliance" : "Activer Alliance"}
         </h2>
         <p className="text-sm text-muted-foreground">
-          Sélectionnez une durée, un mode de paiement, puis activez.
+          Rapport personnalisé, axes d’amélioration, Matching enrichi — choisissez
+          la durée et payez (Mobile Money ou carte).
         </p>
       </div>
 

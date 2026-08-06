@@ -10,13 +10,26 @@ import {
   MessageCircle,
   MessagesSquare,
   Sparkles,
+  Target,
   Unlock,
 } from "lucide-react"
 import { cn } from "@/utils/cn"
 import { PLANS } from "@/lib/billing/plans"
 
-/** Comparaison Découverte → Alliance — quotas explicites (pas de flou). */
+/** Gratuit (aperçu) → Alliance — rapport + quotas. */
 const FEATURES = [
+  {
+    icon: ClipboardList,
+    title: "Rapport personnalisé (5 piliers)",
+    free: "Aperçu léger",
+    alliance: "Bilan complet",
+  },
+  {
+    icon: Target,
+    title: "Axes d’amélioration + Académie",
+    free: "Conseils limités",
+    alliance: "Axes priorisés + modules",
+  },
   {
     icon: Heart,
     title: "Suggestions de compatibilité",
@@ -42,12 +55,6 @@ const FEATURES = [
     alliance: "20 questions / jour",
   },
   {
-    icon: ClipboardList,
-    title: "Mon bilan relationnel",
-    free: "Conseils légers",
-    alliance: "Axes d’amélioration + Académie",
-  },
-  {
     icon: Crown,
     title: "Badge Alliance",
     free: "—",
@@ -62,17 +69,17 @@ export function PremiumUnlockList() {
     <section className="rounded-2xl border border-border bg-white p-5 sm:p-7 space-y-5 shadow-card">
       <div className="space-y-1.5">
         <h2 className="font-serif text-2xl font-bold text-foreground">
-          Ce qu&apos;Alliance débloque pour vous
+          Ce qu&apos;Alliance débloque
         </h2>
         <p className="text-sm text-muted-foreground">
-          Les quotas exacts — Découverte vs Alliance — pour avancer avec plus de
-          conversations et d&apos;échanges sérieux.
+          D’abord le rapport et les axes d’amélioration — puis plus de suggestions,
+          de conversations et d’échanges sérieux.
         </p>
       </div>
 
-      <div className="hidden sm:grid grid-cols-[1fr_7rem_7rem] gap-2 px-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+      <div className="hidden sm:grid grid-cols-[1fr_7.5rem_7.5rem] gap-2 px-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
         <span>Avantage</span>
-        <span className="text-right">Découverte</span>
+        <span className="text-right">Sans Alliance</span>
         <span className="text-right text-primary">Alliance</span>
       </div>
 
@@ -82,7 +89,7 @@ export function PremiumUnlockList() {
           return (
             <li
               key={f.title}
-              className="flex flex-col sm:grid sm:grid-cols-[1fr_7rem_7rem] sm:items-center gap-2 rounded-xl border border-border/80 bg-background/60 px-3 py-3 sm:px-4"
+              className="flex flex-col sm:grid sm:grid-cols-[1fr_7.5rem_7.5rem] sm:items-center gap-2 rounded-xl border border-border/80 bg-background/60 px-3 py-3 sm:px-4"
             >
               <div className="flex items-start gap-3 min-w-0">
                 <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent/15 text-accent">
@@ -91,14 +98,18 @@ export function PremiumUnlockList() {
                 <p className="text-sm font-semibold text-foreground pt-2">{f.title}</p>
               </div>
               <div className="flex sm:block items-center justify-between gap-2 pl-13 sm:pl-0 sm:text-right">
-                <span className="sm:hidden text-[10px] uppercase text-muted-foreground">Découverte</span>
+                <span className="sm:hidden text-[10px] uppercase text-muted-foreground">
+                  Sans Alliance
+                </span>
                 <span className="inline-flex items-center gap-1 text-xs text-muted-foreground line-through decoration-destructive/40 sm:justify-end">
                   <Lock className="h-3 w-3 text-destructive/70 shrink-0" />
                   {f.free}
                 </span>
               </div>
               <div className="flex sm:block items-center justify-between gap-2 pl-13 sm:pl-0 sm:text-right">
-                <span className="sm:hidden text-[10px] uppercase text-primary font-semibold">Alliance</span>
+                <span className="sm:hidden text-[10px] uppercase text-primary font-semibold">
+                  Alliance
+                </span>
                 <span className="inline-flex items-center gap-1 text-xs font-bold text-primary sm:justify-end">
                   <Unlock className="h-3 w-3 shrink-0" />
                   {f.alliance}
