@@ -14,6 +14,7 @@ import {
   type SettingsData,
 } from "@/lib/settings";
 import { saveSettingsAction } from "@/app/actions/settings";
+import { ThemeToggle } from "@/components/evoraa/ThemeToggle";
 
 export function SettingsForm({ initial }: { initial: SettingsData }) {
   const [retreatMode, setRetreatMode] = React.useState(initial.retreatMode);
@@ -193,6 +194,19 @@ export function SettingsForm({ initial }: { initial: SettingsData }) {
             Le genre recherché suit votre profil (homme ↔ femme). D&apos;autres filtres arriveront
             progressivement.
           </p>
+        </CardContent>
+      </Card>
+
+      <Card className="rounded-2xl border border-border/60 bg-background/90">
+        <CardHeader className="pb-3">
+          <CardTitle className="font-serif text-xl">Apparence</CardTitle>
+          <CardDescription className="text-xs">
+            Clair / sombre — le soleil en haut de l’espace membre sert à vous déconnecter.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex items-center justify-between gap-3">
+          <p className="text-sm text-muted-foreground">Thème de l’interface</p>
+          <ThemeToggle />
         </CardContent>
       </Card>
 

@@ -5,19 +5,10 @@ import { Button } from "@/components/ui/button"
 import { DashboardAlertBanners } from "@/components/dashboard/DashboardAlertBanners"
 import { ProfileProgressHero } from "@/components/dashboard/ProfileProgressHero"
 import { SelectionGrid, SelectionHeader } from "@/components/dashboard/SelectionGrid"
-import {
-  AcademyTeaser,
-  CoachFab,
-  DailyQuotaCard,
-  DailyEditorialCard,
-  QuickAccessGrid,
-} from "@/components/dashboard/FarataHomeBlocks"
-import { EvaWeeklyReflection } from "@/components/dashboard/EvaWeeklyReflection"
-import { PresenceStreak } from "@/components/dashboard/PresenceStreak"
-import { PillarBadges } from "@/components/assessments/PillarBadges"
 import { InviteShareCard } from "@/components/growth/InviteShareCard"
 import { getMyRelationBilan } from "@/app/actions/assessments"
 import { RelationBilanCard } from "@/components/matching/RelationBilanCard"
+import { Crown, BookHeart } from "lucide-react"
 
 export default async function DashboardPage() {
   const [{ data, error }, bilan] = await Promise.all([
@@ -59,6 +50,8 @@ export default async function DashboardPage() {
       tone: s.tone,
     }))
 
+  const needsSetup = !data.hasAvatar || data.assessmentsDone < 5
+
   return (
     <MemberShell
       firstName={data.firstName}
@@ -73,7 +66,7 @@ export default async function DashboardPage() {
       trialDaysRemaining={usage.trialDaysRemaining}
       isTrialBoost={usage.isTrialBoost}
     >
-      <div className="space-y-5 max-w-3xl mx-auto pb-24">
+      <div className="space-y-5 pb-8">
         <DashboardAlertBanners banners={banners} />
 
         <ProfileProgressHero
@@ -83,33 +76,35 @@ export default async function DashboardPage() {
           isVerified={data.isVerified}
         />
 
+        {needsSetup ? (
+          <div className="rounded-2xl border border-primary/25 bg-primary/5 p-5 space-y-3">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
+              Prochaine étape
+            </p>
+            <p className="text-sm font-bold text-foreground">
+              {data.assessmentsDone < 5
+                ? "Complétez vos tests pour activer le Matching"
+                : "Ajoutez une photo claire"}
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {data.assessmentsDone < 5
+                ? `${data.firstName ? `${data.firstName}, v` : "V"}otre parcours est à ${data.completionPercentage}% (${data.assessmentsDone}/5 questionnaires). Les tests guident les suggestions compatibles.`
+                : "Sans portrait, vous restez difficile à découvrir pour les profils compatibles."}
+            </p>
+            <Link
+              href={data.assessmentsDone < 5 ? "/assessments" : "/profile"}
+              className="flex items-center justify-center w-full rounded-xl bg-primary text-primary-foreground h-11 text-sm font-semibold"
+            >
+              {data.assessmentsDone < 5
+                ? "Continuer mes tests →"
+                : "Ajouter ma photo →"}
+            </Link>
+          </div>
+        ) : null}
+
         {data.assessmentsDone > 0 && bilan.report ? (
           <RelationBilanCard report={bilan.report} compact />
         ) : null}
-
-        <Link
-          href="/feedback"
-          className="block rounded-2xl border border-primary/20 bg-primary/5 p-4 hover:border-primary/40 transition-colors"
-        >
-          <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
-            Améliorez Keliaa avec nous
-          </p>
-          <p className="font-serif text-lg font-bold mt-1">
-            Difficultés, plaintes ou idées ?
-          </p>
-          <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-            Plus vous nous écrivez, plus vite nous corrigeons l’inscription, les
-            questionnaires et l’expérience sur mobile. Vos retours vont
-            directement à l’équipe.
-          </p>
-          <span className="inline-block mt-2 text-xs font-bold text-primary">
-            Envoyer un avis →
-          </span>
-        </Link>
-
-        <div className="px-1">
-          <PresenceStreak />
-        </div>
 
         <section className="space-y-3">
           <SelectionHeader
@@ -118,6 +113,38 @@ export default async function DashboardPage() {
           />
           <SelectionGrid items={data.topSuggestions} />
         </section>
+
+        {!usage.isPaid ? (
+          <Link
+            href="/premium"
+            className="flex items-start gap-3 rounded-2xl border border-accent/40 bg-accent/10 p-5 hover:bg-accent/15 transition-colors"
+          >
+            <div className="h-10 w-10 rounded-xl bg-accent/25 flex items-center justify-center shrink-0">
+              <Crown className="h-5 w-5 text-accent" />
+            </div>
+            <div className="min-w-0">
+              <p className="font-serif text-lg font-bold">Passer Alliance</p>
+              <p className="text-sm text-muted-foreground mt-0.5 leading-relaxed">
+                Débloquez votre rapport personnalisé, plus de suggestions et des
+                échanges plus amples.
+              </p>
+              <span className="inline-block mt-2 text-xs font-bold text-accent">
+                Voir Alliance →
+              </span>
+            </div>
+          </Link>
+        ) : null}
+
+        <Link
+          href="/inspiration"
+          className="flex items-center justify-between gap-3 rounded-xl border border-border px-4 py-3 text-sm hover:border-primary/30 transition-colors"
+        >
+          <span className="inline-flex items-center gap-2 font-medium">
+            <BookHeart className="h-4 w-4 text-primary" />
+            Inspiration &amp; méditations
+          </span>
+          <span className="text-xs font-semibold text-primary">Ouvrir →</span>
+        </Link>
 
         {data.sponsoredAds.length > 0 && (
           <div className="space-y-3">
@@ -142,72 +169,10 @@ export default async function DashboardPage() {
           </div>
         )}
 
-        <div className="space-y-3">
-          <div className="flex items-end justify-between gap-3 px-1">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
-              Astuce relationnelle
-            </p>
-            <Link
-              href="/inspiration"
-              className="text-xs font-semibold text-primary hover:underline underline-offset-2"
-            >
-              Voir plus →
-            </Link>
-          </div>
-          <DailyEditorialCard item={data.dailyPrimary} featured />
+        <div id="invite" className="scroll-mt-24 pt-2">
+          <InviteShareCard userId={data.userId} />
         </div>
-
-        {!data.hasAvatar || data.assessmentsDone < 5 ? (
-          <div className="rounded-2xl border border-primary/25 bg-primary/5 p-5 space-y-3">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
-              Message d’Eva
-            </p>
-            <p className="text-sm font-bold text-foreground">
-              {data.assessmentsDone < 5
-                ? "Sans Matching, pas de rencontre juste"
-                : "Devenez visible dès maintenant"}
-            </p>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {data.assessmentsDone < 5
-                ? `${data.firstName ? `${data.firstName}, v` : "V"}otre profil est à ${data.completionPercentage}% (${data.assessmentsDone}/5 questionnaires). Sans les tests, je ne peux pas bien vous orienter vers quelqu’un qui partage votre foi et votre projet.`
-                : "Ajoutez une photo claire : sans portrait, vous restez difficile à découvrir pour les profils compatibles."}
-            </p>
-            <Link
-              href={data.assessmentsDone < 5 ? "/assessments" : "/profile"}
-              className="flex items-center justify-center w-full rounded-xl bg-primary text-primary-foreground h-11 text-sm font-semibold"
-            >
-              {data.assessmentsDone < 5
-                ? "Compléter mes questionnaires →"
-                : "Ajouter ma photo →"}
-            </Link>
-          </div>
-        ) : null}
-
-        <EvaWeeklyReflection />
-
-        <QuickAccessGrid
-          unreadMessages={data.unreadMessages}
-          social={data.social}
-          isPaid={usage.isPaid}
-        />
-
-        <InviteShareCard userId={data.userId} />
-
-        <DailyQuotaCard usage={usage} />
-
-        <div className="rounded-2xl border border-border bg-card p-5">
-          <PillarBadges
-            pillars={data.assessmentProgress.map((p) => ({
-              slug: p.slug,
-              completed: p.completed,
-            }))}
-          />
-        </div>
-
-        <AcademyTeaser />
       </div>
-
-      <CoachFab />
     </MemberShell>
   )
 }

@@ -91,7 +91,7 @@ export function MemberReminders({
             className="w-full flex items-center justify-between gap-3 rounded-xl border border-accent/40 bg-accent/10 px-3 py-2 text-xs sm:text-sm cursor-pointer text-left"
           >
             <span className="font-medium truncate">
-              Découverte enrichie : {trialDaysRemaining} jour
+              Boost temporaire : {trialDaysRemaining} jour
               {trialDaysRemaining === 1 ? "" : "s"} restant
               {trialDaysRemaining === 1 ? "" : "s"}
             </span>
