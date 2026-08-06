@@ -2,8 +2,11 @@
 
 import { revalidatePath } from "next/cache"
 import { createClient } from "@/utils/supabase/server"
+import {
+  detectImageMime,
+  extensionForMime,
+} from "@/lib/security/imageMagic"
 
-const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp"])
 const MAX_BYTES = 5 * 1024 * 1024
 
 export type ProfileEditorData = {
@@ -129,9 +132,6 @@ export async function saveProfileAction(payload: {
 }
 
 function moderatePhotoMeta(file: File): string | null {
-  if (!ALLOWED_TYPES.has(file.type)) {
-    return "Formats acceptés : JPEG, PNG ou WebP."
-  }
   if (file.size <= 0 || file.size > MAX_BYTES) {
     return "La photo doit faire moins de 5 Mo."
   }
@@ -159,6 +159,13 @@ export async function uploadProfilePhotoAction(
   const moderationError = moderatePhotoMeta(file)
   if (moderationError) return { error: moderationError }
 
+  // Trust file contents, not browser Content-Type.
+  const header = await file.slice(0, 32).arrayBuffer()
+  const detected = detectImageMime(header)
+  if (!detected) {
+    return { error: "Formats acceptés : JPEG, PNG ou WebP." }
+  }
+
   const { data: profile } = await supabase
     .from("profiles")
     .select("id")
@@ -167,8 +174,7 @@ export async function uploadProfilePhotoAction(
 
   if (!profile) return { error: "Profil introuvable" }
 
-  const ext =
-    file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg"
+  const ext = extensionForMime(detected)
   const path = `${user.id}/${Date.now()}.${ext}`
 
   const { error: uploadError } = await supabase.storage
@@ -176,11 +182,11 @@ export async function uploadProfilePhotoAction(
     .upload(path, file, {
       cacheControl: "3600",
       upsert: false,
-      contentType: file.type,
+      contentType: detected,
     })
 
   if (uploadError) {
-    return { error: uploadError.message }
+    return { error: "Impossible d’envoyer la photo pour le moment." }
   }
 
   const {

@@ -43,6 +43,10 @@ Mot de passe : `KELLIA-32fa2984!`
 
 ## Vérifier après redeploy
 
-Ouvrez : https://evoraa-net.vercel.app/api/health/config  
+`GET /api/health/config` exige un Bearer secret (`CRON_SECRET` ou `HEALTH_CHECK_SECRET`) :
 
-Vous devez voir `"ok": true` et `"misconfigured": false`.
+```bash
+curl -s -H "Authorization: Bearer $CRON_SECRET" https://www.keliaa.org/api/health/config
+```
+
+Sans header → 404. Avec secret valide : `"ok": true` et `"misconfigured": false`.

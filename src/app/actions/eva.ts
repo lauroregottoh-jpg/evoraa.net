@@ -15,6 +15,7 @@ import {
 } from "@/lib/eva/engine"
 import { DEFAULT_EVA_CONFIG, parseEvaConfig } from "@/lib/admin/opsRules"
 import { enforceRateLimit, RL } from "@/lib/security/rateLimit"
+import { askEvaSchema, firstZodError } from "@/lib/security/schemas"
 
 export async function getEvaQuotaAction() {
   const supabase = await createClient()
@@ -95,8 +96,11 @@ export async function askEvaAction(input: {
   } = await supabase.auth.getUser()
   if (!user) return { ok: false, error: "Non authentifié." }
 
-  const question = (input.question || "").trim().slice(0, 1200)
-  if (!question) return { ok: false, error: "Question vide." }
+  const parsed = askEvaSchema.safeParse(input)
+  if (!parsed.success) {
+    return { ok: false, error: firstZodError(parsed.error) }
+  }
+  const { question, history: rawHistory } = parsed.data
 
   const rl = await enforceRateLimit({ ...RL.eva, subject: user.id })
   if (!rl.ok) return { ok: false, error: rl.error }
@@ -138,7 +142,7 @@ export async function askEvaAction(input: {
     /* ops optional */
   }
 
-  const history = (input.history || [])
+  const history = rawHistory
     .slice(-8)
     .map((m) => ({
       role: m.role === "assistant" ? ("assistant" as const) : ("user" as const),

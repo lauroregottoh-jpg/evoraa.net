@@ -4,6 +4,7 @@ import { sendResendEmail } from "@/lib/email/send"
 import { brandedEmailShell, contactAckEmailHtml } from "@/lib/email/templates"
 import { escapeHtml } from "@/lib/security/html"
 import { enforceRateLimit, RL } from "@/lib/security/rateLimit"
+import { contactSchema, firstZodError } from "@/lib/security/schemas"
 
 const SUBJECT_LABELS: Record<string, string> = {
   question: "Question générale",
@@ -19,20 +20,11 @@ export async function submitContactAction(payload: {
   subject: string
   message: string
 }): Promise<{ error?: string; success?: boolean; emailed?: boolean }> {
-  const name = payload.name.trim().slice(0, 120)
-  const email = payload.email.trim().slice(0, 200)
-  const message = payload.message.trim().slice(0, 5000)
-  const subjectCode = payload.subject.trim() || "question"
-
-  if (!name || !email || !message) {
-    return { error: "Nom, email et message sont requis." }
+  const parsed = contactSchema.safeParse(payload)
+  if (!parsed.success) {
+    return { error: firstZodError(parsed.error) }
   }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return { error: "Email invalide." }
-  }
-  if (message.length < 20) {
-    return { error: "Votre message doit faire au moins 20 caractères." }
-  }
+  const { name, email, message, subject: subjectCode } = parsed.data
 
   const rl = await enforceRateLimit({ ...RL.contact, subject: email })
   if (!rl.ok) return { error: rl.error }
@@ -63,7 +55,7 @@ export async function submitContactAction(payload: {
   if ("skipped" in result && result.skipped) {
     return {
       error:
-        "L’envoi automatique n’est pas encore configuré. Écrivez-nous à lauroregottoh@gmail.com avec votre message.",
+        "L’envoi automatique n’est pas encore configuré. Écrivez-nous à contact@keliaa.org avec votre message.",
     }
   }
 

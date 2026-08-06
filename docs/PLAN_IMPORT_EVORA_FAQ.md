@@ -55,9 +55,10 @@ Keliaa a **déjà** : `OPS_*`, `INCIDENT_PAYMENTS`, `AUTH_FROZEN`, `HARDENING_GA
 [x] 2. Lot A — docs invariants
 [x] 3. Lot B — Sentry configs soft
 [x] 4. Lot C — tripwires vercel/cron + hardening
-[ ] 5. Tests smoke locaux
-[ ] 6. Commit + push + deploy
+[x] 5. Tests smoke locaux
+[x] 6. Commit + push + deploy (`51322c0`, www.keliaa.org)
 [ ] 7. (Toi) coller SENTRY_DSN sur Vercel si prêt
+[ ] 8. (Toi) SQL `00028` si pas encore appliqué
 ```
 
 **Règles d’or pendant l’import :**
