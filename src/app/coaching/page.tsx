@@ -2,7 +2,6 @@ import { MemberPage } from "@/components/layout/MemberPage"
 import { CoachingCheckoutPanel } from "@/components/coaching/CoachingCheckoutPanel"
 import { CoachingWhyGrid } from "@/components/coaching/CoachingWhyGrid"
 import { getCheckoutHints } from "@/app/actions/billing"
-import { COACHING_SESSION_MINUTES } from "@/lib/billing/coachingOffers"
 import Link from "next/link"
 
 export const dynamic = "force-dynamic"
@@ -23,11 +22,11 @@ export default async function CoachingPage({
             Coaching humain
           </p>
           <h1 className="font-serif text-3xl sm:text-4xl font-bold">
-            Séances de {COACHING_SESSION_MINUTES} minutes
+            Coaching : 30 minutes ou 1 heure
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
-            Accompagnement payant (hors Alliance) pour débloquer un sujet précis :
-            préparation au mariage, discernement, communication. Visio ou téléphone.
+            Accompagnement payant (hors Alliance) pour débloquer un sujet précis.
+            Choisissez la durée, puis le nombre de séances.
           </p>
           {sp.moduleTitle ? (
             <p className="text-xs rounded-xl border border-border bg-secondary/40 px-3 py-2">

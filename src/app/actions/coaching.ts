@@ -5,6 +5,7 @@ import { createClient } from "@/utils/supabase/server"
 import { createAdminClient } from "@/utils/supabase/admin"
 import {
   getCoachingPack,
+  type CoachingDurationMinutes,
   type CoachingPackId,
 } from "@/lib/billing/coachingOffers"
 import {
@@ -25,11 +26,14 @@ function appBaseUrl() {
 /** Démarre un paiement Bictorys pour un pack coaching (pas Alliance). */
 export async function startCoachingCheckoutAction(input: {
   packId: string
+  minutes?: number | null
   paymentMode?: string | null
   moduleId?: string | null
   moduleTitle?: string | null
 }): Promise<{ error?: string; checkoutPath?: string; requiresAuth?: boolean }> {
-  const pack = getCoachingPack(input.packId)
+  const minutes: CoachingDurationMinutes =
+    input.minutes === 60 ? 60 : 30
+  const pack = getCoachingPack(input.packId, minutes)
   if (!pack) return { error: "Pack coaching invalide." }
 
   const { assertPaymentsNotPaused } = await import("@/lib/platform/killSwitches")
@@ -101,7 +105,7 @@ export async function startCoachingCheckoutAction(input: {
         product: "coaching",
         packId: pack.id as CoachingPackId,
         sessions: pack.sessions,
-        sessionMinutes: 30,
+        sessionMinutes: pack.minutes,
         moduleId: input.moduleId || null,
         moduleTitle: input.moduleTitle || null,
         payment_mode: paymentMode,
@@ -123,7 +127,7 @@ export async function startCoachingCheckoutAction(input: {
     apiKey,
     paymentId: payment.id,
     amount: pack.amountXof,
-    description: `KELIAA Coaching ${pack.label} (30 min)`,
+    description: `KELIAA Coaching ${pack.label} (${pack.minutes} min)`,
     customerName,
     customerEmail: user.email || "membre@keliaa.org",
     customerCity: (profile?.city as string) || undefined,

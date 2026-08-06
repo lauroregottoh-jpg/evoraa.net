@@ -28,18 +28,18 @@ import { MemberReminders } from "@/components/layout/MemberReminders";
 import { logoutAction } from "@/app/actions/auth";
 import { OpsAdminEntryBanner } from "@/components/admin/OpsAdminEntryBanner";
 
-/** Nav principale — le reste est secondaire (sidebar bas / Compte). */
+/** Nav principale visible sans scroller. */
 const PRIMARY = [
   { href: "/dashboard", label: "Accueil", icon: LayoutGrid },
   { href: "/compatibility", label: "Compatibilités", icon: Heart },
   { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/assessments", label: "Tests", icon: ClipboardList },
   { href: "/premium", label: "Alliance", icon: Crown, accent: true },
+  { href: "/profile", label: "Profil", icon: User },
+  { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
 ] as const;
 
 const SECONDARY = [
-  { href: "/profile", label: "Profil", icon: User },
-  { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
   { href: "/coaching", label: "Coaching", icon: Phone },
   { href: "/inspiration", label: "Inspiration", icon: BookHeart },
   { href: "/dashboard#invite", label: "Recommander", icon: Share2 },
@@ -164,8 +164,11 @@ export function MemberShell({
   };
 
   const sidebarNav = (
-    <nav className="flex flex-col gap-1 flex-1 min-h-0" aria-label="Navigation membre">
-      <p className="px-3 pt-1 pb-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+    <nav
+      className="flex flex-col gap-0.5 flex-1 min-h-0 overflow-y-auto"
+      aria-label="Navigation membre"
+    >
+      <p className="px-3 pt-1 pb-1.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
         Principale
       </p>
       {PRIMARY.map((item) => {
@@ -176,7 +179,7 @@ export function MemberShell({
             key={item.href}
             href={item.href}
             onClick={go(item.href)}
-            className={linkClass(item.href, accent)}
+            className={cn(linkClass(item.href, accent), "!py-2")}
           >
             <Icon className={cn("h-4 w-4 shrink-0", accent && "text-accent")} />
             {item.label}
@@ -184,7 +187,10 @@ export function MemberShell({
         );
       })}
 
-      <div className="mt-3 space-y-0.5 overflow-y-auto">
+      <p className="px-3 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+        Plus
+      </p>
+      <div className="space-y-0.5 pb-2">
         {SECONDARY.map((item) => {
           const Icon = item.icon;
           return (
@@ -192,7 +198,7 @@ export function MemberShell({
               key={`${item.href}-${item.label}`}
               href={item.href}
               onClick={go(item.href)}
-              className={linkClass(item.href)}
+              className={cn(linkClass(item.href), "!py-2 text-[13px]")}
             >
               <Icon className="h-4 w-4 shrink-0" />
               {item.label}
@@ -201,11 +207,11 @@ export function MemberShell({
         })}
       </div>
 
-      <div className="mt-auto pt-4 border-t border-border">
+      <div className="mt-auto pt-3 border-t border-border shrink-0">
         <form action={logoutAction}>
           <button
             type="submit"
-            className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-destructive hover:bg-destructive/10"
+            className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-bold text-white bg-[#8B2942] hover:bg-[#6e1f34]"
           >
             <LogOut className="h-4 w-4" />
             Déconnexion
@@ -307,7 +313,7 @@ export function MemberShell({
                     <form action={logoutAction}>
                       <button
                         type="submit"
-                        className="flex w-full items-center gap-2 px-3 py-2.5 text-sm font-semibold text-destructive hover:bg-destructive/10"
+                        className="flex w-full items-center gap-2 mx-1.5 mb-1 px-3 py-2.5 rounded-lg text-sm font-bold text-white bg-[#8B2942] hover:bg-[#6e1f34]"
                       >
                         <LogOut className="h-4 w-4" />
                         Déconnexion

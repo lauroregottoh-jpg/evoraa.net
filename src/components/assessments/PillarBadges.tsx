@@ -31,7 +31,7 @@ export function PillarBadges({ pillars, className }: PillarBadgesProps) {
       <div className="flex flex-wrap gap-2">
         {ASSESSMENT_ORDER.map((slug) => {
           const completed = Boolean(bySlug.get(slug))
-          const name = ASSESSMENTS[slug].name.split(" ")[0]
+          const name = ASSESSMENTS[slug].name.replace(/^Compatibilité\s+/i, "")
           return (
             <Link
               key={slug}

@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { CalendarClock } from "lucide-react"
-import { COACHING_PACKS, COACHING_SESSION_MINUTES } from "@/lib/billing/coachingOffers"
+import { getCoachingPacks } from "@/lib/billing/coachingOffers"
 
 type Props = {
   moduleTitle: string
@@ -9,15 +9,14 @@ type Props = {
 
 export function AcademyCoachingCta({ moduleTitle, moduleId }: Props) {
   const href = `/coaching?module=${encodeURIComponent(moduleId)}&moduleTitle=${encodeURIComponent(moduleTitle)}`
-  const preview = COACHING_PACKS.filter((p) =>
-    ["c1", "c4", "c12"].includes(p.id)
-  )
+  const preview30 = getCoachingPacks(30).filter((p) => ["c1", "c4"].includes(p.id))
+  const preview60 = getCoachingPacks(60).find((p) => p.id === "c1")
 
   return (
     <div className="rounded-2xl border border-accent/30 bg-accent/5 p-5 space-y-4">
       <div className="space-y-1">
         <p className="text-xs font-bold uppercase tracking-widest text-accent">
-          Coaching payant · {COACHING_SESSION_MINUTES} min / séance
+          Coaching payant · 30 min ou 1 h
         </p>
         <p className="font-serif text-lg font-bold">Besoin d&apos;un accompagnement humain ?</p>
         <p className="text-sm text-muted-foreground">
@@ -27,13 +26,13 @@ export function AcademyCoachingCta({ moduleTitle, moduleId }: Props) {
       </div>
 
       <ul className="space-y-2">
-        {preview.map((p) => (
+        {preview30.map((p) => (
           <li
-            key={p.id}
+            key={`30-${p.id}`}
             className="flex items-center justify-between gap-3 rounded-xl border border-border bg-card px-3 py-2.5"
           >
             <div>
-              <p className="text-sm font-semibold">{p.label}</p>
+              <p className="text-sm font-semibold">{p.label} · 30 min</p>
               <p className="text-[11px] text-muted-foreground">{p.hint}</p>
             </div>
             <p className="text-sm font-bold text-primary shrink-0">
@@ -41,6 +40,17 @@ export function AcademyCoachingCta({ moduleTitle, moduleId }: Props) {
             </p>
           </li>
         ))}
+        {preview60 ? (
+          <li className="flex items-center justify-between gap-3 rounded-xl border border-border bg-card px-3 py-2.5">
+            <div>
+              <p className="text-sm font-semibold">1 séance · 1 h</p>
+              <p className="text-[11px] text-muted-foreground">{preview60.hint}</p>
+            </div>
+            <p className="text-sm font-bold text-primary shrink-0">
+              {preview60.amountXof.toLocaleString("fr-FR")} FCFA
+            </p>
+          </li>
+        ) : null}
       </ul>
 
       <Link

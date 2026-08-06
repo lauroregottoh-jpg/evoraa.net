@@ -41,9 +41,9 @@ export const ASSESSMENTS: Record<
   { name: string; description: string; questions: BankQuestion[] }
 > = {
   personality: {
-    name: "Personnalité & stress",
+    name: "Compatibilité humaine",
     description:
-      "Pression, critique, habitudes, fiabilité, blessures et rythme de vie — pour un profil psychologique précis.",
+      "Personnalité, stress, rythme de vie, ouverture et fiabilité — le pilier « humain » du Matching.",
     questions: [
       {
         key: "p01",
@@ -168,9 +168,9 @@ export const ASSESSMENTS: Record<
     ],
   },
   spiritual: {
-    name: "Foi & valeurs",
+    name: "Compatibilité spirituelle",
     description:
-      "Place de Dieu, prière, service d'église et discernement dans le quotidien du couple.",
+      "Place de Dieu, prière, service et discernement — le pilier spirituel du Matching.",
     questions: [
       {
         key: "s01",
@@ -327,9 +327,9 @@ export const ASSESSMENTS: Record<
     ],
   },
   relationship: {
-    name: "Conflits & dialogue",
+    name: "Compatibilité relationnelle",
     description:
-      "Tensions, silence, réconciliation, jalousie, besoins affectifs — comment vous fonctionnez vraiment à deux.",
+      "Dialogue, conflits, réconciliation, besoins affectifs — le pilier relationnel du Matching.",
     questions: [
       {
         key: "r01",
@@ -449,9 +449,9 @@ export const ASSESSMENTS: Record<
     ],
   },
   couple_life: {
-    name: "Vision du couple",
+    name: "Compatibilité projets de vie",
     description:
-      "Vie à deux, familles, limites physiques, sexualité & pureté, enfants et quotidien — pour un profil clair, sans jugement.",
+      "Mariage, famille, enfants, limites et quotidien — le pilier projets de vie du Matching.",
     questions: [
       {
         key: "c01",
@@ -748,9 +748,9 @@ export const ASSESSMENTS: Record<
     ],
   },
   finances: {
-    name: "Finances & projet",
+    name: "Compatibilité des valeurs",
     description:
-      "Argent, dettes, dîme, budget, famille élargie, épargne — pour matcher des visions matérielles compatibles.",
+      "Argent, priorités, stewardship, dîme, famille élargie — le pilier valeurs du Matching (matériel & principes).",
     questions: [
       {
         key: "f01",

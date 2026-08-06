@@ -61,6 +61,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: APP_URL,
   },
+  verification: {
+    google:
+      process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ||
+      "JNfGd1Y3c4gE2RVDCobRq3rJu0-nIq6yE3I8Ez2eSFc",
+  },
 };
 
 export default function RootLayout({

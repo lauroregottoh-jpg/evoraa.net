@@ -42,9 +42,8 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
       "5 nouvelles conversations / mois",
       "5 messages envoyés / conversation",
       "EVA : 3 questions / jour",
-      "Inspiration & bibliothèque éditoriale",
+      "Inspiration (conseil du jour)",
       "Bouclier de bienveillance",
-      "Paiement Alliance par Mobile Money ou carte bancaire",
     ],
     limits: {
       dailySuggestions: 3,
@@ -92,8 +91,8 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
       "Score de compatibilité détaillé",
       "Badge Alliance",
       "Priorité soft dans les suggestions",
-      "Support prioritaire",
-      "Renouvellement manuel (sans surprise)",
+      "Support prioritaire (WhatsApp VIP + ticket prioritaire)",
+      "Paiement Mobile Money ou carte — renouvellement manuel (sans prélèvement surprise)",
     ],
     limits: {
       dailySuggestions: 15,

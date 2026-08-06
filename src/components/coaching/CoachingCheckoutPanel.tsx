@@ -3,8 +3,9 @@
 import * as React from "react"
 import { useRouter } from "next/navigation"
 import {
-  COACHING_PACKS,
-  COACHING_SESSION_MINUTES,
+  COACHING_DURATIONS,
+  getCoachingPacks,
+  type CoachingDurationMinutes,
   type CoachingPackId,
 } from "@/lib/billing/coachingOffers"
 import { startCoachingCheckoutAction } from "@/app/actions/coaching"
@@ -22,16 +23,18 @@ export function CoachingCheckoutPanel({
   moduleTitle?: string | null
 }) {
   const router = useRouter()
+  const [minutes, setMinutes] = React.useState<CoachingDurationMinutes>(30)
   const [packId, setPackId] = React.useState<CoachingPackId>("c4")
   const [mode, setMode] = React.useState<BictorysPaymentMode>(suggestedMode)
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState("")
 
+  const packs = React.useMemo(() => getCoachingPacks(minutes), [minutes])
+  const selected = packs.find((p) => p.id === packId) || packs[0]
+
   React.useEffect(() => {
     setMode(suggestedMode)
   }, [suggestedMode])
-
-  const selected = COACHING_PACKS.find((p) => p.id === packId) || COACHING_PACKS[0]
 
   const pay = async () => {
     setLoading(true)
@@ -39,6 +42,7 @@ export function CoachingCheckoutPanel({
     try {
       const r = await startCoachingCheckoutAction({
         packId,
+        minutes,
         paymentMode: mode,
         moduleId,
         moduleTitle,
@@ -65,15 +69,47 @@ export function CoachingCheckoutPanel({
   return (
     <section className="rounded-2xl border border-border bg-card p-5 sm:p-7 space-y-5">
       <div className="space-y-1">
-        <h2 className="font-serif text-2xl font-bold">Choisir votre pack</h2>
+        <h2 className="font-serif text-2xl font-bold">Choisir votre formule</h2>
         <p className="text-sm text-muted-foreground">
-          Séances de <strong>{COACHING_SESSION_MINUTES} minutes</strong> (visio ou téléphone).
-          Petits avantages sur les packs — pas de casse de prix.
+          Deux durées, puis un pack de séances (visio ou téléphone).
         </p>
       </div>
 
+      <div className="grid grid-cols-2 gap-2">
+        {COACHING_DURATIONS.map((d) => {
+          const active = d.minutes === minutes
+          return (
+            <button
+              key={d.minutes}
+              type="button"
+              onClick={() => setMinutes(d.minutes)}
+              className={cn(
+                "rounded-xl border px-3 py-3 text-left transition-colors",
+                active
+                  ? "border-primary bg-primary/5 ring-1 ring-primary"
+                  : "border-border hover:border-primary/30"
+              )}
+            >
+              <p className="text-sm font-bold">{d.label}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                <span className="font-semibold text-foreground">
+                  {d.unitXof.toLocaleString("fr-FR")} FCFA
+                </span>
+                {d.listUnitXof > d.unitXof ? (
+                  <span className="ml-1 line-through opacity-60">
+                    {d.listUnitXof.toLocaleString("fr-FR")}
+                  </span>
+                ) : null}{" "}
+                / séance
+              </p>
+              <p className="text-[11px] text-muted-foreground mt-1 leading-snug">{d.blurb}</p>
+            </button>
+          )
+        })}
+      </div>
+
       <div className="space-y-2">
-        {COACHING_PACKS.map((p) => {
+        {packs.map((p) => {
           const active = p.id === packId
           const saved = p.listXof - p.amountXof
           return (
@@ -99,18 +135,16 @@ export function CoachingCheckoutPanel({
                       </span>
                     ) : null}
                   </p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">{p.hint}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{p.hint}</p>
                 </div>
                 <div className="text-right shrink-0">
-                  <p className="text-sm font-bold text-primary">
-                    {p.amountXof.toLocaleString("fr-FR")} FCFA
+                  <p className="font-serif text-lg font-bold text-primary">
+                    {p.amountXof.toLocaleString("fr-FR")}
+                    <span className="text-xs font-sans font-semibold"> FCFA</span>
                   </p>
                   {saved > 0 ? (
-                    <p className="text-[10px] text-muted-foreground">
-                      <span className="line-through">
-                        {p.listXof.toLocaleString("fr-FR")}
-                      </span>{" "}
-                      · −{saved.toLocaleString("fr-FR")}
+                    <p className="text-[10px] text-muted-foreground line-through">
+                      {p.listXof.toLocaleString("fr-FR")} FCFA
                     </p>
                   ) : null}
                 </div>
@@ -120,27 +154,20 @@ export function CoachingCheckoutPanel({
         })}
       </div>
 
-      <PaymentModePicker value={mode} onChange={setMode} suggested={suggestedMode} />
+      <PaymentModePicker value={mode} onChange={setMode} />
+
+      {error ? <p className="text-xs text-destructive">{error}</p> : null}
 
       <button
         type="button"
         disabled={loading}
-        onClick={() => void pay()}
-        className="w-full h-12 rounded-xl bg-primary text-primary-foreground text-sm font-bold disabled:opacity-60"
+        onClick={pay}
+        className="w-full h-11 rounded-xl bg-primary text-primary-foreground text-sm font-bold disabled:opacity-60"
       >
         {loading
           ? "Redirection…"
           : `Payer ${selected.amountXof.toLocaleString("fr-FR")} FCFA`}
       </button>
-
-      {error ? (
-        <p className="text-sm text-destructive break-words">{error}</p>
-      ) : null}
-
-      <p className="text-[11px] text-muted-foreground leading-relaxed">
-        Après paiement, un formulaire s’ouvre pour vos coordonnées et disponibilités.
-        Le coaching n’est pas inclus dans Alliance.
-      </p>
     </section>
   )
 }

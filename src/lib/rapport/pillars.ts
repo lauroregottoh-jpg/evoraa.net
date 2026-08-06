@@ -97,7 +97,7 @@ const SLUG_FALLBACK: Record<AssessmentSlug, ReportPillarId> = {
   relationship: "relationnel",
   spiritual: "spirituel",
   couple_life: "projets_de_vie",
-  finances: "projets_de_vie",
+  finances: "valeurs",
   personality: "humain",
 }
 

@@ -141,7 +141,7 @@ function knowledgeHits(question: string): ScoredHit[] {
       intent: "assessment",
       keys: ["test", "questionnaire", "attachement", "personnalite", "stress"],
       answer:
-        "Les 5 tests (Personnalité & stress, Foi & valeurs, Conflits & dialogue, Vision du couple, Finances & projet) construisent votre score. Ils sont inclus dans Découverte. Sans eux, votre profil reste incomplet et le Matching reste faible. Souhaitez-vous commencer par Personnalité & stress ?",
+        "Les 5 tests (Compatibilité humaine, spirituelle, relationnelle, projets de vie, valeurs) construisent votre score. Ils sont inclus dans Découverte. Sans eux, votre profil reste incomplet et le Matching reste faible. Souhaitez-vous commencer par Compatibilité humaine ?",
       ctaHref: "/assessments",
       ctaLabel: "Ouvrir les questionnaires",
     },
@@ -181,7 +181,7 @@ function knowledgeHits(question: string): ScoredHit[] {
       intent: "coaching",
       keys: ["coach", "seance", "accompagn", "rendez-vous", "psy"],
       answer:
-        "Le coaching humain KELIAA : séances de 30 min à partir de 15 000 FCFA (packs jusqu’à 12 séances). Paiement sur /coaching puis formulaire de brief. Eva ne remplace pas un psychologue clinique.",
+        "Le coaching humain KELIAA : 30 min à 8 000 FCFA (prix lancement, au lieu de 10 000) ou 1 h à 15 000 FCFA (au lieu de 20 000). Packs jusqu’à 12 séances. Paiement sur /coaching puis formulaire de brief.",
       ctaHref: "/contact",
       ctaLabel: "Contacter",
     },
