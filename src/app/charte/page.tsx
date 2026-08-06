@@ -34,7 +34,8 @@ export default function ChartePage() {
         title="Notre charte"
         highlight="KELIAA"
         subtitle="Les piliers, valeurs et engagements qui fondent notre communauté de célibataires chrétiens."
-        imageSrc="https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=2000&auto=format&fit=crop"
+        imageSrc="/home/hero-african-wedding.png"
+        imageClassName="object-[center_32%] sm:object-center"
         imageAlt="Communauté en prière"
       />
 

@@ -107,14 +107,15 @@ export function HeroBackground3D({ imageOpacity = 0.35 }: HeroBackground3DProps)
 
   return (
     <div ref={containerRef} className="absolute inset-0 z-0 overflow-hidden bg-[#120f10]">
-      <div className="absolute inset-[-8%] z-0">
+      <div className="absolute inset-[-4%] z-0">
         <Image
           ref={imageRef}
-          src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop"
+          src="/home/hero-african-wedding.png"
           alt=""
           fill
           priority
-          className="object-cover scale-110"
+          sizes="100vw"
+          className="object-cover object-[center_32%] sm:object-[center_40%] md:object-center scale-105 md:scale-110"
           style={{ opacity: imageOpacity }}
           aria-hidden
         />

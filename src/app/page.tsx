@@ -175,10 +175,10 @@ export default function Home() {
           </div>
           <div className="story-image relative h-[520px] sm:h-[600px] rounded-2xl overflow-hidden shadow-elevated">
             <Image
-              src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=2069&auto=format&fit=crop"
+              src="/home/story-community.png"
               alt="Moment de partage"
               fill
-              className="object-cover scale-105"
+              className="object-cover object-[center_30%] sm:object-center scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
           </div>
@@ -286,10 +286,10 @@ export default function Home() {
       <section className="compare-container relative py-28 px-6 sm:px-12 lg:px-20 bg-primary text-primary-foreground">
         <div className="absolute inset-0 opacity-15">
           <Image
-            src="https://images.unsplash.com/photo-1511285560929-80b456fe3b4f?q=80&w=2000&auto=format&fit=crop"
+            src="/home/compare-couple.png"
             alt=""
             fill
-            className="object-cover"
+            className="object-cover object-[center_35%] md:object-center"
             aria-hidden
           />
         </div>
@@ -412,7 +412,7 @@ export default function Home() {
 
       {/* CTA final */}
       <section className="py-28 px-6 sm:px-12 relative overflow-hidden bg-primary text-white">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=2000&auto=format&fit=crop')] opacity-10 bg-cover bg-center mix-blend-overlay" />
+        <div className="absolute inset-0 bg-[url('/home/hero-african-wedding.png')] opacity-10 bg-cover bg-[center_35%] md:bg-center mix-blend-overlay" />
         <div className="relative z-10 text-center max-w-3xl mx-auto space-y-8 gsap-fade-up">
           <h2 className="font-serif text-4xl sm:text-6xl font-bold leading-tight">
             Vous ne cherchez probablement qu&apos;une seule personne.

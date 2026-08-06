@@ -32,7 +32,8 @@ export default function BlogListPage() {
         title="Préparez-vous à la rencontre"
         highlight="que Dieu a peut-être déjà préparée."
         subtitle="Découvrez des articles, des témoignages et des conseils inspirés de la Bible pour grandir dans votre foi, discerner avec sagesse et construire les fondations d'un mariage durable."
-        imageSrc="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?q=80&w=2000&auto=format&fit=crop"
+        imageSrc="/home/compare-couple.png"
+        imageClassName="object-[center_35%] sm:object-center"
         imageAlt="Inspiration et méditation"
       >
         <div className="pt-6 max-w-xl">

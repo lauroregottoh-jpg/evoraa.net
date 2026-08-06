@@ -11,7 +11,8 @@ export default function AboutPage() {
         title="KELIAA n'est pas née d'une idée marketing."
         highlight="Elle est née d'une fatigue."
         subtitle="Celle des célibataires chrétiens qui veulent se marier — et qui n'en peuvent plus des apps où l'on se vend avant de se connaître."
-        imageSrc="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=2000&auto=format&fit=crop"
+        imageSrc="/home/compare-couple.png"
+        imageClassName="object-[center_35%] sm:object-center"
         imageAlt="Cheminer ensemble"
       />
 
@@ -33,7 +34,7 @@ export default function AboutPage() {
         eyebrow="Méthode"
         title="Discernement avant attraction."
         body="Questionnaires, charte de bienveillance, vérification et modération humaine : chaque étape renforce la confiance avant d'ouvrir un dialogue."
-        imageSrc="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1600&auto=format&fit=crop"
+        imageSrc="/home/story-community.png"
         imageAlt="Moment de partage"
       />
 

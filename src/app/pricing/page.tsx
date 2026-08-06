@@ -108,7 +108,8 @@ export default function PricingPage() {
         title="Trouver la bonne personne"
         highlight="vaut bien plus qu'un abonnement."
         subtitle="Alliance vous donne accès à toute la puissance du Matching KELIAA™ à 5 piliers : une méthode unique qui va bien au-delà des photos et des critères superficiels pour vous proposer des personnes réellement compatibles avec votre foi, vos valeurs et votre projet de mariage."
-        imageSrc="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=2000&auto=format&fit=crop"
+        imageSrc="/home/hero-african-wedding.png"
+        imageClassName="object-[center_32%] sm:object-center"
         imageAlt="Engagement"
       >
         <div className="pt-6 space-y-4">

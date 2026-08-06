@@ -84,7 +84,8 @@ function ContactPageInner() {
         title="Vous n'êtes jamais seul"
         highlight="dans votre parcours."
         subtitle="Que vous ayez une question sur Keliaa, besoin d'un conseil ou souhaitiez signaler une situation, notre équipe est là pour vous accompagner avec bienveillance, confidentialité et respect."
-        imageSrc="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=85&w=2000&auto=format&fit=crop"
+        imageSrc="/home/story-community.png"
+        imageClassName="object-[center_30%] sm:object-center"
         imageAlt="Conseillère KELIAA disponible pour accompagner les membres"
         imageClassName="object-center"
       >
