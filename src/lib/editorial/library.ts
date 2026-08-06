@@ -44,7 +44,7 @@ export const EDITORIAL_CATEGORY_META: Record<
   citation: { label: "Citation KELIAA", short: "Citation" },
   preparation: { label: "Préparation au mariage", short: "Préparation" },
   encouragement: { label: "Encouragement", short: "Encouragement" },
-  a_mediter: { label: "À méditer", short: "À méditer" },
+  a_mediter: { label: "Réflexion concrète", short: "Réflexion" },
   conseil_coach: { label: "Le conseil du coach", short: "Coach" },
   erreur: { label: "Une erreur fréquente", short: "Erreur" },
   conversation: { label: "Idée de conversation", short: "Conversation" },
@@ -287,24 +287,24 @@ export const EDITORIAL_LIBRARY: EditorialItem[] = [
 
   ...items("a_mediter", [
     {
-      title: "Racontez-vous vos journées",
-      body: "Prenez l'habitude de vous raconter vos journées. Il ne s'agit pas seulement de dire ce que vous avez fait. Prenez aussi le temps de partager ce que vous avez ressenti, ce qui vous a marqué ou ce qui vous a préoccupé. C'est souvent dans ces échanges ordinaires que naît une véritable intimité.",
+      title: "Parlez-vous vraiment de votre journée",
+      body: "Prenez l’habitude de vous raconter vos journées : non seulement ce que vous avez fait, mais aussi ce que vous avez ressenti. C’est souvent dans ces échanges ordinaires que naît une véritable intimité.",
     },
     {
-      title: "Les non-dits",
-      body: "Les non-dits finissent rarement par disparaître. On espère parfois qu'un sujet délicat se réglera avec le temps. Pourtant, ce qui n'est jamais exprimé finit souvent par ressortir au mauvais moment. Choisissez un moment calme pour parler des sujets importants avant qu'ils ne deviennent des sources de tension.",
+      title: "Les non-dits ne disparaîtront pas seuls",
+      body: "On espère parfois qu’un sujet délicat se réglera avec le temps. Pourtant, ce qui n’est jamais exprimé finit souvent par ressortir au mauvais moment. Choisissez un moment calme pour en parler avant que ça ne crée de la tension.",
     },
     {
-      title: "Avant la crise",
-      body: "N'attendez pas une crise pour prendre soin de votre relation. Les couples solides ne se parlent pas seulement lorsqu'il y a un problème. Ils prennent aussi le temps d'entretenir leur complicité lorsque tout va bien.",
+      title: "Ne soignez pas la relation seulement en crise",
+      body: "Les couples solides ne se parlent pas seulement lorsqu’il y a un problème. Ils entretiennent aussi leur complicité lorsque tout va bien.",
     },
     {
-      title: "Reconnaître les efforts",
-      body: "Apprenez à reconnaître les efforts. Votre partenaire ne fait peut-être pas tout parfaitement, mais remarquez-vous les progrès qu'il fait ? Un encouragement sincère donne souvent envie de continuer à avancer.",
+      title: "Remarquez les efforts, même petits",
+      body: "Votre partenaire ne fait peut-être pas tout parfaitement — remarquez-vous les progrès ? Un encouragement sincère donne souvent envie de continuer.",
     },
     {
-      title: "Vous n'êtes pas adversaires",
-      body: "Lorsqu'un problème apparaît, évitez de vous placer l'un contre l'autre. Le véritable défi n'est pas de savoir qui gagne la discussion, mais comment vous pouvez résoudre le problème ensemble.",
+      title: "Vous êtes coéquipiers, pas adversaires",
+      body: "Face à un problème, le défi n’est pas de savoir qui gagne la discussion, mais comment vous résolvez la difficulté ensemble.",
     },
   ]),
 
@@ -381,6 +381,77 @@ export function dayOfYearUTC(date = new Date()): number {
   const start = Date.UTC(date.getUTCFullYear(), 0, 0)
   const now = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
   return Math.floor((now - start) / 86_400_000)
+}
+
+/** Index semaine (0–51) pour rotation stable. */
+export function weekIndexUTC(date = new Date()): number {
+  const day = dayOfYearUTC(date)
+  return Math.floor((day - 1) / 7)
+}
+
+export type WeeklyMeditation = {
+  title: string
+  body: string
+  verse: string
+  verseRef: string
+  practice: string
+}
+
+/** Méditations hebdo — titres directs, pas de poésie opaque. */
+const WEEKLY_MEDITATIONS: WeeklyMeditation[] = [
+  {
+    title: "Ralentir dans la recherche",
+    body: "La bonne personne se découvre dans le calme autant que dans l’enthousiasme. Si vous vous sentez pressé(e) de « matcher vite », gardez une règle simple : une conversation honnête vaut mieux que trois échanges superficiels.",
+    verse: "Attends-toi à l’Éternel ; fortifie-toi, et que ton cœur s’affermisse !",
+    verseRef: "Psaume 27:14",
+    practice:
+      "Cette semaine : avant chaque nouveau message, écrivez une question sérieuse (foi, projet, valeurs) — pas seulement « ça va ? ».",
+  },
+  {
+    title: "Dire ce que l’on ressent sans attaquer",
+    body: "Beaucoup de tensions naissent du non-dit. Exprimez un besoin avec « je » plutôt qu’un reproche avec « tu ». Cela reste vrai en fréquentation comme en couple.",
+    verse: "Que votre parole soit toujours accompagnée de grâce.",
+    verseRef: "Colossiens 4:6",
+    practice:
+      "Cette semaine : une fois, reformulez une frustration en besoin clair (« J’ai besoin de… »).",
+  },
+  {
+    title: "Écouter jusqu’au bout",
+    body: "Écouter, ce n’est pas préparer sa réponse. Sur KELIAA, les échanges sérieux commencent quand chaque personne se sent vraiment entendue.",
+    verse: "Que chacun soit prompt à écouter, lent à parler, lent à se mettre en colère.",
+    verseRef: "Jacques 1:19",
+    practice:
+      "Cette semaine : dans une conversation, posez une question de plus avant de donner votre avis.",
+  },
+  {
+    title: "Laisser le passé ne pas tout diriger",
+    body: "Une déception ancienne peut colorer chaque nouveau contact. Discernez : cette peur vient-elle de la personne en face, ou d’une histoire non soignée ?",
+    verse: "Oublier ce qui est en arrière et me porter vers ce qui est en avant.",
+    verseRef: "Philippiens 3:13",
+    practice:
+      "Cette semaine : nommez une peur liée au passé… et une chose concrète que vous vérifiez ailleurs (faits, pas projections).",
+  },
+  {
+    title: "Patience ≠ immobilisme",
+    body: "Patienter n’empêche pas d’avancer : questionnaires, profil clair, photo, Alliance pour le rapport. La patience guide le tempo ; elle ne justifie pas l’inaction.",
+    verse: "L’amour est patient, il est plein de bonté.",
+    verseRef: "1 Corinthiens 13:4",
+    practice:
+      "Cette semaine : complétez une étape concrète (test, photo ou rapport) plutôt que scroller sans direction.",
+  },
+  {
+    title: "Prier et agir",
+    body: "La prière ouvre le cœur ; les actes montrent la maturité. Sur la plateforme, cela veut dire : réponses honnêtes, respect des limites, et présence réelle dans les messages.",
+    verse: "La foi sans les œuvres est morte.",
+    verseRef: "Jacques 2:26",
+    practice:
+      "Cette semaine : une prière courte pour votre projet… et un message respectueux à quelqu’un de compatible.",
+  },
+]
+
+export function getWeeklyMeditation(date = new Date()): WeeklyMeditation {
+  const idx = weekIndexUTC(date) % WEEKLY_MEDITATIONS.length
+  return WEEKLY_MEDITATIONS[idx]
 }
 
 export function pickFromCategory(

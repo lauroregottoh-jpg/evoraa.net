@@ -4,6 +4,7 @@ import * as React from "react"
 import Link from "next/link"
 import { MemberShell } from "@/components/layout/MemberShell"
 import { DailyEditorialCard } from "@/components/dashboard/FarataHomeBlocks"
+import { EvaWeeklyReflection } from "@/components/dashboard/EvaWeeklyReflection"
 import {
   EDITORIAL_FILTERS,
   getBrowsableEditorialPreview,
@@ -32,14 +33,15 @@ export default function InspirationPage() {
             Inspiration
           </p>
           <h1 className="font-serif text-3xl font-bold text-foreground">
-            Inspiration du jour
+            Inspiration
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
-            Chaque jour, un contenu nouveau vous est proposé. Ci-dessous, un aperçu limité
-            (environ une douzaine) — le reste se découvre au fil des jours, pour garder chaque
-            lecture utile.
+            Contenu du jour + une réflexion de la semaine claire et pratique.
+            Les filtres ci-dessous aident à feuilleter l’aperçu.
           </p>
         </header>
+
+        <EvaWeeklyReflection />
 
         <section className="space-y-3">
           <div className="flex items-center gap-2 px-1">
@@ -52,10 +54,10 @@ export default function InspirationPage() {
         <section className="space-y-3">
           <div className="flex items-end justify-between gap-3 px-1">
             <h2 className="font-serif text-xl font-bold">Aperçu</h2>
-            <p className="text-xs text-muted-foreground">{items.length} contenus ouverts</p>
+            <p className="text-xs text-muted-foreground">{items.length} contenus</p>
           </div>
 
-          <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-thin">
+          <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
             {EDITORIAL_FILTERS.map((f) => (
               <button
                 key={f.id}
@@ -81,21 +83,28 @@ export default function InspirationPage() {
 
           <div className="rounded-2xl border border-dashed border-border bg-secondary/30 px-4 py-5 text-center space-y-2">
             <Lock className="h-4 w-4 mx-auto text-muted-foreground" />
-            <p className="text-sm font-semibold text-foreground">Le reste arrive au fil des jours</p>
+            <p className="text-sm font-semibold text-foreground">
+              Le reste arrive au fil des jours
+            </p>
             <p className="text-xs text-muted-foreground max-w-md mx-auto leading-relaxed">
-              Revenez demain pour un nouveau contenu. Pour aller plus loin dans la préparation :
+              Revenez demain pour un nouveau contenu du jour. Pour aller plus loin :
               Académie du mariage.
             </p>
           </div>
         </section>
 
         <p className="text-center text-xs text-muted-foreground px-4">
-          Envie d&apos;aller plus loin ?{" "}
-          <Link href="/academie-mariage" className="text-primary font-semibold underline-offset-2 hover:underline">
+          <Link
+            href="/academie-mariage"
+            className="text-primary font-semibold underline-offset-2 hover:underline"
+          >
             Académie du mariage
           </Link>
           {" · "}
-          <Link href="/help" className="text-primary font-semibold underline-offset-2 hover:underline">
+          <Link
+            href="/help"
+            className="text-primary font-semibold underline-offset-2 hover:underline"
+          >
             Parler à EVA
           </Link>
         </p>
