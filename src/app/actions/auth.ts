@@ -197,6 +197,19 @@ export async function loginAction(formData: FormData) {
         const unlocked = await confirmEmailAndSignIn(supabase, email, password)
         if (unlocked.ok) {
           await clearLoginFailures(email)
+          try {
+            const {
+              data: { user: syncedUser },
+            } = await supabase.auth.getUser()
+            if (syncedUser) {
+              const { ensureOAuthProfile } = await import(
+                "@/lib/auth/ensureOAuthProfile"
+              )
+              await ensureOAuthProfile({ user: syncedUser, supabase })
+            }
+          } catch (e) {
+            console.error("[login] soft-confirm name sync", e)
+          }
           const nextPath = await resolveLoginDestination({
             userId: unlocked.userId,
             email,
@@ -229,6 +242,14 @@ export async function loginAction(formData: FormData) {
     }
 
     await clearLoginFailures(email)
+
+    // Sync prénom/nom Auth → profiles (Google / metadata) avant redirection
+    try {
+      const { ensureOAuthProfile } = await import("@/lib/auth/ensureOAuthProfile")
+      await ensureOAuthProfile({ user: data.user, supabase })
+    } catch (e) {
+      console.error("[login] profile name sync", e)
+    }
 
     const nextPath = await resolveLoginDestination({
       userId: data.user.id,

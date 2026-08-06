@@ -41,6 +41,7 @@ type FilterStatus =
   | "rejected"
   | "incomplete"
   | "tests_incomplete"
+  | "no_name"
 
 type MatchRow = {
   id: string
@@ -199,6 +200,10 @@ export function AdminUsersValidationTable({
       if (filter === "incomplete" && u.missing.length === 0) return false
       if (filter === "tests_incomplete" && (u.pillarsCompleted ?? 0) >= 5)
         return false
+      if (filter === "no_name") {
+        const sansNom = u.name === "Sans nom" || !String(u.firstName || "").trim()
+        if (!sansNom) return false
+      }
       if (noPhotoOnly && u.hasAvatar) return false
       if (u.completion < minCompletion) return false
       if (cityNeedle && !u.city.toLowerCase().includes(cityNeedle)) return false
@@ -319,22 +324,65 @@ export function AdminUsersValidationTable({
     }
   }
 
-  const bulkApprove = () =>
-    run("bulk-approve", async () => {
+  const applyBulkStatus = (
+    key: string,
+    ids: string[],
+    status: "approved" | "rejected" | "pending",
+    label: string
+  ) =>
+    run(key, async () => {
+      if (ids.length === 0) return { error: "Aucun profil dans la vue actuelle." }
       const res = await adminBulkUpdateModerationStatus({
-        profileIds: checkedIds,
-        status: "approved",
+        profileIds: ids,
+        status,
       })
       if (res.error) return res
+      const idSet = new Set(ids)
       setRows((prev) =>
-        prev.map((u) =>
-          checked[u.id] ? { ...u, status: "approved", missing: u.missing } : u
-        )
+        prev.map((u) => (idSet.has(u.id) ? { ...u, status, missing: u.missing } : u))
       )
-      setFlash(`${res.ok ?? checkedIds.length} profil(s) validés`)
+      setFlash(`${res.ok ?? ids.length} profil(s) ${label}`)
       setChecked({})
       return { success: true }
     })
+
+  const bulkApprove = () =>
+    applyBulkStatus("bulk-approve", checkedIds, "approved", "validés")
+
+  const bulkReject = () =>
+    applyBulkStatus("bulk-reject", checkedIds, "rejected", "invalidés")
+
+  const approveAllFiltered = () => {
+    if (
+      !window.confirm(
+        `Valider les ${filtered.length} profil(s) visibles dans le filtre actuel ?`
+      )
+    ) {
+      return
+    }
+    void applyBulkStatus(
+      "approve-all-filtered",
+      filtered.map((u) => u.id),
+      "approved",
+      "validés"
+    )
+  }
+
+  const rejectAllFiltered = () => {
+    if (
+      !window.confirm(
+        `Invalider (rejeter) les ${filtered.length} profil(s) visibles ? Action sensible.`
+      )
+    ) {
+      return
+    }
+    void applyBulkStatus(
+      "reject-all-filtered",
+      filtered.map((u) => u.id),
+      "rejected",
+      "invalidés"
+    )
+  }
 
   const bulkMessage = () =>
     run("bulk-msg", async () => {
@@ -383,6 +431,7 @@ export function AdminUsersValidationTable({
           {(
             [
               ["pending", `À valider (${pendingCount})`],
+              ["no_name", "Sans nom"],
               ["incomplete", "Infos manquantes"],
               ["tests_incomplete", "Tests incomplets"],
               ["approved", "Validés"],
@@ -405,6 +454,37 @@ export function AdminUsersValidationTable({
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-2 rounded-xl border border-border bg-secondary/30 px-4 py-3">
+        <span className="text-xs text-muted-foreground mr-1">
+          Actions sur la vue ({filtered.length})
+        </span>
+        <Button
+          size="sm"
+          disabled={
+            filtered.length === 0 ||
+            busy === "approve-all-filtered" ||
+            busy === "bulk-approve"
+          }
+          onClick={approveAllFiltered}
+        >
+          <CheckCircle2 className="h-3.5 w-3.5 mr-1" />
+          Tout valider
+        </Button>
+        <Button
+          size="sm"
+          variant="destructive"
+          disabled={
+            filtered.length === 0 ||
+            busy === "reject-all-filtered" ||
+            busy === "bulk-reject"
+          }
+          onClick={rejectAllFiltered}
+        >
+          <XCircle className="h-3.5 w-3.5 mr-1" />
+          Tout invalider
+        </Button>
       </div>
 
       {flash && (
@@ -475,6 +555,15 @@ export function AdminUsersValidationTable({
           >
             <CheckCircle2 className="h-3.5 w-3.5 mr-1" />
             Valider la sélection
+          </Button>
+          <Button
+            size="sm"
+            variant="destructive"
+            disabled={busy === "bulk-reject"}
+            onClick={bulkReject}
+          >
+            <XCircle className="h-3.5 w-3.5 mr-1" />
+            Invalider la sélection
           </Button>
           <Button
             size="sm"
@@ -569,11 +658,17 @@ export function AdminUsersValidationTable({
                       </td>
                       <td className="py-3.5 px-4">
                         <p className="font-semibold text-foreground">{u.name}</p>
-                        <p className="text-xs text-muted-foreground mt-0.5">
-                          {u.gender !== "?" ? u.gender : "—"}
-                          {u.age != null ? ` · ${u.age} ans` : ""}
-                          {u.pastorName ? ` · Past. ${u.pastorName}` : ""}
-                        </p>
+                        {u.name === "Sans nom" || !u.firstName ? (
+                          <p className="text-xs text-amber-700 dark:text-amber-300 mt-0.5 truncate max-w-[200px]">
+                            {u.email || "E-mail non hydraté"} · sync nom manquante
+                          </p>
+                        ) : (
+                          <p className="text-xs text-muted-foreground mt-0.5">
+                            {u.gender !== "?" ? u.gender : "—"}
+                            {u.age != null ? ` · ${u.age} ans` : ""}
+                            {u.pastorName ? ` · Past. ${u.pastorName}` : ""}
+                          </p>
+                        )}
                       </td>
                       <td className="py-3.5 px-4 text-xs text-muted-foreground max-w-[180px] truncate hidden sm:table-cell">
                         {u.email || "—"}
