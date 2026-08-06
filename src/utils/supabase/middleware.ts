@@ -32,6 +32,7 @@ const PROTECTED_PREFIXES = [
   '/feedback',
   '/inspiration',
   '/premium',
+  '/coffre-premium',
 ]
 
 const ADMIN_PREFIXES = [OPS_CONSOLE_PATH, '/moderation']

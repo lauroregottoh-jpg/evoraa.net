@@ -80,6 +80,22 @@ export default async function PremiumPage() {
           isPaid={Boolean(usage?.isPaid)}
         />
 
+        <div className="rounded-2xl border border-border bg-white p-5 sm:p-6 shadow-card flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
+          <div className="space-y-1">
+            <p className="font-serif text-xl font-bold">Le Coffre Premium</p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Guides, journaux et exercices exclusifs — 3 au choix dès Alliance,
+              puis +2 chaque mois.
+            </p>
+          </div>
+          <Link
+            href="/coffre-premium"
+            className="shrink-0 inline-flex h-10 items-center justify-center rounded-xl bg-primary text-primary-foreground px-4 text-sm font-semibold"
+          >
+            Ouvrir le Coffre
+          </Link>
+        </div>
+
         <BoostSection />
 
         <AlliancePrioritySupport isPaid={Boolean(usage?.isPaid)} />

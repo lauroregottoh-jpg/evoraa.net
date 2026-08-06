@@ -70,6 +70,20 @@ const SECTIONS: Array<{ id: string; title: string; items: FaqItem[] }> = [
         q: "Académie gratuite / premium ?",
         a: "Une partie des modules reste accessible gratuitement ; le parcours premium (contenu enrichi) arrivera ensuite. Pour l’instant la structure est en place.",
       },
+      {
+        q: "Qu’est-ce que Le Coffre Premium ?",
+        a: (
+          <>
+            Une bibliothèque exclusive de PDF (guides, journaux, prières…). Avec Alliance :
+            3 ressources au choix dès le départ, puis +2 chaque mois. Les membres Découverte
+            voient le catalogue verrouillé. Accès :{" "}
+            <Link href="/coffre-premium" className="text-primary font-semibold underline">
+              Le Coffre Premium
+            </Link>
+            .
+          </>
+        ),
+      },
     ],
   },
 ]

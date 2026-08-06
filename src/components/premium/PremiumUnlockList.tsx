@@ -7,6 +7,7 @@ import {
   Crown,
   Eye,
   Heart,
+  Library,
   Lock,
   MessageCircle,
   MessagesSquare,
@@ -54,6 +55,12 @@ const FEATURES = [
     title: "Échanges avec Eva",
     free: "3 questions / jour",
     alliance: "20 questions / jour",
+  },
+  {
+    icon: Library,
+    title: "Le Coffre Premium",
+    free: "Visible, verrouillé",
+    alliance: "3 au choix, puis +2 / mois",
   },
   {
     icon: Crown,

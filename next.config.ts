@@ -24,6 +24,10 @@ const nextConfig = {
   serverActions: {
     bodySizeLimit: "6mb",
   },
+  // Inclure les PDF du Coffre dans le bundle serveur (route download).
+  outputFileTracingIncludes: {
+    "/coffre-premium/download/[resourceId]": ["./docs/COFFRE PREMIUM/**/*"],
+  },
   images: {
     remotePatterns: [
       {

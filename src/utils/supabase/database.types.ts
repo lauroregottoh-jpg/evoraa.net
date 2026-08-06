@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      coffre_unlocks: {
+        Row: {
+          id: string
+          resource_id: string
+          unlocked_at: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          resource_id: string
+          unlocked_at?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          resource_id?: string
+          unlocked_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       conversations: {
         Row: {
           created_at: string | null

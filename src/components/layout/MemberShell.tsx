@@ -21,6 +21,7 @@ import {
   MessageSquareHeart,
   Phone,
   Sun,
+  Library,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { DevSessionSwitcher } from "@/components/dev/DevSessionSwitcher";
@@ -35,6 +36,7 @@ const PRIMARY = [
   { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/assessments", label: "Tests", icon: ClipboardList },
   { href: "/premium", label: "Alliance", icon: Crown, accent: true },
+  { href: "/coffre-premium", label: "Coffre", icon: Library },
   { href: "/profile", label: "Profil", icon: User },
   { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
 ] as const;

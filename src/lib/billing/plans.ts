@@ -84,6 +84,7 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
     features: [
       "Rapport personnalisé complet (5 piliers)",
       "Axes d’amélioration priorisés + Académie",
+      "Le Coffre Premium (3 ressources au choix, puis +2 / mois)",
       "15 suggestions de compatibilité / jour (vs 3)",
       "25 nouvelles conversations sérieuses / mois (vs 5)",
       "100 messages / conversation (vs 5)",
