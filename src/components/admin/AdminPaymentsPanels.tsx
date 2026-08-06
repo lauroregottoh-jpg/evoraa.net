@@ -12,6 +12,7 @@ import {
 import { PaymentModePicker } from "@/components/billing/PaymentModePicker"
 import type { BictorysPaymentMode } from "@/lib/billing/bictorys"
 import { bictorysPaymentModeLabel } from "@/lib/billing/bictorys"
+import { OPS_CONSOLE_PATH } from "@/lib/admin/consolePath"
 import { ExternalLink, FlaskConical, Radio } from "lucide-react"
 
 type PaymentRow = {
@@ -179,6 +180,12 @@ export function BictorysSandboxPanel({
         <p className="text-xs text-muted-foreground">
           Carte test : <strong>4242 4242 4242 4242</strong> · Mobile Money OTP :{" "}
           <strong>123456</strong> · Montant <strong>13</strong> XOF = échec forcé.
+        </p>
+        <p className="text-xs">
+          Micro-test live 150 FCFA :{" "}
+          <a href={`${OPS_CONSOLE_PATH}/test-pay`} className="text-primary underline font-medium">
+            page dédiée
+          </a>
         </p>
 
         {isFullAdmin && (
