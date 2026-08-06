@@ -12,9 +12,17 @@ const MAX_BYTES = 5 * 1024 * 1024
 export type ProfileEditorData = {
   profileId: string
   firstName: string
+  lastName: string
+  gender: string
+  birthDate: string
+  city: string
+  country: string
+  denomination: string
+  churchAttended: string
   testimony: string
   favoriteVerses: string
   completionPercentage: number
+  assessmentsDone: number
   photos: Array<{
     id: string
     photoUrl: string
@@ -35,7 +43,9 @@ export async function getMyProfileEditorData(): Promise<{
 
   const { data: profile, error } = await supabase
     .from("profiles")
-    .select("id, first_name, testimony, matching_indicators, completion_percentage")
+    .select(
+      "id, first_name, last_name, gender, birth_date, city, country, denomination, church_attended, testimony, matching_indicators, completion_percentage, psychometric_results"
+    )
     .eq("user_id", user.id)
     .maybeSingle()
 
@@ -48,6 +58,18 @@ export async function getMyProfileEditorData(): Promise<{
       ? (profile.matching_indicators as Record<string, unknown>)
       : {}
 
+  const psy =
+    profile.psychometric_results && typeof profile.psychometric_results === "object"
+      ? (profile.psychometric_results as Record<string, unknown>)
+      : {}
+  const assessmentsDone = [
+    "personality",
+    "spiritual",
+    "relationship",
+    "couple_life",
+    "finances",
+  ].filter((k) => psy[k] != null).length
+
   const { data: photos } = await supabase
     .from("user_photos")
     .select("id, photo_url, status, is_primary")
@@ -58,10 +80,20 @@ export async function getMyProfileEditorData(): Promise<{
   return {
     data: {
       profileId: profile.id,
-      firstName: profile.first_name || "Membre",
+      firstName: profile.first_name || "",
+      lastName: profile.last_name || "",
+      gender: profile.gender || "",
+      birthDate: profile.birth_date
+        ? String(profile.birth_date).slice(0, 10)
+        : "",
+      city: profile.city || "",
+      country: profile.country || "",
+      denomination: profile.denomination || "",
+      churchAttended: profile.church_attended || "",
       testimony: profile.testimony || "",
       favoriteVerses: String(indicators.favorite_verses || ""),
       completionPercentage: profile.completion_percentage ?? 0,
+      assessmentsDone,
       photos: (photos ?? []).map((p) => ({
         id: p.id,
         photoUrl: p.photo_url,
@@ -73,6 +105,14 @@ export async function getMyProfileEditorData(): Promise<{
 }
 
 export async function saveProfileAction(payload: {
+  firstName: string
+  lastName: string
+  gender: string
+  birthDate: string
+  city: string
+  country: string
+  denomination: string
+  churchAttended: string
   testimony: string
   favoriteVerses: string
 }): Promise<{ error?: string; success?: boolean; completionPercentage?: number }> {
@@ -82,10 +122,23 @@ export async function saveProfileAction(payload: {
   } = await supabase.auth.getUser()
   if (!user) return { error: "Non authentifié" }
 
+  const firstName = payload.firstName.trim().slice(0, 80)
+  const lastName = payload.lastName.trim().slice(0, 80)
+  const city = payload.city.trim().slice(0, 120)
+  const country = payload.country.trim().slice(0, 80)
+  const denomination = payload.denomination.trim().slice(0, 120)
+  const churchAttended = payload.churchAttended.trim().slice(0, 160)
   const testimony = payload.testimony.trim()
-  const favoriteVerses = payload.favoriteVerses.trim()
-  if (testimony.length < 40) {
-    return { error: "Votre témoignage doit faire au moins 40 caractères." }
+  const favoriteVerses = payload.favoriteVerses.trim().slice(0, 300)
+  const genderRaw = payload.gender.trim().toUpperCase()
+  const gender =
+    genderRaw === "M" || genderRaw === "F" ? genderRaw : null
+  const birthDate = payload.birthDate.trim().slice(0, 10)
+
+  if (!firstName) return { error: "Le prénom est requis." }
+  if (!city) return { error: "La ville est requise." }
+  if (testimony && testimony.length < 40) {
+    return { error: "Le témoignage doit faire au moins 40 caractères (ou laissez-le vide)." }
   }
 
   const { data: profile } = await supabase
@@ -108,12 +161,25 @@ export async function saveProfileAction(payload: {
     .is("deleted_at", null)
 
   const hasPhoto = (photoCount ?? 0) > 0
-  const completion = hasPhoto && testimony.length >= 40 ? 100 : hasPhoto ? 90 : 85
+  const hasTestimony = testimony.length >= 40
+  let completion = 40
+  if (firstName && city) completion = 55
+  if (gender && birthDate) completion = 70
+  if (hasTestimony) completion = Math.max(completion, 85)
+  if (hasPhoto) completion = Math.max(completion, hasTestimony ? 100 : 90)
 
   const { error } = await supabase
     .from("profiles")
     .update({
-      testimony,
+      first_name: firstName,
+      last_name: lastName || null,
+      gender,
+      birth_date: birthDate || null,
+      city,
+      country: country || null,
+      denomination: denomination || null,
+      church_attended: churchAttended || null,
+      testimony: testimony || null,
       matching_indicators: {
         ...prev,
         favorite_verses: favoriteVerses,
@@ -128,6 +194,7 @@ export async function saveProfileAction(payload: {
 
   revalidatePath("/profile")
   revalidatePath("/compatibility")
+  revalidatePath("/dashboard")
   return { success: true, completionPercentage: completion }
 }
 

@@ -19,10 +19,10 @@ export default async function ProfilePage() {
             Mon espace personnel
           </Badge>
           <h1 className="text-3xl sm:text-4xl font-serif font-bold text-foreground">
-            Édition de votre profil
+            Mon profil
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Enrichissez votre témoignage et vos photos. Tout est sauvegardé dans votre compte KELIAA.
+            Vos infos (préremplies), photo et questionnaires — tout au même endroit.
           </p>
         </div>
 

@@ -19,6 +19,7 @@ import {
   BookHeart,
   LogOut,
   MessageSquareHeart,
+  Phone,
   Sun,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
@@ -39,6 +40,7 @@ const PRIMARY = [
 const SECONDARY = [
   { href: "/profile", label: "Profil", icon: User },
   { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
+  { href: "/coaching", label: "Coaching", icon: Phone },
   { href: "/inspiration", label: "Inspiration", icon: BookHeart },
   { href: "/dashboard#invite", label: "Inviter", icon: Share2 },
   { href: "/notifications", label: "Alertes", icon: Bell },
@@ -62,6 +64,7 @@ const ACCOUNT_HREFS = [
   "/help",
   "/settings",
   "/academie-mariage",
+  "/coaching",
 ];
 
 export type MemberShellProps = {
