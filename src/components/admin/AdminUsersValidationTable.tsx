@@ -12,6 +12,7 @@ import {
   adminListMemberTeamMessages,
   adminLoadMoreUsers,
   adminResolveUserEmails,
+  adminResyncMissingNames,
   adminSendMemberFeedback,
   adminUpdateModerationStatus,
 } from "@/app/actions/admin"
@@ -28,6 +29,7 @@ import {
   CheckCircle2,
   Download,
   Loader2,
+  RefreshCw,
   Search,
   Send,
   Upload,
@@ -484,6 +486,47 @@ export function AdminUsersValidationTable({
         >
           <XCircle className="h-3.5 w-3.5 mr-1" />
           Tout invalider
+        </Button>
+        <Button
+          size="sm"
+          variant="outline"
+          disabled={busy === "resync-names"}
+          onClick={() =>
+            run("resync-names", async () => {
+              const res = await adminResyncMissingNames()
+              if (res.error) return res
+              if (res.patches?.length) {
+                const byId = new Map(
+                  res.patches.map((p) => [p.profileId, p] as const)
+                )
+                setRows((prev) =>
+                  prev.map((u) => {
+                    const p = byId.get(u.id)
+                    if (!p) return u
+                    const name =
+                      [p.firstName, p.lastName].filter(Boolean).join(" ") ||
+                      u.name
+                    return {
+                      ...u,
+                      firstName: p.firstName || u.firstName,
+                      lastName: p.lastName || u.lastName,
+                      name,
+                      email: p.email || u.email,
+                    }
+                  })
+                )
+              }
+              setFlash(res.message || "Sync noms terminée.")
+              return { success: true, message: res.message }
+            })
+          }
+        >
+          {busy === "resync-names" ? (
+            <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" />
+          ) : (
+            <RefreshCw className="h-3.5 w-3.5 mr-1" />
+          )}
+          Resync noms Auth
         </Button>
       </div>
 

@@ -948,6 +948,133 @@ export async function adminBulkUpdateModerationStatus(input: {
   return { success: true, ok, failed }
 }
 
+/**
+ * Resync prénom/nom (+ e-mail affiché) depuis Auth pour les profils « Sans nom ».
+ * Écrit en base ; l’admin rafraîchit ensuite la liste.
+ */
+export async function adminResyncMissingNames() {
+  const gate = await requireFullAdmin()
+  if (gate.error || !gate.supabase) return { error: gate.error || "Acces refuse." }
+
+  const admin = createAdminClient()
+  const { namesFromAuthMetadata } = await import("@/lib/auth/ensureOAuthProfile")
+
+  const { data: profiles, error: listErr } = await admin
+    .from("profiles")
+    .select("id, user_id, first_name, last_name")
+    .order("created_at", { ascending: false })
+    .limit(2000)
+
+  if (listErr) return { error: listErr.message }
+
+  const targets = (profiles ?? []).filter(
+    (p) => !String(p.first_name || "").trim()
+  )
+  if (targets.length === 0) {
+    return {
+      success: true,
+      updated: 0,
+      stillMissing: 0,
+      scanned: 0,
+      message: "Aucun profil sans prénom à synchroniser.",
+      patches: [] as Array<{
+        profileId: string
+        userId: string
+        firstName: string
+        lastName: string
+        email: string | null
+      }>,
+    }
+  }
+
+  const byUserId = new Map(
+    targets.map((t) => [t.user_id as string, t] as const)
+  )
+
+  const authById = new Map<
+    string,
+    { firstName: string | null; lastName: string | null; email: string | null }
+  >()
+
+  for (let page = 1; page <= 5; page++) {
+    const { data, error } = await admin.auth.admin.listUsers({
+      page,
+      perPage: 1000,
+    })
+    if (error || !data?.users?.length) break
+    for (const au of data.users) {
+      if (!byUserId.has(au.id)) continue
+      const n = namesFromAuthMetadata(
+        au.user_metadata as Record<string, unknown>
+      )
+      authById.set(au.id, {
+        firstName: n.firstName,
+        lastName: n.lastName,
+        email: au.email ?? null,
+      })
+    }
+    if (data.users.length < 1000) break
+  }
+
+  let updated = 0
+  let stillMissing = 0
+  const patches: Array<{
+    profileId: string
+    userId: string
+    firstName: string
+    lastName: string
+    email: string | null
+  }> = []
+
+  for (const [userId, row] of byUserId) {
+    const fromAuth = authById.get(userId)
+    const firstName = fromAuth?.firstName?.trim() || ""
+    const lastName = fromAuth?.lastName?.trim() || ""
+    if (!firstName && !lastName) {
+      stillMissing += 1
+      continue
+    }
+    const { error } = await admin
+      .from("profiles")
+      .update({
+        first_name: firstName || null,
+        last_name: lastName || null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("user_id", userId)
+    if (!error) {
+      updated += 1
+      patches.push({
+        profileId: row.id as string,
+        userId,
+        firstName,
+        lastName,
+        email: fromAuth?.email ?? null,
+      })
+    } else {
+      stillMissing += 1
+    }
+  }
+
+  const { logAdminAction } = await import("@/lib/admin/audit")
+  await logAdminAction({
+    action: "resync_missing_names",
+    targetType: "profiles",
+    targetId: null,
+    meta: { scanned: byUserId.size, updated, stillMissing },
+  })
+
+  revalidateOps()
+  return {
+    success: true,
+    updated,
+    stillMissing,
+    scanned: byUserId.size,
+    patches,
+    message: `${updated} nom(s) synchronisé(s) · ${stillMissing} encore sans nom Auth`,
+  }
+}
+
 /** Message groupé → notifications in-app. */
 export async function adminBulkSendMemberFeedback(input: {
   targets: Array<{ profileId: string; userId: string }>

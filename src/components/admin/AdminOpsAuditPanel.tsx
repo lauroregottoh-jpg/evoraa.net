@@ -31,7 +31,8 @@ const ACTION_LABELS: Record<string, string> = {
   create_member: "Création membre",
   review_church_reco: "Reco église",
   send_member_feedback: "Message équipe",
-  bulk_member_feedback: "Message équipe (bulk)",
+    resync_missing_names: "Resync noms Auth",
+    bulk_member_feedback: "Message équipe (bulk)",
   member_feedback_send: "Message équipe",
   member_feedback_bulk_send: "Message équipe (bulk)",
 }
