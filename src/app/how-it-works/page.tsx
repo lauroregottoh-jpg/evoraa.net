@@ -102,7 +102,6 @@ export default function HowItWorksPage() {
         imageSrc="/home/story-community.png"
         imageClassName="object-[center_30%] sm:object-center"
         imageAlt="Communauté de personnes réunies dans un cadre chaleureux"
-        imageClassName="object-center"
         overlayClassName="from-black/75 via-black/40 to-black/20"
       >
         <div className="space-y-5 pt-2">

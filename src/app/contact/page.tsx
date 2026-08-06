@@ -87,7 +87,6 @@ function ContactPageInner() {
         imageSrc="/home/story-community.png"
         imageClassName="object-[center_30%] sm:object-center"
         imageAlt="Conseillère KELIAA disponible pour accompagner les membres"
-        imageClassName="object-center"
       >
         <div className="pt-6 space-y-4">
           <div className="flex flex-wrap items-center gap-3">
