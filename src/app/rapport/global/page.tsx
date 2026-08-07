@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/server"
 import { getUsageSnapshot } from "@/lib/billing/usage"
 import { buildLivingPersonalizedReport } from "@/lib/rapport/personalized/buildLivingReport"
 import { ReportDocumentView } from "@/components/rapport/ReportDocumentView"
-import { AllianceRapportGate } from "@/components/rapport/AllianceRapportGate"
+import { DiscoveryRapportTeaser } from "@/components/rapport/DiscoveryRapportTeaser"
 import type { AssessmentSlug } from "@/lib/assessments/questionBank"
 
 export const dynamic = "force-dynamic"
@@ -55,7 +55,11 @@ export default async function RapportGlobalPage({
 
   const isAlliance = Boolean(usage?.isPaid)
   if (!isAlliance) {
-    return <AllianceRapportGate nextPath="/rapport/global" />
+    return (
+      <MemberPage>
+        <DiscoveryRapportTeaser firstName={profile?.first_name} />
+      </MemberPage>
+    )
   }
 
   const psych = profile?.psychometric_results as {

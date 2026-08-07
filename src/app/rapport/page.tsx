@@ -4,12 +4,12 @@ import { createClient } from "@/utils/supabase/server"
 import { getUsageSnapshot } from "@/lib/billing/usage"
 import { buildLivingPersonalizedReport } from "@/lib/rapport/personalized/buildLivingReport"
 import { RapportHubView } from "@/components/rapport/RapportHubView"
-import { AllianceRapportGate } from "@/components/rapport/AllianceRapportGate"
+import { DiscoveryRapportTeaser } from "@/components/rapport/DiscoveryRapportTeaser"
 import type { AssessmentSlug } from "@/lib/assessments/questionBank"
 
 export const dynamic = "force-dynamic"
 
-/** Hub Rapport — Alliance uniquement ; se reconstruit à chaque visite depuis les tests. */
+/** Hub Rapport — Alliance : document vivant ; Découverte : aperçu flouté. */
 export default async function RapportPage() {
   const supabase = await createClient()
   const {
@@ -24,7 +24,7 @@ export default async function RapportPage() {
             Rapport Personnalisé Alliance™
           </h1>
           <p className="text-sm text-muted-foreground">
-            Connectez-vous pour voir votre rapport vivant.
+            Connectez-vous pour voir votre rapport.
           </p>
           <Link
             href="/login?next=/rapport"
@@ -47,8 +47,13 @@ export default async function RapportPage() {
   ])
 
   const isAlliance = Boolean(usage?.isPaid)
+
   if (!isAlliance) {
-    return <AllianceRapportGate nextPath="/rapport" />
+    return (
+      <MemberPage>
+        <DiscoveryRapportTeaser firstName={profile?.first_name} />
+      </MemberPage>
+    )
   }
 
   const psych = profile?.psychometric_results as {

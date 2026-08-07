@@ -53,9 +53,18 @@ export default async function AssessmentsHubPage() {
     progress.find((p) => p.canStart && !p.completed) ??
     progress.find((p) => p.canStart)
 
+  const discoveryCards = living.cards.map((c) => {
+    if (isAlliance) return c
+    if (c.state === "done") return c
+    if (c.tier === "essential") {
+      return { ...c, state: "locked" as const }
+    }
+    return c
+  })
+
   return (
     <MemberPage>
-      <div className="relative space-y-8 py-2 max-w-4xl mx-auto">
+      <div className="relative space-y-10 py-2 max-w-4xl mx-auto">
         <header className="relative z-10 overflow-hidden rounded-[1.75rem] border border-primary/20 bg-gradient-to-br from-[#5C1F28] via-[#722F37] to-[#3D141A] p-6 sm:p-8 text-[#F8F4EE] shadow-elevated">
           <div
             aria-hidden
@@ -63,15 +72,15 @@ export default async function AssessmentsHubPage() {
           />
           <div className="relative z-10 space-y-4">
             <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
-              Tests · Matching & Rapport
+              {isAlliance ? "Tests · Matching & Rapport" : "Espace Découverte · Tests"}
             </p>
             <h1 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
               Choisissez un test
             </h1>
             <p className="text-sm text-white/85 leading-relaxed max-w-2xl">
               {isAlliance
-                ? "Avec Alliance, chaque test compte double : il alimente le Matching et ouvre une clé de votre Rapport Personnalisé (~18 pages). Les 10 clés ci-dessous sont le cœur de votre bilan."
-                : "Formule Découverte : les 5 tests de compatibilité. Les 10 clés Alliance du Rapport Personnalisé sont visibles mais verrouillées."}
+                ? "Avec Alliance, chaque test Matching alimente aussi votre Rapport Personnalisé. Les 10 clés ci-dessous ouvrent les chapitres du bilan."
+                : "En Découverte, commencez par les 5 tests de compatibilité. Les 10 clés du Rapport et Premium+ restent visibles en aperçu verrouillé."}
             </p>
 
             {isAlliance ? (
@@ -79,18 +88,13 @@ export default async function AssessmentsHubPage() {
                 <div className="flex items-center gap-2">
                   <KeyRound className="h-4 w-4 text-[#F3D9A4]" />
                   <p className="text-[11px] font-bold uppercase tracking-widest text-[#F3D9A4]">
-                    Les 10 clés du Rapport Personnalisé Alliance
+                    Progression des 10 clés
                   </p>
                 </div>
-                <p className="text-xs text-white/75 leading-relaxed">
-                  Personnalité, communication, conflits, intelligence émotionnelle,
-                  valeurs, vision du mariage, projet de vie, spiritualité, finances,
-                  famille — chaque clé ouvre un chapitre. Complétez-les pour un
-                  rapport premium, section par section.
-                </p>
                 <ol className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
                   {ESSENTIAL_ASSESSMENTS.map((a) => {
-                    const done = living.cards.find((c) => c.id === a.id)?.state === "done"
+                    const done =
+                      living.cards.find((c) => c.id === a.id)?.state === "done"
                     return (
                       <li
                         key={a.id}
@@ -103,7 +107,10 @@ export default async function AssessmentsHubPage() {
                         <span className="text-[#F3D9A4] font-bold">
                           {String(a.order).padStart(2, "0")}
                         </span>{" "}
-                        {a.title.replace(/^Personnalité relationnelle$/, "Personnalité")}
+                        {a.title.replace(
+                          /^Personnalité relationnelle$/,
+                          "Personnalité"
+                        )}
                       </li>
                     )
                   })}
@@ -128,7 +135,7 @@ export default async function AssessmentsHubPage() {
                   className="inline-flex h-12 items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-5 text-sm font-semibold"
                 >
                   <Crown className="h-4 w-4 text-[#F3D9A4]" />
-                  Débloquer les tests Alliance
+                  Débloquer Alliance
                 </Link>
               ) : (
                 <Link
@@ -139,8 +146,11 @@ export default async function AssessmentsHubPage() {
                 </Link>
               )}
               <p className="text-xs text-white/65">
-                Matching {doneCount}/5 · Rapport {living.completenessPercent}% ·
-                maj {ASSESSMENT_RETAKE_COOLDOWN_DAYS} j
+                Matching {doneCount}/5
+                {isAlliance
+                  ? ` · Rapport ${living.completenessPercent}%`
+                  : ""}{" "}
+                · maj {ASSESSMENT_RETAKE_COOLDOWN_DAYS} j
               </p>
             </div>
           </div>
@@ -159,45 +169,48 @@ export default async function AssessmentsHubPage() {
           <p className="relative z-10 text-sm text-destructive">{error}</p>
         ) : null}
 
-        <section className="relative z-10 space-y-3">
+        {/* ——— 1. COMPATIBILITÉ · 5 CLÉS (bien distinct, grand) ——— */}
+        <section className="relative z-10 space-y-4 rounded-[1.75rem] border-2 border-primary/25 bg-gradient-to-br from-white via-white to-primary/[0.04] p-5 sm:p-7 shadow-card">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-primary inline-flex items-center gap-1.5">
-              <Sparkles className="h-3.5 w-3.5" />
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary inline-flex items-center gap-1.5">
+              <Sparkles className="h-4 w-4" />
               Formule Découverte
             </p>
-            <h2 className="font-serif text-2xl font-bold">
-              Tests de compatibilité (5 piliers)
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold mt-1 leading-tight">
+              Tests de compatibilité
             </h2>
-            <p className="text-sm text-muted-foreground mt-1">
-              Accessibles à tous — Matching + plusieurs chapitres du rapport.
+            <p className="text-base text-muted-foreground mt-2 max-w-2xl leading-relaxed">
+              <strong className="text-foreground">5 clés</strong> pour le
+              Matching — accessibles dès maintenant.
             </p>
           </div>
           <AssessmentPillarCards items={[...progress]} />
         </section>
 
+        {/* ——— 2. 10 CLÉS DU RAPPORT (une seule fois) ——— */}
         <section className="relative z-10 space-y-4">
           <div
             className={
               isAlliance
-                ? "rounded-2xl border border-[#B8954A]/35 bg-gradient-to-br from-[#B8954A]/12 via-white to-primary/[0.04] p-5 space-y-2"
-                : "rounded-2xl border border-accent/25 bg-accent/[0.07] p-5 space-y-2"
+                ? "rounded-2xl border border-[#B8954A]/35 bg-gradient-to-br from-[#B8954A]/12 via-white to-primary/[0.04] p-5 sm:p-6 space-y-2"
+                : "rounded-2xl border border-dashed border-accent/40 bg-accent/[0.06] p-5 sm:p-6 space-y-2"
             }
           >
-            <p className="text-[10px] font-bold uppercase tracking-widest text-accent inline-flex items-center gap-1.5">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent inline-flex items-center gap-1.5">
               {isAlliance ? (
-                <Crown className="h-3.5 w-3.5" />
+                <Crown className="h-4 w-4" />
               ) : (
-                <Lock className="h-3.5 w-3.5" />
+                <Lock className="h-4 w-4" />
               )}
               Formule Alliance
             </p>
-            <h2 className="font-serif text-2xl font-bold">
-              Les 10 clés · Évaluations du Rapport Personnalisé
+            <h2 className="font-serif text-3xl font-bold leading-tight">
+              Les 10 clés de votre rapport
             </h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
               {isAlliance
-                ? "Chaque clé ouvre un chapitre de votre rapport (forces, portrait, communication, spiritualité…). Cliquez pour faire le test Matching lié, puis lisez l’analyse dans Rapport complet."
-                : "Ces 10 clés sont le cœur d’Alliance. En Découverte elles restent visibles mais verrouillées — passez Alliance pour les ouvrir."}
+                ? "Chaque clé ouvre un chapitre de votre Rapport Personnalisé. Faites le test lié, puis lisez l’analyse dans le rapport global."
+                : "Aperçu verrouillé en Découverte. Passez Alliance pour ouvrir ces évaluations et alimenter automatiquement votre rapport."}
             </p>
             {!isAlliance ? (
               <Link
@@ -216,15 +229,34 @@ export default async function AssessmentsHubPage() {
             )}
           </div>
           <DiscoveryAssessmentCards
-            cards={living.cards.map((c) => {
-              if (isAlliance) return c
-              if (c.state === "done") return c
-              if (c.tier === "essential") {
-                return { ...c, state: "locked" as const }
-              }
-              return c
-            })}
+            cards={discoveryCards}
             isAlliance={isAlliance}
+            kinds={["essential"]}
+            showHeaders={false}
+          />
+        </section>
+
+        {/* ——— 3. PREMIUM+ À VENIR (bloc séparé) ——— */}
+        <section className="relative z-10 space-y-4 rounded-[1.75rem] border border-dashed border-accent/40 bg-gradient-to-br from-accent/[0.05] via-white to-white p-5 sm:p-7">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent inline-flex items-center gap-1.5">
+              <Crown className="h-4 w-4" />
+              Premium+ · À venir
+            </p>
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold mt-1">
+              Analyses approfondies
+            </h2>
+            <p className="text-sm text-muted-foreground mt-2 max-w-2xl leading-relaxed">
+              Langages d’amour, besoins émotionnels, stress, attachement… Ces
+              cartes arriveront bientôt. Elles ne font pas partie des 10 clés du
+              Rapport Alliance.
+            </p>
+          </div>
+          <DiscoveryAssessmentCards
+            cards={discoveryCards}
+            isAlliance={isAlliance}
+            kinds={["premium_plus"]}
+            showHeaders={false}
           />
         </section>
 
@@ -234,10 +266,21 @@ export default async function AssessmentsHubPage() {
             <Link href="/compatibility" className="underline font-semibold">
               Voir vos compatibilités
             </Link>
-            {" · "}
-            <Link href="/rapport/global" className="underline font-semibold">
-              Ouvrir le rapport
-            </Link>
+            {isAlliance ? (
+              <>
+                {" · "}
+                <Link href="/rapport/global" className="underline font-semibold">
+                  Ouvrir le rapport
+                </Link>
+              </>
+            ) : (
+              <>
+                {" · "}
+                <Link href="/premium" className="underline font-semibold">
+                  Débloquer le Rapport Alliance
+                </Link>
+              </>
+            )}
           </div>
         ) : null}
       </div>
