@@ -158,3 +158,27 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Barre de scroll visible sur le menu membre (bordeaux) */
+.member-sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(248, 244, 238, 0.45) rgba(255, 255, 255, 0.08);
+}
+.member-sidebar-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.member-sidebar-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  margin-block: 4px;
+}
+.member-sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(248, 244, 238, 0.4);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.member-sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(248, 244, 238, 0.6);
+  background-clip: padding-box;
+}

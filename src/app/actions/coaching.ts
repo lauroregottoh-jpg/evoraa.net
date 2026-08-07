@@ -46,7 +46,7 @@ export async function startCoachingCheckoutAction(input: {
   const pack = getCoachingPack(input.packId, minutes)
   if (!pack) return { error: "Pack coaching invalide." }
 
-  const objectiveLimit = minutes === 30 ? 2 : 3
+  const objectiveLimit = minutes === 30 ? 2 : 4
   const firstName = (input.brief?.firstName || "").trim().slice(0, 60)
   const lastName = (input.brief?.lastName || "").trim().slice(0, 60)
   const subject = (input.brief?.subject || "").trim().slice(0, 200)

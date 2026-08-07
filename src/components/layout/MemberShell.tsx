@@ -201,22 +201,16 @@ export function MemberShell({
     );
   };
 
-  const renderNav = (compact: boolean, forMobile = false) => (
-    <nav
-      className={cn(
-        "flex flex-col gap-0.5 flex-1 min-h-0 overflow-y-auto overflow-x-hidden scrollbar-none",
-        forMobile && "text-[#F8F4EE]"
-      )}
-      aria-label="Navigation membre"
-    >
+  const renderNavLinks = (compact: boolean) => (
+    <>
       {!compact ? (
-        <p className="px-3 pt-1 pb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/45 animate-in fade-in duration-300">
+        <p className="px-3 pt-1 pb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/45">
           Principale
         </p>
       ) : (
         <div className="h-3" />
       )}
-      {PRIMARY.map((item, i) => {
+      {PRIMARY.map((item) => {
         const Icon = item.icon;
         const accent = "accent" in item && item.accent;
         return (
@@ -225,11 +219,7 @@ export function MemberShell({
             href={item.href}
             onClick={go(item.href)}
             title={compact ? item.label : undefined}
-            className={cn(
-              navLinkClass(item.href, accent, compact),
-              "animate-in fade-in slide-in-from-left-2 fill-mode-both"
-            )}
-            style={{ animationDelay: `${Math.min(i, 8) * 30}ms` }}
+            className={navLinkClass(item.href, accent, compact)}
           >
             <Icon
               className={cn(
@@ -255,14 +245,14 @@ export function MemberShell({
       })}
 
       {!compact ? (
-        <p className="px-3 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/45 animate-in fade-in duration-300">
+        <p className="px-3 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/45">
           Compte
         </p>
       ) : (
         <div className="my-2 mx-2 border-t border-white/15" />
       )}
       <div className="space-y-0.5 pb-2">
-        {SECONDARY.map((item, i) => {
+        {SECONDARY.map((item) => {
           const Icon = item.icon;
           return (
             <a
@@ -270,11 +260,7 @@ export function MemberShell({
               href={item.href}
               onClick={go(item.href)}
               title={compact ? item.label : undefined}
-              className={cn(
-                navLinkClass(item.href, false, compact),
-                "text-[13px] animate-in fade-in slide-in-from-left-2 fill-mode-both"
-              )}
-              style={{ animationDelay: `${(i + 4) * 30}ms` }}
+              className={cn(navLinkClass(item.href, false, compact), "text-[13px]")}
             >
               <Icon className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110" />
               <span
@@ -291,29 +277,24 @@ export function MemberShell({
           );
         })}
       </div>
+    </>
+  );
 
-      <div
+  const logoutButton = (compact: boolean) => (
+    <form action={logoutAction} className="shrink-0 pt-3 border-t border-white/15">
+      <button
+        type="submit"
+        title={compact ? "Déconnexion" : undefined}
         className={cn(
-          "mt-auto pt-3 shrink-0",
-          compact ? "border-t border-white/15" : "border-t border-white/15"
+          "flex w-full items-center rounded-xl text-sm font-bold transition-all duration-300",
+          "bg-white/12 text-white hover:bg-white/20 border border-white/15",
+          compact ? "justify-center px-0 py-2.5" : "gap-2.5 px-3 py-2.5"
         )}
       >
-        <form action={logoutAction}>
-          <button
-            type="submit"
-            title={compact ? "Déconnexion" : undefined}
-            className={cn(
-              "flex w-full items-center rounded-xl text-sm font-bold transition-all duration-300",
-              "bg-white/12 text-white hover:bg-white/20 border border-white/15",
-              compact ? "justify-center px-0 py-2.5" : "gap-2.5 px-3 py-2.5"
-            )}
-          >
-            <LogOut className="h-4 w-4 shrink-0" />
-            {!compact ? <span>Déconnexion</span> : null}
-          </button>
-        </form>
-      </div>
-    </nav>
+        <LogOut className="h-4 w-4 shrink-0" />
+        {!compact ? <span>Déconnexion</span> : null}
+      </button>
+    </form>
   );
 
   return (
@@ -324,9 +305,9 @@ export function MemberShell({
           "hidden md:flex shrink-0 flex-col sticky top-0 h-screen z-40",
           "bg-[#5C1F28] text-[#F8F4EE]",
           "border-r border-[#3D141A]/80 shadow-[4px_0_24px_-12px_rgba(92,31,40,0.35)]",
-          "transition-[width] duration-300 ease-out overflow-hidden",
+          "transition-[width] duration-300 ease-out",
           sidebarReady ? (sidebarOpen ? "md:w-56 lg:w-60" : "md:w-[4.25rem]") : "md:w-56 lg:w-60",
-          sidebarOpen ? "px-3 py-4 gap-4" : "px-2 py-4 gap-3"
+          sidebarOpen ? "px-3 py-4 gap-3" : "px-2 py-4 gap-3"
         )}
       >
         <div
@@ -352,8 +333,7 @@ export function MemberShell({
             className={cn(
               "inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/10",
               "text-white/85 hover:text-white hover:bg-white/18 transition-all duration-300",
-              "hover:scale-105 active:scale-95",
-              sidebarOpen ? "h-9 w-9" : "h-9 w-9"
+              "hover:scale-105 active:scale-95 h-9 w-9"
             )}
             aria-label={sidebarOpen ? "Masquer le menu" : "Afficher le menu"}
             title={sidebarOpen ? "Masquer le menu" : "Afficher le menu"}
@@ -367,16 +347,23 @@ export function MemberShell({
         </div>
 
         <div
-          className="pointer-events-none h-px w-full bg-gradient-to-r from-transparent via-[#B8954A]/50 to-transparent opacity-80"
+          className="pointer-events-none h-px w-full shrink-0 bg-gradient-to-r from-transparent via-[#B8954A]/50 to-transparent opacity-80"
           aria-hidden
         />
 
-        {renderNav(!sidebarOpen)}
+        <nav
+          className="flex flex-col gap-0.5 flex-1 min-h-0 overflow-y-auto overflow-x-hidden member-sidebar-scroll pr-0.5"
+          aria-label="Navigation membre"
+        >
+          {renderNavLinks(!sidebarOpen)}
+        </nav>
+
+        {logoutButton(!sidebarOpen)}
       </aside>
 
       <div className="flex-1 min-w-0 flex flex-col min-h-screen">
         <header className="sticky top-0 z-[60] border-b border-border/50 bg-background/95 backdrop-blur-md">
-          <div className="flex h-14 sm:h-16 items-center justify-between gap-2 px-4 sm:px-6">
+          <div className="relative z-[80] flex h-14 sm:h-16 items-center justify-between gap-2 px-4 sm:px-6 bg-background/95">
             <div className="flex items-center gap-3 min-w-0">
               <button
                 type="button"
@@ -428,7 +415,7 @@ export function MemberShell({
                   Passer Alliance
                 </a>
               )}
-              <div className="relative" ref={accountRef}>
+              <div className="relative z-[90]" ref={accountRef}>
                 <button
                   type="button"
                   onClick={() => setAccountOpen((v) => !v)}
@@ -442,7 +429,7 @@ export function MemberShell({
                 {accountOpen && (
                   <div
                     role="menu"
-                    className="absolute right-0 mt-2 w-52 rounded-xl border border-border bg-card shadow-lg z-[70] overflow-hidden py-1 animate-in fade-in zoom-in-95 duration-200"
+                    className="absolute right-0 mt-2 w-52 rounded-xl border border-border bg-card shadow-lg z-[100] overflow-hidden py-1 animate-in fade-in zoom-in-95 duration-200"
                   >
                     <a
                       href="/profile"
@@ -477,8 +464,11 @@ export function MemberShell({
           </div>
 
           {mobileOpen && (
-            <div className="md:hidden border-t border-[#3D141A] bg-[#5C1F28] px-3 py-3 max-h-[75vh] overflow-y-auto z-[70] animate-in slide-in-from-top-2 fade-in duration-300">
-              {renderNav(false, true)}
+            <div className="md:hidden border-t border-[#3D141A] bg-[#5C1F28] px-3 py-3 max-h-[75vh] overflow-y-auto z-[70] animate-in slide-in-from-top-2 fade-in duration-300 member-sidebar-scroll">
+              <nav className="flex flex-col gap-0.5 text-[#F8F4EE]" aria-label="Navigation membre">
+                {renderNavLinks(false)}
+              </nav>
+              <div className="mt-3">{logoutButton(false)}</div>
             </div>
           )}
 
