@@ -525,8 +525,30 @@
     animation: none !important;
   }
 
+  /* Garder les visuels à l’impression (anneaux, barres, cadres) */
   .rapport-corner {
-    display: none;
+    display: block !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .rapport-bar-fill {
+    transform: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .rapport-page-premium,
+  .rapport-ring,
+  .rapport-pattern {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .rapport-gold-text {
+    color: #b8954a !important;
+    -webkit-text-fill-color: #b8954a;
+    background: none !important;
   }
 }
 

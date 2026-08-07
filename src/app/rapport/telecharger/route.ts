@@ -71,7 +71,8 @@ export async function GET() {
     status: 200,
     headers: {
       "Content-Type": "text/html; charset=utf-8",
-      "Content-Disposition": `attachment; filename*=UTF-8''${encodeURIComponent(filename)}`,
+      // inline = ouvrir dans le navigateur (imprimable) ; filename conservé pour « Enregistrer sous »
+      "Content-Disposition": `inline; filename*=UTF-8''${encodeURIComponent(filename)}`,
       "Cache-Control": "private, no-store",
     },
   })
