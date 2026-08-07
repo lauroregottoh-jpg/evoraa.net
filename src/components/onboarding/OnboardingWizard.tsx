@@ -20,6 +20,9 @@ import { cn } from "@/utils/cn"
 
 type Phase = "charter" | "basics" | "faith" | "values"
 
+/** Formulaire wizard = payload onboarding + champs essentials (ex. lastName). */
+type WizardForm = Partial<OnboardingPayload> & { lastName?: string }
+
 const PHASE_META: Record<
   Exclude<Phase, "charter">,
   { label: string; pct: number; index: number }
@@ -47,7 +50,7 @@ export function OnboardingWizard({
       : "basics"
   const [phase, setPhase] = React.useState<Phase>(startPhase)
   const [charterAccepted, setCharterAccepted] = React.useState(false)
-  const [formData, setFormData] = React.useState<Partial<OnboardingPayload>>({
+  const [formData, setFormData] = React.useState<WizardForm>({
     firstName: initialBasics?.firstName,
     lastName: initialBasics?.lastName,
     gender: initialBasics?.gender,
@@ -86,6 +89,7 @@ export function OnboardingWizard({
       setFormData((prev) => ({
         ...prev,
         firstName: data.firstName,
+        lastName: data.lastName,
         gender: data.gender,
         birthDate: data.birthDate,
         city: data.city,
