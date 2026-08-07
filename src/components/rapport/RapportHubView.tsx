@@ -114,7 +114,7 @@ export function RapportHubView({
             <ArrowRight className="h-4 w-4" />
           </Link>
           <a
-            href="/rapport/telecharger"
+            href="/rapport/telecharger?dl=1"
             className="inline-flex h-12 items-center gap-2 rounded-xl border border-[#B8954A]/50 bg-white/10 px-5 text-sm font-bold text-[#F3D9A4]"
           >
             Télécharger

@@ -601,7 +601,7 @@ export function ReportDocumentView({
           </p>
           <div className="flex flex-wrap gap-2">
             <a
-              href="/rapport/telecharger"
+              href="/rapport/telecharger?dl=1"
               className="inline-flex h-10 items-center gap-2 rounded-xl border border-[#B8954A]/40 bg-white px-4 text-xs font-bold"
             >
               <Download className="h-3.5 w-3.5" /> Télécharger
