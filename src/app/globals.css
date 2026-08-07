@@ -555,12 +555,10 @@
 /* ——— Matching 5 piliers (accueil) ——— */
 @keyframes matchingPillarIn {
   from {
-    opacity: 0;
-    transform: translateY(22px) scale(0.96);
+    transform: translateY(18px);
   }
   to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
@@ -584,16 +582,18 @@
   }
 }
 
-.matching-pillars-title {
-  animation: matchingPillarIn 0.7s ease-out both;
-}
-
 .matching-pillar-card {
-  animation: matchingPillarIn 0.75s ease-out both;
+  opacity: 1 !important;
+  visibility: visible !important;
+  animation: matchingPillarIn 0.7s ease-out both;
 }
 
 .matching-pillar-icon {
   animation: matchingPillarFloat 3.6s ease-in-out infinite;
+}
+
+.matching-pillar-banner {
+  animation: matchingPillarFloat 4.2s ease-in-out infinite;
 }
 
 .matching-pillar-num {
@@ -603,11 +603,9 @@
 /* ——— Découverte · parcours animé ——— */
 @keyframes discoveryStepIn {
   from {
-    opacity: 0;
-    transform: translateX(-18px);
+    transform: translateX(-14px);
   }
   to {
-    opacity: 1;
     transform: translateX(0);
   }
 }
@@ -637,29 +635,27 @@
 @keyframes discoverySparkTwinkle {
   0%,
   100% {
-    opacity: 1;
     transform: rotate(0deg) scale(1);
   }
   50% {
-    opacity: 0.65;
     transform: rotate(12deg) scale(1.15);
   }
 }
 
 @keyframes discoveryPathDraw {
   from {
-    opacity: 0.2;
     transform: scaleY(0.4);
     transform-origin: top;
   }
   to {
-    opacity: 1;
     transform: scaleY(1);
     transform-origin: top;
   }
 }
 
 .discovery-step {
+  opacity: 1 !important;
+  visibility: visible !important;
   animation: discoveryStepIn 0.65s ease-out both;
 }
 
@@ -689,26 +685,22 @@
 
 @keyframes discoveryMapNodeIn {
   from {
-    opacity: 0;
-    transform: translateY(16px) scale(0.85);
+    transform: translateY(12px) scale(0.92);
   }
   to {
-    opacity: 1;
     transform: translateY(0) scale(1);
   }
 }
 
 @keyframes discoveryHorizonShimmer {
   0% {
-    opacity: 0.35;
-    background-position: 0% 50%;
+    opacity: 0.45;
   }
   50% {
     opacity: 1;
   }
   100% {
-    opacity: 0.35;
-    background-position: 100% 50%;
+    opacity: 0.45;
   }
 }
 
@@ -725,12 +717,13 @@
 }
 
 .discovery-map-node {
+  opacity: 1 !important;
+  visibility: visible !important;
   animation: discoveryMapNodeIn 0.7s ease-out both,
     matchingPillarFloat 4s ease-in-out infinite;
 }
 
 .discovery-horizon-line {
-  background-size: 200% 100%;
   animation: discoveryHorizonShimmer 3.5s ease-in-out infinite;
 }
 
@@ -739,9 +732,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .matching-pillars-title,
   .matching-pillar-card,
   .matching-pillar-icon,
+  .matching-pillar-banner,
   .matching-pillar-num,
   .discovery-step,
   .discovery-orb-a,

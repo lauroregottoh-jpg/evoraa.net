@@ -15,31 +15,37 @@ const PILLARS: {
   icon: LucideIcon
   title: string
   desc: string
+  accent: string
 }[] = [
   {
     icon: Heart,
     title: "Compatibilité relationnelle",
     desc: "Communication, émotions, conflits, confiance.",
+    accent: "from-[#5C1F28] to-[#8B2E3A]",
   },
   {
     icon: Sparkles,
     title: "Compatibilité spirituelle",
     desc: "Parcours de foi, convictions, pratique, vision chrétienne.",
+    accent: "from-[#2A1810] to-[#5C3A1A]",
   },
   {
     icon: Home,
     title: "Compatibilité des projets de vie",
     desc: "Mariage, famille, enfants, avenir.",
+    accent: "from-[#1C3A2A] to-[#2A5C3A]",
   },
   {
     icon: Leaf,
     title: "Compatibilité des valeurs",
     desc: "Principes, stewardship, priorités de vie.",
+    accent: "from-[#3A2A10] to-[#6B4A1A]",
   },
   {
     icon: Users,
     title: "Compatibilité des personnalités",
     desc: "Personnalité, rythme, ouverture, fiabilité.",
+    accent: "from-[#1C2840] to-[#2A3A5C]",
   },
 ]
 
@@ -51,8 +57,9 @@ export function MatchingPillarsShowcase({
 }) {
   return (
     <section
+      id="matching-piliers"
       className={cn(
-        "relative overflow-hidden py-20 px-6 sm:px-12",
+        "relative overflow-hidden py-16 sm:py-24 px-6 sm:px-12",
         className
       )}
     >
@@ -62,22 +69,18 @@ export function MatchingPillarsShowcase({
       />
       <div
         aria-hidden
-        className="rapport-pattern pointer-events-none absolute inset-0 opacity-30 mix-blend-overlay"
-      />
-      <div
-        aria-hidden
-        className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-40"
+        className="rapport-pattern pointer-events-none absolute inset-0 opacity-25 mix-blend-overlay"
       />
 
       <div className="relative z-10 mx-auto max-w-6xl space-y-10">
-        <div className="text-center space-y-3 matching-pillars-title">
-          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#F3D9A4]">
+        <div className="text-center space-y-3">
+          <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#F3D9A4]">
             Matching KELIAA™
           </p>
-          <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#F8F4EE] leading-tight">
+          <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#F8F4EE] leading-tight drop-shadow-sm">
             Les 5 piliers du Matching KELIAA™
           </h2>
-          <p className="text-sm sm:text-base text-white/70 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-[#F8F4EE]/85 max-w-2xl mx-auto leading-relaxed">
             Parce qu&apos;une relation durable ne repose jamais sur un seul
             critère.
           </p>
@@ -89,29 +92,29 @@ export function MatchingPillarsShowcase({
             return (
               <article
                 key={pillar.title}
-                className="matching-pillar-card group relative overflow-hidden rounded-2xl border border-[#B8954A]/40 bg-white/[0.07] backdrop-blur-sm p-5 text-[#F8F4EE] shadow-elevated"
-                style={{ animationDelay: `${i * 120}ms` }}
+                className="matching-pillar-card group relative flex flex-col overflow-hidden rounded-2xl border-2 border-[#B8954A]/55 bg-[#F8F4EE] p-5 text-[#1C1412] shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
+                style={{ animationDelay: `${i * 100}ms` }}
               >
                 <div
                   aria-hidden
-                  className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-[#B8954A]/15 blur-2xl transition group-hover:bg-[#B8954A]/25"
-                />
-                <div className="relative space-y-3">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="matching-pillar-num inline-flex h-9 min-w-9 items-center justify-center rounded-xl border border-[#B8954A]/50 bg-[#B8954A]/20 px-2 font-mono text-xs font-bold text-[#F3D9A4]">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="matching-pillar-icon flex h-10 w-10 items-center justify-center rounded-full border border-[#B8954A]/35 bg-[#1C1412]/40 text-[#F3D9A4]">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                  </div>
-                  <h3 className="font-serif text-lg font-bold leading-snug">
-                    {pillar.title}
-                  </h3>
-                  <p className="text-xs text-white/70 leading-relaxed">
-                    {pillar.desc}
-                  </p>
+                  className={cn(
+                    "matching-pillar-banner mb-4 flex h-24 items-center justify-center rounded-xl bg-gradient-to-br",
+                    pillar.accent
+                  )}
+                >
+                  <span className="matching-pillar-icon flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#F3D9A4]/70 bg-black/25 text-[#F3D9A4] shadow-lg">
+                    <Icon className="h-7 w-7" strokeWidth={2.25} />
+                  </span>
                 </div>
+                <span className="matching-pillar-num mb-2 inline-flex h-8 w-fit items-center rounded-lg bg-[#B8954A]/20 px-2.5 font-mono text-xs font-bold text-[#5C1F28]">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className="font-serif text-lg font-bold leading-snug text-[#1C1412]">
+                  {pillar.title}
+                </h3>
+                <p className="mt-2 text-xs text-[#1C1412]/70 leading-relaxed grow">
+                  {pillar.desc}
+                </p>
               </article>
             )
           })}

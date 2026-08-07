@@ -227,6 +227,8 @@ export default function Home() {
         </div>
       </section>
 
+      <MatchingPillarsShowcase />
+
       {/* Parcours */}
       <section className="relative py-28 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16 gsap-fade-up">
@@ -410,8 +412,6 @@ export default function Home() {
       </section>
 
       <ShareRecommendSection />
-
-      <MatchingPillarsShowcase />
 
       {/* CTA final */}
       <section className="py-28 px-6 sm:px-12 relative overflow-hidden bg-primary text-white">
