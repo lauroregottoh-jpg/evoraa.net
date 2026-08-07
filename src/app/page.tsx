@@ -26,6 +26,7 @@ import {
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { PLANS } from "@/lib/billing/plans";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -34,6 +35,7 @@ if (typeof window !== "undefined") {
 /** Copy source: software-architecture/KELIA - Page d'accueil.docx — orienté inscription. */
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const alliance = PLANS.premium_plus;
 
   useGSAP(
     () => {
@@ -409,6 +411,45 @@ export default function Home() {
       </section>
 
       <ShareRecommendSection />
+
+      {/* Tarif Alliance — ancrage officiel */}
+      <section className="py-20 px-6 sm:px-12 bg-[#F8F4EE]">
+        <div className="max-w-3xl mx-auto text-center space-y-6 gsap-fade-up">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-accent">
+            Offre Alliance
+          </p>
+          <h2 className="font-serif text-3xl sm:text-4xl font-bold text-foreground">
+            Préparez votre mariage avec Alliance
+          </h2>
+          <div className="inline-flex flex-wrap items-baseline justify-center gap-2 rounded-2xl border-2 border-[#B8954A]/40 bg-white px-6 py-5 shadow-card">
+            {alliance.compareAtXof ? (
+              <span className="text-xl text-muted-foreground line-through">
+                {alliance.compareAtXof.toLocaleString("fr-FR")}
+              </span>
+            ) : null}
+            <span className="font-serif text-5xl font-bold text-primary">
+              {alliance.amountXof.toLocaleString("fr-FR")}
+            </span>
+            <span className="text-sm text-muted-foreground mb-1">FCFA / mois</span>
+          </div>
+          <p className="text-sm font-semibold text-accent">
+            Tarif de lancement · prix normal{" "}
+            {alliance.compareAtXof?.toLocaleString("fr-FR")} FCFA / mois
+          </p>
+          <p className="text-sm text-muted-foreground max-w-xl mx-auto leading-relaxed">
+            Rapport Personnalisé, Matching enrichi, Coffre Premium — sans prélèvement
+            surprise.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <MagneticButton href="/pricing" variant="primary" className="px-8">
+              Voir les tarifs
+            </MagneticButton>
+            <MagneticButton href="/register" variant="outline" className="px-8">
+              Commencer gratuitement
+            </MagneticButton>
+          </div>
+        </div>
+      </section>
 
       {/* CTA final */}
       <section className="py-28 px-6 sm:px-12 relative overflow-hidden bg-primary text-white">

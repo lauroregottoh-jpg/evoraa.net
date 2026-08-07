@@ -34,6 +34,8 @@ const DEFAULT_SLIDES: PremiumHeroSlide[] = [
   },
 ]
 
+import { PLANS } from "@/lib/billing/plans"
+
 export function PremiumHeroCarousel({
   firstName,
   slides = DEFAULT_SLIDES,
@@ -45,6 +47,7 @@ export function PremiumHeroCarousel({
 }) {
   const [index, setIndex] = React.useState(0)
   const name = firstName?.trim() || ""
+  const alliance = PLANS.premium_plus
 
   React.useEffect(() => {
     const id = window.setInterval(() => {
@@ -73,6 +76,22 @@ export function PremiumHeroCarousel({
         <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto">
           {slide.subtitle}
         </p>
+      </div>
+
+      <div className="inline-flex flex-wrap items-baseline justify-center gap-2 rounded-2xl border border-[#B8954A]/35 bg-[#B8954A]/10 px-5 py-3">
+        {alliance.compareAtXof ? (
+          <span className="text-base text-muted-foreground line-through">
+            {alliance.compareAtXof.toLocaleString("fr-FR")}
+          </span>
+        ) : null}
+        <span className="font-serif text-3xl font-bold text-foreground">
+          {alliance.amountXof.toLocaleString("fr-FR")}
+        </span>
+        <span className="text-sm text-muted-foreground">FCFA / mois</span>
+        <span className="w-full text-[11px] font-semibold text-accent">
+          Tarif de lancement · prix normal{" "}
+          {alliance.compareAtXof?.toLocaleString("fr-FR")} FCFA
+        </span>
       </div>
 
       <div

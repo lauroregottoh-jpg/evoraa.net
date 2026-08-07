@@ -2,6 +2,9 @@
 
 export const ALLIANCE_WELCOME_KEY = "KELIAA_alliance_welcome_seen"
 export const ALLIANCE_CELEBRATIONS_KEY = "KELIAA_alliance_celebrations"
+export const ALLIANCE_RENEWAL_KEY = "KELIAA_alliance_renewal_seen"
+
+export type AllianceCinemaMode = "welcome" | "renewal"
 
 export type AlliancePrivilegeId =
   | "badge"
@@ -45,6 +48,38 @@ export const ALLIANCE_PRIVILEGES: {
     id: "priorite",
     title: "Priorité soft",
     body: "Une visibilité plus juste auprès des profils alignés.",
+  },
+]
+
+export const ALLIANCE_RENEWAL_HIGHLIGHTS: {
+  id: string
+  title: string
+  body: string
+}[] = [
+  {
+    id: "fidelite",
+    title: "Votre fidélité compte",
+    body: "Chaque renouvellement prolonge votre espace de préparation — sans tout recommencer.",
+  },
+  {
+    id: "rapport",
+    title: "Votre rapport continue de vivre",
+    body: "Les chapitres déjà ouverts restent, et chaque nouveau test continue d’enrichir votre lecture.",
+  },
+  {
+    id: "coffre",
+    title: "Le Coffre reste ouvert",
+    body: "Vos ressources Premium et vos prochaines sélections vous attendent.",
+  },
+  {
+    id: "matching",
+    title: "Matching Alliance maintenu",
+    body: "Suggestions enrichies, conversations et Eva au rythme Alliance.",
+  },
+  {
+    id: "parcours",
+    title: "Votre parcours reprend",
+    body: "Missions, niveaux et prochaine étape : vous reprenez exactement où vous étiez.",
   },
 ]
 

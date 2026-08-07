@@ -8,6 +8,7 @@ import {
   ClipboardList,
   Crown,
   Gift,
+  Headphones,
   Library,
   Route,
   Sparkles,
@@ -15,6 +16,34 @@ import {
 } from "lucide-react"
 import { cn } from "@/utils/cn"
 import { AmbientSnowOrbs } from "@/components/home/AmbientSnowOrbs"
+
+const REVEAL_ITEMS = [
+  {
+    icon: ClipboardList,
+    title: "Rapport Personnalisé",
+    href: "/rapport/global",
+  },
+  {
+    icon: Sparkles,
+    title: "Tests débloqués",
+    href: "/assessments",
+  },
+  {
+    icon: Library,
+    title: "Coffre Premium",
+    href: "/coffre-premium",
+  },
+  {
+    icon: Headphones,
+    title: "Support humain",
+    href: "/coaching",
+  },
+  {
+    icon: Route,
+    title: "Parcours guidé",
+    href: "/alliance/parcours",
+  },
+] as const
 
 const UNLOCKED = [
   {
@@ -48,7 +77,7 @@ function defaultAvatar(gender: "M" | "F" | null) {
   return "/avatars/avatar-woman-default.png"
 }
 
-/** Accueil Alliance : carte d’identité or + neige + coffret confettis. */
+/** Accueil Alliance : coffret géant → carte or → espace enrichi. */
 export function AllianceIdentityHome({
   firstName,
   lastName,
@@ -76,44 +105,121 @@ export function AllianceIdentityHome({
       ? "Compléter mes tests (Matching + Alliance)"
       : "Continuer mon parcours Alliance"
 
-  const [burstKey, setBurstKey] = React.useState(0)
-  const [boxOpen, setBoxOpen] = React.useState(false)
-  const [ready, setReady] = React.useState(false)
+  const [phase, setPhase] = React.useState<"idle" | "open" | "reveal">("idle")
+  const [cycle, setCycle] = React.useState(0)
 
   React.useEffect(() => {
-    const start = window.setTimeout(() => setReady(true), 5000)
-    return () => window.clearTimeout(start)
-  }, [])
-
-  React.useEffect(() => {
-    if (!ready) return
-    const fire = () => {
-      setBoxOpen(true)
-      setBurstKey((k) => k + 1)
-      window.setTimeout(() => setBoxOpen(false), 1200)
+    let cancelled = false
+    const run = () => {
+      if (cancelled) return
+      setPhase("idle")
+      window.setTimeout(() => {
+        if (cancelled) return
+        setPhase("open")
+        window.setTimeout(() => {
+          if (cancelled) return
+          setPhase("reveal")
+          window.setTimeout(() => {
+            if (cancelled) return
+            setCycle((c) => c + 1)
+          }, 4200)
+        }, 900)
+      }, 800)
     }
-    fire()
-    const id = window.setInterval(fire, 3500)
-    return () => window.clearInterval(id)
-  }, [ready])
-
-  const burstPieces = React.useMemo(
-    () =>
-      Array.from({ length: 22 }, (_, i) => ({
-        left: `${35 + ((i * 13) % 30)}%`,
-        delay: `${(i % 8) * 0.04}s`,
-        dx: `${-40 + (i % 10) * 9}px`,
-        tone: i % 3 === 0 ? "gold" : i % 3 === 1 ? "ivory" : "burgundy",
-        size: 5 + (i % 4) * 2,
-      })),
-    [burstKey]
-  )
+    run()
+    return () => {
+      cancelled = true
+    }
+  }, [cycle])
 
   return (
     <div className="relative space-y-5">
       <AmbientSnowOrbs density="soft" className="opacity-55 z-0" />
 
-      {/* Carte membre — PRIORITÉ #1 */}
+      {/* Coffret géant — animation récurrente */}
+      <section className="relative z-10 overflow-hidden rounded-[1.75rem] border-2 border-[#B8954A]/50 bg-gradient-to-br from-[#1C1412] via-[#2A1810] to-[#5C1F28] p-6 sm:p-8 text-[#F8F4EE] shadow-elevated">
+        <div
+          aria-hidden
+          className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-45"
+        />
+        <p className="relative z-10 text-center text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
+          Bienvenue Alliance · Votre coffret
+        </p>
+        <h2 className="relative z-10 mt-2 text-center font-serif text-2xl sm:text-3xl font-bold">
+          {name}, voici ce que vous avez débloqué
+        </h2>
+
+        <div className="relative z-10 mt-6 flex flex-col items-center">
+          <div
+            className={cn(
+              "relative flex h-28 w-28 sm:h-36 sm:w-36 items-end justify-center transition-transform duration-700",
+              phase === "open" && "scale-110",
+              phase === "reveal" && "scale-105"
+            )}
+          >
+            {/* Lid */}
+            <div
+              className={cn(
+                "absolute left-1/2 top-0 z-20 h-10 w-[88%] -translate-x-1/2 rounded-t-2xl border-2 border-[#F3D9A4]/60 bg-gradient-to-b from-[#D4AF37] to-[#B8954A] shadow-lg origin-bottom transition-transform duration-700",
+                phase !== "idle" && "-translate-y-8 -rotate-12"
+              )}
+            >
+              <div className="absolute left-1/2 top-1/2 h-3 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#F8F4EE]/35" />
+            </div>
+            {/* Box body */}
+            <div className="relative z-10 flex h-20 w-[88%] sm:h-24 items-center justify-center rounded-b-2xl border-2 border-[#B8954A]/70 bg-gradient-to-b from-[#B8954A] to-[#8A6B2E] shadow-[0_16px_40px_-12px_rgba(184,149,74,0.7)]">
+              <Gift
+                className={cn(
+                  "h-10 w-10 text-[#1C1412] transition-opacity duration-500",
+                  phase === "reveal" && "opacity-40"
+                )}
+              />
+            </div>
+            {/* Glow */}
+            <div
+              aria-hidden
+              className={cn(
+                "pointer-events-none absolute inset-0 rounded-full bg-[#F3D9A4]/25 blur-2xl transition-opacity duration-700",
+                phase === "idle" ? "opacity-20" : "opacity-70"
+              )}
+            />
+          </div>
+
+          <ul
+            className={cn(
+              "mt-6 grid w-full max-w-lg grid-cols-2 sm:grid-cols-3 gap-2.5 transition-all duration-700",
+              phase === "reveal"
+                ? "opacity-100 translate-y-0"
+                : "opacity-40 translate-y-3"
+            )}
+          >
+            {REVEAL_ITEMS.map((item, i) => {
+              const Icon = item.icon
+              return (
+                <li key={item.title}>
+                  <Link
+                    href={item.href}
+                    className={cn(
+                      "flex flex-col items-center gap-1.5 rounded-xl border border-[#B8954A]/35 bg-white/10 px-2 py-3 text-center backdrop-blur-sm hover:bg-white/15 transition-all",
+                      phase === "reveal" && "alliance-gift-reveal"
+                    )}
+                    style={{ animationDelay: `${i * 80}ms` }}
+                  >
+                    <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#B8954A]/25 text-[#F3D9A4]">
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    <span className="text-[11px] font-semibold leading-tight text-[#F8F4EE]">
+                      {item.title}
+                    </span>
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      </section>
+
+      {/* Carte membre */}
       <section className="relative z-10 overflow-hidden rounded-[1.6rem] border-2 border-[#B8954A]/55 bg-gradient-to-br from-[#1C1412] via-[#2A1A12] to-[#3D2418] text-[#F8F4EE] p-5 sm:p-7 shadow-elevated">
         <div
           aria-hidden
@@ -124,40 +230,7 @@ export function AllianceIdentityHome({
           className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-55"
         />
 
-        {/* Coffret confettis */}
-        <div className="absolute right-4 top-4 sm:right-6 sm:top-6 z-20">
-          <div className="relative h-14 w-14">
-            {ready
-              ? burstPieces.map((p, i) => (
-                  <span
-                    key={`${burstKey}-${i}`}
-                    className={cn(
-                      "alliance-gift-confetti absolute left-1/2 top-1/2 rounded-[2px]",
-                      p.tone === "gold" && "bg-[#D4AF37]",
-                      p.tone === "ivory" && "bg-[#FDFBF7]",
-                      p.tone === "burgundy" && "bg-[#722F37]"
-                    )}
-                    style={{
-                      width: p.size,
-                      height: p.size * 1.3,
-                      animationDelay: p.delay,
-                      ["--dx" as string]: p.dx,
-                    }}
-                  />
-                ))
-              : null}
-            <div
-              className={cn(
-                "relative flex h-12 w-12 items-center justify-center rounded-xl border border-[#B8954A]/50 bg-[#B8954A] text-[#1C1412] shadow-lg transition-transform duration-500",
-                boxOpen && "scale-110 -rotate-6"
-              )}
-            >
-              <Gift className="h-5 w-5" />
-            </div>
-          </div>
-        </div>
-
-        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center gap-5 pr-14">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center gap-5">
           <div className="relative mx-auto sm:mx-0 shrink-0">
             <div className="h-28 w-28 sm:h-32 sm:w-32 rounded-2xl overflow-hidden border-2 border-[#B8954A]/70 shadow-[0_12px_40px_-12px_rgba(184,149,74,0.65)] ring-2 ring-[#F3D9A4]/25">
               <Image
@@ -204,18 +277,18 @@ export function AllianceIdentityHome({
         </div>
       </section>
 
-      <section className="relative z-10 rounded-[1.5rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#B8954A]/12 via-white to-primary/[0.04] p-5 sm:p-6 space-y-4 shadow-card">
-        <div className="space-y-1.5">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
-            Bienvenue dans Alliance
+      <section className="relative z-10 rounded-[1.5rem] border-2 border-[#B8954A]/45 bg-gradient-to-br from-[#B8954A]/18 via-white to-primary/[0.04] p-5 sm:p-7 space-y-4 shadow-elevated">
+        <div className="space-y-2">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-accent">
+            Espace enrichi débloqué
           </p>
-          <h2 className="font-serif text-2xl font-bold leading-tight">
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold leading-tight">
             Vous avez débloqué un espace enrichi
           </h2>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            Bravo. Vous disposez désormais de tests supplémentaires, d’un matériel
-            enrichi, d’un bilan relationnel complet, du Coffre Premium et d’un
-            parcours à suivre — étape par étape.
+          <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
+            Bravo. Vous disposez désormais de tests supplémentaires, d’un bilan
+            relationnel complet, du Coffre Premium, d’un parcours guidé et d’un
+            accès au support humain — étape par étape.
           </p>
         </div>
 
@@ -226,13 +299,13 @@ export function AllianceIdentityHome({
               <li key={item.title}>
                 <Link
                   href={item.href}
-                  className="flex gap-3 rounded-xl border border-[#B8954A]/25 bg-white/95 p-3.5 hover:border-[#B8954A]/50 transition-colors h-full"
+                  className="flex gap-3 rounded-xl border border-[#B8954A]/30 bg-white p-4 hover:border-[#B8954A]/55 transition-colors h-full shadow-sm"
                 >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#B8954A]/15 text-accent">
-                    <Icon className="h-4 w-4" />
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#B8954A]/15 text-accent">
+                    <Icon className="h-5 w-5" />
                   </span>
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold">{item.title}</p>
+                    <p className="text-sm font-bold">{item.title}</p>
                     <p className="text-xs text-muted-foreground leading-relaxed mt-0.5">
                       {item.body}
                     </p>
@@ -243,13 +316,13 @@ export function AllianceIdentityHome({
           })}
         </ul>
 
-        <div className="rounded-xl border border-[#B8954A]/30 bg-[#B8954A]/10 p-4 space-y-2">
+        <div className="rounded-xl border border-[#B8954A]/35 bg-[#B8954A]/12 p-4 space-y-2">
           <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
             Prochaine étape
           </p>
           <p className="text-sm font-semibold">
             {assessmentsDone < 5
-              ? "Complétez vos tests Matching, puis explorez les évaluations Alliance."
+              ? "Complétez vos tests Matching, puis explorez les 10 clés Alliance."
               : "Suivez votre parcours : missions, rapport global et Coffre Premium."}
           </p>
           <Link

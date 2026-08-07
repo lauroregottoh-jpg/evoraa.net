@@ -13,12 +13,14 @@ export function DemoPaymentPanel({
   currency,
   planName,
   transactionReference,
+  isRenewal = false,
 }: {
   paymentId: string;
   amount: number;
   currency: string;
   planName: string;
   transactionReference: string | null;
+  isRenewal?: boolean;
 }) {
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
@@ -33,7 +35,9 @@ export function DemoPaymentPanel({
         setError(result.error);
         return;
       }
-      router.push(`/checkout/success?payment=${paymentId}`);
+      router.push(
+        `/checkout/success?payment=${paymentId}${isRenewal ? "&renew=1" : ""}`
+      );
       router.refresh();
     } finally {
       setLoading(false);

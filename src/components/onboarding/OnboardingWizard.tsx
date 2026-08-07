@@ -31,15 +31,30 @@ const PHASE_META: Record<
 
 export function OnboardingWizard({
   needsCharter = true,
+  initialBasics,
+  essentialsComplete = false,
 }: {
   needsCharter?: boolean
+  initialBasics?: Partial<BasicsPayload>
+  /** Si l’essentiel est déjà rempli (ex. Découverte → Alliance), on ne le re-demande pas. */
+  essentialsComplete?: boolean
 }) {
   const router = useRouter()
-  const [phase, setPhase] = React.useState<Phase>(
-    needsCharter ? "charter" : "basics"
-  )
+  const startPhase: Phase = needsCharter
+    ? "charter"
+    : essentialsComplete
+      ? "faith"
+      : "basics"
+  const [phase, setPhase] = React.useState<Phase>(startPhase)
   const [charterAccepted, setCharterAccepted] = React.useState(false)
-  const [formData, setFormData] = React.useState<Partial<OnboardingPayload>>({})
+  const [formData, setFormData] = React.useState<Partial<OnboardingPayload>>({
+    firstName: initialBasics?.firstName,
+    lastName: initialBasics?.lastName,
+    gender: initialBasics?.gender,
+    birthDate: initialBasics?.birthDate,
+    city: initialBasics?.city,
+    country: initialBasics?.country,
+  })
   const [error, setError] = React.useState("")
   const [isSaving, setIsSaving] = React.useState(false)
 
@@ -52,7 +67,7 @@ export function OnboardingWizard({
         setError(result.error)
         return
       }
-      setPhase("basics")
+      setPhase(essentialsComplete ? "faith" : "basics")
       window.scrollTo({ top: 0, behavior: "smooth" })
     } finally {
       setIsSaving(false)
@@ -187,6 +202,7 @@ export function OnboardingWizard({
               onNext={handleBasics}
               defaultValues={{
                 firstName: formData.firstName,
+                lastName: formData.lastName,
                 gender: formData.gender,
                 birthDate: formData.birthDate,
                 city: formData.city,
@@ -198,7 +214,13 @@ export function OnboardingWizard({
           {phase === "faith" ? (
             <StepFaith
               onNext={handleFaith}
-              onBack={() => setPhase("basics")}
+              onBack={() => {
+                if (essentialsComplete) {
+                  if (needsCharter) setPhase("charter")
+                  return
+                }
+                setPhase("basics")
+              }}
               defaultValues={formData}
               isSubmitting={isSaving}
             />

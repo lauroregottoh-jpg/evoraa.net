@@ -284,7 +284,7 @@ export function PersonalizedReportView({
                   ) : isPortrait ? (
                     <div className="space-y-4">
                       {chapter.body ? (
-                        <p className="text-sm text-muted-foreground leading-relaxed">
+                        <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                           {chapter.body}
                         </p>
                       ) : null}
@@ -316,9 +316,73 @@ export function PersonalizedReportView({
                   ) : (
                     <>
                       {chapter.body ? (
-                        <p className="text-sm text-muted-foreground leading-relaxed">
+                        <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                           {chapter.body}
                         </p>
+                      ) : null}
+                      {chapter.insightCards?.length ? (
+                        <div className="space-y-3">
+                          {chapter.insightCards.map((card) => (
+                            <div
+                              key={card.id}
+                              className={cn(
+                                "rounded-xl border p-4 space-y-2.5",
+                                card.kind === "force"
+                                  ? "border-[#B8954A]/35 bg-[#B8954A]/[0.06]"
+                                  : "border-primary/20 bg-primary/[0.03]"
+                              )}
+                            >
+                              <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
+                                {card.kind === "force"
+                                  ? "Force"
+                                  : "Axe de progression"}
+                              </p>
+                              <h3 className="font-serif text-lg font-bold leading-snug">
+                                {card.title}
+                              </h3>
+                              <p className="text-sm text-foreground/90 leading-relaxed">
+                                {card.description}
+                              </p>
+                              <div className="space-y-1.5 text-sm text-muted-foreground leading-relaxed">
+                                <p>
+                                  <span className="font-semibold text-foreground/80">
+                                    Pourquoi c’est important —
+                                  </span>{" "}
+                                  {card.why}
+                                </p>
+                                <p>
+                                  <span className="font-semibold text-foreground/80">
+                                    {card.kind === "force"
+                                      ? "Impact dans le futur mariage —"
+                                      : "Si on n’y travaille pas —"}
+                                  </span>{" "}
+                                  {card.impact}
+                                </p>
+                                <p className="rounded-lg bg-white/80 border border-border/60 px-3 py-2 text-foreground/90">
+                                  <span className="font-semibold">
+                                    Conseil pratique —
+                                  </span>{" "}
+                                  {card.tip}
+                                </p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : null}
+                      {chapter.sections?.length ? (
+                        <div className="space-y-3">
+                          {chapter.sections.map((s) => (
+                            <div
+                              key={s.heading}
+                              className="rounded-xl border border-border/70 bg-white/70 p-3.5 space-y-1"
+                            >
+                              <p className="text-sm font-semibold">{s.heading}</p>
+                              <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+                                {s.body}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
                       ) : null}
                       {chapter.bullets?.length ? (
                         <ul className="space-y-1.5">
@@ -351,6 +415,9 @@ export function PersonalizedReportView({
                       ) : null}
                       {chapter.tips?.length ? (
                         <div className="space-y-2">
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
+                            Recommandations officielles
+                          </p>
                           {chapter.tips.map((t) => (
                             <div
                               key={t.id ?? t.title}
@@ -368,8 +435,10 @@ export function PersonalizedReportView({
                             </div>
                           ))}
                         </div>
-                      ) : chapter.id !== "evolution" &&
-                        !chapter.bullets?.length ? (
+                      ) : !chapter.insightCards?.length &&
+                        !chapter.sections?.length &&
+                        !chapter.bullets?.length &&
+                        chapter.id !== "evolution" ? (
                         <p className="text-xs text-muted-foreground">
                           Analyse ouverte — poursuivez vos tests pour enrichir
                           encore cette partie.

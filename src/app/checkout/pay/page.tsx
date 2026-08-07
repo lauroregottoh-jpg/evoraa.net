@@ -41,7 +41,12 @@ export default async function CheckoutPayPage({
   }
 
   if (result.payment.status === "completed") {
-    redirect(`/checkout/success?payment=${paymentId}`);
+    const renew =
+      result.payment.metadata &&
+      (result.payment.metadata as { is_renewal?: boolean }).is_renewal
+        ? "&renew=1"
+        : ""
+    redirect(`/checkout/success?payment=${paymentId}${renew}`)
   }
 
   return (
@@ -53,6 +58,9 @@ export default async function CheckoutPayPage({
           currency={result.payment.currency}
           planName={result.payment.planName}
           transactionReference={result.payment.transactionReference}
+          isRenewal={Boolean(
+            (result.payment.metadata as { is_renewal?: boolean } | null)?.is_renewal
+          )}
         />
       </div>
     </MemberPage>

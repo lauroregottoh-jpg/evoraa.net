@@ -207,6 +207,16 @@ export function buildProfileReport(input: {
           .join(" et ")}.`
       : "Continuez vos questionnaires pour affiner la présentation générale de votre profil."
 
+  // Prefer short human labels (not "Compatibilité humaine")
+  const strengthsLabeled = strengths.map((s) => ({
+    ...s,
+    label: REPORT_PILLARS[s.id].shortLabel,
+  }))
+  const prioritiesLabeled = priorities.map((p) => ({
+    ...p,
+    label: REPORT_PILLARS[p.id].shortLabel,
+  }))
+
   const pillars = REPORT_PILLAR_ORDER.map((id) =>
     buildPillarSection({
       id,
@@ -229,8 +239,8 @@ export function buildProfileReport(input: {
     offerLabel: offerLabel(tier),
     introduction: pickIntroduction(seedKey),
     overview: {
-      strengths,
-      priorities,
+      strengths: strengthsLabeled,
+      priorities: prioritiesLabeled,
       body: overviewBody,
     },
     pillars,

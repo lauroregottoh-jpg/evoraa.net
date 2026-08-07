@@ -89,28 +89,35 @@ export function AllianceParcoursView({
         </div>
       </section>
 
-      <section className="rounded-2xl border border-[#B8954A]/30 bg-gradient-to-br from-[#B8954A]/10 via-white to-card p-5 space-y-4 shadow-card">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
-          Schéma du parcours
-        </p>
-        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0">
+      <section className="rounded-[1.75rem] border-2 border-[#B8954A]/40 bg-gradient-to-br from-[#B8954A]/15 via-white to-card p-6 sm:p-8 space-y-5 shadow-elevated">
+        <div className="text-center space-y-1">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-accent">
+            Schéma du parcours
+          </p>
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold">
+            Votre chemin Alliance
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Me connaître → Me préparer → Rencontrer → Construire
+          </p>
+        </div>
+        <div className="flex flex-col sm:flex-row sm:items-stretch gap-3 sm:gap-2">
           {ALLIANCE_STAGES.map((stage, i) => (
             <div key={stage.id} className="flex items-center gap-2 flex-1 min-w-0">
-              <div className="rounded-xl border border-[#B8954A]/35 bg-white px-3 py-2.5 flex-1 text-center">
-                <p className="text-[10px] font-bold text-accent">Étape {i + 1}</p>
-                <p className="text-xs font-semibold leading-snug mt-0.5">
+              <div className="rounded-2xl border-2 border-[#B8954A]/40 bg-white px-4 py-5 flex-1 text-center shadow-sm min-h-[7.5rem] flex flex-col justify-center">
+                <p className="text-xs font-bold uppercase tracking-wider text-accent">
+                  Étape {i + 1}
+                </p>
+                <p className="font-serif text-base sm:text-lg font-bold leading-snug mt-1.5">
                   {stage.title.replace(/^Étape \d+ — /, "")}
                 </p>
               </div>
               {i < ALLIANCE_STAGES.length - 1 ? (
-                <ChevronRight className="hidden sm:block h-4 w-4 text-accent shrink-0 mx-1" />
+                <ChevronRight className="hidden sm:block h-6 w-6 text-accent shrink-0" />
               ) : null}
             </div>
           ))}
         </div>
-        <p className="text-xs text-muted-foreground text-center">
-          Me connaître → Me préparer → Rencontrer → Construire
-        </p>
       </section>
 
       <section className="rounded-2xl border border-border bg-card p-5 space-y-3">

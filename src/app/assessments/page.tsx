@@ -8,8 +8,9 @@ import { DiscoveryAssessmentCards } from "@/components/rapport/DiscoveryAssessme
 import { buildLivingPersonalizedReport } from "@/lib/rapport/personalized/buildLivingReport"
 import { createClient } from "@/utils/supabase/server"
 import { getUsageSnapshot } from "@/lib/billing/usage"
-import { Crown, Lock, Sparkles } from "lucide-react"
+import { Crown, Lock, Sparkles, KeyRound } from "lucide-react"
 import type { AssessmentSlug } from "@/lib/assessments/questionBank"
+import { ESSENTIAL_ASSESSMENTS } from "@/lib/rapport/personalized/assessments.catalog"
 
 export const dynamic = "force-dynamic"
 
@@ -69,9 +70,47 @@ export default async function AssessmentsHubPage() {
             </h1>
             <p className="text-sm text-white/85 leading-relaxed max-w-2xl">
               {isAlliance
-                ? "Formule Alliance : socle Matching (5 tests) + clés du Rapport Personnalisé. Chaque test enrichit votre lecture."
-                : "Formule Découverte : les 5 tests de compatibilité. Les évaluations Alliance sont visibles mais verrouillées."}
+                ? "Avec Alliance, chaque test compte double : il alimente le Matching et ouvre une clé de votre Rapport Personnalisé (~18 pages). Les 10 clés ci-dessous sont le cœur de votre bilan."
+                : "Formule Découverte : les 5 tests de compatibilité. Les 10 clés Alliance du Rapport Personnalisé sont visibles mais verrouillées."}
             </p>
+
+            {isAlliance ? (
+              <div className="rounded-2xl border border-[#B8954A]/45 bg-[#B8954A]/15 p-4 space-y-3">
+                <div className="flex items-center gap-2">
+                  <KeyRound className="h-4 w-4 text-[#F3D9A4]" />
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-[#F3D9A4]">
+                    Les 10 clés du Rapport Personnalisé Alliance
+                  </p>
+                </div>
+                <p className="text-xs text-white/75 leading-relaxed">
+                  Personnalité, communication, conflits, intelligence émotionnelle,
+                  valeurs, vision du mariage, projet de vie, spiritualité, finances,
+                  famille — chaque clé ouvre un chapitre. Complétez-les pour un
+                  rapport premium, section par section.
+                </p>
+                <ol className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
+                  {ESSENTIAL_ASSESSMENTS.map((a) => {
+                    const done = living.cards.find((c) => c.id === a.id)?.state === "done"
+                    return (
+                      <li
+                        key={a.id}
+                        className={
+                          done
+                            ? "rounded-lg border border-[#F3D9A4]/50 bg-[#B8954A]/30 px-2 py-1.5 text-[10px] font-semibold text-[#F8F4EE]"
+                            : "rounded-lg border border-white/15 bg-white/5 px-2 py-1.5 text-[10px] font-medium text-white/70"
+                        }
+                      >
+                        <span className="text-[#F3D9A4] font-bold">
+                          {String(a.order).padStart(2, "0")}
+                        </span>{" "}
+                        {a.title.replace(/^Personnalité relationnelle$/, "Personnalité")}
+                      </li>
+                    )
+                  })}
+                </ol>
+              </div>
+            ) : null}
+
             <div className="flex flex-wrap items-center gap-3 pt-1">
               {next ? (
                 <Link
@@ -153,12 +192,12 @@ export default async function AssessmentsHubPage() {
               Formule Alliance
             </p>
             <h2 className="font-serif text-2xl font-bold">
-              Évaluations du Rapport Personnalisé
+              Les 10 clés · Évaluations du Rapport Personnalisé
             </h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {isAlliance
-                ? "Cartes débloquées / enrichies : les 10 clés Alliance. Cliquez pour passer le test Matching lié, puis ouvrez l’analyse dans Rapport."
-                : "Cartes visibles mais verrouillées en Découverte (sauf les tests Matching ci-dessus). Alliance ouvre le rapport vivant et les évaluations enrichies."}
+                ? "Chaque clé ouvre un chapitre de votre rapport (forces, portrait, communication, spiritualité…). Cliquez pour faire le test Matching lié, puis lisez l’analyse dans Rapport complet."
+                : "Ces 10 clés sont le cœur d’Alliance. En Découverte elles restent visibles mais verrouillées — passez Alliance pour les ouvrir."}
             </p>
             {!isAlliance ? (
               <Link

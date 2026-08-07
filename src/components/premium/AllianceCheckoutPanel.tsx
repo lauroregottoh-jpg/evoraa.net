@@ -92,6 +92,10 @@ export function AllianceCheckoutPanel({
           const active = opt.id === durationId
           const perMonth =
             opt.months > 1 ? Math.round(opt.amountXof / opt.months) : opt.amountXof
+          const comparePerMonth =
+            opt.months > 1
+              ? Math.round(opt.compareAtXof / opt.months)
+              : opt.compareAtXof
           return (
             <button
               key={opt.id}
@@ -129,18 +133,28 @@ export function AllianceCheckoutPanel({
                         </span>
                       )}
                     </p>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      {perMonth.toLocaleString("fr-FR")} FCFA/mois
-                      {opt.months > 1 && (
-                        <>
-                          {" · "}
-                          <span className="line-through">
-                            {opt.compareAtXof.toLocaleString("fr-FR")}
-                          </span>{" "}
-                          → {opt.amountXof.toLocaleString("fr-FR")} FCFA
-                        </>
-                      )}
+                    <p className="text-sm mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                      <span className="text-muted-foreground line-through">
+                        {comparePerMonth.toLocaleString("fr-FR")}
+                      </span>
+                      <span className="font-bold text-foreground">
+                        {perMonth.toLocaleString("fr-FR")} FCFA/mois
+                      </span>
                     </p>
+                    {opt.months > 1 ? (
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        Total :{" "}
+                        <span className="line-through">
+                          {opt.compareAtXof.toLocaleString("fr-FR")}
+                        </span>{" "}
+                        → {opt.amountXof.toLocaleString("fr-FR")} FCFA
+                      </p>
+                    ) : (
+                      <p className="text-xs text-accent font-semibold mt-0.5">
+                        Tarif de lancement · prix normal{" "}
+                        {opt.compareAtXof.toLocaleString("fr-FR")} FCFA
+                      </p>
+                    )}
                     <p className="text-[11px] text-primary font-medium mt-1.5 leading-snug">
                       Quotas Alliance : 15 suggestions/jour · 25 conversations/mois ·
                       100 messages/conversation · Eva 20/jour · Rapport Personnalisé
@@ -200,11 +214,21 @@ export function AllianceCheckoutPanel({
       <div className="flex items-end justify-between gap-3 border-t border-border pt-4">
         <div>
           <p className="text-xs text-muted-foreground">Total affiché</p>
-          <p className="font-serif text-2xl font-bold text-foreground">
+          <p className="font-serif text-2xl font-bold text-foreground flex items-baseline gap-2">
+            <span className="text-lg text-muted-foreground line-through font-sans font-normal">
+              {selected.compareAtXof.toLocaleString("fr-FR")}
+            </span>
             {selected.amountXof.toLocaleString("fr-FR")} FCFA
           </p>
           <p className="text-[11px] text-muted-foreground">
-            soit {monthly.toLocaleString("fr-FR")} FCFA / mois
+            soit{" "}
+            <span className="line-through">
+              {(selected.months > 1
+                ? Math.round(selected.compareAtXof / selected.months)
+                : selected.compareAtXof
+              ).toLocaleString("fr-FR")}
+            </span>{" "}
+            → {monthly.toLocaleString("fr-FR")} FCFA / mois · tarif de lancement
           </p>
         </div>
       </div>

@@ -16,7 +16,17 @@ import {
   REPORT_CHAPTERS,
   type ReportChapterId,
 } from "@/lib/rapport/personalized/chapters"
-import { pickConclusion, pickIntroduction } from "@/lib/rapport/formulations"
+import { computePillarScores, rankedPillars } from "@/lib/rapport/pillarScores"
+import type { ReportPillarId } from "@/lib/rapport/pillars"
+import { REPORT_COPY } from "@/lib/rapport/personalized/copyLibrary"
+import {
+  buildForceCards,
+  buildVigilanceCards,
+  composeChapterAnalysis,
+  composeExecutiveSummary,
+  composePortraitNarrative,
+  type InsightCard,
+} from "@/lib/rapport/personalized/insightCards"
 
 type Psychometric = {
   personality?: number | null
@@ -52,6 +62,10 @@ export type LivingChapter = {
   unlockHref?: string
   /** Liens d’action (ex. évolution → tests restants) */
   unlockActions?: { label: string; href: string }[]
+  /** Cartes force / axe premium (23-2) */
+  insightCards?: InsightCard[]
+  /** Sous-sections structurées (analyse détaillée) */
+  sections?: { heading: string; body: string }[]
 }
 
 export type LivingPersonalizedReport = {
@@ -193,7 +207,32 @@ export function buildLivingPersonalizedReport(input: {
   })
 
   const name = input.firstName?.trim() || "Membre"
-  const seed = `${name}:living`
+  const pillarScores = computePillarScores(input.psychometric)
+  const ranked = rankedPillars(pillarScores)
+  const forceCards = buildForceCards(ranked)
+  const vigilanceCards = buildVigilanceCards(ranked)
+  const portraitBody = composePortraitNarrative({
+    firstName: name,
+    ranked,
+  })
+  const resumeBody = composeExecutiveSummary({
+    firstName: name,
+    forces: forceCards,
+    vigilances: vigilanceCards,
+    testsDone: essentialsDone,
+    testsTotal: essentialsTotal,
+  })
+
+  const chapterPillarMap: Partial<Record<ReportChapterId, ReportPillarId>> = {
+    communication: "relationnel",
+    conflits: "relationnel",
+    intelligence_emotionnelle: "humain",
+    valeurs: "valeurs",
+    vision_mariage: "projets_de_vie",
+    projet_de_vie: "projets_de_vie",
+    finances: "valeurs",
+    spiritualite: "spirituel",
+  }
 
   const chapters: LivingChapter[] = REPORT_CHAPTERS.map((def) => {
     const unlocked =
@@ -209,8 +248,8 @@ export function buildLivingPersonalizedReport(input: {
         teaser: def.teaser,
         unlocked: false,
         unlockHint: needed
-          ? `Cette partie est encore bloquée. Complétez « ${needed.title} » pour ouvrir vos résultats.`
-          : "Cette partie est encore bloquée. Complétez l’évaluation correspondante pour ouvrir vos résultats.",
+          ? `${REPORT_COPY.missingEval} Évaluation requise : « ${needed.title} ».`
+          : REPORT_COPY.missingEval,
         unlockHref: needed?.sourceSlug
           ? `/assessments/${needed.sourceSlug}`
           : "/assessments",
@@ -226,7 +265,10 @@ export function buildLivingPersonalizedReport(input: {
         title: def.title,
         teaser: def.teaser,
         unlocked: true,
-        body: `${name}, votre Rapport Personnalisé Alliance™ — découvrez vos forces, vos axes de progression et votre niveau actuel de préparation à une relation durable.`,
+        body: REPORT_COPY.welcome.replace(
+          "Bienvenue dans votre Rapport Personnalisé KELIAA Alliance.",
+          `${name}, bienvenue dans votre Rapport Personnalisé KELIAA Alliance.`
+        ),
       }
     }
 
@@ -237,15 +279,15 @@ export function buildLivingPersonalizedReport(input: {
         title: def.title,
         teaser: def.teaser,
         unlocked: true,
-        body:
-          (base.overview?.body || pickIntroduction(seed)) +
-          (globalIndex != null
-            ? ` Indice global observé : ${globalIndex}/100 à partir des tests déjà complétés.`
-            : " Complétez vos premiers tests pour affiner l’indice global."),
+        body: resumeBody,
         bullets: [
           `${essentialsDone} / ${essentialsTotal} évaluations essentielles complétées`,
-          `${base.lightTips.length} recommandations personnalisées`,
-          `${completenessPercent} % de complétude du rapport`,
+          forceCards.length
+            ? `${forceCards.length} force${forceCards.length > 1 ? "s" : ""} mise${forceCards.length > 1 ? "s" : ""} en avant`
+            : "Forces en cours d’identification",
+          vigilanceCards.length
+            ? `${vigilanceCards.length} axe${vigilanceCards.length > 1 ? "s" : ""} de progression`
+            : "Axes à affiner avec les prochains tests",
         ],
       }
     }
@@ -261,9 +303,7 @@ export function buildLivingPersonalizedReport(input: {
         title: def.title,
         teaser: def.teaser,
         unlocked: true,
-        body:
-          base.overview?.body ||
-          `${name}, votre portrait relationnel se construit à partir des évaluations déjà réalisées. Il reste volontairement nuancé : ce n’est pas une étiquette, c’est une photographie actuelle.`,
+        body: portraitBody,
         unlockHref: needed?.sourceSlug
           ? `/assessments/${needed.sourceSlug}`
           : "/assessments/personality",
@@ -271,29 +311,41 @@ export function buildLivingPersonalizedReport(input: {
     }
 
     if (def.id === "forces") {
-      const strengths = base.overview?.strengths ?? []
       return {
         id: def.id,
         page: def.page,
         title: def.title,
         teaser: def.teaser,
         unlocked: true,
-        body: "Voici les ressources qui ressortent le plus clairement de vos réponses.",
-        bullets: strengths.map((s) => `${s.label} (${s.score}%)`),
+        body: REPORT_COPY.forcesIntro,
+        insightCards:
+          forceCards.length > 0
+            ? forceCards
+            : undefined,
+        bullets:
+          forceCards.length === 0
+            ? [
+                "Complétez au moins une évaluation pour faire apparaître vos premières forces.",
+              ]
+            : undefined,
         tips: chapterTips.slice(0, 2),
       }
     }
 
     if (def.id === "vigilances") {
-      const priorities = base.overview?.priorities ?? []
       return {
         id: def.id,
         page: def.page,
         title: def.title,
         teaser: def.teaser,
         unlocked: true,
-        body: "Ces domaines méritent une attention particulière — avec bienveillance et des actions concrètes.",
-        bullets: priorities.map((s) => `${s.label} (${s.score}%)`),
+        body: REPORT_COPY.vigilancesIntro,
+        insightCards:
+          vigilanceCards.length > 0 ? vigilanceCards : undefined,
+        bullets:
+          vigilanceCards.length === 0
+            ? [REPORT_COPY.noPriority]
+            : undefined,
         tips: chapterTips.slice(0, 3),
       }
     }
@@ -305,10 +357,11 @@ export function buildLivingPersonalizedReport(input: {
         title: def.title,
         teaser: def.teaser,
         unlocked: true,
-        body: "Synthèse des compétences déjà mesurées. Les indicateurs manquants apparaîtront au fur et à mesure des tests.",
-        bullets: (base.pillars ?? [])
-          .filter((p) => p.score != null)
-          .map((p) => `${p.shortLabel} · ${p.score}% · ${p.scoreBandLabel ?? ""}`),
+        body: "Vue d’ensemble de vos ressources et de vos axes — sans jargon, sans étiquette.",
+        bullets: [
+          ...forceCards.slice(0, 3).map((c) => `Force · ${c.title}`),
+          ...vigilanceCards.slice(0, 3).map((c) => `Axe · ${c.title}`),
+        ],
       }
     }
 
@@ -319,7 +372,12 @@ export function buildLivingPersonalizedReport(input: {
         title: def.title,
         teaser: def.teaser,
         unlocked: true,
-        body: "Priorités d’action (maximum 5) — issues de la bibliothèque officielle.",
+        body: REPORT_COPY.tipsIntro,
+        insightCards: vigilanceCards.slice(0, 3).map((c) => ({
+          ...c,
+          id: `plan_${c.id}`,
+          kind: "vigilance" as const,
+        })),
         tips: base.lightTips.slice(0, 5),
       }
     }
@@ -336,7 +394,7 @@ export function buildLivingPersonalizedReport(input: {
           "Académie du mariage — modules ciblés",
           "Coffre Premium — guides et exercices",
           "Eva — questions de discernement au quotidien",
-          "Coaching — quand vous avez besoin d’un accompagnement humain",
+          "Coaching — accompagnement humain quand vous en avez besoin",
         ],
       }
     }
@@ -351,10 +409,7 @@ export function buildLivingPersonalizedReport(input: {
         title: def.title,
         teaser: def.teaser,
         unlocked: true,
-        body:
-          remaining.length > 0
-            ? "Votre rapport continue de s’enrichir. Voici les évaluations encore à faire pour débloquer de nouvelles analyses."
-            : "Bravo — les évaluations essentielles sont complètes. Revenez quand de nouveaux tests Alliance s’ouvriront.",
+        body: REPORT_COPY.evolution,
         bullets: remaining.slice(0, 5).map(
           (c) =>
             `${c.title} → ouvre ${c.unlocks.slice(0, 2).join(", ") || "de nouvelles parties"}`
@@ -377,21 +432,29 @@ export function buildLivingPersonalizedReport(input: {
         title: def.title,
         teaser: def.teaser,
         unlocked: true,
-        body: base.conclusion || pickConclusion(seed),
+        body: `${REPORT_COPY.conclusion}\n\n${REPORT_COPY.motivation}`,
       }
     }
 
-  // Chapitres compétence (communication, conflits, …)
+    // Chapitres compétence (communication, conflits, …)
     const linked = def.unlockedBy[0]
       ? PERSONALIZED_ASSESSMENTS.find((a) => a.id === def.unlockedBy[0])
       : undefined
+    const pillarId = chapterPillarMap[def.id]
+    const analysis = composeChapterAnalysis({
+      chapterTitle: def.title,
+      pillarId,
+      tipTitles: chapterTips.map((t) => t.title),
+      tipAdvice: chapterTips.map((t) => t.advice),
+    })
     return {
       id: def.id,
       page: def.page,
       title: def.title,
       teaser: def.teaser,
       unlocked: true,
-      body: def.teaser,
+      body: analysis.body,
+      sections: analysis.sections,
       tips: chapterTips.slice(0, 4),
       unlockHref: linked?.sourceSlug
         ? `/assessments/${linked.sourceSlug}`

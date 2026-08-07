@@ -6,9 +6,9 @@ import { CheckCircle2, Clock } from "lucide-react"
 export default async function CheckoutSuccessPage({
   searchParams,
 }: {
-  searchParams: Promise<{ payment?: string }>
+  searchParams: Promise<{ payment?: string; renew?: string }>
 }) {
-  const { payment: paymentId } = await searchParams
+  const { payment: paymentId, renew } = await searchParams
   const summary = await getMySubscriptionSummary()
   const pending = paymentId ? await getPendingPayment(paymentId) : null
 
@@ -23,8 +23,25 @@ export default async function CheckoutSuccessPage({
     !active &&
     (paymentStatus === "pending" || paymentStatus === "processing" || !paymentId)
 
-  const primaryHref = active ? "/alliance/bienvenue" : "/billing"
-  const primaryLabel = active ? "Entrer dans Alliance" : "Vérifier mon offre"
+  const isRenewal =
+    renew === "1" ||
+    renew === "true" ||
+    Boolean(
+      (pending?.payment?.metadata as { is_renewal?: boolean } | null | undefined)
+        ?.is_renewal
+    )
+
+  /** Toujours le cinéma Alliance — premier accès ou renouvellement. */
+  const primaryHref = active
+    ? isRenewal
+      ? "/alliance/bienvenue?mode=renew"
+      : "/alliance/bienvenue"
+    : "/billing"
+  const primaryLabel = active
+    ? isRenewal
+      ? "Voir mon renouvellement"
+      : "Entrer dans Alliance"
+    : "Vérifier mon offre"
 
   return (
     <MemberPage>
@@ -41,13 +58,19 @@ export default async function CheckoutSuccessPage({
           )}
         </div>
         <h1 className="font-serif text-4xl font-bold text-foreground">
-          {active ? "Bienvenue dans Alliance" : "Paiement reçu — activation en cours"}
+          {active
+            ? isRenewal
+              ? "Alliance renouvelée"
+              : "Bienvenue dans Alliance"
+            : "Paiement reçu — activation en cours"}
         </h1>
         <p className="text-muted-foreground text-sm leading-relaxed">
           {active ? (
             <>
-              Votre offre <strong>{planName}</strong> est active. Une expérience guidée
-              vous attend — pas seulement des fonctionnalités.
+              Votre offre <strong>{planName}</strong> est active.
+              {isRenewal
+                ? " Une célébration de renouvellement vous attend."
+                : " Une expérience guidée vous attend — vous avez payé, voici Alliance."}
             </>
           ) : (
             <>

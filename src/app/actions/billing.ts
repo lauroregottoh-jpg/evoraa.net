@@ -107,6 +107,9 @@ export async function startCheckoutAction(
         )
       : null
 
+  const existingSub = await getActiveSubscription(user.id)
+  const isRenewal = Boolean(existingSub)
+
   const { data: subscription, error: subError } = await supabase
     .from("subscriptions")
     .insert({
@@ -139,6 +142,7 @@ export async function startCheckoutAction(
         demo_mode: isDemoPayments(),
         payment_mode: paymentMode,
         user_country: profile?.country || null,
+        is_renewal: isRenewal,
       },
     })
     .select("id")
@@ -147,6 +151,11 @@ export async function startCheckoutAction(
   if (payError || !payment) {
     return { error: payError?.message || "Impossible de créer le paiement." }
   }
+
+  const successPath = `/checkout/success?payment=${payment.id}${
+    isRenewal ? "&renew=1" : ""
+  }`
+  const successUrl = `${appBaseUrl()}${successPath}`
 
   if (!isDemoPayments()) {
     try {
@@ -165,6 +174,7 @@ export async function startCheckoutAction(
           customerCity: (profile?.city as string) || "Dakar",
           paymentMode: paymentMode || "mobile_money",
           appBaseUrl: appBaseUrl(),
+          successPath,
         })
         if (!result.ok) {
           await logPaymentEvent({
@@ -186,6 +196,7 @@ export async function startCheckoutAction(
               provider: "bictorys",
               payment_mode: result.paymentMode,
               user_country: profile?.country || null,
+              is_renewal: isRenewal,
               bictorys: result.raw,
             },
           })
@@ -216,7 +227,7 @@ export async function startCheckoutAction(
           secretKey: process.env.MONEROO_SECRET_KEY,
           amountXof: plan.amountXof,
           description: `KELIAA ${plan.name} — 30 jours`,
-          returnUrl: `${appBaseUrl()}/checkout/success?payment=${payment.id}`,
+          returnUrl: successUrl,
           customerEmail: user.email || "",
           customerFirstName:
             (profile?.first_name as string) ||
@@ -246,6 +257,7 @@ export async function startCheckoutAction(
               plan_name: plan.name,
               provider: "moneroo",
               user_country: profile?.country || null,
+              is_renewal: isRenewal,
               moneroo: result.raw,
             },
           })
@@ -311,6 +323,7 @@ export async function getPendingPayment(paymentId: string) {
       planId: subscription.plan as PlanId,
       planName: PLANS[subscription.plan as PlanId]?.name ?? subscription.plan,
       subscriptionStatus: subscription.status,
+      metadata: (payment.metadata as Record<string, unknown> | null) ?? null,
     },
   }
 }
