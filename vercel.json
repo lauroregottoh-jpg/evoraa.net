@@ -16,7 +16,7 @@
     },
     {
       "path": "/api/cron/abandoned-payments",
-      "schedule": "0 */3 * * *"
+      "schedule": "30 11 * * *"
     }
   ]
 }

@@ -106,15 +106,15 @@ export async function GET(request: NextRequest) {
     })
     notified++
 
-    const email = emailByUser.get(c.userId)
-    if (email) {
+    const row = emailByUser.get(c.userId)
+    if (row?.email) {
       const html = abandonedPaymentEmailHtml({
-        firstName: nameByUser.get(c.userId) || "",
+        firstName: nameByUser.get(c.userId) || row.firstName || "",
         appUrl,
         amountLabel: `${c.amount.toLocaleString("fr-FR")} FCFA`,
       })
       const r = await sendEmailWithRetry({
-        to: email,
+        to: row.email,
         subject: "Votre paiement Alliance n’est pas terminé",
         html,
       })
