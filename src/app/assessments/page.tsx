@@ -56,6 +56,10 @@ export default async function AssessmentsHubPage() {
     <MemberPage>
       <div className="relative space-y-8 py-2 max-w-4xl mx-auto">
         <header className="relative z-10 overflow-hidden rounded-[1.75rem] border border-primary/20 bg-gradient-to-br from-[#5C1F28] via-[#722F37] to-[#3D141A] p-6 sm:p-8 text-[#F8F4EE] shadow-elevated">
+          <div
+            aria-hidden
+            className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-35"
+          />
           <div className="relative z-10 space-y-4">
             <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
               Tests · Matching & Rapport
@@ -65,8 +69,8 @@ export default async function AssessmentsHubPage() {
             </h1>
             <p className="text-sm text-white/85 leading-relaxed max-w-2xl">
               {isAlliance
-                ? "Formule Alliance : les 5 tests Matching restent le socle. Les évaluations enrichies sont visibles et débloquées pour votre Rapport Personnalisé."
-                : "Formule Découverte : commencez par les 5 tests de compatibilité. Les évaluations Alliance sont visibles mais verrouillées — elles s’ouvrent avec Alliance."}
+                ? "Formule Alliance : socle Matching (5 tests) + clés du Rapport Personnalisé. Chaque test enrichit votre lecture."
+                : "Formule Découverte : les 5 tests de compatibilité. Les évaluations Alliance sont visibles mais verrouillées."}
             </p>
             <div className="flex flex-wrap items-center gap-3 pt-1">
               {next ? (
@@ -90,13 +94,14 @@ export default async function AssessmentsHubPage() {
               ) : (
                 <Link
                   href="/rapport"
-                  className="inline-flex h-12 items-center rounded-xl border border-white/25 bg-white/10 px-5 text-sm font-semibold"
+                  className="inline-flex h-12 items-center rounded-xl border border-[#B8954A]/45 bg-[#B8954A]/20 px-5 text-sm font-semibold text-[#F3D9A4]"
                 >
                   Voir mon rapport
                 </Link>
               )}
               <p className="text-xs text-white/65">
-                Matching {doneCount}/5 · maj tous les {ASSESSMENT_RETAKE_COOLDOWN_DAYS} j
+                Matching {doneCount}/5 · Rapport {living.completenessPercent}% ·
+                maj {ASSESSMENT_RETAKE_COOLDOWN_DAYS} j
               </p>
             </div>
           </div>
@@ -104,7 +109,10 @@ export default async function AssessmentsHubPage() {
 
         <div className="relative z-10 rounded-[1.35rem] border border-border/70 bg-gradient-to-br from-white via-secondary/40 to-accent/[0.06] p-5 shadow-card">
           <PillarBadges
-            pillars={progress.map((p) => ({ slug: p.slug, completed: p.completed }))}
+            pillars={progress.map((p) => ({
+              slug: p.slug,
+              completed: p.completed,
+            }))}
           />
         </div>
 
@@ -122,15 +130,20 @@ export default async function AssessmentsHubPage() {
               Tests de compatibilité (5 piliers)
             </h2>
             <p className="text-sm text-muted-foreground mt-1">
-              Accessibles à tous — alimentent le Matching et plusieurs chapitres du
-              rapport.
+              Accessibles à tous — Matching + plusieurs chapitres du rapport.
             </p>
           </div>
           <AssessmentPillarCards items={[...progress]} />
         </section>
 
         <section className="relative z-10 space-y-4">
-          <div className="rounded-2xl border border-accent/25 bg-accent/[0.07] p-5 space-y-2">
+          <div
+            className={
+              isAlliance
+                ? "rounded-2xl border border-[#B8954A]/35 bg-gradient-to-br from-[#B8954A]/12 via-white to-primary/[0.04] p-5 space-y-2"
+                : "rounded-2xl border border-accent/25 bg-accent/[0.07] p-5 space-y-2"
+            }
+          >
             <p className="text-[10px] font-bold uppercase tracking-widest text-accent inline-flex items-center gap-1.5">
               {isAlliance ? (
                 <Crown className="h-3.5 w-3.5" />
@@ -140,12 +153,12 @@ export default async function AssessmentsHubPage() {
               Formule Alliance
             </p>
             <h2 className="font-serif text-2xl font-bold">
-              Évaluations enrichies du Rapport Personnalisé
+              Évaluations du Rapport Personnalisé
             </h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {isAlliance
-                ? "Cartes débloquées : chaque évaluation ouvre une nouvelle partie de votre rapport. Les questionnaires dédiés arriveront progressivement — les clés Matching déjà complétées enrichissent déjà plusieurs chapitres."
-                : "Cartes visibles mais verrouillées en Découverte. Avec Alliance, elles s’ouvrent pour enrichir votre bilan relationnel complet."}
+                ? "Cartes débloquées / enrichies : les 10 clés + complémentaires. Cliquez pour passer le test Matching lié, puis ouvrez l’analyse dans Rapport."
+                : "Cartes visibles mais verrouillées en Découverte (sauf les tests Matching ci-dessus). Alliance ouvre le rapport vivant et les évaluations enrichies."}
             </p>
             {!isAlliance ? (
               <Link
@@ -154,11 +167,26 @@ export default async function AssessmentsHubPage() {
               >
                 Passer Alliance pour débloquer →
               </Link>
-            ) : null}
+            ) : (
+              <Link
+                href="/rapport"
+                className="inline-flex h-10 items-center rounded-xl border border-[#B8954A]/40 bg-[#B8954A]/15 px-4 text-sm font-bold text-[#7A5F28]"
+              >
+                Ouvrir mon Rapport Personnalisé →
+              </Link>
+            )}
           </div>
           <DiscoveryAssessmentCards
-            cards={living.cards.filter((c) => c.tier !== "essential")}
+            cards={living.cards.map((c) => {
+              if (isAlliance) return c
+              if (c.state === "done") return c
+              if (c.tier === "essential" || c.tier === "complementary") {
+                return { ...c, state: "locked" as const }
+              }
+              return c
+            })}
             showComplementary
+            isAlliance={isAlliance}
           />
         </section>
 

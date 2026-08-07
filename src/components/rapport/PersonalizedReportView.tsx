@@ -36,6 +36,8 @@ export function PersonalizedReportView({
     })
   }, [chapters])
 
+  const unlockedCount = ordered.filter((c) => c.unlocked).length
+  const lockedCount = ordered.length - unlockedCount
   const firstUnlockedId = ordered.find((c) => c.unlocked)?.id ?? null
   const [openId, setOpenId] = React.useState<string | null>(firstUnlockedId)
   const [expandAll, setExpandAll] = React.useState(false)
@@ -46,57 +48,87 @@ export function PersonalizedReportView({
   }, [firstUnlockedId])
 
   const isOpen = (id: string) => expandAll || openId === id
+  const hasAnyTest = living.testsCompleted > 0
 
   return (
     <article className="space-y-5 max-w-3xl mx-auto">
-      <header className="relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#1C1412] via-[#2A1810] to-[#5C1F28] p-6 sm:p-8 text-[#F8F4EE] shadow-elevated">
-        <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
-          KELIAA · Alliance
+      <header className="relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/40 bg-gradient-to-br from-[#1C1412] via-[#2A1810] to-[#5C1F28] p-6 sm:p-8 text-[#F8F4EE] shadow-elevated">
+        <div
+          aria-hidden
+          className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-40"
+        />
+        <p className="relative z-10 text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
+          KELIAA · Rapport Personnalisé
         </p>
-        <h1 className="mt-3 font-serif text-3xl sm:text-4xl font-bold leading-tight">
-          Votre Rapport Personnalisé Alliance™
+        <h1 className="relative z-10 mt-3 font-serif text-3xl sm:text-4xl font-bold leading-tight">
+          {isAlliance
+            ? `${name}, votre lecture Alliance™`
+            : `${name}, aperçu de votre rapport`}
         </h1>
-        <p className="mt-2 text-sm text-white/75 leading-relaxed max-w-xl">
-          Cliquez sur une partie pour l’ouvrir. Les analyses déjà débloquées
-          apparaissent en premier.
+        <p className="relative z-10 mt-2 text-sm text-white/75 leading-relaxed max-w-xl">
+          Cliquez sur une partie pour l’ouvrir. Chaque test complété enrichit
+          automatiquement votre rapport — les sections verrouillées restent
+          visibles.
         </p>
-        <div className="mt-5 flex flex-wrap items-end gap-4">
-          <div>
-            <p className="text-[10px] uppercase tracking-wider text-white/50">
-              Membre
-            </p>
-            <p className="font-serif text-xl font-bold">{name}</p>
-          </div>
-          <div>
-            <p className="text-[10px] uppercase tracking-wider text-white/50">
-              Complétude
-            </p>
-            <p className="font-serif text-xl font-bold text-[#F3D9A4]">
+
+        <div className="relative z-10 mt-5 space-y-2">
+          <div className="flex items-center justify-between text-[11px] text-white/60">
+            <span>Complétude du rapport</span>
+            <span className="font-bold text-[#F3D9A4]">
               {living.completenessPercent}%
-            </p>
+            </span>
           </div>
+          <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-[#B8954A] to-[#F3D9A4] transition-all duration-700"
+              style={{ width: `${Math.min(100, living.completenessPercent)}%` }}
+            />
+          </div>
+        </div>
+
+        <div className="relative z-10 mt-5 flex flex-wrap items-end gap-4">
           {living.globalIndex != null ? (
             <div>
               <p className="text-[10px] uppercase tracking-wider text-white/50">
                 Indice global
               </p>
-              <p className="font-serif text-xl font-bold">{living.globalIndex}</p>
+              <p className="font-serif text-2xl font-bold">{living.globalIndex}</p>
             </div>
           ) : null}
+          <div>
+            <p className="text-[10px] uppercase tracking-wider text-white/50">
+              Parties ouvertes
+            </p>
+            <p className="font-serif text-2xl font-bold text-[#F3D9A4]">
+              {unlockedCount}
+              <span className="text-base text-white/45 font-normal">
+                /{ordered.length}
+              </span>
+            </p>
+          </div>
+          <div>
+            <p className="text-[10px] uppercase tracking-wider text-white/50">
+              Évaluations
+            </p>
+            <p className="font-serif text-2xl font-bold">
+              {living.testsCompleted}
+              <span className="text-base text-white/45 font-normal">
+                /{living.essentialsTotal}
+              </span>
+            </p>
+          </div>
         </div>
-        <div className="mt-4 flex flex-wrap gap-2">
+
+        <div className="relative z-10 mt-4 flex flex-wrap gap-2">
           {isAlliance ? (
             <span className="inline-flex items-center gap-1 rounded-full border border-[#B8954A]/50 bg-[#B8954A]/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#F3D9A4]">
               <Crown className="h-3 w-3" /> {base.offerLabel}
             </span>
           ) : (
             <span className="inline-flex items-center gap-1 rounded-full border border-white/25 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider">
-              <Lock className="h-3 w-3" /> Aperçu
+              <Lock className="h-3 w-3" /> Aperçu Découverte
             </span>
           )}
-          <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-semibold">
-            {living.testsCompleted}/{living.essentialsTotal} évaluations
-          </span>
           {demoLabel ? (
             <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-semibold">
               {demoLabel}
@@ -105,30 +137,54 @@ export function PersonalizedReportView({
         </div>
       </header>
 
+      {!hasAnyTest ? (
+        <div className="rounded-2xl border border-accent/30 bg-accent/10 p-5 space-y-3">
+          <p className="font-serif text-xl font-bold">Commencez par un test</p>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Votre rapport se construit au fur et à mesure. Complétez au moins un
+            questionnaire Matching pour ouvrir vos premières analyses.
+          </p>
+          <Link
+            href="/assessments"
+            className="inline-flex h-11 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-primary-foreground"
+          >
+            Aller aux tests <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      ) : null}
+
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-xs text-muted-foreground">
-          {ordered.filter((c) => c.unlocked).length} parties ouvertes ·{" "}
-          {ordered.filter((c) => !c.unlocked).length} à débloquer
+          {unlockedCount} ouverte{unlockedCount > 1 ? "s" : ""} · {lockedCount}{" "}
+          à débloquer
         </p>
-        <button
-          type="button"
-          onClick={() => setExpandAll((v) => !v)}
-          className="text-xs font-bold text-primary underline underline-offset-2"
-        >
-          {expandAll ? "Replier tout" : "Voir toute la vision"}
-        </button>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/assessments"
+            className="text-xs font-semibold text-primary underline underline-offset-2"
+          >
+            Continuer les tests
+          </Link>
+          <button
+            type="button"
+            onClick={() => setExpandAll((v) => !v)}
+            className="text-xs font-bold text-accent underline underline-offset-2"
+          >
+            {expandAll ? "Replier tout" : "Voir toute la vision"}
+          </button>
+        </div>
       </div>
 
       {living.nextUnlock ? (
-        <div className="rounded-2xl border border-accent/30 bg-accent/10 px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+        <div className="rounded-2xl border border-[#B8954A]/35 bg-gradient-to-r from-[#B8954A]/15 via-white to-primary/[0.04] px-4 py-3.5 flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm">
             <Sparkles className="inline h-4 w-4 text-accent mr-1.5" />
-            Complétez <strong>{living.nextUnlock.title}</strong> pour enrichir «{" "}
-            {living.nextUnlock.chapterTitle} ».
+            Prochaine clé : <strong>{living.nextUnlock.title}</strong> → enrichit «{" "}
+            {living.nextUnlock.chapterTitle} »
           </p>
           <Link
             href={living.nextUnlock.href}
-            className="inline-flex h-9 items-center gap-1 rounded-xl bg-primary px-3 text-xs font-bold text-primary-foreground"
+            className="inline-flex h-9 items-center gap-1 rounded-xl bg-[#B8954A] px-3 text-xs font-bold text-[#1C1412]"
           >
             Faire le test <ArrowRight className="h-3.5 w-3.5" />
           </Link>
@@ -144,19 +200,26 @@ export function PersonalizedReportView({
               className={cn(
                 "rounded-2xl border overflow-hidden transition-colors",
                 chapter.unlocked
-                  ? "border-border bg-card"
+                  ? "border-[#B8954A]/35 bg-card shadow-sm"
                   : "border-dashed border-border/80 bg-secondary/25"
               )}
             >
               <button
                 type="button"
                 onClick={() =>
-                  setOpenId((cur) => (cur === chapter.id && !expandAll ? null : chapter.id))
+                  setOpenId((cur) =>
+                    cur === chapter.id && !expandAll ? null : chapter.id
+                  )
                 }
                 className="w-full flex items-start justify-between gap-3 p-4 sm:p-5 text-left"
               >
                 <div className="min-w-0">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
+                  <p
+                    className={cn(
+                      "text-[10px] font-bold uppercase tracking-widest",
+                      chapter.unlocked ? "text-accent" : "text-muted-foreground"
+                    )}
+                  >
                     Page {chapter.page}
                     {chapter.unlocked ? " · Débloqué" : " · Verrouillé"}
                   </p>
@@ -171,7 +234,7 @@ export function PersonalizedReportView({
                   {!chapter.unlocked ? (
                     <Lock className="h-4 w-4 text-muted-foreground" />
                   ) : (
-                    <ClipboardList className="h-4 w-4 text-primary" />
+                    <ClipboardList className="h-4 w-4 text-accent" />
                   )}
                   <ChevronDown
                     className={cn(
@@ -189,6 +252,10 @@ export function PersonalizedReportView({
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {chapter.unlockHint}
                       </p>
+                      <p className="text-xs text-muted-foreground">
+                        Cette partie reste visible pour vous montrer ce qui
+                        s’ouvrira ensuite.
+                      </p>
                       {chapter.unlockHref ? (
                         <Link
                           href={isAlliance ? chapter.unlockHref : "/premium"}
@@ -196,7 +263,7 @@ export function PersonalizedReportView({
                         >
                           {isAlliance
                             ? "Faire le test pour ouvrir"
-                            : "Ouvrir avec Alliance"}
+                            : "Débloquer avec Alliance"}
                         </Link>
                       ) : null}
                     </div>
@@ -224,16 +291,26 @@ export function PersonalizedReportView({
                           {chapter.tips.map((t) => (
                             <div
                               key={t.id ?? t.title}
-                              className="rounded-xl border border-border/70 p-3 space-y-1"
+                              className="rounded-xl border border-accent/20 bg-accent/[0.04] p-3 space-y-1"
                             >
                               <p className="text-sm font-semibold">{t.title}</p>
                               <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line">
                                 {t.advice}
                               </p>
+                              {t.why ? (
+                                <p className="text-xs italic text-muted-foreground/80">
+                                  {t.why}
+                                </p>
+                              ) : null}
                             </div>
                           ))}
                         </div>
-                      ) : null}
+                      ) : (
+                        <p className="text-xs text-muted-foreground">
+                          Analyse ouverte — poursuivez vos tests pour enrichir
+                          encore cette partie.
+                        </p>
+                      )}
                     </>
                   )}
                 </div>

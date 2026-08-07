@@ -65,7 +65,11 @@ export default async function RapportPage() {
         />
         <p className="text-center text-xs text-muted-foreground">
           <Link href="/assessments" className="underline font-semibold text-primary">
-            Continuer mes évaluations
+            Continuer mes tests
+          </Link>
+          {" · "}
+          <Link href="/alliance/parcours" className="underline">
+            Mon parcours
           </Link>
           {" · "}
           <Link href="/premium" className="underline">
