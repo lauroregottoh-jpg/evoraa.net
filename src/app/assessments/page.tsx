@@ -148,7 +148,7 @@ export default async function AssessmentsHubPage() {
               </h2>
             </div>
           </div>
-          <AssessmentPillarCards items={progress} />
+          <AssessmentPillarCards items={[...progress]} />
         </section>
       </div>
     </MemberPage>

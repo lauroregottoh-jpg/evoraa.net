@@ -72,7 +72,7 @@ const PILLAR_META: Record<
 export function AssessmentPillarCards({
   items,
 }: {
-  items: AssessmentProgressItem[]
+  items: readonly AssessmentProgressItem[]
 }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
