@@ -4,11 +4,82 @@ import { createAdminClient } from "@/utils/supabase/admin"
 import { canAccessOpsConsole, OPS_CONSOLE_PATH } from "@/lib/admin/consolePath"
 import { buildProfileReport } from "@/lib/matching/report/buildProfileReport"
 import { PersonalizedReportView } from "@/components/rapport/PersonalizedReportView"
-import type { AssessmentSlug } from "@/lib/assessments/questionBank"
+import {
+  ASSESSMENT_ORDER,
+  type AssessmentSlug,
+} from "@/lib/assessments/questionBank"
+import { TEST_IDS } from "@/lib/assessments/testIds"
 
 export const dynamic = "force-dynamic"
 
-/** Aperçu admin : rapport Alliance généré depuis un vrai profil avec tests. */
+type Psych = {
+  personality?: number | null
+  spiritual?: number | null
+  relationship?: number | null
+  couple_life?: number | null
+  finances?: number | null
+  dimensions?: Partial<Record<AssessmentSlug, Record<string, number>>>
+}
+
+/** Jeu de démo si aucun membre n’a encore de tests en base. */
+const FALLBACK_PSYCH: Psych = {
+  personality: 78,
+  spiritual: 84,
+  relationship: 62,
+  couple_life: 71,
+  finances: 69,
+  dimensions: {
+    personality: {
+      emotional_stability: 72,
+      communication: 65,
+      openness: 80,
+      reliability: 74,
+    },
+    spiritual: {
+      prayer: 88,
+      service: 76,
+      church: 82,
+    },
+    relationship: {
+      conflict: 55,
+      listening: 68,
+      affection: 70,
+    },
+    couple_life: {
+      marriage_vision: 75,
+      children: 68,
+      daily_rhythm: 71,
+    },
+    finances: {
+      stewardship: 70,
+      transparency: 66,
+      priorities: 72,
+    },
+  },
+}
+
+function psychFromTestRows(
+  rows: { test_id: string; score: number | null; dimensions: unknown }[]
+): Psych | null {
+  if (!rows.length) return null
+  const dimensionsByPillar: Partial<Record<AssessmentSlug, Record<string, number>>> =
+    {}
+  const scores: Psych = {}
+  for (const slug of ASSESSMENT_ORDER) {
+    const row = rows.find((r) => r.test_id === TEST_IDS[slug])
+    if (!row) continue
+    scores[slug] = row.score != null ? Number(row.score) : null
+    if (row.dimensions && typeof row.dimensions === "object") {
+      dimensionsByPillar[slug] = row.dimensions as Record<string, number>
+    }
+  }
+  if (Object.keys(dimensionsByPillar).length === 0 && Object.keys(scores).length === 0) {
+    return null
+  }
+  return { ...scores, dimensions: dimensionsByPillar }
+}
+
+/** Aperçu admin : rapport Alliance (données réelles si dispo, sinon démo). */
 export default async function OpsRapportDemoPage() {
   let data: Awaited<ReturnType<typeof getAdminDashboardData>>
   try {
@@ -33,51 +104,70 @@ export default async function OpsRapportDemoPage() {
   }
 
   const admin = createAdminClient()
-  const { data: profiles } = await admin
-    .from("profiles")
-    .select("user_id, first_name, last_name, psychometric_results")
-    .not("psychometric_results", "is", null)
-    .limit(100)
 
-  type Psych = {
-    personality?: number | null
-    spiritual?: number | null
-    relationship?: number | null
-    couple_life?: number | null
-    finances?: number | null
-    dimensions?: Partial<Record<AssessmentSlug, Record<string, number>>>
+  let chosen: { firstName: string; psych: Psych; label: string } | null = null
+
+  const { data: recentResults } = await admin
+    .from("test_results")
+    .select("user_id, test_id, score, dimensions")
+    .order("completed_at", { ascending: false })
+    .limit(400)
+
+  const byUser = new Map<
+    string,
+    { test_id: string; score: number | null; dimensions: unknown }[]
+  >()
+  for (const r of recentResults ?? []) {
+    const uid = r.user_id as string
+    if (!uid) continue
+    const list = byUser.get(uid) ?? []
+    list.push({
+      test_id: r.test_id as string,
+      score: r.score as number | null,
+      dimensions: r.dimensions,
+    })
+    byUser.set(uid, list)
   }
 
-  let chosen: {
-    firstName: string
-    psych: Psych
-    label: string
-  } | null = null
+  const candidateIds = [...byUser.entries()]
+    .filter(([, rows]) => rows.length >= 2)
+    .map(([uid]) => uid)
+    .slice(0, 20)
 
-  for (const p of profiles ?? []) {
-    const psych = p.psychometric_results as Psych | null
-    if (!psych?.dimensions) continue
-    const dimCount = Object.values(psych.dimensions).filter(
-      (d) => d && Object.keys(d).length > 0
-    ).length
-    if (dimCount < 2) continue
-    const fn = (p.first_name as string) || "Membre"
-    const ln = ((p.last_name as string) || "").trim()
-    chosen = {
-      firstName: fn,
-      psych,
-      label: `Données réelles · ${fn}${ln ? ` ${ln[0]}.` : ""}`,
+  if (candidateIds.length > 0) {
+    const { data: profiles } = await admin
+      .from("profiles")
+      .select("user_id, first_name, last_name, psychometric_results")
+      .in("user_id", candidateIds)
+
+    for (const p of profiles ?? []) {
+      const uid = p.user_id as string
+      const fromRows = psychFromTestRows(byUser.get(uid) ?? [])
+      const fromProfile = p.psychometric_results as Psych | null
+      const psych =
+        fromRows?.dimensions && Object.keys(fromRows.dimensions).length > 0
+          ? fromRows
+          : fromProfile?.dimensions
+            ? fromProfile
+            : fromRows
+      if (!psych) continue
+      const fn = (p.first_name as string) || "Membre"
+      const ln = ((p.last_name as string) || "").trim()
+      chosen = {
+        firstName: fn,
+        psych,
+        label: `Données réelles · ${fn}${ln ? ` ${ln[0]}.` : ""}`,
+      }
+      break
     }
-    break
   }
 
   if (!chosen) {
-    return (
-      <Gate
-        title="Aucun profil avec tests"
-        body="Complétez les 5 tests sur un compte, puis rechargez."
-      />
-    )
+    chosen = {
+      firstName: "Chloé",
+      psych: FALLBACK_PSYCH,
+      label: "Exemple illustratif (aucun profil avec tests en base)",
+    }
   }
 
   const report = buildProfileReport({

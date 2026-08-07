@@ -9,6 +9,7 @@ import {
   AllianceBilanSection,
 } from "@/components/premium/AllianceBenefitCards"
 import { AllianceCheckoutPanel } from "@/components/premium/AllianceCheckoutPanel"
+import { BoostSection } from "@/components/premium/BoostSection"
 import { PremiumSocialProof } from "@/components/premium/PremiumSocialProof"
 import { AlliancePrioritySupport } from "@/components/premium/AlliancePrioritySupport"
 import { AmbientSnowOrbs } from "@/components/home/AmbientSnowOrbs"
@@ -62,8 +63,7 @@ export default async function PremiumPage() {
           <p className="text-sm text-muted-foreground leading-relaxed">
             Alliance est l’offre KELIAA pour ceux qui veulent préparer leur
             mariage avec lucidité. Elle ouvre votre bilan relationnel, enrichit
-            le Matching, et inclut le Coffre Premium — pour grandir avant (et
-            pour) l’alliance.
+            le Matching, et inclut le Coffre Premium.
           </p>
         </section>
 
@@ -76,6 +76,8 @@ export default async function PremiumPage() {
           suggestedMode={checkoutHints?.suggestedMode ?? "mobile_money"}
           isPaid={Boolean(usage?.isPaid)}
         />
+
+        <BoostSection />
 
         <AlliancePrioritySupport isPaid={Boolean(usage?.isPaid)} />
 

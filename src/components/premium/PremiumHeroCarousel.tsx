@@ -16,7 +16,7 @@ const DEFAULT_SLIDES: PremiumHeroSlide[] = [
     title: "l’espace pour préparer un mariage sérieux.",
     highlight: "Alliance,",
     subtitle:
-      "Un abonnement pensé pour ceux qui veulent avancer avec lucidité : se connaître mieux, rencontrer mieux, et grandir avant l’alliance.",
+      "Un abonnement pensé pour ceux qui veulent avancer avec lucidité : se connaître mieux, et rencontrer mieux.",
   },
   {
     badge: "Matching sérieux",
