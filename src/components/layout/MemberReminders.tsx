@@ -63,7 +63,7 @@ export function MemberReminders({
   if (!task && !showRenew && !showTrial) return null
 
   return (
-    <div className="border-t border-border/40 bg-secondary/30">
+    <div className="relative z-0 border-t border-border/40 bg-secondary/30">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-2 space-y-2">
         {showRenew && (
           <a
