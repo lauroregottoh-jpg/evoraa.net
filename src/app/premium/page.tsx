@@ -11,6 +11,7 @@ import {
 import { AllianceCheckoutPanel } from "@/components/premium/AllianceCheckoutPanel"
 import { BoostSection } from "@/components/premium/BoostSection"
 import { PremiumSocialProof } from "@/components/premium/PremiumSocialProof"
+import { AlliancePrioritySupport } from "@/components/premium/AlliancePrioritySupport"
 
 export default async function PremiumPage() {
   const supabase = await createClient()
@@ -75,6 +76,8 @@ export default async function PremiumPage() {
         />
 
         <BoostSection />
+
+        <AlliancePrioritySupport isPaid={Boolean(usage?.isPaid)} />
 
         <PremiumSocialProof />
 

@@ -1,18 +1,14 @@
 import Link from "next/link"
 import { Headphones, MessageCircle } from "lucide-react"
+import { getAllianceWhatsappHref } from "@/lib/support/allianceWhatsapp"
 
 /**
  * Support prioritaire Alliance :
- * - Ligne WhatsApp VIP (numéro via NEXT_PUBLIC_ALLIANCE_WHATSAPP)
+ * - Ligne WhatsApp VIP
  * - Ticket in-app prioritaire (/notifications?tab=avis&priority=1)
  */
 export function AlliancePrioritySupport({ isPaid }: { isPaid: boolean }) {
-  const raw = process.env.NEXT_PUBLIC_ALLIANCE_WHATSAPP?.replace(/\D/g, "") || ""
-  const waHref = raw
-    ? `https://wa.me/${raw}?text=${encodeURIComponent(
-        "Bonjour, je suis membre Alliance KELIAA et j’ai besoin d’aide prioritaire :"
-      )}`
-    : null
+  const waHref = getAllianceWhatsappHref()
 
   return (
     <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 space-y-4">
@@ -36,20 +32,18 @@ export function AlliancePrioritySupport({ isPaid }: { isPaid: boolean }) {
           <p className="text-xs text-muted-foreground leading-relaxed">
             Une ligne dédiée pour les urgences compte / paiement / matching.
           </p>
-          {isPaid && waHref ? (
+          {isPaid ? (
             <a
               href={waHref}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex text-xs font-bold text-primary underline"
+              className="inline-flex h-10 items-center justify-center rounded-xl bg-[#25D366] px-4 text-xs font-bold text-white hover:bg-[#1ebe57] transition-colors"
             >
               Ouvrir WhatsApp
             </a>
           ) : (
             <p className="text-[11px] text-muted-foreground">
-              {isPaid
-                ? "Configurez NEXT_PUBLIC_ALLIANCE_WHATSAPP (indicatif pays + numéro) pour activer le lien."
-                : "Disponible après activation Alliance."}
+              Disponible après activation Alliance.
             </p>
           )}
         </li>

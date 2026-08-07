@@ -4,12 +4,14 @@ import {
   ClipboardList,
   Crown,
   Library,
+  MessageCircle,
   Sparkles,
 } from "lucide-react"
 import {
   COFFRE_INITIAL_UNLOCKS,
   COFFRE_UNLOCKS_PER_MONTH,
 } from "@/lib/coffre/unlock"
+import { getAllianceWhatsappHref } from "@/lib/support/allianceWhatsapp"
 import type { UsageSnapshot } from "@/lib/billing/usage"
 
 /** Accueil Alliance — ce qui change vraiment pour un membre payant. */
@@ -23,6 +25,7 @@ export function AllianceDashboardPanel({
   assessmentsDone: number
 }) {
   const name = firstName?.trim() || "Membre"
+  const waHref = getAllianceWhatsappHref()
 
   return (
     <section className="rounded-[1.5rem] border border-accent/35 bg-gradient-to-br from-accent/15 via-white to-primary/[0.06] p-5 sm:p-6 space-y-5 shadow-card">
@@ -111,6 +114,15 @@ export function AllianceDashboardPanel({
         >
           Ouvrir le Coffre Premium
         </Link>
+        <a
+          href={waHref}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex h-10 items-center gap-1.5 rounded-xl bg-[#25D366] px-4 text-xs font-bold text-white hover:bg-[#1ebe57]"
+        >
+          <MessageCircle className="h-3.5 w-3.5" />
+          Support WhatsApp
+        </a>
         <Link
           href="/premium"
           className="inline-flex h-10 items-center rounded-xl border border-border bg-white px-4 text-xs font-semibold"
