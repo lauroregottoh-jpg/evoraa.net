@@ -15,6 +15,8 @@ type MemberRemindersProps = {
   isTrialBoost: boolean
   isPaid: boolean
   onNavigate: NavHandler
+  /** Masque le bandeau quand le menu compte est ouvert (évite le chevauchement). */
+  dimmed?: boolean
 }
 
 /**
@@ -32,6 +34,7 @@ export function MemberReminders({
   isTrialBoost,
   isPaid,
   onNavigate,
+  dimmed = false,
 }: MemberRemindersProps) {
   const testsLeft = assessmentsDone < assessmentsTotal
   const pushTestsFirst = testsLeft || completionPercentage < 15
@@ -63,7 +66,12 @@ export function MemberReminders({
   if (!task && !showRenew && !showTrial) return null
 
   return (
-    <div className="relative z-0 border-t border-border/40 bg-secondary/30">
+    <div
+      className={`relative z-0 border-t border-border/40 bg-secondary/30 transition-opacity duration-200 ${
+        dimmed ? "opacity-0 pointer-events-none" : "opacity-100"
+      }`}
+      aria-hidden={dimmed}
+    >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-2 space-y-2">
         {showRenew && (
           <a

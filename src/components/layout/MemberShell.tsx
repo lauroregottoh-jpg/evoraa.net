@@ -19,7 +19,6 @@ import {
   BookHeart,
   LogOut,
   Phone,
-  Sun,
   Library,
   PanelLeftClose,
   PanelLeftOpen,
@@ -359,7 +358,7 @@ export function MemberShell({
       </aside>
 
       <div className="flex-1 min-w-0 flex flex-col min-h-screen">
-        <header className="sticky top-0 z-[60] border-b border-border/50 bg-background/95 backdrop-blur-md">
+        <header className="sticky top-0 z-[60] isolate border-b border-border/50 bg-background/95 backdrop-blur-md">
           <div className="relative z-[80] flex h-14 sm:h-16 items-center justify-between gap-2 px-4 sm:px-6 bg-background/95">
             <div className="flex items-center gap-3 min-w-0">
               <button
@@ -399,45 +398,45 @@ export function MemberShell({
                   Passer Alliance
                 </a>
               )}
-              <div className="relative z-[90]" ref={accountRef}>
+              <div className="relative z-[120]" ref={accountRef}>
                 <button
                   type="button"
                   onClick={() => setAccountOpen((v) => !v)}
-                  className="inline-flex items-center justify-center rounded-full w-9 h-9 border border-border/60 bg-background/50 hover:bg-accent/10 transition-colors"
+                  className="inline-flex items-center justify-center rounded-full w-9 h-9 border border-[#5C1F28]/25 bg-[#5C1F28]/[0.08] hover:bg-[#5C1F28]/15 transition-colors"
                   title="Compte"
                   aria-label="Menu compte"
                   aria-expanded={accountOpen}
                 >
-                  <Sun className="h-4 w-4 text-accent" />
+                  <User className="h-4 w-4 text-[#5C1F28]" />
                 </button>
                 {accountOpen && (
                   <div
                     role="menu"
-                    className="absolute right-0 mt-2 w-52 rounded-xl border border-border bg-card shadow-lg z-[100] overflow-hidden py-1 animate-in fade-in zoom-in-95 duration-200"
+                    className="absolute right-0 mt-2 w-56 rounded-2xl border border-[#3D141A]/80 bg-[#5C1F28] text-[#F8F4EE] shadow-2xl z-[200] overflow-hidden py-1.5 animate-in fade-in zoom-in-95 duration-200"
                   >
                     <a
                       href="/profile"
                       onClick={go("/profile")}
-                      className="flex items-center gap-2 px-3 py-2.5 text-sm font-medium hover:bg-secondary"
+                      className="flex items-center gap-2.5 px-3.5 py-2.5 text-sm font-semibold text-[#F8F4EE]/90 hover:bg-white/12 hover:text-white transition-colors"
                     >
-                      <User className="h-4 w-4" />
+                      <User className="h-4 w-4 text-[#F3D9A4]" />
                       Profil
                     </a>
                     <a
                       href="/settings"
                       onClick={go("/settings")}
-                      className="flex items-center gap-2 px-3 py-2.5 text-sm font-medium hover:bg-secondary"
+                      className="flex items-center gap-2.5 px-3.5 py-2.5 text-sm font-semibold text-[#F8F4EE]/90 hover:bg-white/12 hover:text-white transition-colors"
                     >
-                      <Settings className="h-4 w-4" />
+                      <Settings className="h-4 w-4 text-[#F3D9A4]" />
                       Paramètres
                     </a>
-                    <div className="my-1 border-t border-border" />
-                    <form action={logoutAction}>
+                    <div className="my-1.5 mx-3 h-px bg-gradient-to-r from-transparent via-[#B8954A]/55 to-transparent" />
+                    <form action={logoutAction} className="px-1.5 pb-0.5">
                       <button
                         type="submit"
-                        className="flex w-full items-center gap-2 mx-1.5 mb-1 px-3 py-2.5 rounded-lg text-sm font-bold text-white bg-[#5C1F28] hover:bg-[#4A1820]"
+                        className="flex w-full items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#F8F4EE]/90 hover:bg-white/12 hover:text-white transition-colors"
                       >
-                        <LogOut className="h-4 w-4" />
+                        <LogOut className="h-4 w-4 text-[#F3D9A4]" />
                         Déconnexion
                       </button>
                     </form>
@@ -467,6 +466,7 @@ export function MemberShell({
             isTrialBoost={isTrialBoost}
             isPaid={isPaid}
             onNavigate={go}
+            dimmed={accountOpen}
           />
         </header>
 
