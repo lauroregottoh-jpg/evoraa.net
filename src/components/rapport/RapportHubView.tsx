@@ -9,9 +9,10 @@ import {
   Sparkles,
 } from "lucide-react"
 import type { LivingPersonalizedReport } from "@/lib/rapport/personalized/buildLivingReport"
+import { ScoreRing } from "@/components/rapport/ReportVisuals"
 import { cn } from "@/utils/cn"
 
-/** Hub Rapport — aperçu + CTAs ; le détail complet est sur /rapport/global. */
+/** Hub Rapport — aperçu premium + CTAs ; détail sur /rapport/global. */
 export function RapportHubView({
   firstName,
   living,
@@ -32,35 +33,53 @@ export function RapportHubView({
 
   return (
     <article className="space-y-5 max-w-3xl mx-auto">
-      <header className="relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/40 bg-gradient-to-br from-[#1C1412] via-[#2A1810] to-[#5C1F28] p-6 sm:p-8 text-[#F8F4EE] shadow-elevated">
+      <header className="rapport-reveal relative overflow-hidden rounded-[1.75rem] border-2 border-[#B8954A]/45 bg-gradient-to-br from-[#1C1412] via-[#2A1810] to-[#5C1F28] p-6 sm:p-8 text-[#F8F4EE] shadow-elevated">
         <div
           aria-hidden
           className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-40"
         />
-        <p className="relative z-10 text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
-          KELIAA · Rapport Personnalisé
-        </p>
-        <h1 className="relative z-10 mt-3 font-serif text-3xl sm:text-4xl font-bold leading-tight">
-          {isAlliance
-            ? `${name}, votre espace Rapport`
-            : `${name}, aperçu de votre rapport`}
-        </h1>
-        <p className="relative z-10 mt-2 text-sm text-white/75 leading-relaxed max-w-xl">
-          {living.documentMode === "complete"
-            ? "Votre rapport est complet. Relisez-le comme un guide de préparation au mariage."
-            : "Votre rapport évolue avec vous. Chaque test enrichit le document — les analyses en attente restent visibles avec la prochaine étape."}
-        </p>
+        <div
+          aria-hidden
+          className="rapport-pattern pointer-events-none absolute inset-0 opacity-25 mix-blend-overlay"
+        />
+
+        <div className="relative z-10 flex flex-col sm:flex-row gap-6 sm:items-start sm:justify-between">
+          <div className="min-w-0 space-y-2">
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
+              KELIAA · Rapport Personnalisé
+            </p>
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
+              <span className="rapport-gold-text">
+                {isAlliance
+                  ? `${name}, votre espace Rapport`
+                  : `${name}, aperçu de votre rapport`}
+              </span>
+            </h1>
+            <p className="mt-2 text-sm text-white/75 leading-relaxed max-w-xl">
+              {living.documentMode === "complete"
+                ? "Votre rapport est complet. Relisez-le comme un guide de préparation au mariage."
+                : "Votre rapport évolue avec vous. Chaque test enrichit le document — les analyses en attente restent visibles avec la prochaine étape."}
+            </p>
+          </div>
+          <div className="shrink-0 mx-auto sm:mx-0 rounded-2xl bg-white/95 p-3 shadow-lg">
+            <ScoreRing
+              value={living.completenessPercent}
+              label="Complétude"
+              size={112}
+            />
+          </div>
+        </div>
 
         <div className="relative z-10 mt-5 space-y-2">
           <div className="flex items-center justify-between text-[11px] text-white/60">
-            <span>Complétude</span>
+            <span>Progression du document</span>
             <span className="font-bold text-[#F3D9A4]">
               {living.completenessPercent}%
             </span>
           </div>
-          <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+          <div className="h-2.5 rounded-full bg-white/10 overflow-hidden">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#B8954A] to-[#F3D9A4] transition-all duration-700"
+              className="rapport-bar-fill h-full rounded-full bg-gradient-to-r from-[#B8954A] to-[#F3D9A4]"
               style={{ width: `${Math.min(100, living.completenessPercent)}%` }}
             />
           </div>
@@ -68,7 +87,7 @@ export function RapportHubView({
 
         <div className="relative z-10 mt-5 flex flex-wrap gap-2">
           {isAlliance ? (
-            <span className="inline-flex items-center gap-1 rounded-full border border-[#B8954A]/50 bg-[#B8954A]/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#F3D9A4]">
+            <span className="rapport-cover-seal inline-flex items-center gap-1 rounded-full border border-[#B8954A]/50 bg-[#B8954A]/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#F3D9A4]">
               <Crown className="h-3 w-3" /> {living.base.offerLabel}
             </span>
           ) : (
@@ -79,12 +98,17 @@ export function RapportHubView({
           <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-semibold">
             {unlockedCount}/{chapters.length} parties ouvertes
           </span>
+          {living.globalIndex != null ? (
+            <span className="rounded-full border border-[#B8954A]/40 bg-[#B8954A]/15 px-3 py-1 text-[10px] font-semibold text-[#F3D9A4]">
+              Indice {living.globalIndex}/100
+            </span>
+          ) : null}
         </div>
 
         <div className="relative z-10 mt-6 flex flex-wrap gap-2">
           <Link
             href="/rapport/global"
-            className="inline-flex h-12 items-center gap-2 rounded-xl bg-[#B8954A] px-5 text-sm font-bold text-[#1C1412]"
+            className="inline-flex h-12 items-center gap-2 rounded-xl bg-[#B8954A] px-5 text-sm font-bold text-[#1C1412] hover:brightness-105 transition"
           >
             Découvrir le rapport global
             <ArrowRight className="h-4 w-4" />
@@ -102,7 +126,7 @@ export function RapportHubView({
         </p>
       </header>
 
-      <section className="rounded-2xl border border-[#B8954A]/35 bg-card p-5 sm:p-6 space-y-4 shadow-sm">
+      <section className="rapport-reveal rapport-page-premium rounded-2xl border border-[#B8954A]/35 p-5 sm:p-6 space-y-4 shadow-sm">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
             Portrait relationnel
@@ -133,7 +157,7 @@ export function RapportHubView({
       </section>
 
       {living.nextUnlock ? (
-        <div className="rounded-2xl border border-[#B8954A]/35 bg-gradient-to-r from-[#B8954A]/15 via-white to-primary/[0.04] px-4 py-3.5 flex flex-wrap items-center justify-between gap-3">
+        <div className="rapport-reveal rounded-2xl border border-[#B8954A]/35 bg-gradient-to-r from-[#B8954A]/15 via-white to-primary/[0.04] px-4 py-3.5 flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm">
             <Sparkles className="inline h-4 w-4 text-accent mr-1.5" />
             Prochaine clé : <strong>{living.nextUnlock.title}</strong> → «{" "}
@@ -150,15 +174,16 @@ export function RapportHubView({
 
       <section className="space-y-2.5">
         <h2 className="font-serif text-xl font-bold px-1">Parties du rapport</h2>
-        {chapters.map((chapter) => (
+        {chapters.map((chapter, i) => (
           <div
             key={chapter.id}
             className={cn(
-              "rounded-2xl border p-4 sm:p-5",
+              "rapport-reveal rounded-2xl border p-4 sm:p-5",
               chapter.unlocked
-                ? "border-[#B8954A]/30 bg-card"
+                ? "rapport-page-premium border-[#B8954A]/30"
                 : "border-dashed border-border/80 bg-secondary/25"
             )}
+            style={{ animationDelay: `${Math.min(i, 8) * 40}ms` }}
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
