@@ -89,6 +89,7 @@ export const COFFRE_RESOURCES: CoffreResource[] = [
     description:
       "Un espace guidé pour clarifier vos intentions, vos peurs et vos rêves avant l’alliance.",
     category: "journal",
+    coverImage: "/coffre-premium/covers/cover-journal.png",
     fileName: "MON JOURNAL DE PREPARATION AU MARIAGE - LAURORE GOTTOH.pdf",
     unlockOrder: 1,
     premiumOnly: true,
@@ -99,6 +100,7 @@ export const COFFRE_RESOURCES: CoffreResource[] = [
     description:
       "Des questions profondes pour discerner avec lucidité, sans précipitation ni illusion.",
     category: "guide",
+    coverImage: "/coffre-premium/covers/cover-guide.png",
     fileName: "14 QUESTIONS SUR LE CHOIX DU CONJOINT - LAURORE GOTTOH.pdf",
     unlockOrder: 2,
     premiumOnly: true,
@@ -109,6 +111,7 @@ export const COFFRE_RESOURCES: CoffreResource[] = [
     description:
       "Les pièges fréquents à connaître tôt — pour construire sur des fondations solides.",
     category: "guide",
+    coverImage: "/coffre-premium/covers/cover-guide.png",
     fileName: "12 ERREURS QUI PEUVENT DETRUIRE TON FUTURE MARIAGE - LAURORE GOTTOH.pdf",
     unlockOrder: 3,
     premiumOnly: true,
@@ -119,6 +122,7 @@ export const COFFRE_RESOURCES: CoffreResource[] = [
     description:
       "Un plan de prière concret pour couvrir votre relation, votre foyer et votre vocation.",
     category: "priere",
+    coverImage: "/coffre-premium/covers/cover-priere.png",
     fileName:
       "160 POINTS DE PRIÈRE POUR TON FUTUR - ACTUEL COUPLE - LAURORE GOTTOH.pdf",
     unlockOrder: 4,
@@ -130,6 +134,7 @@ export const COFFRE_RESOURCES: CoffreResource[] = [
     description:
       "Des affirmations ancrées pour renforcer une identité saine avant (et dans) le couple.",
     category: "affirmations",
+    coverImage: "/coffre-premium/covers/cover-affirmations.png",
     fileName: "50-AFFIRMATIONS-POUR-REPROGRAMMER-TON-IDENTITE.pdf.pdf",
     unlockOrder: 5,
     premiumOnly: true,
@@ -140,6 +145,7 @@ export const COFFRE_RESOURCES: CoffreResource[] = [
     description:
       "Un parcours court et honnête pour mesurer la réalité de votre pardon — pas seulement l’intention.",
     category: "exercice",
+    coverImage: "/coffre-premium/covers/cover-exercice.png",
     fileName: "7 JOURS POUR VALIDER SI TU AS VRAIMENT PARDONNÉ - LAURORE GOTTOH.pdf",
     unlockOrder: 6,
     premiumOnly: true,
@@ -150,6 +156,7 @@ export const COFFRE_RESOURCES: CoffreResource[] = [
     description:
       "Une pratique concrète pour vous aimer sainement — condition d’un amour durable à deux.",
     category: "exercice",
+    coverImage: "/coffre-premium/covers/cover-exercice.png",
     fileName: "EXERCICE POUR RENFORCER L’AMOUR DE SOI.pdf.pdf",
     unlockOrder: 7,
     premiumOnly: true,
@@ -160,6 +167,7 @@ export const COFFRE_RESOURCES: CoffreResource[] = [
     description:
       "Un écrit thérapeutique pour déposer blessures, colères et libérations avant d’avancer.",
     category: "lettre",
+    coverImage: "/coffre-premium/covers/cover-lettre.png",
     fileName: "LETTRE DE GUERISON - LAURORE GOTTOH.pdf",
     unlockOrder: 8,
     premiumOnly: true,
@@ -170,6 +178,7 @@ export const COFFRE_RESOURCES: CoffreResource[] = [
     description:
       "Une fiche pratique de moins de 5 minutes pour sortir de l’immobilisme avec clarté.",
     category: "fiche",
+    coverImage: "/coffre-premium/covers/cover-fiche.png",
     fileName:
       "Passer à l'action malgré la procrastination en moins de 5 minutes.pdf.pdf",
     unlockOrder: 9,

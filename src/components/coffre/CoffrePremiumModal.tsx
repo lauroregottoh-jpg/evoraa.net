@@ -125,7 +125,7 @@ export function CoffrePremiumModal({ open, onClose, resourceTitle }: Props) {
               href="/premium"
               className="inline-flex h-11 items-center justify-center rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:opacity-95 transition-opacity"
             >
-              Passer à Premium
+              Passer à Alliance
             </Link>
             <button
               type="button"

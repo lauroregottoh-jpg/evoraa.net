@@ -30,7 +30,17 @@ export function CoffreCover({ resource, locked, className }: Props) {
             locked && "opacity-70 saturate-[0.75]"
           )}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/25" />
+        <div className="absolute top-4 left-4 right-4">
+          <span className="inline-flex text-[10px] font-bold uppercase tracking-[0.18em] px-2.5 py-1 rounded-full border border-white/30 bg-black/25 text-white">
+            {meta.label}
+          </span>
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 p-5 pt-10">
+          <p className="font-serif text-[1.05rem] sm:text-lg font-semibold leading-snug text-white line-clamp-3 drop-shadow-sm">
+            {resource.title}
+          </p>
+        </div>
       </div>
     )
   }

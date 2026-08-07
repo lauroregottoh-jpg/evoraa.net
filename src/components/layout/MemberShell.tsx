@@ -22,12 +22,16 @@ import {
   Phone,
   Sun,
   Library,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { DevSessionSwitcher } from "@/components/dev/DevSessionSwitcher";
 import { MemberReminders } from "@/components/layout/MemberReminders";
 import { logoutAction } from "@/app/actions/auth";
 import { OpsAdminEntryBanner } from "@/components/admin/OpsAdminEntryBanner";
+
+const SIDEBAR_KEY = "KELIAA_member_sidebar_open";
 
 /** Nav principale visible sans scroller. */
 const PRIMARY = [
@@ -36,13 +40,13 @@ const PRIMARY = [
   { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/assessments", label: "Tests", icon: ClipboardList },
   { href: "/premium", label: "Alliance", icon: Crown, accent: true },
-  { href: "/coffre-premium", label: "Coffre", icon: Library },
+  { href: "/coffre-premium", label: "Coffre Premium", icon: Library },
   { href: "/profile", label: "Profil", icon: User },
   { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
+  { href: "/coaching", label: "Coaching", icon: Phone },
 ] as const;
 
 const SECONDARY = [
-  { href: "/coaching", label: "Coaching", icon: Phone },
   { href: "/inspiration", label: "Inspiration", icon: BookHeart },
   { href: "/dashboard#invite", label: "Recommander", icon: Share2 },
   { href: "/notifications", label: "Alertes", icon: Bell },
@@ -67,6 +71,7 @@ const ACCOUNT_HREFS = [
   "/settings",
   "/academie-mariage",
   "/coaching",
+  "/coffre-premium",
 ];
 
 export type MemberShellProps = {
@@ -104,7 +109,32 @@ export function MemberShell({
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [accountOpen, setAccountOpen] = React.useState(false);
+  const [sidebarOpen, setSidebarOpen] = React.useState(true);
+  const [sidebarReady, setSidebarReady] = React.useState(false);
   const accountRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    try {
+      const raw = localStorage.getItem(SIDEBAR_KEY);
+      if (raw === "0") setSidebarOpen(false);
+      if (raw === "1") setSidebarOpen(true);
+    } catch {
+      /* ignore */
+    }
+    setSidebarReady(true);
+  }, []);
+
+  const toggleSidebar = () => {
+    setSidebarOpen((v) => {
+      const next = !v;
+      try {
+        localStorage.setItem(SIDEBAR_KEY, next ? "1" : "0");
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  };
 
   const isActive = (href: string) => {
     const base = href.split("#")[0];
@@ -150,30 +180,43 @@ export function MemberShell({
     router.push(href);
   };
 
-  const linkClass = (href: string, accent?: boolean) => {
+  const navLinkClass = (href: string, accent?: boolean, compact?: boolean) => {
     const active = isActive(href);
     return cn(
-      "flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors cursor-pointer",
+      "group relative flex items-center rounded-xl text-sm font-semibold cursor-pointer",
+      "transition-all duration-300 ease-out",
+      compact ? "justify-center px-0 py-2.5" : "gap-2.5 px-3 py-2",
       accent &&
         !active &&
-        "text-accent border border-accent/35 bg-accent/10",
-      accent && active && "bg-accent/20 text-accent border border-accent/40",
+        "text-[#F3D9A4] bg-white/10 border border-[#B8954A]/35 hover:bg-white/15",
+      accent &&
+        active &&
+        "bg-[#B8954A] text-[#1C1412] border border-[#B8954A] shadow-sm",
       !accent &&
-        (active
-          ? "bg-primary/10 text-primary"
-          : "text-muted-foreground hover:text-foreground hover:bg-secondary/70")
+        active &&
+        "bg-white/18 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.12)]",
+      !accent &&
+        !active &&
+        "text-white/72 hover:text-white hover:bg-white/10"
     );
   };
 
-  const sidebarNav = (
+  const renderNav = (compact: boolean, forMobile = false) => (
     <nav
-      className="flex flex-col gap-0.5 flex-1 min-h-0 overflow-y-auto"
+      className={cn(
+        "flex flex-col gap-0.5 flex-1 min-h-0 overflow-y-auto overflow-x-hidden scrollbar-none",
+        forMobile && "text-[#F8F4EE]"
+      )}
       aria-label="Navigation membre"
     >
-      <p className="px-3 pt-1 pb-1.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-        Principale
-      </p>
-      {PRIMARY.map((item) => {
+      {!compact ? (
+        <p className="px-3 pt-1 pb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/45 animate-in fade-in duration-300">
+          Principale
+        </p>
+      ) : (
+        <div className="h-3" />
+      )}
+      {PRIMARY.map((item, i) => {
         const Icon = item.icon;
         const accent = "accent" in item && item.accent;
         return (
@@ -181,42 +224,92 @@ export function MemberShell({
             key={item.href}
             href={item.href}
             onClick={go(item.href)}
-            className={cn(linkClass(item.href, accent), "!py-2")}
+            title={compact ? item.label : undefined}
+            className={cn(
+              navLinkClass(item.href, accent, compact),
+              "animate-in fade-in slide-in-from-left-2 fill-mode-both"
+            )}
+            style={{ animationDelay: `${Math.min(i, 8) * 30}ms` }}
           >
-            <Icon className={cn("h-4 w-4 shrink-0", accent && "text-accent")} />
-            {item.label}
+            <Icon
+              className={cn(
+                "h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110",
+                accent && !isActive(item.href) && "text-[#F3D9A4]"
+              )}
+            />
+            <span
+              className={cn(
+                "truncate transition-all duration-300",
+                compact
+                  ? "w-0 opacity-0 overflow-hidden"
+                  : "w-auto opacity-100"
+              )}
+            >
+              {item.label}
+            </span>
+            {compact && isActive(item.href) ? (
+              <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full bg-[#B8954A]" />
+            ) : null}
           </a>
         );
       })}
 
-      <p className="px-3 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-        Plus
-      </p>
+      {!compact ? (
+        <p className="px-3 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/45 animate-in fade-in duration-300">
+          Compte
+        </p>
+      ) : (
+        <div className="my-2 mx-2 border-t border-white/15" />
+      )}
       <div className="space-y-0.5 pb-2">
-        {SECONDARY.map((item) => {
+        {SECONDARY.map((item, i) => {
           const Icon = item.icon;
           return (
             <a
               key={`${item.href}-${item.label}`}
               href={item.href}
               onClick={go(item.href)}
-              className={cn(linkClass(item.href), "!py-2 text-[13px]")}
+              title={compact ? item.label : undefined}
+              className={cn(
+                navLinkClass(item.href, false, compact),
+                "text-[13px] animate-in fade-in slide-in-from-left-2 fill-mode-both"
+              )}
+              style={{ animationDelay: `${(i + 4) * 30}ms` }}
             >
-              <Icon className="h-4 w-4 shrink-0" />
-              {item.label}
+              <Icon className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110" />
+              <span
+                className={cn(
+                  "truncate transition-all duration-300",
+                  compact
+                    ? "w-0 opacity-0 overflow-hidden"
+                    : "w-auto opacity-100"
+                )}
+              >
+                {item.label}
+              </span>
             </a>
           );
         })}
       </div>
 
-      <div className="mt-auto pt-3 border-t border-border shrink-0">
+      <div
+        className={cn(
+          "mt-auto pt-3 shrink-0",
+          compact ? "border-t border-white/15" : "border-t border-white/15"
+        )}
+      >
         <form action={logoutAction}>
           <button
             type="submit"
-            className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-bold text-white bg-[#8B2942] hover:bg-[#6e1f34]"
+            title={compact ? "Déconnexion" : undefined}
+            className={cn(
+              "flex w-full items-center rounded-xl text-sm font-bold transition-all duration-300",
+              "bg-white/12 text-white hover:bg-white/20 border border-white/15",
+              compact ? "justify-center px-0 py-2.5" : "gap-2.5 px-3 py-2.5"
+            )}
           >
-            <LogOut className="h-4 w-4" />
-            Déconnexion
+            <LogOut className="h-4 w-4 shrink-0" />
+            {!compact ? <span>Déconnexion</span> : null}
           </button>
         </form>
       </div>
@@ -225,16 +318,60 @@ export function MemberShell({
 
   return (
     <div className="min-h-screen bg-background text-foreground md:flex">
-      {/* Sidebar desktop */}
-      <aside className="hidden md:flex md:w-56 lg:w-60 shrink-0 flex-col border-r border-border/60 bg-background sticky top-0 h-screen px-3 py-4 gap-4 z-40">
-        <a
-          href="/dashboard"
-          onClick={go("/dashboard")}
-          className="font-serif text-2xl font-bold text-primary tracking-tight px-2"
+      {/* Sidebar desktop — bordeaux unifié, repliable */}
+      <aside
+        className={cn(
+          "hidden md:flex shrink-0 flex-col sticky top-0 h-screen z-40",
+          "bg-[#5C1F28] text-[#F8F4EE]",
+          "border-r border-[#3D141A]/80 shadow-[4px_0_24px_-12px_rgba(92,31,40,0.35)]",
+          "transition-[width] duration-300 ease-out overflow-hidden",
+          sidebarReady ? (sidebarOpen ? "md:w-56 lg:w-60" : "md:w-[4.25rem]") : "md:w-56 lg:w-60",
+          sidebarOpen ? "px-3 py-4 gap-4" : "px-2 py-4 gap-3"
+        )}
+      >
+        <div
+          className={cn(
+            "flex items-center shrink-0",
+            sidebarOpen ? "justify-between gap-2 px-1" : "flex-col gap-2"
+          )}
         >
-          KELIAA
-        </a>
-        {sidebarNav}
+          <a
+            href="/dashboard"
+            onClick={go("/dashboard")}
+            className={cn(
+              "font-serif font-bold tracking-tight text-[#F8F4EE] transition-all duration-300",
+              sidebarOpen ? "text-2xl px-1" : "text-lg"
+            )}
+            title="KELIAA"
+          >
+            {sidebarOpen ? "KELIAA" : "K"}
+          </a>
+          <button
+            type="button"
+            onClick={toggleSidebar}
+            className={cn(
+              "inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/10",
+              "text-white/85 hover:text-white hover:bg-white/18 transition-all duration-300",
+              "hover:scale-105 active:scale-95",
+              sidebarOpen ? "h-9 w-9" : "h-9 w-9"
+            )}
+            aria-label={sidebarOpen ? "Masquer le menu" : "Afficher le menu"}
+            title={sidebarOpen ? "Masquer le menu" : "Afficher le menu"}
+          >
+            {sidebarOpen ? (
+              <PanelLeftClose className="h-4 w-4" />
+            ) : (
+              <PanelLeftOpen className="h-4 w-4" />
+            )}
+          </button>
+        </div>
+
+        <div
+          className="pointer-events-none h-px w-full bg-gradient-to-r from-transparent via-[#B8954A]/50 to-transparent opacity-80"
+          aria-hidden
+        />
+
+        {renderNav(!sidebarOpen)}
       </aside>
 
       <div className="flex-1 min-w-0 flex flex-col min-h-screen">
@@ -243,12 +380,25 @@ export function MemberShell({
             <div className="flex items-center gap-3 min-w-0">
               <button
                 type="button"
-                className="md:hidden p-2 rounded-lg border border-border shrink-0"
+                className="md:hidden p-2 rounded-lg border border-border shrink-0 bg-[#5C1F28] text-white border-[#5C1F28]"
                 onClick={() => setMobileOpen((v) => !v)}
                 aria-label="Ouvrir le menu"
                 aria-expanded={mobileOpen}
               >
                 {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              </button>
+              <button
+                type="button"
+                className="hidden md:inline-flex p-2 rounded-lg border border-border/70 shrink-0 text-primary hover:bg-primary/5 transition-colors"
+                onClick={toggleSidebar}
+                aria-label={sidebarOpen ? "Masquer le menu" : "Afficher le menu"}
+                title={sidebarOpen ? "Masquer le menu" : "Afficher le menu"}
+              >
+                {sidebarOpen ? (
+                  <PanelLeftClose className="h-4 w-4" />
+                ) : (
+                  <PanelLeftOpen className="h-4 w-4" />
+                )}
               </button>
               <a
                 href="/dashboard"
@@ -278,7 +428,6 @@ export function MemberShell({
                   Passer Alliance
                 </a>
               )}
-              {/* Soleil = menu compte / déconnexion */}
               <div className="relative" ref={accountRef}>
                 <button
                   type="button"
@@ -293,7 +442,7 @@ export function MemberShell({
                 {accountOpen && (
                   <div
                     role="menu"
-                    className="absolute right-0 mt-2 w-52 rounded-xl border border-border bg-card shadow-lg z-[70] overflow-hidden py-1"
+                    className="absolute right-0 mt-2 w-52 rounded-xl border border-border bg-card shadow-lg z-[70] overflow-hidden py-1 animate-in fade-in zoom-in-95 duration-200"
                   >
                     <a
                       href="/profile"
@@ -315,7 +464,7 @@ export function MemberShell({
                     <form action={logoutAction}>
                       <button
                         type="submit"
-                        className="flex w-full items-center gap-2 mx-1.5 mb-1 px-3 py-2.5 rounded-lg text-sm font-bold text-white bg-[#8B2942] hover:bg-[#6e1f34]"
+                        className="flex w-full items-center gap-2 mx-1.5 mb-1 px-3 py-2.5 rounded-lg text-sm font-bold text-white bg-[#5C1F28] hover:bg-[#4A1820]"
                       >
                         <LogOut className="h-4 w-4" />
                         Déconnexion
@@ -328,8 +477,8 @@ export function MemberShell({
           </div>
 
           {mobileOpen && (
-            <div className="md:hidden border-t border-border bg-card px-3 py-3 max-h-[75vh] overflow-y-auto z-[70]">
-              {sidebarNav}
+            <div className="md:hidden border-t border-[#3D141A] bg-[#5C1F28] px-3 py-3 max-h-[75vh] overflow-y-auto z-[70] animate-in slide-in-from-top-2 fade-in duration-300">
+              {renderNav(false, true)}
             </div>
           )}
 
@@ -362,7 +511,7 @@ export function MemberShell({
         </main>
 
         <nav
-          className="md:hidden fixed bottom-0 inset-x-0 z-[60] border-t border-border bg-background/95 backdrop-blur-md"
+          className="md:hidden fixed bottom-0 inset-x-0 z-[60] border-t border-[#3D141A]/40 bg-[#5C1F28] text-white backdrop-blur-md"
           aria-label="Navigation mobile"
         >
           <div className="mx-auto max-w-lg grid grid-cols-5 h-16">
@@ -375,8 +524,8 @@ export function MemberShell({
                   href={item.href}
                   onClick={go(item.href)}
                   className={cn(
-                    "flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold cursor-pointer",
-                    active ? "text-primary" : "text-muted-foreground"
+                    "flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold cursor-pointer transition-colors",
+                    active ? "text-[#F3D9A4]" : "text-white/65"
                   )}
                 >
                   <Icon className="h-5 w-5" />
@@ -388,8 +537,8 @@ export function MemberShell({
               type="button"
               onClick={() => setMobileOpen(true)}
               className={cn(
-                "flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold",
-                accountActive || mobileOpen ? "text-primary" : "text-muted-foreground"
+                "flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold transition-colors",
+                accountActive || mobileOpen ? "text-[#F3D9A4]" : "text-white/65"
               )}
             >
               <Menu className="h-5 w-5" />

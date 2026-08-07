@@ -7,7 +7,7 @@ import { PremiumHeroCarousel } from "@/components/premium/PremiumHeroCarousel"
 import { AllianceReportPitch } from "@/components/premium/AllianceReportPitch"
 import { SimulatedAllianceReport } from "@/components/premium/SimulatedAllianceReport"
 import { AlliancePrioritySupport } from "@/components/premium/AlliancePrioritySupport"
-import { PremiumUnlockList } from "@/components/premium/PremiumUnlockList"
+import { AllianceBenefitCards } from "@/components/premium/AllianceBenefitCards"
 import { AllianceCheckoutPanel } from "@/components/premium/AllianceCheckoutPanel"
 import { BoostSection } from "@/components/premium/BoostSection"
 import { PremiumSocialProof } from "@/components/premium/PremiumSocialProof"
@@ -72,29 +72,32 @@ export default async function PremiumPage() {
           </p>
         )}
 
-        <PremiumUnlockList />
+        <AllianceBenefitCards />
 
-        <AllianceCheckoutPanel
-          showModePicker={checkoutHints?.showModePicker ?? true}
-          suggestedMode={checkoutHints?.suggestedMode ?? "mobile_money"}
-          isPaid={Boolean(usage?.isPaid)}
-        />
-
-        <div className="rounded-2xl border border-border bg-white p-5 sm:p-6 shadow-card flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
-          <div className="space-y-1">
-            <p className="font-serif text-xl font-bold">Le Coffre Premium</p>
+        <div className="rounded-2xl border border-accent/35 bg-gradient-to-br from-accent/10 via-white to-white p-5 sm:p-6 shadow-card flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
+          <div className="space-y-1.5">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
+              Inclus Alliance
+            </p>
+            <p className="font-serif text-xl font-bold">Coffre Premium</p>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Guides, journaux et exercices exclusifs — 3 au choix dès Alliance,
-              puis +2 chaque mois.
+              Bibliothèque privée de guides, journaux et exercices — 3 ressources
+              au choix dès l’activation, puis +2 chaque mois.
             </p>
           </div>
           <Link
             href="/coffre-premium"
             className="shrink-0 inline-flex h-10 items-center justify-center rounded-xl bg-primary text-primary-foreground px-4 text-sm font-semibold"
           >
-            Ouvrir le Coffre
+            Ouvrir le Coffre Premium
           </Link>
         </div>
+
+        <AllianceCheckoutPanel
+          showModePicker={checkoutHints?.showModePicker ?? true}
+          suggestedMode={checkoutHints?.suggestedMode ?? "mobile_money"}
+          isPaid={Boolean(usage?.isPaid)}
+        />
 
         <BoostSection />
 

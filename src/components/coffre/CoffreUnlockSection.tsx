@@ -192,7 +192,7 @@ export function CoffreUnlockSection({ resources, isPaid, onUnlockCta }: Props) {
               className="shrink-0 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-accent text-accent-foreground px-6 text-sm font-bold hover:opacity-95 transition-all hover:scale-[1.02]"
             >
               <Unlock className="h-4 w-4" />
-              Débloquer avec Alliance
+              Débloquer Coffre Premium
             </button>
           )}
         </div>

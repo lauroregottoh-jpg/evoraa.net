@@ -105,7 +105,7 @@ export function CoffreResourceCard({
                 className="w-full inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-primary/25 bg-primary/5 text-primary text-sm font-semibold hover:bg-primary/10 transition-colors"
               >
                 <Lock className="h-4 w-4" />
-                Débloquer avec Premium
+                Débloquer Coffre Premium
               </button>
             )
           ) : (

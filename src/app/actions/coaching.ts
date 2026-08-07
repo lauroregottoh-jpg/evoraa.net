@@ -23,6 +23,15 @@ function appBaseUrl() {
   return "http://localhost:3000"
 }
 
+type CoachingCheckoutBrief = {
+  firstName: string
+  lastName: string
+  subject: string
+  message?: string
+  phone: string
+  objectives: string[]
+}
+
 /** Démarre un paiement Bictorys pour un pack coaching (pas Alliance). */
 export async function startCoachingCheckoutAction(input: {
   packId: string
@@ -30,11 +39,32 @@ export async function startCoachingCheckoutAction(input: {
   paymentMode?: string | null
   moduleId?: string | null
   moduleTitle?: string | null
+  brief?: CoachingCheckoutBrief | null
 }): Promise<{ error?: string; checkoutPath?: string; requiresAuth?: boolean }> {
   const minutes: CoachingDurationMinutes =
     input.minutes === 60 ? 60 : 30
   const pack = getCoachingPack(input.packId, minutes)
   if (!pack) return { error: "Pack coaching invalide." }
+
+  const objectiveLimit = minutes === 30 ? 2 : 3
+  const firstName = (input.brief?.firstName || "").trim().slice(0, 60)
+  const lastName = (input.brief?.lastName || "").trim().slice(0, 60)
+  const subject = (input.brief?.subject || "").trim().slice(0, 200)
+  const message = (input.brief?.message || "").trim().slice(0, 2000)
+  const phone = (input.brief?.phone || "").trim().slice(0, 40)
+  const objectives = (input.brief?.objectives || [])
+    .map((o) => o.trim().slice(0, 280))
+    .filter(Boolean)
+    .slice(0, objectiveLimit)
+
+  if (!firstName || !lastName || !subject || !phone) {
+    return { error: "Prénom, nom, objet et téléphone sont requis." }
+  }
+  if (objectives.length < objectiveLimit) {
+    return {
+      error: `Indiquez ${objectiveLimit} question(s) / objectif(s) pour cette durée.`,
+    }
+  }
 
   const { assertPaymentsNotPaused } = await import("@/lib/platform/killSwitches")
   const gatePay = await assertPaymentsNotPaused()
@@ -91,6 +121,21 @@ export async function startCoachingCheckoutAction(input: {
     return { error: subError?.message || "Impossible de créer la commande coaching." }
   }
 
+  const fullName = `${firstName} ${lastName}`.trim()
+  const coachingBrief = {
+    firstName,
+    lastName,
+    fullName,
+    phone,
+    subject,
+    message: message || null,
+    objectives,
+    submittedAt: new Date().toISOString(),
+    userId: user.id,
+    email: user.email || null,
+    prePayment: true,
+  }
+
   const transactionRef = `COACH-${user.id.slice(0, 8)}-${Date.now()}`
   const { data: payment, error: payError } = await supabase
     .from("payments")
@@ -109,6 +154,7 @@ export async function startCoachingCheckoutAction(input: {
         moduleId: input.moduleId || null,
         moduleTitle: input.moduleTitle || null,
         payment_mode: paymentMode,
+        coaching_brief: coachingBrief,
       },
     })
     .select("id")
@@ -119,6 +165,7 @@ export async function startCoachingCheckoutAction(input: {
   }
 
   const customerName =
+    fullName ||
     [profile?.first_name, profile?.last_name].filter(Boolean).join(" ") ||
     user.email ||
     "Membre KELIAA"
@@ -156,14 +203,27 @@ export async function startCoachingCheckoutAction(input: {
         product: "coaching",
         packId: pack.id,
         sessions: pack.sessions,
-        sessionMinutes: 30,
+        sessionMinutes: pack.minutes,
         moduleId: input.moduleId || null,
         moduleTitle: input.moduleTitle || null,
         payment_mode: paymentMode,
+        coaching_brief: coachingBrief,
         bictorys: result.raw,
       },
     })
     .eq("id", payment.id)
+
+  await sendResendEmail({
+    to: process.env.COACHING_NOTIFY_EMAIL || "contact@keliaa.org",
+    subject: `[Coaching] Nouvelle demande — ${fullName} · ${pack.sessions}×${pack.minutes} min`,
+    html: `<p><strong>${fullName}</strong> (${user.email || "—"}) · ${phone}</p>
+<p>Objet : ${subject}</p>
+<p>Message : ${message || "—"}</p>
+<p>Questions :</p>
+<ul>${objectives.map((o) => `<li>${o}</li>`).join("")}</ul>
+<p>Pack : ${pack.label} · ${pack.sessions}×${pack.minutes} min · ${pack.amountXof.toLocaleString("fr-FR")} XOF</p>
+<p>Payment id : ${payment.id}</p>`,
+  })
 
   await logPaymentEvent({
     paymentId: payment.id,

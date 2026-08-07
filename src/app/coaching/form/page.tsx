@@ -47,11 +47,12 @@ export default async function CoachingFormPage({
       <div className="max-w-lg mx-auto space-y-5 pb-10">
         <header className="space-y-1">
           <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
-            Après paiement
+            Confirmation
           </p>
-          <h1 className="font-serif text-3xl font-bold">Votre brief coaching</h1>
+          <h1 className="font-serif text-3xl font-bold">Merci pour votre paiement</h1>
           <p className="text-sm text-muted-foreground">
-            Remplissez ces informations pour que l’équipe planifie vos séances de 30 minutes.
+            Votre brief a déjà été enregistré avec la commande. Si besoin, vous
+            pouvez compléter ou vérifier les informations ci-dessous.
           </p>
         </header>
         <CoachingBriefForm paymentId={payment} initialName={initialName} />

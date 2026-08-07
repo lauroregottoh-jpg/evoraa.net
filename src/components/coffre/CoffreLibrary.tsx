@@ -153,7 +153,7 @@ export function CoffreLibrary({ resources, initialAccess }: Props) {
             onClick={() => openPremiumModal()}
             className="shrink-0 inline-flex h-10 items-center justify-center rounded-xl bg-primary text-primary-foreground px-4 text-sm font-semibold"
           >
-            Passer à Premium
+            Débloquer Coffre Premium
           </button>
         </div>
       )}
