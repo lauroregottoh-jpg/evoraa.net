@@ -37,18 +37,20 @@ const CARDS: BenefitCard[] = [
   {
     id: "bilan",
     icon: ClipboardList,
-    title: "Mon bilan relationnel",
+    title: "Rapport Personnalisé Alliance™",
     summary:
-      "Votre lecture personnelle sur les 5 piliers — pour vous comprendre avant d’avancer à deux.",
+      "Un rapport vivant (~18 pages) : portrait, forces, vigilances, chapitres qui se débloquent à chaque test.",
     details: [
-      "Bilan complet à partir de vos questionnaires déjà remplis",
-      "Personnalité, foi, conflits, vision du couple, finances",
-      "Points forts et zones de vigilance, formulés clairement",
-      "Axes d’amélioration priorisés + une piste concrète à travailler",
+      "Structure officielle : couverture → portrait → compétences → plan → évolution",
+      "10 évaluations essentielles + complémentaires + Premium+",
+      "Sections verrouillées visibles — chaque test ouvre une nouvelle analyse",
+      "Recommandations concrètes + liens Académie / Coffre / Eva",
     ],
     tone: "#5C1F28",
     soft: "rgba(92, 31, 40, 0.08)",
     ink: "#5C1F28",
+    href: "/rapport",
+    cta: "Voir mon rapport",
   },
   {
     id: "coffre",
@@ -276,38 +278,38 @@ export function AllianceBilanSection() {
           Au cœur d’Alliance
         </p>
         <h2 className="font-serif text-2xl sm:text-3xl font-bold leading-tight">
-          Mon bilan relationnel + axes d’amélioration
+          Rapport Personnalisé Alliance™
         </h2>
         <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
-          Alliance ne se limite pas à « plus de matchs ». Vous débloquez{" "}
+          Alliance ne se limite pas à « plus de matchs ». Vous débloquez un{" "}
           <strong className="text-foreground font-semibold">
-            mon bilan relationnel
+            rapport vivant
           </strong>{" "}
-          : lecture des 5 piliers et axes priorisés pour grandir concrètement —
-          à partir des questionnaires déjà remplis, sans nouveau test obligatoire.
+          : chapitres qui s’enrichissent à chaque évaluation, forces, vigilances
+          et plan d’action — sans jamais cacher ce qui reste à découvrir.
         </p>
       </div>
       <ul className="grid sm:grid-cols-2 gap-3">
         {[
           {
             icon: ClipboardList,
-            title: "Lecture claire des 5 piliers",
-            body: "Une synthèse honnête de votre profil relationnel, utilisable dès demain.",
+            title: "18 pages structurées",
+            body: "Couverture, portrait, compétences, plan, ressources, évolution.",
           },
           {
             icon: Target,
-            title: "Axes priorisés",
-            body: "Savoir où commencer — une piste concrète, pas une liste interminable.",
+            title: "10+ évaluations",
+            body: "Essentielles, complémentaires, Premium+ — chaque test ouvre une analyse.",
           },
           {
             icon: MessageCircle,
-            title: "Base pour vos rencontres",
-            body: "Mieux vous connaître aide à choisir et à échanger avec plus de justesse.",
+            title: "Chapitres verrouillés visibles",
+            body: "Rien n’est caché : vous voyez ce qu’il reste à débloquer.",
           },
           {
             icon: Zap,
             title: "Activation immédiate",
-            body: "Après paiement : bilan, quotas, badge et Coffre Premium s’ouvrent ensemble.",
+            body: "Après paiement : rapport, quotas, badge et Coffre Premium s’ouvrent ensemble.",
           },
         ].map((item) => {
           const Icon = item.icon

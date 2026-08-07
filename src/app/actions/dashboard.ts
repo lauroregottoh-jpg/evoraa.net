@@ -33,11 +33,15 @@ export type DashboardMission = {
 
 export type DashboardData = {
   firstName: string
+  lastName: string
   userId: string
   completionPercentage: number
   isVerified: boolean
   retreatMode: boolean
   hasAvatar: boolean
+  avatarUrl: string | null
+  gender: "M" | "F" | null
+  memberSinceLabel: string
   unreadMessages: number
   conversationCount: number
   topHarmonyCount: number
@@ -81,7 +85,7 @@ export async function getDashboardData(): Promise<{
   const { data: profile } = await supabase
     .from("profiles")
     .select(
-      "first_name, completion_percentage, is_verified, identity_verified, privacy_settings, avatar_url, onboarding_status"
+      "first_name, last_name, gender, created_at, completion_percentage, is_verified, identity_verified, privacy_settings, avatar_url, onboarding_status"
     )
     .eq("user_id", user.id)
     .maybeSingle()
@@ -114,6 +118,17 @@ export async function getDashboardData(): Promise<{
   const assessmentsDone = progress.filter((p) => p.completed).length
 
   const hasAvatar = Boolean(profile.avatar_url)
+  const genderRaw = String(profile.gender || "").toUpperCase()
+  const gender = genderRaw === "M" || genderRaw === "F" ? genderRaw : null
+  const memberSince = profile.created_at
+    ? new Date(profile.created_at as string)
+    : new Date()
+  const memberSinceLabel = memberSince.toLocaleDateString("fr-FR", {
+    month: "long",
+    year: "numeric",
+  })
+  const memberSinceFormatted =
+    memberSinceLabel.charAt(0).toUpperCase() + memberSinceLabel.slice(1)
   const { computeProfileCompletion, isOnboardingProfileDone } = await import(
     "@/lib/profile/completion"
   )
@@ -250,11 +265,15 @@ export async function getDashboardData(): Promise<{
   return {
     data: {
       firstName: (profile.first_name || "").trim(),
+      lastName: (profile.last_name || "").trim(),
       userId: user.id,
       completionPercentage: completion,
       isVerified: Boolean(profile.is_verified || profile.identity_verified),
       retreatMode: Boolean(privacy.retreat_mode),
       hasAvatar,
+      avatarUrl: (profile.avatar_url as string) || null,
+      gender,
+      memberSinceLabel: memberSinceFormatted,
       unreadMessages,
       conversationCount: conversations.length,
       topHarmonyCount: highHarmony.length || suggestions.length,

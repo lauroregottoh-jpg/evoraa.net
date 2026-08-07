@@ -16,7 +16,7 @@ const DEFAULT_SLIDES: PremiumHeroSlide[] = [
     title: "l’espace pour préparer un mariage sérieux.",
     highlight: "Alliance,",
     subtitle:
-      "Un abonnement pensé pour ceux qui veulent avancer avec lucidité : se connaître mieux, et rencontrer mieux.",
+      "Un abonnement pensé pour ceux qui veulent avancer avec lucidité : Rapport Personnalisé, Matching enrichi, et Coffre Premium.",
   },
   {
     badge: "Matching sérieux",
@@ -80,7 +80,7 @@ export function PremiumHeroCarousel({
         aria-label="Ce qu’Alliance débloque"
       >
         {[
-          { value: "Bilan", label: "relationnel + axes" },
+          { value: "Rapport", label: "Essentiel + axes" },
           { value: "Coffre", label: "Premium inclus" },
           { value: "15", label: "suggestions / jour" },
         ].map((s) => (

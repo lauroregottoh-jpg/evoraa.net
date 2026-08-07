@@ -82,7 +82,7 @@ export function AllianceCheckoutPanel({
           {isPaid ? "Renouveler Alliance" : "Activer Alliance"}
         </h2>
         <p className="text-sm text-muted-foreground">
-          Mon bilan relationnel, Coffre Premium, Matching enrichi — choisissez la
+          Rapport Personnalisé, Coffre Premium, Matching enrichi — choisissez la
           durée et payez (Mobile Money ou carte).
         </p>
       </div>
@@ -143,7 +143,7 @@ export function AllianceCheckoutPanel({
                     </p>
                     <p className="text-[11px] text-primary font-medium mt-1.5 leading-snug">
                       Quotas Alliance : 15 suggestions/jour · 25 conversations/mois ·
-                      100 messages/conversation · Eva 20/jour · Mon bilan relationnel
+                      100 messages/conversation · Eva 20/jour · Rapport Personnalisé
                     </p>
                   </div>
                 </div>

@@ -56,12 +56,12 @@ export function AllianceDashboardPanel({
           },
           {
             icon: ClipboardList,
-            title: "Mon bilan relationnel",
+            title: "Rapport Personnalisé",
             body:
               assessmentsDone >= 5
-                ? "Bilan complet débloqué à partir de vos tests."
-                : `Terminez vos tests (${assessmentsDone}/5) pour affiner le bilan.`,
-            href: assessmentsDone >= 5 ? "/rapport" : "/assessments",
+                ? "Rapport vivant prêt à partir de vos tests."
+                : `Terminez vos tests (${assessmentsDone}/5) pour enrichir le rapport.`,
+            href: assessmentsDone >= 1 ? "/rapport" : "/assessments",
           },
           {
             icon: Library,

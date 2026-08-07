@@ -146,6 +146,7 @@ function toTip(
     title: reco.title.replace(/\.$/, ""),
     advice: reco.advice.replace(/\n{3,}/g, "\n\n").trim(),
     why: reco.why || undefined,
+    premium: reco.premium || undefined,
     href: ACADEMY_BY_PILLAR[reco.pillar],
     reportPillarId: reco.pillar,
     pillarName: REPORT_PILLARS[reco.pillar].label,
@@ -165,24 +166,35 @@ export function selectOfficialRecommendations(input: {
   tier: ReportTier
 }): ProfileReportTip[] {
   const weak = collectWeakDims(input.dimensions)
-  const maxTotal = input.tier === "discovery" ? 3 : input.tier === "alliance" ? 5 : 10
+  const allDims = collectAllDims(input.dimensions)
+  const maxTotal = input.tier === "discovery" ? 3 : input.tier === "alliance" ? 8 : 12
   const maxPerPillar = input.tier === "discovery" ? 1 : input.tier === "alliance" ? 2 : 3
-
-  if (weak.length === 0) return []
 
   const usedIds = new Set<string>()
   const usedTitles = new Set<string>()
   const tips: ProfileReportTip[] = []
 
+  const dimsForPriority = weak.length ? weak : allDims
+  if (dimsForPriority.length === 0) return []
+
   const pillarPriority = [...REPORT_PILLAR_ORDER].sort((a, b) => {
-    const sa = weak.find((w) => w.pillar === a)?.score ?? 999
-    const sb = weak.find((w) => w.pillar === b)?.score ?? 999
+    const sa = dimsForPriority.find((w) => w.pillar === a)?.score ?? 999
+    const sb = dimsForPriority.find((w) => w.pillar === b)?.score ?? 999
     return sa - sb
   })
 
   for (const pillar of pillarPriority) {
     if (tips.length >= maxTotal) break
-    const dims = weak.filter((w) => w.pillar === pillar)
+    const dims = (weak.length ? weak : allDims).filter((w) => w.pillar === pillar)
+    if (!dims.length && input.tier !== "discovery") {
+      // Consolidation : au moins une reco si le pilier a des dimensions (même score élevé)
+      const strong = allDims.filter((w) => w.pillar === pillar)
+      if (!strong.length) continue
+      const room = Math.min(1, maxTotal - tips.length)
+      const picked = pickForPillar(pillar, strong, usedIds, usedTitles, room)
+      for (const reco of picked) tips.push(toTip(reco, strong[0]))
+      continue
+    }
     if (!dims.length) continue
     const room = Math.min(maxPerPillar, maxTotal - tips.length)
     const picked = pickForPillar(pillar, dims, usedIds, usedTitles, room)
@@ -191,7 +203,7 @@ export function selectOfficialRecommendations(input: {
     }
   }
 
-  if (tips.length < maxTotal) {
+  if (tips.length < maxTotal && weak.length) {
     const remaining = OFFICIAL_RECOMMENDATIONS.filter((r) => !usedIds.has(r.id))
       .map((r) => ({
         r,
@@ -210,4 +222,24 @@ export function selectOfficialRecommendations(input: {
   }
 
   return tips
+}
+
+function collectAllDims(
+  dimensions: Partial<Record<AssessmentSlug, Record<string, number>>> | null | undefined
+): WeakDim[] {
+  if (!dimensions) return []
+  const out: WeakDim[] = []
+  for (const [slug, dims] of Object.entries(dimensions)) {
+    if (!dims) continue
+    for (const [dimension, score] of Object.entries(dims)) {
+      if (typeof score !== "number") continue
+      out.push({
+        slug: slug as AssessmentSlug,
+        dimension,
+        score,
+        pillar: resolveReportPillar(slug as AssessmentSlug, dimension),
+      })
+    }
+  }
+  return out.sort((a, b) => a.score - b.score)
 }

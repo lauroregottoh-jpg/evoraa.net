@@ -29,24 +29,50 @@ import { DevSessionSwitcher } from "@/components/dev/DevSessionSwitcher";
 import { MemberReminders } from "@/components/layout/MemberReminders";
 import { logoutAction } from "@/app/actions/auth";
 import { OpsAdminEntryBanner } from "@/components/admin/OpsAdminEntryBanner";
-import { AllianceQuotaBar } from "@/components/alliance/AllianceQuotaBar";
 
 const SIDEBAR_KEY = "KELIAA_member_sidebar_open";
 
-/** Nav principale visible sans scroller. */
-const PRIMARY = [
+type NavItem = {
+  href: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  /** CTA « Passer Alliance » */
+  accent?: boolean;
+  /** Entrée Alliance upgradée — icône / filet dorés */
+  allianceGold?: boolean;
+};
+
+/** Découverte — ordre classique. */
+const PRIMARY_FREE: NavItem[] = [
   { href: "/dashboard", label: "Accueil", icon: LayoutGrid },
   { href: "/compatibility", label: "Compatibilités", icon: Heart },
   { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/assessments", label: "Tests", icon: ClipboardList },
   { href: "/premium", label: "Alliance", icon: Crown, accent: true },
-  { href: "/alliance/parcours", label: "Parcours", icon: Route },
   { href: "/rapport", label: "Rapport", icon: ClipboardList },
   { href: "/coffre-premium", label: "Coffre Premium", icon: Library },
   { href: "/profile", label: "Profil", icon: User },
   { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
   { href: "/coaching", label: "Coaching", icon: Phone },
-] as const;
+];
+
+/**
+ * Alliance — Accueil, puis bloc upgradé (Parcours → Rapport → Coffre → Tests),
+ * puis le reste comme avant.
+ */
+const PRIMARY_ALLIANCE: NavItem[] = [
+  { href: "/dashboard", label: "Accueil", icon: LayoutGrid },
+  { href: "/alliance/parcours", label: "Parcours", icon: Route, allianceGold: true },
+  { href: "/rapport", label: "Rapport", icon: ClipboardList, allianceGold: true },
+  { href: "/coffre-premium", label: "Coffre Premium", icon: Library, allianceGold: true },
+  { href: "/assessments", label: "Tests", icon: ClipboardList, allianceGold: true },
+  { href: "/compatibility", label: "Compatibilités", icon: Heart },
+  { href: "/messages", label: "Messages", icon: MessageCircle },
+  { href: "/premium", label: "Alliance", icon: Crown, accent: true },
+  { href: "/profile", label: "Profil", icon: User },
+  { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
+  { href: "/coaching", label: "Coaching", icon: Phone },
+];
 
 const SECONDARY = [
   { href: "/inspiration", label: "Inspiration", icon: BookHeart },
@@ -193,8 +219,14 @@ export function MemberShell({
     router.push(href);
   };
 
-  const navLinkClass = (href: string, accent?: boolean, compact?: boolean) => {
+  const navLinkClass = (
+    href: string,
+    opts?: { accent?: boolean; allianceGold?: boolean; compact?: boolean }
+  ) => {
     const active = isActive(href);
+    const accent = Boolean(opts?.accent);
+    const gold = Boolean(opts?.allianceGold);
+    const compact = Boolean(opts?.compact);
     return cn(
       "group relative flex items-center rounded-xl text-sm font-semibold cursor-pointer",
       "transition-all duration-300 ease-out",
@@ -205,14 +237,26 @@ export function MemberShell({
       accent &&
         active &&
         "bg-[#B8954A] text-[#1C1412] border border-[#B8954A] shadow-sm",
+      gold &&
+        !accent &&
+        !active &&
+        "text-[#F3D9A4]/95 hover:text-[#F8E7C0] hover:bg-[#B8954A]/15",
+      gold &&
+        !accent &&
+        active &&
+        "bg-[#B8954A]/25 text-[#F3D9A4] shadow-[inset_0_0_0_1px_rgba(184,149,74,0.45)]",
       !accent &&
+        !gold &&
         active &&
         "bg-white/18 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.12)]",
       !accent &&
+        !gold &&
         !active &&
         "text-white/72 hover:text-white hover:bg-white/10"
     );
   };
+
+  const primaryItems = isPaid ? PRIMARY_ALLIANCE : PRIMARY_FREE;
 
   const renderNavLinks = (compact: boolean) => (
     <>
@@ -223,23 +267,27 @@ export function MemberShell({
       ) : (
         <div className="h-3" />
       )}
-      {PRIMARY.filter((item) =>
-        item.href === "/alliance/parcours" ? isPaid : true
-      ).map((item) => {
+      {primaryItems.map((item) => {
         const Icon = item.icon;
-        const accent = "accent" in item && item.accent;
+        const accent = Boolean(item.accent);
+        const gold = Boolean(item.allianceGold);
         return (
           <a
             key={item.href}
             href={item.href}
             onClick={go(item.href)}
             title={compact ? item.label : undefined}
-            className={navLinkClass(item.href, accent, compact)}
+            className={navLinkClass(item.href, {
+              accent,
+              allianceGold: gold,
+              compact,
+            })}
           >
             <Icon
               className={cn(
                 "h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110",
-                accent && !isActive(item.href) && "text-[#F3D9A4]"
+                (accent || gold) && !isActive(item.href) && "text-[#F3D9A4]",
+                gold && isActive(item.href) && "text-[#F3D9A4]"
               )}
             />
             <span
@@ -254,6 +302,14 @@ export function MemberShell({
             </span>
             {compact && isActive(item.href) ? (
               <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full bg-[#B8954A]" />
+            ) : null}
+            {!compact && gold && !accent ? (
+              <span
+                className="ml-auto text-[9px] font-bold uppercase tracking-wider text-[#B8954A]/90"
+                aria-hidden
+              >
+                ★
+              </span>
             ) : null}
           </a>
         );
@@ -275,7 +331,10 @@ export function MemberShell({
               href={item.href}
               onClick={go(item.href)}
               title={compact ? item.label : undefined}
-              className={cn(navLinkClass(item.href, false, compact), "text-[13px]")}
+              className={cn(
+                navLinkClass(item.href, { compact }),
+                "text-[13px]"
+              )}
             >
               <Icon className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110" />
               <span
@@ -487,14 +546,6 @@ export function MemberShell({
             onNavigate={go}
             dimmed={accountOpen}
           />
-          {isPaid ? (
-            <AllianceQuotaBar
-              suggestionsLimit={suggestionsLimit}
-              evaQuestionsLimit={evaQuestionsLimit}
-              coffreUnlocked={coffreUnlocked}
-              coffreQuota={coffreQuota}
-            />
-          ) : null}
         </header>
 
         <main

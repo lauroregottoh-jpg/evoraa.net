@@ -22,15 +22,15 @@ import { PLANS } from "@/lib/billing/plans"
 const FEATURES = [
   {
     icon: ClipboardList,
-    title: "Rapport personnalisé (5 piliers)",
+    title: "Rapport Personnalisé Alliance™",
     free: "Aperçu léger",
-    alliance: "Bilan complet",
+    alliance: "Rapport vivant + chapitres",
   },
   {
     icon: Target,
-    title: "Axes d’amélioration + Académie",
-    free: "Conseils limités",
-    alliance: "Axes priorisés + modules",
+    title: "Évaluations & Académie",
+    free: "5 tests Matching",
+    alliance: "10+ clés + modules",
   },
   {
     icon: Heart,

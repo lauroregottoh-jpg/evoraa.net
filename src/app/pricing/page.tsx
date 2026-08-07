@@ -23,14 +23,14 @@ import { TestimonialsCarousel } from "@/components/marketing/TestimonialsCarouse
 /** Copy source: software-architecture/KELIA - Page d'accueil.docx — PAGE TARIFS */
 const PLAN_DESCRIPTIONS: Record<string, string> = {
   free: "Essayez gratuitement la méthode Keliaa.",
-  premium_plus: "Profitez de toute la puissance du Matching KELIAA™.",
+  premium_plus: "Rapport Personnalisé Alliance™ + Matching complet.",
 };
 
 const PILLARS = [
   {
     icon: Heart,
     title: "Compatibilité relationnelle",
-    desc: "Personnalité, manière d'aimer, communiquer, désaccords.",
+    desc: "Communication, émotions, conflits, confiance.",
   },
   {
     icon: Sparkles,
@@ -39,22 +39,26 @@ const PILLARS = [
   },
   {
     icon: Home,
-    title: "Compatibilité de projet de vie",
+    title: "Compatibilité des projets de vie",
     desc: "Mariage, famille, enfants, avenir.",
   },
   {
     icon: Leaf,
     title: "Compatibilité des valeurs",
-    desc: "Principes, manière de vivre, priorités.",
+    desc: "Principes, stewardship, priorités de vie.",
   },
   {
     icon: Users,
     title: "Compatibilité humaine",
-    desc: "Centres d'intérêt, mode de vie, rythme, aspirations.",
+    desc: "Personnalité, rythme, ouverture, fiabilité.",
   },
 ];
 
 const ALLIANCE_COMPARE_ROWS = [
+  {
+    decouverte: "Aperçu du rapport (2–3 axes)",
+    alliance: "Rapport Personnalisé Alliance™ (vivant)",
+  },
   {
     decouverte: "Premières recommandations",
     alliance: "Toutes les capacités du Matching KELIAA™",
@@ -66,10 +70,6 @@ const ALLIANCE_COMPARE_ROWS = [
   {
     decouverte: "Découverte de la plateforme",
     alliance: "Une expérience complète",
-  },
-  {
-    decouverte: "Fonctionnalités essentielles",
-    alliance: "Toutes les fonctionnalités pour avancer sereinement",
   },
 ];
 
@@ -107,7 +107,7 @@ export default function PricingPage() {
         eyebrow="Tarifs"
         title="Trouver la bonne personne"
         highlight="vaut bien plus qu'un abonnement."
-        subtitle="Alliance vous donne accès à toute la puissance du Matching KELIAA™ à 5 piliers : une méthode unique qui va bien au-delà des photos et des critères superficiels pour vous proposer des personnes réellement compatibles avec votre foi, vos valeurs et votre projet de mariage."
+        subtitle="Alliance ouvre le Rapport Personnalisé Alliance™ et toute la puissance du Matching KELIAA™ à 5 piliers : une méthode unique qui va bien au-delà des photos et des critères superficiels pour vous proposer des personnes réellement compatibles avec votre foi, vos valeurs et votre projet de mariage."
         imageSrc="/home/hero-african-wedding.png"
         imageClassName="object-[center_32%] sm:object-center"
         imageAlt="Engagement"
@@ -128,7 +128,7 @@ export default function PricingPage() {
             </MagneticButton>
           </div>
           <p className="text-sm text-white/85">
-            ✓ Matching à 5 piliers · ✓ Compatibilités expliquées · ✓ Profils vérifiés
+            ✓ Rapport Personnalisé · ✓ Matching à 5 piliers · ✓ Profils vérifiés
           </p>
         </div>
       </PageHero>
@@ -176,7 +176,7 @@ export default function PricingPage() {
             </h3>
             <ul className="space-y-3 text-sm text-foreground">
               {[
-                "Matching à 5 piliers : foi, valeurs, projet de vie",
+                "Matching à 5 piliers + Rapport Personnalisé",
                 "Compatibilités expliquées, pas seulement un score",
                 "Profils vérifiés dans un cadre respectueux",
                 "Rencontres orientées vers le mariage",

@@ -2,7 +2,7 @@ import Link from "next/link"
 import { MemberPage } from "@/components/layout/MemberPage"
 import { createClient } from "@/utils/supabase/server"
 import { getUsageSnapshot } from "@/lib/billing/usage"
-import { buildProfileReport } from "@/lib/matching/report/buildProfileReport"
+import { buildLivingPersonalizedReport } from "@/lib/rapport/personalized/buildLivingReport"
 import { PersonalizedReportView } from "@/components/rapport/PersonalizedReportView"
 import type { AssessmentSlug } from "@/lib/assessments/questionBank"
 
@@ -18,8 +18,10 @@ export default async function RapportPage() {
     return (
       <MemberPage>
         <div className="max-w-lg mx-auto text-center py-12 space-y-3">
-          <h1 className="font-serif text-3xl font-bold">Rapport personnalisé</h1>
-          <p className="text-sm text-muted-foreground">Connectez-vous pour voir votre rapport.</p>
+          <h1 className="font-serif text-3xl font-bold">Rapport Personnalisé Alliance™</h1>
+          <p className="text-sm text-muted-foreground">
+            Connectez-vous pour voir votre rapport vivant.
+          </p>
           <Link href="/login?next=/rapport" className="text-primary font-semibold underline">
             Connexion
           </Link>
@@ -47,7 +49,7 @@ export default async function RapportPage() {
   } | null
 
   const isAlliance = Boolean(usage?.isPaid)
-  const report = buildProfileReport({
+  const living = buildLivingPersonalizedReport({
     firstName: profile?.first_name,
     psychometric: psych,
     isAlliance,
@@ -58,23 +60,16 @@ export default async function RapportPage() {
       <div className="pb-10 space-y-4">
         <PersonalizedReportView
           firstName={profile?.first_name}
-          report={report}
+          living={living}
           isAlliance={isAlliance}
-          scores={{
-            personality: psych?.personality ?? null,
-            spiritual: psych?.spiritual ?? null,
-            relationship: psych?.relationship ?? null,
-            couple_life: psych?.couple_life ?? null,
-            finances: psych?.finances ?? null,
-          }}
         />
         <p className="text-center text-xs text-muted-foreground">
-          <Link href="/premium" className="underline font-semibold text-primary">
-            Retour Alliance
+          <Link href="/assessments" className="underline font-semibold text-primary">
+            Continuer mes évaluations
           </Link>
           {" · "}
-          <Link href="/assessments" className="underline">
-            Tests de compatibilité
+          <Link href="/premium" className="underline">
+            Alliance
           </Link>
         </p>
       </div>

@@ -78,12 +78,12 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
     compareAtXof: 6000,
     periodLabel: "/ mois",
     description:
-      "Alliance : rapport personnalisé, axes d’amélioration + Matching enrichi.",
+      "Alliance : Rapport Personnalisé vivant, axes d’amélioration + Matching enrichi.",
     popular: true,
     public: true,
     features: [
-      "Rapport personnalisé complet (5 piliers)",
-      "Axes d’amélioration priorisés + Académie",
+      "Rapport Personnalisé Alliance™ (rapport vivant)",
+      "Forces, vigilances, chapitres qui se débloquent",
       "Le Coffre Premium (3 ressources au choix, puis +2 / mois)",
       "15 suggestions de compatibilité / jour (vs 3)",
       "25 nouvelles conversations sérieuses / mois (vs 5)",

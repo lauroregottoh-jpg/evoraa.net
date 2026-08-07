@@ -26,7 +26,7 @@ export default async function PremiumPage() {
         <div className="max-w-lg mx-auto text-center space-y-3 py-10">
           <h1 className="font-serif text-3xl font-bold">Alliance KELIAA</h1>
           <p className="text-sm text-muted-foreground">
-            Connectez-vous pour activer Alliance : bilan relationnel, Coffre
+            Connectez-vous pour activer Alliance : Rapport Personnalisé, Coffre
             Premium et Matching enrichi.
           </p>
           <Link
@@ -62,8 +62,8 @@ export default async function PremiumPage() {
           </h2>
           <p className="text-sm text-muted-foreground leading-relaxed">
             Alliance est l’offre KELIAA pour ceux qui veulent préparer leur
-            mariage avec lucidité. Elle ouvre votre bilan relationnel, enrichit
-            le Matching, et inclut le Coffre Premium.
+            mariage avec lucidité. Elle ouvre votre Rapport Personnalisé Alliance™
+            (rapport vivant), enrichit le Matching, et inclut le Coffre Premium.
           </p>
         </section>
 

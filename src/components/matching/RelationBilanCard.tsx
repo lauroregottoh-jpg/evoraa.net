@@ -12,10 +12,10 @@ export function RelationBilanCard({
   if (!report) return null
 
   const isAlliance = report.tier === "alliance" || report.tier === "sovereign"
-  if (report.lightTips.length === 0 && !report.ctaUpgrade) {
+  if (report.lightTips.length === 0 && !report.ctaUpgrade && !report.overview) {
     return (
       <section className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-5 space-y-2">
-        <h2 className="font-serif text-xl font-bold">Mon bilan relationnel</h2>
+        <h2 className="font-serif text-xl font-bold">Rapport personnalisé</h2>
         <p className="text-sm text-muted-foreground">
           Pour l&apos;instant, vos réponses ne mettent pas en évidence de zone prioritaire.
           Continuez via l&apos;
@@ -35,20 +35,20 @@ export function RelationBilanCard({
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
-            Rapport individuel KELIAA
+            {report.offerLabel} · KELIAA
           </p>
           <h2 className="font-serif text-xl sm:text-2xl font-bold flex items-center gap-2">
             <ClipboardList className="h-5 w-5 text-primary shrink-0" />
-            Mon bilan relationnel
+            Rapport personnalisé
           </h2>
           <p className="text-xs text-muted-foreground mt-1">
-            Axes d&apos;amélioration sur vos 5 piliers — à travailler (coaching /
-            Académie).
+            Lecture des 5 piliers du dossier — forces, vigilances et recommandations
+            concrètes.
           </p>
         </div>
         {isAlliance ? (
           <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-accent border border-accent/30 bg-accent/10 px-2 py-1 rounded-full shrink-0">
-            <Crown className="h-3 w-3" /> Alliance
+            <Crown className="h-3 w-3" /> {report.offerLabel}
           </span>
         ) : (
           <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground border border-border px-2 py-1 rounded-full shrink-0">
@@ -56,6 +56,12 @@ export function RelationBilanCard({
           </span>
         )}
       </div>
+
+      {isAlliance && report.overview && !compact ? (
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          {report.overview.body}
+        </p>
+      ) : null}
 
       <div className="space-y-3">
         {tips.map((t) => (
@@ -97,14 +103,12 @@ export function RelationBilanCard({
         ))}
       </div>
 
-      {compact && report.lightTips.length > tips.length ? (
-        <Link
-          href="/assessments"
-          className="text-xs font-semibold text-primary inline-flex items-center"
-        >
-          Voir tous les axes →
-        </Link>
-      ) : null}
+      <Link
+        href="/rapport"
+        className="text-xs font-semibold text-primary inline-flex items-center"
+      >
+        {compact ? "Ouvrir le rapport complet →" : "Voir le rapport détaillé →"}
+      </Link>
 
       {report.ctaUpgrade ? (
         <Link

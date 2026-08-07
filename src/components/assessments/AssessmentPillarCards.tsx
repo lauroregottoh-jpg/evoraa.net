@@ -56,7 +56,7 @@ const PILLAR_META: Record<
     icon: MessageCircleHeart,
   },
   couple_life: {
-    short: "Projet de vie",
+    short: "Projets de vie",
     accent: "from-[#2F4A3C]/[0.1] via-white to-[#D4AF37]/[0.08]",
     glow: "group-hover:shadow-[0_18px_40px_-18px_rgba(47,74,60,0.35)]",
     icon: Compass,

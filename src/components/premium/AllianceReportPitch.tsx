@@ -13,13 +13,13 @@ export function AllianceReportPitch() {
   const pillars = [
     {
       icon: ClipboardList,
-      title: "Rapport personnalisé complet",
-      body: "À partir de vos 5 questionnaires déjà faits, Alliance ouvre le bilan détaillé — sans nouveau test obligatoire. Lecture claire de votre profil relationnel.",
+      title: "Rapport Personnalisé Alliance™",
+      body: "Rapport vivant (~18 pages) : portrait, forces, vigilances, chapitres qui se débloquent à chaque évaluation. Les sections manquantes restent visibles.",
     },
     {
       icon: Target,
-      title: "Axes d’amélioration + suggestion du jour",
-      body: "Personnalité, foi, conflits, vision du couple, finances — axes priorisés, avec une piste concrète à travailler.",
+      title: "10+ évaluations = nouvelles analyses",
+      body: "Essentielles, complémentaires, Premium+. Chaque test enrichit automatiquement votre lecture — pas seulement un score.",
     },
     {
       icon: BadgeCheck,

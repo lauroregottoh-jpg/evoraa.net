@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnostic — Dépendance Affective</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!--
+╔══════════════════════════════════════════════════════════╗
+║  DIAGNOSTIC ÉMOTIONNEL — DÉPENDANCE AFFECTIVE           ║
+║  Version Universelle — Systeme.io + WordPress            ║
+╠══════════════════════════════════════════════════════════╣
+║  SYSTEME.IO → Colle tout ce fichier dans un bloc HTML   ║
+║  WORDPRESS  → Bloc HTML personnalisé / Widget Elementor ║
+╠══════════════════════════════════════════════════════════╣
+║  PERSONNALISATION :                                      ║
+║  → Ligne "CALENDLY_URL" : colle ton lien Calendly       ║
+║  → Ligne "WEBHOOK_URL"  : optionnel, pour capturer les  ║
+║    emails (Zapier, Make, Systeme.io webhook)             ║
+╚══════════════════════════════════════════════════════════╝
+-->
+
+<style>
+/* ── RESET GLOBAL ── */
+#DA_APP, #DA_APP * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── CONTENEUR RACINE ── */
+#DA_APP {
+  font-family: 'Jost', system-ui, sans-serif;
+  background: #060504;
+  color: #ece4d6;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ── VARIABLES ── */
+#DA_APP {
+  --or:    #c09a52;
+  --or-v:  #d4b06a;
+  --or-p:  rgba(192,154,82,0.13);
+  --or-b:  rgba(192,154,82,0.22);
+  --or-s:  rgba(192,154,82,0.42);
+  --c:     #ece4d6;
+  --c70:   rgba(236,228,214,0.70);
+  --c50:   rgba(236,228,214,0.50);
+  --c25:   rgba(236,228,214,0.25);
+  --c12:   rgba(236,228,214,0.10);
+  --card:  rgba(255,255,255,0.028);
+}
+
+/* ── FOND LUMINEUX ── */
+#DA_APP .da-glow {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 90% 50% at 50% 0%,   rgba(192,154,82,0.09) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 35% at 8%  100%, rgba(130,90,40,0.05)  0%, transparent 50%);
+}
+
+/* ── PAGES (toutes cachées par défaut sauf .da-on) ── */
+#DA_APP .da-page {
+  display: none;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+#DA_APP .da-page.da-on {
+  display: block;
+}
+#DA_APP .da-page.da-flex {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+#DA_APP .da-page.da-flex.da-on {
+  display: flex;
+}
+
+/* ═══════════════════════════════
+   PAGE INTRO
+═══════════════════════════════ */
+#DA_APP .intro-wrap {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 60px 24px 88px;
+  text-align: center;
+  animation: da-up .8s ease both;
+}
+
+#DA_APP .da-eyebrow {
+  display: inline-block;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: .30em; text-transform: uppercase;
+  color: var(--or);
+  border: 1px solid var(--or-b); border-radius: 100px;
+  padding: 8px 22px; margin-bottom: 32px;
+}
+
+#DA_APP .intro-h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(28px, 5vw, 50px);
+  font-weight: 400; line-height: 1.14;
+  color: var(--c); margin-bottom: 18px;
+  letter-spacing: -.01em;
+}
+#DA_APP .intro-h1 em { font-style: italic; color: var(--or-v); }
+
+#DA_APP .intro-lead {
+  font-size: 16px; font-weight: 300;
+  color: var(--c50); line-height: 1.82;
+  max-width: 500px; margin: 0 auto 44px;
+}
+
+/* BLOC RÉSONANCES */
+#DA_APP .resos-block {
+  background: var(--card);
+  border: 1px solid var(--or-b); border-radius: 18px;
+  padding: 26px 28px 20px;
+  margin-bottom: 46px; text-align: left;
+  position: relative; overflow: hidden;
+}
+#DA_APP .resos-block::before {
+  content: '';
+  position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(135deg, rgba(192,154,82,0.04) 0%, transparent 55%);
+  pointer-events: none;
+}
+#DA_APP .resos-lbl {
+  display: block; font-size: 10px; font-weight: 600;
+  letter-spacing: .25em; text-transform: uppercase;
+  color: var(--or); margin-bottom: 16px;
+}
+#DA_APP .reso-item {
+  padding: 10px 0 10px 20px;
+  font-size: 14px; font-weight: 300;
+  color: var(--c70); line-height: 1.6;
+  position: relative;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+#DA_APP .reso-item:last-child { border-bottom: none; }
+#DA_APP .reso-item::before {
+  content: '—';
+  position: absolute; left: 0; top: 11px;
+  color: var(--or); opacity: .4; font-size: 12px;
+}
+
+/* BOUTON START */
+#DA_APP .da-btn-start {
+  display: inline-flex; align-items: center; gap: 12px;
+  background: var(--or); color: #060504;
+  font-family: 'Jost', system-ui, sans-serif;
+  font-size: 15px; font-weight: 500; letter-spacing: .03em;
+  padding: 18px 44px; border-radius: 100px;
+  border: none; cursor: pointer;
+  transition: all .3s cubic-bezier(.4,0,.2,1);
+  -webkit-tap-highlight-color: transparent;
+  outline: none; text-decoration: none;
+}
+#DA_APP .da-btn-start:hover {
+  background: var(--or-v);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 50px rgba(192,154,82,.30);
+}
+#DA_APP .da-btn-start svg { transition: transform .3s; }
+#DA_APP .da-btn-start:hover svg { transform: translateX(4px); }
+
+#DA_APP .intro-meta {
+  display: block; margin-top: 20px;
+  font-size: 11px; color: var(--c12); letter-spacing: .1em;
+}
+
+/* ═══════════════════════════════
+   PAGE QUIZ — HEADER
+═══════════════════════════════ */
+#DA_APP .quiz-header {
+  position: sticky; top: 0; z-index: 300;
+  background: rgba(6,5,4,0.97);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--or-b);
+  padding: 13px 24px;
+  width: 100%;
+}
+#DA_APP .hd-row {
+  max-width: 700px; margin: 0 auto;
+  display: flex; align-items: center; gap: 18px;
+}
+#DA_APP .hd-brand {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic; font-size: 14px;
+  color: var(--or); opacity: .65;
+  flex-shrink: 0; white-space: nowrap;
+}
+#DA_APP .prog-wrap { flex: 1; }
+#DA_APP .prog-lbl {
+  display: block; text-align: right;
+  font-size: 10px; color: var(--c25);
+  letter-spacing: .1em; margin-bottom: 5px;
+}
+#DA_APP .prog-track {
+  height: 2px; background: rgba(255,255,255,0.06);
+  border-radius: 100px; overflow: hidden;
+}
+#DA_APP .prog-fill {
+  height: 100%; border-radius: 100px;
+  background: linear-gradient(90deg, var(--or), var(--or-v));
+  transition: width .5s cubic-bezier(.4,0,.2,1);
+  width: 0%;
+}
+
+/* ═══════════════════════════════
+   PAGE QUIZ — QUESTIONS
+═══════════════════════════════ */
+#DA_APP .quiz-body {
+  max-width: 700px; margin: 0 auto;
+  padding: 50px 24px 80px;
+}
+
+#DA_APP .qb { display: none; animation: da-up .38s ease both; }
+#DA_APP .qb.qb-on { display: block; }
+
+#DA_APP .q-label {
+  display: block; margin-bottom: 15px;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: .28em; text-transform: uppercase; color: var(--or);
+}
+#DA_APP .q-text {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(18px, 3vw, 25px); font-weight: 400;
+  color: var(--c); line-height: 1.35;
+  margin-bottom: 28px; max-width: 580px;
+}
+
+#DA_APP .q-opts { display: flex; flex-direction: column; gap: 9px; }
+
+#DA_APP .q-opt {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 18px;
+  background: var(--card);
+  border: 1px solid rgba(255,255,255,0.065); border-radius: 12px;
+  cursor: pointer;
+  transition: border-color .2s, background .2s, transform .2s;
+  font-size: 14px; font-weight: 300;
+  color: var(--c50); line-height: 1.55; text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none; -webkit-user-select: none;
+}
+#DA_APP .q-opt:hover {
+  border-color: var(--or-b);
+  background: rgba(255,255,255,0.04);
+  color: var(--c);
+  transform: translateX(3px);
+}
+#DA_APP .q-opt.q-sel {
+  border-color: var(--or-s);
+  background: var(--or-p);
+  color: var(--c);
+  transform: translateX(3px);
+}
+#DA_APP .opt-ring {
+  width: 18px; height: 18px; flex-shrink: 0;
+  border-radius: 50%; border: 1.5px solid rgba(236,228,214,.2);
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+}
+#DA_APP .q-opt:hover .opt-ring { border-color: var(--or); }
+#DA_APP .q-opt.q-sel  .opt-ring { background: var(--or); border-color: var(--or); }
+#DA_APP .opt-pip {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #060504; opacity: 0; transition: opacity .15s;
+}
+#DA_APP .q-opt.q-sel .opt-pip { opacity: 1; }
+#DA_APP .opt-lbl { flex: 1; pointer-events: none; }
+
+/* NAV */
+#DA_APP .q-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 30px; padding-top: 22px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+#DA_APP .da-btn-prev {
+  display: flex; align-items: center; gap: 7px;
+  font-family: 'Jost', system-ui, sans-serif;
+  font-size: 13px; font-weight: 300;
+  color: var(--c25); background: none; border: none;
+  cursor: pointer; padding: 8px 4px; transition: color .2s;
+  -webkit-tap-highlight-color: transparent;
+}
+#DA_APP .da-btn-prev:hover { color: var(--c50); }
+#DA_APP .da-btn-prev:disabled { opacity: .15; cursor: default; }
+
+#DA_APP .da-btn-next {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Jost', system-ui, sans-serif;
+  font-size: 14px; font-weight: 500; letter-spacing: .03em;
+  padding: 13px 28px; border-radius: 100px;
+  border: 1px solid rgba(192,154,82,.18);
+  background: transparent; color: var(--c25);
+  cursor: not-allowed; transition: all .25s;
+  -webkit-tap-highlight-color: transparent;
+}
+#DA_APP .da-btn-next.da-ok {
+  background: var(--or); color: #060504;
+  border-color: transparent; cursor: pointer;
+}
+#DA_APP .da-btn-next.da-ok:hover {
+  background: var(--or-v);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(192,154,82,.28);
+}
+
+/* ═══════════════════════════════
+   PAGE CAPTURE
+═══════════════════════════════ */
+#DA_APP .capture-wrap {
+  max-width: 500px; width: 100%;
+  padding: 20px 24px;
+  text-align: center;
+  animation: da-up .5s ease both;
+}
+#DA_APP .cap-icon {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--or-p); border: 1px solid var(--or-b);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 22px; color: var(--or);
+}
+#DA_APP .cap-h {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(22px, 4vw, 30px); font-weight: 400;
+  margin-bottom: 12px; line-height: 1.25;
+}
+#DA_APP .cap-sub {
+  font-size: 15px; font-weight: 300; color: var(--c50);
+  line-height: 1.78; margin-bottom: 34px;
+  max-width: 400px; margin-left: auto; margin-right: auto;
+}
+#DA_APP .fg { margin-bottom: 11px; text-align: left; }
+#DA_APP .flbl {
+  display: block; font-size: 10px; font-weight: 600;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--or); margin-bottom: 7px;
+}
+#DA_APP .finp {
+  width: 100%;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 9px;
+  padding: 14px 16px;
+  font-family: 'Jost', system-ui, sans-serif;
+  font-size: 15px; font-weight: 300; color: var(--c);
+  outline: none; transition: border-color .2s;
+  -webkit-appearance: none; appearance: none;
+}
+#DA_APP .finp::placeholder { color: var(--c25); }
+#DA_APP .finp:focus { border-color: var(--or-s); }
+#DA_APP .ferr { font-size: 11px; color: #d97a68; margin-top: 4px; display: none; }
+#DA_APP .ferr.fe-on { display: block; }
+#DA_APP .fhint { font-size: 11px; color: var(--c12); margin-top: 4px; display: block; }
+
+#DA_APP .da-btn-sub {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  width: 100%; background: var(--or); color: #060504;
+  font-family: 'Jost', system-ui, sans-serif;
+  font-size: 15px; font-weight: 500;
+  padding: 17px; border-radius: 100px; border: none;
+  cursor: pointer; transition: all .3s; margin-top: 10px;
+  -webkit-tap-highlight-color: transparent;
+}
+#DA_APP .da-btn-sub:hover {
+  background: var(--or-v);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 44px rgba(192,154,82,.30);
+}
+#DA_APP .cap-priv { margin-top: 16px; font-size: 11px; color: var(--c12); line-height: 1.65; }
+
+/* ═══════════════════════════════
+   PAGE LOADING
+═══════════════════════════════ */
+#DA_APP .ld-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic; font-size: 20px; color: var(--c50);
+  animation: da-breathe 2.2s ease-in-out infinite;
+}
+#DA_APP .ld-steps { display: flex; flex-direction: column; gap: 9px; align-items: center; margin-top: 18px; }
+#DA_APP .ld-step {
+  font-size: 12px; color: var(--c25); letter-spacing: .08em;
+  opacity: 0; animation: da-sin .5s ease forwards;
+}
+#DA_APP .ld-step:nth-child(1) { animation-delay: .35s; }
+#DA_APP .ld-step:nth-child(2) { animation-delay: 1.1s; }
+#DA_APP .ld-step:nth-child(3) { animation-delay: 1.9s; }
+#DA_APP .ld-bar-wrap { width: 160px; height: 1px; background: rgba(255,255,255,0.06); border-radius: 100px; overflow: hidden; margin-top: 22px; }
+#DA_APP .ld-bar { height: 100%; background: linear-gradient(90deg, var(--or), var(--or-v)); width: 0; }
+
+/* ═══════════════════════════════
+   PAGE RÉSULTAT — HERO
+═══════════════════════════════ */
+#DA_APP .r-hero {
+  padding: 76px 24px 64px; text-align: center;
+  position: relative; overflow: hidden;
+  border-bottom: 1px solid var(--or-b);
+}
+#DA_APP .r-hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 85% 55% at 50% -5%, rgba(192,154,82,.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+#DA_APP .r-hero-in { max-width: 700px; margin: 0 auto; position: relative; z-index: 1; animation: da-up .6s ease both; }
+#DA_APP .r-badge { display: block; font-size: 10px; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; color: var(--or); margin-bottom: 18px; }
+#DA_APP .r-nom { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(26px,5vw,44px); font-weight: 400; color: var(--c); line-height: 1.15; margin-bottom: 16px; }
+#DA_APP .r-tagline { font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-weight: 300; font-size: clamp(15px,2.4vw,20px); color: var(--or-v); line-height: 1.5; max-width: 500px; margin: 0 auto; }
+
+/* RÉSULTAT BODY */
+#DA_APP .r-body { max-width: 700px; margin: 0 auto; padding: 64px 24px 40px; }
+#DA_APP .r-section { margin-bottom: 52px; }
+#DA_APP .r-slabel { display: block; font-size: 10px; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; color: var(--or); margin-bottom: 20px; }
+#DA_APP .r-prose { font-size: 15.5px; font-weight: 300; color: var(--c70); line-height: 1.9; }
+#DA_APP .r-prose p { margin-bottom: 16px; }
+#DA_APP .r-prose p:last-child { margin-bottom: 0; }
+#DA_APP .r-prose strong { font-weight: 500; color: var(--c); }
+#DA_APP .r-prose em { font-style: italic; color: var(--c); }
+#DA_APP .da-divider { height: 1px; background: linear-gradient(to right, transparent, var(--or-b), transparent); margin: 52px 0; }
+
+/* COÛTS */
+#DA_APP .cout-list { display: flex; flex-direction: column; gap: 11px; }
+#DA_APP .cout-card { background: var(--card); border: 1px solid var(--or-b); border-left: 2px solid var(--or); border-radius: 0 12px 12px 0; padding: 20px 20px; }
+#DA_APP .cout-head { font-size: 14px; font-weight: 500; color: var(--c); margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+#DA_APP .cout-n { width: 21px; height: 21px; border-radius: 50%; background: var(--or-p); border: 1px solid var(--or-b); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--or); flex-shrink: 0; }
+#DA_APP .cout-body { font-size: 14px; font-weight: 300; color: var(--c70); line-height: 1.75; }
+
+/* BONNE NOUVELLE */
+#DA_APP .bn-box { background: var(--card); border: 1px solid var(--or-b); border-radius: 18px; padding: 28px; position: relative; overflow: hidden; }
+#DA_APP .bn-box::before { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(135deg, rgba(192,154,82,.05) 0%, transparent 50%); pointer-events: none; }
+#DA_APP .bn-label { display: block; font-size: 10px; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; color: var(--or); margin-bottom: 14px; }
+#DA_APP .bn-prose { font-size: 15px; font-weight: 300; color: var(--c70); line-height: 1.85; }
+#DA_APP .bn-prose p { margin-bottom: 13px; }
+#DA_APP .bn-prose p:last-child { margin-bottom: 0; }
+
+/* CTA */
+#DA_APP .cta-zone { background: linear-gradient(180deg, rgba(192,154,82,.04) 0%, transparent 100%); border-top: 1px solid var(--or-b); padding: 76px 24px 92px; text-align: center; }
+#DA_APP .cta-in { max-width: 540px; margin: 0 auto; }
+#DA_APP .cta-ey { display: block; font-size: 10px; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; color: var(--or); margin-bottom: 20px; }
+#DA_APP .cta-h { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(22px,3.8vw,34px); font-weight: 400; color: var(--c); line-height: 1.2; margin-bottom: 16px; }
+#DA_APP .cta-p { font-size: 15px; font-weight: 300; color: var(--c50); line-height: 1.82; margin-bottom: 34px; }
+#DA_APP .cta-pts { background: var(--card); border: 1px solid var(--or-b); border-radius: 16px; padding: 22px; text-align: left; margin-bottom: 34px; }
+#DA_APP .cta-pt { display: flex; gap: 13px; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+#DA_APP .cta-pt:last-child { border-bottom: none; }
+#DA_APP .cta-pt-ic { color: var(--or); flex-shrink: 0; margin-top: 4px; font-size: 10px; }
+#DA_APP .cta-pt-t { font-size: 13.5px; font-weight: 300; color: var(--c70); line-height: 1.65; }
+
+#DA_APP .da-btn-cta {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  width: 100%; max-width: 440px; margin: 0 auto;
+  background: var(--or); color: #060504;
+  font-family: 'Jost', system-ui, sans-serif;
+  font-size: 15px; font-weight: 500;
+  padding: 19px 32px; border-radius: 100px; border: none;
+  cursor: pointer; text-decoration: none;
+  transition: all .3s; -webkit-tap-highlight-color: transparent;
+}
+#DA_APP .da-btn-cta:hover { background: var(--or-v); transform: translateY(-3px); box-shadow: 0 16px 60px rgba(192,154,82,.35); }
+#DA_APP .cta-assu { margin-top: 16px; font-size: 11px; color: var(--c12); line-height: 1.6; }
+
+/* ── SECTION WHATSAPP GROUPE ── */
+#DA_APP .wa-zone {
+  background: #0a0a08;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 76px 24px 92px;
+  text-align: center;
+}
+#DA_APP .wa-in { max-width: 560px; margin: 0 auto; }
+
+#DA_APP .wa-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: .28em; text-transform: uppercase;
+  color: #25d366;
+  border: 1px solid rgba(37,211,102,0.25);
+  border-radius: 100px; padding: 7px 18px;
+  margin-bottom: 24px;
+}
+#DA_APP .wa-badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #25d366;
+  animation: wa-pulse 2s ease-in-out infinite;
+}
+
+#DA_APP .wa-h {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(22px,3.8vw,34px); font-weight: 400;
+  color: var(--c); line-height: 1.2; margin-bottom: 14px;
+}
+#DA_APP .wa-sub {
+  font-size: 15px; font-weight: 300; color: var(--c50);
+  line-height: 1.82; margin-bottom: 34px;
+}
+
+#DA_APP .wa-details {
+  background: rgba(37,211,102,0.04);
+  border: 1px solid rgba(37,211,102,0.15);
+  border-radius: 16px; padding: 22px 24px;
+  text-align: left; margin-bottom: 34px;
+}
+#DA_APP .wa-detail-item {
+  display: flex; gap: 13px; align-items: flex-start;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+#DA_APP .wa-detail-item:last-child { border-bottom: none; }
+#DA_APP .wa-detail-ic { color: #25d366; flex-shrink: 0; margin-top: 3px; font-size: 12px; }
+#DA_APP .wa-detail-t { font-size: 13.5px; font-weight: 300; color: var(--c70); line-height: 1.65; }
+
+#DA_APP .wa-warning {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px; padding: 16px 20px;
+  margin-bottom: 32px;
+  font-size: 13px; font-weight: 300;
+  color: var(--c50); line-height: 1.7;
+  font-style: italic;
+}
+
+#DA_APP .da-btn-wa {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  width: 100%; max-width: 440px; margin: 0 auto;
+  background: #25d366; color: #060504;
+  font-family: 'Jost', system-ui, sans-serif;
+  font-size: 15px; font-weight: 500;
+  padding: 19px 32px; border-radius: 100px; border: none;
+  cursor: pointer; text-decoration: none;
+  transition: all .3s; -webkit-tap-highlight-color: transparent;
+}
+#DA_APP .da-btn-wa:hover {
+  background: #20c95e;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 50px rgba(37,211,102,0.28);
+}
+#DA_APP .wa-assu { margin-top: 16px; font-size: 11px; color: var(--c12); line-height: 1.6; }
+
+@keyframes wa-pulse { 0%,100%{opacity:.4; transform:scale(1)} 50%{opacity:1; transform:scale(1.3)} }
+
+/* ═══════════════════════════════
+   ANIMATIONS
+═══════════════════════════════ */
+@keyframes da-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes da-breathe { 0%,100%{opacity:.35}50%{opacity:.85} }
+@keyframes da-sin { to{opacity:1} from{opacity:0} }
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  #DA_APP .hd-brand { display: none; }
+  #DA_APP .resos-block { padding: 18px 16px; }
+  #DA_APP .r-body { padding: 50px 16px 32px; }
+  #DA_APP .cta-zone { padding: 60px 16px 72px; }
+  #DA_APP .bn-box { padding: 22px 16px; }
+  #DA_APP .cout-card { padding: 16px 14px; }
+  #DA_APP .capture-wrap { padding: 20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ╔══════════════════════════════════════════════╗
+     ║  CONTENEUR UNIQUE — colle tout ce bloc      ║
+     ║  dans Systeme.io ou WordPress                ║
+     ╚══════════════════════════════════════════════╝ -->
+
+<div id="DA_APP">
+<div class="da-glow"></div>
+
+<!-- ══════════ PAGE 1 — INTRO ══════════ -->
+<div class="da-page da-on" data-page="intro">
+  <div class="intro-wrap">
+    <span class="da-eyebrow">Diagnostic — Dépendance Affective</span>
+
+    <h1 class="intro-h1">
+      Comprends enfin ce qui se passe<br>
+      <em>vraiment</em> en toi dans les relations
+    </h1>
+
+    <p class="intro-lead">
+      Un diagnostic en 18 questions pour identifier ton fonctionnement émotionnel profond —
+      ce qui t'épuise, ce qui se répète, et pourquoi tu n'arrives pas à t'en sortir seule.
+    </p>
+
+    <div class="resos-block">
+      <span class="resos-lbl">Est-ce que tu te reconnais dans l'une de ces situations ?</span>
+      <div class="reso-item">Tu vis dans une inquiétude relationnelle presque constante — même quand il ne se passe rien de grave.</div>
+      <div class="reso-item">Ton équilibre intérieur dépend de l'autre : de ses messages, de son humeur, de sa présence.</div>
+      <div class="reso-item">Tu donnes énormément dans tes relations. Et tu te retrouves seule, épuisée, à te demander pourquoi.</div>
+      <div class="reso-item">Ton esprit revient sans cesse vers cette personne, même quand tu veux t'en détacher.</div>
+      <div class="reso-item">Tu te perds dans la relation — tu t'oublies, tu t'effaces, sans t'en rendre compte au début.</div>
+      <div class="reso-item">Tu veux de la vraie connexion. Et en même temps, quelque chose en toi la fuit ou la sabote.</div>
+    </div>
+
+    <button class="da-btn-start" data-action="go-quiz">
+      Découvrir mon profil
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <span class="intro-meta">Gratuit · Confidentiel · Résultat immédiat · ~8 minutes</span>
+  </div>
+</div>
+
+<!-- ══════════ PAGE 2 — QUIZ ══════════ -->
+<div class="da-page" data-page="quiz">
+  <div class="quiz-header">
+    <div class="hd-row">
+      <span class="hd-brand">Diagnostic</span>
+      <div class="prog-wrap">
+        <span class="prog-lbl" data-el="prog-lbl">1 / 18</span>
+        <div class="prog-track">
+          <div class="prog-fill" data-el="prog-fill"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="quiz-body" data-el="quiz-body"></div>
+</div>
+
+<!-- ══════════ PAGE 3 — CAPTURE ══════════ -->
+<div class="da-page da-flex" data-page="capture">
+  <div class="capture-wrap">
+    <div class="cap-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+    </div>
+    <h2 class="cap-h">Ton diagnostic est prêt.</h2>
+    <p class="cap-sub">Indique où envoyer ton profil. Il est généré uniquement pour toi — personnalisé selon tes réponses.</p>
+
+    <!--
+    ╔══════════════════════════════════════════════════════════════╗
+    ║  FORMULAIRE SYSTEME.IO — INSTRUCTIONS                       ║
+    ║                                                              ║
+    ║  1. Dans Systeme.io → Formulaires → Créer un formulaire     ║
+    ║  2. Ajoute les champs : Prénom / Email / Téléphone           ║
+    ║  3. Clique "Obtenir le code d'intégration"                   ║
+    ║  4. REMPLACE TOUT LE BLOC ci-dessous                         ║
+    ║     (entre les lignes DEBUT FORMULAIRE et FIN FORMULAIRE)    ║
+    ║     par le code fourni par Systeme.io                        ║
+    ╚══════════════════════════════════════════════════════════════╝
+    -->
+
+    <!-- ▼▼▼ DEBUT FORMULAIRE — REMPLACE CE BLOC PAR TON CODE SYSTEME.IO ▼▼▼ -->
+    <div class="fg">
+      <label class="flbl" for="da-prenom">Ton prénom</label>
+      <input class="finp" type="text" id="da-prenom" placeholder="Prénom" autocomplete="given-name">
+      <span class="ferr" data-el="err-prenom">Indique ton prénom pour continuer.</span>
+    </div>
+    <div class="fg">
+      <label class="flbl" for="da-email">Email</label>
+      <input class="finp" type="email" id="da-email" placeholder="ton@email.com" autocomplete="email">
+      <span class="ferr" data-el="err-email">Indique un email valide pour recevoir ton profil.</span>
+    </div>
+    <div class="fg">
+      <label class="flbl" for="da-wa">WhatsApp <span style="font-weight:300;text-transform:none;letter-spacing:0;color:rgba(236,228,214,0.2);font-size:10px">— optionnel</span></label>
+      <input class="finp" type="tel" id="da-wa" placeholder="+225 00 00 00 00 00" autocomplete="tel">
+      <span class="fhint">Pour recevoir des ressources complémentaires</span>
+    </div>
+    <button class="da-btn-sub" data-action="submit-form">
+      Voir mon profil émotionnel
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <!-- ▲▲▲ FIN FORMULAIRE ▲▲▲ -->
+
+    <p class="cap-priv">Tes informations sont strictement confidentielles. Elles ne seront jamais partagées.</p>
+  </div>
+</div>
+
+<!-- ══════════ PAGE 4 — LOADING ══════════ -->
+<div class="da-page da-flex" data-page="loading">
+  <p class="ld-title">Analyse de ton profil…</p>
+  <div class="ld-steps">
+    <span class="ld-step">Identification des schémas émotionnels</span>
+    <span class="ld-step">Analyse de tes patterns relationnels</span>
+    <span class="ld-step">Construction de ton profil personnalisé</span>
+  </div>
+  <div class="ld-bar-wrap">
+    <div class="ld-bar" data-el="ld-bar"></div>
+  </div>
+</div>
+
+<!-- ══════════ PAGE 5 — RÉSULTAT ══════════ -->
+<div class="da-page" data-page="result">
+  <div class="r-hero">
+    <div class="r-hero-in">
+      <span class="r-badge" data-el="r-badge">Ton profil — Dépendance Affective</span>
+      <h1 class="r-nom" data-el="r-nom"></h1>
+      <p class="r-tagline" data-el="r-tagline"></p>
+    </div>
+  </div>
+
+  <div class="r-body">
+    <div class="r-section">
+      <span class="r-slabel">Ce que ce profil révèle sur toi</span>
+      <div class="r-prose" data-el="r-general"></div>
+    </div>
+    <div class="da-divider"></div>
+    <div class="r-section">
+      <span class="r-slabel">Dans tes relations</span>
+      <div class="r-prose" data-el="r-relations"></div>
+    </div>
+    <div class="da-divider"></div>
+    <div class="r-section">
+      <span class="r-slabel">Ce que ce fonctionnement te coûte réellement</span>
+      <div class="cout-list" data-el="r-couts"></div>
+    </div>
+    <div class="da-divider"></div>
+    <div class="r-section">
+      <div class="bn-box">
+        <span class="bn-label">Ce qui est possible</span>
+        <div class="bn-prose" data-el="r-bonne"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-zone">
+    <div class="cta-in">
+      <span class="cta-ey">Protocole Détachement</span>
+      <h2 class="cta-h">Demander une session de<br>clarification émotionnelle</h2>
+      <p class="cta-p">Cette session n'est pas un appel de vente. C'est un espace d'exploration approfondie — pour valider ton profil en détail, comprendre précisément ce qui se joue en toi, et évaluer honnêtement si le Protocole Détachement correspond à ta situation.</p>
+      <div class="cta-pts">
+        <div class="cta-pt"><span class="cta-pt-ic">◆</span><span class="cta-pt-t">Une analyse approfondie de ton profil, personnalisée selon tes réponses</span></div>
+        <div class="cta-pt"><span class="cta-pt-ic">◆</span><span class="cta-pt-t">La compréhension précise de tes schémas et de ce qui les alimente vraiment</span></div>
+        <div class="cta-pt"><span class="cta-pt-ic">◆</span><span class="cta-pt-t">Une évaluation honnête : le Protocole est-il vraiment adapté à ce que tu vis ?</span></div>
+        <div class="cta-pt"><span class="cta-pt-ic">◆</span><span class="cta-pt-t">Des premières pistes concrètes que tu pourras appliquer dès cette semaine</span></div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════
+           👇 COLLE TON LIEN CALENDLY ICI — REMPLACE UNIQUEMENT
+              https://calendly.com/TON-NOM/NOM-DE-LA-SESSION
+           ══════════════════════════════════════════════════════ -->
+      <a href="https://calendly.com/TON-NOM/NOM-DE-LA-SESSION" class="da-btn-cta" data-el="btn-cta">
+        Demander ma session de clarification émotionnelle
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <p class="cta-assu">Session confidentielle · Places limitées · Sans engagement</p>
+    </div>
+  </div>
+
+  <!-- ══════════ SECTION GROUPE WHATSAPP ══════════ -->
+  <div class="wa-zone">
+    <div class="wa-in">
+
+      <div class="wa-badge">
+        <span class="wa-badge-dot"></span>
+        Bonus — Groupe Privé
+      </div>
+
+      <h2 class="wa-h">Rejoins le groupe WhatsApp<br>de suivi — 6 semaines</h2>
+
+      <p class="wa-sub">
+        En complément de ta session, un espace privé et temporaire pour aller plus loin.
+        Pendant 6 semaines, tu vas identifier concrètement ton profil de dépendance affective
+        et comprendre les mécanismes émotionnels qui l'entretiennent — avec un contenu
+        exclusif livré directement sur WhatsApp.
+      </p>
+
+      <div class="wa-details">
+        <div class="wa-detail-item">
+          <span class="wa-detail-ic">◆</span>
+          <span class="wa-detail-t">Identification approfondie de ton profil de dépendance affective selon tes patterns spécifiques</span>
+        </div>
+        <div class="wa-detail-item">
+          <span class="wa-detail-ic">◆</span>
+          <span class="wa-detail-t">Compréhension des mécanismes émotionnels qui entretiennent tes schémas relationnels</span>
+        </div>
+        <div class="wa-detail-item">
+          <span class="wa-detail-ic">◆</span>
+          <span class="wa-detail-t">Contenus exclusifs 2 fois par semaine — audios, analyses, prises de conscience</span>
+        </div>
+        <div class="wa-detail-item">
+          <span class="wa-detail-ic">◆</span>
+          <span class="wa-detail-t">Groupe fermé et temporaire — 6 semaines uniquement, nombre de places limité</span>
+        </div>
+      </div>
+
+      <div class="wa-warning">
+        Ce groupe n'est pas un espace de coaching collectif ni une formation. C'est un espace
+        d'exploration émotionnelle guidée — conçu pour approfondir ce que tu as découvert
+        dans ton diagnostic, à ton rythme.
+      </div>
+
+      <a href="https://chat.whatsapp.com/H1o51qkF3qcGAALcBtqEzh" class="da-btn-wa" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        Rejoindre le groupe — 6 semaines
+      </a>
+
+      <p class="wa-assu">Groupe privé · Temporaire · Places limitées · Contenu exclusif</p>
+
+    </div>
+  </div>
+</div>
+
+</div><!-- /DA_APP -->
+
+
+<script>
+/* ══════════════════════════════════════════════════════
+   QUIZ — DÉPENDANCE AFFECTIVE
+   Architecture : tout dans DA_APP, zéro conflit externe
+══════════════════════════════════════════════════════ */
+(function() {
+
+  /* ── RÉCUPÉRER LE CONTENEUR ── */
+  var APP = document.getElementById('DA_APP');
+  if (!APP) return;
+
+  /* ── HELPER : trouver un élément dans APP ── */
+  function el(attr) {
+    return APP.querySelector('[data-el="' + attr + '"]');
+  }
+
+  /* ── NAVIGATION ENTRE PAGES ── */
+  function goTo(pageName) {
+    var pages = APP.querySelectorAll('.da-page');
+    for (var i = 0; i < pages.length; i++) {
+      pages[i].classList.remove('da-on');
+    }
+    var target = APP.querySelector('[data-page="' + pageName + '"]');
+    if (target) {
+      target.classList.add('da-on');
+      /* Scroll vers le haut du conteneur */
+      try { APP.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(e) {}
+      try { window.scrollTo(0, APP.getBoundingClientRect().top + window.pageYOffset - 10); } catch(e) {}
+    }
+  }
+
+  /* ══════════════════════════════════════════════════
+     DONNÉES PROFILS
+  ══════════════════════════════════════════════════ */
+  var PROFILS = {
+    H: {
+      nom: 'Le Profil Hyper-Anxieux',
+      tagline: 'Même quand tout va bien, quelque chose en toi attend que ça s\'effondre.',
+      general: '<p>Dans tes relations, l\'anxiété est presque une présence permanente. Pas nécessairement visible de l\'extérieur — tu peux fonctionner, sourire, paraître calme. Mais intérieurement, une partie de toi surveille en permanence : les signaux, les silences, les changements de ton, la moindre variation dans l\'énergie de l\'autre.</p><p>Ton système émotionnel a appris, à un moment de ta vie, que l\'amour et la stabilité étaient des choses fragiles. Que ça pouvait changer sans prévenir. Que la sécurité affective ne durait jamais vraiment longtemps. Et depuis, une partie de toi veille. Constamment. Même quand il n\'y a rien à surveiller.</p><p>Le problème, c\'est que <strong>cette vigilance permanente a un coût immense.</strong> Elle t\'empêche de vivre dans le présent de tes relations. Elle transforme chaque moment de calme en attente inconsciente de la prochaine turbulence. Et elle t\'épuise profondément — sans que tu saches toujours d\'où vient cette fatigue.</p>',
+      relations: '<p>Quand tu aimes quelqu\'un, tu peux ressentir un niveau d\'inquiétude qui ne correspond pas toujours à ce qui se passe réellement. Un message qui tarde devient une menace potentielle. Un changement d\'humeur devient un signal d\'alarme. Une période de calme peut même devenir suspecte — <em>comme si quelque chose de bien ne pouvait pas vraiment durer.</em></p><p>Tu peux être parfaitement consciente que tu "penses trop" — et pourtant être incapable d\'arrêter. Ton esprit cherche en permanence des preuves que tout va bien, mais même quand il les trouve, ce soulagement reste temporaire. Quelques heures. Et l\'inquiétude revient.</p><p>Ce n\'est pas un manque de confiance en l\'autre. C\'est un système nerveux conditionné à rester en alerte — parce qu\'à un moment de ta vie, rester en alerte était la seule façon de te protéger.</p>',
+      couts: [
+        {n:1, t:'Une fatigue émotionnelle chronique', b:'Vivre dans un état d\'anxiété relationnelle quasi-permanente consomme énormément d\'énergie. Même quand rien de grave ne se passe, une grande partie de tes ressources intérieures est mobilisée pour surveiller, anticiper, gérer l\'incertitude. Avec le temps, cela crée une forme d\'épuisement profond qui n\'est pas toujours visible de l\'extérieur.'},
+        {n:2, t:'Une difficulté à vivre pleinement le présent', b:'Quand ton esprit est constamment projeté vers ce qui pourrait mal se passer, il devient difficile de vraiment profiter de ce qui se passe bien. Les bons moments deviennent des moments d\'attente plutôt que de présence. Et progressivement, tu peux avoir l\'impression de ne jamais vraiment te poser dans une relation.'},
+        {n:3, t:'Une fragilité profonde face à l\'incertitude', b:'L\'incertitude émotionnelle — même normale dans toute relation — peut devenir une source de souffrance réelle. Ton équilibre intérieur dépend trop de la prévisibilité de l\'autre. Et quand cette prévisibilité fait défaut, quelque chose en toi vacille profondément.'}
+      ],
+      bonne: '<p>Ce mécanisme d\'hypervigilance n\'est pas une fatalité. Il a été appris — ce qui signifie qu\'il peut évoluer.</p><p>Mais dans la majorité des cas, comprendre intellectuellement la source de cette anxiété ne suffit pas à la réduire durablement. Les réactions émotionnelles automatiques ne se modifient pas par la seule compréhension. Elles se modifient par un travail progressif et structuré, qui s\'adresse à ce qui se passe réellement dans ton système nerveux et dans tes schémas relationnels.</p><p>C\'est exactement pour cela que le Protocole Détachement a été conçu.</p>'
+    },
+    V: {
+      nom: 'Le Profil Validation Addict',
+      tagline: 'Tu peux recevoir de l\'amour et continuer à douter de ta propre valeur.',
+      general: '<p>Ton équilibre émotionnel dépend d\'une chose que tu ne contrôles pas entièrement : le regard des autres. Tu peux te sentir bien, stable, en paix avec toi-même — jusqu\'au moment où l\'attention baisse, où les messages deviennent plus rares, où quelqu\'un semble moins présent ou moins chaleureux qu\'avant.</p><p>À ce moment-là, quelque chose se fragilise intérieurement. Rapidement. Et tu commences à interpréter cette distance — même minime — comme un signe que tu ne comptes plus autant. Que tu n\'es plus suffisante. Que tu as peut-être fait quelque chose de mal sans t\'en rendre compte.</p><p>Au fond, <strong>tu ne cherches pas seulement de l\'amour. Tu cherches à te sentir validée, reconnue, suffisante.</strong> Et le plus difficile, c\'est que même quand tu reçois cette validation, le soulagement ne dure jamais vraiment longtemps.</p>',
+      relations: '<p>Quand tu t\'attaches à quelqu\'un, ta confiance en toi dans la relation commence à dépendre de ce que tu reçois de cette personne. L\'attention qu\'elle te porte. La fréquence de ses messages. La façon dont elle te parle. Les preuves concrètes qu\'elle tient à toi.</p><p>Quand ces signaux sont présents et réguliers, tu vas bien. Mais dès qu\'ils se font moins visibles — même pour des raisons totalement indépendantes de toi — une spirale peut s\'enclencher : le doute, l\'hyperanalyse, la remise en question de ta valeur, la peur d\'être remplacée.</p><p>Et la partie la plus épuisante, c\'est que <em>tu sais souvent que ta réaction est disproportionnée.</em> Tu le sais. Mais émotionnellement, il devient très difficile de rester stable quand tu ne te sens plus suffisamment vue.</p>',
+      couts: [
+        {n:1, t:'Une stabilité émotionnelle très fragile', b:'Quand ton équilibre intérieur dépend autant du regard et des comportements extérieurs, il devient extrêmement fragile. Le moindre changement dans la dynamique relationnelle peut créer une instabilité profonde — parce que ta sécurité repose sur quelque chose que tu ne contrôles pas.'},
+        {n:2, t:'Une perte progressive de confiance intérieure', b:'À force de chercher ta valeur dans le regard des autres, tu peux progressivement perdre la capacité de te sentir suffisante par toi-même. Même quand tu reçois de l\'amour ou de la reconnaissance, cela ne comble jamais durablement ce vide intérieur. Parce que la source du problème n\'est pas dehors.'},
+        {n:3, t:'Une fatigue émotionnelle constante', b:'Vivre dans l\'attente de validation — consciemment ou non — est épuisant. Une grande partie de ton énergie reste mobilisée pour évaluer ce que les autres pensent de toi, mesurer ta place dans la relation, interpréter chaque signal. Cette vigilance permanente crée à long terme un vide intérieur très difficile à combler.'}
+      ],
+      bonne: '<p>Ces mécanismes émotionnels peuvent véritablement évoluer — et beaucoup de femmes avec ce profil ont réussi à reconstruire une stabilité intérieure qui ne dépend plus autant du regard extérieur.</p><p>Mais dans la plupart des cas, la simple prise de conscience ne suffit pas à modifier des réactions profondément installées. Ce qui change réellement, c\'est un travail progressif qui s\'adresse aux croyances fondamentales sur ta valeur — pas seulement à leurs manifestations dans les relations.</p><p>C\'est exactement ce sur quoi le Protocole Détachement travaille.</p>'
+    },
+    S: {
+      nom: 'Le Profil Sauveuse',
+      tagline: 'Tu as appris à exister dans la relation à travers ce que tu donnes aux autres.',
+      general: '<p>Prendre soin des autres émotionnellement est presque naturel pour toi. Tu comprends rapidement quand quelqu\'un souffre. Tu ressens le besoin d\'aider, de soutenir, de rassurer. Et dans tes relations importantes, tu prends très vite un rôle central : celle qui comprend, celle qui porte, celle qui maintient le lien.</p><p>Au début, ce rôle peut même te donner le sentiment d\'être forte, utile, indispensable. Mais avec le temps, quelque chose de plus lourd se met en place. Sans vraiment le décider, tu commences à exister dans la relation principalement à travers ce que tu donnes aux autres.</p><p><strong>Tu donnes énormément — de ton temps, de ton énergie, de ta compréhension, de ta présence.</strong> Et pourtant, malgré tout ce que tu apportes, tu peux finir par te sentir profondément seule. Parce qu\'une partie de toi attend quelque chose que les autres ne semblent jamais vraiment te donner en retour.</p>',
+      relations: '<p>Quand tu aimes quelqu\'un, tu te retrouves rapidement à porter une part disproportionnée de la charge émotionnelle de la relation. Tu fais les efforts, tu cherches les solutions, tu répares les tensions, tu t\'assures que l\'autre va bien — souvent avant même de vérifier comment toi tu vas.</p><p>Et il y a quelque chose de particulièrement difficile dans ton fonctionnement : tu as tendance à rester même quand la relation te coûte beaucoup. À redoubler d\'efforts quand les choses vont mal. À te dire que si tu donnes encore plus, les choses vont finir par s\'arranger.</p><p>Mais une partie de toi sait probablement que cet effort supplémentaire ne changera pas les dynamiques fondamentales. <em>Et pourtant, tu continues.</em> Parce qu\'arrêter de donner, pour toi, peut ressembler à abandonner quelqu\'un.</p>',
+      couts: [
+        {n:1, t:'Un épuisement émotionnel profond', b:'Porter émotionnellement les autres demande énormément d\'énergie. À force de mettre les besoins des autres avant les tiens, tu peux progressivement vider tes propres réserves — sans t\'en rendre compte, parce que tu es habituée à fonctionner sur ce mode depuis longtemps.'},
+        {n:2, t:'Une perte progressive de contact avec toi-même', b:'Quand toute ton attention émotionnelle est tournée vers les autres, tu peux perdre le lien avec tes propres émotions, tes propres besoins, tes propres limites. Certaines femmes avec ce profil finissent par ne plus vraiment savoir ce qu\'elles ressentent elles-mêmes.'},
+        {n:3, t:'Des relations émotionnellement déséquilibrées', b:'À force de donner énormément, tu peux attirer ou rester dans des relations où tu portes presque toute la charge émotionnelle. Et malgré tous tes efforts, tu peux finir par te sentir peu sécurisée, insuffisamment aimée, ou profondément seule dans une relation pourtant très investie de ta part.'}
+      ],
+      bonne: '<p>Il est possible de sortir progressivement de ces schémas relationnels — sans pour autant devenir froide ou cesser de prendre soin des autres.</p><p>Mais dans la plupart des cas, comprendre ce mécanisme ne suffit pas automatiquement à modifier des comportements profondément installés. Ce qui change réellement, c\'est un travail sur les croyances fondamentales qui associent ta valeur personnelle au fait d\'être indispensable pour l\'autre.</p><p>C\'est exactement le type de travail au cœur du Protocole Détachement.</p>'
+    },
+    O: {
+      nom: 'Le Profil Obsessionnel',
+      tagline: 'Ton esprit revient toujours vers cette personne. Même quand tu ne le veux plus.',
+      general: '<p>Quand une relation devient émotionnellement importante pour toi, elle peut rapidement commencer à occuper une place énorme dans ton espace mental. Même quand tu essaies de penser à autre chose, ton attention revient constamment vers cette personne — ses réactions, ses messages, ses comportements, ses silences, ce qu\'elle pense de toi.</p><p>Tu peux continuer à fonctionner normalement en apparence — travailler, voir des gens, gérer ton quotidien. Mais intérieurement, <strong>une grande partie de ton énergie reste constamment mobilisée autour de ce lien.</strong> Comme si ton cerveau avait mis cette relation en mode prioritaire et refusait de la débrancher.</p><p>Et le plus difficile, c\'est que tu le sais déjà. Tu sais que ça prend trop de place. Tu essaies de prendre du recul. Mais l\'émotion revient. Et avec elle, les pensées qui tournent en boucle.</p>',
+      relations: '<p>Quand tu t\'attaches à quelqu\'un, ton esprit commence à tourner autour de cette relation de manière quasi-permanente. Tu penses à ce que l\'autre ressent, à ce qu\'il pense, à ce qu\'il va faire. Même les petits détails — un mot, un ton, une heure de réponse — peuvent prendre une importance émotionnelle énorme.</p><p>Tu peux relire des conversations, repenser à certains moments, analyser des réactions, construire des scénarios pendant des heures. Et plus la relation est émotionnellement importante, plus cette fixation s\'intensifie — et plus il devient difficile de retrouver un vrai calme intérieur.</p><p>En cas de distance ou d\'ambiguïté, <em>ton esprit s\'emballe.</em> Les scénarios négatifs se multiplient. Et tu peux avoir l\'impression de ne plus réussir à éteindre mentalement cette relation — même quand tu en as profondément envie.</p>',
+      couts: [
+        {n:1, t:'Une surcharge mentale permanente', b:'Une énorme part de ton énergie mentale reste constamment mobilisée autour d\'une relation ou d\'une personne. Même quand tu travailles, quand tu sors, quand tu essaies de te concentrer — ton esprit revient régulièrement vers ce lien. Cela crée progressivement une fatigue mentale chronique qui déborde bien au-delà de ta vie relationnelle.'},
+        {n:2, t:'Une instabilité émotionnelle liée aux comportements de l\'autre', b:'Quand ton esprit reste constamment focalisé sur une relation, ton équilibre émotionnel devient très dépendant des comportements de l\'autre. Le moindre changement ou silence peut déclencher des vagues émotionnelles très fortes.'},
+        {n:3, t:'Une difficulté à retrouver ta paix intérieure', b:'À force de vivre émotionnellement tournée vers une relation, tu peux progressivement perdre la capacité de te sentir pleinement présente à toi-même. Et le plus douloureux : tu sais souvent que cette fixation t\'épuise profondément — mais tu as l\'impression de ne plus pouvoir t\'en détacher.'}
+      ],
+      bonne: '<p>Il est possible de sortir progressivement de ces mécanismes de fixation émotionnelle — et de retrouver une vraie paix intérieure qui ne dépend plus d\'une seule relation.</p><p>Mais dans la plupart des cas, comprendre le problème ne suffit pas à reprendre le contrôle sur des réactions devenues automatiques. Ce qui change réellement, c\'est un travail progressif qui s\'adresse aux mécanismes spécifiques qui alimentent cette fixation.</p><p>C\'est exactement pour cela que le Protocole Détachement a été structuré.</p>'
+    },
+    F: {
+      nom: 'Le Profil Fusionnel',
+      tagline: 'La relation est devenue le centre de ta stabilité. Et tu commences à t\'y perdre.',
+      general: '<p>Quand tu aimes quelqu\'un, tu vis la relation de manière extrêmement intense. Très rapidement, elle prend énormément de place dans ta vie, dans ton esprit, dans ton équilibre intérieur. Tu aimes profondément, tu t\'impliques totalement, tu ressens un besoin fort de partager — ton temps, tes pensées, tes émotions, ton quotidien, ton énergie.</p><p>Au début, cette intensité peut donner l\'impression de vivre quelque chose de très fort, de très réel. Mais avec le temps, <strong>cette fusion peut progressivement devenir étouffante intérieurement</strong> — sans que tu comprennes toujours très bien pourquoi.</p><p>Parce que sans t\'en rendre compte, tu as construit toute ta stabilité émotionnelle autour de cette relation. Ton humeur, ton énergie, ta paix intérieure — et parfois même ton identité — ont commencé à dépendre du lien avec l\'autre. Et plus tu aimes profondément, plus la peur de perdre ce lien devient présente.</p>',
+      relations: '<p>Quand tu t\'attaches à quelqu\'un, tu ressens rapidement le besoin de tout partager, de tout vivre ensemble, d\'être constamment connectée. La fusion émotionnelle te donne un fort sentiment de sécurité — et c\'est pourquoi tu y reviens sans cesse, même quand elle te coûte quelque chose.</p><p>Mais progressivement, tu peux commencer à t\'oublier dans la relation. Tes besoins personnels, ton espace émotionnel, ton individualité passent au second plan. Et quand la relation va bien, tu vas bien. Quand elle vacille — <em>tout vacille avec elle.</em></p><p>Les moments de distance ou de séparation peuvent devenir extrêmement difficiles à vivre — parce que la relation est devenue bien plus qu\'une relation. Elle est devenue une partie de qui tu es.</p>',
+      couts: [
+        {n:1, t:'Une perte progressive de ton individualité', b:'À force de construire ton équilibre autour de la relation, tu peux progressivement perdre le lien avec tes besoins personnels, ta stabilité intérieure propre, ton autonomie émotionnelle, et ton identité en dehors du lien. Certaines femmes avec ce profil finissent par ne plus vraiment savoir qui elles sont en dehors de leurs relations.'},
+        {n:2, t:'Une dépendance émotionnelle très forte', b:'Quand ta sécurité émotionnelle dépend énormément de la relation, chaque changement dans ce lien peut provoquer une instabilité intérieure profonde. Ta paix émotionnelle devient extrêmement fragile parce qu\'elle repose principalement sur la présence ou l\'attention de l\'autre.'},
+        {n:3, t:'Une peur profonde du vide émotionnel', b:'Avec le temps, tu peux développer une peur très forte de la solitude émotionnelle. Non pas parce que tu ne sais pas être seule physiquement — mais parce que le vide intérieur devient extrêmement difficile à supporter quand il n\'y a plus cette fusion permanente. Et cela peut t\'enfermer dans des relations où tu restes davantage pour éviter ce vide que par réel équilibre intérieur.'}
+      ],
+      bonne: '<p>Il est possible de retrouver progressivement une stabilité émotionnelle plus saine — sans devenir froide, sans perdre ta capacité à aimer profondément.</p><p>Mais dans la plupart des cas, comprendre ces mécanismes ne suffit pas à modifier des habitudes émotionnelles profondément installées. Ce qui change réellement, c\'est la reconstruction progressive d\'une sécurité intérieure qui ne dépend plus uniquement du lien avec l\'autre.</p><p>C\'est exactement pour cela que le Protocole Détachement a été structuré.</p>'
+    },
+    E: {
+      nom: 'Le Profil Évitante Dépendante',
+      tagline: 'Tu veux de la connexion. Et en même temps, quelque chose en toi la fuit.',
+      general: '<p>Extérieurement, tu peux donner l\'impression d\'être indépendante émotionnellement. Tu as probablement appris à ne pas trop montrer tes émotions, à gérer seule, à maintenir une certaine distance. Tu peux parfois te convaincre que tu n\'as besoin de personne, que l\'attachement émotionnel est risqué, que les relations prennent trop d\'énergie.</p><p>Mais intérieurement, la réalité est souvent beaucoup plus complexe. Parce qu\'au fond, tu ressens malgré tout un besoin profond de connexion. Le problème, c\'est <strong>qu\'une partie de toi associe cette proximité à quelque chose de menaçant :</strong> la vulnérabilité, la perte de contrôle, le rejet, la souffrance, l\'abandon.</p><p>Alors tu vis souvent dans une contradiction permanente et épuisante : tu veux être proche émotionnellement — et dès que quelqu\'un devient trop proche, quelque chose en toi commence à prendre de la distance.</p>',
+      relations: '<p>Quand quelqu\'un commence à devenir émotionnellement important pour toi, tu peux rapidement ressentir un mélange difficile à gérer : l\'envie de proximité, le besoin de connexion — mais aussi la peur de trop t\'attacher, la peur d\'être envahie, le besoin presque automatique de reprendre de la distance.</p><p>Tu peux parfois te fermer émotionnellement au moment précis où tu as le plus besoin de soutien. Comme si ton système de protection s\'activait exactement quand la relation devenait trop réelle, trop proche.</p><p>Et il y a quelque chose de particulièrement douloureux dans ce fonctionnement : <em>après avoir pris de la distance, tu peux souffrir profondément de cette distance toi-même.</em> Tu as voulu être proche. Tu as eu peur. Tu t\'es éloignée. Et maintenant, tu souffres de l\'éloignement. Ce cycle peut se répéter pendant des années.</p>',
+      couts: [
+        {n:1, t:'Une grande solitude émotionnelle', b:'Même entourée, même dans une relation, tu peux ressentir une forme de solitude intérieure difficile à expliquer aux autres. Parce qu\'une partie de toi veut profondément être comprise — mais une autre partie a peur de se montrer réellement vulnérable. Et cette contradiction crée un isolement intérieur très douloureux.'},
+        {n:2, t:'Des relations émotionnellement instables', b:'Le besoin constant d\'alterner entre proximité et distance crée beaucoup d\'instabilité dans tes relations — et beaucoup d\'incompréhension chez les autres. Tu peux parfois avoir l\'impression de repousser exactement ce dont tu as pourtant besoin émotionnellement.'},
+        {n:3, t:'Une fatigue émotionnelle permanente', b:'Vivre constamment dans cette tension entre l\'envie de connexion et la peur de cette connexion est extrêmement épuisant. Certaines femmes avec ce profil finissent par se couper progressivement de leurs émotions pour éviter de souffrir — mais perdent aussi leur capacité à vivre des relations émotionnellement apaisantes.'}
+      ],
+      bonne: '<p>Ces mécanismes de protection peuvent véritablement évoluer progressivement — tu n\'es pas condamnée à cette contradiction permanente.</p><p>Mais dans la plupart des cas, comprendre intellectuellement ces schémas ne suffit pas à modifier des réactions devenues automatiques avec le temps. Ce qui change réellement, c\'est un travail progressif qui permet de reconstruire une relation plus sécurisée avec la proximité émotionnelle — sans perdre ton équilibre ou ton indépendance.</p><p>C\'est exactement pour cela que le Protocole Détachement a été structuré.</p>'
+    }
+  };
+
+  /* ══════════════════════════════════════════════════
+     QUESTIONS
+  ══════════════════════════════════════════════════ */
+  var QS = [
+    {q:'Dans tes relations les plus importantes, ce qui occupe le plus de place émotionnellement, c\'est…',opts:[{t:'L\'inquiétude quasi-constante qu\'une chose fragile puisse changer ou s\'effondrer',p:'H'},{t:'Le besoin profond de sentir que tu comptes vraiment, que tu es choisie et importante',p:'V'},{t:'Le fait de t\'occuper de l\'autre — porter, soutenir, réparer émotionnellement',p:'S'},{t:'La fusion totale avec la relation, qui devient rapidement toute ta stabilité intérieure',p:'F'}]},
+    {q:'Quand quelqu\'un que tu aimes devient plus distant ou moins disponible, ta première réaction intérieure c\'est…',opts:[{t:'Ton esprit commence à analyser chaque signe, chaque mot, chaque silence',p:'O'},{t:'Tu prends de la distance toi aussi, presque par réflexe, pour te protéger',p:'E'},{t:'Une anxiété monte que tu as du mal à contrôler, même si tu essaies de rester calme',p:'H'},{t:'Tu commences à douter de ta valeur, à te demander si tu comptes encore autant',p:'V'}]},
+    {q:'Dans une relation, ce que tu fais naturellement et presque automatiquement, c\'est…',opts:[{t:'Prendre soin, rassurer, comprendre, porter émotionnellement l\'autre',p:'S'},{t:'Tout partager, tout vivre ensemble, t\'immerger complètement dans le lien',p:'F'},{t:'Garder une certaine distance, contrôler ce que tu montres, protéger ton espace intérieur',p:'E'},{t:'Observer, analyser, essayer de comprendre ce que l\'autre ressent vraiment pour toi',p:'O'}]},
+    {q:'Lorsque la relation traverse une période difficile ou instable, tu as tendance à…',opts:[{t:'Ressentir une forte anxiété intérieure, même quand tu essaies de ne pas le montrer',p:'H'},{t:'Redoubler d\'efforts, donner encore plus, essayer de sauver le lien',p:'S'},{t:'Chercher une validation, un signe concret que la relation tient toujours',p:'V'},{t:'Te refermer émotionnellement, prendre de la distance pour te protéger',p:'E'}]},
+    {q:'Ce qui te coûte le plus émotionnellement dans une relation, c\'est…',opts:[{t:'Les moments de distance, les séparations — le vide quand le lien s\'allège',p:'F'},{t:'Ne pas savoir ce que l\'autre pense ou ressent vraiment — l\'ambiguïté',p:'O'},{t:'Voir quelqu\'un que tu aimes souffrir sans pouvoir rien faire pour lui',p:'S'},{t:'L\'incertitude — ne jamais savoir si ça va tenir, si tu peux vraiment compter sur ça',p:'H'}]},
+    {q:'Quand une relation importante se termine, ce qui se passe en toi c\'est…',opts:[{t:'Un vide émotionnel profond, comme si une partie de toi disparaissait avec elle',p:'F'},{t:'Tu remets profondément en question ta valeur — peut-être que tu n\'étais pas suffisante',p:'V'},{t:'Tu te demandes ce que tu aurais pu faire différemment, mieux, plus',p:'S'},{t:'Tu coupes tout, tu te refermes, tu fais semblant d\'aller bien plutôt que de montrer ta douleur',p:'E'}]},
+    {q:'Laquelle de ces phrases te ressemble le plus profondément ?',opts:[{t:'"Je me sens souvent anxieuse même quand tout va bien, comme si j\'attendais que quelque chose se brise"',p:'H'},{t:'"J\'ai besoin de sentir que je suis vraiment choisie et importante pour aller bien"',p:'V'},{t:'"Cette relation est devenue toute ma stabilité émotionnelle"',p:'F'},{t:'"Mon esprit revient constamment vers cette personne, même quand je veux m\'en détacher"',p:'O'}]},
+    {q:'Ce qui t\'épuise le plus intérieurement en ce moment, c\'est…',opts:[{t:'Donner autant sans recevoir autant en retour — une asymétrie qui s\'accumule',p:'S'},{t:'Cette contradiction permanente entre vouloir être proche et avoir peur de cette proximité',p:'E'},{t:'L\'anxiété émotionnelle quasi-permanente liée à la relation ou à une personne',p:'H'},{t:'Ne jamais vraiment savoir si tu comptes assez — attendre des signes de ta valeur',p:'V'}]},
+    {q:'Dans tes relations, un schéma qui revient souvent c\'est…',opts:[{t:'Tu t\'oublies progressivement dans le lien — tes besoins passent toujours en dernier',p:'F'},{t:'Tu analyses les comportements, les messages, les silences pour trouver la vérité',p:'O'},{t:'Tu portes bien plus que ta juste part de la charge émotionnelle',p:'S'},{t:'Tu alternes entre besoin de proximité et besoin de distance, sans trouver l\'équilibre',p:'E'}]},
+    {q:'Ce qui déclenche le plus de douleur ou d\'inconfort émotionnel en toi, c\'est…',opts:[{t:'Sentir que quelque chose de précieux pourrait se briser sans que tu puisses l\'empêcher',p:'H'},{t:'Ne pas recevoir assez de signes concrets que tu es aimée et suffisamment importante',p:'V'},{t:'Voir quelqu\'un souffrir et te sentir impuissante à aider ou à réparer',p:'S'},{t:'Sentir que le lien se distancie ou que l\'autre devient moins présent émotionnellement',p:'F'}]},
+    {q:'Après une rupture ou une fin de relation importante, tu as tendance à…',opts:[{t:'Rejouer chaque détail, chaque conversation, chaque moment dans ta tête pendant longtemps',p:'O'},{t:'T\'isoler, garder ta douleur pour toi, ne montrer à personne ce que tu ressens vraiment',p:'E'},{t:'Ressentir une perte d\'identité, comme si tu ne savais plus qui tu es sans cette relation',p:'F'},{t:'Vivre une anxiété intense pendant longtemps, une incapacité à retrouver une vraie paix',p:'H'}]},
+    {q:'Dans tes relations, tu te reconnais le plus dans…',opts:[{t:'Je cherche constamment des preuves que je suis aimée, validée, suffisante',p:'V'},{t:'Je me sacrifie énormément pour le bien-être émotionnel de l\'autre',p:'S'},{t:'Ma vie émotionnelle tourne presque entièrement autour du lien avec cette personne',p:'F'},{t:'Je garde toujours une part de moi inaccessible, même avec les gens que j\'aime',p:'E'}]},
+    {q:'Ce que tu ressens souvent mais que tu n\'exprimes pas ou n\'admets pas facilement…',opts:[{t:'Une forme d\'angoisse intérieure permanente que tu tentes de dissimuler',p:'H'},{t:'Le sentiment de ne jamais être tout à fait suffisante, de devoir toujours prouver ta valeur',p:'V'},{t:'Un épuisement profond de tout ce que tu donnes, sans que ça soit vraiment reconnu',p:'S'},{t:'Une fatigue mentale causée par les pensées qui tournent sans arrêt autour d\'une relation',p:'O'}]},
+    {q:'Quand quelqu\'un t\'offre de l\'amour simplement, sans condition, sans complication…',opts:[{t:'Quelque chose en toi se méfie ou cherche à prendre de la distance, sans raison claire',p:'E'},{t:'Tu ressens une connexion si intense qu\'elle devient rapidement toute ta stabilité',p:'F'},{t:'Tu te demandes si c\'est vraiment sincère ou si ça va vraiment durer',p:'V'},{t:'Tu te prépares intérieurement à ce que ça puisse changer ou s\'arrêter',p:'H'}]},
+    {q:'Dans une relation, ce que tu cherches vraiment au fond c\'est…',opts:[{t:'Être indispensable, irremplaçable, absolument nécessaire pour l\'autre',p:'S'},{t:'Comprendre exactement ce que l\'autre ressent pour toi — avoir une réponse claire',p:'O'},{t:'Te sentir suffisamment importante et choisie, sans jamais douter de ta place',p:'V'},{t:'Fusionner profondément, sentir une connexion totale et permanente',p:'F'}]},
+    {q:'Ce qui t\'est le plus difficile à vraiment vivre…',opts:[{t:'Montrer ta vraie vulnérabilité à quelqu\'un que tu aimes',p:'E'},{t:'L\'incertitude émotionnelle — ne pas savoir ce qui va se passer dans la relation',p:'H'},{t:'Te permettre de recevoir sans donner, sans te sentir inutile dans la relation',p:'S'},{t:'Arrêter de penser à quelqu\'un même quand tu en as consciemment très envie',p:'O'}]},
+    {q:'Ce qui décrit le mieux ton fonctionnement émotionnel actuel…',opts:[{t:'Ma stabilité émotionnelle dépend énormément d\'une relation ou d\'une personne',p:'F'},{t:'Je m\'évalue souvent à travers le regard et les réactions des autres sur moi',p:'V'},{t:'Je porte les autres bien plus que je ne me porte moi-même',p:'S'},{t:'Je veux de la vraie connexion — mais elle me fait peur en même temps',p:'E'}]},
+    {q:'Si tu pouvais être totalement honnête avec toi-même sur ce qui t\'épuise le plus en ce moment…',opts:[{t:'Je suis épuisée de vivre dans une anxiété émotionnelle relationnelle presque constante',p:'H'},{t:'Je suis épuisée de ne pas réussir à sortir certaines pensées ou certaines personnes de ma tête',p:'O'},{t:'Je suis épuisée de chercher constamment à prouver que je suis suffisante aux yeux des autres',p:'V'},{t:'Je suis épuisée de tout donner et de ne jamais vraiment recevoir autant en retour',p:'S'}]}
+  ];
+
+  /* ── STATE ── */
+  var cur = 0;
+  var answers = [];
+  var userData = {};
+  for (var _i = 0; _i < QS.length; _i++) answers.push(null);
+
+  /* ══════════════════════════════════════════════════
+     BUILD QUIZ
+  ══════════════════════════════════════════════════ */
+  function buildQuiz() {
+    var body = el('quiz-body');
+    if (!body) return;
+    body.innerHTML = '';
+
+    for (var qi = 0; qi < QS.length; qi++) {
+      (function(qi) {
+        var q   = QS[qi];
+        var div = document.createElement('div');
+        div.className = 'qb' + (qi === 0 ? ' qb-on' : '');
+        div.setAttribute('data-qi', qi);
+
+        /* Mélanger les options */
+        var opts = q.opts.slice().sort(function() { return Math.random() - 0.5; });
+
+        var optsHtml = '';
+        for (var k = 0; k < opts.length; k++) {
+          optsHtml += '<div class="q-opt" data-qi="' + qi + '" data-p="' + opts[k].p + '">'
+            + '<div class="opt-ring"><div class="opt-pip"></div></div>'
+            + '<span class="opt-lbl">' + opts[k].t + '</span>'
+            + '</div>';
+        }
+
+        var isLast = (qi === QS.length - 1);
+        div.innerHTML =
+          '<span class="q-label">Question ' + (qi+1) + ' sur ' + QS.length + '</span>'
+          + '<h2 class="q-text">' + q.q + '</h2>'
+          + '<div class="q-opts">' + optsHtml + '</div>'
+          + '<div class="q-nav">'
+          + '<button class="da-btn-prev" data-qnav="prev"' + (qi === 0 ? ' disabled' : '') + '>'
+          + '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 12L3 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+          + ' Précédent</button>'
+          + '<button class="da-btn-next" data-qnav="next">'
+          + (isLast ? 'Finaliser' : 'Continuer')
+          + ' <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+          + '</button>'
+          + '</div>';
+
+        body.appendChild(div);
+      })(qi);
+    }
+
+    /* ── EVENT DELEGATION : un seul listener sur quiz-body ── */
+    body.addEventListener('click', function(e) {
+      var t = e.target;
+
+      /* Clic sur une option (ou ses enfants) */
+      var optEl = t.closest ? t.closest('.q-opt') : null;
+      if (!optEl && t.classList && t.classList.contains('q-opt')) optEl = t;
+      if (!optEl && t.parentElement && t.parentElement.classList && t.parentElement.classList.contains('q-opt')) optEl = t.parentElement;
+
+      if (optEl) {
+        var qi = parseInt(optEl.getAttribute('data-qi'));
+        var p  = optEl.getAttribute('data-p');
+        pickOption(qi, p, optEl);
+        return;
+      }
+
+      /* Clic sur bouton NAV */
+      var navBtn = t.closest ? t.closest('[data-qnav]') : null;
+      if (!navBtn && t.getAttribute && t.getAttribute('data-qnav')) navBtn = t;
+
+      if (navBtn) {
+        var dir = navBtn.getAttribute('data-qnav');
+        if (dir === 'next') onNext();
+        if (dir === 'prev') onPrev();
+      }
+    });
+  }
+
+  /* ── SÉLECTION OPTION ── */
+  function pickOption(qi, p, clickedEl) {
+    answers[qi] = p;
+
+    /* Mettre à jour visuel */
+    var body = el('quiz-body');
+    var allOpts = body.querySelectorAll('[data-qi="' + qi + '"].q-opt');
+    for (var i = 0; i < allOpts.length; i++) allOpts[i].classList.remove('q-sel');
+    clickedEl.classList.add('q-sel');
+
+    /* Activer bouton Suivant */
+    var qBlock = body.querySelector('[data-qi="' + qi + '"].qb');
+    if (!qBlock) {
+      /* Cherche le bloc parent de l'option */
+      var p2 = clickedEl.parentElement;
+      while (p2 && !p2.classList.contains('qb')) p2 = p2.parentElement;
+      qBlock = p2;
+    }
+    if (qBlock) {
+      var nxtBtn = qBlock.querySelector('[data-qnav="next"]');
+      if (nxtBtn) nxtBtn.classList.add('da-ok');
+    }
+
+    /* Auto-avancer */
+    setTimeout(function() {
+      if (answers[cur] !== null) onNext();
+    }, 380);
+  }
+
+  /* ── NAVIGATION ── */
+  function onNext() {
+    if (answers[cur] === null) return;
+    if (cur === QS.length - 1) { goTo('capture'); return; }
+
+    var body = el('quiz-body');
+    var curBlock = body.querySelector('.qb[data-qi="' + cur + '"]');
+    if (curBlock) curBlock.classList.remove('qb-on');
+
+    cur++;
+    var nextBlock = body.querySelector('.qb[data-qi="' + cur + '"]');
+    if (nextBlock) {
+      nextBlock.classList.add('qb-on');
+      /* Restaurer état si déjà répondu */
+      if (answers[cur] !== null) {
+        var nxtBtn = nextBlock.querySelector('[data-qnav="next"]');
+        if (nxtBtn) nxtBtn.classList.add('da-ok');
+        var selOpts = nextBlock.querySelectorAll('.q-opt');
+        for (var i = 0; i < selOpts.length; i++) {
+          if (selOpts[i].getAttribute('data-p') === answers[cur]) {
+            selOpts[i].classList.add('q-sel');
+          }
+        }
+      }
+    }
+    updateProg();
+    scrollToTop();
+  }
+
+  function onPrev() {
+    if (cur === 0) return;
+    var body = el('quiz-body');
+    var curBlock = body.querySelector('.qb[data-qi="' + cur + '"]');
+    if (curBlock) curBlock.classList.remove('qb-on');
+
+    cur--;
+    var prevBlock = body.querySelector('.qb[data-qi="' + cur + '"]');
+    if (prevBlock) {
+      prevBlock.classList.add('qb-on');
+      if (answers[cur] !== null) {
+        var nxtBtn = prevBlock.querySelector('[data-qnav="next"]');
+        if (nxtBtn) nxtBtn.classList.add('da-ok');
+        var selOpts = prevBlock.querySelectorAll('.q-opt');
+        for (var i = 0; i < selOpts.length; i++) {
+          selOpts[i].classList.toggle('q-sel', selOpts[i].getAttribute('data-p') === answers[cur]);
+        }
+      }
+    }
+    updateProg();
+    scrollToTop();
+  }
+
+  function updateProg() {
+    var pct  = Math.round((cur / QS.length) * 100);
+    var fill = el('prog-fill');
+    var lbl  = el('prog-lbl');
+    if (fill) fill.style.width = pct + '%';
+    if (lbl)  lbl.textContent = (cur + 1) + ' / ' + QS.length;
+  }
+
+  function scrollToTop() {
+    try { APP.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(e) {}
+    try { window.scrollTo(0, APP.getBoundingClientRect().top + window.pageYOffset - 10); } catch(e) {}
+  }
+
+  /* ══════════════════════════════════════════════════
+     CALCUL PROFIL + SCORE
+  ══════════════════════════════════════════════════ */
+  function calcProfile() {
+    var sc = {H:0,V:0,S:0,O:0,F:0,E:0};
+    for (var i = 0; i < answers.length; i++) {
+      if (answers[i] && sc[answers[i]] !== undefined) sc[answers[i]]++;
+    }
+    var best = 'H', max = 0;
+    var keys = ['H','V','S','O','F','E'];
+    for (var j = 0; j < keys.length; j++) {
+      if (sc[keys[j]] > max) { max = sc[keys[j]]; best = keys[j]; }
+    }
+    return best;
+  }
+
+  function calcScore() {
+    var sc = {H:0,V:0,S:0,O:0,F:0,E:0};
+    for (var i = 0; i < answers.length; i++) {
+      if (answers[i] && sc[answers[i]] !== undefined) sc[answers[i]]++;
+    }
+    return sc[calcProfile()] || 0;
+  }
+
+  var PROFIL_LABELS = {
+    H:'Hyper-Anxieux', V:'Validation Addict',
+    S:'Sauveuse',      O:'Obsessionnel',
+    F:'Fusionnel',     E:'Évitante Dépendante'
+  };
+
+  /* ══════════════════════════════════════════════════
+     SYSTEME.IO — API OFFICIELLE (envoi direct, fiable)
+  ══════════════════════════════════════════════════ */
+  function submitToSystemeio(prenom, email, wa, profil, score) {
+    var API_KEY = '6s418m5nosw1giln4552is7g6vr8l15yc0cm9e3im4rh6q6x8unwr2ytdgz8rkzk';
+
+    var payload = {
+      email:     email,
+      firstName: prenom,
+      tags: [
+        { name: 'Quiz-Dependance-Affective' },
+        { name: 'Profil-' + profil.replace(/\s+/g, '-') },
+        { name: 'Score-' + score }
+      ]
+    };
+
+    /* WhatsApp / téléphone — ajouté seulement si renseigné */
+    if (wa) payload.phoneNumber = wa;
+
+    fetch('https://api.systeme.io/api/contacts', {
+      method:  'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key':    API_KEY
+      },
+      body: JSON.stringify(payload)
+    })
+    .then(function(res) {
+      if (!res.ok) res.json().then(function(d){ console.warn('[SIO]', d); });
+    })
+    .catch(function() { /* Silencieux — ne jamais bloquer l'UX */ });
+  }
+
+  /* ══════════════════════════════════════════════════
+     FORMULAIRE
+  ══════════════════════════════════════════════════ */
+  function validEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+  function handleSubmit() {
+    var prenom = APP.querySelector('#da-prenom').value.trim();
+    var email  = APP.querySelector('#da-email').value.trim();
+    var wa     = APP.querySelector('#da-wa').value.trim();
+    var ok = true;
+
+    el('err-prenom').classList.remove('fe-on');
+    el('err-email').classList.remove('fe-on');
+
+    if (!prenom) { el('err-prenom').classList.add('fe-on'); ok = false; }
+    if (!validEmail(email)) { el('err-email').classList.add('fe-on'); ok = false; }
+    if (!ok) return;
+
+    userData = { prenom: prenom, email: email, wa: wa };
+
+    /* ── Envoi vers Systeme.io en arrière-plan ── */
+    var profil = PROFIL_LABELS[calcProfile()] || calcProfile();
+    var score  = calcScore();
+    submitToSystemeio(prenom, email, wa, profil, score);
+
+    goTo('loading');
+
+    setTimeout(function() {
+      var bar = el('ld-bar');
+      if (bar) { bar.style.transition = 'width 2.9s ease'; bar.style.width = '100%'; }
+    }, 60);
+
+    setTimeout(function() {
+      renderResult();
+      goTo('result');
+    }, 3200);
+  }
+
+  /* ══════════════════════════════════════════════════
+     RENDU RÉSULTAT
+  ══════════════════════════════════════════════════ */
+  function renderResult() {
+    var pid  = calcProfile();
+    var prof = PROFILS[pid];
+    var nom  = userData.prenom || '';
+
+    el('r-badge').textContent    = nom ? nom + ', voici ton profil' : 'Ton profil — Dépendance Affective';
+    el('r-nom').textContent      = prof.nom;
+    el('r-tagline').textContent  = prof.tagline;
+    el('r-general').innerHTML    = prof.general;
+    el('r-relations').innerHTML  = prof.relations;
+
+    var coutsHtml = '';
+    for (var i = 0; i < prof.couts.length; i++) {
+      var c = prof.couts[i];
+      coutsHtml += '<div class="cout-card"><div class="cout-head"><span class="cout-n">'
+        + c.n + '</span>' + c.t + '</div><div class="cout-body">' + c.b + '</div></div>';
+    }
+    el('r-couts').innerHTML  = coutsHtml;
+    el('r-bonne').innerHTML  = prof.bonne;
+  }
+
+  /* ══════════════════════════════════════════════════
+     EVENT DELEGATION GLOBAL SUR APP
+  ══════════════════════════════════════════════════ */
+  APP.addEventListener('click', function(e) {
+    var t = e.target;
+
+    /* Chercher le bouton le plus proche avec data-action */
+    var btn = null;
+    if (t.getAttribute && t.getAttribute('data-action')) {
+      btn = t;
+    } else if (t.closest) {
+      btn = t.closest('[data-action]');
+    } else {
+      /* Fallback pour navigateurs très anciens */
+      var p = t;
+      while (p && p !== APP) {
+        if (p.getAttribute && p.getAttribute('data-action')) { btn = p; break; }
+        p = p.parentElement;
+      }
+    }
+
+    if (!btn) return;
+    var action = btn.getAttribute('data-action');
+
+    if (action === 'go-quiz') {
+      buildQuiz();
+      goTo('quiz');
+      updateProg();
+      initSio(); /* Charge Systeme.io silencieusement en arrière-plan */
+    }
+
+    if (action === 'submit-form') {
+      handleSubmit();
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>

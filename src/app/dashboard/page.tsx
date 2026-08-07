@@ -6,16 +6,11 @@ import { DashboardAlertBanners } from "@/components/dashboard/DashboardAlertBann
 import { ProfileProgressHero } from "@/components/dashboard/ProfileProgressHero"
 import { SelectionGrid, SelectionHeader } from "@/components/dashboard/SelectionGrid"
 import { InviteShareCard } from "@/components/growth/InviteShareCard"
-import { getMyRelationBilan } from "@/app/actions/assessments"
-import { RelationBilanCard } from "@/components/matching/RelationBilanCard"
-import { AllianceDashboardPanel } from "@/components/dashboard/AllianceDashboardPanel"
+import { AllianceIdentityHome } from "@/components/dashboard/AllianceIdentityHome"
 import { Crown, BookHeart } from "lucide-react"
 
 export default async function DashboardPage() {
-  const [{ data, error }, bilan] = await Promise.all([
-    getDashboardData(),
-    getMyRelationBilan(),
-  ])
+  const { data, error } = await getDashboardData()
 
   if (error || !data) {
     return (
@@ -55,7 +50,7 @@ export default async function DashboardPage() {
     }))
     .filter((b) => !(isPaid && b.tone === "upgrade"))
 
-  const needsSetup = !data.hasAvatar || data.assessmentsDone < 5
+  const needsSetup = !isPaid && (!data.hasAvatar || data.assessmentsDone < 5)
 
   return (
     <MemberShell
@@ -74,20 +69,24 @@ export default async function DashboardPage() {
       <div className="space-y-5 pb-8">
         <DashboardAlertBanners banners={banners} />
 
-        <ProfileProgressHero
-          firstName={firstName}
-          completion={data.completionPercentage}
-          hasAvatar={data.hasAvatar}
-          isVerified={data.isVerified}
-        />
-
         {isPaid ? (
-          <AllianceDashboardPanel
+          <AllianceIdentityHome
             firstName={firstName}
-            usage={usage}
+            lastName={data.lastName}
+            avatarUrl={data.avatarUrl}
+            gender={data.gender}
+            memberSinceLabel={data.memberSinceLabel}
+            isVerified={data.isVerified}
             assessmentsDone={data.assessmentsDone}
           />
-        ) : null}
+        ) : (
+          <ProfileProgressHero
+            firstName={firstName}
+            completion={data.completionPercentage}
+            hasAvatar={data.hasAvatar}
+            isVerified={data.isVerified}
+          />
+        )}
 
         {needsSetup ? (
           <div className="rounded-2xl border border-primary/25 bg-primary/5 p-5 space-y-3">
@@ -115,24 +114,28 @@ export default async function DashboardPage() {
           </div>
         ) : null}
 
-        {data.assessmentsDone > 0 && bilan.report ? (
-          <RelationBilanCard report={bilan.report} compact />
-        ) : null}
-
         <section className="space-y-3">
           <SelectionHeader
             title={
-              isPaid
-                ? "Votre sélection Alliance"
-                : data.selectionTitle
+              isPaid ? "Découvrez vos compatibilités" : data.selectionTitle
             }
             subtitle={
               isPaid
-                ? `Jusqu’à ${usage.suggestionsLimit} suggestions / jour — Matching enrichi.`
+                ? data.assessmentsDone < 5
+                  ? "Continuez vos questionnaires pour affiner vos suggestions."
+                  : "Profils alignés sur votre foi et votre projet de mariage."
                 : data.selectionSubtitle
             }
           />
           <SelectionGrid items={data.topSuggestions} />
+          {isPaid && data.assessmentsDone < 5 ? (
+            <Link
+              href="/assessments"
+              className="inline-flex text-xs font-semibold text-primary underline"
+            >
+              Continuer mon questionnaire →
+            </Link>
+          ) : null}
         </section>
 
         {!isPaid ? (
@@ -146,7 +149,7 @@ export default async function DashboardPage() {
             <div className="min-w-0">
               <p className="font-serif text-lg font-bold">Passer Alliance</p>
               <p className="text-sm text-muted-foreground mt-0.5 leading-relaxed">
-                Débloquez mon bilan relationnel, le Coffre Premium et un Matching
+                Débloquez mon Rapport Personnalisé, le Coffre Premium et un Matching
                 enrichi.
               </p>
               <span className="inline-block mt-2 text-xs font-bold text-accent">

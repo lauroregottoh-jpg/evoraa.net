@@ -2,7 +2,7 @@ import Link from "next/link"
 import { getAdminDashboardData } from "@/app/actions/admin"
 import { createAdminClient } from "@/utils/supabase/admin"
 import { canAccessOpsConsole, OPS_CONSOLE_PATH } from "@/lib/admin/consolePath"
-import { buildProfileReport } from "@/lib/matching/report/buildProfileReport"
+import { buildLivingPersonalizedReport } from "@/lib/rapport/personalized/buildLivingReport"
 import { PersonalizedReportView } from "@/components/rapport/PersonalizedReportView"
 import {
   ASSESSMENT_ORDER,
@@ -170,7 +170,7 @@ export default async function OpsRapportDemoPage() {
     }
   }
 
-  const report = buildProfileReport({
+  const living = buildLivingPersonalizedReport({
     firstName: chosen.firstName,
     psychometric: chosen.psych,
     isAlliance: true,
@@ -182,20 +182,15 @@ export default async function OpsRapportDemoPage() {
         <Link href={OPS_CONSOLE_PATH} className="text-primary underline font-semibold">
           ← Console ops
         </Link>
-        <span className="text-muted-foreground">Aperçu rapport Alliance (PDF ensuite)</span>
+        <span className="text-muted-foreground">
+          Aperçu Rapport Personnalisé Alliance™ (PDF ensuite)
+        </span>
       </div>
       <PersonalizedReportView
         firstName={chosen.firstName}
-        report={report}
+        living={living}
         isAlliance
         demoLabel={chosen.label}
-        scores={{
-          personality: chosen.psych.personality ?? null,
-          spiritual: chosen.psych.spiritual ?? null,
-          relationship: chosen.psych.relationship ?? null,
-          couple_life: chosen.psych.couple_life ?? null,
-          finances: chosen.psych.finances ?? null,
-        }}
       />
     </div>
   )

@@ -101,7 +101,8 @@ export default function MagicScreenPage() {
                   Prochaine étape : les questionnaires
                 </h3>
                 <p className="text-xs sm:text-sm text-muted-foreground max-w-md mx-auto">
-                  Trois tests courts enrichissent votre score de compatibilité avant les suggestions.
+                  Cinq tests (les piliers du Matching) enrichissent votre profil et préparent
+                  votre Rapport Personnalisé Alliance™.
                 </p>
               </div>
 

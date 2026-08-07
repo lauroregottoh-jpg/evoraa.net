@@ -29,7 +29,7 @@ export const ALLIANCE_PRIVILEGES: {
   {
     id: "bilan",
     title: "Bilan relationnel",
-    body: "Lecture claire de vos 5 piliers et axes de croissance.",
+    body: "Rapport Personnalisé vivant : chapitres qui se débloquent à chaque test.",
   },
   {
     id: "eva",
@@ -132,7 +132,7 @@ export const ALLIANCE_STAGES: AllianceJourneyStage[] = [
     id: "connaitre",
     title: "Étape 1 — Me connaître",
     items: [
-      { label: "Découvrir mon bilan relationnel", href: "/rapport", doneKey: "bilanSeen" },
+      { label: "Découvrir mon Rapport Personnalisé", href: "/rapport", doneKey: "bilanSeen" },
       { label: "Comprendre mes cinq piliers", href: "/assessments", doneKey: "tests" },
       { label: "Identifier mes priorités de croissance", href: "/rapport", doneKey: "bilanSeen" },
     ],

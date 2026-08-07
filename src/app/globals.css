@@ -177,16 +177,31 @@
   animation: assessmentPillarIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-@keyframes allianceGoldSweep {
+@keyframes allianceConfettiFall {
   0% {
-    transform: translateX(-120%) rotate(12deg);
+    transform: translateY(-12px) rotate(0deg);
     opacity: 0;
   }
-  35% {
-    opacity: 0.55;
+  12% {
+    opacity: 0.95;
   }
   100% {
-    transform: translateX(120%) rotate(12deg);
+    transform: translateY(340px) rotate(220deg);
+    opacity: 0;
+  }
+}
+
+.alliance-confetti {
+  animation-name: allianceConfettiFall;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .alliance-confetti {
+    animation: none !important;
     opacity: 0;
   }
 }

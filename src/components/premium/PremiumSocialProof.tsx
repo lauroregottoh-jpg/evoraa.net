@@ -7,12 +7,12 @@ import { KELIAA_TESTIMONIALS } from "@/lib/marketing/testimonials"
 
 const FAQS = [
   {
-    q: "Qu’est-ce que mon bilan relationnel Alliance ?",
-    a: "C’est votre lecture personnelle sur les 5 piliers KELIAA : synthèse claire de vos réponses, axes d’amélioration priorisés. Sans Alliance, vous n’avez qu’un aperçu léger.",
+    q: "Qu’est-ce que le Rapport Personnalisé Alliance™ ?",
+    a: "C’est un rapport vivant : portrait, forces, vigilances et chapitres (communication, conflits, spiritualité…). Chaque évaluation débloque de nouvelles analyses. Les sections manquantes restent visibles, jamais cachées.",
   },
   {
     q: "Pourquoi devenir membre Alliance ?",
-    a: "Pour débloquer mon bilan relationnel, le Coffre Premium, plus de suggestions et d’échanges Eva — autour d’un Matching sérieux, pas du hasard.",
+    a: "Pour débloquer le Rapport Personnalisé, le Coffre Premium, plus de suggestions et d’échanges Eva — autour d’un Matching sérieux, pas du hasard.",
   },
   {
     q: "Puis-je arrêter quand je le souhaite ?",
@@ -24,11 +24,11 @@ const FAQS = [
   },
   {
     q: "Que se passe-t-il si je n’ai plus Alliance ?",
-    a: "Votre compte reste actif. Vous conservez votre profil et retrouvez les limites de l’offre gratuite ; le bilan complet et le Coffre restent réservés à Alliance.",
+    a: "Votre compte reste actif. Vous conservez votre profil et retrouvez les limites de l’offre gratuite ; le Rapport Personnalisé complet et le Coffre restent réservés à Alliance.",
   },
   {
-    q: "Y aura-t-il d’autres options plus avancées ?",
-    a: "Oui, plus tard (visibilité, packs dédiés). Elles s’ajouteront à Alliance mensuelle — elles ne la remplacent pas.",
+    q: "Y aura-t-il des analyses Premium+ plus profondes ?",
+    a: "Oui (dépendance affective, attachement approfondi…). Elles enrichiront le même Rapport Personnalisé sans remplacer Alliance mensuelle.",
   },
 ]
 
