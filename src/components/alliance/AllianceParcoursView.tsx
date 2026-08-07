@@ -89,6 +89,30 @@ export function AllianceParcoursView({
         </div>
       </section>
 
+      <section className="rounded-2xl border border-[#B8954A]/30 bg-gradient-to-br from-[#B8954A]/10 via-white to-card p-5 space-y-4 shadow-card">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
+          Schéma du parcours
+        </p>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0">
+          {ALLIANCE_STAGES.map((stage, i) => (
+            <div key={stage.id} className="flex items-center gap-2 flex-1 min-w-0">
+              <div className="rounded-xl border border-[#B8954A]/35 bg-white px-3 py-2.5 flex-1 text-center">
+                <p className="text-[10px] font-bold text-accent">Étape {i + 1}</p>
+                <p className="text-xs font-semibold leading-snug mt-0.5">
+                  {stage.title.replace(/^Étape \d+ — /, "")}
+                </p>
+              </div>
+              {i < ALLIANCE_STAGES.length - 1 ? (
+                <ChevronRight className="hidden sm:block h-4 w-4 text-accent shrink-0 mx-1" />
+              ) : null}
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-muted-foreground text-center">
+          Me connaître → Me préparer → Rencontrer → Construire
+        </p>
+      </section>
+
       <section className="rounded-2xl border border-border bg-card p-5 space-y-3">
         <div className="flex items-center justify-between gap-2">
           <h2 className="font-serif text-xl font-bold">Première mission</h2>

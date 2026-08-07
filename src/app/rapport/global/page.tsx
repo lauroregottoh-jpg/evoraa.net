@@ -3,12 +3,13 @@ import { MemberPage } from "@/components/layout/MemberPage"
 import { createClient } from "@/utils/supabase/server"
 import { getUsageSnapshot } from "@/lib/billing/usage"
 import { buildLivingPersonalizedReport } from "@/lib/rapport/personalized/buildLivingReport"
-import { RapportHubView } from "@/components/rapport/RapportHubView"
+import { PersonalizedReportView } from "@/components/rapport/PersonalizedReportView"
 import type { AssessmentSlug } from "@/lib/assessments/questionBank"
 
 export const dynamic = "force-dynamic"
 
-export default async function RapportPage() {
+/** Rapport global — toutes les sections détaillées, page par page. */
+export default async function RapportGlobalPage() {
   const supabase = await createClient()
   const {
     data: { user },
@@ -18,11 +19,16 @@ export default async function RapportPage() {
     return (
       <MemberPage>
         <div className="max-w-lg mx-auto text-center py-12 space-y-3">
-          <h1 className="font-serif text-3xl font-bold">Rapport Personnalisé Alliance™</h1>
+          <h1 className="font-serif text-3xl font-bold">
+            Rapport Personnalisé Alliance™
+          </h1>
           <p className="text-sm text-muted-foreground">
-            Connectez-vous pour voir votre rapport vivant.
+            Connectez-vous pour découvrir votre rapport complet.
           </p>
-          <Link href="/login?next=/rapport" className="text-primary font-semibold underline">
+          <Link
+            href="/login?next=/rapport/global"
+            className="text-primary font-semibold underline"
+          >
             Connexion
           </Link>
         </div>
@@ -58,20 +64,22 @@ export default async function RapportPage() {
   return (
     <MemberPage>
       <div className="pb-10 space-y-4">
-        <RapportHubView
+        <p className="text-center text-xs text-muted-foreground">
+          <Link href="/rapport" className="underline">
+            ← Retour au hub Rapport
+          </Link>
+        </p>
+        <PersonalizedReportView
           firstName={profile?.first_name}
           living={living}
           isAlliance={isAlliance}
+          variant="global"
         />
         <p className="text-center text-xs text-muted-foreground">
           <Link
-            href="/rapport/global"
-            className="underline font-semibold text-accent"
+            href="/assessments"
+            className="underline font-semibold text-primary"
           >
-            Rapport complet (toutes les sections)
-          </Link>
-          {" · "}
-          <Link href="/assessments" className="underline font-semibold text-primary">
             Continuer mes tests
           </Link>
           {" · "}

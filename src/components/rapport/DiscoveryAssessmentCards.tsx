@@ -19,12 +19,13 @@ export function DiscoveryAssessmentCards({
   isAlliance = false,
 }: {
   cards: AssessmentCardView[]
+  /** @deprecated — les complémentaires sont désormais Premium+ à venir */
   showComplementary?: boolean
   isAlliance?: boolean
 }) {
   const essentials = cards.filter((c) => c.tier === "essential")
-  const complementary = cards.filter((c) => c.tier === "complementary")
   const premiumPlus = cards.filter((c) => c.tier === "premium_plus")
+  void showComplementary
 
   return (
     <div className="space-y-8">
@@ -35,23 +36,10 @@ export function DiscoveryAssessmentCards({
         cards={essentials}
         isAlliance={isAlliance}
       />
-      {showComplementary ? (
-        <Section
-          eyebrow="Complémentaires"
-          title="Enrichissez progressivement votre lecture"
-          subtitle={
-            isAlliance
-              ? "Visibles Alliance — questionnaires dédiés bientôt. En attendant, continuez le Matching."
-              : "Visibles mais verrouillées en Découverte — s’ouvrent avec Alliance."
-          }
-          cards={complementary}
-          isAlliance={isAlliance}
-        />
-      ) : null}
       <Section
-        eyebrow="Premium+"
+        eyebrow="Premium+ · À venir"
         title="Analyses approfondies"
-        subtitle="Réservées aux offres supérieures — déjà visibles pour vous motiver."
+        subtitle="Langages d’amour, besoins émotionnels, stress, attachement… réservés Premium+ — déjà visibles pour vous motiver."
         cards={premiumPlus}
         isAlliance={isAlliance}
       />
@@ -134,9 +122,7 @@ function Card({
           >
             {card.tier === "essential"
               ? `Éval. ${String(card.order).padStart(2, "0")}`
-              : card.tier === "premium_plus"
-                ? "Premium+"
-                : "Complémentaire"}
+              : "Premium+ · À venir"}
             {done ? " · Terminé" : locked ? " · Verrouillé" : ""}
           </p>
           <h3 className="font-serif text-xl font-bold leading-tight mt-0.5">
@@ -183,7 +169,7 @@ function Card({
               Revoir
             </Link>
             <Link
-              href="/rapport"
+              href="/rapport/global"
               className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-[#B8954A]/40 bg-[#B8954A]/15 px-3 text-xs font-bold text-[#7A5F28]"
             >
               Voir analyse
@@ -198,7 +184,7 @@ function Card({
           </Link>
         ) : card.state === "premium_plus" ? (
           <span className="inline-flex h-10 items-center rounded-xl border border-accent/30 bg-accent/10 px-4 text-sm font-semibold text-accent">
-            Premium+
+            À venir
           </span>
         ) : (
           <Link

@@ -63,7 +63,7 @@ export const ALLIANCE_FIRST_MISSIONS: {
   {
     id: "bilan",
     title: "Découvrir mon bilan",
-    href: "/rapport",
+    href: "/rapport/global",
     field: "bilanSeen",
   },
   {
@@ -132,9 +132,9 @@ export const ALLIANCE_STAGES: AllianceJourneyStage[] = [
     id: "connaitre",
     title: "Étape 1 — Me connaître",
     items: [
-      { label: "Découvrir mon Rapport Personnalisé", href: "/rapport", doneKey: "bilanSeen" },
+      { label: "Découvrir mon Rapport Personnalisé", href: "/rapport/global", doneKey: "bilanSeen" },
       { label: "Comprendre mes cinq piliers", href: "/assessments", doneKey: "tests" },
-      { label: "Identifier mes priorités de croissance", href: "/rapport", doneKey: "bilanSeen" },
+      { label: "Identifier mes priorités de croissance", href: "/rapport/global", doneKey: "bilanSeen" },
     ],
   },
   {

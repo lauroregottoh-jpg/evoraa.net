@@ -61,7 +61,7 @@ export function AllianceDashboardPanel({
               assessmentsDone >= 5
                 ? "Rapport vivant prêt à partir de vos tests."
                 : `Terminez vos tests (${assessmentsDone}/5) pour enrichir le rapport.`,
-            href: assessmentsDone >= 1 ? "/rapport" : "/assessments",
+            href: assessmentsDone >= 1 ? "/rapport/global" : "/assessments",
           },
           {
             icon: Library,

@@ -201,9 +201,9 @@ export function buildProfileReport(input: {
   const overviewBody =
     strengths.length && priorities.length
       ? `Les résultats mettent surtout en avant ${strengths
-          .map((s) => s.label.toLowerCase())
+          .map((s) => REPORT_PILLARS[s.id].shortLabel.toLowerCase())
           .join(" et ")}. Les axes prioritaires concernent ${priorities
-          .map((p) => p.label.toLowerCase())
+          .map((p) => REPORT_PILLARS[p.id].shortLabel.toLowerCase())
           .join(" et ")}.`
       : "Continuez vos questionnaires pour affiner la présentation générale de votre profil."
 

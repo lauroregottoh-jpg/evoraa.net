@@ -93,7 +93,7 @@ export default async function PremiumPage() {
           </Link>
           {" · "}
           <Link
-            href="/rapport"
+            href="/rapport/global"
             className="font-semibold text-primary underline-offset-2 hover:underline"
           >
             Mon rapport personnalisé

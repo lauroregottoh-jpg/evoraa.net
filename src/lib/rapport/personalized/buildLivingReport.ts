@@ -50,6 +50,8 @@ export type LivingChapter = {
   tips?: ProfileReportTip[]
   unlockHint?: string
   unlockHref?: string
+  /** Liens d’action (ex. évolution → tests restants) */
+  unlockActions?: { label: string; href: string }[]
 }
 
 export type LivingPersonalizedReport = {
@@ -207,8 +209,8 @@ export function buildLivingPersonalizedReport(input: {
         teaser: def.teaser,
         unlocked: false,
         unlockHint: needed
-          ? `Complétez « ${needed.title} » pour débloquer cette analyse.`
-          : "Complétez l’évaluation correspondante pour débloquer cette analyse.",
+          ? `Cette partie est encore bloquée. Complétez « ${needed.title} » pour ouvrir vos résultats.`
+          : "Cette partie est encore bloquée. Complétez l’évaluation correspondante pour ouvrir vos résultats.",
         unlockHref: needed?.sourceSlug
           ? `/assessments/${needed.sourceSlug}`
           : "/assessments",
@@ -249,6 +251,10 @@ export function buildLivingPersonalizedReport(input: {
     }
 
     if (def.id === "portrait") {
+      const needed = unlockAssessment(
+        ["personnalite", "intelligence_emotionnelle"],
+        doneIds
+      )
       return {
         id: def.id,
         page: def.page,
@@ -258,6 +264,9 @@ export function buildLivingPersonalizedReport(input: {
         body:
           base.overview?.body ||
           `${name}, votre portrait relationnel se construit à partir des évaluations déjà réalisées. Il reste volontairement nuancé : ce n’est pas une étiquette, c’est une photographie actuelle.`,
+        unlockHref: needed?.sourceSlug
+          ? `/assessments/${needed.sourceSlug}`
+          : "/assessments/personality",
       }
     }
 
@@ -342,11 +351,22 @@ export function buildLivingPersonalizedReport(input: {
         title: def.title,
         teaser: def.teaser,
         unlocked: true,
-        body: "Votre rapport n’est jamais terminé. Chaque nouveau test enrichit automatiquement vos analyses.",
+        body:
+          remaining.length > 0
+            ? "Votre rapport continue de s’enrichir. Voici les évaluations encore à faire pour débloquer de nouvelles analyses."
+            : "Bravo — les évaluations essentielles sont complètes. Revenez quand de nouveaux tests Alliance s’ouvriront.",
         bullets: remaining.slice(0, 5).map(
           (c) =>
-            `Prochaine clé : ${c.title} → débloque ${c.unlocks.slice(0, 2).join(", ")}`
+            `${c.title} → ouvre ${c.unlocks.slice(0, 2).join(", ") || "de nouvelles parties"}`
         ),
+        unlockActions: remaining
+          .filter((c) => c.href)
+          .slice(0, 5)
+          .map((c) => ({
+            label: `Faire « ${c.title} »`,
+            href: c.href as string,
+          })),
+        unlockHref: remaining.find((c) => c.href)?.href || "/assessments",
       }
     }
 
@@ -361,7 +381,10 @@ export function buildLivingPersonalizedReport(input: {
       }
     }
 
-    // Chapitres compétence (communication, conflits, …)
+  // Chapitres compétence (communication, conflits, …)
+    const linked = def.unlockedBy[0]
+      ? PERSONALIZED_ASSESSMENTS.find((a) => a.id === def.unlockedBy[0])
+      : undefined
     return {
       id: def.id,
       page: def.page,
@@ -370,6 +393,9 @@ export function buildLivingPersonalizedReport(input: {
       unlocked: true,
       body: def.teaser,
       tips: chapterTips.slice(0, 4),
+      unlockHref: linked?.sourceSlug
+        ? `/assessments/${linked.sourceSlug}`
+        : undefined,
     }
   })
 

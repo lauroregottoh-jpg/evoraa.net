@@ -42,14 +42,14 @@ const CARDS: BenefitCard[] = [
       "Un rapport vivant (~18 pages) : portrait, forces, vigilances, chapitres qui se débloquent à chaque test.",
     details: [
       "Structure officielle : couverture → portrait → compétences → plan → évolution",
-      "10 évaluations essentielles + complémentaires + Premium+",
+      "10 évaluations essentielles + analyses Premium+ à venir",
       "Sections verrouillées visibles — chaque test ouvre une nouvelle analyse",
       "Recommandations concrètes + liens Académie / Coffre / Eva",
     ],
     tone: "#5C1F28",
     soft: "rgba(92, 31, 40, 0.08)",
     ink: "#5C1F28",
-    href: "/rapport",
+    href: "/rapport/global",
     cta: "Voir mon rapport",
   },
   {

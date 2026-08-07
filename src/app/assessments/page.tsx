@@ -93,7 +93,7 @@ export default async function AssessmentsHubPage() {
                 </Link>
               ) : (
                 <Link
-                  href="/rapport"
+                  href="/rapport/global"
                   className="inline-flex h-12 items-center rounded-xl border border-[#B8954A]/45 bg-[#B8954A]/20 px-5 text-sm font-semibold text-[#F3D9A4]"
                 >
                   Voir mon rapport
@@ -157,7 +157,7 @@ export default async function AssessmentsHubPage() {
             </h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {isAlliance
-                ? "Cartes débloquées / enrichies : les 10 clés + complémentaires. Cliquez pour passer le test Matching lié, puis ouvrez l’analyse dans Rapport."
+                ? "Cartes débloquées / enrichies : les 10 clés Alliance. Cliquez pour passer le test Matching lié, puis ouvrez l’analyse dans Rapport."
                 : "Cartes visibles mais verrouillées en Découverte (sauf les tests Matching ci-dessus). Alliance ouvre le rapport vivant et les évaluations enrichies."}
             </p>
             {!isAlliance ? (
@@ -169,7 +169,7 @@ export default async function AssessmentsHubPage() {
               </Link>
             ) : (
               <Link
-                href="/rapport"
+                href="/rapport/global"
                 className="inline-flex h-10 items-center rounded-xl border border-[#B8954A]/40 bg-[#B8954A]/15 px-4 text-sm font-bold text-[#7A5F28]"
               >
                 Ouvrir mon Rapport Personnalisé →
@@ -180,12 +180,11 @@ export default async function AssessmentsHubPage() {
             cards={living.cards.map((c) => {
               if (isAlliance) return c
               if (c.state === "done") return c
-              if (c.tier === "essential" || c.tier === "complementary") {
+              if (c.tier === "essential") {
                 return { ...c, state: "locked" as const }
               }
               return c
             })}
-            showComplementary
             isAlliance={isAlliance}
           />
         </section>
@@ -197,7 +196,7 @@ export default async function AssessmentsHubPage() {
               Voir vos compatibilités
             </Link>
             {" · "}
-            <Link href="/rapport" className="underline font-semibold">
+            <Link href="/rapport/global" className="underline font-semibold">
               Ouvrir le rapport
             </Link>
           </div>

@@ -63,8 +63,8 @@ export const ALLIANCE_DURATION_OPTIONS: AllianceDurationOption[] = [
     months: 1,
     label: "Alliance 1 mois",
     amountXof: 5000,
-    compareAtXof: 6000,
-    discountPercent: 17,
+    compareAtXof: 7500,
+    discountPercent: 33,
     popular: true,
     bonusBoosts: 1,
     checkoutPlanId: "premium_plus",
@@ -73,10 +73,10 @@ export const ALLIANCE_DURATION_OPTIONS: AllianceDurationOption[] = [
     id: "3m",
     months: 3,
     label: "Alliance 3 mois",
-    /** 3 × 5 000 = 15 000 − 1 500 */
+    /** Lancement 3 × 5 000 − 1 500 · ancrage 3 × 7 500 */
     amountXof: 13500,
-    compareAtXof: 15000,
-    discountPercent: 10,
+    compareAtXof: 22500,
+    discountPercent: 40,
     bonusBoosts: 3,
     checkoutPlanId: "premium_plus",
   },
@@ -84,10 +84,10 @@ export const ALLIANCE_DURATION_OPTIONS: AllianceDurationOption[] = [
     id: "6m",
     months: 6,
     label: "Alliance 6 mois",
-    /** 6 × 5 000 = 30 000 − 3 000 */
+    /** Lancement 6 × 5 000 − 3 000 · ancrage 6 × 7 500 */
     amountXof: 27000,
-    compareAtXof: 30000,
-    discountPercent: 10,
+    compareAtXof: 45000,
+    discountPercent: 40,
     bonusBoosts: 6,
     checkoutPlanId: "premium_plus",
   },

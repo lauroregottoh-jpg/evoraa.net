@@ -19,33 +19,47 @@ export function PersonalizedReportView({
   living,
   isAlliance,
   demoLabel,
+  variant = "global",
 }: {
   firstName?: string | null
   living: LivingPersonalizedReport
   isAlliance: boolean
   demoLabel?: string
+  /** global = page complète section par section */
+  variant?: "global" | "accordion"
 }) {
   const name = firstName?.trim() || "Membre"
   const { base, chapters } = living
 
   const ordered = React.useMemo(() => {
     const rest = chapters.filter((c) => c.id !== "couverture")
+    // Sur la page globale : ordre officiel des pages (1→18)
+    if (variant === "global") {
+      return [...rest].sort((a, b) => a.page - b.page)
+    }
     return [...rest].sort((a, b) => {
       if (a.unlocked === b.unlocked) return a.page - b.page
       return a.unlocked ? -1 : 1
     })
-  }, [chapters])
+  }, [chapters, variant])
 
   const unlockedCount = ordered.filter((c) => c.unlocked).length
   const lockedCount = ordered.length - unlockedCount
   const firstUnlockedId = ordered.find((c) => c.unlocked)?.id ?? null
-  const [openId, setOpenId] = React.useState<string | null>(firstUnlockedId)
-  const [expandAll, setExpandAll] = React.useState(false)
+  const [openId, setOpenId] = React.useState<string | null>(
+    variant === "global" ? null : firstUnlockedId
+  )
+  const [expandAll, setExpandAll] = React.useState(variant === "global")
 
   React.useEffect(() => {
-    setOpenId(firstUnlockedId)
-    setExpandAll(false)
-  }, [firstUnlockedId])
+    if (variant === "global") {
+      setExpandAll(true)
+      setOpenId(null)
+    } else {
+      setOpenId(firstUnlockedId)
+      setExpandAll(false)
+    }
+  }, [firstUnlockedId, variant])
 
   const isOpen = (id: string) => expandAll || openId === id
   const hasAnyTest = living.testsCompleted > 0
@@ -58,7 +72,7 @@ export function PersonalizedReportView({
           className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-40"
         />
         <p className="relative z-10 text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
-          KELIAA · Rapport Personnalisé
+          KELIAA · Rapport complet
         </p>
         <h1 className="relative z-10 mt-3 font-serif text-3xl sm:text-4xl font-bold leading-tight">
           {isAlliance
@@ -66,9 +80,9 @@ export function PersonalizedReportView({
             : `${name}, aperçu de votre rapport`}
         </h1>
         <p className="relative z-10 mt-2 text-sm text-white/75 leading-relaxed max-w-xl">
-          Cliquez sur une partie pour l’ouvrir. Chaque test complété enrichit
-          automatiquement votre rapport — les sections verrouillées restent
-          visibles.
+          Section par section. Chaque test complété enrichit automatiquement
+          votre rapport — les parties verrouillées restent visibles avec un lien
+          pour les débloquer.
         </p>
 
         <div className="relative z-10 mt-5 space-y-2">
@@ -170,7 +184,7 @@ export function PersonalizedReportView({
             onClick={() => setExpandAll((v) => !v)}
             className="text-xs font-bold text-accent underline underline-offset-2"
           >
-            {expandAll ? "Replier tout" : "Voir toute la vision"}
+            {expandAll ? "Replier tout" : "Tout déplier"}
           </button>
         </div>
       </div>
@@ -179,8 +193,8 @@ export function PersonalizedReportView({
         <div className="rounded-2xl border border-[#B8954A]/35 bg-gradient-to-r from-[#B8954A]/15 via-white to-primary/[0.04] px-4 py-3.5 flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm">
             <Sparkles className="inline h-4 w-4 text-accent mr-1.5" />
-            Prochaine clé : <strong>{living.nextUnlock.title}</strong> → enrichit «{" "}
-            {living.nextUnlock.chapterTitle} »
+            Prochaine clé : <strong>{living.nextUnlock.title}</strong> → enrichit
+            « {living.nextUnlock.chapterTitle} »
           </p>
           <Link
             href={living.nextUnlock.href}
@@ -194,6 +208,7 @@ export function PersonalizedReportView({
       <div className="space-y-2.5">
         {ordered.map((chapter) => {
           const open = isOpen(chapter.id)
+          const isPortrait = chapter.id === "portrait"
           return (
             <section
               key={chapter.id}
@@ -221,7 +236,7 @@ export function PersonalizedReportView({
                     )}
                   >
                     Page {chapter.page}
-                    {chapter.unlocked ? " · Débloqué" : " · Verrouillé"}
+                    {chapter.unlocked ? " · Débloqué" : " · Encore bloqué"}
                   </p>
                   <h2 className="font-serif text-lg sm:text-xl font-bold">
                     {chapter.title}
@@ -252,9 +267,8 @@ export function PersonalizedReportView({
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {chapter.unlockHint}
                       </p>
-                      <p className="text-xs text-muted-foreground">
-                        Cette partie reste visible pour vous montrer ce qui
-                        s’ouvrira ensuite.
+                      <p className="text-sm font-medium text-foreground">
+                        Pour débloquer vos résultats, cliquez ici :
                       </p>
                       {chapter.unlockHref ? (
                         <Link
@@ -266,6 +280,38 @@ export function PersonalizedReportView({
                             : "Débloquer avec Alliance"}
                         </Link>
                       ) : null}
+                    </div>
+                  ) : isPortrait ? (
+                    <div className="space-y-4">
+                      {chapter.body ? (
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          {chapter.body}
+                        </p>
+                      ) : null}
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <Link
+                          href={
+                            variant === "global" ? "/rapport" : "/rapport/global"
+                          }
+                          className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#B8954A] px-4 text-sm font-bold text-[#1C1412]"
+                        >
+                          {variant === "global"
+                            ? "Retour au hub Rapport"
+                            : "Découvrir votre rapport complet"}
+                        </Link>
+                        <Link
+                          href={
+                            isAlliance
+                              ? chapter.unlockHref ||
+                                living.nextUnlock?.href ||
+                                "/assessments"
+                              : "/premium"
+                          }
+                          className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-white px-4 text-sm font-semibold"
+                        >
+                          Finaliser le test
+                        </Link>
+                      </div>
                     </div>
                   ) : (
                     <>
@@ -286,6 +332,23 @@ export function PersonalizedReportView({
                           ))}
                         </ul>
                       ) : null}
+                      {chapter.unlockActions?.length ? (
+                        <div className="flex flex-col gap-2 pt-1">
+                          <p className="text-sm font-medium">
+                            Pour enrichir encore votre rapport :
+                          </p>
+                          {chapter.unlockActions.map((a) => (
+                            <Link
+                              key={a.href + a.label}
+                              href={a.href}
+                              className="inline-flex h-10 items-center justify-between rounded-xl border border-[#B8954A]/30 bg-[#B8954A]/10 px-4 text-sm font-semibold text-[#7A5F28]"
+                            >
+                              {a.label}
+                              <ArrowRight className="h-3.5 w-3.5" />
+                            </Link>
+                          ))}
+                        </div>
+                      ) : null}
                       {chapter.tips?.length ? (
                         <div className="space-y-2">
                           {chapter.tips.map((t) => (
@@ -305,12 +368,21 @@ export function PersonalizedReportView({
                             </div>
                           ))}
                         </div>
-                      ) : (
+                      ) : chapter.id !== "evolution" &&
+                        !chapter.bullets?.length ? (
                         <p className="text-xs text-muted-foreground">
                           Analyse ouverte — poursuivez vos tests pour enrichir
                           encore cette partie.
                         </p>
-                      )}
+                      ) : null}
+                      {chapter.unlockHref && chapter.id !== "portrait" ? (
+                        <Link
+                          href={chapter.unlockHref}
+                          className="inline-flex text-xs font-semibold text-primary underline underline-offset-2"
+                        >
+                          Revoir / compléter le test lié →
+                        </Link>
+                      ) : null}
                     </>
                   )}
                 </div>

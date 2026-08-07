@@ -104,7 +104,7 @@ export function RelationBilanCard({
       </div>
 
       <Link
-        href="/rapport"
+        href="/rapport/global"
         className="text-xs font-semibold text-primary inline-flex items-center"
       >
         {compact ? "Ouvrir le rapport complet →" : "Voir le rapport détaillé →"}

@@ -5,9 +5,8 @@ import { Button } from "@/components/ui/button"
 import { DashboardAlertBanners } from "@/components/dashboard/DashboardAlertBanners"
 import { ProfileProgressHero } from "@/components/dashboard/ProfileProgressHero"
 import { SelectionGrid, SelectionHeader } from "@/components/dashboard/SelectionGrid"
-import { InviteShareCard } from "@/components/growth/InviteShareCard"
 import { AllianceIdentityHome } from "@/components/dashboard/AllianceIdentityHome"
-import { Crown, BookHeart } from "lucide-react"
+import { Crown } from "lucide-react"
 
 export default async function DashboardPage() {
   const { data, error } = await getDashboardData()
@@ -31,6 +30,7 @@ export default async function DashboardPage() {
   const firstName = data.firstName
   const isPaid = usage.isPaid
 
+  /** Alliance : pas de bannières photo/profil devant la carte membre. */
   const banners = data.nextSteps
     .filter(
       (s) =>
@@ -48,7 +48,11 @@ export default async function DashboardPage() {
       cta: s.cta,
       tone: s.tone,
     }))
-    .filter((b) => !(isPaid && b.tone === "upgrade"))
+    .filter((b) => {
+      if (isPaid && b.tone === "upgrade") return false
+      if (isPaid && (b.tone === "photo" || b.tone === "profile")) return false
+      return true
+    })
 
   const needsSetup = !isPaid && (!data.hasAvatar || data.assessmentsDone < 5)
 
@@ -67,8 +71,6 @@ export default async function DashboardPage() {
       isTrialBoost={usage.isTrialBoost}
     >
       <div className="space-y-5 pb-8">
-        <DashboardAlertBanners banners={banners} />
-
         {isPaid ? (
           <AllianceIdentityHome
             firstName={firstName}
@@ -80,12 +82,15 @@ export default async function DashboardPage() {
             assessmentsDone={data.assessmentsDone}
           />
         ) : (
-          <ProfileProgressHero
-            firstName={firstName}
-            completion={data.completionPercentage}
-            hasAvatar={data.hasAvatar}
-            isVerified={data.isVerified}
-          />
+          <>
+            <DashboardAlertBanners banners={banners} />
+            <ProfileProgressHero
+              firstName={firstName}
+              completion={data.completionPercentage}
+              hasAvatar={data.hasAvatar}
+              isVerified={data.isVerified}
+            />
+          </>
         )}
 
         {needsSetup ? (
@@ -100,7 +105,7 @@ export default async function DashboardPage() {
             </p>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {data.assessmentsDone < 5
-                ? `${firstName ? `${firstName}, v` : "V"}otre parcours est à ${data.completionPercentage}% (${data.assessmentsDone}/5 tests). D’abord se découvrir, ensuite retrouver celles et ceux qui partagent la même vision.`
+                ? `${firstName ? `${firstName}, v` : "V"}otre parcours est à ${data.completionPercentage}% (${data.assessmentsDone}/5 tests).`
                 : "Sans portrait, vous restez difficile à découvrir pour les profils compatibles."}
             </p>
             <Link
@@ -159,17 +164,6 @@ export default async function DashboardPage() {
           </Link>
         ) : null}
 
-        <Link
-          href="/inspiration"
-          className="flex items-center justify-between gap-3 rounded-xl border border-border px-4 py-3 text-sm hover:border-primary/30 transition-colors"
-        >
-          <span className="inline-flex items-center gap-2 font-medium">
-            <BookHeart className="h-4 w-4 text-primary" />
-            Inspiration &amp; méditations
-          </span>
-          <span className="text-xs font-semibold text-primary">Ouvrir →</span>
-        </Link>
-
         {data.sponsoredAds.length > 0 && (
           <div className="space-y-3">
             {data.sponsoredAds.map((ad) => (
@@ -192,10 +186,6 @@ export default async function DashboardPage() {
             ))}
           </div>
         )}
-
-        <div id="invite" className="scroll-mt-24 pt-2">
-          <InviteShareCard userId={data.userId} />
-        </div>
       </div>
     </MemberShell>
   )

@@ -75,7 +75,7 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
     id: "premium_plus",
     name: "Alliance",
     amountXof: 5000,
-    compareAtXof: 6000,
+    compareAtXof: 7500,
     periodLabel: "/ mois",
     description:
       "Alliance : Rapport Personnalisé vivant, axes d’amélioration + Matching enrichi.",
