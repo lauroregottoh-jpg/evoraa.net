@@ -1,0 +1,226 @@
+"use client"
+
+import * as React from "react"
+import Link from "next/link"
+import { Check, Crown, Sparkles } from "lucide-react"
+import {
+  ALLIANCE_FIRST_MISSIONS,
+  ALLIANCE_PRIVILEGES,
+  ALLIANCE_WELCOME_KEY,
+  type AllianceMissionFlags,
+} from "@/lib/alliance/journey"
+import { cn } from "@/utils/cn"
+
+type Phase = "cinema" | "privileges" | "mission"
+
+export function AllianceWelcomeExperience({
+  firstName,
+  missions,
+}: {
+  firstName: string
+  missions: AllianceMissionFlags
+}) {
+  const [phase, setPhase] = React.useState<Phase>("cinema")
+  const [line, setLine] = React.useState(0)
+  const [privIndex, setPrivIndex] = React.useState(-1)
+
+  React.useEffect(() => {
+    try {
+      localStorage.setItem(ALLIANCE_WELCOME_KEY, "1")
+    } catch {
+      /* ignore */
+    }
+  }, [])
+
+  React.useEffect(() => {
+    if (phase !== "cinema") return
+    const timers = [
+      window.setTimeout(() => setLine(1), 900),
+      window.setTimeout(() => setLine(2), 2800),
+      window.setTimeout(() => setLine(3), 4800),
+      window.setTimeout(() => setPhase("privileges"), 7200),
+    ]
+    return () => timers.forEach(clearTimeout)
+  }, [phase])
+
+  React.useEffect(() => {
+    if (phase !== "privileges") return
+    setPrivIndex(0)
+    const timers: number[] = []
+    ALLIANCE_PRIVILEGES.forEach((_, i) => {
+      timers.push(
+        window.setTimeout(() => setPrivIndex(i), 450 * (i + 1))
+      )
+    })
+    timers.push(
+      window.setTimeout(
+        () => setPhase("mission"),
+        450 * (ALLIANCE_PRIVILEGES.length + 2)
+      )
+    )
+    return () => timers.forEach(clearTimeout)
+  }, [phase])
+
+  const remaining = ALLIANCE_FIRST_MISSIONS.filter((m) => !missions[m.field]).length
+
+  return (
+    <div className="min-h-[70vh]">
+      {phase === "cinema" ? (
+        <section className="relative overflow-hidden rounded-[1.75rem] bg-[#120f10] text-[#F8F4EE] px-6 py-16 sm:py-20 text-center shadow-elevated">
+          <div
+            aria-hidden
+            className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-70"
+          />
+          <p
+            className={cn(
+              "font-serif text-3xl sm:text-4xl font-bold tracking-tight transition-all duration-700",
+              line >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+            )}
+          >
+            KELIAA
+          </p>
+          <div
+            className={cn(
+              "mx-auto mt-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-[#B8954A]/50 bg-[#B8954A]/15 transition-all duration-700",
+              line >= 1 ? "opacity-100 scale-100" : "opacity-0 scale-75"
+            )}
+          >
+            <Crown className="h-7 w-7 text-[#F3D9A4]" />
+          </div>
+          <h1
+            className={cn(
+              "mt-6 font-serif text-3xl sm:text-5xl font-bold transition-all duration-700",
+              line >= 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            )}
+          >
+            Bienvenue dans Alliance
+          </h1>
+          <div className="mt-6 space-y-3 max-w-md mx-auto min-h-[5.5rem]">
+            <p
+              className={cn(
+                "text-sm sm:text-base text-white/75 leading-relaxed transition-all duration-700",
+                line >= 3 ? "opacity-100" : "opacity-0"
+              )}
+            >
+              Vous n’êtes plus simplement sur une application de rencontre.
+            </p>
+            <p
+              className={cn(
+                "text-sm sm:text-base text-[#F3D9A4] leading-relaxed transition-all duration-700 delay-300",
+                line >= 3 ? "opacity-100" : "opacity-0"
+              )}
+            >
+              Vous entrez dans un espace de préparation au mariage.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setPhase("privileges")}
+            className="mt-8 inline-flex h-11 items-center rounded-xl bg-[#B8954A] px-6 text-sm font-bold text-[#1C1412]"
+          >
+            Commencer
+          </button>
+        </section>
+      ) : null}
+
+      {phase === "privileges" ? (
+        <section className="rounded-[1.75rem] border border-accent/30 bg-gradient-to-br from-[#5C1F28] via-[#722F37] to-[#3D141A] p-6 sm:p-8 text-[#F8F4EE] space-y-5">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#F3D9A4]">
+            Vos privilèges
+          </p>
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold">
+            {firstName}, Alliance s’ouvre pour vous
+          </h2>
+          <ul className="space-y-2.5">
+            {ALLIANCE_PRIVILEGES.map((p, i) => {
+              const visible = i <= privIndex
+              return (
+                <li
+                  key={p.id}
+                  className={cn(
+                    "flex items-start gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 transition-all duration-500",
+                    visible
+                      ? "opacity-100 translate-x-0"
+                      : "opacity-0 -translate-x-3"
+                  )}
+                >
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#B8954A]/25 text-[#F3D9A4]">
+                    <Check className="h-3.5 w-3.5" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold">{p.title}</p>
+                    <p className="text-xs text-white/65 leading-relaxed">{p.body}</p>
+                  </div>
+                </li>
+              )
+            })}
+          </ul>
+          <button
+            type="button"
+            onClick={() => setPhase("mission")}
+            className="inline-flex h-11 items-center rounded-xl bg-white px-5 text-sm font-bold text-primary"
+          >
+            Continuer
+          </button>
+        </section>
+      ) : null}
+
+      {phase === "mission" ? (
+        <section className="space-y-5 animate-in fade-in duration-500">
+          <div className="rounded-[1.75rem] border border-border bg-card p-6 sm:p-8 space-y-3 shadow-card">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-accent inline-flex items-center gap-1.5">
+              <Sparkles className="h-3.5 w-3.5" /> Première mission
+            </p>
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold">
+              Bienvenue {firstName}
+            </h2>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Pour profiter pleinement d’Alliance, commencez par ces étapes.{" "}
+              <strong className="text-foreground">
+                {remaining} étape{remaining === 1 ? "" : "s"} restante
+                {remaining === 1 ? "" : "s"}
+              </strong>
+              .
+            </p>
+            <ul className="space-y-2 pt-2">
+              {ALLIANCE_FIRST_MISSIONS.map((m) => {
+                const done = missions[m.field]
+                return (
+                  <li key={m.id}>
+                    <Link
+                      href={m.href}
+                      className={cn(
+                        "flex items-center gap-3 rounded-xl border px-4 py-3 text-sm transition-colors",
+                        done
+                          ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-800"
+                          : "border-border hover:border-primary/40"
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          "flex h-5 w-5 items-center justify-center rounded border text-[10px]",
+                          done
+                            ? "border-emerald-600 bg-emerald-600 text-white"
+                            : "border-muted-foreground/40"
+                        )}
+                      >
+                        {done ? <Check className="h-3 w-3" /> : null}
+                      </span>
+                      {m.title}
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+            <Link
+              href="/alliance/parcours"
+              className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-xl bg-primary text-primary-foreground text-sm font-bold"
+            >
+              Commencer mon parcours
+            </Link>
+          </div>
+        </section>
+      ) : null}
+    </div>
+  )
+}

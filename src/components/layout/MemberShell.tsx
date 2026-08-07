@@ -22,12 +22,14 @@ import {
   Library,
   PanelLeftClose,
   PanelLeftOpen,
+  Route,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { DevSessionSwitcher } from "@/components/dev/DevSessionSwitcher";
 import { MemberReminders } from "@/components/layout/MemberReminders";
 import { logoutAction } from "@/app/actions/auth";
 import { OpsAdminEntryBanner } from "@/components/admin/OpsAdminEntryBanner";
+import { AllianceQuotaBar } from "@/components/alliance/AllianceQuotaBar";
 
 const SIDEBAR_KEY = "KELIAA_member_sidebar_open";
 
@@ -38,6 +40,7 @@ const PRIMARY = [
   { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/assessments", label: "Tests", icon: ClipboardList },
   { href: "/premium", label: "Alliance", icon: Crown, accent: true },
+  { href: "/alliance/parcours", label: "Parcours", icon: Route },
   { href: "/rapport", label: "Rapport", icon: ClipboardList },
   { href: "/coffre-premium", label: "Coffre Premium", icon: Library },
   { href: "/profile", label: "Profil", icon: User },
@@ -70,6 +73,7 @@ const ACCOUNT_HREFS = [
   "/coaching",
   "/coffre-premium",
   "/rapport",
+  "/alliance",
 ];
 
 export type MemberShellProps = {
@@ -86,6 +90,10 @@ export type MemberShellProps = {
   daysRemaining?: number | null;
   trialDaysRemaining?: number | null;
   isTrialBoost?: boolean;
+  suggestionsLimit?: number;
+  evaQuestionsLimit?: number;
+  coffreUnlocked?: number;
+  coffreQuota?: number;
 };
 
 export function MemberShell({
@@ -102,6 +110,10 @@ export function MemberShell({
   daysRemaining = null,
   trialDaysRemaining = null,
   isTrialBoost = false,
+  suggestionsLimit = 15,
+  evaQuestionsLimit = 20,
+  coffreUnlocked = 0,
+  coffreQuota = 3,
 }: MemberShellProps) {
   const pathname = usePathname();
   const router = useRouter();
@@ -144,6 +156,9 @@ export function MemberShell({
         pathname === "/billing" ||
         pathname.startsWith("/billing/")
       );
+    }
+    if (base === "/alliance/parcours") {
+      return pathname === "/alliance/parcours" || pathname.startsWith("/alliance/");
     }
     return pathname === base || pathname.startsWith(`${base}/`);
   };
@@ -208,7 +223,9 @@ export function MemberShell({
       ) : (
         <div className="h-3" />
       )}
-      {PRIMARY.map((item) => {
+      {PRIMARY.filter((item) =>
+        item.href === "/alliance/parcours" ? isPaid : true
+      ).map((item) => {
         const Icon = item.icon;
         const accent = "accent" in item && item.accent;
         return (
@@ -470,6 +487,14 @@ export function MemberShell({
             onNavigate={go}
             dimmed={accountOpen}
           />
+          {isPaid ? (
+            <AllianceQuotaBar
+              suggestionsLimit={suggestionsLimit}
+              evaQuestionsLimit={evaQuestionsLimit}
+              coffreUnlocked={coffreUnlocked}
+              coffreQuota={coffreQuota}
+            />
+          ) : null}
         </header>
 
         <main

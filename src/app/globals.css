@@ -177,10 +177,35 @@
   animation: assessmentPillarIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+@keyframes allianceGoldSweep {
+  0% {
+    transform: translateX(-120%) rotate(12deg);
+    opacity: 0;
+  }
+  35% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateX(120%) rotate(12deg);
+    opacity: 0;
+  }
+}
+
+.alliance-gold-sweep {
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(212, 175, 55, 0.35) 48%,
+    rgba(253, 251, 247, 0.2) 52%,
+    transparent 70%
+  );
+  animation: allianceGoldSweep 2.8s ease-in-out 0.4s both;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .ambient-snow-orb,
-  .assessment-pillar-card {
+  .alliance-gold-sweep {
     animation: none !important;
+    opacity: 0.2;
   }
 }
 

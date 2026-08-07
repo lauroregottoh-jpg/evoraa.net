@@ -38,11 +38,11 @@ export function AllianceDashboardPanel({
             Espace Alliance
           </p>
           <h2 className="font-serif text-2xl font-bold leading-tight">
-            {name}, votre parcours Alliance est actif
+            {name}, vous êtes dans Alliance
           </h2>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Voici ce qui change par rapport à Découverte : plus de suggestions,
-            bilan relationnel, Coffre Premium, et badge Alliance.
+            Pas seulement des quotas — un parcours guidé pour préparer un mariage
+            solide. Continuez là où vous en êtes.
           </p>
         </div>
       </div>
@@ -61,7 +61,7 @@ export function AllianceDashboardPanel({
               assessmentsDone >= 5
                 ? "Bilan complet débloqué à partir de vos tests."
                 : `Terminez vos tests (${assessmentsDone}/5) pour affiner le bilan.`,
-            href: assessmentsDone >= 5 ? "/premium" : "/assessments",
+            href: assessmentsDone >= 5 ? "/rapport" : "/assessments",
           },
           {
             icon: Library,
@@ -71,9 +71,9 @@ export function AllianceDashboardPanel({
           },
           {
             icon: BadgeCheck,
-            title: "Badge & priorité",
-            body: "Badge Alliance sur le profil + priorité soft dans les suggestions.",
-            href: "/profile",
+            title: "Mon parcours",
+            body: "Missions, niveaux et succès — avancez étape par étape.",
+            href: "/alliance/parcours",
           },
         ].map((item) => {
           const Icon = item.icon
@@ -109,10 +109,22 @@ export function AllianceDashboardPanel({
 
       <div className="flex flex-wrap gap-2">
         <Link
-          href="/coffre-premium"
+          href="/alliance/parcours"
           className="inline-flex h-10 items-center rounded-xl bg-primary text-primary-foreground px-4 text-xs font-bold"
         >
-          Ouvrir le Coffre Premium
+          Mon parcours Alliance
+        </Link>
+        <Link
+          href="/alliance/bienvenue"
+          className="inline-flex h-10 items-center rounded-xl border border-accent/40 bg-accent/10 text-accent px-4 text-xs font-bold"
+        >
+          Relire l’accueil
+        </Link>
+        <Link
+          href="/coffre-premium"
+          className="inline-flex h-10 items-center rounded-xl border border-border bg-white px-4 text-xs font-semibold"
+        >
+          Coffre Premium
         </Link>
         <a
           href={waHref}
