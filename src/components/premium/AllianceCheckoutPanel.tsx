@@ -82,8 +82,8 @@ export function AllianceCheckoutPanel({
           {isPaid ? "Renouveler Alliance" : "Activer Alliance"}
         </h2>
         <p className="text-sm text-muted-foreground">
-          Rapport personnalisé, axes d’amélioration, Matching enrichi — choisissez
-          la durée et payez (Mobile Money ou carte).
+          Mon bilan relationnel, Coffre Premium, Matching enrichi — choisissez la
+          durée et payez (Mobile Money ou carte).
         </p>
       </div>
 

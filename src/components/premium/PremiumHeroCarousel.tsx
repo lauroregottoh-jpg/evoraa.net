@@ -12,11 +12,11 @@ export type PremiumHeroSlide = {
 
 const DEFAULT_SLIDES: PremiumHeroSlide[] = [
   {
-    badge: "Rapport personnalisé",
-    title: "votre rapport individuel avec axes d’amélioration.",
-    highlight: "Alliance débloque",
+    badge: "Alliance KELIAA",
+    title: "l’espace pour préparer un mariage sérieux.",
+    highlight: "Alliance,",
     subtitle:
-      "Lecture claire de vos 5 piliers Matching, axes prioritaires à travailler, et lien avec l’Académie du mariage — pour avancer concrètement, pas seulement consulter des profils.",
+      "Un abonnement pensé pour ceux qui veulent avancer avec lucidité : se connaître mieux, rencontrer mieux, et grandir avant l’alliance.",
   },
   {
     badge: "Matching sérieux",
@@ -57,7 +57,7 @@ export function PremiumHeroCarousel({
 
   return (
     <section className="text-center space-y-5 max-w-3xl mx-auto px-1">
-      <div key={index} className="space-y-4">
+      <div key={index} className="space-y-4 animate-in fade-in duration-500">
         <span className="inline-flex items-center rounded-full bg-accent/20 text-accent-foreground border border-accent/30 px-3 py-1 text-[11px] font-semibold tracking-wide">
           {slide.badge}
         </span>
@@ -80,12 +80,14 @@ export function PremiumHeroCarousel({
         aria-label="Ce qu’Alliance débloque"
       >
         {[
-          { value: "Rapport", label: "personnalisé complet" },
-          { value: "Axes", label: "d’amélioration + Académie" },
+          { value: "Bilan", label: "relationnel + axes" },
+          { value: "Coffre", label: "Premium inclus" },
           { value: "15", label: "suggestions / jour" },
         ].map((s) => (
           <div key={s.label} className="text-center">
-            <p className="font-serif text-lg sm:text-2xl font-bold text-foreground">{s.value}</p>
+            <p className="font-serif text-lg sm:text-2xl font-bold text-foreground">
+              {s.value}
+            </p>
             <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 leading-snug">
               {s.label}
             </p>
@@ -102,7 +104,9 @@ export function PremiumHeroCarousel({
             onClick={() => setIndex(i)}
             className={cn(
               "h-2 rounded-full transition-all",
-              i === index ? "w-7 bg-accent" : "w-2 bg-border hover:bg-muted-foreground/40"
+              i === index
+                ? "w-7 bg-accent"
+                : "w-2 bg-border hover:bg-muted-foreground/40"
             )}
           />
         ))}

@@ -33,30 +33,40 @@ export default async function CoachingPage({
   return (
     <MemberPage>
       <div className="max-w-3xl mx-auto space-y-8 pb-10">
-        <header className="space-y-2">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
-            Coaching humain
-          </p>
-          <h1 className="font-serif text-3xl sm:text-4xl font-bold">
-            Coaching : 30 minutes ou 1 heure
-          </h1>
-          <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
-            Accompagnement payant (hors Alliance) pour répondre à vos questions
-            précises. Remplissez le brief, choisissez la formule, puis payez —
-            sur une seule page.
-          </p>
-          {sp.moduleTitle ? (
-            <p className="text-xs rounded-xl border border-border bg-secondary/40 px-3 py-2">
-              Thème Académie : <strong>{sp.moduleTitle}</strong>
+        <header className="relative overflow-hidden rounded-[1.75rem] border border-primary/15 bg-gradient-to-br from-[#5C1F28] via-[#4A1820] to-[#3D2A14] px-5 py-8 sm:px-8 sm:py-10 text-[#F8F4EE] shadow-elevated">
+          <div
+            className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full opacity-40"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(184,149,74,0.45), transparent 70%)",
+            }}
+          />
+          <div className="relative space-y-3 max-w-2xl">
+            <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
+              Coaching relationnel
             </p>
-          ) : null}
-          {sp.cancel === "1" ? (
-            <p className="text-sm text-amber-700 dark:text-amber-300">
-              Paiement annulé. Vous pouvez reprendre ci-dessous — votre brief
-              reste à remplir.
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
+              Une oreille formée pour débloquer un vrai point
+            </h1>
+            <p className="text-sm sm:text-base text-white/75 leading-relaxed">
+              Séances de 30 minutes ou 1 heure (hors Alliance). Remplissez votre
+              brief, choisissez la formule, puis payez — trois étapes distinctes,
+              une seule page.
             </p>
-          ) : null}
+          </div>
         </header>
+
+        {sp.moduleTitle ? (
+          <p className="text-xs rounded-xl border border-border bg-secondary/40 px-3 py-2">
+            Thème Académie : <strong>{sp.moduleTitle}</strong>
+          </p>
+        ) : null}
+        {sp.cancel === "1" ? (
+          <p className="text-sm text-amber-800 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3">
+            Paiement annulé. Vous pouvez reprendre ci-dessous — votre brief reste
+            à remplir.
+          </p>
+        ) : null}
 
         <CoachingWhyGrid />
 

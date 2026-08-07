@@ -47,24 +47,25 @@ export function CoachingWhyGrid() {
     <section className="space-y-4">
       <div className="space-y-2">
         <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
-          Pourquoi le coaching
+          Pourquoi le coaching relationnel
         </p>
         <h2 className="font-serif text-2xl sm:text-3xl font-bold leading-tight">
           Pas pour « consommer » des séances — pour débloquer un vrai point
         </h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          EVA guide. L’Académie forme. Le coaching humain intervient quand vous avez besoin
-          d’une oreille formée et d’un plan d’action personnel.
+          EVA guide. L’Académie forme. Le coaching relationnel intervient quand
+          vous avez besoin d’une oreille formée et d’un plan d’action personnel.
         </p>
       </div>
 
       <ul className="grid sm:grid-cols-2 gap-3">
-        {WHY.map((item) => {
+        {WHY.map((item, i) => {
           const Icon = item.icon
           return (
             <li
               key={item.title}
-              className="rounded-2xl border border-border bg-card p-4 space-y-2 shadow-sm"
+              className="rounded-2xl border border-border bg-card p-4 space-y-2 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-card animate-in fade-in slide-in-from-bottom-2 fill-mode-both"
+              style={{ animationDelay: `${i * 50}ms` }}
             >
               <div className="flex items-center gap-2">
                 <span className="h-9 w-9 rounded-xl bg-accent/15 text-accent flex items-center justify-center">

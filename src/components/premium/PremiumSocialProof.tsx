@@ -7,12 +7,12 @@ import { KELIAA_TESTIMONIALS } from "@/lib/marketing/testimonials"
 
 const FAQS = [
   {
-    q: "Qu’est-ce que le rapport personnalisé Alliance ?",
-    a: "C’est votre bilan individuel sur les 5 piliers KELIAA : lecture détaillée de vos réponses, axes d’amélioration priorisés, et orientation vers l’Académie du mariage. Sans Alliance, vous n’avez qu’un aperçu léger.",
+    q: "Qu’est-ce que mon bilan relationnel Alliance ?",
+    a: "C’est votre lecture personnelle sur les 5 piliers KELIAA : synthèse claire de vos réponses, axes d’amélioration priorisés. Sans Alliance, vous n’avez qu’un aperçu léger.",
   },
   {
     q: "Pourquoi devenir membre Alliance ?",
-    a: "Pour débloquer le rapport complet avec axes d’amélioration, puis accélérer avec plus de suggestions, de conversations et d’échanges Eva — toujours autour d’un Matching sérieux, pas du hasard.",
+    a: "Pour débloquer mon bilan relationnel, le Coffre Premium, plus de suggestions et d’échanges Eva — autour d’un Matching sérieux, pas du hasard.",
   },
   {
     q: "Puis-je arrêter quand je le souhaite ?",
@@ -24,7 +24,7 @@ const FAQS = [
   },
   {
     q: "Que se passe-t-il si je n’ai plus Alliance ?",
-    a: "Votre compte reste actif. Vous conservez votre profil et retrouvez les limites de l’offre gratuite ; le rapport complet et les axes détaillés restent réservés à Alliance.",
+    a: "Votre compte reste actif. Vous conservez votre profil et retrouvez les limites de l’offre gratuite ; le bilan complet et le Coffre restent réservés à Alliance.",
   },
   {
     q: "Y aura-t-il d’autres options plus avancées ?",

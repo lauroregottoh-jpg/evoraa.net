@@ -4,15 +4,13 @@ import { getCheckoutHints } from "@/app/actions/billing"
 import { getUsageSnapshot } from "@/lib/billing/usage"
 import { createClient } from "@/utils/supabase/server"
 import { PremiumHeroCarousel } from "@/components/premium/PremiumHeroCarousel"
-import { AllianceReportPitch } from "@/components/premium/AllianceReportPitch"
-import { SimulatedAllianceReport } from "@/components/premium/SimulatedAllianceReport"
-import { AlliancePrioritySupport } from "@/components/premium/AlliancePrioritySupport"
-import { AllianceBenefitCards } from "@/components/premium/AllianceBenefitCards"
+import {
+  AllianceBenefitCards,
+  AllianceBilanSection,
+} from "@/components/premium/AllianceBenefitCards"
 import { AllianceCheckoutPanel } from "@/components/premium/AllianceCheckoutPanel"
 import { BoostSection } from "@/components/premium/BoostSection"
 import { PremiumSocialProof } from "@/components/premium/PremiumSocialProof"
-import { getMyRelationBilan } from "@/app/actions/assessments"
-import { RelationBilanCard } from "@/components/matching/RelationBilanCard"
 
 export default async function PremiumPage() {
   const supabase = await createClient()
@@ -26,8 +24,8 @@ export default async function PremiumPage() {
         <div className="max-w-lg mx-auto text-center space-y-3 py-10">
           <h1 className="font-serif text-3xl font-bold">Alliance KELIAA</h1>
           <p className="text-sm text-muted-foreground">
-            Connectez-vous pour activer Alliance : rapport personnalisé, axes
-            d’amélioration et Matching enrichi.
+            Connectez-vous pour activer Alliance : bilan relationnel, Coffre
+            Premium et Matching enrichi.
           </p>
           <Link
             href="/login"
@@ -40,11 +38,10 @@ export default async function PremiumPage() {
     )
   }
 
-  const [{ data: profile }, usage, checkoutHints, bilan] = await Promise.all([
+  const [{ data: profile }, usage, checkoutHints] = await Promise.all([
     supabase.from("profiles").select("first_name").eq("user_id", user.id).maybeSingle(),
     getUsageSnapshot(user.id),
     getCheckoutHints(),
-    getMyRelationBilan(),
   ])
 
   return (
@@ -52,46 +49,24 @@ export default async function PremiumPage() {
       <div className="max-w-3xl mx-auto space-y-8 pb-8">
         <PremiumHeroCarousel firstName={profile?.first_name ?? undefined} />
 
-        <AllianceReportPitch />
-
-        <SimulatedAllianceReport />
-
-        {bilan.report ? (
-          <div className="space-y-2">
-            <p className="text-xs text-muted-foreground px-1">
-              {usage?.isPaid
-                ? "Votre rapport Alliance actuel :"
-                : "Aperçu actuel (complet dès Alliance) :"}
-            </p>
-            <RelationBilanCard report={bilan.report} compact />
-          </div>
-        ) : (
-          <p className="text-sm text-muted-foreground rounded-xl border border-dashed border-border px-4 py-3">
-            Complétez vos questionnaires pour générer le rapport. Alliance
-            débloque ensuite les axes d’amélioration détaillés.
+        <section className="rounded-2xl border border-border/70 bg-white/80 px-5 py-5 sm:px-7 sm:py-6 space-y-2 shadow-card">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
+            Qu’est-ce qu’Alliance ?
           </p>
-        )}
+          <h2 className="font-serif text-2xl font-bold leading-tight">
+            Plus qu’un abonnement : un cadre pour avancer sérieusement
+          </h2>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Alliance est l’offre KELIAA pour ceux qui veulent préparer leur
+            mariage avec lucidité. Elle ouvre votre bilan relationnel, enrichit
+            le Matching, et inclut le Coffre Premium — pour grandir avant (et
+            pour) l’alliance.
+          </p>
+        </section>
 
         <AllianceBenefitCards />
 
-        <div className="rounded-2xl border border-accent/35 bg-gradient-to-br from-accent/10 via-white to-white p-5 sm:p-6 shadow-card flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
-          <div className="space-y-1.5">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
-              Inclus Alliance
-            </p>
-            <p className="font-serif text-xl font-bold">Coffre Premium</p>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              Bibliothèque privée de guides, journaux et exercices — 3 ressources
-              au choix dès l’activation, puis +2 chaque mois.
-            </p>
-          </div>
-          <Link
-            href="/coffre-premium"
-            className="shrink-0 inline-flex h-10 items-center justify-center rounded-xl bg-primary text-primary-foreground px-4 text-sm font-semibold"
-          >
-            Ouvrir le Coffre Premium
-          </Link>
-        </div>
+        <AllianceBilanSection />
 
         <AllianceCheckoutPanel
           showModePicker={checkoutHints?.showModePicker ?? true}
@@ -100,8 +75,6 @@ export default async function PremiumPage() {
         />
 
         <BoostSection />
-
-        <AlliancePrioritySupport isPaid={Boolean(usage?.isPaid)} />
 
         <PremiumSocialProof />
 
