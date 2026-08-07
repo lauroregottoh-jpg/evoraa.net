@@ -371,19 +371,6 @@ export function MemberShell({
               >
                 {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
               </button>
-              <button
-                type="button"
-                className="hidden md:inline-flex p-2 rounded-lg border border-border/70 shrink-0 text-primary hover:bg-primary/5 transition-colors"
-                onClick={toggleSidebar}
-                aria-label={sidebarOpen ? "Masquer le menu" : "Afficher le menu"}
-                title={sidebarOpen ? "Masquer le menu" : "Afficher le menu"}
-              >
-                {sidebarOpen ? (
-                  <PanelLeftClose className="h-4 w-4" />
-                ) : (
-                  <PanelLeftOpen className="h-4 w-4" />
-                )}
-              </button>
               <a
                 href="/dashboard"
                 onClick={go("/dashboard")}

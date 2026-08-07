@@ -43,7 +43,7 @@ export function MemberReminders({
   if (pushTestsFirst && testsLeft) {
     task = {
       href: "/assessments",
-      label: `Eva · Questionnaires ${assessmentsDone}/${assessmentsTotal}`,
+      label: `Eva · Tests de compatibilité ${assessmentsDone}/${assessmentsTotal}`,
       cta: "Continuer les tests",
     }
   } else if (!hasAvatar) {

@@ -66,7 +66,7 @@ export function AlertsAndFeedbackHub({
   const items =
     notifications.length > 0
       ? notifications
-      : searchParams.get("demo") === "sara-gande"
+      : searchParams.get("demo") === "orbs-preview"
         ? DEMO_ALERTS
         : notifications
 

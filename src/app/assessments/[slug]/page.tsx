@@ -22,7 +22,7 @@ export default async function AssessmentPage({
       <div className="space-y-6 py-2 max-w-4xl mx-auto">
         <div className="space-y-1">
           <Link href="/assessments" className="text-xs text-muted-foreground hover:underline">
-            ← Tous les questionnaires
+            ← Tous les tests de compatibilité
           </Link>
           <h1 className="font-serif text-3xl font-bold">{meta.name}</h1>
           <p className="text-sm text-muted-foreground">{meta.description}</p>

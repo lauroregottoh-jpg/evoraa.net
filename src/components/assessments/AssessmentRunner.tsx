@@ -54,7 +54,7 @@ export function AssessmentRunner({
     return (
       <Card className="rounded-2xl max-w-xl mx-auto">
         <CardContent className="p-8 text-center space-y-3">
-          <p className="font-serif text-xl">Questionnaire verrouillé</p>
+          <p className="font-serif text-xl">Test verrouillé</p>
           <p className="text-sm text-muted-foreground">{lockMessage}</p>
           <Button variant="outline" className="rounded-xl" onClick={() => router.push("/assessments")}>
             Retour

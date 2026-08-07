@@ -10,34 +10,8 @@ import { getMyRelationBilan } from "@/app/actions/assessments"
 import { RelationBilanCard } from "@/components/matching/RelationBilanCard"
 import { AllianceDashboardPanel } from "@/components/dashboard/AllianceDashboardPanel"
 import { Crown, BookHeart } from "lucide-react"
-import type { UsageSnapshot } from "@/lib/billing/usage"
 
-/** Simulation Sara Gande Alliance — aperçu de ce qui change pour un membre Premium. */
-function saraGandeAllianceUsage(base: UsageSnapshot): UsageSnapshot {
-  return {
-    ...base,
-    planId: "premium_plus",
-    planName: "Alliance",
-    isPaid: true,
-    suggestionsLimit: 15,
-    conversationsLimit: 25,
-    conversationsRemaining: Math.max(0, 25 - base.conversationsUsed),
-    messagesPerConversation: 100,
-    evaQuestionsLimit: 20,
-    renewSoon: false,
-    daysRemaining: 22,
-    isTrialBoost: false,
-    trialDaysRemaining: null,
-  }
-}
-
-export default async function DashboardPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ demo?: string }>
-}) {
-  const sp = await searchParams
-  const demoSara = sp.demo === "sara-gande"
+export default async function DashboardPage() {
   const [{ data, error }, bilan] = await Promise.all([
     getDashboardData(),
     getMyRelationBilan(),
@@ -58,8 +32,8 @@ export default async function DashboardPage({
     )
   }
 
-  const usage = demoSara ? saraGandeAllianceUsage(data.usage) : data.usage
-  const firstName = demoSara ? "Sara" : data.firstName
+  const usage = data.usage
+  const firstName = data.firstName
   const isPaid = usage.isPaid
 
   const banners = data.nextSteps
@@ -98,24 +72,6 @@ export default async function DashboardPage({
       isTrialBoost={usage.isTrialBoost}
     >
       <div className="space-y-5 pb-8">
-        {demoSara ? (
-          <div className="rounded-xl border border-accent/40 bg-accent/10 px-4 py-3 text-xs text-foreground leading-relaxed">
-            <strong className="font-semibold">Simulation Sara Gande · Alliance</strong>
-            {" — "}
-            aperçu du dashboard Premium.{" "}
-            <Link href="/dashboard" className="font-semibold text-primary underline">
-              Quitter la démo
-            </Link>
-            {" · "}
-            <Link
-              href="/notifications?demo=sara-gande"
-              className="font-semibold text-primary underline"
-            >
-              Voir ses alertes
-            </Link>
-          </div>
-        ) : null}
-
         <DashboardAlertBanners banners={banners} />
 
         <ProfileProgressHero
@@ -140,12 +96,12 @@ export default async function DashboardPage({
             </p>
             <p className="text-sm font-bold text-foreground">
               {data.assessmentsDone < 5
-                ? "Complétez vos tests pour activer le Matching"
+                ? "Complétez vos tests de compatibilité"
                 : "Ajoutez une photo claire"}
             </p>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {data.assessmentsDone < 5
-                ? `${firstName ? `${firstName}, v` : "V"}otre parcours est à ${data.completionPercentage}% (${data.assessmentsDone}/5 questionnaires). Les tests guident les suggestions compatibles.`
+                ? `${firstName ? `${firstName}, v` : "V"}otre parcours est à ${data.completionPercentage}% (${data.assessmentsDone}/5 tests). D’abord se découvrir, ensuite retrouver celles et ceux qui partagent la même vision.`
                 : "Sans portrait, vous restez difficile à découvrir pour les profils compatibles."}
             </p>
             <Link
@@ -197,15 +153,6 @@ export default async function DashboardPage({
                 Voir Alliance →
               </span>
             </div>
-          </Link>
-        ) : null}
-
-        {!isPaid ? (
-          <Link
-            href="/dashboard?demo=sara-gande"
-            className="block text-center text-xs text-muted-foreground hover:text-primary underline underline-offset-2"
-          >
-            Aperçu : dashboard Alliance (simulation Sara Gande)
           </Link>
         ) : null}
 

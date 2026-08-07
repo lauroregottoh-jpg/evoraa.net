@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server"
 import { applyTrialBoost } from "@/lib/billing/trial"
 import { getPlan, isPaidPlan, type PlanDefinition, type PlanId } from "@/lib/billing/plans"
+import { isOpsAdminEmail, resolveAuthEmail } from "@/lib/admin/consolePath"
 
 export type ActiveSubscription = {
   id: string
@@ -62,15 +63,26 @@ export async function getActiveSubscription(
 export async function getUserEntitlements(userId?: string) {
   const supabase = await createClient()
   let uid = userId
+  let authEmail: string | null = null
   if (!uid) {
     const {
       data: { user },
     } = await supabase.auth.getUser()
     uid = user?.id
+    authEmail = resolveAuthEmail(user)
+  } else {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (user?.id === uid) authEmail = resolveAuthEmail(user)
   }
 
   const sub = await getActiveSubscription(uid)
-  const plan = sub?.plan ?? getPlan("free")
+  /** Compte ops (ex. Sara / fondateur) : vue Alliance native, sans mode démo. */
+  const adminAlliance = isOpsAdminEmail(authEmail)
+  const plan = adminAlliance
+    ? getPlan("premium_plus")
+    : sub?.plan ?? getPlan("free")
 
   let trialEndsAt: string | null = null
   if (uid && plan.id === "free") {
