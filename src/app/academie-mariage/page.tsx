@@ -15,6 +15,7 @@ import {
 import { MemberPage } from "@/components/layout/MemberPage"
 import { getMyGrowthAxes } from "@/app/actions/assessments"
 import { AcademyCoachingCta } from "@/components/academy/AcademyCoachingCta"
+import { AcademyHeroTitle } from "@/components/academy/AcademyHeroTitle"
 import { ModuleProgressBar } from "@/components/academy/AcademyProgress"
 import {
   academyLessonPath,
@@ -52,18 +53,10 @@ export default async function AcademieMariagePage() {
   return (
     <MemberPage>
       <div className="max-w-3xl mx-auto space-y-8 pb-10">
-        <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-            Académie du mariage
-          </p>
-          <h1 className="font-serif text-3xl sm:text-4xl font-bold">
-            Grandir avant (et pour) l&apos;alliance
-          </h1>
-          <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
-            Huit modules, une leçon profonde chacun. Lis à ton rythme — une partie
-            accessible gratuitement ; le parcours premium arrivera ensuite.
-          </p>
-          <div className="grid sm:grid-cols-2 gap-3 pt-3">
+        <AcademyHeroTitle />
+
+        <div className="space-y-3">
+          <div className="grid sm:grid-cols-2 gap-3">
             <div className="rounded-xl border border-border bg-card px-4 py-3 space-y-1">
               <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                 Version gratuite
@@ -85,7 +78,7 @@ export default async function AcademieMariagePage() {
               </p>
             </div>
           </div>
-          <div className="flex flex-wrap gap-3 pt-2">
+          <div className="flex flex-wrap gap-3">
             <Link href="/assessments" className="text-sm font-semibold text-primary underline">
               Voir mes axes (tests)
             </Link>
