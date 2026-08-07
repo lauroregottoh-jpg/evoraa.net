@@ -8,9 +8,36 @@ import { SelectionGrid, SelectionHeader } from "@/components/dashboard/Selection
 import { InviteShareCard } from "@/components/growth/InviteShareCard"
 import { getMyRelationBilan } from "@/app/actions/assessments"
 import { RelationBilanCard } from "@/components/matching/RelationBilanCard"
+import { AllianceDashboardPanel } from "@/components/dashboard/AllianceDashboardPanel"
 import { Crown, BookHeart } from "lucide-react"
+import type { UsageSnapshot } from "@/lib/billing/usage"
 
-export default async function DashboardPage() {
+/** Simulation Sara Gande Alliance — aperçu de ce qui change pour un membre Premium. */
+function saraGandeAllianceUsage(base: UsageSnapshot): UsageSnapshot {
+  return {
+    ...base,
+    planId: "premium_plus",
+    planName: "Alliance",
+    isPaid: true,
+    suggestionsLimit: 15,
+    conversationsLimit: 25,
+    conversationsRemaining: Math.max(0, 25 - base.conversationsUsed),
+    messagesPerConversation: 100,
+    evaQuestionsLimit: 20,
+    renewSoon: false,
+    daysRemaining: 22,
+    isTrialBoost: false,
+    trialDaysRemaining: null,
+  }
+}
+
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ demo?: string }>
+}) {
+  const sp = await searchParams
+  const demoSara = sp.demo === "sara-gande"
   const [{ data, error }, bilan] = await Promise.all([
     getDashboardData(),
     getMyRelationBilan(),
@@ -31,7 +58,10 @@ export default async function DashboardPage() {
     )
   }
 
-  const { usage } = data
+  const usage = demoSara ? saraGandeAllianceUsage(data.usage) : data.usage
+  const firstName = demoSara ? "Sara" : data.firstName
+  const isPaid = usage.isPaid
+
   const banners = data.nextSteps
     .filter(
       (s) =>
@@ -49,14 +79,15 @@ export default async function DashboardPage() {
       cta: s.cta,
       tone: s.tone,
     }))
+    .filter((b) => !(isPaid && b.tone === "upgrade"))
 
   const needsSetup = !data.hasAvatar || data.assessmentsDone < 5
 
   return (
     <MemberShell
-      firstName={data.firstName}
+      firstName={firstName}
       planLabel={usage.planName}
-      isPaid={usage.isPaid}
+      isPaid={isPaid}
       completionPercentage={data.completionPercentage}
       hasAvatar={data.hasAvatar}
       assessmentsDone={data.assessmentsDone}
@@ -67,14 +98,40 @@ export default async function DashboardPage() {
       isTrialBoost={usage.isTrialBoost}
     >
       <div className="space-y-5 pb-8">
+        {demoSara ? (
+          <div className="rounded-xl border border-accent/40 bg-accent/10 px-4 py-3 text-xs text-foreground leading-relaxed">
+            <strong className="font-semibold">Simulation Sara Gande · Alliance</strong>
+            {" — "}
+            aperçu du dashboard Premium.{" "}
+            <Link href="/dashboard" className="font-semibold text-primary underline">
+              Quitter la démo
+            </Link>
+            {" · "}
+            <Link
+              href="/notifications?demo=sara-gande"
+              className="font-semibold text-primary underline"
+            >
+              Voir ses alertes
+            </Link>
+          </div>
+        ) : null}
+
         <DashboardAlertBanners banners={banners} />
 
         <ProfileProgressHero
-          firstName={data.firstName}
+          firstName={firstName}
           completion={data.completionPercentage}
           hasAvatar={data.hasAvatar}
           isVerified={data.isVerified}
         />
+
+        {isPaid ? (
+          <AllianceDashboardPanel
+            firstName={firstName}
+            usage={usage}
+            assessmentsDone={data.assessmentsDone}
+          />
+        ) : null}
 
         {needsSetup ? (
           <div className="rounded-2xl border border-primary/25 bg-primary/5 p-5 space-y-3">
@@ -88,7 +145,7 @@ export default async function DashboardPage() {
             </p>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {data.assessmentsDone < 5
-                ? `${data.firstName ? `${data.firstName}, v` : "V"}otre parcours est à ${data.completionPercentage}% (${data.assessmentsDone}/5 questionnaires). Les tests guident les suggestions compatibles.`
+                ? `${firstName ? `${firstName}, v` : "V"}otre parcours est à ${data.completionPercentage}% (${data.assessmentsDone}/5 questionnaires). Les tests guident les suggestions compatibles.`
                 : "Sans portrait, vous restez difficile à découvrir pour les profils compatibles."}
             </p>
             <Link
@@ -108,13 +165,21 @@ export default async function DashboardPage() {
 
         <section className="space-y-3">
           <SelectionHeader
-            title={data.selectionTitle}
-            subtitle={data.selectionSubtitle}
+            title={
+              isPaid
+                ? "Votre sélection Alliance"
+                : data.selectionTitle
+            }
+            subtitle={
+              isPaid
+                ? `Jusqu’à ${usage.suggestionsLimit} suggestions / jour — Matching enrichi.`
+                : data.selectionSubtitle
+            }
           />
           <SelectionGrid items={data.topSuggestions} />
         </section>
 
-        {!usage.isPaid ? (
+        {!isPaid ? (
           <Link
             href="/premium"
             className="flex items-start gap-3 rounded-2xl border border-accent/40 bg-accent/10 p-5 hover:bg-accent/15 transition-colors"
@@ -125,13 +190,22 @@ export default async function DashboardPage() {
             <div className="min-w-0">
               <p className="font-serif text-lg font-bold">Passer Alliance</p>
               <p className="text-sm text-muted-foreground mt-0.5 leading-relaxed">
-                Débloquez votre rapport personnalisé, plus de suggestions et des
-                échanges plus amples.
+                Débloquez mon bilan relationnel, le Coffre Premium et un Matching
+                enrichi.
               </p>
               <span className="inline-block mt-2 text-xs font-bold text-accent">
                 Voir Alliance →
               </span>
             </div>
+          </Link>
+        ) : null}
+
+        {!isPaid ? (
+          <Link
+            href="/dashboard?demo=sara-gande"
+            className="block text-center text-xs text-muted-foreground hover:text-primary underline underline-offset-2"
+          >
+            Aperçu : dashboard Alliance (simulation Sara Gande)
           </Link>
         ) : null}
 

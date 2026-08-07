@@ -18,7 +18,6 @@ import {
   Share2,
   BookHeart,
   LogOut,
-  MessageSquareHeart,
   Phone,
   Sun,
   Library,
@@ -49,8 +48,7 @@ const PRIMARY = [
 const SECONDARY = [
   { href: "/inspiration", label: "Inspiration", icon: BookHeart },
   { href: "/dashboard#invite", label: "Recommander", icon: Share2 },
-  { href: "/notifications", label: "Alertes", icon: Bell },
-  { href: "/feedback", label: "Avis", icon: MessageSquareHeart },
+  { href: "/notifications", label: "Alertes & avis", icon: Bell },
   { href: "/help", label: "Aide", icon: HelpCircle },
   { href: "/settings", label: "Paramètres", icon: Settings },
 ] as const;
@@ -66,7 +64,6 @@ const ACCOUNT_HREFS = [
   "/profile",
   "/notifications",
   "/inspiration",
-  "/feedback",
   "/help",
   "/settings",
   "/academie-mariage",

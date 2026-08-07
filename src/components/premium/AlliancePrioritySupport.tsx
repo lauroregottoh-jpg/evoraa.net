@@ -4,7 +4,7 @@ import { Headphones, MessageCircle } from "lucide-react"
 /**
  * Support prioritaire Alliance :
  * - Ligne WhatsApp VIP (numéro via NEXT_PUBLIC_ALLIANCE_WHATSAPP)
- * - Ticket in-app prioritaire (/feedback?priority=1)
+ * - Ticket in-app prioritaire (/notifications?tab=avis&priority=1)
  */
 export function AlliancePrioritySupport({ isPaid }: { isPaid: boolean }) {
   const raw = process.env.NEXT_PUBLIC_ALLIANCE_WHATSAPP?.replace(/\D/g, "") || ""
@@ -62,7 +62,7 @@ export function AlliancePrioritySupport({ isPaid }: { isPaid: boolean }) {
             Message via Avis / Contact : file prioritaire côté équipe.
           </p>
           <Link
-            href={isPaid ? "/feedback?priority=1" : "/premium"}
+            href={isPaid ? "/notifications?tab=avis&priority=1" : "/premium"}
             className="inline-flex text-xs font-bold text-primary underline"
           >
             {isPaid ? "Ouvrir un ticket" : "Voir Alliance"}

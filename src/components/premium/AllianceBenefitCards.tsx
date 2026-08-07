@@ -142,7 +142,7 @@ function BenefitCardItem({
   card: BenefitCard
   index: number
 }) {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(true)
   const Icon = card.icon
 
   return (
@@ -151,6 +151,7 @@ function BenefitCardItem({
         "group relative rounded-2xl border border-border/70 bg-white overflow-hidden shadow-card",
         "transition-all duration-500 ease-out hover:-translate-y-1 hover:shadow-elevated",
         "animate-in fade-in slide-in-from-bottom-3 fill-mode-both",
+        "h-full flex flex-col",
         open && "ring-1 shadow-elevated"
       )}
       style={{
@@ -162,12 +163,7 @@ function BenefitCardItem({
         className="absolute inset-x-0 top-0 h-1.5 transition-opacity duration-300"
         style={{ background: card.tone, opacity: open ? 1 : 0.85 }}
       />
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="w-full text-left p-5 sm:p-6 space-y-3"
-        aria-expanded={open}
-      >
+      <div className="w-full text-left p-5 sm:p-6 space-y-3 flex-1 flex flex-col">
         <div className="flex items-start gap-3">
           <span
             className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-105"
@@ -194,44 +190,51 @@ function BenefitCardItem({
             </p>
           </div>
         </div>
-        <p className="text-[11px] font-semibold" style={{ color: card.ink }}>
-          {open ? "Masquer le détail" : "Voir le détail"}
-        </p>
-      </button>
 
-      <div
-        className={cn(
-          "grid transition-all duration-400 ease-out",
-          open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-        )}
-      >
-        <div className="overflow-hidden">
-          <ul className="px-5 sm:px-6 pb-5 space-y-2.5 border-t border-border/50 pt-4">
-            {card.details.map((d) => (
-              <li
-                key={d}
-                className="flex items-start gap-2 text-sm text-foreground/90"
-              >
-                <Target
-                  className="h-3.5 w-3.5 mt-1 shrink-0"
-                  style={{ color: card.tone }}
-                />
-                <span className="leading-relaxed">{d}</span>
-              </li>
-            ))}
-          </ul>
-          {card.href && card.cta ? (
-            <div className="px-5 sm:px-6 pb-5">
-              <Link
-                href={card.href}
-                className="inline-flex h-10 items-center rounded-xl px-4 text-sm font-semibold text-white transition-opacity hover:opacity-95"
-                style={{ background: card.tone }}
-              >
-                {card.cta}
-              </Link>
-            </div>
-          ) : null}
+        <div
+          className={cn(
+            "grid transition-all duration-400 ease-out flex-1",
+            open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+          )}
+        >
+          <div className="overflow-hidden">
+            <ul className="pt-3 space-y-2.5 border-t border-border/50">
+              {card.details.map((d) => (
+                <li
+                  key={d}
+                  className="flex items-start gap-2 text-sm text-foreground/90"
+                >
+                  <Target
+                    className="h-3.5 w-3.5 mt-1 shrink-0"
+                    style={{ color: card.tone }}
+                  />
+                  <span className="leading-relaxed">{d}</span>
+                </li>
+              ))}
+            </ul>
+            {card.href && card.cta ? (
+              <div className="pt-4">
+                <Link
+                  href={card.href}
+                  className="inline-flex h-10 items-center rounded-xl px-4 text-sm font-semibold text-white transition-opacity hover:opacity-95"
+                  style={{ background: card.tone }}
+                >
+                  {card.cta}
+                </Link>
+              </div>
+            ) : null}
+          </div>
         </div>
+
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          className="mt-auto pt-2 text-[11px] font-semibold text-left hover:underline"
+          style={{ color: card.ink }}
+          aria-expanded={open}
+        >
+          {open ? "Voir moins" : "Voir plus"}
+        </button>
       </div>
     </article>
   )
@@ -249,12 +252,13 @@ export function AllianceBenefitCards() {
           Six avantages, une seule intention
         </h2>
         <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
-          Cliquez une carte pour voir le détail. Tout est pensé pour préparer un
-          mariage sérieux — pas pour accumuler des options.
+          Tout est affiché d’emblée. Cliquez sur « Voir moins » si vous voulez
+          alléger une carte — pensé pour préparer un mariage sérieux, pas pour
+          accumuler des options.
         </p>
       </div>
 
-      <div className="grid sm:grid-cols-2 gap-4">
+      <div className="grid sm:grid-cols-2 gap-4 items-stretch">
         {CARDS.map((card, index) => (
           <BenefitCardItem key={card.id} card={card} index={index} />
         ))}

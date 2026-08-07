@@ -23,12 +23,13 @@ export function NotificationsList({
   const [items, setItems] = React.useState(initial);
 
   const markOne = async (id: string) => {
-    await markNotificationReadAction(id);
+    if (!id.startsWith("demo-")) await markNotificationReadAction(id);
     setItems((prev) => prev.map((n) => (n.id === id ? { ...n, is_read: true } : n)));
   };
 
   const markAll = async () => {
-    await markAllNotificationsReadAction();
+    const hasReal = items.some((n) => !n.id.startsWith("demo-"));
+    if (hasReal) await markAllNotificationsReadAction();
     setItems((prev) => prev.map((n) => ({ ...n, is_read: true })));
   };
 
