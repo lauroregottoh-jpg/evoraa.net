@@ -15,7 +15,7 @@ if (typeof window !== "undefined") {
 
 function ParticleField() {
   const ref = useRef<THREE.Points>(null);
-  const count = 3200;
+  const count = 4200;
 
   const [positions, colors] = useMemo(() => {
     const positions = new Float32Array(count * 3);
@@ -40,9 +40,12 @@ function ParticleField() {
 
   useFrame((state, delta) => {
     if (ref.current) {
-      ref.current.rotation.x -= delta / 45;
-      ref.current.rotation.y -= delta / 55;
-      ref.current.position.y = Math.sin(state.clock.elapsedTime * 0.12) * 0.25;
+      ref.current.rotation.x -= delta / 55;
+      ref.current.rotation.y -= delta / 70;
+      // Soft “snowfall” drift — gentle downward loop
+      ref.current.position.y -= delta * 0.08;
+      if (ref.current.position.y < -2.2) ref.current.position.y = 2.2;
+      ref.current.position.x = Math.sin(state.clock.elapsedTime * 0.1) * 0.2;
     }
   });
 
@@ -51,7 +54,7 @@ function ParticleField() {
       <PointMaterial
         transparent
         vertexColors
-        size={0.045}
+        size={0.055}
         sizeAttenuation
         depthWrite={false}
         opacity={0.85}

@@ -7,6 +7,7 @@ import { CinematicFooter } from "@/components/layout/CinematicFooter";
 import { HeroBackground3D } from "@/components/home/HeroBackground3D";
 import { HomeHeroCarousel } from "@/components/home/HomeHeroCarousel";
 import { StoryJourneyCard } from "@/components/home/StoryJourneyCard";
+import { AmbientSnowOrbs } from "@/components/home/AmbientSnowOrbs";
 import { TestimonialsCarousel } from "@/components/marketing/TestimonialsCarousel";
 import { ShareRecommendSection } from "@/components/marketing/ShareRecommendSection";
 import { MagneticButton } from "@/components/ui/magnetic-button";
@@ -120,17 +121,19 @@ export default function Home() {
   );
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-background selection:bg-primary/20 overflow-hidden">
+    <div ref={containerRef} className="min-h-screen bg-background selection:bg-primary/20 overflow-hidden relative">
       <AuthHashCatcher />
       <CinematicNavbar />
+      <AmbientSnowOrbs density="rich" className="fixed inset-0 z-[1] opacity-70" />
 
-      <div className="relative">
+      <div className="relative z-[2]">
         <HeroBackground3D />
         <HomeHeroCarousel cta={heroCta} />
       </div>
 
       {/* Pourquoi KELIAA existe */}
-      <section className="story-container py-28 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto overflow-hidden">
+      <section className="story-container relative z-[2] py-28 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto overflow-hidden">
+        <AmbientSnowOrbs density="soft" variant="light" className="opacity-50" />
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="story-text space-y-8">
             <div className="space-y-4">
@@ -186,7 +189,8 @@ export default function Home() {
       </section>
 
       {/* Ce qui change concrètement */}
-      <section className="py-8 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
+      <section className="relative z-[2] py-8 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
+        <AmbientSnowOrbs density="soft" className="opacity-40" />
         <div className="encart-kelia p-8 sm:p-10 gsap-fade-up">
           <div className="grid md:grid-cols-2 gap-10 items-center">
             <div className="space-y-4">
@@ -227,7 +231,8 @@ export default function Home() {
       </section>
 
       {/* Parcours */}
-      <section className="py-28 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto relative">
+      <section className="relative z-[2] py-28 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
+        <AmbientSnowOrbs density="normal" className="opacity-45" />
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16 gsap-fade-up">
           <span className="text-sm font-sans font-semibold text-primary uppercase tracking-widest">
             Le parcours
@@ -283,7 +288,8 @@ export default function Home() {
       </section>
 
       {/* Comparatif */}
-      <section className="compare-container relative py-28 px-6 sm:px-12 lg:px-20 bg-primary text-primary-foreground">
+      <section className="compare-container relative z-[2] py-28 px-6 sm:px-12 lg:px-20 bg-primary text-primary-foreground overflow-hidden">
+        <AmbientSnowOrbs density="rich" variant="dark" className="opacity-60" />
         <div className="absolute inset-0 opacity-15">
           <Image
             src="/home/compare-couple.png"
@@ -368,7 +374,8 @@ export default function Home() {
       <TestimonialsCarousel />
 
       {/* Imaginez votre histoire */}
-      <section className="py-28 px-6 sm:px-12 relative overflow-hidden bg-[#1C1412] text-white">
+      <section className="py-28 px-6 sm:px-12 relative z-[2] overflow-hidden bg-[#1C1412] text-white">
+        <AmbientSnowOrbs density="rich" variant="dark" className="opacity-70" />
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-40"
@@ -411,7 +418,8 @@ export default function Home() {
       <ShareRecommendSection />
 
       {/* CTA final */}
-      <section className="py-28 px-6 sm:px-12 relative overflow-hidden bg-primary text-white">
+      <section className="py-28 px-6 sm:px-12 relative z-[2] overflow-hidden bg-primary text-white">
+        <AmbientSnowOrbs density="normal" variant="dark" className="opacity-55" />
         <div className="absolute inset-0 bg-[url('/home/hero-african-wedding.png')] opacity-10 bg-cover bg-[center_35%] md:bg-center mix-blend-overlay" />
         <div className="relative z-10 text-center max-w-3xl mx-auto space-y-8 gsap-fade-up">
           <h2 className="font-serif text-4xl sm:text-6xl font-bold leading-tight">

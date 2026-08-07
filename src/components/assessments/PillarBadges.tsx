@@ -22,7 +22,7 @@ export function PillarBadges({ pillars, className }: PillarBadgesProps) {
     <div className={cn("space-y-3", className)}>
       <div className="flex items-center justify-between gap-2">
         <p className="text-xs font-semibold uppercase tracking-wide text-primary">
-          Piliers de discernement
+          Piliers de compatibilité
         </p>
         <p className="text-xs text-muted-foreground">
           {done}/5

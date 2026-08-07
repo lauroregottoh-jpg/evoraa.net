@@ -141,6 +141,49 @@
   }
 }
 
+@keyframes ambientSnowFall {
+  0% {
+    transform: translate3d(0, -8vh, 0) scale(0.85);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(18px, 110vh, 0) scale(1.05);
+    opacity: 0;
+  }
+}
+
+@keyframes assessmentPillarIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ambient-snow-orb {
+  animation-name: ambientSnowFall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform, opacity;
+}
+
+.assessment-pillar-card {
+  animation: assessmentPillarIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-snow-orb,
+  .assessment-pillar-card {
+    animation: none !important;
+  }
+}
+
 .academy-fade-up {
   animation: academyFadeUp 0.55s ease both;
 }

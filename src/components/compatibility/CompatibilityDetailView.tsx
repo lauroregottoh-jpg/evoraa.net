@@ -160,7 +160,7 @@ export function CompatibilityDetailView({
 
       <Card className="rounded-2xl bg-card">
         <CardHeader className="border-b border-border/40">
-          <CardTitle className="font-serif text-xl">Questionnaire de discernement</CardTitle>
+          <CardTitle className="font-serif text-xl">Test de compatibilité</CardTitle>
         </CardHeader>
         <CardContent className="p-6 space-y-6">
           {profile.answers.map((item, idx) => (

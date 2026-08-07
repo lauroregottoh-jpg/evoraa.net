@@ -449,9 +449,9 @@ export const ASSESSMENTS: Record<
     ],
   },
   couple_life: {
-    name: "Compatibilité projets de vie",
+    name: "Compatibilité projet de vie",
     description:
-      "Mariage, famille, enfants, limites et quotidien — le pilier projets de vie du Matching.",
+      "Mariage, famille, enfants, limites et quotidien — le pilier projet de vie du Matching.",
     questions: [
       {
         key: "c01",
@@ -750,7 +750,7 @@ export const ASSESSMENTS: Record<
   finances: {
     name: "Compatibilité des valeurs",
     description:
-      "Argent, priorités, stewardship, dîme, famille élargie — le pilier valeurs du Matching (matériel & principes).",
+      "Argent, priorités, stewardship, dîme, famille élargie — le pilier valeurs du Matching.",
     questions: [
       {
         key: "f01",
