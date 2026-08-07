@@ -38,7 +38,7 @@ const PILLAR_META: Record<
   }
 > = {
   personality: {
-    short: "Humaine",
+    short: "Personnalités",
     accent: "from-[#5C1F28]/[0.14] via-white to-[#D4AF37]/[0.08]",
     glow: "group-hover:shadow-[0_18px_40px_-18px_rgba(92,31,40,0.45)]",
     icon: HeartHandshake,

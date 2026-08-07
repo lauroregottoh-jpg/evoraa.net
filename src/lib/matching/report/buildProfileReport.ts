@@ -207,7 +207,7 @@ export function buildProfileReport(input: {
           .join(" et ")}.`
       : "Continuez vos questionnaires pour affiner la présentation générale de votre profil."
 
-  // Prefer short human labels (not "Compatibilité humaine")
+  // Prefer short human labels (not full "Compatibilité des personnalités")
   const strengthsLabeled = strengths.map((s) => ({
     ...s,
     label: REPORT_PILLARS[s.id].shortLabel,

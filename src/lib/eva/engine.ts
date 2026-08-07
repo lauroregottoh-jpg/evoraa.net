@@ -141,7 +141,7 @@ function knowledgeHits(question: string): ScoredHit[] {
       intent: "assessment",
       keys: ["test", "questionnaire", "attachement", "personnalite", "stress"],
       answer:
-        "Les 5 tests (Compatibilité humaine, spirituelle, relationnelle, projets de vie, valeurs) construisent votre score. Ils sont inclus dans Découverte. Sans eux, votre profil reste incomplet et le Matching reste faible. Souhaitez-vous commencer par Compatibilité humaine ?",
+        "Les 5 tests (Compatibilité des personnalités, spirituelle, relationnelle, projets de vie, valeurs) construisent votre score. Ils sont inclus dans Découverte. Sans eux, votre profil reste incomplet et le Matching reste faible. Souhaitez-vous commencer par Compatibilité des personnalités ?",
       ctaHref: "/assessments",
       ctaLabel: "Ouvrir les questionnaires",
     },

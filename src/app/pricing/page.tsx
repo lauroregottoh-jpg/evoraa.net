@@ -49,7 +49,7 @@ const PILLARS = [
   },
   {
     icon: Users,
-    title: "Compatibilité humaine",
+    title: "Compatibilité des personnalités",
     desc: "Personnalité, rythme, ouverture, fiabilité.",
   },
 ];

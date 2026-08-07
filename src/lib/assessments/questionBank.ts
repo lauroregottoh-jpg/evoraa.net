@@ -41,7 +41,7 @@ export const ASSESSMENTS: Record<
   { name: string; description: string; questions: BankQuestion[] }
 > = {
   personality: {
-    name: "Compatibilité humaine",
+    name: "Compatibilité des personnalités",
     description:
       "Personnalité, stress, rythme de vie, ouverture et fiabilité — le pilier « humain » du Matching.",
     questions: [

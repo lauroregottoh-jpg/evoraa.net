@@ -46,7 +46,7 @@ export const REPORT_PILLARS: Record<
     order: 4,
   },
   humain: {
-    label: "Compatibilité humaine",
+    label: "Compatibilité des personnalités",
     shortLabel: "Humain",
     order: 5,
   },
