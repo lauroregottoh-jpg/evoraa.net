@@ -552,3 +552,209 @@
   }
 }
 
+/* ——— Matching 5 piliers (accueil) ——— */
+@keyframes matchingPillarIn {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes matchingPillarFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes matchingNumGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(184, 149, 74, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 16px 2px rgba(184, 149, 74, 0.45);
+  }
+}
+
+.matching-pillars-title {
+  animation: matchingPillarIn 0.7s ease-out both;
+}
+
+.matching-pillar-card {
+  animation: matchingPillarIn 0.75s ease-out both;
+}
+
+.matching-pillar-icon {
+  animation: matchingPillarFloat 3.6s ease-in-out infinite;
+}
+
+.matching-pillar-num {
+  animation: matchingNumGlow 2.8s ease-in-out infinite;
+}
+
+/* ——— Découverte · parcours animé ——— */
+@keyframes discoveryStepIn {
+  from {
+    opacity: 0;
+    transform: translateX(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes discoveryOrbDrift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(12px, -16px) scale(1.08);
+  }
+}
+
+@keyframes discoveryStepPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(243, 217, 164, 0.45);
+  }
+  50% {
+    transform: scale(1.06);
+    box-shadow: 0 0 0 10px rgba(243, 217, 164, 0);
+  }
+}
+
+@keyframes discoverySparkTwinkle {
+  0%,
+  100% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    opacity: 0.65;
+    transform: rotate(12deg) scale(1.15);
+  }
+}
+
+@keyframes discoveryPathDraw {
+  from {
+    opacity: 0.2;
+    transform: scaleY(0.4);
+    transform-origin: top;
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+}
+
+.discovery-step {
+  animation: discoveryStepIn 0.65s ease-out both;
+}
+
+.discovery-orb-a {
+  animation: discoveryOrbDrift 7s ease-in-out infinite;
+}
+
+.discovery-orb-b {
+  animation: discoveryOrbDrift 9s ease-in-out infinite reverse;
+}
+
+.discovery-step-pulse {
+  animation: discoveryStepPulse 2.2s ease-in-out infinite;
+}
+
+.discovery-spark {
+  animation: discoverySparkTwinkle 2.4s ease-in-out infinite;
+}
+
+.discovery-path-line {
+  animation: discoveryPathDraw 1.2s ease-out both;
+}
+
+.discovery-step-icon {
+  animation: matchingPillarFloat 3.2s ease-in-out infinite;
+}
+
+@keyframes discoveryMapNodeIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes discoveryHorizonShimmer {
+  0% {
+    opacity: 0.35;
+    background-position: 0% 50%;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.35;
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes discoveryGoalPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(243, 217, 164, 0.5);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 24px 4px rgba(184, 149, 74, 0.35);
+  }
+}
+
+.discovery-map-node {
+  animation: discoveryMapNodeIn 0.7s ease-out both,
+    matchingPillarFloat 4s ease-in-out infinite;
+}
+
+.discovery-horizon-line {
+  background-size: 200% 100%;
+  animation: discoveryHorizonShimmer 3.5s ease-in-out infinite;
+}
+
+.discovery-goal-pulse {
+  animation: discoveryGoalPulse 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .matching-pillars-title,
+  .matching-pillar-card,
+  .matching-pillar-icon,
+  .matching-pillar-num,
+  .discovery-step,
+  .discovery-orb-a,
+  .discovery-orb-b,
+  .discovery-step-pulse,
+  .discovery-spark,
+  .discovery-path-line,
+  .discovery-step-icon,
+  .discovery-map-node,
+  .discovery-horizon-line,
+  .discovery-goal-pulse {
+    animation: none !important;
+  }
+}
+
+

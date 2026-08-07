@@ -3,9 +3,9 @@ import { MemberShell } from "@/components/layout/MemberShell"
 import { getDashboardData } from "@/app/actions/dashboard"
 import { Button } from "@/components/ui/button"
 import { DashboardAlertBanners } from "@/components/dashboard/DashboardAlertBanners"
-import { ProfileProgressHero } from "@/components/dashboard/ProfileProgressHero"
 import { SelectionGrid, SelectionHeader } from "@/components/dashboard/SelectionGrid"
 import { AllianceIdentityHome } from "@/components/dashboard/AllianceIdentityHome"
+import { DiscoveryPathVisual } from "@/components/dashboard/DiscoveryPathVisual"
 import { Crown } from "lucide-react"
 
 export default async function DashboardPage() {
@@ -54,8 +54,6 @@ export default async function DashboardPage() {
       return true
     })
 
-  const needsSetup = !isPaid && (!data.hasAvatar || data.assessmentsDone < 5)
-
   return (
     <MemberShell
       firstName={firstName}
@@ -84,40 +82,13 @@ export default async function DashboardPage() {
         ) : (
           <>
             <DashboardAlertBanners banners={banners} />
-            <ProfileProgressHero
+            <DiscoveryPathVisual
               firstName={firstName}
-              completion={data.completionPercentage}
+              assessmentsDone={data.assessmentsDone}
               hasAvatar={data.hasAvatar}
-              isVerified={data.isVerified}
             />
           </>
         )}
-
-        {needsSetup ? (
-          <div className="rounded-2xl border border-primary/25 bg-primary/5 p-5 space-y-3">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
-              Prochaine étape
-            </p>
-            <p className="text-sm font-bold text-foreground">
-              {data.assessmentsDone < 5
-                ? "Complétez vos tests de compatibilité"
-                : "Ajoutez une photo claire"}
-            </p>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {data.assessmentsDone < 5
-                ? `${firstName ? `${firstName}, v` : "V"}otre parcours est à ${data.completionPercentage}% (${data.assessmentsDone}/5 tests).`
-                : "Sans portrait, vous restez difficile à découvrir pour les profils compatibles."}
-            </p>
-            <Link
-              href={data.assessmentsDone < 5 ? "/assessments" : "/profile"}
-              className="flex items-center justify-center w-full rounded-xl bg-primary text-primary-foreground h-11 text-sm font-semibold"
-            >
-              {data.assessmentsDone < 5
-                ? "Continuer mes tests →"
-                : "Ajouter ma photo →"}
-            </Link>
-          </div>
-        ) : null}
 
         <section className="space-y-3">
           <SelectionHeader
