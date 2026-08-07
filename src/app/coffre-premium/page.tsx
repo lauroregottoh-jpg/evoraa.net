@@ -2,6 +2,7 @@ import { MemberPage } from "@/components/layout/MemberPage"
 import { CoffreLibrary } from "@/components/coffre/CoffreLibrary"
 import { getCoffreState } from "@/app/actions/coffre"
 import { getCoffreResourcesSorted } from "@/lib/coffre/resources"
+import { AmbientSnowOrbs } from "@/components/home/AmbientSnowOrbs"
 
 export const metadata = {
   title: "Le Coffre Premium | KELIAA",
@@ -15,8 +16,11 @@ export default async function CoffrePremiumPage() {
 
   return (
     <MemberPage>
-      <div className="max-w-5xl mx-auto pb-12">
-        <CoffreLibrary resources={resources} initialAccess={access} />
+      <div className="relative max-w-5xl mx-auto pb-12">
+        <AmbientSnowOrbs density="soft" className="opacity-55" />
+        <div className="relative z-10">
+          <CoffreLibrary resources={resources} initialAccess={access} />
+        </div>
       </div>
     </MemberPage>
   )

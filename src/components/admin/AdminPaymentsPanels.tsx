@@ -161,7 +161,7 @@ export function BictorysSandboxPanel({
   run: Run
   setMsg: (m: string) => void
 }) {
-  const [amount, setAmount] = React.useState(500)
+  const [amount, setAmount] = React.useState(17)
   const [mode, setMode] = React.useState<BictorysPaymentMode>("mobile_money")
   const [lastUrl, setLastUrl] = React.useState<string | null>(null)
 
@@ -182,7 +182,7 @@ export function BictorysSandboxPanel({
           <strong>123456</strong> · Montant <strong>13</strong> XOF = échec forcé.
         </p>
         <p className="text-xs">
-          Micro-test live 150 FCFA :{" "}
+          Micro-test live 17 FCFA (démo Alliance) :{" "}
           <a href={`${OPS_CONSOLE_PATH}/test-pay`} className="text-primary underline font-medium">
             page dédiée
           </a>
@@ -218,10 +218,10 @@ export function BictorysSandboxPanel({
                 </span>
                 <input
                   type="number"
-                  min={100}
+                  min={13}
                   max={500000}
                   value={amount}
-                  onChange={(e) => setAmount(Number(e.target.value) || 500)}
+                  onChange={(e) => setAmount(Number(e.target.value) || 17)}
                   className="w-full rounded-xl border border-border px-3 py-2"
                 />
               </label>

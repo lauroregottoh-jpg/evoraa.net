@@ -21,6 +21,7 @@ import {
 } from "@/app/actions/admin"
 import { ACADEMY_MODULES } from "@/lib/academy/modules"
 import { PLANS } from "@/lib/billing/plans"
+import { OPS_CONSOLE_PATH } from "@/lib/admin/consolePath"
 import {
   AdminShell,
   FunnelBar,
@@ -757,25 +758,47 @@ export function AdminConsole(props: Props) {
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             <KpiCard label="Alliance actives" value={props.retention.activeAlliance} tone="green" />
-            <KpiCard label="Legacy 2 500" value={props.retention.activeLegacyPremium} />
+            <KpiCard
+              label="Anciens Essentiel"
+              value={props.retention.activeLegacyPremium}
+              hint="Plan 2 500 legacy — non vendu aux nouveaux"
+            />
             <KpiCard
               label="Revenus Alliance (estim.)"
               value={`${props.stats.revenueXof.toLocaleString("fr-FR")} F`}
               tone="gold"
-              hint="Paiements completed — majoritairement Alliance tant que les Boosts ne sont pas en ligne"
+              hint="Paiements completed Alliance"
             />
             <KpiCard
-              label="Boosts vendus"
-              value={0}
-              hint="Paiement Boost encore « bientôt » côté membre — KPI prêt"
+              label="Paiements abandonnés"
+              value={props.retention.renewalsDue7d}
+              hint="Relances auto (cron) — voir aussi paiements pending"
             />
+          </div>
+          <div className="rounded-2xl border-2 border-accent/40 bg-accent/10 px-5 py-4 space-y-3">
+            <p className="text-sm font-bold text-foreground">Démo paiement Alliance — 17 FCFA</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Validez le parcours live (Bictorys → webhook → Alliance active) avec un micro-montant
+              sur ce compte admin.
+            </p>
+            <a
+              href={`${OPS_CONSOLE_PATH}/test-pay`}
+              className="inline-flex h-11 items-center justify-center rounded-xl bg-accent text-accent-foreground px-5 text-sm font-bold"
+            >
+              Ouvrir la démo 17 FCFA →
+            </a>
+            <a
+              href={`${OPS_CONSOLE_PATH}/rapport-demo`}
+              className="ml-2 inline-flex h-11 items-center justify-center rounded-xl border border-border bg-white px-5 text-sm font-semibold"
+            >
+              Aperçu rapport personnalisé
+            </a>
           </div>
           <div className="rounded-xl border border-border bg-card px-4 py-3 text-xs text-muted-foreground space-y-1.5">
             <p>
-              <strong className="text-foreground">Séparation produits :</strong> Alliance =
-              abonnement mensuel ({PLANS.premium_plus.amountXof.toLocaleString("fr-FR")} FCFA).
-              Boosts = packs ponctuels 1 500 / 3 000 / 5 000 FCFA (24h / 3j / 7j) — affichage
-              commercial déjà prêt, checkout Boost à brancher ensuite.
+              <strong className="text-foreground">Offre membre :</strong> Alliance ={" "}
+              {PLANS.premium_plus.amountXof.toLocaleString("fr-FR")} FCFA / mois (seul plan
+              payant public). Le plan 2 500 n’est plus proposé.
             </p>
             <p>
               J-7 à rappeler : <strong>{props.retention.renewalsDue7d}</strong>

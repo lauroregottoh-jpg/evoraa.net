@@ -2151,7 +2151,7 @@ export async function adminBictorysSandboxCharge(input: {
   const apiKey = process.env.BICTORYS_API_KEY
   if (!apiKey) return { error: "BICTORYS_API_KEY manquant." }
 
-  const amount = Math.max(100, Math.min(input.amount || 500, 500_000))
+  const amount = Math.max(13, Math.min(input.amount || 500, 500_000))
   const { resolveBictorysPaymentMode, parseBictorysPaymentMode } = await import(
     "@/lib/billing/bictorys"
   )

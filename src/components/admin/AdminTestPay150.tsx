@@ -7,7 +7,8 @@ import type { BictorysPaymentMode } from "@/lib/billing/bictorys"
 import { OPS_CONSOLE_PATH } from "@/lib/admin/consolePath"
 import Link from "next/link"
 
-const TEST_AMOUNT_XOF = 150
+/** Micro-paiement démo Alliance (live) — visible dans l’onglet Alliance admin. */
+export const ALLIANCE_DEMO_AMOUNT_XOF = 17
 
 export function AdminTestPay150({
   demoMode,
@@ -27,7 +28,7 @@ export function AdminTestPay150({
     setError(null)
     try {
       const r = await adminBictorysSandboxCharge({
-        amount: TEST_AMOUNT_XOF,
+        amount: ALLIANCE_DEMO_AMOUNT_XOF,
         paymentMode: mode,
       })
       if (r.error) {
@@ -50,9 +51,11 @@ export function AdminTestPay150({
     <div className="mx-auto max-w-md space-y-6 rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-sm">
       <div className="space-y-2">
         <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          Test production · admin seulement
+          Démo Alliance · admin seulement
         </p>
-        <h1 className="font-serif text-3xl font-bold tracking-tight">Payer 150 FCFA</h1>
+        <h1 className="font-serif text-3xl font-bold tracking-tight">
+          Payer {ALLIANCE_DEMO_AMOUNT_XOF} FCFA
+        </h1>
         <p className="text-sm text-muted-foreground leading-relaxed">
           Micro-paiement live via Bictorys pour valider webhook + activation Alliance sur{" "}
           <strong>ce compte admin</strong>.
@@ -61,7 +64,7 @@ export function AdminTestPay150({
 
       <div className="rounded-xl border border-border bg-secondary/30 px-4 py-3 text-sm space-y-1">
         <p>
-          Montant : <strong>{TEST_AMOUNT_XOF} FCFA</strong>
+          Montant : <strong>{ALLIANCE_DEMO_AMOUNT_XOF} FCFA</strong>
         </p>
         <p>
           Provider : <strong>{paymentProvider}</strong>
@@ -80,7 +83,7 @@ export function AdminTestPay150({
         onClick={() => void pay()}
         className="w-full inline-flex items-center justify-center rounded-xl bg-accent text-accent-foreground h-12 px-6 text-sm font-bold hover:brightness-95 disabled:opacity-60"
       >
-        {busy ? "Redirection Bictorys…" : `Payer ${TEST_AMOUNT_XOF} FCFA`}
+        {busy ? "Redirection Bictorys…" : `Payer ${ALLIANCE_DEMO_AMOUNT_XOF} FCFA — Alliance`}
       </button>
 
       {demoMode && (
@@ -96,8 +99,8 @@ export function AdminTestPay150({
       )}
 
       <p className="text-[11px] text-muted-foreground leading-relaxed">
-        Après paiement réussi : Alliance active sur ce compte, event `payment_completed` dans la
-        console. Échec forcé sandbox uniquement avec montant 13 XOF (hors cette page).
+        Après paiement réussi : Alliance active sur ce compte. Échec forcé sandbox : montant 13
+        XOF.
       </p>
 
       <Link href={OPS_CONSOLE_PATH} className="text-sm text-primary underline inline-block">

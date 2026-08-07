@@ -113,6 +113,25 @@ export function subscriptionReminderEmailHtml(input: {
   })
 }
 
+export function abandonedPaymentEmailHtml(input: {
+  firstName: string
+  appUrl: string
+  amountLabel: string
+}) {
+  const name = input.firstName.trim() || "ami(e)"
+  return brandedEmailShell({
+    title: "Paiement Alliance non terminé",
+    preheader: "Reprenez votre paiement quand vous êtes prêt(e).",
+    bodyHtml: `
+      <p>Bonjour ${name},</p>
+      <p>Vous avez commencé un paiement <strong>Alliance</strong> (${input.amountLabel}) sans le finaliser.</p>
+      <p>Aucun problème — vous pouvez reprendre en un clic dès que vous êtes prêt(e). Votre rapport personnalisé, le Matching enrichi et le Coffre Premium vous attendent.</p>
+    `,
+    ctaLabel: "Finaliser mon Alliance",
+    ctaHref: `${input.appUrl}/premium`,
+  })
+}
+
 export function allianceActivatedEmailHtml(input: {
   firstName: string
   appUrl: string

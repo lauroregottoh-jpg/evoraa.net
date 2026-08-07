@@ -10,7 +10,6 @@ import { GrowthAxesCard } from "@/components/assessments/GrowthAxesCard"
 import { RelationBilanCard } from "@/components/matching/RelationBilanCard"
 import { PillarBadges } from "@/components/assessments/PillarBadges"
 import { AssessmentPillarCards } from "@/components/assessments/AssessmentPillarCards"
-import { AmbientSnowOrbs } from "@/components/home/AmbientSnowOrbs"
 import { Heart, Sparkles, Users } from "lucide-react"
 
 export const dynamic = "force-dynamic"
@@ -29,10 +28,7 @@ export default async function AssessmentsHubPage() {
   return (
     <MemberPage>
       <div className="relative space-y-8 py-2 max-w-4xl mx-auto">
-        <AmbientSnowOrbs density="soft" className="opacity-80" />
-
         <header className="relative z-10 overflow-hidden rounded-[1.75rem] border border-primary/20 bg-gradient-to-br from-[#5C1F28] via-[#722F37] to-[#3D141A] p-6 sm:p-8 text-[#F8F4EE] shadow-elevated">
-          <AmbientSnowOrbs density="normal" variant="dark" className="opacity-50" />
           <div className="relative z-10 space-y-5">
             <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
               5 piliers · Matching KELIAA

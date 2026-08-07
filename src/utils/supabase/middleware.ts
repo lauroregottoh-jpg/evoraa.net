@@ -33,6 +33,7 @@ const PROTECTED_PREFIXES = [
   '/inspiration',
   '/premium',
   '/coffre-premium',
+  '/rapport',
 ]
 
 const ADMIN_PREFIXES = [OPS_CONSOLE_PATH, '/moderation']
@@ -42,6 +43,7 @@ const ALLOWED_API_PREFIXES = [
   '/api/payments/bictorys/notify',
   '/api/payments/moneroo/notify',
   '/api/cron/subscription-reminders',
+  '/api/cron/abandoned-payments',
   '/api/cron/email-outbox',
   '/api/cron/profile-reminders',
   '/api/health/config',

@@ -9,9 +9,9 @@ import {
   AllianceBilanSection,
 } from "@/components/premium/AllianceBenefitCards"
 import { AllianceCheckoutPanel } from "@/components/premium/AllianceCheckoutPanel"
-import { BoostSection } from "@/components/premium/BoostSection"
 import { PremiumSocialProof } from "@/components/premium/PremiumSocialProof"
 import { AlliancePrioritySupport } from "@/components/premium/AlliancePrioritySupport"
+import { AmbientSnowOrbs } from "@/components/home/AmbientSnowOrbs"
 
 export default async function PremiumPage() {
   const supabase = await createClient()
@@ -47,7 +47,9 @@ export default async function PremiumPage() {
 
   return (
     <MemberPage>
-      <div className="max-w-3xl mx-auto space-y-8 pb-8">
+      <div className="relative max-w-3xl mx-auto space-y-8 pb-8">
+        <AmbientSnowOrbs density="soft" className="opacity-60" />
+        <div className="relative z-10 space-y-8">
         <PremiumHeroCarousel firstName={profile?.first_name ?? undefined} />
 
         <section className="rounded-2xl border border-border/70 bg-white/80 px-5 py-5 sm:px-7 sm:py-6 space-y-2 shadow-card">
@@ -75,8 +77,6 @@ export default async function PremiumPage() {
           isPaid={Boolean(usage?.isPaid)}
         />
 
-        <BoostSection />
-
         <AlliancePrioritySupport isPaid={Boolean(usage?.isPaid)} />
 
         <PremiumSocialProof />
@@ -89,7 +89,15 @@ export default async function PremiumPage() {
           >
             facturation Alliance
           </Link>
+          {" · "}
+          <Link
+            href="/rapport"
+            className="font-semibold text-primary underline-offset-2 hover:underline"
+          >
+            Mon rapport personnalisé
+          </Link>
         </p>
+        </div>
       </div>
     </MemberPage>
   )

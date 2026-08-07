@@ -38,6 +38,7 @@ const PRIMARY = [
   { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/assessments", label: "Tests", icon: ClipboardList },
   { href: "/premium", label: "Alliance", icon: Crown, accent: true },
+  { href: "/rapport", label: "Rapport", icon: ClipboardList },
   { href: "/coffre-premium", label: "Coffre Premium", icon: Library },
   { href: "/profile", label: "Profil", icon: User },
   { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
@@ -68,6 +69,7 @@ const ACCOUNT_HREFS = [
   "/academie-mariage",
   "/coaching",
   "/coffre-premium",
+  "/rapport",
 ];
 
 export type MemberShellProps = {

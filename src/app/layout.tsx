@@ -4,7 +4,6 @@ import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { AnalyticsScripts } from "@/components/analytics/AnalyticsScripts";
-import { SiteAmbientSnow } from "@/components/home/SiteAmbientSnow";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -113,7 +112,6 @@ export default function RootLayout({
         `}</Script>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <AnalyticsScripts />
-          <SiteAmbientSnow />
           <SmoothScroll>{children}</SmoothScroll>
         </ThemeProvider>
       </body>
