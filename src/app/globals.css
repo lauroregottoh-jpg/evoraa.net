@@ -731,6 +731,87 @@
   animation: discoveryGoalPulse 2.4s ease-in-out infinite;
 }
 
+/* ——— Découverte · Bienvenue ——— */
+@keyframes discoveryWelcomeIn {
+  from {
+    transform: translateY(12px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes discoveryWelcomeName {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes discoveryWelcomeHeart {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes discoveryWelcomeGlow {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(8px, 6px) scale(1.05);
+  }
+}
+
+.discovery-welcome-title {
+  animation: discoveryWelcomeIn 0.75s ease-out both;
+}
+
+.discovery-welcome-eyebrow {
+  animation: discoveryWelcomeIn 0.55s ease-out both;
+}
+
+.discovery-welcome-sub {
+  animation: discoveryWelcomeIn 0.85s ease-out both;
+}
+
+.discovery-welcome-name {
+  display: inline-block;
+  animation: discoveryWelcomeName 3s ease-in-out infinite;
+}
+
+.discovery-welcome-hearts {
+  animation: discoveryWelcomeIn 1s ease-out both;
+}
+
+.discovery-welcome-hearts svg {
+  animation: discoveryWelcomeHeart 2.4s ease-in-out infinite;
+}
+
+.discovery-welcome-hearts svg:nth-child(2) {
+  animation-delay: 0.35s;
+}
+
+.discovery-welcome-hearts svg:nth-child(3) {
+  animation-delay: 0.7s;
+}
+
+.discovery-welcome-glow {
+  animation: discoveryWelcomeGlow 6s ease-in-out infinite;
+}
+
+.discovery-welcome-glow-b {
+  animation: discoveryWelcomeGlow 8s ease-in-out infinite reverse;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .matching-pillar-card,
   .matching-pillar-icon,
@@ -745,7 +826,15 @@
   .discovery-step-icon,
   .discovery-map-node,
   .discovery-horizon-line,
-  .discovery-goal-pulse {
+  .discovery-goal-pulse,
+  .discovery-welcome-title,
+  .discovery-welcome-eyebrow,
+  .discovery-welcome-sub,
+  .discovery-welcome-name,
+  .discovery-welcome-hearts,
+  .discovery-welcome-hearts svg,
+  .discovery-welcome-glow,
+  .discovery-welcome-glow-b {
     animation: none !important;
   }
 }

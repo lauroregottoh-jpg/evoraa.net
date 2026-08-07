@@ -6,6 +6,7 @@ import { DashboardAlertBanners } from "@/components/dashboard/DashboardAlertBann
 import { SelectionGrid, SelectionHeader } from "@/components/dashboard/SelectionGrid"
 import { AllianceIdentityHome } from "@/components/dashboard/AllianceIdentityHome"
 import { DiscoveryPathVisual } from "@/components/dashboard/DiscoveryPathVisual"
+import { DiscoveryWelcomeHero } from "@/components/dashboard/DiscoveryWelcomeHero"
 import { Crown } from "lucide-react"
 
 export default async function DashboardPage() {
@@ -31,7 +32,7 @@ export default async function DashboardPage() {
   const isPaid = usage.isPaid
 
   /** Alliance : pas de bannières photo/profil devant la carte membre. */
-  const banners = data.nextSteps
+  const allBanners = data.nextSteps
     .filter(
       (s) =>
         s.tone === "photo" ||
@@ -54,6 +55,14 @@ export default async function DashboardPage() {
       return true
     })
 
+  /** Découverte : alertes photo/profil uniquement juste avant la sélection. */
+  const topBanners = isPaid
+    ? allBanners
+    : allBanners.filter((b) => b.tone !== "photo" && b.tone !== "profile")
+  const beforeSelectionBanners = !isPaid
+    ? allBanners.filter((b) => b.tone === "photo" || b.tone === "profile")
+    : []
+
   return (
     <MemberShell
       firstName={firstName}
@@ -68,7 +77,7 @@ export default async function DashboardPage() {
       trialDaysRemaining={usage.trialDaysRemaining}
       isTrialBoost={usage.isTrialBoost}
     >
-      <div className="space-y-5 pb-8">
+      <div className="space-y-8 pb-8">
         {isPaid ? (
           <AllianceIdentityHome
             firstName={firstName}
@@ -81,14 +90,17 @@ export default async function DashboardPage() {
           />
         ) : (
           <>
-            <DashboardAlertBanners banners={banners} />
-            <DiscoveryPathVisual
-              firstName={firstName}
-              assessmentsDone={data.assessmentsDone}
-              hasAvatar={data.hasAvatar}
-            />
+            <DiscoveryWelcomeHero firstName={firstName} />
+            <DiscoveryPathVisual assessmentsDone={data.assessmentsDone} />
+            {topBanners.length > 0 ? (
+              <DashboardAlertBanners banners={topBanners} />
+            ) : null}
           </>
         )}
+
+        {beforeSelectionBanners.length > 0 ? (
+          <DashboardAlertBanners banners={beforeSelectionBanners} />
+        ) : null}
 
         <section className="space-y-3">
           <SelectionHeader
