@@ -227,14 +227,23 @@ export async function submitAssessmentAction(
     }`,
   })
 
+  // Rapport Alliance : reconstruction automatique à la prochaine lecture
   revalidatePath("/assessments")
   revalidatePath("/compatibility")
   revalidatePath("/dashboard")
+  revalidatePath("/rapport")
+  revalidatePath("/rapport/global")
+  revalidatePath("/rapport/telecharger")
+
+  const usage = await getUsageSnapshot(user.id)
+  const isAlliance = Boolean(usage?.isPaid)
 
   return {
     success: true,
     score: scored.normalized,
     allDone: completedCount >= 5,
+    /** Redirection auto vers le rapport vivant Alliance */
+    rapportRedirect: isAlliance ? "/rapport/global?maj=1" : null,
   }
 }
 

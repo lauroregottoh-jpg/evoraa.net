@@ -29,10 +29,13 @@ export function AssessmentRunner({
   slug,
   locked,
   lockMessage,
+  isAlliance = false,
 }: {
   slug: AssessmentSlug;
   locked?: boolean;
   lockMessage?: string;
+  /** Si Alliance : après validation → rapport global mis à jour auto */
+  isAlliance?: boolean;
 }) {
   const router = useRouter();
   const bank = ASSESSMENTS[slug];
@@ -113,7 +116,15 @@ export function AssessmentRunner({
       }
       setDoneScore(result.score ?? null);
       setPhase("done");
-      if (result.allDone) {
+      const rapportHref =
+        typeof result.rapportRedirect === "string"
+          ? result.rapportRedirect
+          : isAlliance
+            ? "/rapport/global?maj=1"
+            : null;
+      if (rapportHref) {
+        setTimeout(() => router.push(rapportHref), 1800);
+      } else if (result.allDone) {
         setTimeout(() => router.push("/compatibility"), 2200);
       } else {
         setTimeout(() => router.push("/assessments"), 1800);
@@ -133,11 +144,13 @@ export function AssessmentRunner({
             « {bank.name} » enregistré · score <strong>{doneScore}%</strong>
           </p>
           <p className="text-sm text-foreground/80">
-            Votre matching vient de gagner en précision. Une étape de plus vers des rencontres
-            alignées.
+            {isAlliance
+              ? "Votre Rapport Personnalisé Alliance se met à jour automatiquement. Redirection…"
+              : "Votre matching vient de gagner en précision. Une étape de plus vers des rencontres alignées."}
           </p>
           <p className="text-xs text-muted-foreground">
-            Mise à jour possible dans 60 jours. Redirection…
+            Mise à jour possible dans 60 jours.
+            {isAlliance ? " Ouverture du rapport…" : " Redirection…"}
           </p>
         </CardContent>
       </Card>

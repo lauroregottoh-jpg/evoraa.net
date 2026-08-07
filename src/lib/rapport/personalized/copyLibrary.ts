@@ -4,7 +4,7 @@
 
 export const REPORT_COPY = {
   welcome:
-    "Bienvenue dans votre Rapport Personnalisé KELIAA Alliance. Ce document rassemble les enseignements issus de vos différentes évaluations afin de vous aider à mieux vous connaître et à préparer sereinement votre futur mariage. Chaque nouvelle évaluation enrichira progressivement ce rapport.",
+    "Bienvenue dans votre Rapport Personnalisé Alliance. Ce document est un carnet de route destiné à vous accompagner dans votre préparation au mariage. Chaque nouvelle évaluation enrichira progressivement ce rapport.",
 
   portraitIntro:
     "Votre manière d’entrer en relation est unique. Les éléments présentés dans cette section ne cherchent pas à vous définir, mais à vous aider à mieux comprendre votre fonctionnement, vos ressources et les domaines dans lesquels vous pouvez encore progresser.",
@@ -13,7 +13,7 @@ export const REPORT_COPY = {
     "Toute relation solide s’appuie sur des qualités déjà présentes. Les forces présentées ci-dessous représentent les ressources qui ressortent le plus clairement de vos évaluations. Prenez le temps de les reconnaître et de continuer à les développer.",
 
   vigilancesIntro:
-    "Chaque personne possède des domaines dans lesquels elle peut grandir. Les éléments ci-dessous ne sont pas des faiblesses, mais des compétences qui, une fois développées, contribueront à renforcer vos futures relations.",
+    "Chaque personne possède des domaines dans lesquels elle peut grandir. Les éléments ci-dessous ne sont pas des faiblesses, mais des compétences qui, une fois développées, contribueront à renforcer votre futur mariage.",
 
   missingEval:
     "Cette analyse n’est pas encore disponible. Vous n’avez pas encore réalisé l’évaluation correspondante. En la complétant, votre Rapport Personnalisé sera automatiquement enrichi avec de nouvelles analyses, des conseils adaptés et une vision plus complète de votre profil.",

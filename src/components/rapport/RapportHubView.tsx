@@ -46,8 +46,9 @@ export function RapportHubView({
             : `${name}, aperçu de votre rapport`}
         </h1>
         <p className="relative z-10 mt-2 text-sm text-white/75 leading-relaxed max-w-xl">
-          Chaque test ouvre une partie. Les sections encore verrouillées
-          restent visibles — cliquez pour savoir comment les débloquer.
+          {living.documentMode === "complete"
+            ? "Votre rapport est complet. Relisez-le comme un guide de préparation au mariage."
+            : "Votre rapport évolue avec vous. Chaque test enrichit le document — les analyses en attente restent visibles avec la prochaine étape."}
         </p>
 
         <div className="relative z-10 mt-5 space-y-2">
@@ -80,13 +81,25 @@ export function RapportHubView({
           </span>
         </div>
 
-        <Link
-          href="/rapport/global"
-          className="relative z-10 mt-6 inline-flex h-12 items-center gap-2 rounded-xl bg-[#B8954A] px-5 text-sm font-bold text-[#1C1412]"
-        >
-          Découvrir le rapport complet
-          <ArrowRight className="h-4 w-4" />
-        </Link>
+        <div className="relative z-10 mt-6 flex flex-wrap gap-2">
+          <Link
+            href="/rapport/global"
+            className="inline-flex h-12 items-center gap-2 rounded-xl bg-[#B8954A] px-5 text-sm font-bold text-[#1C1412]"
+          >
+            Découvrir le rapport global
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+          <a
+            href="/rapport/telecharger"
+            className="inline-flex h-12 items-center gap-2 rounded-xl border border-[#B8954A]/50 bg-white/10 px-5 text-sm font-bold text-[#F3D9A4]"
+          >
+            Télécharger
+          </a>
+        </div>
+        <p className="relative z-10 mt-3 text-[11px] text-white/55 max-w-xl leading-relaxed">
+          Mise à jour automatique après chaque test. Les parties vides ouvrent
+          directement l’évaluation rattachée.
+        </p>
       </header>
 
       <section className="rounded-2xl border border-[#B8954A]/35 bg-card p-5 sm:p-6 space-y-4 shadow-sm">

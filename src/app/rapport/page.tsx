@@ -4,10 +4,12 @@ import { createClient } from "@/utils/supabase/server"
 import { getUsageSnapshot } from "@/lib/billing/usage"
 import { buildLivingPersonalizedReport } from "@/lib/rapport/personalized/buildLivingReport"
 import { RapportHubView } from "@/components/rapport/RapportHubView"
+import { AllianceRapportGate } from "@/components/rapport/AllianceRapportGate"
 import type { AssessmentSlug } from "@/lib/assessments/questionBank"
 
 export const dynamic = "force-dynamic"
 
+/** Hub Rapport — Alliance uniquement ; se reconstruit à chaque visite depuis les tests. */
 export default async function RapportPage() {
   const supabase = await createClient()
   const {
@@ -18,11 +20,16 @@ export default async function RapportPage() {
     return (
       <MemberPage>
         <div className="max-w-lg mx-auto text-center py-12 space-y-3">
-          <h1 className="font-serif text-3xl font-bold">Rapport Personnalisé Alliance™</h1>
+          <h1 className="font-serif text-3xl font-bold">
+            Rapport Personnalisé Alliance™
+          </h1>
           <p className="text-sm text-muted-foreground">
             Connectez-vous pour voir votre rapport vivant.
           </p>
-          <Link href="/login?next=/rapport" className="text-primary font-semibold underline">
+          <Link
+            href="/login?next=/rapport"
+            className="text-primary font-semibold underline"
+          >
             Connexion
           </Link>
         </div>
@@ -39,6 +46,11 @@ export default async function RapportPage() {
     getUsageSnapshot(user.id),
   ])
 
+  const isAlliance = Boolean(usage?.isPaid)
+  if (!isAlliance) {
+    return <AllianceRapportGate nextPath="/rapport" />
+  }
+
   const psych = profile?.psychometric_results as {
     personality?: number | null
     spiritual?: number | null
@@ -48,11 +60,10 @@ export default async function RapportPage() {
     dimensions?: Partial<Record<AssessmentSlug, Record<string, number>>>
   } | null
 
-  const isAlliance = Boolean(usage?.isPaid)
   const living = buildLivingPersonalizedReport({
     firstName: profile?.first_name,
     psychometric: psych,
-    isAlliance,
+    isAlliance: true,
   })
 
   return (
@@ -61,22 +72,25 @@ export default async function RapportPage() {
         <RapportHubView
           firstName={profile?.first_name}
           living={living}
-          isAlliance={isAlliance}
+          isAlliance
         />
         <p className="text-center text-xs text-muted-foreground">
           <Link
             href="/rapport/global"
             className="underline font-semibold text-accent"
           >
-            Rapport complet (toutes les sections)
+            Rapport global (toutes les sections)
           </Link>
           {" · "}
-          <Link href="/assessments" className="underline font-semibold text-primary">
+          <a
+            href="/rapport/telecharger"
+            className="underline font-semibold text-primary"
+          >
+            Télécharger
+          </a>
+          {" · "}
+          <Link href="/assessments" className="underline">
             Continuer mes tests
-          </Link>
-          {" · "}
-          <Link href="/alliance/parcours" className="underline">
-            Mon parcours
           </Link>
         </p>
       </div>

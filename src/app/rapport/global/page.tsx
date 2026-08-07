@@ -4,12 +4,17 @@ import { createClient } from "@/utils/supabase/server"
 import { getUsageSnapshot } from "@/lib/billing/usage"
 import { buildLivingPersonalizedReport } from "@/lib/rapport/personalized/buildLivingReport"
 import { ReportDocumentView } from "@/components/rapport/ReportDocumentView"
+import { AllianceRapportGate } from "@/components/rapport/AllianceRapportGate"
 import type { AssessmentSlug } from "@/lib/assessments/questionBank"
 
 export const dynamic = "force-dynamic"
 
-/** Rapport global — document complet section par section (template 23-1). */
-export default async function RapportGlobalPage() {
+/** Rapport global Alliance — reconstruit automatiquement après chaque test. */
+export default async function RapportGlobalPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ maj?: string }>
+}) {
   const supabase = await createClient()
   const {
     data: { user },
@@ -36,6 +41,9 @@ export default async function RapportGlobalPage() {
     )
   }
 
+  const sp = (await searchParams) || {}
+  const justUpdated = sp.maj === "1"
+
   const [{ data: profile }, usage] = await Promise.all([
     supabase
       .from("profiles")
@@ -44,6 +52,11 @@ export default async function RapportGlobalPage() {
       .maybeSingle(),
     getUsageSnapshot(user.id),
   ])
+
+  const isAlliance = Boolean(usage?.isPaid)
+  if (!isAlliance) {
+    return <AllianceRapportGate nextPath="/rapport/global" />
+  }
 
   const psych = profile?.psychometric_results as {
     personality?: number | null
@@ -54,25 +67,34 @@ export default async function RapportGlobalPage() {
     dimensions?: Partial<Record<AssessmentSlug, Record<string, number>>>
   } | null
 
-  const isAlliance = Boolean(usage?.isPaid)
   const living = buildLivingPersonalizedReport({
     firstName: profile?.first_name,
     psychometric: psych,
-    isAlliance,
+    isAlliance: true,
   })
 
   return (
     <MemberPage>
       <div className="pb-10 space-y-4">
+        {justUpdated ? (
+          <div className="max-w-3xl mx-auto rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-900">
+            Rapport mis à jour automatiquement après votre évaluation.
+            Les parties liées au test viennent d’être enrichies.
+          </div>
+        ) : null}
         <p className="text-center text-xs text-muted-foreground">
           <Link href="/rapport" className="underline">
             ← Retour au hub Rapport
           </Link>
+          {" · "}
+          <a href="/rapport/telecharger" className="underline font-semibold">
+            Télécharger le rapport
+          </a>
         </p>
         <ReportDocumentView
           firstName={profile?.first_name}
           living={living}
-          isAlliance={isAlliance}
+          isAlliance
         />
         <p className="text-center text-xs text-muted-foreground">
           <Link
