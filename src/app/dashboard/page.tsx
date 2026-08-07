@@ -7,6 +7,8 @@ import { SelectionGrid, SelectionHeader } from "@/components/dashboard/Selection
 import { AllianceIdentityHome } from "@/components/dashboard/AllianceIdentityHome"
 import { DiscoveryPathVisual } from "@/components/dashboard/DiscoveryPathVisual"
 import { DiscoveryWelcomeHero } from "@/components/dashboard/DiscoveryWelcomeHero"
+import { SimulatedMatchesPanel } from "@/components/dashboard/SimulatedMatchesPanel"
+import { isSarahGande } from "@/lib/demo/sarahGandeSimulations"
 import { Crown } from "lucide-react"
 
 export default async function DashboardPage() {
@@ -30,6 +32,7 @@ export default async function DashboardPage() {
   const usage = data.usage
   const firstName = data.firstName
   const isPaid = usage.isPaid
+  const showSarahDemo = isSarahGande(data.firstName, data.lastName)
 
   /** Alliance : pas de bannières photo/profil devant la carte membre. */
   const allBanners = data.nextSteps
@@ -97,6 +100,12 @@ export default async function DashboardPage() {
             ) : null}
           </>
         )}
+
+        {showSarahDemo ? (
+          <SimulatedMatchesPanel
+            variant={isPaid ? "alliance" : "discovery"}
+          />
+        ) : null}
 
         {beforeSelectionBanners.length > 0 ? (
           <DashboardAlertBanners banners={beforeSelectionBanners} />

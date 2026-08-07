@@ -812,6 +812,56 @@
   animation: discoveryWelcomeGlow 8s ease-in-out infinite reverse;
 }
 
+/* ——— Simulations matchs / messages ——— */
+@keyframes simMatchCardIn {
+  from {
+    transform: translateY(14px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes simOpenMsgPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(92, 31, 40, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(92, 31, 40, 0);
+  }
+}
+
+@keyframes demoMsgIn {
+  from {
+    transform: translateY(8px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.sim-match-card {
+  opacity: 1 !important;
+  visibility: visible !important;
+  animation: simMatchCardIn 0.65s ease-out both;
+}
+
+.sim-open-msg {
+  animation: simOpenMsgPulse 2.8s ease-in-out infinite;
+}
+
+.sim-inbox-row {
+  opacity: 1 !important;
+  animation: simMatchCardIn 0.55s ease-out both;
+}
+
+.demo-msg-bubble,
+.demo-msg-in {
+  opacity: 1 !important;
+  animation: demoMsgIn 0.45s ease-out both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .matching-pillar-card,
   .matching-pillar-icon,
@@ -834,7 +884,12 @@
   .discovery-welcome-hearts,
   .discovery-welcome-hearts svg,
   .discovery-welcome-glow,
-  .discovery-welcome-glow-b {
+  .discovery-welcome-glow-b,
+  .sim-match-card,
+  .sim-open-msg,
+  .sim-inbox-row,
+  .demo-msg-bubble,
+  .demo-msg-in {
     animation: none !important;
   }
 }
