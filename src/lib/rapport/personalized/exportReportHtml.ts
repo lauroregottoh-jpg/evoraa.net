@@ -190,8 +190,10 @@ body {
   font-family: system-ui, sans-serif; font-size: .78rem; font-weight: 700;
   border-radius: 10px; padding: .55rem 1rem; border: 1px solid var(--line);
   background: #fff; color: var(--ink); cursor: pointer; text-decoration: none;
+  display: inline-flex; align-items: center; justify-content: center;
 }
 .toolbar .primary { background: var(--gold); border-color: var(--gold); color: #1C1412; }
+.toolbar .secondary { background: #fff; border-color: var(--gold); color: var(--gold-deep); }
 .frame {
   position: relative;
   border: 1.5px solid rgba(184,149,74,.4);
@@ -388,6 +390,8 @@ export function renderReportExportHtml(input: {
   firstName: string
   living: LivingPersonalizedReport
   generatedAtLabel: string
+  downloadHref?: string
+  filename?: string
 }): string {
   const { living } = input
   const name = input.firstName.trim() || "Membre"
@@ -759,7 +763,8 @@ export function renderReportExportHtml(input: {
 </head>
 <body>
   <div class="toolbar no-print">
-    <button type="button" class="primary" onclick="window.print()">Imprimer / Enregistrer en PDF</button>
+    <button type="button" class="primary" onclick="window.print()">Imprimer</button>
+    <a class="secondary" href="${esc(input.downloadHref || "/rapport/telecharger?dl=1")}" download="${esc(input.filename || "keliaa-rapport-alliance.html")}">Télécharger</a>
   </div>
   ${blocks.join("\n")}
 </body>

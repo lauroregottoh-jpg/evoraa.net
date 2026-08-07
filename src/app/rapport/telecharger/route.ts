@@ -8,10 +8,10 @@ export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 
 /**
- * Téléchargement HTML du Rapport Personnalisé Alliance (complet ou en cours).
- * Se met à jour automatiquement : reconstruit depuis psychometric_results à chaque requête.
+ * Téléchargement / aperçu imprimable du Rapport Alliance.
+ * ?dl=1 → téléchargement fichier ; sinon ouverture inline avec boutons Imprimer + Télécharger.
  */
-export async function GET() {
+export async function GET(request: Request) {
   const supabase = await createClient()
   const {
     data: { user },
@@ -52,12 +52,6 @@ export async function GET() {
     { day: "numeric", month: "long", year: "numeric" }
   )
 
-  const html = renderReportExportHtml({
-    firstName: profile?.first_name || "Membre",
-    living,
-    generatedAtLabel,
-  })
-
   const safeName = (profile?.first_name || "membre")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -67,13 +61,23 @@ export async function GET() {
     living.documentMode === "complete" ? "complet" : "en-cours"
   const filename = `keliaa-rapport-alliance-${mode}-${safeName}.html`
 
+  const wantDownload = new URL(request.url).searchParams.get("dl") === "1"
+
+  const html = renderReportExportHtml({
+    firstName: profile?.first_name || "Membre",
+    living,
+    generatedAtLabel,
+    downloadHref: "/rapport/telecharger?dl=1",
+    filename,
+  })
+
   return new Response(html, {
     status: 200,
     headers: {
       "Content-Type": "text/html; charset=utf-8",
-      // inline = ouvrir dans le navigateur (imprimable) ; filename conservé pour « Enregistrer sous »
-      "Content-Disposition": `inline; filename*=UTF-8''${encodeURIComponent(filename)}`,
+      "Content-Disposition": `${wantDownload ? "attachment" : "inline"}; filename*=UTF-8''${encodeURIComponent(filename)}`,
       "Cache-Control": "private, no-store",
     },
   })
 }
+

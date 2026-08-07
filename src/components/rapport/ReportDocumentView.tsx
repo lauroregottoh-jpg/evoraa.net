@@ -79,21 +79,21 @@ export function ReportDocumentView({
   return (
     <article className="max-w-3xl mx-auto space-y-8 pb-12 print:max-w-none">
       <div className="flex flex-wrap items-center justify-end gap-2 print:hidden">
-        <a
-          href="/rapport/telecharger"
-          className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#B8954A] px-4 text-xs font-bold text-[#1C1412] shadow-sm hover:brightness-105 transition"
-        >
-          <Download className="h-3.5 w-3.5" />
-          Télécharger le rapport global
-        </a>
         <button
           type="button"
           onClick={() => window.print()}
-          className="inline-flex h-10 items-center gap-2 rounded-xl border border-[#B8954A]/35 bg-white px-4 text-xs font-semibold hover:bg-[#B8954A]/5 transition"
+          className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#B8954A] px-4 text-xs font-bold text-[#1C1412] shadow-sm hover:brightness-105 transition"
         >
           <Printer className="h-3.5 w-3.5" />
-          Imprimer / PDF
+          Imprimer
         </button>
+        <a
+          href="/rapport/telecharger?dl=1"
+          className="inline-flex h-10 items-center gap-2 rounded-xl border border-[#B8954A]/45 bg-white px-4 text-xs font-bold text-[#7A5F28] hover:bg-[#B8954A]/5 transition"
+        >
+          <Download className="h-3.5 w-3.5" />
+          Télécharger
+        </a>
       </div>
 
       {/* ——— COUVERTURE PREMIUM ——— */}
