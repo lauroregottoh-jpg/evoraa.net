@@ -235,9 +235,17 @@ export function buildLivingPersonalizedReport(input: {
   }
 
   const chapters: LivingChapter[] = REPORT_CHAPTERS.map((def) => {
+    const hasScores = ranked.length > 0
     const unlocked =
       def.unlockedBy.length === 0 ||
-      def.unlockedBy.some((id) => doneIds.has(id))
+      def.unlockedBy.some((id) => doneIds.has(id)) ||
+      // Document : dès qu’il y a des scores Matching, portrait / forces / axes s’ouvrent
+      (hasScores &&
+        (def.id === "portrait" ||
+          def.id === "forces" ||
+          def.id === "vigilances" ||
+          def.id === "synthese" ||
+          def.id === "plan"))
 
     if (!unlocked) {
       const needed = unlockAssessment(def.unlockedBy, doneIds)
@@ -292,24 +300,6 @@ export function buildLivingPersonalizedReport(input: {
       }
     }
 
-    if (def.id === "portrait") {
-      const needed = unlockAssessment(
-        ["personnalite", "intelligence_emotionnelle"],
-        doneIds
-      )
-      return {
-        id: def.id,
-        page: def.page,
-        title: def.title,
-        teaser: def.teaser,
-        unlocked: true,
-        body: portraitBody,
-        unlockHref: needed?.sourceSlug
-          ? `/assessments/${needed.sourceSlug}`
-          : "/assessments/personality",
-      }
-    }
-
     if (def.id === "forces") {
       return {
         id: def.id,
@@ -347,6 +337,24 @@ export function buildLivingPersonalizedReport(input: {
             ? [REPORT_COPY.noPriority]
             : undefined,
         tips: chapterTips.slice(0, 3),
+      }
+    }
+
+    if (def.id === "portrait") {
+      const needed = unlockAssessment(
+        ["personnalite", "intelligence_emotionnelle"],
+        doneIds
+      )
+      return {
+        id: def.id,
+        page: def.page,
+        title: def.title,
+        teaser: def.teaser,
+        unlocked: true,
+        body: portraitBody,
+        unlockHref: needed?.sourceSlug
+          ? `/assessments/${needed.sourceSlug}`
+          : "/assessments/personality",
       }
     }
 

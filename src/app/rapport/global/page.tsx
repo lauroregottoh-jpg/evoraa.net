@@ -3,12 +3,12 @@ import { MemberPage } from "@/components/layout/MemberPage"
 import { createClient } from "@/utils/supabase/server"
 import { getUsageSnapshot } from "@/lib/billing/usage"
 import { buildLivingPersonalizedReport } from "@/lib/rapport/personalized/buildLivingReport"
-import { PersonalizedReportView } from "@/components/rapport/PersonalizedReportView"
+import { ReportDocumentView } from "@/components/rapport/ReportDocumentView"
 import type { AssessmentSlug } from "@/lib/assessments/questionBank"
 
 export const dynamic = "force-dynamic"
 
-/** Rapport global — toutes les sections détaillées, page par page. */
+/** Rapport global — document complet section par section (template 23-1). */
 export default async function RapportGlobalPage() {
   const supabase = await createClient()
   const {
@@ -39,7 +39,7 @@ export default async function RapportGlobalPage() {
   const [{ data: profile }, usage] = await Promise.all([
     supabase
       .from("profiles")
-      .select("first_name, psychometric_results")
+      .select("first_name, last_name, psychometric_results")
       .eq("user_id", user.id)
       .maybeSingle(),
     getUsageSnapshot(user.id),
@@ -69,11 +69,10 @@ export default async function RapportGlobalPage() {
             ← Retour au hub Rapport
           </Link>
         </p>
-        <PersonalizedReportView
+        <ReportDocumentView
           firstName={profile?.first_name}
           living={living}
           isAlliance={isAlliance}
-          variant="global"
         />
         <p className="text-center text-xs text-muted-foreground">
           <Link

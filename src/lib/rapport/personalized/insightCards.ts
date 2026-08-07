@@ -162,53 +162,57 @@ const PACKS: Record<ReportPillarId, PillarInsightPack> = {
 export function buildForceCards(
   ranked: { id: ReportPillarId; score: number }[]
 ): InsightCard[] {
-  return ranked
-    .filter((p) => {
-      const b = scoreBand(p.score)
-      return b === "force_majeure" || b === "bon_equilibre"
-    })
-    .slice(0, 5)
-    .map((p) => {
-      const pack = PACKS[p.id]
-      return {
-        id: `force_${p.id}`,
-        kind: "force" as const,
-        title: pack.forceTitle,
-        description: pack.forceDescription,
-        why: pack.forceWhy,
-        impact: pack.forceImpact,
-        tip: pack.forceTip,
-        pillarId: p.id,
-        score: p.score,
-      }
-    })
+  if (!ranked.length) return []
+  // Toujours valoriser les meilleurs scores (même s’ils sont « moyens »)
+  const candidates = ranked.slice(0, 5)
+  return candidates.map((p) => {
+    const pack = PACKS[p.id]
+    const band = scoreBand(p.score)
+    const strong = band === "force_majeure" || band === "bon_equilibre"
+    return {
+      id: `force_${p.id}`,
+      kind: "force" as const,
+      title: pack.forceTitle,
+      description: strong
+        ? pack.forceDescription
+        : `Les résultats mettent en lumière une ressource intéressante autour de « ${pack.forceTitle.toLowerCase()} », encore en consolidation.`,
+      why: pack.forceWhy,
+      impact: pack.forceImpact,
+      tip: pack.forceTip,
+      pillarId: p.id,
+      score: p.score,
+    }
+  })
 }
 
 /** Construit jusqu’à 5 axes de progression (pas des « faiblesses »). */
 export function buildVigilanceCards(
   ranked: { id: ReportPillarId; score: number }[]
 ): InsightCard[] {
-  return [...ranked]
-    .sort((a, b) => a.score - b.score)
-    .filter((p) => {
-      const b = scoreBand(p.score)
-      return b === "axe_prioritaire" || b === "en_developpement"
-    })
-    .slice(0, 5)
-    .map((p) => {
-      const pack = PACKS[p.id]
-      return {
-        id: `axe_${p.id}`,
-        kind: "vigilance" as const,
-        title: pack.vigilanceTitle,
-        description: pack.vigilanceDescription,
-        why: pack.vigilanceWhy,
-        impact: pack.vigilanceImpact,
-        tip: pack.vigilanceTip,
-        pillarId: p.id,
-        score: p.score,
-      }
-    })
+  if (!ranked.length) return []
+  const lowest = [...ranked].sort((a, b) => a.score - b.score).slice(0, 5)
+  // Éviter de dupliquer exactement les mêmes piliers que les 2 meilleures forces si possible
+  const topIds = new Set(ranked.slice(0, 2).map((p) => p.id))
+  const picked = lowest.filter((p) => !topIds.has(p.id)).slice(0, 3)
+  const fill =
+    picked.length >= 2
+      ? picked
+      : lowest.slice(0, Math.min(3, lowest.length))
+
+  return fill.map((p) => {
+    const pack = PACKS[p.id]
+    return {
+      id: `axe_${p.id}`,
+      kind: "vigilance" as const,
+      title: pack.vigilanceTitle,
+      description: pack.vigilanceDescription,
+      why: pack.vigilanceWhy,
+      impact: pack.vigilanceImpact,
+      tip: pack.vigilanceTip,
+      pillarId: p.id,
+      score: p.score,
+    }
+  })
 }
 
 /** Portrait fluide multi-piliers — template V1 (sans LLM). */

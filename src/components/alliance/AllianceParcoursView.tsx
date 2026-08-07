@@ -89,40 +89,100 @@ export function AllianceParcoursView({
         </div>
       </section>
 
-      <section className="rounded-[1.75rem] border-2 border-[#B8954A]/40 bg-gradient-to-br from-[#B8954A]/15 via-white to-card p-6 sm:p-8 space-y-5 shadow-elevated">
+      <section className="rounded-[1.75rem] border-2 border-[#B8954A]/40 bg-gradient-to-br from-[#B8954A]/12 via-white to-card p-6 sm:p-8 space-y-6 shadow-elevated">
         <div className="text-center space-y-1">
           <p className="text-[11px] font-bold uppercase tracking-widest text-accent">
-            Schéma du parcours
+            Schéma visuel
           </p>
           <h2 className="font-serif text-2xl sm:text-3xl font-bold">
-            Votre chemin Alliance
+            Votre parcours Alliance
           </h2>
           <p className="text-sm text-muted-foreground">
-            Me connaître → Me préparer → Rencontrer → Construire
+            Quatre saisons — de la connaissance de soi à la relation solide
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row sm:items-stretch gap-3 sm:gap-2">
-          {ALLIANCE_STAGES.map((stage, i) => (
-            <div key={stage.id} className="flex items-center gap-2 flex-1 min-w-0">
-              <div className="rounded-2xl border-2 border-[#B8954A]/40 bg-white px-4 py-5 flex-1 text-center shadow-sm min-h-[7.5rem] flex flex-col justify-center">
-                <p className="text-xs font-bold uppercase tracking-wider text-accent">
-                  Étape {i + 1}
-                </p>
-                <p className="font-serif text-base sm:text-lg font-bold leading-snug mt-1.5">
-                  {stage.title.replace(/^Étape \d+ — /, "")}
-                </p>
-              </div>
-              {i < ALLIANCE_STAGES.length - 1 ? (
-                <ChevronRight className="hidden sm:block h-6 w-6 text-accent shrink-0" />
-              ) : null}
-            </div>
-          ))}
+
+        {/* Timeline visuelle */}
+        <div className="relative">
+          <div
+            aria-hidden
+            className="hidden sm:block absolute left-8 right-8 top-[2.15rem] h-1 rounded-full bg-gradient-to-r from-[#B8954A]/30 via-[#B8954A] to-[#B8954A]/30"
+          />
+          <ol className="grid sm:grid-cols-4 gap-4 relative z-10">
+            {ALLIANCE_STAGES.map((stage, i) => (
+              <li key={stage.id} className="flex flex-col items-center text-center gap-3">
+                <span className="flex h-16 w-16 items-center justify-center rounded-full border-4 border-[#B8954A] bg-white font-serif text-2xl font-bold text-[#7A5F28] shadow-md">
+                  {i + 1}
+                </span>
+                <div className="space-y-1 px-1">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-accent">
+                    Étape {i + 1}
+                  </p>
+                  <p className="font-serif text-base font-bold leading-snug">
+                    {stage.title.replace(/^Étape \d+ — /, "")}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        {/* Première mission — schéma */}
+        <div className="rounded-2xl border border-[#B8954A]/30 bg-white/90 p-5 space-y-4">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
+              Première mission · schéma
+            </p>
+            <span className="text-xs font-semibold text-muted-foreground">
+              {remaining} restante{remaining === 1 ? "" : "s"}
+            </span>
+          </div>
+          <div className="flex flex-col gap-0">
+            {ALLIANCE_FIRST_MISSIONS.map((m, i) => {
+              const done = missions[m.field]
+              return (
+                <div key={m.id} className="flex gap-3">
+                  <div className="flex flex-col items-center w-8 shrink-0">
+                    <span
+                      className={cn(
+                        "flex h-8 w-8 items-center justify-center rounded-full border-2 text-xs font-bold",
+                        done
+                          ? "border-emerald-500 bg-emerald-500 text-white"
+                          : "border-[#B8954A] bg-[#B8954A]/15 text-[#7A5F28]"
+                      )}
+                    >
+                      {done ? <Check className="h-3.5 w-3.5" /> : i + 1}
+                    </span>
+                    {i < ALLIANCE_FIRST_MISSIONS.length - 1 ? (
+                      <span
+                        className={cn(
+                          "w-0.5 flex-1 min-h-[1.25rem]",
+                          done ? "bg-emerald-400" : "bg-[#B8954A]/35"
+                        )}
+                      />
+                    ) : null}
+                  </div>
+                  <Link
+                    href={m.href}
+                    className={cn(
+                      "flex-1 mb-2 rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors",
+                      done
+                        ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-800"
+                        : "border-border hover:border-[#B8954A]/50 bg-card"
+                    )}
+                  >
+                    {m.title}
+                  </Link>
+                </div>
+              )
+            })}
+          </div>
         </div>
       </section>
 
       <section className="rounded-2xl border border-border bg-card p-5 space-y-3">
         <div className="flex items-center justify-between gap-2">
-          <h2 className="font-serif text-xl font-bold">Première mission</h2>
+          <h2 className="font-serif text-xl font-bold">Première mission · liste</h2>
           <span className="text-xs font-semibold text-muted-foreground">
             {remaining} restante{remaining === 1 ? "" : "s"}
           </span>
