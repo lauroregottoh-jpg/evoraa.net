@@ -25,7 +25,7 @@ export const LANDING_HERO = {
   map:
     "Votre bilan devient ainsi une véritable carte de compréhension de votre couple : une façon de mettre des mots sur ce que vous vivez déjà, de mieux anticiper ce qui pourrait devenir sensible et de savoir par où commencer pour construire une relation plus consciente.",
   ctaPrimary: "Découvrir mon bilan de couple",
-  ctaSecondary: "J’ai un code",
+  ctaSecondary: "Accéder à mon espace couple",
 } as const
 
 /** Quatre situations — cartes interactives pour se projeter. */
@@ -303,9 +303,48 @@ export const LANDING_CLOSING = {
   body: "Votre couple a besoin de clarté, de conversations et de compréhension — pas de verdicts, ni d’incertitude.",
   finishTitle: "Pour finir",
   lastPrompt:
-    "Ce qui vous rapproche, ce qui vous différencie — ou simplement :",
+    "Vos différences versus vos compatibilités — ce qui vous rapproche, ce qui vous différencie, ou simplement :",
   lastQuote: "Est-ce que nous sommes réellement aussi alignés que nous le pensons ?",
   start: "Faites le bilan pour le découvrir.",
   tagline:
     "Comprendre votre dynamique. Clarifier vos différences. Construire avec intention.",
 } as const
+
+export const LANDING_FAQ = [
+  {
+    q: "Est-ce qu’un seul partenaire doit acheter ?",
+    a: "Oui. Un seul achat couvre le bilan pour deux participants. La personne qui achète peut ensuite inviter son partenaire.",
+  },
+  {
+    q: "Qui doit commencer ?",
+    a: "Peu importe. Monsieur ou Madame peut souscrire et créer le bilan.",
+  },
+  {
+    q: "Mon partenaire doit-il avoir un compte KELIAA ?",
+    a: "Il pourra rejoindre via l’invitation prévue. Le parcours est conçu pour intégrer facilement le second participant.",
+  },
+  {
+    q: "Mon partenaire verra-t-il mes réponses ?",
+    a: "Non. Les réponses brutes individuelles sont confidentielles. Le rapport présente une analyse de votre dynamique commune.",
+  },
+  {
+    q: "Et si nous obtenons un faible pourcentage ?",
+    a: "Le pourcentage n’est pas un verdict. Un résultat faible indique surtout des différences importantes à comprendre et à travailler.",
+  },
+  {
+    q: "Et si nous avons un score élevé ?",
+    a: "C’est une bonne indication de convergence, mais cela ne signifie pas que votre couple n’a rien à travailler. Le rapport identifie aussi les points à entretenir.",
+  },
+  {
+    q: "Peut-on télécharger le rapport ?",
+    a: "Oui. Les documents prévus dans votre offre peuvent être téléchargés et conservés pour les relire ou travailler dessus ensemble.",
+  },
+  {
+    q: "Le Premium Plus remplace-t-il le Bilan Essentiel ?",
+    a: "Non. Premium Plus comprend le Bilan Essentiel et ajoute des analyses et ressources supplémentaires.",
+  },
+  {
+    q: "Est-ce une thérapie de couple ?",
+    a: "Non. KELIAA COUPLE™ est un outil d’évaluation, de réflexion et de travail relationnel. Si un accompagnement professionnel est nécessaire, des orientations adaptées peuvent être proposées.",
+  },
+] as const

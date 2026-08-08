@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Image from "next/image"
 import Link from "next/link"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -24,6 +25,7 @@ import { cn } from "@/utils/cn"
 import {
   LANDING_AUDIENCES,
   LANDING_CLOSING,
+  LANDING_FAQ,
   LANDING_HERO,
   LANDING_IMAGINE,
   LANDING_OFFERS,
@@ -92,7 +94,7 @@ export function CoupleLanding() {
             <ArrowRight className="ml-2 h-4 w-4" />
           </MagneticButton>
           <MagneticButton
-            href="/couple/rejoindre"
+            href="/couple/espace"
             variant="outline"
             size="lg"
             className="bg-white/10 hover:bg-white/20 text-white border-white/40 backdrop-blur-md"
@@ -491,69 +493,115 @@ export function CoupleLanding() {
         </div>
       </section>
 
-      {/* Closing — un seul bloc */}
+      {/* Closing — texte gauche, image couple droite */}
       <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#F8F4EE]">
-        <div className="max-w-2xl space-y-6">
-          <h2 className="ck-reveal font-serif text-3xl sm:text-5xl font-bold leading-tight text-[#1C1412]">
-            {LANDING_CLOSING.title}
-          </h2>
-          <p className="ck-reveal text-lg sm:text-xl text-[#1C1412] leading-relaxed font-medium">
-            {LANDING_CLOSING.body}
-          </p>
-          <div className="ck-reveal flex flex-wrap gap-3 pt-2">
-            <MagneticButton
-              href="/couple/checkout/couple_essential"
-              variant="primary"
-              size="lg"
-            >
-              Commencer — 30 000 FCFA
-            </MagneticButton>
-            <MagneticButton
-              href="/couple/checkout/couple_premium_plus"
-              variant="outline"
-              size="lg"
-            >
-              Premium Plus — 50 000 FCFA
-            </MagneticButton>
+        <div className="max-w-5xl mx-auto grid lg:grid-cols-[1fr_1.05fr] gap-10 lg:gap-14 items-center">
+          <div className="space-y-6">
+            <h2 className="ck-reveal font-serif text-3xl sm:text-5xl font-bold leading-tight text-[#1C1412]">
+              {LANDING_CLOSING.title}
+            </h2>
+            <p className="ck-reveal text-lg sm:text-xl text-[#1C1412] leading-relaxed font-medium">
+              {LANDING_CLOSING.body}
+            </p>
+            <div className="ck-reveal flex flex-wrap gap-3 pt-2">
+              <MagneticButton
+                href="/couple/checkout/couple_essential"
+                variant="primary"
+                size="lg"
+              >
+                Commencer — 30 000 FCFA
+              </MagneticButton>
+              <MagneticButton
+                href="/couple/checkout/couple_premium_plus"
+                variant="outline"
+                size="lg"
+              >
+                Premium Plus — 50 000 FCFA
+              </MagneticButton>
+            </div>
+          </div>
+          <div className="ck-reveal relative aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/5] overflow-hidden rounded-2xl border border-[#1C1412]/10 shadow-sm">
+            <Image
+              src="/home/compare-couple.png"
+              alt="Couple — comprendre ensemble"
+              fill
+              className="object-cover object-center"
+              sizes="(max-width: 1024px) 100vw, 45vw"
+            />
           </div>
         </div>
       </section>
 
-      {/* Pour finir + dual */}
+      {/* Pour finir — animation gauche, texte + CTA droite */}
       <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-white">
-        <div className="max-w-2xl space-y-8">
-          <div className="ck-reveal space-y-3">
+        <div className="max-w-5xl mx-auto grid lg:grid-cols-[1.05fr_1fr] gap-10 lg:gap-14 items-center">
+          <div className="ck-reveal order-2 lg:order-1">
+            <VizDualFinish />
+          </div>
+          <div className="ck-reveal order-1 lg:order-2 space-y-6">
             <p className="couple-chapter text-xs font-bold uppercase text-primary">
               {LANDING_CLOSING.finishTitle}
             </p>
             <p className="text-base sm:text-lg text-[#1C1412] leading-relaxed">
               {LANDING_CLOSING.lastPrompt}
             </p>
+            <p className="font-serif text-2xl sm:text-3xl italic text-primary leading-snug">
+              « {LANDING_CLOSING.lastQuote} »
+            </p>
+            <p className="text-lg sm:text-xl font-semibold text-[#1C1412]">
+              {LANDING_CLOSING.start}
+            </p>
+            <p className="text-base text-[#1C1412] italic">
+              {COUPLE_BRAND} — {LANDING_CLOSING.tagline}
+            </p>
+            <MagneticButton href="/couple/offre" variant="primary" size="lg">
+              Je commence
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </MagneticButton>
+            <div>
+              <Link
+                href="/couple/espace"
+                className="text-base font-semibold text-primary"
+              >
+                Accéder à mon espace couple →
+              </Link>
+            </div>
           </div>
-          <div className="ck-reveal">
-            <VizDualFinish />
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#FBF9F6]">
+        <div className="max-w-3xl mx-auto space-y-8">
+          <div className="ck-reveal space-y-2">
+            <p className="couple-chapter text-xs font-bold uppercase text-primary">
+              FAQ
+            </p>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1C1412]">
+              Questions fréquentes
+            </h2>
           </div>
-          <p className="ck-reveal font-serif text-2xl sm:text-3xl italic text-primary leading-snug">
-            « {LANDING_CLOSING.lastQuote} »
-          </p>
-          <p className="ck-reveal text-lg sm:text-xl font-semibold text-[#1C1412]">
-            {LANDING_CLOSING.start}
-          </p>
-          <p className="ck-reveal text-base text-[#1C1412] italic">
-            {COUPLE_BRAND} — {LANDING_CLOSING.tagline}
-          </p>
-          <MagneticButton href="/couple/offre" variant="primary" size="lg">
-            Je commence
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </MagneticButton>
-          <div>
-            <Link
-              href="/couple/espace"
-              className="text-base font-semibold text-primary"
-            >
-              Mon espace couple →
+          <div className="space-y-3">
+            {LANDING_FAQ.map((item) => (
+              <details
+                key={item.q}
+                className="ck-reveal group rounded-xl border border-[#1C1412]/10 bg-white px-5 py-4 open:shadow-sm"
+              >
+                <summary className="cursor-pointer list-none font-serif text-lg sm:text-xl font-bold text-[#1C1412] pr-8 relative after:content-['+'] after:absolute after:right-0 after:top-0 after:text-primary after:font-sans after:text-xl group-open:after:content-['–']">
+                  {item.q}
+                </summary>
+                <p className="mt-3 text-base text-[#1C1412]/80 leading-relaxed">
+                  {item.a}
+                </p>
+              </details>
+            ))}
+          </div>
+          <p className="ck-reveal text-sm text-[#1C1412]/60">
+            Déjà un code d’invitation ?{" "}
+            <Link href="/couple/rejoindre" className="font-semibold text-primary">
+              Rejoindre le bilan →
             </Link>
-          </div>
+          </p>
         </div>
       </section>
     </div>

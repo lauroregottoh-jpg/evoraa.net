@@ -79,35 +79,44 @@ export function VizReportUnlockScene({ className }: { className?: string }) {
   )
 }
 
-/** Duel / dual — deux questions qui se rejoignent. */
+/** Différences versus compatibilités — duel animé. */
 export function VizDualFinish({ className }: { className?: string }) {
   return (
     <div
-      className={cn("relative w-full max-w-lg mx-auto py-4", className)}
+      className={cn("relative w-full max-w-md py-2", className)}
       aria-hidden
     >
-      <div className="flex items-center justify-between gap-3">
-        <div className="couple-dual-left flex-1 rounded-xl border-2 border-primary bg-white px-3 py-3 text-center shadow-sm">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-accent">
-            A
+      <div className="flex items-stretch justify-between gap-3">
+        <div className="couple-dual-left flex-1 rounded-xl border-2 border-primary bg-white px-3 py-4 text-center shadow-sm">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-accent mb-1">
+            Compatibilités
           </p>
-          <p className="font-serif text-sm sm:text-base font-bold text-primary leading-snug">
+          <p className="font-serif text-base sm:text-lg font-bold text-primary leading-snug">
             Ce qui vous rapproche
           </p>
-        </div>
-        <div className="couple-dual-heart shrink-0 flex h-10 w-10 items-center justify-center rounded-full bg-accent text-primary font-bold text-lg">
-          ↔
-        </div>
-        <div className="couple-dual-right flex-1 rounded-xl border-2 border-accent bg-[#F8F4EE] px-3 py-3 text-center shadow-sm">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-primary">
-            B
+          <p className="mt-2 text-xs text-[#1C1412]/70 leading-relaxed">
+            Convergences, forces, terrains communs
           </p>
-          <p className="font-serif text-sm sm:text-base font-bold text-primary leading-snug">
-            Êtes-vous alignés ?
+        </div>
+        <div className="couple-dual-heart shrink-0 self-center flex h-11 w-11 items-center justify-center rounded-full bg-accent text-primary font-bold text-lg">
+          vs
+        </div>
+        <div className="couple-dual-right flex-1 rounded-xl border-2 border-[#5C1F28] bg-[#F8F4EE] px-3 py-4 text-center shadow-sm">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-primary mb-1">
+            Différences
+          </p>
+          <p className="font-serif text-base sm:text-lg font-bold text-primary leading-snug">
+            Ce qui vous différencie
+          </p>
+          <p className="mt-2 text-xs text-[#1C1412]/70 leading-relaxed">
+            Écarts, vigilance, sujets à clarifier
           </p>
         </div>
       </div>
-      <div className="couple-dual-line mx-auto mt-3 h-0.5 w-0 bg-accent" />
+      <div className="couple-dual-line mx-auto mt-4 h-0.5 bg-accent" />
+      <p className="mt-3 text-center font-serif text-sm sm:text-base italic text-primary">
+        Êtes-vous aussi alignés que vous le pensez ?
+      </p>
     </div>
   )
 }
