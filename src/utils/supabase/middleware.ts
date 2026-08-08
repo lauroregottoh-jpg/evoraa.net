@@ -49,6 +49,9 @@ const PROTECTED_PREFIXES = [
   '/couple/checkout',
 ]
 
+/** Aperçus démo Couple — accessibles sans compte. */
+const PUBLIC_EXCEPTIONS = ['/couple/rapport/demo']
+
 const ADMIN_PREFIXES = [OPS_CONSOLE_PATH, '/moderation']
 
 /** API surface fermée : seules ces routes existent côté public réseau. */
@@ -167,7 +170,9 @@ export async function updateSession(request: NextRequest) {
   const isAuthRoute = AUTH_ROUTES.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`)
   )
-  const isProtected = matchesPrefix(pathname, PROTECTED_PREFIXES)
+  const isProtected =
+    matchesPrefix(pathname, PROTECTED_PREFIXES) &&
+    !matchesPrefix(pathname, PUBLIC_EXCEPTIONS)
   const isOpsConsole =
     pathname === OPS_CONSOLE_PATH || pathname.startsWith(`${OPS_CONSOLE_PATH}/`)
   const isAdminRoute = matchesPrefix(pathname, ADMIN_PREFIXES)

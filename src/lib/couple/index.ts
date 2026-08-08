@@ -9,4 +9,9 @@ export { COUPLE_OFFERS, getCoupleOffer, isPremiumPlusOffer } from "@/lib/couple/
 export { getCoupleQuestions, COUPLE_DIMENSION_META } from "@/lib/couple/questionBank"
 export { scoreCouplePair, interpretGlobalScore } from "@/lib/couple/scoring"
 export { buildCoupleReport, qaCoupleReport } from "@/lib/couple/report"
+export {
+  buildDemoCoupleReport,
+  DEMO_COUPLE_META,
+  DEMO_COUPLE_NAMES,
+} from "@/lib/couple/demoReport"
 export { GOLDEN_COUPLES } from "@/lib/couple/golden"
