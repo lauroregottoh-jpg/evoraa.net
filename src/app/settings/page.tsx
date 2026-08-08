@@ -3,12 +3,17 @@ import { EvaCompanion } from "@/components/evoraa/EvaCompanion"
 import { Badge } from "@/components/ui/badge"
 import { SettingsForm } from "@/components/settings/SettingsForm"
 import { getMySettings } from "@/app/actions/settings"
+import { getUsageSnapshot } from "@/lib/billing/usage"
 import { logoutAction } from "@/app/actions/auth"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
 export default async function SettingsPage() {
-  const { data, error } = await getMySettings()
+  const [{ data, error }, usage] = await Promise.all([
+    getMySettings(),
+    getUsageSnapshot(),
+  ])
+  const isAlliance = Boolean(usage?.isPaid)
 
   return (
     <MemberPage>
@@ -47,7 +52,7 @@ export default async function SettingsPage() {
           </div>
         ) : (
           <>
-            <SettingsForm initial={data} />
+            <SettingsForm initial={data} isAlliance={isAlliance} />
             <form action={logoutAction} className="pt-4 border-t border-border">
               <Button
                 type="submit"

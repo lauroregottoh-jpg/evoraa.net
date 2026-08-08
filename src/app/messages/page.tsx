@@ -5,10 +5,9 @@ import { getUsageSnapshot } from "@/lib/billing/usage"
 import { QuotaPill } from "@/components/billing/QuotaPill"
 import { loadPublicCms } from "@/lib/admin/loadCms"
 import { SponsoredAdBanner } from "@/components/ads/SponsoredAdBanner"
-import { createClient } from "@/utils/supabase/server"
 import {
-  isSarahGande,
-  SARAH_GANDE_DEMO_THREADS,
+  DEMO_MATCH_THREADS,
+  shouldShowDemoMatches,
 } from "@/lib/demo/sarahGandeSimulations"
 
 export default async function MessagesPage() {
@@ -19,26 +18,14 @@ export default async function MessagesPage() {
   ])
 
   const ads = cms.ads.filter((a) => a.active && a.slot === "messages")
-
-  let demoThreads = [] as typeof SARAH_GANDE_DEMO_THREADS
-  try {
-    const supabase = await createClient()
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-    if (user) {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("first_name, last_name")
-        .eq("user_id", user.id)
-        .maybeSingle()
-      if (isSarahGande(profile?.first_name, profile?.last_name)) {
-        demoThreads = SARAH_GANDE_DEMO_THREADS
-      }
-    }
-  } catch {
-    /* ignore — inbox still works without demo */
-  }
+  const realCount = (result.conversations ?? []).length
+  const demoThreads = shouldShowDemoMatches({
+    conversations: realCount,
+    matches: realCount,
+    compatibilities: realCount,
+  })
+    ? DEMO_MATCH_THREADS
+    : []
 
   return (
     <MemberPage>

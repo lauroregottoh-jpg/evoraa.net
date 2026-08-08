@@ -771,8 +771,37 @@
   }
 }
 
+@keyframes discoveryWelcomeZoom {
+  from {
+    transform: scale(0.82);
+    opacity: 0.4;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes discoveryWelcomeRing {
+  0% {
+    transform: translate(-50%, -50%) scale(0.7);
+    opacity: 0.5;
+  }
+  70% {
+    opacity: 0.15;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.15);
+    opacity: 0;
+  }
+}
+
 .discovery-welcome-title {
   animation: discoveryWelcomeIn 0.75s ease-out both;
+}
+
+.discovery-welcome-zoom {
+  animation: discoveryWelcomeZoom 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .discovery-welcome-eyebrow {
@@ -810,6 +839,14 @@
 
 .discovery-welcome-glow-b {
   animation: discoveryWelcomeGlow 8s ease-in-out infinite reverse;
+}
+
+.discovery-welcome-ring {
+  animation: discoveryWelcomeRing 2.4s ease-out infinite;
+}
+
+.discovery-welcome-ring-b {
+  animation: discoveryWelcomeRing 2.4s ease-out 0.6s infinite;
 }
 
 /* ——— Simulations matchs / messages ——— */
@@ -878,6 +915,7 @@
   .discovery-horizon-line,
   .discovery-goal-pulse,
   .discovery-welcome-title,
+  .discovery-welcome-zoom,
   .discovery-welcome-eyebrow,
   .discovery-welcome-sub,
   .discovery-welcome-name,
@@ -885,6 +923,8 @@
   .discovery-welcome-hearts svg,
   .discovery-welcome-glow,
   .discovery-welcome-glow-b,
+  .discovery-welcome-ring,
+  .discovery-welcome-ring-b,
   .sim-match-card,
   .sim-open-msg,
   .sim-inbox-row,

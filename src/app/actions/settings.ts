@@ -51,6 +51,7 @@ export async function getMySettings(): Promise<{
   return {
     data: {
       retreatMode: Boolean(privacy.retreat_mode),
+      sameSexFriendship: Boolean(privacy.same_sex_friendship),
       maxDistance: prefs?.max_distance ?? 100,
       ageMin: prefs?.age_min ?? 26,
       ageMax: prefs?.age_max ?? 36,
@@ -73,6 +74,7 @@ export async function getMySettings(): Promise<{
 
 export async function saveSettingsAction(payload: {
   retreatMode: boolean
+  sameSexFriendship: boolean
   maxDistance: string
   ageRange: string
   marriageTimeline: MarriageTimeline
@@ -109,6 +111,7 @@ export async function saveSettingsAction(payload: {
       privacy_settings: {
         ...prevPrivacy,
         retreat_mode: payload.retreatMode,
+        same_sex_friendship: payload.sameSexFriendship,
         faith_practice: payload.faithPractice,
         relocate: payload.relocate,
         denomination_open: payload.denominationOpen,
@@ -139,5 +142,6 @@ export async function saveSettingsAction(payload: {
 
   revalidatePath("/settings")
   revalidatePath("/compatibility")
+  revalidatePath("/communaute")
   return { success: true }
 }

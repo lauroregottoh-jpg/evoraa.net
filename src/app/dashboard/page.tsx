@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { MemberShell } from "@/components/layout/MemberShell"
 import { getDashboardData } from "@/app/actions/dashboard"
+import { listCommunityMembers } from "@/app/actions/community"
 import { Button } from "@/components/ui/button"
 import { DashboardAlertBanners } from "@/components/dashboard/DashboardAlertBanners"
 import { SelectionGrid, SelectionHeader } from "@/components/dashboard/SelectionGrid"
@@ -8,11 +9,15 @@ import { AllianceIdentityHome } from "@/components/dashboard/AllianceIdentityHom
 import { DiscoveryPathVisual } from "@/components/dashboard/DiscoveryPathVisual"
 import { DiscoveryWelcomeHero } from "@/components/dashboard/DiscoveryWelcomeHero"
 import { SimulatedMatchesPanel } from "@/components/dashboard/SimulatedMatchesPanel"
-import { isSarahGande } from "@/lib/demo/sarahGandeSimulations"
+import { CommunityTeaser } from "@/components/community/CommunityMemberCard"
+import { shouldShowDemoMatches } from "@/lib/demo/sarahGandeSimulations"
 import { Crown } from "lucide-react"
 
 export default async function DashboardPage() {
-  const { data, error } = await getDashboardData()
+  const [{ data, error }, community] = await Promise.all([
+    getDashboardData(),
+    listCommunityMembers(8),
+  ])
 
   if (error || !data) {
     return (
@@ -32,9 +37,12 @@ export default async function DashboardPage() {
   const usage = data.usage
   const firstName = data.firstName
   const isPaid = usage.isPaid
-  const showSarahDemo = isSarahGande(data.firstName, data.lastName)
+  const showDemo = shouldShowDemoMatches({
+    conversations: data.conversationCount,
+    compatibilities: data.topSuggestions?.length ?? 0,
+    matches: data.conversationCount,
+  })
 
-  /** Alliance : pas de bannières photo/profil devant la carte membre. */
   const allBanners = data.nextSteps
     .filter(
       (s) =>
@@ -58,7 +66,6 @@ export default async function DashboardPage() {
       return true
     })
 
-  /** Découverte : alertes photo/profil uniquement juste avant la sélection. */
   const topBanners = isPaid
     ? allBanners
     : allBanners.filter((b) => b.tone !== "photo" && b.tone !== "profile")
@@ -82,26 +89,39 @@ export default async function DashboardPage() {
     >
       <div className="space-y-8 pb-8">
         {isPaid ? (
-          <AllianceIdentityHome
-            firstName={firstName}
-            lastName={data.lastName}
-            avatarUrl={data.avatarUrl}
-            gender={data.gender}
-            memberSinceLabel={data.memberSinceLabel}
-            isVerified={data.isVerified}
-            assessmentsDone={data.assessmentsDone}
-          />
+          <>
+            <DiscoveryWelcomeHero firstName={firstName} variant="alliance" />
+            <AllianceIdentityHome
+              firstName={firstName}
+              lastName={data.lastName}
+              avatarUrl={data.avatarUrl}
+              gender={data.gender}
+              memberSinceLabel={data.memberSinceLabel}
+              isVerified={data.isVerified}
+              assessmentsDone={data.assessmentsDone}
+            />
+          </>
         ) : (
           <>
             <DiscoveryWelcomeHero firstName={firstName} />
-            <DiscoveryPathVisual assessmentsDone={data.assessmentsDone} />
             {topBanners.length > 0 ? (
               <DashboardAlertBanners banners={topBanners} />
             ) : null}
           </>
         )}
 
-        {showSarahDemo ? (
+        {/* Communauté — juste après l’accueil */}
+        <CommunityTeaser
+          members={community.members}
+          sameSexFriendship={community.sameSexFriendship}
+          isPaid={isPaid || community.isPaid}
+        />
+
+        {!isPaid ? (
+          <DiscoveryPathVisual assessmentsDone={data.assessmentsDone} />
+        ) : null}
+
+        {showDemo ? (
           <SimulatedMatchesPanel
             variant={isPaid ? "alliance" : "discovery"}
           />

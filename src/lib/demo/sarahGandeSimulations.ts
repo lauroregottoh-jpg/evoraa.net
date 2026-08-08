@@ -1,13 +1,12 @@
 /**
- * Simulations de matchs & messages — Sarah Gande (prévisualisation / fond animé).
- * Pas de données DB : threads démo ouverts via /messages/demo/[threadId].
+ * Données démo matchs/messages — visibles tant que l’engagement réel < 5.
  */
 
 export type DemoChatMessage = {
   id: string
   fromMe: boolean
   text: string
-  at: string // ISO
+  at: string
 }
 
 export type DemoMatchThread = {
@@ -26,17 +25,32 @@ export type DemoMatchThread = {
   messages: DemoChatMessage[]
 }
 
+/** @deprecated use shouldShowDemoMatches */
 export function isSarahGande(firstName?: string | null, lastName?: string | null) {
   const f = (firstName || "").trim().toLowerCase()
   const l = (lastName || "").trim().toLowerCase()
   return f === "sarah" && (l === "gande" || l.startsWith("gande"))
 }
 
+/** Afficher la démo tant qu’il y a moins de 5 matchs / convos / compatibilités réels. */
+export function shouldShowDemoMatches(counts: {
+  conversations?: number
+  matches?: number
+  compatibilities?: number
+}) {
+  const n = Math.max(
+    counts.conversations ?? 0,
+    counts.matches ?? 0,
+    counts.compatibilities ?? 0
+  )
+  return n < 5
+}
+
 const now = Date.now()
 const hoursAgo = (h: number) => new Date(now - h * 3600_000).toISOString()
 const daysAgo = (d: number) => new Date(now - d * 86400_000).toISOString()
 
-export const SARAH_GANDE_DEMO_THREADS: DemoMatchThread[] = [
+export const DEMO_MATCH_THREADS: DemoMatchThread[] = [
   {
     id: "david-mensah",
     partnerFirstName: "David",
@@ -46,7 +60,7 @@ export const SARAH_GANDE_DEMO_THREADS: DemoMatchThread[] = [
     score: 91,
     verified: true,
     photoGradient: "from-[#5C1F28] to-[#B8954A]",
-    preview: "Bonjour Sarah, j’ai beaucoup apprécié votre vision du mariage…",
+    preview: "Bonjour, j’ai beaucoup apprécié votre vision du mariage…",
     unread: true,
     matchedLabel: "Match · hier",
     timeLabel: "Il y a 2 h",
@@ -54,7 +68,7 @@ export const SARAH_GANDE_DEMO_THREADS: DemoMatchThread[] = [
       {
         id: "dm1",
         fromMe: false,
-        text: "Bonjour Sarah, j’ai beaucoup apprécié votre vision du mariage et de la foi sur votre profil. Merci pour votre authenticité.",
+        text: "Bonjour, j’ai beaucoup apprécié votre vision du mariage et de la foi sur votre profil. Merci pour votre authenticité.",
         at: daysAgo(1),
       },
       {
@@ -66,7 +80,7 @@ export const SARAH_GANDE_DEMO_THREADS: DemoMatchThread[] = [
       {
         id: "dm3",
         fromMe: false,
-        text: "Votre façon de parler du foyer comme un projet spirituel commun. C’est rare et précieux. J’aimerais en savoir plus sur votre parcours de foi.",
+        text: "Votre façon de parler du foyer comme un projet spirituel commun. C’est rare et précieux.",
         at: hoursAgo(4),
       },
       {
@@ -86,7 +100,7 @@ export const SARAH_GANDE_DEMO_THREADS: DemoMatchThread[] = [
     score: 87,
     verified: true,
     photoGradient: "from-[#1C3A2A] to-[#B8954A]",
-    preview: "Sarah, paix du Seigneur. Votre témoignage m’a touché…",
+    preview: "Paix du Seigneur. Votre témoignage m’a touché…",
     unread: false,
     matchedLabel: "Match · il y a 3 j",
     timeLabel: "Hier",
@@ -94,19 +108,19 @@ export const SARAH_GANDE_DEMO_THREADS: DemoMatchThread[] = [
       {
         id: "sk1",
         fromMe: false,
-        text: "Sarah, paix du Seigneur. Votre témoignage m’a touché — surtout votre désir de construire sur Christ.",
+        text: "Paix du Seigneur. Votre témoignage m’a touché — surtout votre désir de construire sur Christ.",
         at: daysAgo(3),
       },
       {
         id: "sk2",
         fromMe: true,
-        text: "Paix à vous aussi Samuel. Merci. Qu’est-ce qui compte le plus pour vous dans une relation ?",
+        text: "Paix à vous aussi. Merci. Qu’est-ce qui compte le plus pour vous dans une relation ?",
         at: daysAgo(2),
       },
       {
         id: "sk3",
         fromMe: false,
-        text: "La prière commune, l’honnêteté, et une vision claire du mariage. Le reste se construit avec le temps.",
+        text: "La prière commune, l’honnêteté, et une vision claire du mariage.",
         at: daysAgo(1),
       },
     ],
@@ -120,7 +134,7 @@ export const SARAH_GANDE_DEMO_THREADS: DemoMatchThread[] = [
     score: 84,
     verified: false,
     photoGradient: "from-[#2A1810] to-[#5C1F28]",
-    preview: "Enchanté Sarah. J’ai vu notre compatibilité spirituelle…",
+    preview: "Enchanté. J’ai vu notre compatibilité spirituelle…",
     unread: true,
     matchedLabel: "Match · aujourd’hui",
     timeLabel: "À l’instant",
@@ -128,7 +142,7 @@ export const SARAH_GANDE_DEMO_THREADS: DemoMatchThread[] = [
       {
         id: "ja1",
         fromMe: false,
-        text: "Enchanté Sarah. J’ai vu notre compatibilité spirituelle et j’aimerais simplement faire connaissance avec respect.",
+        text: "Enchanté. J’ai vu notre compatibilité spirituelle et j’aimerais simplement faire connaissance avec respect.",
         at: hoursAgo(1),
       },
       {
@@ -148,7 +162,7 @@ export const SARAH_GANDE_DEMO_THREADS: DemoMatchThread[] = [
     score: 79,
     verified: true,
     photoGradient: "from-[#1C2840] to-[#B8954A]",
-    preview: "Vous : Merci Marc, bonne semaine à vous aussi.",
+    preview: "Vous : Merci, bonne semaine à vous aussi.",
     unread: false,
     matchedLabel: "Match · il y a 1 sem",
     timeLabel: "Il y a 5 j",
@@ -156,13 +170,13 @@ export const SARAH_GANDE_DEMO_THREADS: DemoMatchThread[] = [
       {
         id: "mt1",
         fromMe: false,
-        text: "Bonjour Sarah, j’espère que vous allez bien. Comment se passe votre semaine ?",
+        text: "Bonjour, j’espère que vous allez bien. Comment se passe votre semaine ?",
         at: daysAgo(7),
       },
       {
         id: "mt2",
         fromMe: true,
-        text: "Bonjour Marc, elle se passe bien, merci. Et la vôtre ?",
+        text: "Bonjour, elle se passe bien, merci. Et la vôtre ?",
         at: daysAgo(6),
       },
       {
@@ -174,13 +188,16 @@ export const SARAH_GANDE_DEMO_THREADS: DemoMatchThread[] = [
       {
         id: "mt4",
         fromMe: true,
-        text: "Merci Marc, bonne semaine à vous aussi.",
+        text: "Merci, bonne semaine à vous aussi.",
         at: daysAgo(5),
       },
     ],
   },
 ]
 
+/** Alias rétrocompat */
+export const SARAH_GANDE_DEMO_THREADS = DEMO_MATCH_THREADS
+
 export function getDemoThread(id: string) {
-  return SARAH_GANDE_DEMO_THREADS.find((t) => t.id === id) ?? null
+  return DEMO_MATCH_THREADS.find((t) => t.id === id) ?? null
 }

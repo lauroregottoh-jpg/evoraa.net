@@ -13,6 +13,8 @@ export type DenominationOpenPref = "same" | "christian_open" | "open"
 
 export type SettingsData = {
   retreatMode: boolean
+  /** Alliance — autorise likes / messages amitié même sexe (Communauté). */
+  sameSexFriendship: boolean
   maxDistance: number
   ageMin: number
   ageMax: number

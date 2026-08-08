@@ -23,6 +23,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Route,
+  Users,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { DevSessionSwitcher } from "@/components/dev/DevSessionSwitcher";
@@ -45,6 +46,7 @@ type NavItem = {
 /** Découverte — ordre classique. */
 const PRIMARY_FREE: NavItem[] = [
   { href: "/dashboard", label: "Accueil", icon: LayoutGrid },
+  { href: "/communaute", label: "Communauté", icon: Users },
   { href: "/compatibility", label: "Compatibilités", icon: Heart },
   { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/assessments", label: "Tests", icon: ClipboardList },
@@ -57,11 +59,12 @@ const PRIMARY_FREE: NavItem[] = [
 ];
 
 /**
- * Alliance — Accueil, puis bloc upgradé (Parcours → Rapport → Coffre → Tests),
+ * Alliance — Accueil, puis Communauté, puis bloc upgradé,
  * puis le reste comme avant.
  */
 const PRIMARY_ALLIANCE: NavItem[] = [
   { href: "/dashboard", label: "Accueil", icon: LayoutGrid },
+  { href: "/communaute", label: "Communauté", icon: Users },
   { href: "/alliance/parcours", label: "Parcours", icon: Route, allianceGold: true },
   { href: "/rapport", label: "Rapport", icon: ClipboardList, allianceGold: true },
   { href: "/coffre-premium", label: "Coffre Premium", icon: Library, allianceGold: true },
@@ -84,7 +87,7 @@ const SECONDARY = [
 
 const BOTTOM_PRIMARY = [
   { href: "/dashboard", label: "Accueil", icon: LayoutGrid },
-  { href: "/compatibility", label: "Matchs", icon: Heart },
+  { href: "/communaute", label: "Communauté", icon: Users },
   { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/assessments", label: "Tests", icon: ClipboardList },
 ] as const;

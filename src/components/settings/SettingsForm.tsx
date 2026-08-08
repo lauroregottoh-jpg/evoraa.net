@@ -21,8 +21,17 @@ import {
 } from "@/lib/settings";
 import { saveSettingsAction } from "@/app/actions/settings";
 
-export function SettingsForm({ initial }: { initial: SettingsData }) {
+export function SettingsForm({
+  initial,
+  isAlliance = false,
+}: {
+  initial: SettingsData
+  isAlliance?: boolean
+}) {
   const [retreatMode, setRetreatMode] = React.useState(initial.retreatMode);
+  const [sameSexFriendship, setSameSexFriendship] = React.useState(
+    initial.sameSexFriendship
+  );
   const [maxDistance, setMaxDistance] = React.useState(String(initial.maxDistance));
   const [ageRange, setAgeRange] = React.useState(
     ageRangeLabel(initial.ageMin, initial.ageMax)
@@ -51,6 +60,7 @@ export function SettingsForm({ initial }: { initial: SettingsData }) {
     setSaved(false);
     const result = await saveSettingsAction({
       retreatMode,
+      sameSexFriendship: isAlliance ? sameSexFriendship : false,
       maxDistance,
       ageRange,
       marriageTimeline,
@@ -123,6 +133,51 @@ export function SettingsForm({ initial }: { initial: SettingsData }) {
           </Button>
         </CardContent>
       </Card>
+
+      {isAlliance ? (
+        <Card
+          className={`rounded-2xl border transition-all ${
+            sameSexFriendship
+              ? "border-[#B8954A]/50 bg-[#B8954A]/10"
+              : "border-[#B8954A]/30 bg-background/90"
+          }`}
+        >
+          <CardHeader className="border-b border-border/40 pb-4">
+            <CardTitle className="font-serif text-2xl text-foreground flex items-center gap-2">
+              <Badge className="bg-[#B8954A] text-[#1C1412]">Alliance</Badge>
+              Amitiés même sexe
+            </CardTitle>
+            <CardDescription className="text-xs text-muted-foreground">
+              Dans la Communauté KELIAA, likez aussi des membres du même sexe
+              (amitié chrétienne). Les messages s’ouvrent uniquement en like
+              mutuel — pas de contact direct.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="space-y-1 max-w-lg">
+              <span className="text-sm font-semibold text-foreground block">
+                Activer les amitiés entre personnes du même sexe
+              </span>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Option Alliance. Le Matching mariage reste centré sur
+                l’autre sexe.
+              </p>
+            </div>
+            <Button
+              type="button"
+              onClick={() => setSameSexFriendship(!sameSexFriendship)}
+              variant={sameSexFriendship ? "default" : "outline"}
+              className={`rounded-xl h-10 px-5 font-medium shrink-0 ${
+                sameSexFriendship
+                  ? "bg-[#5C1F28] hover:bg-[#5C1F28]/90 text-[#F8F4EE]"
+                  : "border-[#B8954A]/40"
+              }`}
+            >
+              {sameSexFriendship ? "Activé" : "Débloquer"}
+            </Button>
+          </CardContent>
+        </Card>
+      ) : null}
 
       <Card className="rounded-2xl border-border/60 bg-background/90 backdrop-blur-md shadow-xs">
         <CardHeader className="border-b border-border/40 pb-4">

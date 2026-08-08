@@ -5,7 +5,7 @@ import Link from "next/link"
 import { Crown, Heart, MapPin, MessageCircle, Sparkles } from "lucide-react"
 import { cn } from "@/utils/cn"
 import {
-  SARAH_GANDE_DEMO_THREADS,
+  DEMO_MATCH_THREADS,
   type DemoMatchThread,
 } from "@/lib/demo/sarahGandeSimulations"
 
@@ -38,6 +38,9 @@ function MatchCard({
             <Crown className="h-2.5 w-2.5" /> Vérifié
           </span>
         ) : null}
+        <span className="absolute left-2.5 bottom-14 z-10 rounded-md border border-dashed border-white/70 bg-[#5C1F28]/85 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-[#F3D9A4]">
+          Démo
+        </span>
         <span className="absolute top-2.5 right-2.5 inline-flex items-center gap-1 rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
           <Heart className="h-2.5 w-2.5 fill-current" /> {thread.score}%
         </span>
@@ -72,14 +75,14 @@ function MatchCard({
 }
 
 /**
- * Historique de matchs & messages simulés — Sarah Gande (Découverte + Alliance).
+ * Matchs & messages démo — visibles tant que l’engagement réel < 5.
  */
 export function SimulatedMatchesPanel({
   variant = "discovery",
 }: {
   variant?: "discovery" | "alliance"
 }) {
-  const threads = SARAH_GANDE_DEMO_THREADS
+  const threads = DEMO_MATCH_THREADS
   const unread = threads.filter((t) => t.unread).length
 
   return (
@@ -87,8 +90,8 @@ export function SimulatedMatchesPanel({
       className={cn(
         "relative overflow-hidden rounded-[1.75rem] border shadow-card",
         variant === "alliance"
-          ? "border-[#B8954A]/40 bg-gradient-to-br from-[#FFFBF5] via-[#F8F4EE] to-[#F0E6D4]"
-          : "border-[#B8954A]/30 bg-gradient-to-br from-[#FFFBF5] via-[#F8F4EE] to-[#F3E8D0]"
+          ? "border-dashed border-[#B8954A]/50 bg-gradient-to-br from-[#FFFBF5] via-[#F8F4EE] to-[#F0E6D4]"
+          : "border-dashed border-[#B8954A]/40 bg-gradient-to-br from-[#FFFBF5] via-[#F8F4EE] to-[#F3E8D0]"
       )}
     >
       <div
@@ -100,18 +103,20 @@ export function SimulatedMatchesPanel({
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="space-y-1.5">
             <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.28em] text-[#8B6914]">
+              <span className="rounded bg-[#5C1F28] px-1.5 py-0.5 text-[9px] tracking-widest text-[#F3D9A4]">
+                Démo
+              </span>
               <Sparkles className="h-3.5 w-3.5 text-[#B8954A] discovery-spark" />
-              Vos matchs · aperçu
+              Aperçu matchs & messages
             </p>
             <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#1C1412] leading-tight">
-              Historique de vos rencontres
+              Exemples pour vous guider
             </h2>
             <p className="max-w-lg text-sm text-[#1C1412]/65 leading-relaxed">
-              Cliquez sur{" "}
-              <span className="font-semibold text-[#5C1F28]">
-                Ouvrir le message
-              </span>{" "}
-              pour lire l’échange et continuer la conversation.
+              Ces conversations sont{" "}
+              <span className="font-semibold text-[#5C1F28]">simulées</span>. Elles
+              disparaissent dès que vous avez 5 matchs, compatibilités ou
+              conversations réels.
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -124,7 +129,7 @@ export function SimulatedMatchesPanel({
               href="/messages"
               className="rounded-full border border-[#B8954A]/40 bg-white px-3 py-1 text-[11px] font-bold text-[#5C1F28] hover:bg-[#F7F0E0]"
             >
-              Tous les messages →
+              Messages →
             </Link>
           </div>
         </div>

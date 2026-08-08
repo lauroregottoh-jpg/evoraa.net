@@ -187,22 +187,33 @@ export default async function AssessmentsHubPage() {
           <AssessmentPillarCards items={[...progress]} />
         </section>
 
-        {/* ——— 2. 10 CLÉS DU RAPPORT (une seule fois) ——— */}
-        <section className="relative z-10 space-y-4">
+        {/* ——— 2. 10 CLÉS DU RAPPORT (Alliance mis en avant) ——— */}
+        <section
+          className={
+            isAlliance
+              ? "relative z-10 space-y-4 rounded-[1.75rem] border-2 border-[#B8954A]/55 bg-gradient-to-br from-[#B8954A]/15 via-white to-[#F8F4EE] p-5 sm:p-7 shadow-elevated ring-2 ring-[#B8954A]/20"
+              : "relative z-10 space-y-4"
+          }
+        >
           <div
             className={
               isAlliance
-                ? "rounded-2xl border border-[#B8954A]/35 bg-gradient-to-br from-[#B8954A]/12 via-white to-primary/[0.04] p-5 sm:p-6 space-y-2"
+                ? "space-y-2"
                 : "rounded-2xl border border-dashed border-accent/40 bg-accent/[0.06] p-5 sm:p-6 space-y-2"
             }
           >
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent inline-flex items-center gap-1.5">
               {isAlliance ? (
-                <Crown className="h-4 w-4" />
+                <Crown className="h-4 w-4 text-[#B8954A]" />
               ) : (
                 <Lock className="h-4 w-4" />
               )}
               Formule Alliance
+              {isAlliance ? (
+                <span className="ml-1 rounded-full bg-[#B8954A] px-2 py-0.5 text-[9px] font-bold uppercase text-[#1C1412]">
+                  Inclus
+                </span>
+              ) : null}
             </p>
             <h2 className="font-serif text-3xl font-bold leading-tight">
               Les 10 clés de votre rapport
