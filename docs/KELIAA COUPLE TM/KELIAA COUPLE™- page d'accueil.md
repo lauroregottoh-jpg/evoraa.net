@@ -1,703 +1,426 @@
 # KELIAA COUPLE™
-## Bilan de Compatibilité & Dynamique du Couple
 
-### Et si vous pouviez mieux comprendre votre couple avant que les différences ne deviennent des conflits ?
+## Et si vous découvriez enfin ce qui se joue vraiment entre vous ?
 
-Vous vous aimez. Vous avez peut-être prié ensemble, parlé mariage, construit des projets ou déjà partagé plusieurs années de vie.
+Vous vous aimez.
 
-Mais vous êtes aussi deux personnes différentes.
+Vous avez des projets.
 
-Vous n'avez peut-être pas la même manière de communiquer, de gérer l'argent, de prendre des décisions, de vivre les désaccords, de concevoir les rôles dans le couple, de gérer les relations avec les familles ou d'exprimer vos besoins.
+Peut-être même que vous préparez votre mariage.
 
-Et parfois, ce sont précisément ces différences que l'on découvre **après** les fiançailles, après le mariage ou après plusieurs années de vie commune.
+Mais il y a des sujets dont vous parlez peu.
 
-**KELIAA COUPLE™ vous permet de mettre ces sujets sur la table avant qu'ils ne deviennent des incompréhensions répétitives.**
+L'argent.
+Les familles.
+Les décisions.
+Les conflits.
+Les attentes.
+Les rôles.
+L'intimité.
+L'avenir.
 
-Ce n'est pas un test qui décide si vous devez être ensemble.
+**Et si vous preniez enfin le temps de regarder tout cela ensemble ?**
 
-Ce n'est pas un verdict « compatible » ou « incompatible ».
+### KELIAA COUPLE™ est un bilan approfondi pour deux personnes qui veulent mieux comprendre leur dynamique et construire leur relation avec davantage de clarté.
 
-C'est un **bilan relationnel approfondi réalisé séparément par les deux partenaires**, puis croisé pour vous aider à comprendre ce qui vous rapproche, ce qui vous différencie et surtout **ce que vous pouvez concrètement travailler ensemble.**
+**Pas un verdict ni un simple score mais une véritable lecture de votre couple avec des outils éprouvés .**
 
-### Vous ne repartez pas simplement avec un pourcentage.
-
-Vous repartez avec une lecture de votre dynamique, des sujets à approfondir, des forces sur lesquelles vous appuyer, des conversations à avoir et des actions concrètes pour avancer à deux.
-
-**[Découvrir mon bilan de couple →]**
-
----
-
-# POURQUOI FAIRE UN BILAN DE COUPLE ?
-
-## Parce que l'amour ne suffit pas toujours à éviter les malentendus.
-
-Deux personnes peuvent profondément s'aimer et pourtant avoir des visions très différentes sur certaines dimensions essentielles de la vie à deux.
-
-L'une peut considérer que parler immédiatement d'un problème est une preuve de maturité, tandis que l'autre a besoin de prendre du recul avant de discuter.
-
-L'une peut voir l'argent comme une sécurité à construire ensemble, tandis que l'autre peut le percevoir davantage comme un moyen de répondre aux besoins présents.
-
-L'une peut attendre beaucoup d'implication de la belle-famille, tandis que l'autre peut avoir besoin de frontières beaucoup plus fortes.
-
-Aucune de ces visions ne signifie automatiquement que votre couple ne peut pas fonctionner.
-
-Mais **ne pas en parler peut devenir un problème.**
-
-KELIAA COUPLE™ vous aide justement à faire apparaître ces différences avant qu'elles ne soient uniquement découvertes dans le conflit.
+**[Découvrir mon bilan →]**
 
 ---
 
-# CE QUE VOUS ALLEZ DÉCOUVRIR SUR VOTRE COUPLE
+# VOUS ALLEZ PEUT-ÊTRE VOUS RECONNAÎTRE...
 
-Votre bilan ne se contente pas de calculer un score.
+Vous pensez bien vous connaître. Puis une conversation sur l'argent tourne mal.
 
-Il cherche à répondre à des questions beaucoup plus importantes.
+Ou une décision importante devient compliquée.
+Ou vous découvrez que vous n'avez pas du tout la même vision de la famille.
+Ou l'un de vous veut parler immédiatement. Et l'autre préfère se taire.
 
-### Comment fonctionnons-nous lorsque nous ne sommes pas d'accord ?
+**Vous vous aimez.**
 
-Vous pourrez mieux comprendre vos différences dans la manière d'aborder les désaccords, les tensions et les décisions difficiles.
+Mais vous ne fonctionnez pas toujours de la même manière. Et c'est normal. La vraie question n'est pas :
 
-L'objectif n'est pas de déterminer qui a raison.
+> « Pourquoi ne pensons-nous / faisons-nous pas pareil ? »
 
-L'objectif est de comprendre **comment chacun fonctionne**, afin d'éviter que chaque différence ne devienne une bataille.
+La vraie question est :
 
-### Sommes-nous réellement alignés sur les sujets importants ?
-
-Vous pourrez identifier les domaines où vos attentes sont proches et ceux où elles méritent d'être clarifiées.
-
-Cela peut concerner notamment :
-
-- communication ;
-- gestion des conflits ;
-- finances ;
-- projets de vie ;
-- vision du mariage ;
-- rôles et responsabilités ;
-- famille et belles-familles ;
-- limites dans le couple ;
-- valeurs ;
-- prise de décision ;
-- affection et besoins relationnels ;
-- intimité ;
-- vie spirituelle lorsque cette dimension est intégrée au bilan ;
-- organisation de la vie quotidienne.
-
-Le but n'est pas d'avoir deux personnes identiques.
-
-**Le but est de savoir où vous êtes alignés et où vous devez apprendre à construire ensemble.**
+> **« Savons-nous construire avec nos différences ? »**
 
 ---
 
-# ET SI VOTRE SCORE DE COMPATIBILITÉ EST FAIBLE ?
+# C'EST CE QUE KELIAA COUPLE™ VA VOUS AIDER À DÉCOUVRIR.
 
-C'est justement là qu'il faut comprendre ce que signifie réellement un score.
+Vous répondez chacun de votre côté. Puis KELIAA met vos deux résultats en relation. Et soudain, certaines choses deviennent plus claires.
 
-Un résultat de 85 % ne signifie pas que votre couple est garanti.
+**Ce qui vous rapproche.**
 
-Un résultat de 40 % ne signifie pas que votre couple est condamné.
+**Ce qui vous différencie.**
 
-Et un résultat de 15 % ne signifie certainement pas :
+**Ce que vous aviez sous-estimé.**
 
-> « Vous ne pouvez pas être ensemble. »
+**Ce que vous devez vraiment discuter.**
 
-Le score est un **indicateur de dynamique**, pas un jugement sur votre avenir.
-
-Deux personnes peuvent avoir de nombreuses différences et construire une relation solide si elles savent les comprendre, en parler et mettre en place de nouvelles façons de fonctionner.
-
-À l'inverse, deux personnes très proches sur le papier peuvent rencontrer des difficultés si elles ne savent pas communiquer ou gérer leurs différences.
-
-C'est pourquoi KELIAA COUPLE™ ne s'arrête jamais au pourcentage.
-
-**Nous cherchons surtout à comprendre ce que ce pourcentage raconte.**
+**Ce sur quoi vous pouvez déjà vous appuyer.**
 
 ---
 
-# COMMENT ÇA FONCTIONNE ?
+# VOUS NE RECEVEZ PAS JUSTE UN SCORE.
 
-## Vous faites le bilan à deux, mais chacun de son côté.
+Imaginez ouvrir votre rapport. Vous y découvrez :
 
-Vous n'avez pas besoin d'être assis devant le même écran.
+### VOS FORCES
 
-Un seul des deux partenaires achète le bilan.
+Ce qui fonctionne déjà entre vous.
 
-Il reçoit ensuite la possibilité d'inviter son partenaire **par un lien sécurisé ou par un code personnel.**
+Ce qui constitue une vraie ressource pour votre relation.
 
-### 1. Un seul partenaire achète
+### VOS CONVERGENCES
 
-Peu importe qui commence.
+Les domaines où vos attentes et vos visions se rejoignent.
 
-Monsieur peut acheter.
+### VOS DIFFÉRENCES
 
-Madame peut acheter.
+Les sujets sur lesquels vous ne voyez pas forcément les choses de la même manière.
 
-Le système ne fait aucune différence.
+### VOS ZONES DE VIGILANCE
 
-L'achat correspond directement à **un bilan pour deux personnes.**
+Les différences qui méritent d'être clarifiées avant qu'elles ne deviennent des tensions répétitives.
 
-Vous n'avez donc pas besoin d'acheter deux questionnaires séparément.
+### VOS PRIORITÉS
 
----
+Les quelques sujets sur lesquels il serait réellement utile de commencer à travailler.
 
-### 2. Vous invitez votre partenaire
-
-Après l'achat, vous recevez votre espace couple.
-
-Vous pouvez envoyer à votre partenaire :
-
-**un lien d'invitation sécurisé**
-
-ou
-
-**un code de couple.**
-
-Le code est prévu pour un seul partenaire supplémentaire.
-
-**Une fois les deux places occupées, le bilan est fermé aux nouvelles inscriptions.**
+**Vous passez de « nous avons un problème » à « nous savons ce que nous devons comprendre et travailler ».**
 
 ---
 
-### 3. Chacun répond en privé
 
-C'est une étape essentielle.
-
-Vous répondez chacun de votre côté.
-
-Votre partenaire ne voit pas vos réponses brutes.
-
-Vous pouvez donc répondre avec davantage de sincérité, sans avoir à anticiper immédiatement :
-
-> « Qu'est-ce qu'il/elle va penser de ma réponse ? »
-
-Votre questionnaire devient ainsi un espace personnel de réflexion.
 
 ---
 
-### 4. KELIAA croise vos réponses
+# DEUX PERSONNES. DEUX REGARDS. UNE ANALYSE.
 
-C'est ici que le véritable travail commence.
+## Chacun répond en privé.
 
-KELIAA ne regarde pas seulement vos réponses individuellement.
-
-Le système analyse les deux profils ensemble afin d'identifier :
-
-**vos convergences**,  
-**vos différences**,  
-**vos écarts de perception**,  
-**vos forces relationnelles**,  
-**vos zones de vigilance**,  
-**vos priorités de travail.**
-
-Vous ne recevez donc pas simplement :
-
-> « Voici votre résultat. »
-
-Vous découvrez :
-
-> **« Voici ce que vos deux résultats racontent lorsque nous les regardons ensemble. »**
+Vous n'avez pas besoin de regarder votre partenaire répondre.
+Vous n'avez pas besoin de modifier votre réponse pour éviter une discussion.
+**Vous répondez honnêtement.**
+Vos réponses restent confidentielles.
 
 ---
 
-### 5. Votre dossier personnalisé est généré
+## Puis KELIAA croise vos deux résultats.
 
-À partir de vos réponses, vous recevez un dossier personnalisé.
+Et c'est là que votre bilan devient vraiment intéressant. Parce que nous ne voulons pas seulement savoir :
 
-Il ne s'agit pas d'une fiche automatique avec quelques scores.
+> « Qui êtes-vous ? »
 
-Le rapport est conçu comme un véritable **dossier de compréhension du couple**.
+Nous voulons comprendre :
 
-Vous pouvez le consulter dans votre espace KELIAA et télécharger les éléments prévus dans votre offre.
-
----
-
-# VOTRE RAPPORT VOUS PERMET DE VOIR...
-
-## Ce qui fonctionne déjà entre vous
-
-Parce qu'un bilan de couple ne doit pas uniquement chercher les problèmes.
-
-Vous découvrirez les domaines dans lesquels vos visions, vos attentes ou vos fonctionnements sont déjà fortement alignés.
-
-Ces convergences deviennent des **ressources pour votre couple**.
+> **« Que se passe-t-il lorsque vos deux façons de fonctionner se rencontrent ? »**
 
 ---
 
-## Ce qui vous différencie
+# VOUS POURRIEZ DÉCOUVRIR...
 
-Vous pourrez identifier les domaines dans lesquels vos réponses montrent des écarts.
+Que vous êtes très alignés sur votre vision du mariage. Mais pas sur l'argent.
 
-Et surtout, le rapport vous aide à comprendre :
+Que vous partagez les mêmes valeurs. Mais que vous gérez les conflits de manière complètement différente.
 
-**d'où peut venir cette différence,**
+Que vous avez une excellente base relationnelle. Mais un sujet important que vous n'avez jamais vraiment abordé.
 
-**comment elle peut se manifester dans votre quotidien,**
+Ou peut-être que vous êtes beaucoup plus alignés que vous ne le pensiez.
 
-**ce qu'elle pourrait produire si elle reste non clarifiée,**
-
-et
-
-**comment commencer à travailler dessus.**
+**Le bilan vous permet de le voir.**
 
 ---
 
-## Les sujets que vous devriez vraiment aborder ensemble
+# ET SURTOUT...
 
-Certaines différences méritent une simple prise de conscience.
+Vous ne repartez pas avec :
 
-D'autres nécessitent une véritable conversation.
+> « Voici vos résultats. Bonne chance. »
 
-Votre rapport vous aide à distinguer les deux.
-
-Vous pourrez ainsi savoir :
-
-> « Voilà les sujets que nous devons prendre le temps de discuter sérieusement. »
+Votre rapport vous aide à passer de la compréhension à l'action.
 
 ---
 
-## Vos priorités de travail
+# VOUS AVEZ UN SUJET DIFFICILE ?
 
-Parce qu'un couple ne peut pas travailler efficacement sur vingt problèmes à la fois.
+### Vous recevez des conversations guidées.
 
-Le bilan vous aide à identifier les domaines qui méritent votre attention en priorité.
+Des questions précises, un cadre, une manière d'aborder le sujet sans commencer immédiatement par :
 
-Vous savez donc :
+> « Tu ne comprends jamais... »
 
-**par quoi commencer,**
+Mais plutôt :
 
-**pourquoi commencer par là,**
-
-et
-
-**quelle première action mettre en place.**
+> **« Voilà ce que j'ai compris. Comment est-ce que toi, tu le vois ? »**
 
 ---
 
-# ET APRÈS LE BILAN ?
+# VOUS AVEZ BESOIN DE TRAVAILLER À DEUX ?
 
-## Vous ne serez pas simplement invités à « mieux communiquer ».
+### Vous recevez des exercices.
 
-Nous allons beaucoup plus loin.
+Vous pouvez les télécharger, les imprimer, vous asseoir ensemble.
 
-Lorsque votre analyse identifie une difficulté, les recommandations sont pensées pour vous permettre de passer de la compréhension à l'action.
+Prendre votre temps, écrire, répondre et échanger.
 
-Selon votre situation, vous pourrez retrouver dans votre dossier :
-
-### Des conversations guidées
-
-Des questions précises pour vous aider à aborder un sujet sans transformer immédiatement la discussion en conflit.
-
-Vous n'avez pas besoin de chercher vous-mêmes :
-
-> « Comment est-ce qu'on va parler de ça ? »
-
-Le dossier vous donne une structure pour commencer.
+**Le bilan ne s'arrête donc pas à l'écran.**
 
 ---
 
-### Des exercices à faire ensemble
+# VOUS NE SAVEZ PAS PAR QUOI COMMENCER ?
 
-Certains sujets sont plus faciles à comprendre lorsqu'on les travaille concrètement.
+### Votre rapport vous donne des priorités. Pas vingt choses à changer.
 
-Vous pourrez retrouver des exercices conçus pour vous aider à :
+**Les sujets qui méritent réellement votre attention.**
 
-- mieux vous écouter ;
-- clarifier vos attentes ;
-- comprendre vos différences ;
-- exprimer vos besoins ;
-- réfléchir à vos fonctionnements ;
-- prendre certaines décisions ensemble.
+Et surtout :
 
-Les exercices peuvent être téléchargés et imprimés afin que vous puissiez réellement travailler dessus à deux.
+> **quoi faire maintenant.**
 
 ---
 
-### Des recommandations personnalisées
+# VOUS PRÉPAREZ VOTRE MARIAGE ?
 
-Vous ne recevrez pas uniquement des conseils généraux.
+Alors ce bilan peut vous offrir quelque chose de précieux :
 
-Les recommandations sont reliées aux dynamiques identifiées dans votre bilan.
+**un temps volontaire pour parler de sujets que la préparation du mariage ne permet pas toujours d'approfondir.**
 
-L'objectif est simple :
-
-**vous aider à savoir quoi faire maintenant.**
+Vous ne préparez pas seulement une cérémonie. Vous préparez une vie à deux.
 
 ---
 
-### Un plan d'action
+# VOUS ÊTES DÉJÀ MARIÉS ?
 
-Comprendre son couple est une première étape.
+Alors vous pouvez utiliser le bilan autrement :
 
-Changer certaines habitudes demande ensuite de la pratique.
+Pour comprendre certains fonctionnements.
+Pour mettre des mots sur des sujets qui reviennent.
+Pour retrouver vos forces.
+Pour décider ensemble de ce que vous voulez améliorer.
 
-Votre dossier vous aide donc à transformer les observations en actions concrètes.
+**Il n'est jamais trop tôt — ni trop tard — pour mieux comprendre son couple.**
 
 ---
 
-# DEUX NIVEAUX POUR DEUX NIVEAUX D'ACCOMPAGNEMENT
+# VOUS ÊTES CHRÉTIENS ?
+
+KELIAA est pensée **d'abord pour vous**.
+
+La plateforme est née d'une vision chrétienne et s'adresse en priorité aux chrétiens, aux couples chrétiens et aux fiancés qui souhaitent construire une relation alignée avec leurs valeurs et leur foi.
+
+
+Et si vous n'êtes pas chrétien ?
+
+**Vous êtes également le bienvenu.**
+
+KELIAA COUPLE™ est ouvert à tous les couples qui souhaitent mieux comprendre leur dynamique.
+
+---
+
+# COMMENT ÇA COMMENCE ?
+
+### 01 — L'UN DE VOUS ACHÈTE
+
+**Un seul achat pour deux personnes.**
+
+---
+
+### 02 — VOUS INVITEZ L'AUTRE
+
+Un lien sécurisé ou un code, et votre partenaire rejoint votre espace couple.
+
+**Deux places. Pas une de plus.**
+
+---
+
+### 03 — VOUS RÉPONDEZ SÉPARÉMENT
+
+Chacun son espace.
+Chacun ses réponses.
+Chacun sa sincérité.
+
+---
+
+### 04 — KELIAA ANALYSE
+
+Vos deux résultats sont croisés.
+Les convergences apparaissent.
+Les différences aussi.
+Les priorités se dessinent.
+
+---
+
+### 05 — VOUS DÉCOUVREZ VOTRE RAPPORT
+
+Et vous avez enfin quelque chose de concret à regarder ensemble.
+
+---
+
+# ALORS, QUELLE EXPÉRIENCE CHOISIR ?
 
 ## BILAN ESSENTIEL
-### 30 000 FCFA pour le couple
 
-**Pour les couples qui veulent comprendre leur dynamique et savoir sur quoi travailler.**
+### 30 000 FCFA — pour vous deux
 
-Vous bénéficiez de :
+Pour les couples qui veulent **comprendre leur dynamique et savoir par où commencer.**
 
-**Questionnaires individuels confidentiels**
 
-Chacun répond séparément, dans son propre espace, sans accès aux réponses brutes de l'autre.
+Vous recevez :
 
-**Analyse individuelle**
+**Votre analyse individuelle**
 
-Vous comprenez les principales tendances observées chez chacun des deux partenaires.
+Pour mieux comprendre chacun de vos fonctionnements.
 
-**Analyse croisée du couple**
+**Votre analyse de couple**
 
-Les deux profils sont ensuite mis en relation pour faire apparaître les convergences, les différences et les zones de vigilance.
+Pour découvrir vos convergences, vos différences et vos zones de vigilance.
 
-**Lecture des forces du couple**
+**Vos forces**
 
-Parce qu'un bilan sérieux ne cherche pas uniquement ce qui ne va pas. Vous identifiez également les ressources déjà présentes dans votre relation.
+Ce sur quoi vous pouvez déjà vous appuyer.
 
-**Identification des priorités**
+**Vos priorités**
 
-Vous découvrez les sujets qui méritent réellement votre attention plutôt que d'essayer de tout travailler en même temps.
+Les sujets qui méritent votre attention.
 
-**Recommandations personnalisées**
+**Vos recommandations**
 
-Des pistes concrètes sont proposées en fonction de vos résultats.
+Des pistes adaptées à vos résultats.
 
-**Exercices relationnels**
+**Vos exercices**
 
-Vous disposez d'exercices à télécharger et à imprimer pour poursuivre la réflexion à deux.
+Pour continuer le travail à deux.
 
-**Plan d'action**
+**Votre plan d'action**
 
-Vous repartez avec des premières actions concrètes pour transformer les prises de conscience en changements.
+Pour passer de la compréhension à l'action.
 
-**Rapport personnalisé d'environ 35 à 50 pages**
+**Votre rapport personnalisé**
 
-Un véritable dossier construit autour de votre situation, et non un simple résultat de quiz.
+Environ **35 à 50 pages**, selon votre profil et vos résultats.
 
-**Accès à votre espace KELIAA pendant la durée prévue par l'offre**
+### Vous voulez simplement comprendre ce qui se passe entre vous et savoir quoi travailler ?
 
-Vous pouvez consulter votre bilan et retrouver vos ressources depuis votre espace.
+**Commencez ici.**
 
-### Pour vous si...
-
-Vous voulez faire le point sérieusement sur votre couple, comprendre vos différences et repartir avec des priorités concrètes sans entrer immédiatement dans un accompagnement plus approfondi.
-
-**[Choisir le Bilan Essentiel — 30 000 FCFA →]**
+**[CHOISIR LE BILAN ESSENTIEL — 30 000 FCFA →]**
 
 ---
 
-# BILAN PREMIUM PLUS
-### 50 000 FCFA pour le couple
+# VOUS VOULEZ ALLER PLUS LOIN ?
 
-## Pour les couples qui veulent aller beaucoup plus loin dans la compréhension et le travail.
+## BILAN PREMIUM PLUS
 
-Le Premium Plus comprend **tout le Bilan Essentiel**.
+### 50 000 FCFA — pour vous deux
 
-Vous ne perdez donc aucune partie du bilan de base.
+### Tout l'Essentiel. Puis davantage de profondeur.
 
-Vous bénéficiez ensuite d'une analyse et de ressources supplémentaires permettant d'aller plus profondément dans votre dynamique.
+Vous conservez **tout ce qui est inclus dans le Bilan Essentiel.**
 
-### Tout le Bilan Essentiel
+Et vous allez plus loin.
 
-Vous retrouvez :
+### DYNAMIQUES APPROFONDIES
 
-- questionnaires individuels ;
-- analyses individuelles ;
-- analyse croisée ;
-- convergences ;
-- différences ;
-- zones de vigilance ;
-- priorités ;
-- recommandations ;
-- exercices ;
-- plan d'action ;
-- rapport complet.
+Vous explorez davantage la manière dont vos fonctionnements interagissent.
 
-**Puis nous allons plus loin.**
+### SCÉNARIOS RELATIONNELS
 
-### Dynamiques relationnelles approfondies
+Vous réfléchissez à des situations concrètes susceptibles de mettre vos différences à l'épreuve.
 
-Vous explorez plus finement la manière dont vos fonctionnements respectifs peuvent s'influencer.
+### CONVERSATIONS GUIDÉES APPROFONDIES
 
-L'objectif est de comprendre non seulement :
+Vous disposez d'un cadre plus complet pour aborder les sujets sensibles.
 
-> « Nous sommes différents sur ce point. »
+### PROTOCOLES DE TRAVAIL
 
-mais également :
+Des démarches progressives pour travailler certaines difficultés.
 
-> « Que se passe-t-il entre nous lorsque cette différence apparaît ? »
+### CHARTE RELATIONNELLE
 
----
+Pour mettre par écrit les engagements et les principes que vous souhaitez construire ensemble.
 
-### Scénarios relationnels
+### PLAN D'ACTION ÉTENDU
 
-Le rapport peut mettre en lumière certaines situations susceptibles de devenir sensibles dans votre quotidien.
+Plus de structure pour transformer les prises de conscience en habitudes.
 
-Vous pouvez ainsi commencer à réfléchir à :
+### RAPPORT PREMIUM PLUS
 
-> « Comment réagirons-nous si ce scénario se présente ? »
-
-avant d'être obligés de l'apprendre uniquement par le conflit.
+Environ **50 à 70 pages**, avec une profondeur d'analyse et de travail supplémentaire.
 
 ---
 
-### Conversations guidées approfondies
+# EN RÉSUMÉ
 
-Pour les sujets importants, vous disposez de structures de conversation plus détaillées.
+### 30 000 FCFA
 
-L'objectif n'est pas de vous donner un script artificiel.
+**Je veux comprendre notre couple.**
 
-Il s'agit de vous aider à créer un espace dans lequel chacun peut :
+### 50 000 FCFA
 
-- parler ;
-- écouter ;
-- clarifier ;
-- reformuler ;
-- comprendre ;
-- rechercher une solution.
+**Je veux comprendre notre couple et aller beaucoup plus loin dans le travail.**
+
+**Dans les deux cas, vous repartez avec bien plus qu'un score.**
 
 ---
 
-### Protocoles de travail
+# IMAGINEZ LA CONVERSATION APRÈS LE BILAN.
 
-Certains sujets demandent plus qu'une simple recommandation.
+Vous êtes assis ensemble. Votre rapport est ouvert devant vous.
+Vous ne cherchez pas qui a tort  ni qui a le meilleur score.
 
-Le Premium Plus peut donc proposer des protocoles progressifs permettant au couple de travailler une difficulté sur plusieurs étapes.
+Vous regardez, vous découvrez et vous échangez tranquillement. Et peut-être qu'une phrase sortira :
 
-Vous savez ce que vous devez faire maintenant, puis ce qui vient ensuite.
+> **« Je ne savais pas que tu voyais les choses comme ça. »**
 
----
+Puis une autre :
 
-### Charte relationnelle
+> **« Maintenant je comprends mieux. »**
 
-Vous pouvez également être amenés à formaliser ensemble certains engagements importants pour votre relation.
+Et peut-être enfin :
 
-La charte permet de transformer certaines discussions en décisions concrètes.
+> **« Bon. Qu'est-ce qu'on fait maintenant ? »**
 
-Elle peut notamment porter sur :
-
-- la communication ;
-- la gestion des conflits ;
-- les limites ;
-- les décisions ;
-- les priorités ;
-- les engagements mutuels.
-
-L'objectif n'est pas de créer un contrat froid.
-
-C'est de vous aider à mettre des mots sur **la manière dont vous souhaitez construire votre relation.**
+### C'est précisément là que le bilan devient utile.
 
 ---
 
-### Plan d'action étendu
+# VOTRE COUPLE N'A PAS BESOIN D'UN VERDICT.
 
-Au lieu de repartir avec seulement quelques premières actions, vous disposez d'un parcours de travail plus approfondi.
+Il a besoin de clarté, de conversations, de compréhension.
+Et parfois, il a simplement besoin que quelqu'un lui donne **les bonnes questions à poser.**
 
-Le rapport vous aide à hiérarchiser les priorités et à avancer progressivement.
+### KELIAA COUPLE™ vous aide à commencer cette conversation.
 
----
+**[COMMENCER MON BILAN — 30 000 FCFA →]**
 
-### Rapport Premium Plus d'environ 50 à 70 pages
-
-Un dossier beaucoup plus approfondi, qui ne se contente pas d'ajouter des pages.
-
-Il ajoute surtout :
-
-**plus d'analyse,**
-
-**plus de contextualisation,**
-
-**plus de travail à deux,**
-
-**plus d'outils,**
-
-**plus de structure pour passer à l'action.**
-
-### Pour vous si...
-
-Vous êtes fiancés et vous préparez une étape importante.
-
-Vous êtes mariés et vous souhaitez consolider certaines bases.
-
-Vous traversez une période où certains sujets reviennent régulièrement.
-
-Ou simplement, vous ne voulez pas seulement savoir où vous en êtes : **vous voulez réellement travailler sur votre dynamique de couple.**
-
-**[Choisir le Premium Plus — 50 000 FCFA →]**
+**[CHOISIR PREMIUM PLUS — 50 000 FCFA →]**
 
 ---
 
-# VOUS N'AVEZ PAS BESOIN D'ÊTRE EN CRISE POUR FAIRE CE BILAN.
+# UNE DERNIÈRE QUESTION...
 
-C'est probablement l'une des raisons les plus importantes de faire ce travail.
+Si vous pouviez découvrir **une seule chose importante sur votre couple aujourd'hui**, qu'aimeriez-vous savoir ?
 
-Vous pouvez faire KELIAA COUPLE™ alors que tout va bien.
+Ce qui vous rapproche ?
+Ce qui vous différencie ?
+Ce qui pourrait devenir une difficulté ?
+Ce que vous devez travailler ?
 
-Même lorsque vous vous aimez profondément.
+Ou simplement :
 
-Même lorsque vous êtes heureux.
+> **« Est-ce que nous sommes réellement aussi alignés que nous le pensons ? »**
 
-Même lorsque vous préparez votre mariage.
+Vous pouvez continuer à vous poser la question. Ou prendre le temps de chercher une réponse.
 
-Même lorsque vous venez de vous marier.
+### **Votre bilan commence ici.**
 
-Parce qu'il vaut mieux parfois **clarifier avant la crise** que chercher à réparer uniquement après.
+**KELIAA COUPLE™**
 
-Un couple solide n'est pas un couple qui n'a aucune différence.
+*Comprendre votre dynamique. Clarifier vos différences. Construire avec intention.*
 
-C'est un couple qui apprend à reconnaître ses différences et à construire avec elles.
-
----
-
-## Une plateforme pensée d'abord pour les chrétiens, ouverte à tous
-
-KELIAA est une plateforme née d'une vision profondément chrétienne et pensée en priorité pour les chrétiens, les couples chrétiens, les fiancés et toutes les personnes qui souhaitent construire des relations plus saines, conscientes et alignées avec leurs valeurs. Si vous êtes chrétien, vous trouverez dans KELIAA un environnement qui peut naturellement prendre en compte votre foi, votre vision du mariage, vos valeurs et votre désir de construire un foyer selon vos convictions. Mais KELIAA COUPLE™ reste ouvert à tous : vous pouvez utiliser le bilan que vous soyez chrétien ou non. Le cœur de l'expérience reste centré sur votre dynamique relationnelle : votre communication, vos différences, vos attentes, vos projets, votre manière de gérer les désaccords, vos valeurs, vos décisions et les domaines sur lesquels vous pouvez progresser ensemble. La dimension chrétienne devient particulièrement pertinente pour les couples qui souhaitent également réfléchir à leur engagement, à leur vision du mariage, à la place de Dieu dans leur projet de couple et aux valeurs qu'ils souhaitent construire dans leur futur foyer. Dans tous les cas, KELIAA ne décide pas à votre place si vous êtes faits l'un pour l'autre : le bilan ne prédit pas votre avenir et ne vous donne pas un verdict « compatible » ou « incompatible ». Il vous aide à mieux comprendre votre dynamique, à mettre des mots sur vos convergences et vos différences et à identifier ce que vous pouvez concrètement travailler ensemble. **KELIAA est donc d'abord une plateforme pensée pour les chrétiens, mais une expérience relationnelle accessible à tous.**
-
-
----
-
-# CE QUE VOUS NE RECEVREZ PAS
-
-Vous ne recevrez pas :
-
-❌ un verdict « compatible / incompatible » ;
-
-❌ une prédiction de votre avenir ;
-
-❌ un diagnostic psychologique ou médical ;
-
-❌ une note qui décide à votre place si vous devez rester ensemble ;
-
-❌ deux rapports individuels sans analyse du couple ;
-
-❌ une liste générique de conseils que vous pourriez trouver n'importe où.
-
-Vous recevrez une lecture structurée de **votre dynamique à deux**.
-
----
-
-# CE QUI VA CHANGER APRÈS LE BILAN
-
-Imaginez terminer votre bilan et pouvoir dire :
-
-> « Maintenant, je comprends mieux pourquoi nous réagissons différemment sur ce sujet. »
-
-> « Je ne savais pas que nous avions une vision aussi différente de cette question. »
-
-> « Nous avons finalement beaucoup de points forts sur lesquels nous pouvons nous appuyer. »
-
-> « Voilà les trois sujets que nous devons vraiment travailler. »
-
-> « Nous savons maintenant par quoi commencer. »
-
-C'est précisément cette transformation que nous cherchons.
-
-Pas simplement vous donner un résultat.
-
-**Vous aider à mieux vous comprendre pour mieux construire ensemble.**
-
----
-
-# VOTRE COUPLE MÉRITE PLUS QU'UN QUIZ.
-
-Vous pouvez continuer à avancer en espérant que les sujets importants finiront naturellement par se régler.
-
-Ou vous pouvez prendre un temps à deux pour les regarder volontairement, avec méthode et sans jugement.
-
-**KELIAA COUPLE™ vous donne cette occasion.**
-
-### Faites le bilan séparément.
-
-### Découvrez votre dynamique ensemble.
-
-### Identifiez ce qui mérite votre attention.
-
-### Repartez avec des outils pour avancer.
-
-**[Commencer mon Bilan de Couple →]**
-
----
-
-## UNE DERNIÈRE CHOSE AVANT DE COMMENCER
-
-Vous n'êtes pas en train d'acheter un simple questionnaire.
-
-Vous investissez dans un temps de compréhension à deux.
-
-Un temps pour poser certaines questions que la vie quotidienne ne vous donne pas toujours l'occasion de poser.
-
-Un temps pour découvrir vos forces.
-
-Un temps pour regarder vos différences sans avoir immédiatement besoin de les combattre.
-
-Un temps pour décider ensemble :
-
-> **« Qu'est-ce que nous voulons construire, et sur quoi devons-nous encore travailler ? »**
-
-### Votre couple n'a pas besoin d'être parfait pour commencer.
-
-**Il a besoin d'être prêt à se comprendre.**
-
-**[Je commence mon bilan →]**
-
----
-
-# FAQ
-
-## Est-ce qu'un seul partenaire doit acheter ?
-
-Oui. Un seul achat couvre le bilan pour **deux participants**. La personne qui achète peut ensuite inviter son partenaire.
-
-## Qui doit commencer ?
-
-Peu importe. Monsieur ou Madame peut acheter et créer le bilan.
-
-## Mon partenaire doit-il avoir un compte KELIAA ?
-
-Il pourra rejoindre le parcours selon le processus d'inscription prévu. L'invitation est conçue pour lui permettre d'intégrer facilement le bilan.
-
-## Mon partenaire verra-t-il mes réponses ?
-
-Non. Les réponses brutes individuelles sont confidentielles. Le rapport présente une analyse de votre dynamique commune.
-
-## Et si nous obtenons un faible pourcentage ?
-
-Le pourcentage n'est pas un verdict. Un résultat faible indique surtout que certaines dimensions montrent des différences importantes qui méritent d'être comprises et travaillées.
-
-## Et si nous avons un score élevé ?
-
-C'est une bonne indication de convergence sur certaines dimensions, mais cela ne signifie pas que votre couple n'a rien à travailler. Le rapport identifie également les points à entretenir et à renforcer.
-
-## Combien de temps faut-il pour faire le bilan ?
-
-Le temps dépend de votre rythme et de la longueur du questionnaire. L'objectif n'est pas de répondre le plus rapidement possible, mais de répondre avec suffisamment de réflexion et de sincérité.
-
-## Peut-on télécharger le rapport ?
-
-Oui. Les documents prévus dans votre offre peuvent être téléchargés et conservés afin que vous puissiez les relire ou travailler dessus ensemble.
-
-## Le Premium Plus remplace-t-il le Bilan Essentiel ?
-
-Non.
-
-**Premium Plus comprend le Bilan Essentiel et ajoute des analyses et ressources supplémentaires.**
-
-## Est-ce une thérapie de couple ?
-
-Non. KELIAA COUPLE™ est un outil d'évaluation, de réflexion et de travail relationnel. Lorsque certaines situations nécessitent un accompagnement professionnel, des orientations adaptées peuvent être proposées.
-
----
-
-# KELIAA COUPLE™
-
-### Comprendre votre dynamique.
-### Clarifier vos différences.
-### Renforcer vos forces.
-### Construire avec intention.
-
-**[Choisir mon bilan de couple →]**
-
-*KELIAA COUPLE™ — Parce qu'avant de construire une vie ensemble, il est précieux de prendre le temps de comprendre comment vous construisez ensemble.*
+**[JE COMMENCE →]**

@@ -4,7 +4,7 @@ import { HeartHandshake, ArrowRight } from "lucide-react"
 import { MagneticButton } from "@/components/ui/magnetic-button"
 import { COUPLE_BRAND, COUPLE_TAGLINE } from "@/lib/couple/config"
 
-/** Teaser accueil — copy alignée sur la doc landing Couple. */
+/** Teaser accueil — hook aligné sur la landing Couple mise à jour. */
 export function HomeCoupleSection() {
   return (
     <section className="relative py-20 sm:py-24 px-6 sm:px-12 lg:px-20 overflow-hidden">
@@ -24,17 +24,15 @@ export function HomeCoupleSection() {
           {COUPLE_BRAND}
         </h2>
         <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-          Et si vous pouviez mieux comprendre votre couple avant que les
-          différences ne deviennent des conflits ?
+          Et si vous découvriez enfin ce qui se joue vraiment entre vous ?
         </p>
         <p className="text-sm text-muted-foreground leading-relaxed max-w-xl">
-          Un bilan relationnel à deux — pas un verdict « compatible /
-          incompatible ». Comprenez ce qui vous rapproche, ce qui vous
-          différencie, et ce que vous pouvez concrètement travailler ensemble.
+          Un bilan approfondi pour deux — pas un verdict. Une lecture de votre
+          dynamique, avec des outils pour construire avec davantage de clarté.
         </p>
         <div className="flex flex-wrap gap-3 pt-1 justify-center sm:justify-start">
           <MagneticButton href="/couple" size="lg" className="px-7">
-            Découvrir mon bilan de couple
+            Découvrir mon bilan
             <ArrowRight className="ml-2 h-4 w-4" />
           </MagneticButton>
         </div>
