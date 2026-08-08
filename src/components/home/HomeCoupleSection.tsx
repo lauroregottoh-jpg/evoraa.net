@@ -28,8 +28,8 @@ export function HomeCoupleSection() {
           différencie et comment vous pouvez construire ensemble.
         </p>
         <p className="text-sm text-muted-foreground leading-relaxed max-w-xl">
-          Intérêt mutuel, chemin ensemble, fiançailles ou mariage : quatre
-          situations, une même carte de compréhension de votre couple.
+          Intérêt mutuel, chemin ensemble, fiançailles ou mariage — un bilan
+          pour deux, sans verdict.
         </p>
         <div className="flex flex-wrap gap-3 pt-1 justify-center sm:justify-start">
           <MagneticButton href="/couple" size="lg" className="px-7">

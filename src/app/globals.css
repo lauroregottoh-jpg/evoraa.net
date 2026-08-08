@@ -613,6 +613,83 @@
   }
 }
 
+/* ——— KELYA Couple landing — visuels uniques ——— */
+@keyframes coupleVizPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes coupleVizFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes coupleVizDraw {
+  from {
+    stroke-dashoffset: 180;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes coupleVizRing {
+  from {
+    stroke-dashoffset: 176;
+  }
+  to {
+    stroke-dashoffset: 56;
+  }
+}
+
+.couple-viz-pulse {
+  transform-origin: center;
+  animation: coupleVizPulse 2.8s ease-in-out infinite;
+}
+
+.couple-viz-delay {
+  animation-delay: 0.45s;
+}
+
+.couple-viz-float {
+  animation: coupleVizFloat 3.2s ease-in-out infinite;
+}
+
+.couple-viz-draw {
+  stroke-dasharray: 180;
+  animation: coupleVizDraw 2.4s ease-out forwards;
+}
+
+.couple-viz-ring {
+  animation: coupleVizRing 2s ease-out forwards;
+}
+
+.couple-chapter {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.18em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .couple-viz-pulse,
+  .couple-viz-float,
+  .couple-viz-draw,
+  .couple-viz-ring {
+    animation: none !important;
+  }
+}
+
 .matching-pillar-card {
   opacity: 1 !important;
   visibility: visible !important;

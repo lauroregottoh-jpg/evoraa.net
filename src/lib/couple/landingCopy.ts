@@ -262,16 +262,17 @@ export const LANDING_IMAGINE = {
 } as const
 
 export const LANDING_CLOSING = {
-  title: "Votre couple n’a pas besoin d’un verdict",
-  body: "Il a besoin de clarté, de conversations, de compréhension. Et parfois, simplement que quelqu’un lui donne les bonnes questions à poser.",
-  lastQ: "Une dernière question…",
+  title: "Votre couple a besoin de bien plus que d’espérer",
+  body: "Votre couple a besoin de clarté, de conversations et de compréhension…",
+  bodyEnd: "Votre couple n’a pas besoin de verdicts.",
+  lastQ: "Une dernière question",
   lastPrompt:
     "Si vous pouviez découvrir une seule chose importante sur votre couple aujourd’hui, qu’aimeriez-vous savoir ?",
   lastOptions: [
-    "Ce qui vous rapproche ?",
-    "Ce qui vous différencie ?",
-    "Ce qui pourrait devenir une difficulté ?",
-    "Ce que vous devez travailler ?",
+    "Ce qui vous rapproche",
+    "Ce qui vous différencie",
+    "Ce qui pourrait devenir une difficulté",
+    "Ce que vous devez travailler",
   ],
   lastQuote: "Est-ce que nous sommes réellement aussi alignés que nous le pensons ?",
   start: "Votre bilan commence ici.",
