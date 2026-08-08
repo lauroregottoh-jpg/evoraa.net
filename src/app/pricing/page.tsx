@@ -23,8 +23,9 @@ import { PricingLoyaltyTeaser } from "@/components/loyalty/LoyaltyProgramCard";
 
 /** Copy source: software-architecture/KELIA - Page d'accueil.docx — PAGE TARIFS */
 const PLAN_DESCRIPTIONS: Record<string, string> = {
-  free: "Essayez gratuitement la méthode Keliaa.",
-  premium_plus: "Rapport Personnalisé Alliance™ + Matching complet.",
+  free: "Gratuit pour commencer : profil, communauté, premiers matchs.",
+  premium_plus:
+    "Rapport vivant, Coffre Premium, fidélité, Matching complet et messages enrichis.",
 };
 
 const PILLARS = [
@@ -61,16 +62,43 @@ const ALLIANCE_COMPARE_ROWS = [
     alliance: "Rapport Personnalisé Alliance™ (vivant)",
   },
   {
-    decouverte: "Premières recommandations",
-    alliance: "Toutes les capacités du Matching KELIAA™",
+    decouverte: "Communauté : liker les membres",
+    alliance: "Likes mutuels → messages + Matching enrichi",
   },
   {
     decouverte: "Compatibilité simplifiée",
-    alliance: "Compatibilité détaillée et expliquée",
+    alliance: "5 piliers + score détaillé expliqué",
+  },
+  {
+    decouverte: "Pas de Coffre Premium",
+    alliance: "Coffre Premium · vignettes exclusives",
+  },
+  {
+    decouverte: "Pas de programme fidélité",
+    alliance: "Fidélité : +15 msgs, Boosts, Session VIP",
   },
   {
     decouverte: "Découverte de la plateforme",
-    alliance: "Une expérience complète",
+    alliance: "Expérience complète orientée mariage",
+  },
+];
+
+const NOUVEAUTES = [
+  {
+    title: "Communauté KELIAA",
+    desc: "Découvrez les membres, likez avec intention. Un like mutuel débloque la conversation.",
+  },
+  {
+    title: "Coffre Premium",
+    desc: "Guides, journaux et prières en vignettes exclusives — 3 au choix, puis +2 chaque mois.",
+  },
+  {
+    title: "Programme Fidélité Alliance",
+    desc: "+15 messages à chaque renouvellement, paliers +30 + Boost, Session VIP à 12 mois.",
+  },
+  {
+    title: "Matching à 5 piliers",
+    desc: "Personnalité, foi, valeurs, projet de vie et relation — des compatibilités expliquées.",
   },
 ];
 
@@ -82,19 +110,23 @@ export default function PricingPage() {
   const faqs = [
     {
       q: "Pourquoi proposer une offre Alliance ?",
-      a: "Parce que nous préférons investir dans la qualité des recommandations plutôt que dans la quantité des profils.",
+      a: "Parce que nous préférons investir dans la qualité des recommandations plutôt que dans la quantité des profils — Rapport vivant, Coffre Premium, Matching enrichi et fidélité.",
     },
     {
       q: "En quoi le Matching à 5 piliers est-il différent ?",
       a: "Il ne s'appuie pas uniquement sur vos préférences visibles. Il prend en compte votre personnalité, vos valeurs, votre foi, votre vision du mariage et votre projet de vie afin de proposer des compatibilités plus pertinentes.",
     },
     {
-      q: "Vais-je voir plus de profils avec Alliance ?",
-      a: "Oui, mais surtout des profils sélectionnés grâce à l'ensemble des analyses réalisées par notre méthode.",
+      q: "Comment fonctionne la Communauté ?",
+      a: "Vous pouvez liker des membres. Un like mutuel débloque les messages. En Alliance, l’amitié même sexe peut être activée dans les paramètres.",
+    },
+    {
+      q: "Qu’est-ce que le Programme Fidélité ?",
+      a: "À chaque renouvellement Alliance : +15 messages bonus. Tous les 3 mois : +30 + Boost 24 h. À 12 mois : Session VIP. Les bonus restent même si vous revenez en Découverte (inactifs jusqu’à réactivation).",
     },
     {
       q: "Puis-je revenir à l'offre gratuite ?",
-      a: "Bien sûr. Votre profil reste actif et vous pouvez changer d'offre à tout moment.",
+      a: "Bien sûr. Votre profil reste actif et vous pouvez changer d'offre à tout moment. Vos bonus fidélité sont conservés.",
     },
   ];
 
@@ -129,10 +161,43 @@ export default function PricingPage() {
             </MagneticButton>
           </div>
           <p className="text-sm text-white/85">
-            ✓ Rapport Personnalisé · ✓ Matching à 5 piliers · ✓ Profils vérifiés
+            ✓ Rapport · ✓ Communauté · ✓ Coffre Premium · ✓ Fidélité Alliance · ✓ 5 piliers
           </p>
         </div>
       </PageHero>
+
+      {/* Nouveautés produit */}
+      <section className="py-14 px-6 sm:px-12 lg:px-20 bg-[#F8F4EE]">
+        <div className="max-w-5xl mx-auto space-y-8">
+          <div className="text-center space-y-2 max-w-2xl mx-auto">
+            <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#8B6914]">
+              Jour 0 · Offre actuelle
+            </p>
+            <h2 className="font-serif text-3xl font-bold text-[#1C1412]">
+              Tout ce que KELIAA propose aujourd&apos;hui
+            </h2>
+            <p className="text-sm text-[#1C1412]/65 leading-relaxed">
+              Découverte pour commencer ; Alliance pour préparer sérieusement votre
+              projet de mariage — avec les nouveautés déjà en production.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-4">
+            {NOUVEAUTES.map((item) => (
+              <div
+                key={item.title}
+                className="rounded-2xl border border-[#B8954A]/25 bg-white px-5 py-5 space-y-2 shadow-card"
+              >
+                <h3 className="font-serif text-xl font-bold text-[#5C1F28]">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-[#1C1412]/70 leading-relaxed">
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Pourquoi notre Matching est différent */}
       <section className="py-16 px-6 sm:px-12 lg:px-20 max-w-6xl mx-auto space-y-12">

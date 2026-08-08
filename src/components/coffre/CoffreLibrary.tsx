@@ -99,14 +99,14 @@ export function CoffreLibrary({ resources, initialAccess }: Props) {
         <div className="relative space-y-4 max-w-2xl">
           <p className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em] text-primary">
             <Library className="h-3.5 w-3.5" />
-            Bibliothèque exclusive
+            Bibliothèque exclusive · vignettes Premium
           </p>
           <h1 className="font-serif text-4xl sm:text-5xl font-bold tracking-tight text-foreground leading-[1.05]">
             Le Coffre Premium
           </h1>
           <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-            Une bibliothèque exclusive de ressources pour vous accompagner dans
-            votre préparation au mariage.
+            Ressources présentées en vignettes Premium pour accompagner votre
+            préparation au mariage — guides, journaux et prières exclusifs Alliance.
           </p>
 
           <div className="flex flex-wrap gap-2 pt-1">

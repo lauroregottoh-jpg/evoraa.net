@@ -2416,3 +2416,241 @@ export async function adminBictorysSandboxCharge(input: {
     paymentMode,
   }
 }
+
+/** ——— Messagerie ops (privé / général / rappel) ——— */
+
+export async function adminListMemberMessageTemplates() {
+  const gate = await requireAdmin()
+  if (gate.error || !gate.supabase) {
+    return { error: gate.error || "Acces refuse.", templates: [] }
+  }
+
+  const {
+    BUILTIN_ADMIN_MESSAGE_TEMPLATES,
+  } = await import("@/lib/admin/memberMessageTemplates")
+
+  try {
+    const admin = createAdminClient()
+    const { data, error } = await admin
+      .from("admin_message_templates")
+      .select("id, label, scope, title, body, sort_order, active")
+      .eq("active", true)
+      .order("sort_order", { ascending: true })
+
+    if (!error && data?.length) {
+      return {
+        templates: data.map((t) => ({
+          id: String(t.id),
+          label: String(t.label),
+          scope: t.scope as "private" | "broadcast" | "reminder",
+          title: String(t.title),
+          body: String(t.body),
+        })),
+      }
+    }
+  } catch {
+    /* fallback builtins */
+  }
+
+  return { templates: BUILTIN_ADMIN_MESSAGE_TEMPLATES }
+}
+
+export async function adminListRecentMemberMessages() {
+  const gate = await requireAdmin()
+  if (gate.error || !gate.supabase) {
+    return { error: gate.error || "Acces refuse.", messages: [] }
+  }
+
+  try {
+    const admin = createAdminClient()
+    const { data, error } = await admin
+      .from("admin_member_messages")
+      .select("id, scope, title, body, recipient_count, created_at")
+      .order("created_at", { ascending: false })
+      .limit(20)
+
+    if (error) return { messages: [], error: error.message }
+    return {
+      messages: (data || []).map((m) => ({
+        id: m.id as string,
+        scope: String(m.scope),
+        title: String(m.title),
+        body: String(m.body),
+        recipientCount: Number(m.recipient_count) || 0,
+        createdAt: m.created_at as string,
+      })),
+    }
+  } catch (e) {
+    return {
+      messages: [],
+      error: e instanceof Error ? e.message : "Tables messages absentes — appliquer la migration.",
+    }
+  }
+}
+
+export async function adminPreviewMemberMessageAudience(input: {
+  scope: "private" | "broadcast" | "reminder"
+  userId?: string
+}) {
+  const gate = await requireFullAdmin()
+  if (gate.error || !gate.supabase) return { error: gate.error || "Acces refuse." }
+
+  const admin = createAdminClient()
+
+  if (input.scope === "private") {
+    if (!input.userId) return { error: "Sélectionnez un membre.", count: 0 }
+    return { success: true as const, count: 1 }
+  }
+
+  if (input.scope === "broadcast") {
+    const { count, error } = await admin
+      .from("profiles")
+      .select("user_id", { count: "exact", head: true })
+      .is("deleted_at", null)
+      .neq("moderation_status", "rejected")
+    if (error) return { error: error.message, count: 0 }
+    return { success: true as const, count: count ?? 0 }
+  }
+
+  // reminder : profils incomplets (< 70 %) ou sans tests
+  const { data, error } = await admin
+    .from("profiles")
+    .select("user_id, completion_percentage")
+    .is("deleted_at", null)
+    .neq("moderation_status", "rejected")
+    .lt("completion_percentage", 70)
+    .limit(2000)
+
+  if (error) return { error: error.message, count: 0 }
+  return { success: true as const, count: data?.length ?? 0 }
+}
+
+export async function adminSendScopedMemberMessage(input: {
+  scope: "private" | "broadcast" | "reminder"
+  templateId?: string
+  title: string
+  body: string
+  customMessage?: string
+  userId?: string
+}) {
+  const gate = await requireFullAdmin()
+  if (gate.error || !gate.supabase || !gate.user) {
+    return { error: gate.error || "Acces refuse." }
+  }
+
+  const title = input.title.trim().slice(0, 180)
+  const rawBody = input.body.trim().slice(0, 4000)
+  if (!title || !rawBody) return { error: "Titre et message requis." }
+
+  const { fillAdminMessageTemplate } = await import(
+    "@/lib/admin/memberMessageTemplates"
+  )
+  const admin = createAdminClient()
+
+  type Target = { userId: string; prenom: string }
+  let targets: Target[] = []
+
+  if (input.scope === "private") {
+    if (!input.userId) return { error: "Sélectionnez un membre." }
+    const { data: p } = await admin
+      .from("profiles")
+      .select("user_id, first_name")
+      .eq("user_id", input.userId)
+      .maybeSingle()
+    if (!p?.user_id) return { error: "Membre introuvable." }
+    targets = [
+      {
+        userId: p.user_id as string,
+        prenom: (p.first_name as string) || "cher membre",
+      },
+    ]
+  } else if (input.scope === "broadcast") {
+    const { data } = await admin
+      .from("profiles")
+      .select("user_id, first_name")
+      .is("deleted_at", null)
+      .neq("moderation_status", "rejected")
+      .limit(5000)
+    targets = (data || []).map((p) => ({
+      userId: p.user_id as string,
+      prenom: (p.first_name as string) || "cher membre",
+    }))
+  } else {
+    const { data } = await admin
+      .from("profiles")
+      .select("user_id, first_name, completion_percentage")
+      .is("deleted_at", null)
+      .neq("moderation_status", "rejected")
+      .lt("completion_percentage", 70)
+      .limit(2000)
+    targets = (data || []).map((p) => ({
+      userId: p.user_id as string,
+      prenom: (p.first_name as string) || "cher membre",
+    }))
+  }
+
+  if (!targets.length) return { error: "Aucun destinataire." }
+
+  let messageId: string | null = null
+  try {
+    const { data: msgRow, error: msgErr } = await admin
+      .from("admin_member_messages")
+      .insert({
+        scope: input.scope,
+        template_id: input.templateId || null,
+        title,
+        body: rawBody,
+        created_by: gate.user.id,
+        recipient_count: targets.length,
+      })
+      .select("id")
+      .single()
+    if (!msgErr && msgRow?.id) messageId = msgRow.id as string
+  } catch {
+    /* migration maybe missing — still send notifications */
+  }
+
+  const notifRows = targets.map((t) => ({
+    user_id: t.userId,
+    title,
+    body: fillAdminMessageTemplate(rawBody, {
+      prenom: t.prenom,
+      message: input.customMessage || "",
+    }),
+    is_read: false,
+  }))
+
+  // Chunk inserts
+  const chunk = 200
+  let sent = 0
+  for (let i = 0; i < notifRows.length; i += chunk) {
+    const slice = notifRows.slice(i, i + chunk)
+    const { error } = await admin.from("notifications").insert(slice)
+    if (error) return { error: error.message, sent }
+    sent += slice.length
+
+    if (messageId) {
+      const recipients = targets.slice(i, i + chunk).map((t) => ({
+        message_id: messageId,
+        user_id: t.userId,
+      }))
+      await admin.from("admin_member_message_recipients").insert(recipients)
+    }
+  }
+
+  const { logAdminAction } = await import("@/lib/admin/audit")
+  await logAdminAction({
+    action: "admin_member_message_send",
+    targetType: "broadcast",
+    targetId: messageId || input.scope,
+    meta: {
+      scope: input.scope,
+      templateId: input.templateId || null,
+      sent,
+    },
+  })
+  revalidateOps()
+  revalidatePath("/notifications")
+  return { success: true, sent, messageId }
+}
+

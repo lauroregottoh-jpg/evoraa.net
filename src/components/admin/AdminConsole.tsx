@@ -48,6 +48,7 @@ import {
 } from "@/components/admin/AdminOpsV2Panels"
 import { MatchingIntelligencePanel } from "@/components/admin/AdminMatchingIntelligence"
 import { AdminLoyaltyPanel, AdminLoyaltyAllianceNote } from "@/components/admin/AdminLoyaltyPanel"
+import { AdminMemberMessagesPanel } from "@/components/admin/AdminMemberMessagesPanel"
 import { AdminStaffTeamPanel } from "@/components/admin/AdminStaffTeamPanel"
 import { PendingProfilesQueue } from "@/components/admin/PendingProfilesQueue"
 import { AdminFeedbackPanel } from "@/components/admin/AdminFeedbackPanel"
@@ -747,6 +748,14 @@ export function AdminConsole(props: Props) {
       )}
 
       {nav === "feedback" && <AdminFeedbackPanel items={props.feedbackItems} />}
+
+      {nav === "messages" && (
+        <AdminMemberMessagesPanel
+          isFullAdmin={isFullAdmin}
+          selectedUserId={selected?.userId}
+          selectedName={selected?.name}
+        />
+      )}
 
       {/* ——— 5. ALLIANCE ——— */}
       {nav === "alliance" && (

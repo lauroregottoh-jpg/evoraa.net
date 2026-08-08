@@ -50,7 +50,7 @@ async function getViewerContext() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("id, user_id, gender, privacy_settings")
+    .select("id, user_id, gender, privacy_settings, first_name")
     .eq("user_id", user.id)
     .maybeSingle()
 
@@ -66,6 +66,7 @@ async function getViewerContext() {
     supabase,
     user,
     profileId: profile.id as string,
+    firstName: (profile.first_name as string | null) || null,
     gender: (profile.gender as string | null) || null,
     isPaid: entitlements.isPaid,
     sameSexFriendship,
@@ -309,8 +310,33 @@ export async function toggleCommunityLikeAction(targetProfileId: string): Promis
     }
   }
 
+  // Notification au membre liké (service role — RLS insert own only)
+  try {
+    const { createAdminClient } = await import("@/utils/supabase/admin")
+    const admin = createAdminClient()
+    const liker = (ctx.firstName || "Un membre").trim()
+    if (mutual) {
+      await admin.from("notifications").insert({
+        user_id: target.user_id,
+        title: "Like mutuel — vous pouvez échanger",
+        body: `${liker} a aussi aimé votre profil. Ouvrez Messages pour commencer la conversation.`,
+        is_read: false,
+      })
+    } else {
+      await admin.from("notifications").insert({
+        user_id: target.user_id,
+        title: "Quelqu’un a aimé votre profil",
+        body: `${liker} a aimé votre profil. Likez en retour dans la Communauté pour pouvoir échanger.`,
+        is_read: false,
+      })
+    }
+  } catch {
+    /* best-effort */
+  }
+
   revalidatePath("/communaute")
   revalidatePath("/dashboard")
   revalidatePath("/messages")
+  revalidatePath("/notifications")
   return { liked: true, mutual, conversationId }
 }

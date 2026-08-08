@@ -32,6 +32,7 @@ export type AdminNavId =
   | "profiles"
   | "moderation"
   | "feedback"
+  | "messages"
   | "alliance"
   | "matching"
   | "academy"
@@ -96,6 +97,11 @@ export function AdminShell({
       label: "Avis & plaintes",
       icon: MessageSquareHeart,
       badge: badges.feedback || undefined,
+    },
+    {
+      id: "messages",
+      label: "Messages membres",
+      icon: Bell,
     },
   ]
 
