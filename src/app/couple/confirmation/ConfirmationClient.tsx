@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import { MemberPage } from "@/components/layout/MemberPage"
+import { CouplePageFrame } from "@/components/couple/CouplePageFrame"
 import { CoupleShell } from "@/components/couple/CoupleShell"
 import { COUPLE_BRAND } from "@/lib/couple/config"
 
@@ -14,7 +14,7 @@ export default function CoupleConfirmationClient() {
     : null
 
   return (
-    <MemberPage>
+    <CouplePageFrame>
       <CoupleShell>
         <div className="max-w-xl mx-auto space-y-6 py-6">
           <h1 className="font-serif text-3xl sm:text-4xl font-bold">
@@ -53,6 +53,6 @@ export default function CoupleConfirmationClient() {
           </div>
         </div>
       </CoupleShell>
-    </MemberPage>
+    </CouplePageFrame>
   )
 }

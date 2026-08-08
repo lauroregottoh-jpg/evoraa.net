@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { MemberPage } from "@/components/layout/MemberPage"
+import { CouplePageFrame } from "@/components/couple/CouplePageFrame"
 import { CoupleShell } from "@/components/couple/CoupleShell"
 import { getMyCoupleStateAction } from "@/app/actions/couple"
 
@@ -27,7 +27,7 @@ export default function CoupleAttentePage() {
     (state.participants || []).every((p) => p.questionnaire_status === "COMPLETED")
 
   return (
-    <MemberPage>
+    <CouplePageFrame>
       <CoupleShell>
         <div className="max-w-lg space-y-4 py-6">
           <h1 className="font-serif text-3xl font-bold">
@@ -70,6 +70,6 @@ export default function CoupleAttentePage() {
           )}
         </div>
       </CoupleShell>
-    </MemberPage>
+    </CouplePageFrame>
   )
 }

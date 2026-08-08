@@ -3,7 +3,7 @@
 import * as React from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { confirmCoupleDemoPaymentAction } from "@/app/actions/couple"
-import { MemberPage } from "@/components/layout/MemberPage"
+import { CouplePageFrame } from "@/components/couple/CouplePageFrame"
 import { COUPLE_DEMO_AMOUNT_XOF } from "@/lib/couple/offers"
 
 export default function CoupleCheckoutClient({
@@ -39,7 +39,7 @@ export default function CoupleCheckoutClient({
   }
 
   return (
-    <MemberPage>
+    <CouplePageFrame>
       <div className="max-w-lg mx-auto space-y-4 py-10">
         <h1 className="font-serif text-3xl font-bold">Paiement du bilan</h1>
         <p className="text-sm text-muted-foreground">
@@ -85,6 +85,6 @@ export default function CoupleCheckoutClient({
           </p>
         )}
       </div>
-    </MemberPage>
+    </CouplePageFrame>
   )
 }

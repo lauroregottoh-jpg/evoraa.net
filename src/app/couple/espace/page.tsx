@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { MemberPage } from "@/components/layout/MemberPage"
+import { CouplePageFrame } from "@/components/couple/CouplePageFrame"
 import { CoupleShell } from "@/components/couple/CoupleShell"
 import { getMyCoupleStateAction } from "@/app/actions/couple"
 
@@ -16,7 +16,7 @@ export default function CoupleEspacePage() {
   }, [])
 
   return (
-    <MemberPage>
+    <CouplePageFrame>
       <CoupleShell activeHref="/couple/espace">
         {!state ? (
           <p className="text-sm text-muted-foreground">Chargement…</p>
@@ -119,6 +119,6 @@ export default function CoupleEspacePage() {
           </div>
         )}
       </CoupleShell>
-    </MemberPage>
+    </CouplePageFrame>
   )
 }

@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { MemberPage } from "@/components/layout/MemberPage"
+import { CouplePageFrame } from "@/components/couple/CouplePageFrame"
 import { joinCoupleWithCodeAction } from "@/app/actions/couple"
 
 export default function CoupleRejoindrePage() {
@@ -29,7 +29,7 @@ export default function CoupleRejoindrePage() {
   }
 
   return (
-    <MemberPage>
+    <CouplePageFrame>
       <div className="max-w-md mx-auto space-y-5 py-8">
         <h1 className="font-serif text-3xl font-bold">Rejoindre un bilan</h1>
         <p className="text-sm text-muted-foreground">
@@ -57,6 +57,6 @@ export default function CoupleRejoindrePage() {
           </p>
         )}
       </div>
-    </MemberPage>
+    </CouplePageFrame>
   )
 }

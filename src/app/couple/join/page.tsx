@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { MemberPage } from "@/components/layout/MemberPage"
+import { CouplePageFrame } from "@/components/couple/CouplePageFrame"
 import { joinCoupleWithTokenAction } from "@/app/actions/couple"
 import { Suspense } from "react"
 
@@ -42,10 +42,10 @@ function JoinInner() {
 
 export default function CoupleJoinPage() {
   return (
-    <MemberPage>
+    <CouplePageFrame>
       <Suspense fallback={<p className="p-8 text-sm">Chargement…</p>}>
         <JoinInner />
       </Suspense>
-    </MemberPage>
+    </CouplePageFrame>
   )
 }

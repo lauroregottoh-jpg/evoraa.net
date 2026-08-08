@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { MemberPage } from "@/components/layout/MemberPage"
+import { CouplePageFrame } from "@/components/couple/CouplePageFrame"
 import { CoupleShell } from "@/components/couple/CoupleShell"
 import {
   getCoupleLikertOptions,
@@ -109,9 +109,9 @@ export default function CoupleQuestionnairePage() {
 
   if (phase === "loading") {
     return (
-      <MemberPage>
+      <CouplePageFrame>
         <p className="p-8 text-sm text-muted-foreground">Chargement…</p>
-      </MemberPage>
+      </CouplePageFrame>
     )
   }
 
@@ -122,7 +122,7 @@ export default function CoupleQuestionnairePage() {
         ?.label || ""
 
     return (
-      <MemberPage>
+      <CouplePageFrame>
         <CoupleShell activeHref="/couple/questionnaire">
           <div className="max-w-xl mx-auto space-y-5">
             <header className="space-y-2">
@@ -218,7 +218,7 @@ export default function CoupleQuestionnairePage() {
             )}
           </div>
         </CoupleShell>
-      </MemberPage>
+      </CouplePageFrame>
     )
   }
 
@@ -228,14 +228,14 @@ export default function CoupleQuestionnairePage() {
 
   if (!q) {
     return (
-      <MemberPage>
+      <CouplePageFrame>
         <p className="p-8 text-sm">Chargement…</p>
-      </MemberPage>
+      </CouplePageFrame>
     )
   }
 
   return (
-    <MemberPage>
+    <CouplePageFrame>
       <CoupleShell activeHref="/couple/questionnaire">
         <div className="max-w-xl mx-auto space-y-6">
           <div className="space-y-2">
@@ -323,6 +323,6 @@ export default function CoupleQuestionnairePage() {
           )}
         </div>
       </CoupleShell>
-    </MemberPage>
+    </CouplePageFrame>
   )
 }

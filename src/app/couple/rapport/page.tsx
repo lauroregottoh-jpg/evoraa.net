@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { MemberPage } from "@/components/layout/MemberPage"
+import { CouplePageFrame } from "@/components/couple/CouplePageFrame"
 import { CoupleShell } from "@/components/couple/CoupleShell"
 import { getCoupleReportAction } from "@/app/actions/couple"
 import type { CoupleReportDocument } from "@/lib/couple/report"
@@ -18,7 +18,7 @@ export default function CoupleRapportPage() {
   }, [])
 
   return (
-    <MemberPage>
+    <CouplePageFrame>
       <CoupleShell activeHref="/couple/rapport">
         <article className="max-w-3xl mx-auto space-y-10 pb-16">
           {error && <p className="text-sm text-destructive">{error}</p>}
@@ -67,6 +67,6 @@ export default function CoupleRapportPage() {
           )}
         </article>
       </CoupleShell>
-    </MemberPage>
+    </CouplePageFrame>
   )
 }

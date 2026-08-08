@@ -40,8 +40,8 @@ export function AdminCouplePanel() {
       setLoading(true)
       const res = await getAdminCoupleOpsData()
       setLoading(false)
-      if (res.error) {
-        setError(res.error)
+      if (res.error || !res.data) {
+        setError(res.error || "Données indisponibles.")
         return
       }
       setData(res.data)

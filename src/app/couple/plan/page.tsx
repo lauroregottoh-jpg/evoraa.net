@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { MemberPage } from "@/components/layout/MemberPage"
+import { CouplePageFrame } from "@/components/couple/CouplePageFrame"
 import { CoupleShell } from "@/components/couple/CoupleShell"
 import { getCoupleReportAction } from "@/app/actions/couple"
 import type { CoupleReportDocument } from "@/lib/couple/report"
@@ -16,7 +16,7 @@ export default function CouplePlanPage() {
   }, [])
 
   return (
-    <MemberPage>
+    <CouplePageFrame>
       <CoupleShell>
         <div className="max-w-2xl space-y-6 pb-12">
           <h1 className="font-serif text-3xl font-bold">Plan d’action</h1>
@@ -54,6 +54,6 @@ export default function CouplePlanPage() {
           </ol>
         </div>
       </CoupleShell>
-    </MemberPage>
+    </CouplePageFrame>
   )
 }

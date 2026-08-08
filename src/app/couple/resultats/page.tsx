@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { MemberPage } from "@/components/layout/MemberPage"
+import { CouplePageFrame } from "@/components/couple/CouplePageFrame"
 import { CoupleShell } from "@/components/couple/CoupleShell"
 import {
   getCoupleReportAction,
@@ -28,7 +28,7 @@ export default function CoupleResultatsPage() {
   }, [])
 
   return (
-    <MemberPage>
+    <CouplePageFrame>
       <CoupleShell activeHref="/couple/resultats">
         <div className="max-w-2xl space-y-6">
           <h1 className="font-serif text-3xl font-bold">Vos résultats</h1>
@@ -84,6 +84,6 @@ export default function CoupleResultatsPage() {
           )}
         </div>
       </CoupleShell>
-    </MemberPage>
+    </CouplePageFrame>
   )
 }

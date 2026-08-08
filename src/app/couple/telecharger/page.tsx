@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { MemberPage } from "@/components/layout/MemberPage"
+import { CouplePageFrame } from "@/components/couple/CouplePageFrame"
 import { CoupleShell } from "@/components/couple/CoupleShell"
 import { getCoupleReportAction } from "@/app/actions/couple"
 import type { CoupleReportDocument } from "@/lib/couple/report"
@@ -70,7 +70,7 @@ export default function CoupleTelechargerPage() {
   }
 
   return (
-    <MemberPage>
+    <CouplePageFrame>
       <CoupleShell>
         <div className="max-w-lg space-y-4">
           <h1 className="font-serif text-3xl font-bold">Télécharger mon dossier</h1>
@@ -97,6 +97,6 @@ export default function CoupleTelechargerPage() {
           </p>
         </div>
       </CoupleShell>
-    </MemberPage>
+    </CouplePageFrame>
   )
 }

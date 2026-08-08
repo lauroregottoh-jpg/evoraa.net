@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { MemberPage } from "@/components/layout/MemberPage"
+import { CouplePageFrame } from "@/components/couple/CouplePageFrame"
 import { CoupleShell } from "@/components/couple/CoupleShell"
 import {
   getMyCoupleStateAction,
@@ -39,7 +39,7 @@ export default function CoupleInviterPage() {
   }
 
   return (
-    <MemberPage>
+    <CouplePageFrame>
       <CoupleShell activeHref="/couple/inviter">
         <div className="max-w-lg space-y-5">
           <h1 className="font-serif text-3xl font-bold">Inviter votre partenaire</h1>
@@ -81,6 +81,6 @@ export default function CoupleInviterPage() {
           )}
         </div>
       </CoupleShell>
-    </MemberPage>
+    </CouplePageFrame>
   )
 }
