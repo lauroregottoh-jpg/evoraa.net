@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { ArrowLeft, Library, Sparkles } from "lucide-react"
+import { Library, Sparkles } from "lucide-react"
 import { CoffrePremiumModal } from "@/components/coffre/CoffrePremiumModal"
 import { CoffreResourceCard } from "@/components/coffre/CoffreResourceCard"
 import { CoffreUnlockSection } from "@/components/coffre/CoffreUnlockSection"
@@ -35,19 +35,22 @@ export function CoffreLibrary({ resources, initialAccess }: Props) {
     null
   )
   const [toast, setToast] = React.useState<string | null>(null)
-  const [activeDomain, setActiveDomain] = React.useState<CoffreDomain | null>(
-    null
-  )
-  const stats = React.useMemo(() => getCoffreStats(), [])
-  const alliancePrice = PLANS.premium_plus.amountXof.toLocaleString("fr-FR")
-
   const domainGroups = React.useMemo(
     () => getCoffreResourcesByDomain(resources),
     [resources]
   )
+  /** Premier domaine ouvert par défaut — sinon la page paraît vide. */
+  const [activeDomain, setActiveDomain] = React.useState<CoffreDomain | null>(
+    () => domainGroups[0]?.domain ?? null
+  )
+  const stats = React.useMemo(() => getCoffreStats(), [])
+  const alliancePrice = PLANS.premium_plus.amountXof.toLocaleString("fr-FR")
 
   const activeGroup = React.useMemo(
-    () => domainGroups.find((g) => g.domain === activeDomain) ?? null,
+    () =>
+      domainGroups.find((g) => g.domain === activeDomain) ??
+      domainGroups[0] ??
+      null,
     [domainGroups, activeDomain]
   )
 
@@ -195,44 +198,31 @@ export function CoffreLibrary({ resources, initialAccess }: Props) {
         </p>
       )}
 
-      {/* Ligne de domaines */}
+      {/* Domaines — clic pour filtrer les documents */}
       <section aria-label="Domaines du Coffre" className="space-y-3">
-        <div className="flex items-baseline justify-between gap-3">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
-            Choisissez un domaine
-          </p>
-          {activeDomain && (
-            <button
-              type="button"
-              onClick={() => setActiveDomain(null)}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:opacity-80 transition-opacity"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              Tous les domaines
-            </button>
-          )}
-        </div>
+        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+          Domaines
+        </p>
 
-        <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-thin">
+        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3">
           {domainGroups.map((group, i) => {
-            const selected = activeDomain === group.domain
+            const selected = activeGroup?.domain === group.domain
             return (
               <button
                 key={group.domain}
                 type="button"
-                onClick={() =>
-                  setActiveDomain(selected ? null : group.domain)
-                }
+                onClick={() => setActiveDomain(group.domain)}
                 className={cn(
-                  "coffre-theme-section group relative shrink-0 w-[min(72vw,17.5rem)] sm:w-60 text-left rounded-2xl border px-4 py-4 overflow-hidden",
-                  "transition-all duration-400 ease-out",
-                  "hover:-translate-y-1 hover:shadow-elevated",
+                  "group relative text-left rounded-2xl border px-4 py-4 overflow-hidden",
+                  "transition-all duration-300 ease-out",
+                  "hover:-translate-y-0.5 hover:shadow-elevated",
+                  "animate-in fade-in slide-in-from-bottom-2 fill-mode-both",
                   selected
-                    ? "border-transparent shadow-elevated scale-[1.02]"
-                    : "border-border/70 bg-white/85 shadow-card"
+                    ? "border-transparent shadow-elevated"
+                    : "border-border/70 bg-white/90 shadow-card"
                 )}
                 style={{
-                  animationDelay: `${i * 55}ms`,
+                  animationDelay: `${i * 45}ms`,
                   ...(selected
                     ? {
                         background: `linear-gradient(145deg, ${group.tone} 0%, #1C1412 92%)`,
@@ -257,7 +247,7 @@ export function CoffreLibrary({ resources, initialAccess }: Props) {
                 </p>
                 <p
                   className={cn(
-                    "font-serif text-xl font-bold leading-snug",
+                    "font-serif text-lg sm:text-xl font-bold leading-snug",
                     !selected && "text-foreground"
                   )}
                 >
@@ -286,12 +276,12 @@ export function CoffreLibrary({ resources, initialAccess }: Props) {
         </div>
       </section>
 
-      {/* Documents du domaine sélectionné */}
-      {activeGroup ? (
+      {/* Documents du domaine actif */}
+      {activeGroup && (
         <section
           key={activeGroup.domain}
           aria-labelledby="coffre-domain-docs-title"
-          className="coffre-theme-section space-y-5"
+          className="space-y-5 animate-in fade-in slide-in-from-bottom-3 duration-500"
         >
           <div className="space-y-2">
             <p
@@ -307,14 +297,13 @@ export function CoffreLibrary({ resources, initialAccess }: Props) {
               {activeGroup.label}
             </h2>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xl">
-              {activeGroup.blurb} Le type de chaque fichier (journal, guide,
-              prière…) est indiqué sur la carte.
+              {activeGroup.blurb} Type de fichier indiqué sur chaque carte
+              (journal, guide, prière…).
             </p>
             <div
-              className="coffre-theme-rule h-px w-full max-w-md"
+              className="h-px w-full max-w-md origin-left animate-in fade-in duration-700"
               style={{
                 background: `linear-gradient(90deg, ${activeGroup.tone}88, transparent)`,
-                animationDelay: "100ms",
               }}
             />
           </div>
@@ -354,10 +343,6 @@ export function CoffreLibrary({ resources, initialAccess }: Props) {
             })}
           </div>
         </section>
-      ) : (
-        <p className="text-sm text-muted-foreground text-center py-6 animate-in fade-in duration-400">
-          Cliquez sur un domaine ci-dessus pour voir ses documents.
-        </p>
       )}
 
       <CoffreUnlockSection
