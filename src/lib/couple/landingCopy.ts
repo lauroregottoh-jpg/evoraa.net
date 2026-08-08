@@ -4,7 +4,7 @@
  */
 
 export const LANDING_HERO = {
-  hook: "Comprenez pourquoi vous fonctionnez comme vous le faites à deux.",
+  hook: "Découvrez votre dynamique de couple : ce qui vous unit, ce qui vous différencie et comment vous pouvez construire ensemble.",
   essentialQ:
     "Dans chacune de ces situations, il y a une question essentielle : est-ce que nous comprenons réellement comment nous fonctionnons ensemble ?",
   tensions: [
@@ -55,12 +55,26 @@ export const LANDING_SITUATIONS = [
     id: "married",
     label: "Mariage",
     title: "Vous êtes déjà mariés",
-    body: "Depuis quelques mois ou plusieurs années : vous aimez votre conjoint, mais certains sujets reviennent ou des tensions deviennent difficiles à gérer.",
+    body: "Depuis quelques mois ou plusieurs années — vous aimez votre conjoint, mais certains sujets reviennent, certaines incompréhensions s’installent ou certaines tensions deviennent difficiles à gérer.",
     accent: "from-[#3A2A10] to-[#6B4A1A]",
   },
 ] as const
 
 export type LandingSituationId = (typeof LANDING_SITUATIONS)[number]["id"]
+
+/** Affichage marketing des prix (doc) — le montant facturé reste amountXof côté serveur. */
+export const LANDING_PRICE_DISPLAY = {
+  couple_essential: {
+    compareAtXof: 40_000,
+    perPersonXof: 15_000,
+    coupleTotalXof: 30_000,
+  },
+  couple_premium_plus: {
+    compareAtXof: 60_000,
+    perPersonXof: 25_000,
+    coupleTotalXof: 50_000,
+  },
+} as const
 
 export const LANDING_RECOGNIZE = {
   eyebrow: "Vous allez peut-être vous reconnaître",

@@ -437,7 +437,7 @@ export default function PricingPage() {
               </h3>
               <div>
                 <p className="text-xs text-muted-foreground line-through">
-                  40 000 FCFA valeur théorique
+                  40 000 FCFA
                 </p>
                 <p className="font-serif text-3xl font-bold text-primary">
                   {essential.amountXof.toLocaleString("fr-FR")}{" "}
@@ -445,8 +445,8 @@ export default function PricingPage() {
                     FCFA
                   </span>
                 </p>
-                <p className="text-xs text-accent font-semibold mt-1">
-                  Économisez 10 000 FCFA — tarif couple
+                <p className="text-xs text-muted-foreground mt-1">
+                  soit 15 000 FCFA par personne — pour vous deux
                 </p>
               </div>
               <ul className="space-y-2 text-sm flex-1">
@@ -471,7 +471,7 @@ export default function PricingPage() {
               </h3>
               <div>
                 <p className="text-xs text-muted-foreground line-through">
-                  60 000 FCFA valeur théorique
+                  60 000 FCFA
                 </p>
                 <p className="font-serif text-3xl font-bold text-primary">
                   {premium.amountXof.toLocaleString("fr-FR")}{" "}
@@ -479,8 +479,8 @@ export default function PricingPage() {
                     FCFA
                   </span>
                 </p>
-                <p className="text-xs text-accent font-semibold mt-1">
-                  Économisez 10 000 FCFA — tarif couple
+                <p className="text-xs text-muted-foreground mt-1">
+                  soit 25 000 FCFA par personne — pour vous deux
                 </p>
               </div>
               <ul className="space-y-2 text-sm flex-1">

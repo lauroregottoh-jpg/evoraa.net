@@ -19,8 +19,11 @@ import { PageHero } from "@/components/marketing/PageHero"
 import { MagneticButton } from "@/components/ui/magnetic-button"
 import { CoupleJourneyCard } from "@/components/couple/CoupleJourneyCard"
 import { CoupleSituationCards } from "@/components/couple/CoupleSituationCards"
+import {
+  CoupleOfferPrice,
+  CouplePriceHint,
+} from "@/components/couple/CoupleOfferPrice"
 import { COUPLE_BRAND, COUPLE_TAGLINE } from "@/lib/couple/config"
-import { COUPLE_OFFERS } from "@/lib/couple/offers"
 import { cn } from "@/utils/cn"
 import {
   LANDING_AUDIENCES,
@@ -45,8 +48,6 @@ if (typeof window !== "undefined") {
 
 export function CoupleLanding() {
   const rootRef = React.useRef<HTMLDivElement>(null)
-  const essential = COUPLE_OFFERS.couple_essential
-  const premium = COUPLE_OFFERS.couple_premium_plus
   const [situation, setSituation] =
     React.useState<LandingSituationId | null>(null)
 
@@ -188,9 +189,9 @@ export function CoupleLanding() {
             {LANDING_HERO.ctaSecondary}
           </MagneticButton>
         </div>
-        <p className="pt-3 text-sm text-white/75">
-          À partir de {essential.amountXof.toLocaleString("fr-FR")} FCFA — pour
-          vous deux
+        <p className="pt-3 text-sm text-white/80">
+          <span className="line-through text-white/45 mr-2">40 000 FCFA</span>
+          À partir de 30 000 FCFA — pour vous deux
         </p>
       </PageHero>
 
@@ -304,9 +305,7 @@ export function CoupleLanding() {
               {LANDING_HERO.ctaPrimary}
             </MagneticButton>
             <p className="w-full text-xs text-muted-foreground pt-1">
-              Essentiel {essential.amountXof.toLocaleString("fr-FR")} FCFA ·
-              Premium Plus {premium.amountXof.toLocaleString("fr-FR")} FCFA —
-              pour vous deux
+              <CouplePriceHint />
             </p>
           </div>
         </div>
@@ -621,12 +620,7 @@ export function CoupleLanding() {
               <h3 className="font-serif text-2xl font-bold text-white">
                 Bilan Essentiel
               </h3>
-              <p className="font-serif text-xl text-accent">
-                {essential.amountXof.toLocaleString("fr-FR")} FCFA{" "}
-                <span className="text-sm font-sans text-white/70">
-                  — pour vous deux
-                </span>
-              </p>
+              <CoupleOfferPrice offerId="couple_essential" tone="dark" />
               <p className="text-sm text-white/80 leading-relaxed">
                 {LANDING_OFFERS.essentialFor}
               </p>
@@ -646,8 +640,7 @@ export function CoupleLanding() {
                 size="lg"
                 className="bg-white/10 border-white/40 text-white hover:bg-white/20"
               >
-                Choisir Essentiel — {essential.amountXof.toLocaleString("fr-FR")}{" "}
-                FCFA
+                Choisir Essentiel — 30 000 FCFA
               </MagneticButton>
             </article>
 
@@ -658,12 +651,7 @@ export function CoupleLanding() {
               <h3 className="font-serif text-2xl sm:text-3xl font-bold text-primary">
                 Bilan Premium Plus
               </h3>
-              <p className="font-serif text-xl font-semibold">
-                {premium.amountXof.toLocaleString("fr-FR")} FCFA{" "}
-                <span className="text-sm font-sans font-normal text-muted-foreground">
-                  — pour vous deux
-                </span>
-              </p>
+              <CoupleOfferPrice offerId="couple_premium_plus" tone="light" />
               <p className="text-sm text-muted-foreground leading-relaxed">
                 {LANDING_OFFERS.premiumFor}
               </p>
@@ -683,23 +671,20 @@ export function CoupleLanding() {
                 variant="primary"
                 size="lg"
               >
-                Choisir Premium Plus —{" "}
-                {premium.amountXof.toLocaleString("fr-FR")} FCFA
+                Choisir Premium Plus — 50 000 FCFA
               </MagneticButton>
             </article>
           </div>
           <div className="couple-fade-up grid sm:grid-cols-2 gap-4 max-w-3xl mx-auto text-center">
             <p className="text-sm text-white/80">
-              <span className="text-accent font-semibold">
-                {essential.amountXof.toLocaleString("fr-FR")} FCFA
-              </span>
+              <span className="line-through text-white/40 mr-1">40 000</span>
+              <span className="text-accent font-semibold">30 000 FCFA</span>
               <br />
               {LANDING_OFFERS.summaryEssential}
             </p>
             <p className="text-sm text-white/80">
-              <span className="text-accent font-semibold">
-                {premium.amountXof.toLocaleString("fr-FR")} FCFA
-              </span>
+              <span className="line-through text-white/40 mr-1">60 000</span>
+              <span className="text-accent font-semibold">50 000 FCFA</span>
               <br />
               {LANDING_OFFERS.summaryPremium}
             </p>
@@ -752,18 +737,18 @@ export function CoupleLanding() {
         <p className="couple-fade-up text-muted-foreground leading-relaxed text-lg">
           {LANDING_CLOSING.body}
         </p>
-        <div className="couple-fade-up flex flex-wrap justify-center gap-3 pt-2">
-          <MagneticButton href="/couple/checkout/couple_essential" variant="primary" size="lg">
-            Commencer — {essential.amountXof.toLocaleString("fr-FR")} FCFA
-          </MagneticButton>
-          <MagneticButton
-            href="/couple/checkout/couple_premium_plus"
-            variant="outline"
-            size="lg"
-          >
-            Premium Plus — {premium.amountXof.toLocaleString("fr-FR")} FCFA
-          </MagneticButton>
-        </div>
+          <div className="couple-fade-up flex flex-wrap justify-center gap-3 pt-2">
+            <MagneticButton href="/couple/checkout/couple_essential" variant="primary" size="lg">
+              Commencer mon bilan — 30 000 FCFA
+            </MagneticButton>
+            <MagneticButton
+              href="/couple/checkout/couple_premium_plus"
+              variant="outline"
+              size="lg"
+            >
+              Choisir Premium Plus — 50 000 FCFA
+            </MagneticButton>
+          </div>
       </section>
 
       <section className="py-16 px-6 sm:px-12 lg:px-20 bg-[#F8F4EE]">

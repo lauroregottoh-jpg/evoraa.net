@@ -24,7 +24,8 @@ export function HomeCoupleSection() {
           {COUPLE_BRAND}
         </h2>
         <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-          Comprenez pourquoi vous fonctionnez comme vous le faites à deux.
+          Découvrez votre dynamique de couple : ce qui vous unit, ce qui vous
+          différencie et comment vous pouvez construire ensemble.
         </p>
         <p className="text-sm text-muted-foreground leading-relaxed max-w-xl">
           Intérêt mutuel, chemin ensemble, fiançailles ou mariage : quatre
