@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { CinematicLayout } from "@/components/layout/CinematicLayout";
 import { CheckoutPlanButton } from "@/components/billing/CheckoutPlanButton";
 import { PageHero } from "@/components/marketing/PageHero";
@@ -11,6 +12,7 @@ import {
   CheckCircle2,
   ChevronDown,
   Heart,
+  HeartHandshake,
   Home,
   Leaf,
   Sparkles,
@@ -20,8 +22,9 @@ import { cn } from "@/utils/cn";
 import { PLANS, PUBLIC_PLAN_ORDER } from "@/lib/billing/plans";
 import { TestimonialsCarousel } from "@/components/marketing/TestimonialsCarousel";
 import { PricingLoyaltyTeaser } from "@/components/loyalty/LoyaltyProgramCard";
+import { COUPLE_BRAND, COUPLE_TAGLINE } from "@/lib/couple/config";
+import { COUPLE_OFFERS } from "@/lib/couple/offers";
 
-/** Copy source: software-architecture/KELIA - Page d'accueil.docx — PAGE TARIFS */
 const PLAN_DESCRIPTIONS: Record<string, string> = {
   free: "Gratuit pour commencer : profil, communauté, premiers matchs.",
   premium_plus:
@@ -83,136 +86,132 @@ const ALLIANCE_COMPARE_ROWS = [
   },
 ];
 
-const NOUVEAUTES = [
-  {
-    title: "Communauté KELIAA",
-    desc: "Découvrez les membres, likez avec intention. Un like mutuel débloque la conversation.",
-  },
-  {
-    title: "Coffre Premium",
-    desc: "Guides, journaux et prières en vignettes exclusives — 3 au choix, puis +2 chaque mois.",
-  },
-  {
-    title: "Programme Fidélité Alliance",
-    desc: "+15 messages à chaque renouvellement, paliers +30 + Boost, Session VIP à 12 mois.",
-  },
-  {
-    title: "Matching à 5 piliers",
-    desc: "Personnalité, foi, valeurs, projet de vie et relation — des compatibilités expliquées.",
-  },
-];
-
 export default function PricingPage() {
   const [openFaq, setOpenFaq] = React.useState<number | null>(0);
-
   const plans = PUBLIC_PLAN_ORDER.map((id) => PLANS[id]);
+  const essential = COUPLE_OFFERS.couple_essential;
+  const premium = COUPLE_OFFERS.couple_premium_plus;
+
+  React.useEffect(() => {
+    const hash = window.location.hash.replace("#", "");
+    if (hash === "celibataires" || hash === "couples" || hash === "offres") {
+      document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, []);
 
   const faqs = [
+    {
+      q: "KELIAA propose quoi exactement ?",
+      a: "Deux portes : l’application pour célibataires (Découverte gratuite + Alliance) et KELYA Couple™, un bilan relationnel ponctuel pour couples déjà engagés.",
+    },
     {
       q: "Pourquoi proposer une offre Alliance ?",
       a: "Parce que nous préférons investir dans la qualité des recommandations plutôt que dans la quantité des profils — Rapport vivant, Coffre Premium, Matching enrichi et fidélité.",
     },
     {
       q: "En quoi le Matching à 5 piliers est-il différent ?",
-      a: "Il ne s'appuie pas uniquement sur vos préférences visibles. Il prend en compte votre personnalité, vos valeurs, votre foi, votre vision du mariage et votre projet de vie afin de proposer des compatibilités plus pertinentes.",
+      a: "Il ne s'appuie pas uniquement sur vos préférences visibles. Il prend en compte personnalité, valeurs, foi, vision du mariage et projet de vie.",
     },
     {
-      q: "Comment fonctionne la Communauté ?",
-      a: "Vous pouvez liker des membres. Un like mutuel débloque les messages. En Alliance, l’amitié même sexe peut être activée dans les paramètres.",
+      q: "KELYA Couple remplace-t-il Alliance ?",
+      a: "Non. Alliance sert les célibataires. KELYA Couple est un bilan pour deux personnes déjà en couple — prix ponctuel, pas un abonnement mensuel.",
     },
     {
       q: "Qu’est-ce que le Programme Fidélité ?",
-      a: "À chaque renouvellement Alliance : +15 messages bonus. Tous les 3 mois : +30 + Boost 24 h. À 12 mois : Session VIP. Les bonus restent même si vous revenez en Découverte (inactifs jusqu’à réactivation).",
-    },
-    {
-      q: "Puis-je revenir à l'offre gratuite ?",
-      a: "Bien sûr. Votre profil reste actif et vous pouvez changer d'offre à tout moment. Vos bonus fidélité sont conservés.",
+      a: "À chaque renouvellement Alliance : +15 messages bonus. Tous les 3 mois : +30 + Boost 24 h. À 12 mois : Session VIP.",
     },
   ];
-
-  const scrollToOffers = () => {
-    document.getElementById("offres")?.scrollIntoView({ behavior: "smooth" });
-  };
 
   return (
     <CinematicLayout>
       <PageHero
         eyebrow="Tarifs"
-        title="Trouver la bonne personne"
-        highlight="vaut bien plus qu'un abonnement."
-        subtitle="Alliance ouvre le Rapport Personnalisé Alliance™ et toute la puissance du Matching KELIAA™ à 5 piliers : une méthode unique qui va bien au-delà des photos et des critères superficiels pour vous proposer des personnes réellement compatibles avec votre foi, vos valeurs et votre projet de mariage."
+        title="KELIAA propose aujourd’hui"
+        highlight="deux portes d’entrée."
+        subtitle="Pour les célibataires qui cherchent la bonne personne — Matching, Alliance, fidélité. Pour les couples déjà engagés — KELYA Couple™, un bilan relationnel à deux."
         imageSrc="/home/hero-african-wedding.png"
         imageClassName="object-[center_32%] sm:object-center"
-        imageAlt="Engagement"
+        imageAlt="KELIAA"
       >
-        <div className="pt-6 space-y-4">
-          <div className="flex flex-wrap items-center gap-3">
-            <MagneticButton href="/register" variant="primary" size="lg">
-              Créer gratuitement mon profil
-            </MagneticButton>
-            <MagneticButton
-              type="button"
-              variant="outline"
-              size="lg"
-              className="bg-white/10 hover:bg-white/20 text-white border-white/40 backdrop-blur-md"
-              onClick={scrollToOffers}
-            >
-              Découvrir Alliance
-            </MagneticButton>
-          </div>
-          <p className="text-sm text-white/85">
-            ✓ Rapport · ✓ Communauté · ✓ Coffre Premium · ✓ Fidélité Alliance · ✓ 5 piliers
-          </p>
+        <div className="pt-6 flex flex-wrap gap-3">
+          <MagneticButton href="#celibataires" variant="primary" size="lg">
+            Pour les célibataires
+          </MagneticButton>
+          <MagneticButton
+            href="#couples"
+            variant="outline"
+            size="lg"
+            className="bg-white/10 hover:bg-white/20 text-white border-white/40 backdrop-blur-md"
+          >
+            Pour les couples
+          </MagneticButton>
         </div>
       </PageHero>
 
-      {/* Nouveautés produit */}
+      {/* Deux portes */}
       <section className="py-14 px-6 sm:px-12 lg:px-20 bg-[#F8F4EE]">
         <div className="max-w-5xl mx-auto space-y-8">
           <div className="text-center space-y-2 max-w-2xl mx-auto">
-            <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#8B6914]">
-              Jour 0 · Offre actuelle
-            </p>
             <h2 className="font-serif text-3xl font-bold text-[#1C1412]">
-              Tout ce que KELIAA propose aujourd&apos;hui
+              Choisissez votre parcours
             </h2>
             <p className="text-sm text-[#1C1412]/65 leading-relaxed">
-              Découverte pour commencer ; Alliance pour préparer sérieusement votre
-              projet de mariage — avec les nouveautés déjà en production.
+              Cliquez pour aller directement à la section qui vous concerne.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 gap-4">
-            {NOUVEAUTES.map((item) => (
-              <div
-                key={item.title}
-                className="rounded-2xl border border-[#B8954A]/25 bg-white px-5 py-5 space-y-2 shadow-card"
-              >
-                <h3 className="font-serif text-xl font-bold text-[#5C1F28]">
-                  {item.title}
-                </h3>
-                <p className="text-sm text-[#1C1412]/70 leading-relaxed">
-                  {item.desc}
-                </p>
-              </div>
-            ))}
+            <a
+              href="#celibataires"
+              className="rounded-2xl border border-[#B8954A]/25 bg-white px-5 py-6 space-y-3 shadow-card hover:border-primary/40 transition-colors block"
+            >
+              <Users className="h-6 w-6 text-primary" />
+              <h3 className="font-serif text-xl font-bold text-[#5C1F28]">
+                Pour les célibataires
+              </h3>
+              <p className="text-sm text-[#1C1412]/70 leading-relaxed">
+                Rencontrez la bonne personne : Matching à 5 piliers, Communauté,
+                Rapport Alliance, Coffre Premium, programme Fidélité.
+              </p>
+              <span className="inline-flex items-center gap-1 text-sm font-semibold text-primary">
+                Voir cette section <ArrowRight className="h-4 w-4" />
+              </span>
+            </a>
+            <a
+              href="#couples"
+              className="rounded-2xl border border-accent/35 bg-gradient-to-br from-white to-accent/10 px-5 py-6 space-y-3 shadow-card hover:border-accent/55 transition-colors block"
+            >
+              <HeartHandshake className="h-6 w-6 text-accent" />
+              <h3 className="font-serif text-xl font-bold text-[#5C1F28]">
+                Pour les couples — {COUPLE_BRAND}
+              </h3>
+              <p className="text-sm text-[#1C1412]/70 leading-relaxed">
+                {COUPLE_TAGLINE}. Bilan ponctuel pour fiancés, cheminants et
+                mariés — pas un abonnement.
+              </p>
+              <span className="inline-flex items-center gap-1 text-sm font-semibold text-primary">
+                Voir cette section <ArrowRight className="h-4 w-4" />
+              </span>
+            </a>
           </div>
         </div>
       </section>
 
-      {/* Pourquoi notre Matching est différent */}
-      <section className="py-16 px-6 sm:px-12 lg:px-20 max-w-6xl mx-auto space-y-12">
+      {/* ——— CÉLIBATAIRES ——— */}
+      <section
+        id="celibataires"
+        className="py-16 px-6 sm:px-12 lg:px-20 max-w-6xl mx-auto space-y-12 scroll-mt-28"
+      >
         <div className="space-y-4 text-center max-w-3xl mx-auto">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-            Notre différence
+            Application KELIAA
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl font-bold text-foreground">
-            Pourquoi notre Matching est différent
+            Pour les célibataires — rencontrer la bonne personne
           </h2>
           <p className="text-muted-foreground leading-relaxed">
-            Les applications classiques vous proposent des profils principalement selon votre âge,
-            votre localisation ou vos préférences visibles. Chez Keliaa, chaque recommandation
-            repose sur notre Matching à 5 piliers, conçu pour identifier les bases d&apos;une
-            relation durable.
+            Les apps classiques vous proposent des profils selon l’âge ou
+            l’apparence. Chez KELIAA, chaque recommandation repose sur un Matching
+            à 5 piliers, conçu pour identifier les bases d’une relation durable.
           </p>
         </div>
 
@@ -277,17 +276,13 @@ export default function PricingPage() {
               </div>
             ))}
           </div>
-          <p className="text-center text-foreground font-medium italic font-serif">
-            Parce qu&apos;une relation durable ne repose jamais sur un seul critère.
-          </p>
         </div>
       </section>
 
-      {/* Ce que vous obtenez avec Alliance */}
       <section className="py-12 px-6 sm:px-12 lg:px-20 bg-primary text-primary-foreground">
         <div className="max-w-4xl mx-auto space-y-8">
           <h2 className="font-serif text-2xl sm:text-3xl font-bold text-center">
-            Ce que vous obtenez avec Alliance
+            Découverte vs Alliance
           </h2>
           <div className="overflow-hidden rounded-xl border border-white/15">
             <div className="grid grid-cols-2 bg-black/20 text-xs font-semibold uppercase tracking-wide">
@@ -309,8 +304,16 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Plan cards */}
-      <section id="offres" className="py-16 px-6 sm:px-12 lg:px-20 max-w-5xl mx-auto scroll-mt-24">
+      <section
+        id="offres"
+        className="py-16 px-6 sm:px-12 lg:px-20 max-w-5xl mx-auto scroll-mt-24"
+      >
+        <div className="text-center mb-10 space-y-2">
+          <h2 className="font-serif text-3xl font-bold">Offres célibataires</h2>
+          <p className="text-sm text-muted-foreground">
+            Commencez gratuitement. Passez Alliance quand vous êtes prêts.
+          </p>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
           {plans.map((plan) => {
             const isHero = plan.id === "premium_plus";
@@ -340,12 +343,20 @@ export default function PricingPage() {
                         {plan.compareAtXof.toLocaleString("fr-FR")}
                       </span>
                     ) : null}
-                    <span className="font-serif text-4xl font-bold text-primary">
-                      {plan.amountXof === 0 ? "0" : plan.amountXof.toLocaleString("fr-FR")}
-                    </span>
-                    <span className="text-sm text-muted-foreground mb-1">
-                      {plan.amountXof === 0 ? "FCFA" : `FCFA ${plan.periodLabel}`}
-                    </span>
+                    {plan.amountXof === 0 ? (
+                      <span className="font-serif text-4xl font-bold text-primary">
+                        Gratuit
+                      </span>
+                    ) : (
+                      <>
+                        <span className="font-serif text-4xl font-bold text-primary">
+                          {plan.amountXof.toLocaleString("fr-FR")}
+                        </span>
+                        <span className="text-sm text-muted-foreground mb-1">
+                          FCFA {plan.periodLabel}
+                        </span>
+                      </>
+                    )}
                   </div>
                   {plan.amountXof === 0 ? (
                     <p className="text-xs text-muted-foreground">{plan.periodLabel}</p>
@@ -393,6 +404,101 @@ export default function PricingPage() {
         <PricingLoyaltyTeaser />
       </div>
 
+      {/* ——— COUPLES ——— */}
+      <section
+        id="couples"
+        className="py-16 px-6 sm:px-12 lg:px-20 bg-secondary/25 scroll-mt-28"
+      >
+        <div className="max-w-5xl mx-auto space-y-10">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent">
+              {COUPLE_BRAND}
+            </p>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold">
+              Pour les couples — bilan relationnel
+            </h2>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Fiancés, cheminants, jeunes mariés ou couples établis : un bilan
+              ponctuel pour comprendre convergences, différences et priorités —
+              sans verdict d’incompatibilité. Tarif couple (deux participants).
+            </p>
+            <Link
+              href="/couple"
+              className="inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline"
+            >
+              Lire la page de présentation complète →
+            </Link>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <article className="rounded-2xl border border-border bg-white p-6 sm:p-8 flex flex-col gap-4">
+              <h3 className="font-serif text-2xl font-bold">
+                {essential.marketingName}
+              </h3>
+              <div>
+                <p className="text-xs text-muted-foreground line-through">
+                  40 000 FCFA valeur théorique
+                </p>
+                <p className="font-serif text-3xl font-bold text-primary">
+                  {essential.amountXof.toLocaleString("fr-FR")}{" "}
+                  <span className="text-base font-sans font-medium text-muted-foreground">
+                    FCFA
+                  </span>
+                </p>
+                <p className="text-xs text-accent font-semibold mt-1">
+                  Économisez 10 000 FCFA — tarif couple
+                </p>
+              </div>
+              <ul className="space-y-2 text-sm flex-1">
+                {essential.features.map((f) => (
+                  <li key={f} className="flex gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <MagneticButton href="/couple/offre" variant="outline" className="w-full">
+                Choisir Essentiel
+              </MagneticButton>
+            </article>
+
+            <article className="rounded-2xl border-2 border-accent bg-white p-6 sm:p-8 flex flex-col gap-4 shadow-elevated relative">
+              <span className="absolute -top-3 left-6 text-[10px] font-bold uppercase tracking-wider bg-accent text-accent-foreground px-3 py-1 rounded-full">
+                Le plus choisi
+              </span>
+              <h3 className="font-serif text-2xl font-bold">
+                {premium.marketingName}
+              </h3>
+              <div>
+                <p className="text-xs text-muted-foreground line-through">
+                  60 000 FCFA valeur théorique
+                </p>
+                <p className="font-serif text-3xl font-bold text-primary">
+                  {premium.amountXof.toLocaleString("fr-FR")}{" "}
+                  <span className="text-base font-sans font-medium text-muted-foreground">
+                    FCFA
+                  </span>
+                </p>
+                <p className="text-xs text-accent font-semibold mt-1">
+                  Économisez 10 000 FCFA — tarif couple
+                </p>
+              </div>
+              <ul className="space-y-2 text-sm flex-1">
+                {premium.features.map((f) => (
+                  <li key={f} className="flex gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-accent shrink-0 mt-0.5" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <MagneticButton href="/couple/offre" variant="primary" className="w-full">
+                Choisir Premium Plus
+              </MagneticButton>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <TestimonialsCarousel />
 
       <section className="py-12 px-6 max-w-3xl mx-auto space-y-4">
@@ -414,10 +520,13 @@ export default function PricingPage() {
             )}
           </div>
         ))}
-        <div className="pt-6 text-center">
+        <div className="pt-6 text-center flex flex-wrap gap-3 justify-center">
           <MagneticButton href="/register" variant="primary" size="lg">
-            <span>Créer gratuitement mon profil</span>
+            <span>Créer mon profil célibataire</span>
             <ArrowRight className="h-4 w-4" />
+          </MagneticButton>
+          <MagneticButton href="/couple" variant="outline" size="lg">
+            Découvrir {COUPLE_BRAND}
           </MagneticButton>
         </div>
       </section>

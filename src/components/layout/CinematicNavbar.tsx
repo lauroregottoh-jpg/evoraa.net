@@ -28,7 +28,7 @@ export function CinematicNavbar() {
   const navLinks = [
     { name: "Accueil", href: "/" },
     { name: "Fonctionnement", href: "/how-it-works" },
-    { name: "Couple", href: "/couple" },
+    { name: "KELYA Couple", href: "/couple" },
     { name: "Tarifs", href: "/pricing" },
     { name: "Blog", href: "/blog" },
     { name: "Contact", href: "/contact" },

@@ -95,7 +95,7 @@ const BOTTOM_PRIMARY = [
   { href: "/dashboard", label: "Accueil", icon: LayoutGrid },
   { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/assessments", label: "Tests", icon: ClipboardList },
-  { href: "/couple", label: "Couple", icon: HeartHandshake },
+  { href: "/couple", label: "KELYA", icon: HeartHandshake },
 ] as const;
 
 const ACCOUNT_HREFS = [
