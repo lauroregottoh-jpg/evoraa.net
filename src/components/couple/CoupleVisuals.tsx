@@ -145,3 +145,85 @@ export function VizRingProgress({ className }: { className?: string }) {
     </svg>
   )
 }
+
+/** Cadenas → rapport ouvert → couple assis qui sourit. */
+export function VizReportUnlock({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 220 160"
+      className={className}
+      aria-hidden
+      fill="none"
+    >
+      <g className="couple-viz-unlock-lock">
+        <rect
+          x="88"
+          y="28"
+          width="44"
+          height="36"
+          rx="6"
+          stroke="currentColor"
+          strokeWidth="2"
+        />
+        <path
+          d="M98 28v-8a12 12 0 0124 0v8"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+        <circle cx="110" cy="46" r="4" fill="currentColor" />
+      </g>
+      <g className="couple-viz-unlock-report">
+        <rect
+          x="48"
+          y="72"
+          width="56"
+          height="70"
+          rx="4"
+          stroke="currentColor"
+          strokeWidth="1.75"
+          fill="#FBF9F6"
+        />
+        <rect
+          x="116"
+          y="72"
+          width="56"
+          height="70"
+          rx="4"
+          stroke="currentColor"
+          strokeWidth="1.75"
+          fill="#FBF9F6"
+          className="couple-viz-unlock-page"
+        />
+        <path
+          d="M58 88h36M58 100h28M58 112h32"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          opacity="0.45"
+        />
+        <path
+          d="M126 88h36M126 100h28M126 112h32"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          opacity="0.45"
+        />
+      </g>
+      <g className="couple-viz-unlock-people" stroke="currentColor" strokeWidth="1.75">
+        <circle cx="78" cy="128" r="7" />
+        <path d="M78 135v14M70 142h16" strokeLinecap="round" />
+        <circle cx="142" cy="128" r="7" />
+        <path d="M142 135v14M134 142h16" strokeLinecap="round" />
+        <path
+          className="couple-viz-unlock-smile"
+          d="M74 127c1.5 2 5 2 6.5 0"
+          strokeLinecap="round"
+        />
+        <path
+          className="couple-viz-unlock-smile"
+          d="M138 127c1.5 2 5 2 6.5 0"
+          strokeLinecap="round"
+        />
+      </g>
+    </svg>
+  )
+}

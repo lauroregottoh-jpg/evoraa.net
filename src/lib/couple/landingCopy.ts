@@ -157,8 +157,8 @@ export const LANDING_MAYBE = {
 
 export const LANDING_TOOLS = {
   eyebrow: "Et surtout…",
-  title: "Vous ne repartez pas avec « voici vos résultats, bonne chance »",
-  subtitle: "Votre rapport vous aide à passer de la compréhension à l’action.",
+  title: "De la compréhension à l’action",
+  subtitle: "Votre rapport ne s’arrête pas à l’écran.",
   items: [
     {
       title: "Conversations guidées",
@@ -166,43 +166,56 @@ export const LANDING_TOOLS = {
     },
     {
       title: "Exercices à deux",
-      body: "Téléchargeables, imprimables : vous asseoir ensemble, écrire, répondre, échanger. Le bilan ne s’arrête pas à l’écran.",
+      body: "Téléchargeables, imprimables : vous asseoir ensemble, écrire, répondre, échanger. Le travail continue hors de l’écran.",
     },
     {
       title: "Priorités claires",
-      body: "Pas vingt choses à changer. Les sujets qui méritent réellement votre attention — et quoi faire maintenant.",
+      body: "Pas vingt choses à changer d’un coup. Les sujets qui méritent réellement votre attention — et quoi faire maintenant.",
+    },
+    {
+      title: "Recommandations personnalisées",
+      body: "Des pistes reliées à votre dynamique réelle, pour savoir concrètement par où avancer.",
+    },
+    {
+      title: "Plan d’action",
+      body: "Transformer les prises de conscience en gestes simples, progressifs, à vivre à deux.",
+    },
+    {
+      title: "Téléchargement du dossier",
+      body: "Gardez votre rapport et vos outils pour y revenir, les relire et les travailler ensemble.",
     },
   ],
 } as const
 
 export const LANDING_AUDIENCES = [
   {
-    title: "Vous préparez votre mariage ?",
-    body: "Un temps volontaire pour parler de sujets que la préparation du mariage ne permet pas toujours d’approfondir. Vous ne préparez pas seulement une cérémonie — vous préparez une vie à deux.",
-    image: "/home/hero-african-wedding.png",
+    title: "Vous êtes cheminants ou fiancés",
+    body: "Vous construisez déjà quelque chose à deux — avec ou sans date de mariage. Le bilan vous aide à clarifier comment vous fonctionnez ensemble avant que les sujets sensibles ne s’installent dans le silence.",
   },
   {
-    title: "Vous êtes déjà mariés ?",
-    body: "Comprendre certains fonctionnements, mettre des mots sur des sujets qui reviennent, retrouver vos forces, décider ensemble de ce que vous voulez améliorer. Il n’est jamais trop tôt — ni trop tard.",
-    image: "/home/compare-couple.png",
+    title: "Vous préparez votre mariage",
+    body: "Un temps volontaire pour parler de sujets que la préparation du mariage ne permet pas toujours d’approfondir. Vous préparez une vie à deux — pas seulement une cérémonie.",
   },
   {
-    title: "Vous êtes chrétiens ?",
-    body: "KELIAA est pensée d’abord pour vous. Et si vous n’êtes pas chrétien ? Vous êtes également le bienvenu. KELIAA COUPLE™ est ouvert à tous les couples qui souhaitent mieux comprendre leur dynamique.",
-    image: "/home/story-community.png",
+    title: "Vous êtes déjà mariés",
+    body: "Nouvellement mariés ou depuis plusieurs années : comprendre certains fonctionnements, mettre des mots sur ce qui revient, retrouver vos forces, décider ensemble de ce que vous voulez améliorer.",
+  },
+  {
+    title: "Chrétiens — et ouverts à tous",
+    body: "KELIAA est née d’une vision chrétienne et pensée d’abord pour les couples et fiancés chrétiens. Mais le moteur du bilan Couple n’est pas réservé à la chrétienté : le cœur de l’expérience, c’est votre dynamique relationnelle — communication, différences, attentes, décisions, projets. Que vous soyez chrétiens ou non, vous pouvez faire ce bilan.",
   },
 ] as const
 
 export const LANDING_STEPS = [
   {
     n: "01",
-    title: "L’un de vous achète",
-    body: "Un seul achat pour deux personnes.",
+    title: "L’un de vous souscrit",
+    body: "Un seul achat pour deux personnes — peu importe qui commence.",
   },
   {
     n: "02",
     title: "Vous invitez l’autre",
-    body: "Un lien sécurisé ou un code. Deux places. Pas une de plus.",
+    body: "Un lien sécurisé ou un code. Deux places, pas une de plus.",
   },
   {
     n: "03",
@@ -212,12 +225,39 @@ export const LANDING_STEPS = [
   {
     n: "04",
     title: "KELIAA analyse",
-    body: "Convergences, différences, priorités — vos deux résultats croisés.",
+    body: "Vos deux résultats sont croisés : convergences, différences, priorités.",
   },
   {
     n: "05",
-    title: "Vous découvrez votre rapport",
-    body: "Enfin quelque chose de concret à regarder ensemble.",
+    title: "Vous découvrez et téléchargez",
+    body: "Votre rapport est prêt à regarder ensemble — et à conserver.",
+  },
+] as const
+
+export const LANDING_REPORT_BLOCKS = [
+  {
+    title: "Vos forces",
+    body: "Ce qui fonctionne déjà entre vous. Ce qui constitue une vraie ressource pour votre relation — et sur quoi vous pouvez vous appuyer dès maintenant.",
+  },
+  {
+    title: "Vos convergences",
+    body: "Les domaines où vos attentes et vos visions se rejoignent. Les terrains communs qui donnent de la stabilité à votre couple.",
+  },
+  {
+    title: "Vos différences",
+    body: "Les sujets sur lesquels vous ne voyez pas forcément les choses de la même manière — sans que cela signifie un échec, mais un terrain à clarifier.",
+  },
+  {
+    title: "Zones de vigilance",
+    body: "Les écarts qui méritent d’être regardés avant qu’ils ne deviennent des tensions répétitives ou des malentendus installés.",
+  },
+  {
+    title: "Vos priorités",
+    body: "Les quelques sujets sur lesquels il serait réellement utile de commencer. Par quoi commencer, pourquoi, et quelle première action poser.",
+  },
+  {
+    title: "Une lecture à deux",
+    body: "Vous passez de « nous avons un problème » à « nous savons ce que nous devons comprendre et travailler » — ensemble.",
   },
 ] as const
 
@@ -228,29 +268,26 @@ export const LANDING_OFFERS = {
   essentialClose:
     "Vous voulez simplement comprendre ce qui se passe entre vous et savoir quoi travailler ? Commencez ici.",
   essentialFeatures: [
-    "Analyse individuelle",
-    "Analyse de couple",
-    "Forces & priorités",
-    "Recommandations",
+    "Analyse individuelle de chaque partenaire",
+    "Analyse croisée du couple",
+    "Forces, convergences, différences, vigilance",
+    "Priorités et recommandations",
     "Exercices + plan d’action",
-    "Rapport 35–50 pages",
+    "Rapport personnalisé (repère 35–50 pages)",
   ],
   premiumFor: "Tout l’Essentiel. Puis davantage de profondeur.",
   premiumFeatures: [
-    "Dynamiques approfondies",
-    "Scénarios relationnels",
-    "Conversations guidées approfondies",
-    "Protocoles de travail",
+    "Dynamiques relationnelles approfondies",
+    "Scénarios relationnels concrets",
+    "Conversations guidées détaillées",
+    "Protocoles de travail progressifs",
     "Charte relationnelle",
     "Plan d’action étendu · rapport 50–70 pages",
   ],
-  summaryEssential: "Je veux comprendre notre couple.",
-  summaryPremium:
-    "Je veux comprendre notre couple et aller beaucoup plus loin dans le travail.",
 } as const
 
 export const LANDING_IMAGINE = {
-  eyebrow: "Imaginez la conversation après le bilan",
+  eyebrow: "Imaginez",
   title: "Vous êtes assis ensemble. Votre rapport est ouvert devant vous.",
   body: "Vous ne cherchez pas qui a tort ni qui a le meilleur score. Vous regardez, vous découvrez et vous échangez tranquillement.",
   quotes: [
@@ -265,17 +302,11 @@ export const LANDING_CLOSING = {
   title: "Votre couple a besoin de bien plus que d’espérer",
   body: "Votre couple a besoin de clarté, de conversations et de compréhension…",
   bodyEnd: "Votre couple n’a pas besoin de verdicts.",
-  lastQ: "Une dernière question",
+  finishTitle: "Pour finir",
   lastPrompt:
-    "Si vous pouviez découvrir une seule chose importante sur votre couple aujourd’hui, qu’aimeriez-vous savoir ?",
-  lastOptions: [
-    "Ce qui vous rapproche",
-    "Ce qui vous différencie",
-    "Ce qui pourrait devenir une difficulté",
-    "Ce que vous devez travailler",
-  ],
+    "Ce qui vous rapproche, ce qui vous différencie, ce qui pourrait devenir une difficulté — ou simplement :",
   lastQuote: "Est-ce que nous sommes réellement aussi alignés que nous le pensons ?",
-  start: "Votre bilan commence ici.",
+  start: "Faites le bilan pour le découvrir.",
   tagline:
     "Comprendre votre dynamique. Clarifier vos différences. Construire avec intention.",
 } as const
