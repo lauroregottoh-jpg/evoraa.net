@@ -8,7 +8,7 @@ import { DiscoveryAssessmentCards } from "@/components/rapport/DiscoveryAssessme
 import { buildLivingPersonalizedReport } from "@/lib/rapport/personalized/buildLivingReport"
 import { createClient } from "@/utils/supabase/server"
 import { getUsageSnapshot } from "@/lib/billing/usage"
-import { Crown, Lock, Sparkles, KeyRound } from "lucide-react"
+import { Crown, Sparkles, KeyRound } from "lucide-react"
 import type { AssessmentSlug } from "@/lib/assessments/questionBank"
 import { ESSENTIAL_ASSESSMENTS } from "@/lib/rapport/personalized/assessments.catalog"
 
