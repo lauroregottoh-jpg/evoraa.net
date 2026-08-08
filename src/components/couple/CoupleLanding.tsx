@@ -18,6 +18,7 @@ import {
 import { PageHero } from "@/components/marketing/PageHero"
 import { MagneticButton } from "@/components/ui/magnetic-button"
 import { CoupleJourneyCard } from "@/components/couple/CoupleJourneyCard"
+import { CoupleSituationCards } from "@/components/couple/CoupleSituationCards"
 import { COUPLE_BRAND, COUPLE_TAGLINE } from "@/lib/couple/config"
 import { COUPLE_OFFERS } from "@/lib/couple/offers"
 import { cn } from "@/utils/cn"
@@ -31,9 +32,11 @@ import {
   LANDING_OFFERS,
   LANDING_RECOGNIZE,
   LANDING_REPORT_PILLARS,
+  LANDING_SITUATIONS,
   LANDING_STEPS,
   LANDING_TOOLS,
   LANDING_TWO_LOOKS,
+  type LandingSituationId,
 } from "@/lib/couple/landingCopy"
 
 if (typeof window !== "undefined") {
@@ -44,6 +47,10 @@ export function CoupleLanding() {
   const rootRef = React.useRef<HTMLDivElement>(null)
   const essential = COUPLE_OFFERS.couple_essential
   const premium = COUPLE_OFFERS.couple_premium_plus
+  const [situation, setSituation] =
+    React.useState<LandingSituationId | null>(null)
+
+  const selectedSituation = LANDING_SITUATIONS.find((s) => s.id === situation)
 
   useGSAP(
     () => {
@@ -130,6 +137,19 @@ export function CoupleLanding() {
         ease: "power2.out",
       })
 
+      gsap.from(".couple-situation-card", {
+        scrollTrigger: {
+          trigger: ".couple-situations-grid",
+          start: "top 85%",
+          once: true,
+        },
+        y: 24,
+        scale: 0.96,
+        duration: 0.65,
+        stagger: 0.1,
+        ease: "power2.out",
+      })
+
       gsap.to(".hero-cta-main", {
         scale: 1.02,
         duration: 2.2,
@@ -150,7 +170,7 @@ export function CoupleLanding() {
         imageSrc="/home/hero-african-wedding.png"
         imageClassName="object-[center_32%] sm:object-center"
         imageAlt={COUPLE_BRAND}
-        className="min-h-[56vh] sm:min-h-[64vh]"
+        className="min-h-[52vh] sm:min-h-[58vh]"
       >
         <div className="pt-5 flex flex-wrap gap-3">
           <div className="hero-cta-main">
@@ -168,33 +188,87 @@ export function CoupleLanding() {
             {LANDING_HERO.ctaSecondary}
           </MagneticButton>
         </div>
+        <p className="pt-3 text-sm text-white/75">
+          À partir de {essential.amountXof.toLocaleString("fr-FR")} FCFA — pour
+          vous deux
+        </p>
       </PageHero>
 
-      {/* Intro promise */}
+      {/* Quatre situations */}
+      <section className="relative py-16 sm:py-24 px-6 sm:px-12 lg:px-20 overflow-hidden">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#1C1412] via-[#2A1810] to-[#5C1F28]"
+        />
+        <div className="relative z-10 mx-auto max-w-6xl space-y-8">
+          <div className="couple-fade-up text-center space-y-3 max-w-3xl mx-auto">
+            <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#F3D9A4]">
+              Où en êtes-vous ?
+            </p>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#F8F4EE] leading-tight">
+              Choisissez la situation qui vous ressemble
+            </h2>
+            <p className="text-sm sm:text-base text-[#F8F4EE]/80 leading-relaxed">
+              Quatre chemins, une même question : comprendre comment vous
+              fonctionnez vraiment à deux.
+            </p>
+          </div>
+
+          <CoupleSituationCards
+            selected={situation}
+            onSelect={setSituation}
+          />
+
+          <div
+            className={cn(
+              "couple-fade-up mx-auto max-w-2xl rounded-2xl border border-[#B8954A]/40 bg-[#F8F4EE] p-5 sm:p-6 text-center transition-all duration-500",
+              selectedSituation ? "opacity-100 translate-y-0" : "opacity-90"
+            )}
+          >
+            {selectedSituation ? (
+              <>
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
+                  Votre projection
+                </p>
+                <p className="mt-2 font-serif text-xl font-bold text-[#1C1412]">
+                  {selectedSituation.title}
+                </p>
+                <p className="mt-2 text-sm text-[#1C1412]/75 leading-relaxed">
+                  {selectedSituation.body}
+                </p>
+              </>
+            ) : (
+              <p className="text-sm text-[#1C1412]/70 leading-relaxed">
+                Touchez une carte pour vous projeter dans votre situation.
+              </p>
+            )}
+            <p className="mt-4 font-serif text-base sm:text-lg font-bold text-[#1C1412] leading-snug">
+              {LANDING_HERO.essentialQ}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Entête — suite narrative */}
       <section className="py-16 sm:py-20 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div className="couple-roll-left space-y-5">
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-              {LANDING_HERO.lead}
+              Car au début d’une relation, certaines différences peuvent sembler
+              anodines. Puis la relation avance, les responsabilités augmentent,
+              les décisions deviennent plus importantes et ce qui était autrefois
+              facile peut devenir un sujet de tension.
             </p>
-            <ul className="flex flex-wrap gap-2">
-              {LANDING_HERO.topics.map((t) => (
-                <li
-                  key={t}
-                  className="rounded-full border border-border bg-white/80 px-3 py-1.5 text-xs font-medium text-foreground"
-                >
-                  {t}
+            <ul className="space-y-2.5">
+              {LANDING_HERO.tensions.map((line) => (
+                <li key={line} className="flex gap-3 text-sm text-foreground/90">
+                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-accent shrink-0" />
+                  <span className="leading-relaxed">{line}</span>
                 </li>
               ))}
             </ul>
             <p className="font-serif text-xl sm:text-2xl font-bold text-foreground leading-snug">
               {LANDING_HERO.invite}
-            </p>
-            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-              {LANDING_HERO.promise}
-            </p>
-            <p className="text-sm font-medium text-foreground leading-relaxed">
-              {LANDING_HERO.promiseSub}
             </p>
           </div>
           <div className="couple-roll-right couple-zoom-frame relative h-[360px] sm:h-[460px] rounded-2xl overflow-hidden shadow-elevated">
@@ -207,7 +281,32 @@ export function CoupleLanding() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
             <p className="absolute bottom-5 left-5 right-5 text-white font-serif text-lg sm:text-xl font-bold drop-shadow-md">
-              Une lecture à deux — pas un quiz isolé
+              Une carte de compréhension — pas un quiz
+            </p>
+          </div>
+        </div>
+
+        <div className="couple-fade-up mt-12 max-w-3xl mx-auto space-y-4 text-center">
+          <p className="text-base text-muted-foreground leading-relaxed">
+            {LANDING_HERO.promise}
+          </p>
+          <p className="text-sm font-medium text-foreground leading-relaxed">
+            {LANDING_HERO.discover}
+          </p>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            {LANDING_HERO.deeper}
+          </p>
+          <p className="text-sm sm:text-base font-medium text-foreground leading-relaxed">
+            {LANDING_HERO.map}
+          </p>
+          <div className="flex flex-wrap justify-center gap-3 pt-2">
+            <MagneticButton href="/couple/offre" variant="primary" size="lg">
+              {LANDING_HERO.ctaPrimary}
+            </MagneticButton>
+            <p className="w-full text-xs text-muted-foreground pt-1">
+              Essentiel {essential.amountXof.toLocaleString("fr-FR")} FCFA ·
+              Premium Plus {premium.amountXof.toLocaleString("fr-FR")} FCFA —
+              pour vous deux
             </p>
           </div>
         </div>

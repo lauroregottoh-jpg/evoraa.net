@@ -4,26 +4,63 @@
  */
 
 export const LANDING_HERO = {
-  hook: "Et si vous découvriez enfin ce qui se joue vraiment entre vous ?",
-  lead: "Vous vous aimez. Vous avez des projets. Peut-être même que vous préparez votre mariage. Mais il y a des sujets dont vous parlez peu.",
-  topics: [
-    "L’argent",
-    "Les familles",
-    "Les décisions",
-    "Les conflits",
-    "Les attentes",
-    "Les rôles",
-    "L’intimité",
-    "L’avenir",
+  hook: "Comprenez pourquoi vous fonctionnez comme vous le faites à deux.",
+  essentialQ:
+    "Dans chacune de ces situations, il y a une question essentielle : est-ce que nous comprenons réellement comment nous fonctionnons ensemble ?",
+  tensions: [
+    "Vous ne comprenez pas toujours pourquoi vous réagissez différemment.",
+    "Vous avez parfois l’impression de parler de la même chose sans jamais vous comprendre complètement.",
+    "Certains sujets reviennent régulièrement dans vos discussions.",
+    "Vous découvrez parfois des attentes que vous ne soupçonniez pas chez l’autre.",
+    "Vous vous demandez comment vos différences vont se vivre dans la durée.",
   ],
-  invite: "Et si vous preniez enfin le temps de regarder tout cela ensemble ?",
+  invite:
+    "Et si, au lieu d’attendre que ces différences deviennent des difficultés, vous preniez maintenant le temps de les comprendre ?",
   promise:
-    "KELIAA COUPLE™ est un bilan approfondi pour deux personnes qui veulent mieux comprendre leur dynamique et construire leur relation avec davantage de clarté.",
-  promiseSub:
-    "Pas un verdict ni un simple score — une véritable lecture de votre couple, avec des outils pour avancer.",
-  ctaPrimary: "Découvrir mon bilan",
+    "KELIAA COUPLE™ vous permet d’explorer votre dynamique à deux à partir de vos réponses individuelles, puis de mettre vos deux regards en relation.",
+  discover:
+    "Vous découvrez vos points de convergence, vos différences, vos forces, vos zones de vigilance et les sujets qui méritent réellement votre attention.",
+  deeper:
+    "Mais surtout, vous comprenez mieux pourquoi vous pouvez fonctionner différemment, comment ces différences peuvent se manifester dans votre relation et sur quoi vous pouvez concrètement travailler ensemble.",
+  map:
+    "Votre bilan devient ainsi une véritable carte de compréhension de votre couple : une façon de mettre des mots sur ce que vous vivez déjà, de mieux anticiper ce qui pourrait devenir sensible et de savoir par où commencer pour construire une relation plus consciente.",
+  ctaPrimary: "Découvrir mon bilan de couple",
   ctaSecondary: "J’ai un code",
 } as const
+
+/** Quatre situations — cartes interactives pour se projeter. */
+export const LANDING_SITUATIONS = [
+  {
+    id: "interest",
+    label: "Intérêt mutuel",
+    title: "Vous vous intéressez l’un à l’autre",
+    body: "Vous souhaitez savoir où cette relation peut vous mener.",
+    accent: "from-[#5C1F28] to-[#8B2E3A]",
+  },
+  {
+    id: "path",
+    label: "Chemin ensemble",
+    title: "Vous avez décidé de cheminer ensemble",
+    body: "Vous voulez prendre le temps de mieux vous connaître avant d’aller plus loin.",
+    accent: "from-[#2A1810] to-[#5C3A1A]",
+  },
+  {
+    id: "engaged",
+    label: "Fiançailles",
+    title: "Vous êtes fiancés",
+    body: "Vous préparez votre mariage, avec l’envie de construire sur des bases solides.",
+    accent: "from-[#1C3A2A] to-[#2A5C3A]",
+  },
+  {
+    id: "married",
+    label: "Mariage",
+    title: "Vous êtes déjà mariés",
+    body: "Depuis quelques mois ou plusieurs années : vous aimez votre conjoint, mais certains sujets reviennent ou des tensions deviennent difficiles à gérer.",
+    accent: "from-[#3A2A10] to-[#6B4A1A]",
+  },
+] as const
+
+export type LandingSituationId = (typeof LANDING_SITUATIONS)[number]["id"]
 
 export const LANDING_RECOGNIZE = {
   eyebrow: "Vous allez peut-être vous reconnaître",

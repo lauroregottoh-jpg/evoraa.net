@@ -24,15 +24,15 @@ export function HomeCoupleSection() {
           {COUPLE_BRAND}
         </h2>
         <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-          Et si vous découvriez enfin ce qui se joue vraiment entre vous ?
+          Comprenez pourquoi vous fonctionnez comme vous le faites à deux.
         </p>
         <p className="text-sm text-muted-foreground leading-relaxed max-w-xl">
-          Un bilan approfondi pour deux — pas un verdict. Une lecture de votre
-          dynamique, avec des outils pour construire avec davantage de clarté.
+          Intérêt mutuel, chemin ensemble, fiançailles ou mariage : quatre
+          situations, une même carte de compréhension de votre couple.
         </p>
         <div className="flex flex-wrap gap-3 pt-1 justify-center sm:justify-start">
           <MagneticButton href="/couple" size="lg" className="px-7">
-            Découvrir mon bilan
+            Découvrir mon bilan de couple
             <ArrowRight className="ml-2 h-4 w-4" />
           </MagneticButton>
         </div>
