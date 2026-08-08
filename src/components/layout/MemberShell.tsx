@@ -30,6 +30,7 @@ import { DevSessionSwitcher } from "@/components/dev/DevSessionSwitcher";
 import { MemberReminders } from "@/components/layout/MemberReminders";
 import { logoutAction } from "@/app/actions/auth";
 import { OpsAdminEntryBanner } from "@/components/admin/OpsAdminEntryBanner";
+import { PwaInstallHint } from "@/components/pwa/PwaInstallHint";
 
 const SIDEBAR_KEY = "KELIAA_member_sidebar_open";
 
@@ -559,8 +560,9 @@ export function MemberShell({
           )}
         >
           {firstName ? <p className="sr-only">Espace de {firstName}</p> : null}
-          <div className="mb-4">
+          <div className="mb-4 space-y-3">
             <OpsAdminEntryBanner />
+            <PwaInstallHint />
           </div>
           {children}
         </main>

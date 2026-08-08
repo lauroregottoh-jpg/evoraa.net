@@ -102,7 +102,8 @@ export function CoffrePremiumModal({ open, onClose, resourceTitle }: Props) {
             {[
               `${COFFRE_INITIAL_UNLOCKS} ressources au choix dès l’activation`,
               `Puis +${COFFRE_UNLOCKS_PER_MONTH} ressources au choix chaque mois`,
-              "Téléchargements PDF sécurisés, à votre rythme",
+              "18+ guides, journaux, prières, famille & exercices PDF",
+              "Téléchargements sécurisés, à votre rythme",
               "Rapport Alliance, Matching enrichi et badge vérifié",
             ].map((line) => (
               <li

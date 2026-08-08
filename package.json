@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint src",
-    "test:smoke": "node --experimental-strip-types --test tests/**/*.test.mjs"
+    "test:smoke": "node --experimental-strip-types --test tests/**/*.test.mjs",
+    "ops:bug-hunt": "node scripts/daily-bug-hunt.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

@@ -59,6 +59,7 @@ import {
   PaymentsAuditPanel,
 } from "@/components/admin/AdminPaymentsPanels"
 import { AdminOpsAuditPanel } from "@/components/admin/AdminOpsAuditPanel"
+import { AdminOpsHealthBanner } from "@/components/admin/AdminOpsHealthBanner"
 import { DistBars, SparkColumns } from "@/components/admin/AdminCharts"
 import { cn } from "@/utils/cn"
 import type { MatchingIntelligence } from "@/lib/admin/matchingIntelligence"
@@ -306,6 +307,8 @@ export function AdminConsole(props: Props) {
           {msg}
         </p>
       )}
+
+      <AdminOpsHealthBanner settings={props.settings} />
 
       {/* ——— 1. DASHBOARD ——— */}
       {nav === "dashboard" && (

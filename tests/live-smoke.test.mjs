@@ -21,6 +21,15 @@ describe("Live smoke (optionnel)", { skip: !enabled }, () => {
     }
   })
 
+  it("manifest PWA servi", async () => {
+    const res = await fetch(`${base}/manifest.webmanifest`)
+    assert.ok(res.status < 500, `manifest → ${res.status}`)
+    if (res.ok) {
+      const body = await res.text()
+      assert.match(body, /KELIAA|keliaa/i)
+    }
+  })
+
   it("health config répond (sans secrets)", async () => {
     const res = await fetch(`${base}/api/health/config`)
     assert.ok(res.status < 500, `health → ${res.status}`)

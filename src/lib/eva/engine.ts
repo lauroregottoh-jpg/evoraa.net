@@ -277,7 +277,7 @@ export async function runEvaEngine(input: {
   if (CRISIS_PATTERNS.test(question)) {
     return {
       answer:
-        "Merci de m’avoir confié cela. Je ne peux pas vous accompagner seule ici. Si vous êtes en danger immédiat, contactez les secours locaux. Vous pouvez aussi écrire à contact@keliaa.org. Vous n’êtes pas seul(e).",
+        "Merci de m’avoir confié cela. Je ne peux pas vous accompagner seule ici. Si vous êtes en danger immédiat, contactez les secours locaux (police / SAMU selon votre pays). Vous pouvez aussi écrire à contact@keliaa.org. Vous n’êtes pas seul(e).",
       intent: "crisis",
       source: "crisis",
       ctaHref: "/contact",

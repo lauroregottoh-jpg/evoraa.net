@@ -6,13 +6,17 @@ import { CoffrePremiumModal } from "@/components/coffre/CoffrePremiumModal"
 import { CoffreResourceCard } from "@/components/coffre/CoffreResourceCard"
 import { CoffreUnlockSection } from "@/components/coffre/CoffreUnlockSection"
 import { unlockCoffreResource } from "@/app/actions/coffre"
-import type { CoffreResource } from "@/lib/coffre/resources"
+import {
+  getCoffreStats,
+  type CoffreResource,
+} from "@/lib/coffre/resources"
 import type { CoffreAccessState } from "@/lib/coffre/unlock"
-import { isResourceUnlocked } from "@/lib/coffre/unlock"
 import {
   COFFRE_INITIAL_UNLOCKS,
   COFFRE_UNLOCKS_PER_MONTH,
+  isResourceUnlocked,
 } from "@/lib/coffre/unlock"
+import { PLANS } from "@/lib/billing/plans"
 
 type Props = {
   resources: CoffreResource[]
@@ -28,6 +32,8 @@ export function CoffreLibrary({ resources, initialAccess }: Props) {
     null
   )
   const [toast, setToast] = React.useState<string | null>(null)
+  const stats = React.useMemo(() => getCoffreStats(), [])
+  const alliancePrice = PLANS.premium_plus.amountXof.toLocaleString("fr-FR")
 
   React.useEffect(() => {
     setAccess(initialAccess)
@@ -105,8 +111,9 @@ export function CoffreLibrary({ resources, initialAccess }: Props) {
             Le Coffre Premium
           </h1>
           <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-            Ressources présentées en vignettes Premium pour accompagner votre
-            préparation au mariage — guides, journaux et prières exclusifs Alliance.
+            {stats.total} ressources exclusives — guides, journaux, prières,
+            exercices et préparation familiale — pour ceux qui préparent un
+            mariage sérieux, pas un swipe.
           </p>
 
           <div className="flex flex-wrap gap-2 pt-1">
@@ -127,33 +134,38 @@ export function CoffreLibrary({ resources, initialAccess }: Props) {
                 ) : null}
               </>
             ) : (
-              <span className="inline-flex rounded-full border border-border bg-white/70 px-3 py-1.5 text-xs font-medium text-muted-foreground">
-                Aperçu Découverte — ressources visibles, téléchargement Alliance
-              </span>
+              <>
+                <span className="inline-flex rounded-full border border-accent/30 bg-accent/10 px-3 py-1.5 text-xs font-semibold text-accent">
+                  {stats.total} ressources · Alliance
+                </span>
+                <span className="inline-flex rounded-full border border-border bg-white/70 px-3 py-1.5 text-xs font-medium text-muted-foreground">
+                  Aperçu Découverte — téléchargement réservé
+                </span>
+              </>
             )}
           </div>
         </div>
       </header>
 
       {!access.isPaid && (
-        <div className="rounded-2xl border border-primary/15 bg-primary/[0.04] px-4 py-3.5 sm:px-5 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            Dès Alliance :{" "}
-            <span className="font-semibold text-foreground">
-              {COFFRE_INITIAL_UNLOCKS} ressources au choix
-            </span>
-            , puis{" "}
-            <span className="font-semibold text-foreground">
-              +{COFFRE_UNLOCKS_PER_MONTH} chaque mois
-            </span>
-            .
-          </p>
+        <div className="rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/[0.07] via-accent/[0.08] to-primary/[0.05] px-4 py-4 sm:px-5 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
+          <div className="space-y-1">
+            <p className="text-sm font-semibold text-foreground">
+              Dès Alliance ({alliancePrice} FCFA/mois) :{" "}
+              {COFFRE_INITIAL_UNLOCKS} ressources au choix, puis +
+              {COFFRE_UNLOCKS_PER_MONTH} chaque mois
+            </p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Vous voyez tout le Coffre. Alliance ouvre les PDF — et la
+              bibliothèque grandit avec votre abonnement.
+            </p>
+          </div>
           <button
             type="button"
             onClick={() => openPremiumModal()}
-            className="shrink-0 inline-flex h-10 items-center justify-center rounded-xl bg-primary text-primary-foreground px-4 text-sm font-semibold"
+            className="shrink-0 inline-flex h-11 items-center justify-center rounded-xl bg-primary text-primary-foreground px-5 text-sm font-semibold"
           >
-            Débloquer Coffre Premium
+            Ouvrir le Coffre avec Alliance
           </button>
         </div>
       )}

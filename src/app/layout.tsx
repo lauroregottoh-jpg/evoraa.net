@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { AnalyticsScripts } from "@/components/analytics/AnalyticsScripts";
+import { RegisterServiceWorker } from "@/components/pwa/RegisterServiceWorker";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -22,6 +23,13 @@ const cormorant = Cormorant_Garamond({
 const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "https://keliaa.org";
 
+export const viewport: Viewport = {
+  themeColor: "#0F1F1A",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
@@ -30,6 +38,16 @@ export const metadata: Metadata = {
   },
   description:
     "Plateforme de rencontres chrétiennes pour les célibataires qui souhaitent construire un mariage selon les standards bibliques. Matching fondé sur la foi, les valeurs et le projet de vie.",
+  applicationName: "KELIAA",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "KELIAA",
+  },
+  formatDetection: {
+    telephone: false,
+  },
   icons: {
     icon: [{ url: "/favicon-keliaa.png", type: "image/png" }],
     apple: [{ url: "/apple-icon.png", type: "image/png" }],
@@ -65,6 +83,9 @@ export const metadata: Metadata = {
     google:
       process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ||
       "JNfGd1Y3c4gE2RVDCobRq3rJu0-nIq6yE3I8Ez2eSFc",
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
   },
 };
 
@@ -112,6 +133,7 @@ export default function RootLayout({
         `}</Script>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <AnalyticsScripts />
+          <RegisterServiceWorker />
           <SmoothScroll>{children}</SmoothScroll>
         </ThemeProvider>
       </body>

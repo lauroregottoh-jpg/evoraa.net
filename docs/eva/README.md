@@ -35,8 +35,9 @@ Sans `OPENAI_API_KEY` → réponses locales (intention + base docs). Avec clé �
 | Chat LLM | Si `OPENAI_API_KEY` ; sinon moteur connaissance locale |
 | Quota EVA | Free 3/j · Legacy 10/j · Alliance 20/j |
 | Prompt admin | `platform_settings.eva_config` → fusionné dans le system prompt |
-| Surfaces | `/help`, `/spiritual-resources`, `/contact` |
+| Surfaces | `/help`, `/spiritual-resources`, `/contact` + chat membre (PWA installable) |
 | Docs runtime | `docs/eva/*.md` lus côté serveur (déployer avec le repo) |
+| Guardrails tests | `tests/eva-guardrails.test.mjs` (crise + hors-sujet) |
 
 ## Glossaire de nommage
 

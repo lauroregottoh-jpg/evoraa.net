@@ -78,8 +78,13 @@ export function CoffreResourceCard({
             {resource.title}
           </h3>
           <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
-            {resource.description}
+            {locked && resource.teaser ? resource.teaser : resource.description}
           </p>
+          {locked && resource.teaser ? (
+            <p className="text-[11px] text-primary/80 font-medium">
+              Contenu complet réservé Alliance
+            </p>
+          ) : null}
         </div>
 
         <div className="mt-auto pt-1">
@@ -105,7 +110,7 @@ export function CoffreResourceCard({
                 className="w-full inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-primary/25 bg-primary/5 text-primary text-sm font-semibold hover:bg-primary/10 transition-colors"
               >
                 <Lock className="h-4 w-4" />
-                Débloquer Coffre Premium
+                {isPaid ? "Disponible le prochain mois" : "Débloquer avec Alliance"}
               </button>
             )
           ) : (

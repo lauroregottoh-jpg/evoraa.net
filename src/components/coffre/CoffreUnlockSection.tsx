@@ -9,6 +9,7 @@ import {
   Feather,
   FileText,
   HeartHandshake,
+  Home,
   NotebookPen,
   Quote,
   Sparkles,
@@ -38,6 +39,7 @@ const CATEGORY_ICONS: Record<
   lettre: Feather,
   fiche: FileText,
   checklist: CheckCircle2,
+  famille: Home,
 }
 
 const CATEGORY_BLURBS: Partial<Record<CoffreCategory, string>> = {
@@ -49,6 +51,7 @@ const CATEGORY_BLURBS: Partial<Record<CoffreCategory, string>> = {
   lettre: "Déposer ce qui pèse — pour avancer plus léger.",
   fiche: "Passer à l’action en quelques minutes.",
   checklist: "Ne rien oublier d’essentiel sur le chemin.",
+  famille: "Préparer le foyer et l’héritage émotionnel des enfants.",
 }
 
 type Props = {
