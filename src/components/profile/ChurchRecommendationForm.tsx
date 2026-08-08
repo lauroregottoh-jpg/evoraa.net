@@ -3,10 +3,12 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { submitChurchRecommendationAction } from "@/app/actions/profile"
-import { Church } from "lucide-react"
+import { Church, FileImage, Upload } from "lucide-react"
+
+const ACCEPT =
+  "application/pdf,image/jpeg,image/png,image/webp,.pdf,.jpg,.jpeg,.png,.webp"
 
 export function ChurchRecommendationForm() {
   const [name, setName] = React.useState("")
@@ -14,22 +16,26 @@ export function ChurchRecommendationForm() {
   const [church, setChurch] = React.useState("")
   const [email, setEmail] = React.useState("")
   const [phone, setPhone] = React.useState("")
-  const [message, setMessage] = React.useState("")
+  const [file, setFile] = React.useState<File | null>(null)
   const [status, setStatus] = React.useState<"idle" | "saving" | "ok">("idle")
   const [error, setError] = React.useState("")
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!file) {
+      setError("Joignez un PDF ou une image de la recommandation (obligatoire).")
+      return
+    }
     setStatus("saving")
     setError("")
-    const r = await submitChurchRecommendationAction({
-      recommenderName: name,
-      recommenderRole: role,
-      churchName: church,
-      contactEmail: email,
-      contactPhone: phone,
-      message,
-    })
+    const fd = new FormData()
+    fd.set("recommenderName", name)
+    fd.set("recommenderRole", role)
+    fd.set("churchName", church)
+    fd.set("contactEmail", email)
+    fd.set("contactPhone", phone)
+    fd.set("attachment", file)
+    const r = await submitChurchRecommendationAction(fd)
     if (r.error) {
       setError(r.error)
       setStatus("idle")
@@ -37,7 +43,7 @@ export function ChurchRecommendationForm() {
     }
     setStatus("ok")
     setName("")
-    setMessage("")
+    setFile(null)
   }
 
   return (
@@ -49,9 +55,11 @@ export function ChurchRecommendationForm() {
         </CardTitle>
       </CardHeader>
       <CardContent className="p-6">
-        <p className="text-xs text-muted-foreground mb-4">
-          Demandez à un pasteur ou responsable d&apos;Église d&apos;attester de votre sérieux et de
-          votre témoignage. La validation augmente votre score de confiance.
+        <p className="text-xs text-muted-foreground mb-4 leading-relaxed">
+          Joignez uniquement un <strong>PDF</strong> ou une{" "}
+          <strong>image</strong> de l&apos;attestation (pas de texte libre —
+          pour un contrôle fiable). La validation augmente votre score de
+          confiance.
         </p>
         <form onSubmit={onSubmit} className="space-y-3">
           <Input
@@ -87,15 +95,29 @@ export function ChurchRecommendationForm() {
               className="rounded-xl"
             />
           </div>
-          <Textarea
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Message / attestation"
-            className="rounded-xl min-h-20"
-          />
+
+          <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#B8954A]/40 bg-[#F7F0E0]/40 px-4 py-6 text-center hover:bg-[#F7F0E0]/70">
+            <FileImage className="h-7 w-7 text-[#B8954A]" />
+            <span className="text-sm font-semibold text-foreground">
+              {file ? file.name : "PDF ou image de la recommandation *"}
+            </span>
+            <span className="text-[11px] text-muted-foreground inline-flex items-center gap-1">
+              <Upload className="h-3 w-3" />
+              Formats : PDF, JPG, PNG, WebP · max 8 Mo
+            </span>
+            <input
+              type="file"
+              accept={ACCEPT}
+              className="sr-only"
+              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+            />
+          </label>
+
           {error && <p className="text-sm text-destructive">{error}</p>}
           {status === "ok" && (
-            <p className="text-sm text-emerald-600">Demande envoyée — en attente de validation admin.</p>
+            <p className="text-sm text-emerald-600">
+              Document envoyé — en attente de validation admin.
+            </p>
           )}
           <Button type="submit" disabled={status === "saving"} className="rounded-xl">
             {status === "saving" ? "Envoi…" : "Envoyer la recommandation"}

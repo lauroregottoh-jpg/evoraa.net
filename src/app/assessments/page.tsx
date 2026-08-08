@@ -187,53 +187,40 @@ export default async function AssessmentsHubPage() {
           <AssessmentPillarCards items={[...progress]} />
         </section>
 
-        {/* ——— 2. 10 CLÉS DU RAPPORT (Alliance mis en avant) ——— */}
-        <section
-          className={
-            isAlliance
-              ? "relative z-10 space-y-4 rounded-[1.75rem] border-2 border-[#B8954A]/55 bg-gradient-to-br from-[#B8954A]/15 via-white to-[#F8F4EE] p-5 sm:p-7 shadow-elevated ring-2 ring-[#B8954A]/20"
-              : "relative z-10 space-y-4"
-          }
-        >
-          <div
-            className={
-              isAlliance
-                ? "space-y-2"
-                : "rounded-2xl border border-dashed border-accent/40 bg-accent/[0.06] p-5 sm:p-6 space-y-2"
-            }
-          >
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent inline-flex items-center gap-1.5">
-              {isAlliance ? (
-                <Crown className="h-4 w-4 text-[#B8954A]" />
-              ) : (
-                <Lock className="h-4 w-4" />
-              )}
+        {/* ——— 2. 10 CLÉS DU RAPPORT (Alliance mis en avant — Découverte + Alliance) ——— */}
+        <section className="relative z-10 space-y-4 rounded-[1.75rem] border-2 border-[#B8954A]/55 bg-gradient-to-br from-[#B8954A]/18 via-white to-[#F8F4EE] p-5 sm:p-7 shadow-elevated ring-2 ring-[#B8954A]/25">
+          <div className="space-y-2">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#8B6914] inline-flex items-center gap-1.5 flex-wrap">
+              <Crown className="h-4 w-4 text-[#B8954A]" />
               Formule Alliance
-              {isAlliance ? (
-                <span className="ml-1 rounded-full bg-[#B8954A] px-2 py-0.5 text-[9px] font-bold uppercase text-[#1C1412]">
-                  Inclus
+              <span className="rounded-full bg-[#B8954A] px-2 py-0.5 text-[9px] font-bold uppercase text-[#1C1412]">
+                Inclus
+              </span>
+              {!isAlliance ? (
+                <span className="rounded-full border border-[#B8954A]/50 bg-white px-2 py-0.5 text-[9px] font-bold uppercase text-[#5C1F28]">
+                  Aperçu Découverte
                 </span>
               ) : null}
             </p>
-            <h2 className="font-serif text-3xl font-bold leading-tight">
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold leading-tight text-[#1C1412]">
               Les 10 clés de votre rapport
             </h2>
-            <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
+            <p className="text-sm text-[#1C1412]/70 leading-relaxed max-w-2xl">
               {isAlliance
                 ? "Chaque clé ouvre un chapitre de votre Rapport Personnalisé. Faites le test lié, puis lisez l’analyse dans le rapport global."
-                : "Aperçu verrouillé en Découverte. Passez Alliance pour ouvrir ces évaluations et alimenter automatiquement votre rapport."}
+                : "Avec Alliance, ces 10 clés sont incluses et alimentent votre Rapport Personnalisé. En Découverte, l’aperçu reste visible mais verrouillé — passez Alliance pour les ouvrir."}
             </p>
             {!isAlliance ? (
               <Link
                 href="/premium"
-                className="inline-flex h-10 items-center rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground"
+                className="inline-flex h-11 items-center rounded-xl bg-[#5C1F28] px-5 text-sm font-bold text-[#F8F4EE]"
               >
                 Passer Alliance pour débloquer →
               </Link>
             ) : (
               <Link
                 href="/rapport/global"
-                className="inline-flex h-10 items-center rounded-xl border border-[#B8954A]/40 bg-[#B8954A]/15 px-4 text-sm font-bold text-[#7A5F28]"
+                className="inline-flex h-11 items-center rounded-xl border border-[#B8954A]/40 bg-[#B8954A]/15 px-5 text-sm font-bold text-[#7A5F28]"
               >
                 Ouvrir mon Rapport Personnalisé →
               </Link>

@@ -293,22 +293,48 @@ export async function uploadProfilePhotoAction(
   return { success: true, photoUrl: publicUrl }
 }
 
-export async function submitChurchRecommendationAction(payload: {
-  recommenderName: string
-  recommenderRole?: string
-  churchName?: string
-  contactEmail?: string
-  contactPhone?: string
-  message?: string
-}) {
+export async function submitChurchRecommendationAction(
+  formData: FormData
+): Promise<{ error?: string; success?: boolean }> {
   const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) return { error: "Non authentifié" }
 
-  const name = payload.recommenderName.trim()
+  const name = String(formData.get("recommenderName") || "").trim()
   if (name.length < 2) return { error: "Nom du recommandant requis." }
+
+  const file = formData.get("attachment")
+  if (!(file instanceof File) || file.size === 0) {
+    return { error: "Joignez un PDF ou une image (obligatoire)." }
+  }
+  if (file.size > 8 * 1024 * 1024) {
+    return { error: "Fichier trop volumineux (max 8 Mo)." }
+  }
+
+  const header = await file.slice(0, 8).arrayBuffer()
+  const bytes = new Uint8Array(header)
+  const isPdf =
+    bytes[0] === 0x25 &&
+    bytes[1] === 0x50 &&
+    bytes[2] === 0x44 &&
+    bytes[3] === 0x46
+  const isJpeg = bytes[0] === 0xff && bytes[1] === 0xd8
+  const isPng =
+    bytes[0] === 0x89 &&
+    bytes[1] === 0x50 &&
+    bytes[2] === 0x4e &&
+    bytes[3] === 0x47
+  const isWebp =
+    bytes[0] === 0x52 &&
+    bytes[1] === 0x49 &&
+    bytes[2] === 0x46 &&
+    bytes[3] === 0x46
+
+  if (!isPdf && !isJpeg && !isPng && !isWebp) {
+    return { error: "Formats acceptés : PDF, JPEG, PNG ou WebP uniquement." }
+  }
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -317,14 +343,48 @@ export async function submitChurchRecommendationAction(payload: {
     .maybeSingle()
   if (!profile) return { error: "Profil introuvable" }
 
+  const ext = isPdf
+    ? "pdf"
+    : isJpeg
+      ? "jpg"
+      : isPng
+        ? "png"
+        : "webp"
+  const contentType = isPdf
+    ? "application/pdf"
+    : isJpeg
+      ? "image/jpeg"
+      : isPng
+        ? "image/png"
+        : "image/webp"
+  const path = `church-reco/${user.id}/${Date.now()}.${ext}`
+
+  const { error: uploadError } = await supabase.storage
+    .from("avatars")
+    .upload(path, file, {
+      cacheControl: "3600",
+      upsert: false,
+      contentType,
+    })
+
+  if (uploadError) {
+    return { error: "Impossible d’envoyer le document pour le moment." }
+  }
+
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from("avatars").getPublicUrl(path)
+
+  // Pas de texte libre : l’attestation = fichier uniquement (URL contrôlée).
   const { error } = await supabase.from("church_recommendations").insert({
     profile_id: profile.id,
     recommender_name: name,
-    recommender_role: payload.recommenderRole?.trim() || null,
-    church_name: payload.churchName?.trim() || null,
-    contact_email: payload.contactEmail?.trim() || null,
-    contact_phone: payload.contactPhone?.trim() || null,
-    message: payload.message?.trim() || null,
+    recommender_role:
+      String(formData.get("recommenderRole") || "").trim() || null,
+    church_name: String(formData.get("churchName") || "").trim() || null,
+    contact_email: String(formData.get("contactEmail") || "").trim() || null,
+    contact_phone: String(formData.get("contactPhone") || "").trim() || null,
+    message: `[FICHIER] ${publicUrl}`,
     status: "pending",
   })
   if (error) return { error: error.message }
