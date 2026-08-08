@@ -17,9 +17,10 @@ function fold(s) {
 }
 
 describe("Coffre catalogue", () => {
-  it("resources.ts liste au moins 15 entrées et catégorie famille", () => {
+  it("resources.ts liste au moins 15 entrées et domaines de vie", () => {
     const src = readFileSync(join(root, "src/lib/coffre/resources.ts"), "utf8")
-    assert.match(src, /famille/)
+    assert.match(src, /domain:/)
+    assert.match(src, /education-enfants|foyer-famille|preparation-mariage/)
     assert.match(src, /getCoffreStats/)
     const ids = [...src.matchAll(/id:\s*"([^"]+)"/g)].map((m) => m[1])
     assert.ok(ids.length >= 15, `expected >=15 resources, got ${ids.length}`)

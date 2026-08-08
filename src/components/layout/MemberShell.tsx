@@ -24,6 +24,7 @@ import {
   PanelLeftOpen,
   Route,
   Users,
+  HeartHandshake,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { DevSessionSwitcher } from "@/components/dev/DevSessionSwitcher";
@@ -59,6 +60,7 @@ const PRIMARY_FREE: NavItem[] = [
   { href: "/profile", label: "Profil", icon: User },
   { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
   { href: "/coaching", label: "Coaching", icon: Phone },
+  { href: "/couple", label: "KELYA Couple", icon: HeartHandshake },
 ];
 
 /**
@@ -78,6 +80,7 @@ const PRIMARY_ALLIANCE: NavItem[] = [
   { href: "/profile", label: "Profil", icon: User },
   { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
   { href: "/coaching", label: "Coaching", icon: Phone },
+  { href: "/couple", label: "KELYA Couple", icon: HeartHandshake },
 ];
 
 const SECONDARY = [

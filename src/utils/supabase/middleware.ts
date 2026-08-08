@@ -35,6 +35,18 @@ const PROTECTED_PREFIXES = [
   '/coffre-premium',
   '/rapport',
   '/alliance',
+  '/couple/espace',
+  '/couple/onboarding',
+  '/couple/inviter',
+  '/couple/questionnaire',
+  '/couple/attente',
+  '/couple/resultats',
+  '/couple/rapport',
+  '/couple/exercices',
+  '/couple/plan',
+  '/couple/telecharger',
+  '/couple/confirmation',
+  '/couple/checkout',
 ]
 
 const ADMIN_PREFIXES = [OPS_CONSOLE_PATH, '/moderation']

@@ -1,0 +1,12 @@
+export {
+  COUPLE_BRAND,
+  COUPLE_TAGLINE,
+  COUPLE_PROMISE,
+  COUPLE_ACCESS_DAYS,
+  isCoupleFeatureEnabled,
+} from "@/lib/couple/config"
+export { COUPLE_OFFERS, getCoupleOffer, isPremiumPlusOffer } from "@/lib/couple/offers"
+export { getCoupleQuestions, COUPLE_DIMENSION_META } from "@/lib/couple/questionBank"
+export { scoreCouplePair, interpretGlobalScore } from "@/lib/couple/scoring"
+export { buildCoupleReport, qaCoupleReport } from "@/lib/couple/report"
+export { GOLDEN_COUPLES } from "@/lib/couple/golden"

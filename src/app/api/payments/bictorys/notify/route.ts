@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
   }
 
   const admin = createClient(supabaseUrl, serviceKey)
-  let query = admin.from("payments").select("id, status, subscription_id, metadata")
+  let query = admin.from("payments").select("id, status, subscription_id, metadata, user_id, amount")
   if (paymentReference) query = query.eq("id", paymentReference)
   else query = query.eq("transaction_reference", transactionId)
 
@@ -199,6 +199,92 @@ export async function POST(request: NextRequest) {
     typeof payment.metadata === "object" && payment.metadata
       ? (payment.metadata as Record<string, unknown>)
       : {}
+
+  // KELYA COUPLE : one-shot, sans activer Alliance.
+  if (paymentMeta.product === "couple") {
+    const offerId = String(paymentMeta.offer_id || "")
+    if (offerId !== "couple_essential" && offerId !== "couple_premium_plus") {
+      return NextResponse.json({ error: "Offre couple invalide" }, { status: 400 })
+    }
+
+    const { error: couplePayErr } = await admin
+      .from("payments")
+      .update({
+        status: "completed",
+        transaction_reference: transactionId || payment.id,
+        metadata: {
+          ...paymentMeta,
+          webhook: body,
+          provider: "bictorys",
+          couple_paid_at: new Date().toISOString(),
+        },
+      })
+      .eq("id", payment.id)
+      .eq("status", "pending")
+
+    if (couplePayErr) {
+      const { data: refreshed } = await admin
+        .from("payments")
+        .select("status")
+        .eq("id", payment.id)
+        .maybeSingle()
+      if (refreshed?.status === "completed") {
+        if (deliveryId) await markWebhookDeliveryProcessed(admin, deliveryId)
+        return NextResponse.json({ ok: true, activated: true, couple: true, already: true })
+      }
+      captureError(couplePayErr.message, { source: "bictorys_couple_complete" })
+      return NextResponse.json({ error: "Activation couple impossible" }, { status: 500 })
+    }
+
+    await admin
+      .from("subscriptions")
+      .update({
+        status: "paid_couple",
+        starts_at: new Date().toISOString(),
+        ends_at: null,
+      })
+      .eq("id", payment.subscription_id)
+
+    await admin
+      .from("couple_purchases")
+      .update({ status: "completed", completed_at: new Date().toISOString() })
+      .eq("payment_id", payment.id)
+
+    const { data: profile } = await admin
+      .from("profiles")
+      .select("first_name")
+      .eq("user_id", payment.user_id)
+      .maybeSingle()
+
+    try {
+      const { fulfillCouplePurchase } = await import("@/lib/couple/fulfill")
+      await fulfillCouplePurchase({
+        admin,
+        paymentId: payment.id,
+        purchaserUserId: payment.user_id,
+        offerId,
+        amountXof: Number(payment.amount) || 0,
+        displayName: (profile?.first_name as string) || null,
+      })
+    } catch (err) {
+      captureError(err instanceof Error ? err.message : "couple fulfill", {
+        source: "bictorys_couple_fulfill",
+        paymentId: payment.id,
+      })
+      return NextResponse.json({ error: "Création couple impossible" }, { status: 500 })
+    }
+
+    await logPaymentEvent({
+      paymentId: payment.id,
+      provider: "bictorys",
+      eventType: "payment_completed",
+      status: "completed",
+      message: `couple:${offerId}`,
+    })
+
+    if (deliveryId) await markWebhookDeliveryProcessed(admin, deliveryId)
+    return NextResponse.json({ ok: true, activated: true, couple: true })
+  }
 
   // Coaching : marquer payé SANS activer Alliance (ne pas cancel d’autres abos).
   if (paymentMeta.product === "coaching") {
