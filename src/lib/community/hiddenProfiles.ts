@@ -22,12 +22,12 @@ export function isHiddenOperatorProfile(
     .trim()
     .toLowerCase()
     .normalize("NFD")
-    .replace(/\p{M}/gu, "")
+    .replace(/[\u0300-\u036f]/g, "")
   const l = (lastName || "")
     .trim()
     .toLowerCase()
     .normalize("NFD")
-    .replace(/\p{M}/gu, "")
+    .replace(/[\u0300-\u036f]/g, "")
 
   if (!f && !l) return false
   if (HIDDEN_EXACT_FIRST.has(f)) return true
