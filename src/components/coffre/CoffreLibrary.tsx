@@ -1,13 +1,15 @@
 "use client"
 
 import * as React from "react"
-import { Library, Sparkles } from "lucide-react"
+import { ArrowLeft, Library, Sparkles } from "lucide-react"
 import { CoffrePremiumModal } from "@/components/coffre/CoffrePremiumModal"
 import { CoffreResourceCard } from "@/components/coffre/CoffreResourceCard"
 import { CoffreUnlockSection } from "@/components/coffre/CoffreUnlockSection"
 import { unlockCoffreResource } from "@/app/actions/coffre"
 import {
+  getCoffreResourcesByDomain,
   getCoffreStats,
+  type CoffreDomain,
   type CoffreResource,
 } from "@/lib/coffre/resources"
 import type { CoffreAccessState } from "@/lib/coffre/unlock"
@@ -17,6 +19,7 @@ import {
   isResourceUnlocked,
 } from "@/lib/coffre/unlock"
 import { PLANS } from "@/lib/billing/plans"
+import { cn } from "@/utils/cn"
 
 type Props = {
   resources: CoffreResource[]
@@ -32,8 +35,21 @@ export function CoffreLibrary({ resources, initialAccess }: Props) {
     null
   )
   const [toast, setToast] = React.useState<string | null>(null)
+  const [activeDomain, setActiveDomain] = React.useState<CoffreDomain | null>(
+    null
+  )
   const stats = React.useMemo(() => getCoffreStats(), [])
   const alliancePrice = PLANS.premium_plus.amountXof.toLocaleString("fr-FR")
+
+  const domainGroups = React.useMemo(
+    () => getCoffreResourcesByDomain(resources),
+    [resources]
+  )
+
+  const activeGroup = React.useMemo(
+    () => domainGroups.find((g) => g.domain === activeDomain) ?? null,
+    [domainGroups, activeDomain]
+  )
 
   React.useEffect(() => {
     setAccess(initialAccess)
@@ -105,15 +121,15 @@ export function CoffreLibrary({ resources, initialAccess }: Props) {
         <div className="relative space-y-4 max-w-2xl">
           <p className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em] text-primary">
             <Library className="h-3.5 w-3.5" />
-            Bibliothèque exclusive · vignettes Premium
+            Bibliothèque exclusive · par domaine
           </p>
           <h1 className="font-serif text-4xl sm:text-5xl font-bold tracking-tight text-foreground leading-[1.05]">
             Le Coffre Premium
           </h1>
           <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-            {stats.total} ressources exclusives — guides, journaux, prières,
-            exercices et préparation familiale — pour ceux qui préparent un
-            mariage sérieux, pas un swipe.
+            {stats.total} ressources dans {stats.domains} domaines — choisissez
+            celui qui vous parle, puis ouvrez les documents (journal, guide,
+            prière…).
           </p>
 
           <div className="flex flex-wrap gap-2 pt-1">
@@ -179,40 +195,170 @@ export function CoffreLibrary({ resources, initialAccess }: Props) {
         </p>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6">
-        {resources.map((resource, index) => {
-          const unlocked = isResourceUnlocked(
-            resource.id,
-            access,
-            resource.premiumOnly
-          )
-          const locked = !unlocked
-          return (
-            <CoffreResourceCard
-              key={resource.id}
-              resource={resource}
-              locked={locked}
-              canUnlock={access.isPaid && access.remainingSlots > 0}
-              isPaid={access.isPaid}
-              unlocking={unlockingId === resource.id}
-              justUnlocked={justUnlockedId === resource.id}
-              index={index}
-              onLockedClick={() => {
-                if (access.isPaid) {
-                  setToast(
-                    nextLabel
-                      ? `Prochaines ressources disponibles le ${nextLabel}.`
-                      : "Aucun créneau de déblocage pour le moment."
-                  )
-                } else {
-                  openPremiumModal(resource.title)
+      {/* Ligne de domaines */}
+      <section aria-label="Domaines du Coffre" className="space-y-3">
+        <div className="flex items-baseline justify-between gap-3">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+            Choisissez un domaine
+          </p>
+          {activeDomain && (
+            <button
+              type="button"
+              onClick={() => setActiveDomain(null)}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:opacity-80 transition-opacity"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              Tous les domaines
+            </button>
+          )}
+        </div>
+
+        <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-thin">
+          {domainGroups.map((group, i) => {
+            const selected = activeDomain === group.domain
+            return (
+              <button
+                key={group.domain}
+                type="button"
+                onClick={() =>
+                  setActiveDomain(selected ? null : group.domain)
                 }
+                className={cn(
+                  "coffre-theme-section group relative shrink-0 w-[min(72vw,17.5rem)] sm:w-60 text-left rounded-2xl border px-4 py-4 overflow-hidden",
+                  "transition-all duration-400 ease-out",
+                  "hover:-translate-y-1 hover:shadow-elevated",
+                  selected
+                    ? "border-transparent shadow-elevated scale-[1.02]"
+                    : "border-border/70 bg-white/85 shadow-card"
+                )}
+                style={{
+                  animationDelay: `${i * 55}ms`,
+                  ...(selected
+                    ? {
+                        background: `linear-gradient(145deg, ${group.tone} 0%, #1C1412 92%)`,
+                        color: group.ink,
+                      }
+                    : undefined),
+                }}
+              >
+                {!selected && (
+                  <span
+                    className="pointer-events-none absolute inset-x-0 top-0 h-1 opacity-90"
+                    style={{ backgroundColor: group.tone }}
+                  />
+                )}
+                <p
+                  className={cn(
+                    "text-[10px] font-bold uppercase tracking-[0.16em] mb-1.5",
+                    selected ? "opacity-80" : "text-muted-foreground"
+                  )}
+                >
+                  Domaine
+                </p>
+                <p
+                  className={cn(
+                    "font-serif text-xl font-bold leading-snug",
+                    !selected && "text-foreground"
+                  )}
+                >
+                  {group.label}
+                </p>
+                <p
+                  className={cn(
+                    "mt-1.5 text-xs leading-relaxed line-clamp-2",
+                    selected ? "opacity-85" : "text-muted-foreground"
+                  )}
+                >
+                  {group.blurb}
+                </p>
+                <p
+                  className={cn(
+                    "mt-3 text-[11px] font-semibold",
+                    selected ? "text-accent" : "text-primary"
+                  )}
+                >
+                  {group.resources.length} document
+                  {group.resources.length > 1 ? "s" : ""}
+                </p>
+              </button>
+            )
+          })}
+        </div>
+      </section>
+
+      {/* Documents du domaine sélectionné */}
+      {activeGroup ? (
+        <section
+          key={activeGroup.domain}
+          aria-labelledby="coffre-domain-docs-title"
+          className="coffre-theme-section space-y-5"
+        >
+          <div className="space-y-2">
+            <p
+              className="text-[10px] font-bold uppercase tracking-[0.2em]"
+              style={{ color: activeGroup.tone }}
+            >
+              Documents
+            </p>
+            <h2
+              id="coffre-domain-docs-title"
+              className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-foreground"
+            >
+              {activeGroup.label}
+            </h2>
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-xl">
+              {activeGroup.blurb} Le type de chaque fichier (journal, guide,
+              prière…) est indiqué sur la carte.
+            </p>
+            <div
+              className="coffre-theme-rule h-px w-full max-w-md"
+              style={{
+                background: `linear-gradient(90deg, ${activeGroup.tone}88, transparent)`,
+                animationDelay: "100ms",
               }}
-              onUnlock={() => handleUnlock(resource)}
             />
-          )
-        })}
-      </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6">
+            {activeGroup.resources.map((resource, index) => {
+              const unlocked = isResourceUnlocked(
+                resource.id,
+                access,
+                resource.premiumOnly
+              )
+              const locked = !unlocked
+              return (
+                <CoffreResourceCard
+                  key={resource.id}
+                  resource={resource}
+                  locked={locked}
+                  canUnlock={access.isPaid && access.remainingSlots > 0}
+                  isPaid={access.isPaid}
+                  unlocking={unlockingId === resource.id}
+                  justUnlocked={justUnlockedId === resource.id}
+                  index={index}
+                  onLockedClick={() => {
+                    if (access.isPaid) {
+                      setToast(
+                        nextLabel
+                          ? `Prochaines ressources disponibles le ${nextLabel}.`
+                          : "Aucun créneau de déblocage pour le moment."
+                      )
+                    } else {
+                      openPremiumModal(resource.title)
+                    }
+                  }}
+                  onUnlock={() => handleUnlock(resource)}
+                />
+              )
+            })}
+          </div>
+        </section>
+      ) : (
+        <p className="text-sm text-muted-foreground text-center py-6 animate-in fade-in duration-400">
+          Cliquez sur un domaine ci-dessus pour voir ses documents.
+        </p>
+      )}
 
       <CoffreUnlockSection
         resources={resources}

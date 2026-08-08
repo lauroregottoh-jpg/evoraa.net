@@ -3,21 +3,18 @@
 import * as React from "react"
 import Link from "next/link"
 import {
-  BookOpen,
-  CheckCircle2,
-  ClipboardList,
-  Feather,
-  FileText,
+  Heart,
   HeartHandshake,
   Home,
-  NotebookPen,
-  Quote,
   Sparkles,
+  Sprout,
   Unlock,
+  Users,
 } from "lucide-react"
 import {
-  COFFRE_CATEGORY_META,
-  type CoffreCategory,
+  COFFRE_DOMAIN_META,
+  getCoffreResourcesByDomain,
+  type CoffreDomain,
   type CoffreResource,
 } from "@/lib/coffre/resources"
 import {
@@ -27,31 +24,15 @@ import {
 import { PLANS } from "@/lib/billing/plans"
 import { cn } from "@/utils/cn"
 
-const CATEGORY_ICONS: Record<
-  CoffreCategory,
+const DOMAIN_ICONS: Record<
+  CoffreDomain,
   React.ComponentType<{ className?: string }>
 > = {
-  guide: BookOpen,
-  journal: NotebookPen,
-  priere: HeartHandshake,
-  exercice: ClipboardList,
-  affirmations: Quote,
-  lettre: Feather,
-  fiche: FileText,
-  checklist: CheckCircle2,
-  famille: Home,
-}
-
-const CATEGORY_BLURBS: Partial<Record<CoffreCategory, string>> = {
-  guide: "Des repères clairs pour décider sans précipitation.",
-  journal: "Écrire pour clarifier ce que vous portez vraiment.",
-  priere: "Des points concrets pour couvrir votre futur foyer.",
-  exercice: "Des pratiques courtes qui changent la posture.",
-  affirmations: "Reprogrammer une identité saine avant l’alliance.",
-  lettre: "Déposer ce qui pèse — pour avancer plus léger.",
-  fiche: "Passer à l’action en quelques minutes.",
-  checklist: "Ne rien oublier d’essentiel sur le chemin.",
-  famille: "Préparer le foyer et l’héritage émotionnel des enfants.",
+  "preparation-mariage": Heart,
+  "vie-couple": HeartHandshake,
+  "identite-guerison": Sprout,
+  "education-enfants": Users,
+  "foyer-famille": Home,
 }
 
 type Props = {
@@ -63,23 +44,12 @@ type Props = {
 export function CoffreUnlockSection({ resources, isPaid, onUnlockCta }: Props) {
   const alliance = PLANS.premium_plus
 
-  const byCategory = React.useMemo(() => {
-    const map = new Map<CoffreCategory, number>()
-    for (const r of resources) {
-      map.set(r.category, (map.get(r.category) ?? 0) + 1)
-    }
-    return [...map.entries()]
-      .map(([category, count]) => ({
-        category,
-        count,
-        meta: COFFRE_CATEGORY_META[category],
-        blurb: CATEGORY_BLURBS[category] ?? "Ressource exclusive Alliance.",
-        Icon: CATEGORY_ICONS[category],
-      }))
-      .sort(
-        (a, b) =>
-          b.count - a.count || a.meta.label.localeCompare(b.meta.label, "fr")
-      )
+  const byDomain = React.useMemo(() => {
+    return getCoffreResourcesByDomain(resources).map((group) => ({
+      ...group,
+      Icon: DOMAIN_ICONS[group.domain],
+      meta: COFFRE_DOMAIN_META[group.domain],
+    }))
   }, [resources])
 
   return (
@@ -112,15 +82,15 @@ export function CoffreUnlockSection({ resources, isPaid, onUnlockCta }: Props) {
           </h2>
           <p className="text-sm sm:text-base text-white/75 leading-relaxed">
             {isPaid
-              ? `Vous avez ${COFFRE_INITIAL_UNLOCKS} ressources au choix dès Alliance, puis +${COFFRE_UNLOCKS_PER_MONTH} chaque mois. Choisissez ce qui vous parle — le reste reste à portée de main.`
-              : `Guides, journaux, prières, exercices… Une bibliothèque privée pour préparer votre mariage avec sérieux. Dès Alliance : ${COFFRE_INITIAL_UNLOCKS} ressources au choix, puis +${COFFRE_UNLOCKS_PER_MONTH} chaque mois.`}
+              ? `Vous avez ${COFFRE_INITIAL_UNLOCKS} ressources au choix dès Alliance, puis +${COFFRE_UNLOCKS_PER_MONTH} chaque mois. Choisissez le domaine qui vous parle — le reste reste à portée de main.`
+              : `Préparation au mariage, couple, guérison, famille, enfants… Une bibliothèque privée par domaine. Dès Alliance : ${COFFRE_INITIAL_UNLOCKS} ressources au choix, puis +${COFFRE_UNLOCKS_PER_MONTH} chaque mois.`}
           </p>
         </div>
 
         <div className="rounded-2xl border border-white/15 bg-white/[0.07] backdrop-blur-[2px] p-4 sm:p-5 space-y-4">
           <div className="flex items-center justify-between gap-3 flex-wrap">
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/65">
-              Dans votre Coffre aujourd’hui
+              Domaines dans votre Coffre
             </p>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/15 px-2.5 py-1 text-[11px] font-semibold text-accent">
               <Sparkles className="h-3 w-3" />
@@ -129,11 +99,11 @@ export function CoffreUnlockSection({ resources, isPaid, onUnlockCta }: Props) {
           </div>
 
           <ul className="grid sm:grid-cols-2 gap-3">
-            {byCategory.map((item, i) => {
+            {byDomain.map((item, i) => {
               const Icon = item.Icon
               return (
                 <li
-                  key={item.category}
+                  key={item.domain}
                   className={cn(
                     "group flex gap-3 rounded-xl border border-white/10 bg-black/20 px-3.5 py-3.5",
                     "transition-all duration-300 hover:border-accent/40 hover:bg-black/30 hover:-translate-y-0.5",
@@ -150,11 +120,13 @@ export function CoffreUnlockSection({ resources, isPaid, onUnlockCta }: Props) {
                   <div className="min-w-0 space-y-0.5">
                     <div className="flex items-baseline gap-2 flex-wrap">
                       <p className="font-serif text-lg font-semibold leading-none">
-                        {item.meta.label}
+                        {item.label}
                       </p>
                       <span className="text-[11px] font-semibold text-accent/90">
-                        {item.count}{" "}
-                        {item.count > 1 ? "disponibles" : "disponible"}
+                        {item.resources.length}{" "}
+                        {item.resources.length > 1
+                          ? "disponibles"
+                          : "disponible"}
                       </span>
                     </div>
                     <p className="text-xs text-white/65 leading-relaxed">
