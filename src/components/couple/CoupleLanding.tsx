@@ -421,7 +421,7 @@ export function CoupleLanding() {
                 {LANDING_OFFERS.essentialClose}
               </p>
               <MagneticButton
-                href="/couple/checkout/couple_essential"
+                href="/couple/offre?offer=couple_essential#payer"
                 variant="outline"
                 size="lg"
               >
@@ -449,7 +449,7 @@ export function CoupleLanding() {
                 ))}
               </ul>
               <MagneticButton
-                href="/couple/checkout/couple_premium_plus"
+                href="/couple/offre?offer=couple_premium_plus#payer"
                 variant="primary"
                 size="lg"
               >
@@ -505,14 +505,14 @@ export function CoupleLanding() {
             </p>
             <div className="ck-reveal flex flex-wrap gap-3 pt-2">
               <MagneticButton
-                href="/couple/checkout/couple_essential"
+                href="/couple/offre?offer=couple_essential#payer"
                 variant="primary"
                 size="lg"
               >
                 Commencer — 30 000 FCFA
               </MagneticButton>
               <MagneticButton
-                href="/couple/checkout/couple_premium_plus"
+                href="/couple/offre?offer=couple_premium_plus#payer"
                 variant="outline"
                 size="lg"
               >

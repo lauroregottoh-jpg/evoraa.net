@@ -66,12 +66,21 @@ export async function startCoupleCheckoutAction(input: {
   const gatePay = await assertPaymentsNotPaused()
   if (!gatePay.ok) return { error: gatePay.error }
 
+  const parsedMode =
+    parseBictorysPaymentMode(input.paymentMode) ?? input.paymentMode ?? null
+  const modeQuery =
+    parsedMode === "card" || parsedMode === "mobile_money"
+      ? `&mode=${parsedMode}`
+      : ""
+
   const { supabase, user } = await requireUser()
   if (!user) {
+    // Après login → retour sur le checkout vente (panel MM/carte) qui relance le paiement.
+    const next = `/couple/checkout/${offer.id}?autostart=1${modeQuery}`
     return {
       requiresAuth: true,
       error: "Connectez-vous pour acheter le bilan.",
-      checkoutPath: `/login?next=${encodeURIComponent(`/couple/checkout/${offer.id}`)}`,
+      checkoutPath: `/login?next=${encodeURIComponent(next)}`,
     }
   }
 
@@ -81,17 +90,20 @@ export async function startCoupleCheckoutAction(input: {
     .eq("user_id", user.id)
     .maybeSingle()
 
-  const paymentMode = resolveBictorysPaymentMode(
-    profile?.country as string | null,
-    parseBictorysPaymentMode(input.paymentMode) ?? input.paymentMode
-  )
-
   const liveProvider = resolveLiveProvider()
-  // Prix démo 17 FCFA ≠ confirmation gratuite : le faux paiement
-  // ne s’active que si paiements démo / pas de Bictorys.
-  const demo = isDemoPaymentsEnv() || liveProvider !== "bictorys"
+  const paymentMode =
+    liveProvider === "bictorys"
+      ? resolveBictorysPaymentMode(
+          profile?.country as string | null,
+          parsedMode
+        )
+      : null
+
+  // Faux paiement uniquement en mode démo paiements (comme Alliance) — pas si Moneroo.
+  const demo = isDemoPaymentsEnv()
   const chargeAmount = getCoupleChargeAmountXof(offer)
   const offerSnapshot = snapshotCoupleOffer(offer, chargeAmount)
+  const transactionRef = `${liveProvider.toUpperCase()}-COUPLE-${user.id.slice(0, 8)}-${Date.now()}`
 
   const { data: subscription, error: subError } = await supabase
     .from("subscriptions")
@@ -118,6 +130,7 @@ export async function startCoupleCheckoutAction(input: {
     demo_pricing: isCoupleDemoPricing(),
     offer_snapshot: offerSnapshot,
     payment_mode: paymentMode,
+    provider: liveProvider,
     demo_mode: demo,
   }
 
@@ -126,10 +139,11 @@ export async function startCoupleCheckoutAction(input: {
     .insert({
       user_id: user.id,
       subscription_id: subscription.id,
+      provider: liveProvider,
       amount: chargeAmount,
       currency: "XOF",
       status: "pending",
-      transaction_reference: `couple-pending-${Date.now()}`,
+      transaction_reference: transactionRef,
       metadata,
     })
     .select("id")
@@ -150,61 +164,130 @@ export async function startCoupleCheckoutAction(input: {
   })
 
   if (demo) {
-    return { checkoutPath: `/couple/checkout/${offer.id}?paymentId=${payment.id}&demo=1` }
+    return {
+      checkoutPath: `/couple/checkout/${offer.id}?paymentId=${payment.id}&demo=1`,
+    }
   }
-
-  const apiKey = process.env.BICTORYS_API_KEY
-  if (!apiKey) return { error: "BICTORYS_API_KEY manquant." }
 
   const customerName =
     [profile?.first_name, profile?.last_name].filter(Boolean).join(" ") ||
     user.email ||
     "Membre KELIAA"
+  const successPath = `/couple/confirmation?paymentId=${payment.id}`
+  const cancelPath = `/couple/offre`
 
-  const result = await bictorysCreateCharge({
-    apiKey,
-    paymentId: payment.id,
-    amount: chargeAmount,
-    description: `KELYA COUPLE — ${offer.marketingName}${isCoupleDemoPricing() ? " (démo)" : ""}`,
-    customerName,
-    customerEmail: user.email || "membre@keliaa.org",
-    paymentMode,
-    appBaseUrl: appBaseUrl(),
-    successPath: `/couple/confirmation?paymentId=${payment.id}`,
-    cancelPath: `/couple/offre`,
-  })
+  try {
+    if (liveProvider === "bictorys") {
+      const apiKey = process.env.BICTORYS_API_KEY
+      if (!apiKey) return { error: "BICTORYS_API_KEY manquant." }
 
-  if (!result.ok) {
+      const result = await bictorysCreateCharge({
+        apiKey,
+        paymentId: payment.id,
+        amount: chargeAmount,
+        description: `KELYA COUPLE — ${offer.marketingName}${isCoupleDemoPricing() ? " (démo)" : ""}`,
+        customerName,
+        customerEmail: user.email || "membre@keliaa.org",
+        paymentMode: paymentMode ?? "mobile_money",
+        appBaseUrl: appBaseUrl(),
+        successPath,
+        cancelPath,
+      })
+
+      if (!result.ok) {
+        await logPaymentEvent({
+          paymentId: payment.id,
+          provider: "bictorys",
+          eventType: "charge_failed",
+          status: "failed",
+          message: result.error,
+        })
+        return { error: result.error }
+      }
+
+      await supabase
+        .from("payments")
+        .update({
+          transaction_reference: result.txId,
+          metadata: { ...metadata, bictorys: result.raw },
+        })
+        .eq("id", payment.id)
+
+      await logPaymentEvent({
+        paymentId: payment.id,
+        provider: "bictorys",
+        eventType: "charge_initiated",
+        status: "pending",
+        message: `couple:${offer.id}:${chargeAmount}:${result.paymentMode}`,
+      })
+
+      if (result.checkoutUrl) {
+        return { checkoutPath: result.checkoutUrl }
+      }
+      return { checkoutPath: successPath }
+    }
+
+    if (liveProvider === "moneroo") {
+      if (!process.env.MONEROO_SECRET_KEY) {
+        return { error: "MONEROO_SECRET_KEY manquant." }
+      }
+      const { monerooInitializePayment } = await import(
+        "@/lib/billing/monerooClient"
+      )
+      const result = await monerooInitializePayment({
+        secretKey: process.env.MONEROO_SECRET_KEY,
+        amountXof: chargeAmount,
+        description: `KELYA COUPLE — ${offer.marketingName}`,
+        returnUrl: `${appBaseUrl()}${successPath}`,
+        customerEmail: user.email || "membre@keliaa.org",
+        customerFirstName:
+          (profile?.first_name as string) ||
+          user.user_metadata?.first_name ||
+          "Membre",
+        metadata: {
+          keliaa_payment_id: payment.id,
+          product: "couple",
+          offer_id: offer.id,
+        },
+      })
+      if (!result.ok) {
+        await logPaymentEvent({
+          paymentId: payment.id,
+          provider: "moneroo",
+          eventType: "charge_failed",
+          status: "failed",
+          message: result.error,
+        })
+        return { error: result.error }
+      }
+      await supabase
+        .from("payments")
+        .update({
+          transaction_reference: result.txId,
+          metadata: { ...metadata, moneroo: result.raw },
+        })
+        .eq("id", payment.id)
+      await logPaymentEvent({
+        paymentId: payment.id,
+        provider: "moneroo",
+        eventType: "charge_initiated",
+        status: "pending",
+        message: `couple:${offer.id}:${chargeAmount}`,
+      })
+      return { checkoutPath: result.checkoutUrl }
+    }
+
+    return { error: "Provider de paiement non configuré (bictorys | moneroo)." }
+  } catch (err) {
     await logPaymentEvent({
       paymentId: payment.id,
-      provider: "bictorys",
+      provider: liveProvider,
       eventType: "charge_failed",
       status: "failed",
-      message: result.error,
+      message: (err as Error).message,
     })
-    return { error: result.error }
+    return { error: (err as Error).message || "Échec du paiement." }
   }
-
-  await supabase
-    .from("payments")
-    .update({
-      transaction_reference: result.txId,
-      metadata: { ...metadata, bictorys: result.raw },
-    })
-    .eq("id", payment.id)
-
-  await logPaymentEvent({
-    paymentId: payment.id,
-    provider: "bictorys",
-    eventType: "charge_initiated",
-    status: "pending",
-    message: `couple:${offer.id}:${chargeAmount}`,
-  })
-
-  if (result.checkoutUrl) {
-    return { checkoutPath: result.checkoutUrl }
-  }
-  return { checkoutPath: `/couple/confirmation?paymentId=${payment.id}` }
 }
 
 /** Confirmation démo (local / PAYMENTS_DEMO_MODE). */

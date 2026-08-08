@@ -46,11 +46,14 @@ const PROTECTED_PREFIXES = [
   '/couple/plan',
   '/couple/telecharger',
   '/couple/confirmation',
-  '/couple/checkout',
 ]
 
-/** Aperçus démo Couple — accessibles sans compte. */
-const PUBLIC_EXCEPTIONS = ['/couple/rapport/demo']
+/** Pages vente Couple + aperçus démo — accessibles sans compte. */
+const PUBLIC_EXCEPTIONS = [
+  '/couple/rapport/demo',
+  '/couple/checkout',
+  '/couple/offre',
+]
 
 const ADMIN_PREFIXES = [OPS_CONSOLE_PATH, '/moderation']
 
