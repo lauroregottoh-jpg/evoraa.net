@@ -10,6 +10,8 @@ export type BeforeInstallPromptEvent = Event & {
 export type PwaInstallState = {
   canPrompt: boolean
   isIos: boolean
+  /** Téléphone / tablette (UA ou pointeur tactile). */
+  isMobile: boolean
   /** App déjà installée (standalone, appinstalled, ou flag local). */
   isInstalled: boolean
   /** @deprecated alias de isInstalled — compat composants existants */
@@ -61,11 +63,30 @@ function detectStandalone(): boolean {
   )
 }
 
+function detectMobile(): boolean {
+  if (typeof window === "undefined") return false
+  const ua = navigator.userAgent || ""
+  const ios =
+    /iPad|iPhone|iPod/.test(ua) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+  if (ios) return true
+  if (/Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua)) return true
+  try {
+    if (window.matchMedia("(pointer: coarse)").matches && window.innerWidth < 1024) {
+      return true
+    }
+  } catch {
+    /* ignore */
+  }
+  return false
+}
+
 export function usePwaInstall(): PwaInstallState {
   const [deferred, setDeferred] = React.useState<BeforeInstallPromptEvent | null>(
     null
   )
   const [isIos, setIsIos] = React.useState(false)
+  const [isMobile, setIsMobile] = React.useState(false)
   const [isInstalled, setIsInstalled] = React.useState(false)
   const [ready, setReady] = React.useState(false)
 
@@ -84,6 +105,7 @@ export function usePwaInstall(): PwaInstallState {
       /iPad|iPhone|iPod/.test(ua) ||
       (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
     setIsIos(ios)
+    setIsMobile(detectMobile())
 
     const onBip = (e: Event) => {
       e.preventDefault()
@@ -134,6 +156,7 @@ export function usePwaInstall(): PwaInstallState {
   return {
     canPrompt: Boolean(deferred) && !isInstalled,
     isIos,
+    isMobile,
     isInstalled,
     isStandalone: isInstalled,
     ready,

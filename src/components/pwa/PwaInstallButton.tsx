@@ -27,6 +27,23 @@ const VARIANT_CLASS: Record<Variant, string> = {
     "bg-[#5C1F28] text-white hover:brightness-110 border border-transparent",
 }
 
+function defaultLabel(canPrompt: boolean, isIos: boolean, isMobile: boolean) {
+  if (canPrompt) return "Installer l’app"
+  if (isIos) return "Ajouter à l’écran d’accueil"
+  if (!isMobile) return "Installer sur mobile"
+  return "Comment installer"
+}
+
+function helpCopy(isIos: boolean, isMobile: boolean) {
+  if (isIos) {
+    return "Sur iPhone / iPad : Partager → « Sur l’écran d’accueil »."
+  }
+  if (!isMobile) {
+    return "Ouvrez keliaa.org sur votre téléphone, puis utilisez le menu du navigateur → Installer / Ajouter à l’écran d’accueil. L’expérience est conçue pour le mobile."
+  }
+  return "Menu ⋮ ou Partager → « Installer l’application » / « Ajouter à l’écran d’accueil ». Aucun fichier à télécharger."
+}
+
 export function PwaInstallButton({
   variant = "primary",
   className,
@@ -34,7 +51,8 @@ export function PwaInstallButton({
   label,
   size = "md",
 }: Props) {
-  const { canPrompt, isIos, isInstalled, ready, install } = usePwaInstall()
+  const { canPrompt, isIos, isMobile, isInstalled, ready, install } =
+    usePwaInstall()
   const [showHelp, setShowHelp] = React.useState(false)
 
   if (!ready) return null
@@ -55,13 +73,7 @@ export function PwaInstallButton({
     )
   }
 
-  const text =
-    label ||
-    (canPrompt
-      ? "Installer l’app"
-      : isIos
-        ? "Ajouter à l’écran d’accueil"
-        : "Comment installer")
+  const text = label || defaultLabel(canPrompt, isIos, isMobile)
 
   const onClick = async () => {
     if (canPrompt) {
@@ -91,9 +103,7 @@ export function PwaInstallButton({
       </button>
       {showHelp && (
         <p className="text-[11px] text-muted-foreground leading-relaxed max-w-xs rounded-lg border border-border bg-card/95 px-3 py-2 shadow-sm">
-          {isIos
-            ? "Sur iPhone / iPad : Partager → « Sur l’écran d’accueil »."
-            : "Menu ⋮ ou Partager → « Installer l’application » / « Ajouter à l’écran d’accueil ». Aucun fichier à télécharger."}
+          {helpCopy(isIos, isMobile)}
           <button
             type="button"
             className="ml-2 underline"

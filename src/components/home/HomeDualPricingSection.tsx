@@ -1,14 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import { PLANS } from "@/lib/billing/plans"
-import { COUPLE_OFFERS } from "@/lib/couple/offers"
 import { COUPLE_BRAND } from "@/lib/couple/config"
 
-/** Accueil — deux portes, sans afficher « 0 FCFA ». */
+/** Accueil — deux portes, sans aucun prix. */
 export function HomeDualPricingSection() {
-  const alliance = PLANS.premium_plus
-
   return (
     <section className="py-20 sm:py-24 px-6 sm:px-12 lg:px-20 bg-secondary/20">
       <div className="max-w-6xl mx-auto space-y-10">
@@ -36,12 +32,8 @@ export function HomeDualPricingSection() {
             <h3 className="font-serif text-2xl font-bold">Pour les célibataires</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Matching à 5 piliers, Communauté, Rapport Alliance, Coffre Premium
-              et programme Fidélité. Commencez gratuitement, passez Alliance
+              et programme Fidélité. Commencez en Découverte, passez Alliance
               quand vous êtes prêts.
-            </p>
-            <p className="text-sm font-semibold text-foreground">
-              Découverte gratuite · Alliance{" "}
-              {alliance.amountXof.toLocaleString("fr-FR")} FCFA / mois
             </p>
             <span className="inline-flex text-sm font-semibold text-primary">
               Voir les tarifs célibataires →
@@ -49,7 +41,7 @@ export function HomeDualPricingSection() {
           </Link>
 
           <Link
-            href="/pricing#couples"
+            href="/couple"
             className="rounded-[1.5rem] border border-accent/35 bg-gradient-to-br from-white via-[#F8F4EE] to-accent/10 p-6 sm:p-8 space-y-4 hover:border-accent/55 transition-colors block"
           >
             <p className="text-[10px] font-bold uppercase tracking-wider text-accent">
@@ -60,14 +52,8 @@ export function HomeDualPricingSection() {
               Bilan relationnel ponctuel pour deux : questionnaires confidentiels,
               analyse croisée, rapport, exercices et plan d’action.
             </p>
-            <p className="text-sm font-semibold text-foreground">
-              Essentiel {COUPLE_OFFERS.couple_essential.amountXof.toLocaleString("fr-FR")}{" "}
-              FCFA · Premium Plus{" "}
-              {COUPLE_OFFERS.couple_premium_plus.amountXof.toLocaleString("fr-FR")}{" "}
-              FCFA
-            </p>
             <span className="inline-flex text-sm font-semibold text-primary">
-              Voir les tarifs couple →
+              Découvrir {COUPLE_BRAND} →
             </span>
           </Link>
         </div>

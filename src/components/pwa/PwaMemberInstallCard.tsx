@@ -43,7 +43,8 @@ export function PwaMemberInstallCard({ isPaid, className }: Props) {
               : "Découverte — installez KELIAA sur votre téléphone"}
           </p>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Accès direct depuis l’écran d’accueil — sans télécharger de fichier.
+            Sur mobile : accès direct depuis l’écran d’accueil — sans télécharger
+            de fichier.
           </p>
         </div>
       </div>

@@ -13,7 +13,8 @@ import { cn } from "@/utils/cn"
  * Badge flottant d’install — masqué si déjà installé ou dismiss.
  */
 export function PwaInstallBadge() {
-  const { canPrompt, isIos, isInstalled, ready, install } = usePwaInstall()
+  const { canPrompt, isIos, isMobile, isInstalled, ready, install } =
+    usePwaInstall()
   const [hidden, setHidden] = React.useState(true)
   const [showHelp, setShowHelp] = React.useState(false)
 
@@ -42,6 +43,20 @@ export function PwaInstallBadge() {
     setHidden(true)
   }
 
+  const cta =
+    canPrompt
+      ? "Installer l’app"
+      : !isMobile
+        ? "Installer sur mobile"
+        : "Comment installer"
+
+  const help =
+    isIos
+      ? "iPhone : Partager → Sur l’écran d’accueil."
+      : !isMobile
+        ? "Ouvrez keliaa.org sur votre téléphone pour installer l’app."
+        : "Menu du navigateur → Installer l’app / Ajouter à l’écran d’accueil."
+
   return (
     <div
       className={cn(
@@ -51,9 +66,7 @@ export function PwaInstallBadge() {
     >
       {showHelp && (
         <div className="pointer-events-auto max-w-[16rem] rounded-2xl border border-border bg-card px-3 py-2.5 text-[11px] text-muted-foreground shadow-elevated leading-relaxed">
-          {isIos
-            ? "iPhone : Partager → Sur l’écran d’accueil."
-            : "Menu du navigateur → Installer l’app / Ajouter à l’écran d’accueil."}
+          {help}
         </div>
       )}
       <div className="pointer-events-auto flex items-center gap-1 rounded-full border border-primary/25 bg-[#0F1F1A] text-white shadow-elevated pl-1 pr-1 py-1">
@@ -69,7 +82,7 @@ export function PwaInstallBadge() {
               <Smartphone className="h-3.5 w-3.5" />
             )}
           </span>
-          {canPrompt ? "Installer l’app" : "Comment installer"}
+          {cta}
         </button>
         <button
           type="button"

@@ -6,7 +6,7 @@ import { usePwaInstall } from "@/components/pwa/usePwaInstall"
 
 /** Section PWA compacte — page d’accueil. */
 export function PwaInstallHomeSection() {
-  const { isInstalled, ready } = usePwaInstall()
+  const { isInstalled, isMobile, ready } = usePwaInstall()
 
   if (ready && isInstalled) return null
 
@@ -16,9 +16,15 @@ export function PwaInstallHomeSection() {
         <div className="flex items-start gap-3 text-white min-w-0">
           <Smartphone className="h-5 w-5 text-accent shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm font-semibold">Installer l’app KELIAA</p>
+            <p className="text-sm font-semibold">
+              {ready && !isMobile
+                ? "Installer KELIAA sur mobile"
+                : "Installer l’app KELIAA"}
+            </p>
             <p className="text-xs text-white/65 mt-0.5 leading-relaxed">
-              Sur l’écran d’accueil — messagerie, EVA et matching en un tap.
+              {ready && !isMobile
+                ? "Ouvrez keliaa.org sur votre téléphone pour l’ajouter à l’écran d’accueil."
+                : "Sur l’écran d’accueil — messagerie, EVA et matching en un tap."}
             </p>
           </div>
         </div>

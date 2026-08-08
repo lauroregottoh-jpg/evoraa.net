@@ -60,7 +60,7 @@ const PRIMARY_FREE: NavItem[] = [
   { href: "/profile", label: "Profil", icon: User },
   { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
   { href: "/coaching", label: "Coaching", icon: Phone },
-  { href: "/couple", label: "KELYA Couple", icon: HeartHandshake },
+  { href: "/couple/espace", label: "KELYA Couple", icon: HeartHandshake },
 ];
 
 /**
@@ -80,7 +80,7 @@ const PRIMARY_ALLIANCE: NavItem[] = [
   { href: "/profile", label: "Profil", icon: User },
   { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
   { href: "/coaching", label: "Coaching", icon: Phone },
-  { href: "/couple", label: "KELYA Couple", icon: HeartHandshake },
+  { href: "/couple/espace", label: "KELYA Couple", icon: HeartHandshake },
 ];
 
 const SECONDARY = [
@@ -95,7 +95,7 @@ const BOTTOM_PRIMARY = [
   { href: "/dashboard", label: "Accueil", icon: LayoutGrid },
   { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/assessments", label: "Tests", icon: ClipboardList },
-  { href: "/couple", label: "KELYA", icon: HeartHandshake },
+  { href: "/couple/espace", label: "KELYA", icon: HeartHandshake },
 ] as const;
 
 const ACCOUNT_HREFS = [
