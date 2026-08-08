@@ -111,12 +111,19 @@ export async function startCoupleCheckoutAction(input: {
 
   const auditCoupon = isCoupleAuditCoupon(input.promoCode)
   const listPrice = getCoupleChargeAmountXof(offer)
-  const chargeAmount = auditCoupon ? COUPLE_AUDIT_AMOUNT_XOF : listPrice
-  // Sous le plancher Bictorys : confirmation interne (sinon l’API refuse 10/17 FCFA).
-  const useInternalConfirm =
-    isDemoPaymentsEnv() ||
-    auditCoupon ||
-    (liveProvider === "bictorys" && chargeAmount < BICTORYS_MIN_AMOUNT_XOF)
+  // Accès gratuit / confirmation interne : UNIQUEMENT coupon d’audit ou PAYMENTS_DEMO_MODE.
+  // Jamais pour un simple clic « Payer » (même à 17 FCFA en démo pricing).
+  const useInternalConfirm = isDemoPaymentsEnv() || auditCoupon
+
+  let chargeAmount = auditCoupon ? COUPLE_AUDIT_AMOUNT_XOF : listPrice
+  // Live Bictorys : plancher 100 FCFA si micro-tarif démo sans coupon.
+  if (
+    !useInternalConfirm &&
+    liveProvider === "bictorys" &&
+    chargeAmount < BICTORYS_MIN_AMOUNT_XOF
+  ) {
+    chargeAmount = BICTORYS_MIN_AMOUNT_XOF
+  }
 
   const offerSnapshot = {
     ...snapshotCoupleOffer(offer, chargeAmount),
@@ -984,15 +991,22 @@ export async function getCoupleReportAction() {
 
 export async function loadMyCoupleAnswersAction() {
   const state = await getMyCoupleStateAction()
-  if (!("me" in state) || !state.me) return { answers: {} as AnswerMap }
+  if (!("me" in state) || !state.me) {
+    return { answers: {} as AnswerMap, completed: false }
+  }
 
   const admin = createAdminClient()
   const { data: session } = await admin
     .from("couple_questionnaire_sessions")
-    .select("id")
+    .select("id, status")
     .eq("participant_id", state.me.participantId)
     .maybeSingle()
-  if (!session) return { answers: {} as AnswerMap }
+  if (!session) {
+    return {
+      answers: {} as AnswerMap,
+      completed: state.me.questionnaireStatus === "COMPLETED",
+    }
+  }
 
   const { data } = await admin
     .from("couple_answers")
@@ -1001,7 +1015,12 @@ export async function loadMyCoupleAnswersAction() {
 
   const answers: AnswerMap = {}
   for (const row of data || []) answers[row.question_id] = row.value
-  return { answers }
+  return {
+    answers,
+    completed:
+      session.status === "COMPLETED" ||
+      state.me.questionnaireStatus === "COMPLETED",
+  }
 }
 
 /**

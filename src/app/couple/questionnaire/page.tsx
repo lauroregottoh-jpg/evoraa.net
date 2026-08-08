@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { CouplePageFrame } from "@/components/couple/CouplePageFrame"
 import { CoupleShell } from "@/components/couple/CoupleShell"
 import {
@@ -14,8 +15,9 @@ import {
   loadMyCoupleAnswersAction,
   saveCoupleAnswersAction,
 } from "@/app/actions/couple"
+import { cn } from "@/utils/cn"
 
-type Phase = "loading" | "review" | "questions"
+type Phase = "loading" | "done" | "review" | "questions"
 
 export default function CoupleQuestionnairePage() {
   const router = useRouter()
@@ -34,12 +36,16 @@ export default function CoupleQuestionnairePage() {
   React.useEffect(() => {
     void (async () => {
       const existing = await loadMyCoupleAnswersAction()
+      if (existing.completed) {
+        setPhase("done")
+        return
+      }
       const saved = existing.answers || {}
       setAnswers(saved)
 
       if (Object.keys(saved).length > 0) {
         const firstUnanswered = questions.findIndex((q) => !saved[q.id])
-        setIndex(firstUnanswered >= 0 ? firstUnanswered : 0)
+        setIndex(firstUnanswered >= 0 ? firstUnanswered : Math.max(0, questions.length - 1))
         setPhase("questions")
         return
       }
@@ -82,7 +88,7 @@ export default function CoupleQuestionnairePage() {
 
   const select = async (value: number) => {
     const q = questions[index]
-    if (!q) return
+    if (!q || saving) return
     const next = { ...answers, [q.id]: value }
     setAnswers(next)
     setError(null)
@@ -90,20 +96,32 @@ export default function CoupleQuestionnairePage() {
     const res = await saveCoupleAnswersAction({ answers: { [q.id]: value } })
     setSaving(false)
     if (res.error) {
+      if (/déjà terminé/i.test(res.error)) {
+        setPhase("done")
+        return
+      }
       setError(res.error)
       return
     }
-    if (index < questions.length - 1) setIndex((i) => i + 1)
+    if (index < questions.length - 1) {
+      setIndex((i) => i + 1)
+    }
   }
 
   const complete = async () => {
     setSaving(true)
+    setError(null)
     const res = await saveCoupleAnswersAction({ answers, complete: true })
     setSaving(false)
     if (res.error) {
+      if (/déjà terminé/i.test(res.error)) {
+        setPhase("done")
+        return
+      }
       setError(res.error)
       return
     }
+    setPhase("done")
     router.push("/couple/attente")
   }
 
@@ -111,6 +129,42 @@ export default function CoupleQuestionnairePage() {
     return (
       <CouplePageFrame>
         <p className="p-8 text-sm text-muted-foreground">Chargement…</p>
+      </CouplePageFrame>
+    )
+  }
+
+  if (phase === "done") {
+    return (
+      <CouplePageFrame>
+        <CoupleShell activeHref="/couple/questionnaire">
+          <div className="max-w-xl mx-auto space-y-5 py-8">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
+              Questionnaire fermé
+            </p>
+            <h1 className="font-serif text-3xl font-bold">
+              Votre questionnaire est terminé
+            </h1>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Merci. Vos réponses sont enregistrées et restent confidentielles.
+              Le rapport croisé se prépare lorsque votre partenaire a aussi
+              terminé.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/couple/attente"
+                className="inline-flex h-11 items-center rounded-xl bg-primary text-primary-foreground px-5 text-sm font-semibold"
+              >
+                Voir l’attente
+              </Link>
+              <Link
+                href="/couple/espace"
+                className="inline-flex h-11 items-center rounded-xl border px-5 text-sm font-semibold"
+              >
+                Espace couple
+              </Link>
+            </div>
+          </div>
+        </CoupleShell>
       </CouplePageFrame>
     )
   }
@@ -161,11 +215,12 @@ export default function CoupleQuestionnairePage() {
                           [current.questionId]: opt.value,
                         }))
                       }
-                      className={`w-full text-left rounded-xl border px-4 py-3 text-sm transition-colors ${
+                      className={cn(
+                        "w-full text-left rounded-xl border px-4 py-3 text-sm transition-colors",
                         selected
                           ? "border-primary bg-primary/5 font-semibold"
                           : "border-border/70 hover:bg-foreground/[0.03]"
-                      }`}
+                      )}
                     >
                       {opt.label}
                     </button>
@@ -198,7 +253,7 @@ export default function CoupleQuestionnairePage() {
               <button
                 type="button"
                 disabled={saving}
-                onClick={acceptAllPrefill}
+                onClick={() => void acceptAllPrefill()}
                 className="h-10 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-semibold disabled:opacity-60"
               >
                 {saving ? "Enregistrement…" : "Valider ces réponses"}
@@ -223,8 +278,10 @@ export default function CoupleQuestionnairePage() {
   }
 
   const q = questions[index]
-  const answered = Object.keys(answers).length
-  const progress = Math.round((answered / questions.length) * 100)
+  const answeredCount = questions.filter((qq) => answers[qq.id] != null).length
+  const progress = Math.round((answeredCount / questions.length) * 100)
+  const allAnswered = answeredCount >= questions.length
+  const canGoNext = index < questions.length - 1 && answers[q?.id ?? ""] != null
 
   if (!q) {
     return (
@@ -243,7 +300,9 @@ export default function CoupleQuestionnairePage() {
               <span>
                 Question {index + 1} / {questions.length}
               </span>
-              <span>{progress}%</span>
+              <span>
+                {answeredCount} répondues · {progress}%
+              </span>
             </div>
             <div className="h-1.5 rounded-full bg-border/60 overflow-hidden">
               <div
@@ -252,8 +311,8 @@ export default function CoupleQuestionnairePage() {
               />
             </div>
             <p className="text-[10px] text-muted-foreground">
-              Vos réponses restent privées. Votre partenaire ne verra pas vos
-              choix bruts.
+              Choisissez une réponse pour avancer automatiquement. Vos réponses
+              restent privées.
             </p>
           </div>
 
@@ -271,12 +330,14 @@ export default function CoupleQuestionnairePage() {
                   <button
                     key={opt.id}
                     type="button"
-                    onClick={() => select(opt.value)}
-                    className={`w-full text-left rounded-xl border px-4 py-3 text-sm transition-colors ${
+                    disabled={saving}
+                    onClick={() => void select(opt.value)}
+                    className={cn(
+                      "w-full text-left rounded-xl border px-4 py-3 text-sm transition-colors disabled:opacity-60",
                       selected
                         ? "border-primary bg-primary/5 font-semibold"
                         : "border-border/70 hover:bg-foreground/[0.03]"
-                    }`}
+                    )}
                   >
                     {opt.label}
                   </button>
@@ -285,28 +346,19 @@ export default function CoupleQuestionnairePage() {
             </div>
           </div>
 
-          <div className="flex justify-between gap-3">
+          <div className="flex flex-wrap justify-between gap-3">
             <button
               type="button"
-              disabled={index === 0}
+              disabled={index === 0 || saving}
               onClick={() => setIndex((i) => Math.max(0, i - 1))}
               className="h-10 px-4 rounded-xl border text-sm font-medium disabled:opacity-40"
             >
               Précédent
             </button>
-            {answered >= questions.length ? (
+            <div className="flex flex-wrap gap-2">
               <button
                 type="button"
-                disabled={saving}
-                onClick={complete}
-                className="h-10 px-5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold disabled:opacity-60"
-              >
-                {saving ? "Envoi…" : "Terminer le questionnaire"}
-              </button>
-            ) : (
-              <button
-                type="button"
-                disabled={index >= questions.length - 1 || !answers[q.id]}
+                disabled={!canGoNext || saving}
                 onClick={() =>
                   setIndex((i) => Math.min(questions.length - 1, i + 1))
                 }
@@ -314,7 +366,17 @@ export default function CoupleQuestionnairePage() {
               >
                 Suivant
               </button>
-            )}
+              {allAnswered ? (
+                <button
+                  type="button"
+                  disabled={saving}
+                  onClick={() => void complete()}
+                  className="h-10 px-5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold disabled:opacity-60"
+                >
+                  {saving ? "Envoi…" : "Terminer le questionnaire"}
+                </button>
+              ) : null}
+            </div>
           </div>
           {error && (
             <p className="text-sm text-destructive" role="alert">

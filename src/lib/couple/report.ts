@@ -94,6 +94,139 @@ function differenceParagraph(d: DimensionPairScore, names: CoupleReportNames): s
   return `Sur « ${d.label} », vos réponses divergent (écart ${d.gap} points). Ce n’est pas une condamnation : c’est une invitation à clarifier ce que chacun vit, attend ou craint. ${names.nameA} se situe autour de ${d.scoreA} %, ${names.nameB} autour de ${d.scoreB} %. L’objectif n’est pas d’effacer la différence, mais de la rendre parlable et travaillable.`
 }
 
+/** Chapitre long par dimension — profondeur type modèles EX / 05_MODELES. */
+function dimensionDeepChapter(
+  d: DimensionPairScore,
+  names: CoupleReportNames
+): CoupleReportSection {
+  const a = names.nameA
+  const b = names.nameB
+  const statusLine =
+    d.status === "convergence"
+      ? `Sur cet axe, vos réponses convergent nettement (convergence ${d.convergence} %).`
+      : d.status === "vigilance"
+        ? `Sur cet axe, une vigilance particulière s’impose (écart ${d.gap} pts, niveaux ${d.scoreA} % / ${d.scoreB} %).`
+        : `Sur cet axe, une différence réelle apparaît (écart ${d.gap} pts).`
+
+  return {
+    id: `dim-${d.dimension}`,
+    title: `${d.label} — lecture croisée`,
+    paragraphs: [
+      `${statusLine} ${a} se situe autour de ${d.scoreA} %, ${b} autour de ${d.scoreB} %. Ces chiffres ne jugent ni l’amour ni la valeur de chacun : ils décrivent une manière d’habiter le couple aujourd’hui.`,
+      `Ce que cela signifie concrètement : lorsque le sujet « ${d.label.toLowerCase()} » revient dans votre quotidien, l’un peut avoir l’impression d’être entendu rapidement, tandis que l’autre peut avoir l’impression de devoir trop expliquer — ou l’inverse. La tension naît souvent moins du désaccord sur le fond que d’un rythme, d’un besoin de sécurité ou d’une priorité non nommée.`,
+      `Pour ${a} : votre position sur cet axe mérite d’être dite en « j’ai besoin de… » plutôt qu’en reproche. Ce n’est pas une exigence capricieuse ; c’est une condition de confort relationnel. Plus vous la rendez visible, moins ${b} doit deviner.`,
+      `Pour ${b} : reformuler ce que vous croyez comprendre avant de répondre change souvent le climat. Vous n’êtes pas obligé(e) d’être d’accord immédiatement ; vous êtes invité(e) à montrer que le message de ${a} a une place.`,
+      `Pour le couple : choisissez un exemple précis des 14 derniers jours lié à « ${d.label} ». Racontez-le chacun en 3 minutes, sans interruption. Puis demandez-vous : « Qu’est-ce que chacun a besoin de savoir de l’autre pour que la prochaine fois soit plus fluide ? » Une seule demande concrète suffit.`,
+      `Piège à éviter : transformer cet axe en procès d’intention (« tu ne t’intéresses pas », « tu exagères »). Remplacez par une observation + un besoin + une proposition datée. La différence devient alors une matière à construire, pas une preuve d’échec.`,
+      `Signal de progrès : dans les 30 jours, vous pouvez citer deux conversations sur « ${d.label} » qui se sont terminées sans humiliation, avec au moins un micro-ajustement tenu.`,
+    ],
+  }
+}
+
+function buildPremiumPlusDepth(
+  names: CoupleReportNames,
+  scoring: CoupleScoringResult
+): CoupleReportSection[] {
+  const a = names.nameA
+  const b = names.nameB
+  const top = scoring.priorities[0]?.label ?? "la communication"
+  return [
+    {
+      id: "pp-dynamique",
+      title: "Analyse approfondie des dynamiques (Premium Plus)",
+      paragraphs: [
+        `Au-delà des scores, ${a} et ${b} créent un système : ce que l’un initie, l’autre reçoit, et ce que l’autre reçoit influence ce que le premier ose ensuite. Observer « qui initie / qui reçoit / qui répare » est souvent plus utile qu’une note globale.`,
+        "Dans beaucoup de couples, l’un porte la conversation difficile pendant que l’autre porte le calme apparent. Ce partage n’est pas moralement « juste » ou « injuste » : il est souvent historique, culturel ou lié à la peur. Le nommer permet de le redistribuer.",
+        `Scénario de travail (14 jours) : inversez volontairement une habitude. Celui qui parle peu initie une fois une conversation sensible. Celui qui presse ralentit une fois et reformule avant de trancher. Notez le climat le jour J et le jour J+1.`,
+        "Question de supervision : « Est-ce que notre façon de résoudre les problèmes renforce la proximité, ou est-ce qu’elle crée un gagnant et un perdant ? »",
+      ],
+    },
+    {
+      id: "pp-interactions",
+      title: "Interactions entre dimensions (Premium Plus)",
+      paragraphs: [
+        `Vos priorités (notamment ${top}) ne vivent pas isolées. Une tension sur les finances colore souvent la communication ; une différence sur le projet de vie peut amplifier les conflits ; une solidité sur les valeurs peut au contraire protéger les autres axes.`,
+        "Lisez donc vos écarts comme un réseau : si vous travaillez un seul levier sans regarder les leviers voisins, le progrès reste fragile. Si vous travaillez un levier prioritaire avec un rituel de réparation, plusieurs zones s’améliorent souvent ensemble.",
+        `Cartographie suggérée pour ${a} & ${b} : 1) axe prioritaire, 2) axe de soutien (une force), 3) axe de vigilance. Travaillez-les dans cet ordre pendant 30 jours.`,
+      ],
+    },
+    {
+      id: "pp-scenarios",
+      title: "Scénarios relationnels (Premium Plus)",
+      paragraphs: [
+        `Scénario 1 — Désaccord de rythme : ${a} veut accélérer une décision, ${b} veut ralentir. Sans cadre, l’un se sent freiné, l’autre se sent poussé. Cadre : « On décide ce soir si on décide aujourd’hui ou dans 7 jours — pas les deux en même temps. »`,
+        "Scénario 2 — Silence après dispute : l’un a besoin d’espace, l’autre de rapprochement. Accord : signal de pause + heure de reprise (ex. « on reprend à 20h »). Le silence sans date nourrit l’abandon.",
+        "Scénario 3 — Famille / argent / projet : un sujet sensible revient. Utilisez le protocole Premium Plus (sujet unique, tours de parole, reformulation, une demande, un engagement daté).",
+        "Après chaque scénario, notez une phrase : « Ce qui a marché » et « Ce qu’on ajuste la prochaine fois ». La mémoire écrite bat la bonne intention floue.",
+      ],
+    },
+    {
+      id: "pp-protocole",
+      title: "Protocole de conversation difficile (Premium Plus)",
+      paragraphs: [
+        "1) Cadre (2 min) : un seul sujet, durée totale 25–30 min, pas d’interrupteurs, téléphones hors de portée.",
+        "2) Tour A (5 min) puis tour B (5 min) : chacun parle de son vécu, sans attaquer le caractère de l’autre.",
+        "3) Reformulation croisée (5 min) : chacun reformule ce qu’il a compris avant de répondre.",
+        "4) Une demande concrète chacun (3 min) : formulée en besoin, pas en ultimatum.",
+        "5) Un micro-engagement daté (2 min) : qui fait quoi, pour quand, comment on saura que c’est fait.",
+        "Si la tension monte : pause de 20 minutes minimum, puis reprise du protocole — pas reprise du combat. Ce protocole n’est pas une thérapie ; c’est une hygiène relationnelle.",
+      ],
+    },
+    {
+      id: "pp-charte",
+      title: "Charte relationnelle (Premium Plus)",
+      paragraphs: [
+        "Rédigez ensemble une charte courte en 5 engagements. Affichez-la où vous la verrez. Relisez-la le 1er dimanche du mois.",
+        "La charte n’est pas un contrat juridique : c’est un rappel visible de ce que vous choisissez d’être l’un pour l’autre, surtout quand vous êtes fatigués.",
+      ],
+      bullets: [
+        "Nous ne nous humilions pas, même en colère.",
+        "Nous utilisons un signal de pause avant l’emballement.",
+        "Nous réparons avant de « passer à autre chose ».",
+        "Nous décidons ensemble au-delà du seuil convenu.",
+        "Nous célébrons au moins une chose positive chaque semaine.",
+      ],
+    },
+    {
+      id: "pp-fiches",
+      title: "Fiches pratiques (Premium Plus)",
+      paragraphs: [
+        "Fiche 1 — Check-in hebdomadaire (15 min) : une joie, une friction, une demande, une gratitude.",
+        "Fiche 2 — Budget émotionnel : noter 3 moments où l’un s’est senti seul(e) malgré la présence de l’autre.",
+        "Fiche 3 — Décision à deux : options, critères, délai, qui tranche en cas de blocage temporaire.",
+        "Fiche 4 — Réparation : « Ce que j’ai fait / ce que ça a produit / ce que je propose / ce dont j’ai besoin ».",
+        "Utilisez une fiche par semaine pendant 4 semaines, puis choisissez les 2 qui vous servent vraiment.",
+      ],
+    },
+    {
+      id: "pp-plan-etendu",
+      title: "Plan d’action étendu 90 jours (Premium Plus)",
+      paragraphs: [
+        "Jours 1–14 : stabiliser la réparation et le check-in. Objectif : 2 rituels tenus.",
+        `Jours 15–45 : travailler en priorité « ${top} » avec un micro-ajustement hebdomadaire mesurable.`,
+        "Jours 46–90 : élargir à un second axe, puis faire une revue de couple écrite (ce qui a bougé, ce qui reste).",
+        "À J+90 : décider ensemble si vous poursuivez en autonomie, avec coaching, ou avec un professionnel — sans honte. Demander de l’aide est une compétence de couple.",
+      ],
+    },
+    {
+      id: "pp-ressources",
+      title: "Ressources & orientation (Premium Plus)",
+      paragraphs: [
+        "Ce bilan peut s’accompagner de lectures ciblées, de séances de coaching KELIAA, ou d’un accompagnement pastoral / thérapeutique selon votre contexte.",
+        "Si apparaît de la peur, du contrôle, de l’humiliation répétée ou une atteinte à la sécurité, priorisez la mise en sécurité et un professionnel compétent. KELYA COUPLE éclaire ; il ne remplace pas un suivi clinique.",
+      ],
+    },
+    {
+      id: "pp-conclusion",
+      title: "Conclusion Premium Plus",
+      paragraphs: [
+        `${a} et ${b}, vous disposez maintenant d’une base Essentiel complète, enrichie d’outils de mise en pratique. La valeur de Premium Plus n’est pas d’avoir « plus de pages » pour impressionner : c’est de passer de la compréhension à l’action sans vous perdre.`,
+        "Choisissez une seule priorité cette semaine. Tenez-la. Puis revenez au dossier. C’est ainsi qu’un bilan devient un compagnon, pas un souvenir PDF.",
+      ],
+    },
+  ]
+}
+
 function buildCoreExercises(priorities: DimensionPairScore[]): CoupleExercise[] {
   const focus = priorities[0]?.label ?? "la communication"
   return [
@@ -331,13 +464,16 @@ export function buildCoupleReport(args: {
       id: "priorites",
       title: "Vos priorités",
       paragraphs: [
-        "Travaillez d’abord ce qui a le plus d’impact relationnel, pas tout en même temps.",
+        "Travaillez d’abord ce qui a le plus d’impact relationnel, pas tout en même temps. Un couple progresse mieux avec une priorité tenue qu’avec dix intentions abandonnées.",
+        "Pour chaque priorité : nommez le besoin, choisissez un micro-ajustement, fixez une date de revue courte.",
       ],
       bullets: scoring.priorities.slice(0, 5).map(
         (d, i) =>
           `Priorité ${i + 1} — ${d.label} : clarifier les attentes, puis pratiquer un micro-ajustement hebdomadaire.`
       ),
     },
+    // Chapitres longs dimension par dimension (profondeur type modèles EX)
+    ...scoring.dimensions.map((d) => dimensionDeepChapter(d, names)),
     {
       id: "reco",
       title: "Recommandations",
@@ -345,6 +481,16 @@ export function buildCoupleReport(args: {
         `Pour ${names.nameA} : choisissez une demande précise liée à votre priorité n°1, et formulez-la en « j’ai besoin de… » plutôt qu’en reproche.`,
         `Pour ${names.nameB} : pratiquez la reformulation avant la réponse. Être compris précède souvent le fait d’être d’accord.`,
         "Pour le couple : protégez un rendez-vous hebdomadaire court. La régularité bat l’intensité sporadique.",
+        "Dans les 7 jours : une conversation structurée de 20 minutes sur la priorité n°1, avec une seule décision concrète à la fin.",
+        "Dans les 30 jours : relisez ce dossier ensemble et notez ce qui a réellement bougé — même un peu.",
+      ],
+    },
+    {
+      id: "ressources-base",
+      title: "Ressources pour poursuivre",
+      paragraphs: [
+        "Gardez ce dossier accessible. Relisez d’abord les forces avant les écarts : le moral conditionne la qualité du travail.",
+        "Si un sujet déborde (trauma, violence, addiction, détresse), orientez-vous vers un professionnel. Ce bilan n’est pas un diagnostic.",
       ],
     },
     {
@@ -359,39 +505,7 @@ export function buildCoupleReport(args: {
   ]
 
   const premiumPlusExtras: CoupleReportSection[] = isPremiumPlusOffer(offerId)
-    ? [
-        {
-          id: "pp-dynamique",
-          title: "Analyse approfondie des dynamiques (Premium Plus)",
-          paragraphs: [
-            "Au-delà des scores, observez le « qui initie / qui reçoit / qui répare ». Souvent, l’un porte la conversation difficile pendant que l’autre porte le calme apparent. Nommer ces rôles permet de les répartir autrement.",
-            "Scénario de travail : pendant 14 jours, inversez volontairement une habitude (celui qui parle peu initie une fois ; celui qui presse ralentit une fois). Notez ce qui change dans le climat.",
-          ],
-        },
-        {
-          id: "pp-charte",
-          title: "Charte relationnelle (Premium Plus)",
-          paragraphs: [
-            "Rédigez ensemble une charte courte en 5 engagements : respect en désaccord, signal de pause, réparation sous 24 h, décisions financières à partir d’un seuil, et un rituel de rejoicing (ce qui a bien marché cette semaine).",
-            "La charte n’est pas un contrat juridique : c’est un rappel visible de ce que vous choisissez d’être l’un pour l’autre.",
-          ],
-          bullets: [
-            "Nous ne nous humilions pas, même en colère.",
-            "Nous utilisons un signal de pause avant l’emballement.",
-            "Nous réparons avant de « passer à autre chose ».",
-            "Nous décidons ensemble au-delà du seuil convenu.",
-            "Nous célébrons au moins une chose positive chaque semaine.",
-          ],
-        },
-        {
-          id: "pp-protocole",
-          title: "Protocole de conversation difficile (Premium Plus)",
-          paragraphs: [
-            "1) Cadre (2 min) : sujet unique, durée, pas d’interrupteurs. 2) Tour A puis tour B (5 min chacun). 3) Reformulation croisée. 4) Une demande concrète chacun. 5) Un micro-engagement daté.",
-            "Si la tension monte : pause de 20 minutes minimum, puis reprise du protocole — pas reprise du combat.",
-          ],
-        },
-      ]
+    ? buildPremiumPlusDepth(names, scoring)
     : []
 
   const exercises = [

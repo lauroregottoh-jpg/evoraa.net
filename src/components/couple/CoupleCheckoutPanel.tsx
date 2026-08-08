@@ -326,8 +326,8 @@ export function CoupleCheckoutPanel({
       </button>
 
       <p className="text-center text-[11px] text-[#1C1412]/55">
-        Connexion requise pour finaliser · activation après confirmation du
-        paiement
+        Sans code valide, le paiement passe par Mobile Money / carte (prestataire).
+        Un code d’audit n’est jamais public.
       </p>
       {error && (
         <p className="text-sm text-destructive text-center" role="alert">
