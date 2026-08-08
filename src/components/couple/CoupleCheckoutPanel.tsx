@@ -49,7 +49,6 @@ export function CoupleCheckoutPanel({
   const [paymentMode, setPaymentMode] = React.useState<BictorysPaymentMode>(
     initialPaymentMode ?? suggestedMode
   )
-  const [promoOpen, setPromoOpen] = React.useState(Boolean(initialPromoCode))
   const [promoCode, setPromoCode] = React.useState(initialPromoCode)
   const [promoAmount, setPromoAmount] = React.useState<number | null>(null)
   const [promoHint, setPromoHint] = React.useState<string | null>(null)
@@ -68,7 +67,6 @@ export function CoupleCheckoutPanel({
 
   React.useEffect(() => {
     if (!initialPromoCode.trim()) return
-    setPromoOpen(true)
     setPromoCode(initialPromoCode)
     void previewCoupleCouponAction(initialPromoCode).then((r) => {
       if (r.ok && r.amountXof != null) {
@@ -238,41 +236,35 @@ export function CoupleCheckoutPanel({
         })}
       </div>
 
-      <div>
-        <button
-          type="button"
-          onClick={() => setPromoOpen((v) => !v)}
-          className="inline-flex items-center gap-2 text-sm font-semibold text-[#5C1F28] hover:underline"
-        >
-          <Tag className="h-4 w-4" />
+      <div className="rounded-xl border border-[#1C1412]/12 bg-[#F8F4EE] px-4 py-4 space-y-3">
+        <p className="text-sm font-semibold text-[#1C1412] inline-flex items-center gap-2">
+          <Tag className="h-4 w-4 text-[#5C1F28]" />
           J&apos;ai un code
-        </button>
-        {promoOpen && (
-          <div className="mt-2 flex flex-wrap gap-2">
-            <input
-              value={promoCode}
-              onChange={(e) => {
-                setPromoCode(e.target.value)
-                setPromoAmount(null)
-                setPromoHint(null)
-              }}
-              placeholder="Code"
-              autoComplete="off"
-              className="flex-1 min-w-[10rem] rounded-xl border border-[#1C1412]/15 bg-[#FBF9F6] px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#B8954A]/50"
-            />
-            <button
-              type="button"
-              onClick={() => void applyPromo()}
-              className="rounded-xl border border-[#1C1412]/15 px-4 py-2.5 text-sm font-semibold text-[#1C1412] hover:bg-[#F8F4EE]"
-            >
-              Appliquer
-            </button>
-          </div>
-        )}
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <input
+            value={promoCode}
+            onChange={(e) => {
+              setPromoCode(e.target.value)
+              setPromoAmount(null)
+              setPromoHint(null)
+            }}
+            placeholder="Saisir votre code"
+            autoComplete="off"
+            className="flex-1 min-w-[12rem] rounded-xl border border-[#1C1412]/15 bg-white px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#B8954A]/50"
+          />
+          <button
+            type="button"
+            onClick={() => void applyPromo()}
+            className="rounded-xl bg-[#5C1F28] text-white px-4 py-2.5 text-sm font-semibold hover:brightness-110"
+          >
+            Appliquer
+          </button>
+        </div>
         {promoHint && (
           <p
             className={cn(
-              "mt-2 text-xs",
+              "text-xs",
               promoAmount ? "text-[#5C1F28] font-semibold" : "text-destructive"
             )}
           >
