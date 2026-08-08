@@ -3,6 +3,10 @@
 import { revalidatePath } from "next/cache"
 import { createClient } from "@/utils/supabase/server"
 import { getUserEntitlements } from "@/lib/billing/entitlements"
+import {
+  consumeLoyaltyBonusMessage,
+  getLoyaltyAccount,
+} from "@/lib/loyalty/account"
 
 export type ConversationListItem = {
   id: string
@@ -33,6 +37,8 @@ export type ConversationRoomDTO = {
   /** Messages envoyés par moi (pour quota) */
   messageCount: number
   freeLimit: number
+  /** Solde fidélité (utilisable seulement si Alliance) */
+  bonusMessagesRemaining: number
   hasMoreOlder: boolean
 }
 
@@ -369,6 +375,9 @@ export async function getConversationRoom(conversationId: string): Promise<{
 
   const entitlements = await getUserEntitlements(user.id)
   const messageLimit = entitlements.limits.messagesPerConversation
+  const loyalty = await getLoyaltyAccount(user.id, {
+    isPaid: entitlements.isPaid,
+  })
   const { count: myMessageCount } = await supabase
     .from("messages")
     .select("id", { count: "exact", head: true })
@@ -385,6 +394,9 @@ export async function getConversationRoom(conversationId: string): Promise<{
       messages: mapped,
       messageCount: myMessageCount ?? mapped.filter((m) => m.isMine).length,
       freeLimit: messageLimit,
+      bonusMessagesRemaining: entitlements.isPaid
+        ? loyalty.bonusMessagesBalance
+        : 0,
       hasMoreOlder,
     },
   }
@@ -477,10 +489,20 @@ export async function sendMessageAction(
 
   const entitlements = await getUserEntitlements(user.id)
   const messageLimit = entitlements.limits.messagesPerConversation
+  const count = myCount ?? 0
 
-  if ((myCount ?? 0) >= messageLimit) {
-    return {
-      error: `Limite de messages atteinte pour votre offre ${entitlements.planName}. Passez Alliance sur /billing.`,
+  if (count >= messageLimit) {
+    if (entitlements.isPaid) {
+      const usedBonus = await consumeLoyaltyBonusMessage(user.id)
+      if (!usedBonus) {
+        return {
+          error: `Limite de messages atteinte pour votre offre ${entitlements.planName}. Consultez votre solde fidélité sur /premium.`,
+        }
+      }
+    } else {
+      return {
+        error: `Limite de messages atteinte pour votre offre ${entitlements.planName}. Passez Alliance sur /billing.`,
+      }
     }
   }
 
@@ -501,6 +523,7 @@ export async function sendMessageAction(
 
   revalidatePath("/messages")
   revalidatePath(`/messages/${conversationId}`)
+  revalidatePath("/premium")
 
   return {
     message: {

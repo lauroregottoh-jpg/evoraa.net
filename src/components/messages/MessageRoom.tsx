@@ -158,9 +158,16 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
     await doSend()
   }
 
-  const remaining = Math.max(0, room.freeLimit - room.messageCount)
+  const remaining = Math.max(
+    0,
+    room.freeLimit - room.messageCount + (room.bonusMessagesRemaining || 0)
+  )
+  const standardLeft = Math.max(0, room.freeLimit - room.messageCount)
   const messageQuotaReached = remaining <= 0
-  const remainingLabel = `${remaining} msg restants`
+  const remainingLabel =
+    (room.bonusMessagesRemaining || 0) > 0
+      ? `${standardLeft} + ${room.bonusMessagesRemaining} bonus`
+      : `${remaining} msg restants`
 
   return (
     <div className="space-y-6 py-4">

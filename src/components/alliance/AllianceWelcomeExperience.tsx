@@ -13,6 +13,7 @@ import {
   type AllianceMissionFlags,
 } from "@/lib/alliance/journey"
 import { cn } from "@/utils/cn"
+import { LoyaltyRewardReveal } from "@/components/loyalty/LoyaltyProgramCard"
 
 type Phase = "cinema" | "privileges" | "mission"
 
@@ -27,17 +28,26 @@ export function AllianceWelcomeExperience({
   missions,
   mode = "welcome",
   profileGaps = [],
+  loyaltyReward = null,
 }: {
   firstName: string
   missions: AllianceMissionFlags
   mode?: AllianceCinemaMode
   /** Infos manquantes seulement — jamais re-demander ce qui est déjà rempli. */
   profileGaps?: ProfileGapSuggestion[]
+  loyaltyReward?: {
+    bonusMessages: number
+    boosts: number
+    vip?: boolean
+  } | null
 }) {
   const isRenewal = mode === "renewal"
   const [phase, setPhase] = React.useState<Phase>("cinema")
   const [line, setLine] = React.useState(0)
   const [privIndex, setPrivIndex] = React.useState(-1)
+  const [showLoyalty, setShowLoyalty] = React.useState(
+    () => Boolean(loyaltyReward && loyaltyReward.bonusMessages > 0)
+  )
 
   const highlights = isRenewal ? ALLIANCE_RENEWAL_HIGHLIGHTS : ALLIANCE_PRIVILEGES
 
@@ -84,6 +94,14 @@ export function AllianceWelcomeExperience({
 
   return (
     <div className="min-h-[70vh]">
+      {showLoyalty && loyaltyReward ? (
+        <LoyaltyRewardReveal
+          bonusMessages={loyaltyReward.bonusMessages}
+          boosts={loyaltyReward.boosts}
+          vip={loyaltyReward.vip}
+          onContinue={() => setShowLoyalty(false)}
+        />
+      ) : null}
       {phase === "cinema" ? (
         <section className="relative overflow-hidden rounded-[1.75rem] bg-[#120f10] text-[#F8F4EE] px-6 py-16 sm:py-20 text-center shadow-elevated">
           <div

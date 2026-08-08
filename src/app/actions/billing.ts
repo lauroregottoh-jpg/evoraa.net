@@ -361,6 +361,15 @@ export async function confirmDemoPaymentAction(paymentId: string): Promise<{
     return { error: error.message }
   }
 
+  const { maybeGrantLoyaltyAfterAlliancePayment } = await import(
+    "@/lib/loyalty/afterPayment"
+  )
+  await maybeGrantLoyaltyAfterAlliancePayment({
+    userId: user.id,
+    paymentId,
+    metadata: pending.payment.metadata,
+  })
+
   await logPaymentEvent({
     paymentId,
     provider: "demo",
@@ -374,6 +383,7 @@ export async function confirmDemoPaymentAction(paymentId: string): Promise<{
   revalidatePath("/messages")
   revalidatePath("/compatibility")
   revalidatePath("/checkout/success")
+  revalidatePath("/premium")
 
   return { success: true }
 }

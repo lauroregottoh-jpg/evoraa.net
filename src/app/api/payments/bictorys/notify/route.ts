@@ -310,6 +310,15 @@ export async function POST(request: NextRequest) {
   // Best-effort email — await outbox enqueue (fast); never fail the webhook ACK on mail errors.
   await notifyAllianceActivated(admin, subscription.user_id)
 
+  const { maybeGrantLoyaltyAfterAlliancePayment } = await import(
+    "@/lib/loyalty/afterPayment"
+  )
+  await maybeGrantLoyaltyAfterAlliancePayment({
+    userId: subscription.user_id,
+    paymentId: payment.id,
+    metadata: payment.metadata,
+  })
+
   if (deliveryId) await markWebhookDeliveryProcessed(admin, deliveryId)
   return NextResponse.json({ ok: true, activated: true })
 }

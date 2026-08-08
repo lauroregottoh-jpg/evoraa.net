@@ -1437,6 +1437,159 @@ export async function adminGrantAlliance(userId: string, days = 30) {
   return { success: true }
 }
 
+/** Lecture fidélité Alliance (ops). */
+export async function adminGetLoyaltySnapshot(userId: string) {
+  const gate = await requireAdmin()
+  if (gate.error || !gate.supabase) return { error: gate.error || "Acces refuse." }
+
+  const admin = createAdminClient()
+  const [{ data: account }, { data: grants }] = await Promise.all([
+    admin
+      .from("loyalty_accounts")
+      .select(
+        "consecutive_months, bonus_messages_balance, profile_boosts_available, vip_session_eligible, fidelity_card_id, last_grant_at, vip_session_reached_at"
+      )
+      .eq("user_id", userId)
+      .maybeSingle(),
+    admin
+      .from("loyalty_grants")
+      .select(
+        "id, payment_ref, months_credited, consecutive_months_after, bonus_messages, boosts, kind, created_at"
+      )
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
+      .limit(12),
+  ])
+
+  return {
+    success: true as const,
+    account: account
+      ? {
+          consecutiveMonths: Number(account.consecutive_months) || 0,
+          bonusMessagesBalance: Number(account.bonus_messages_balance) || 0,
+          profileBoostsAvailable: Number(account.profile_boosts_available) || 0,
+          vipSessionEligible: Boolean(account.vip_session_eligible),
+          fidelityCardId: String(account.fidelity_card_id || "welcome"),
+          lastGrantAt: account.last_grant_at as string | null,
+          vipSessionReachedAt: account.vip_session_reached_at as string | null,
+        }
+      : null,
+    grants: (grants || []).map((g) => ({
+      id: g.id as string,
+      paymentRef: g.payment_ref as string,
+      monthsCredited: Number(g.months_credited) || 0,
+      consecutiveAfter: Number(g.consecutive_months_after) || 0,
+      bonusMessages: Number(g.bonus_messages) || 0,
+      boosts: Number(g.boosts) || 0,
+      kind: String(g.kind || "renewal"),
+      createdAt: g.created_at as string,
+    })),
+  }
+}
+
+/**
+ * Ajustement manuel fidélité (compensation / support).
+ * deltaBonus peut être négatif mais le solde ne descend pas sous 0.
+ * consecutiveMonths remplace le streak si fourni (>= 0).
+ */
+export async function adminAdjustLoyalty(input: {
+  userId: string
+  deltaBonusMessages?: number
+  deltaBoosts?: number
+  consecutiveMonths?: number
+  vipSessionEligible?: boolean
+  note?: string
+}) {
+  const gate = await requireFullAdmin()
+  if (gate.error || !gate.supabase) return { error: gate.error || "Acces refuse." }
+
+  const userId = input.userId?.trim()
+  if (!userId) return { error: "userId requis." }
+
+  const admin = createAdminClient()
+  const { data: account } = await admin
+    .from("loyalty_accounts")
+    .select(
+      "consecutive_months, bonus_messages_balance, profile_boosts_available, vip_session_eligible"
+    )
+    .eq("user_id", userId)
+    .maybeSingle()
+
+  const nextBonus = Math.max(
+    0,
+    (Number(account?.bonus_messages_balance) || 0) +
+      (Number(input.deltaBonusMessages) || 0)
+  )
+  const nextBoosts = Math.max(
+    0,
+    (Number(account?.profile_boosts_available) || 0) +
+      (Number(input.deltaBoosts) || 0)
+  )
+  const nextStreak =
+    typeof input.consecutiveMonths === "number" && input.consecutiveMonths >= 0
+      ? Math.floor(input.consecutiveMonths)
+      : Number(account?.consecutive_months) || 0
+  const nextVip =
+    typeof input.vipSessionEligible === "boolean"
+      ? input.vipSessionEligible
+      : Boolean(account?.vip_session_eligible)
+
+  const { error } = await admin.from("loyalty_accounts").upsert(
+    {
+      user_id: userId,
+      consecutive_months: nextStreak,
+      bonus_messages_balance: nextBonus,
+      profile_boosts_available: nextBoosts,
+      vip_session_eligible: nextVip,
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "user_id" }
+  )
+  if (error) return { error: error.message }
+
+  const deltaBonus = Number(input.deltaBonusMessages) || 0
+  const deltaBoosts = Number(input.deltaBoosts) || 0
+  if (deltaBonus !== 0 || deltaBoosts !== 0) {
+    await admin.from("loyalty_grants").insert({
+      user_id: userId,
+      payment_ref: `admin:${Date.now()}:${userId.slice(0, 8)}`,
+      months_credited: 0,
+      consecutive_months_after: nextStreak,
+      bonus_messages: deltaBonus,
+      boosts: deltaBoosts,
+      kind: "admin_adjust",
+      meta: {
+        note: input.note || null,
+        consecutive_set:
+          typeof input.consecutiveMonths === "number"
+            ? input.consecutiveMonths
+            : null,
+        vip_set:
+          typeof input.vipSessionEligible === "boolean"
+            ? input.vipSessionEligible
+            : null,
+      },
+    })
+  }
+
+  const { logAdminAction } = await import("@/lib/admin/audit")
+  await logAdminAction({
+    action: "adjust_loyalty",
+    targetType: "user",
+    targetId: userId,
+    meta: {
+      deltaBonusMessages: deltaBonus,
+      deltaBoosts,
+      consecutiveMonths: nextStreak,
+      vipSessionEligible: nextVip,
+      note: input.note || null,
+    },
+  })
+  revalidateOps()
+  revalidatePath("/premium")
+  return { success: true, bonusMessagesBalance: nextBonus, consecutiveMonths: nextStreak }
+}
+
 export async function adminResolveReport(
   reportId: string,
   status: "resolved" | "dismissed" | "pending"

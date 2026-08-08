@@ -47,6 +47,7 @@ import {
   YoutubeConfigEditor,
 } from "@/components/admin/AdminOpsV2Panels"
 import { MatchingIntelligencePanel } from "@/components/admin/AdminMatchingIntelligence"
+import { AdminLoyaltyPanel, AdminLoyaltyAllianceNote } from "@/components/admin/AdminLoyaltyPanel"
 import { AdminStaffTeamPanel } from "@/components/admin/AdminStaffTeamPanel"
 import { PendingProfilesQueue } from "@/components/admin/PendingProfilesQueue"
 import { AdminFeedbackPanel } from "@/components/admin/AdminFeedbackPanel"
@@ -804,6 +805,7 @@ export function AdminConsole(props: Props) {
               J-7 à rappeler : <strong>{props.retention.renewalsDue7d}</strong>
             </p>
           </div>
+          <AdminLoyaltyAllianceNote />
           <p className="text-xs rounded-xl border border-border bg-card px-3 py-2">
             Paiements démo :{" "}
             <strong>{props.ops.paymentsDemoMode ? "ON" : "OFF"}</strong>
@@ -1406,6 +1408,7 @@ function MemberDetailPanel({
               </Button>
             )}
           </div>
+          <AdminLoyaltyPanel userId={selected.userId} isFullAdmin={isFullAdmin} />
           {isFullAdmin && (
             <div className="border-t border-border pt-3 space-y-2">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">

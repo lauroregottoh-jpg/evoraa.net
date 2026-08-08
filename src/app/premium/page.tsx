@@ -13,6 +13,8 @@ import { BoostSection } from "@/components/premium/BoostSection"
 import { PremiumSocialProof } from "@/components/premium/PremiumSocialProof"
 import { AlliancePrioritySupport } from "@/components/premium/AlliancePrioritySupport"
 import { AmbientSnowOrbs } from "@/components/home/AmbientSnowOrbs"
+import { LoyaltyProgramCard } from "@/components/loyalty/LoyaltyProgramCard"
+import { getLoyaltyAccount } from "@/lib/loyalty/account"
 
 export default async function PremiumPage() {
   const supabase = await createClient()
@@ -40,11 +42,17 @@ export default async function PremiumPage() {
     )
   }
 
-  const [{ data: profile }, usage, checkoutHints] = await Promise.all([
+  const [{ data: profile }, usage, checkoutHints, loyalty] = await Promise.all([
     supabase.from("profiles").select("first_name").eq("user_id", user.id).maybeSingle(),
     getUsageSnapshot(user.id),
     getCheckoutHints(),
+    getLoyaltyAccount(user.id, { isPaid: true }),
   ])
+
+  const loyaltyDto = {
+    ...loyalty,
+    bonusActive: Boolean(usage?.isPaid),
+  }
 
   return (
     <MemberPage>
@@ -70,6 +78,10 @@ export default async function PremiumPage() {
         <AllianceBenefitCards />
 
         <AllianceBilanSection />
+
+        <div id="fidelite">
+          <LoyaltyProgramCard loyalty={loyaltyDto} />
+        </div>
 
         <AllianceCheckoutPanel
           showModePicker={checkoutHints?.showModePicker ?? true}

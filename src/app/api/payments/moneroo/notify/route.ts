@@ -262,6 +262,22 @@ export async function POST(request: NextRequest) {
     message: monerooId,
   })
 
+  if (payment.subscription_id) {
+    const { data: sub } = await admin
+      .from("subscriptions")
+      .select("user_id")
+      .eq("id", payment.subscription_id)
+      .maybeSingle()
+    const { maybeGrantLoyaltyAfterAlliancePayment } = await import(
+      "@/lib/loyalty/afterPayment"
+    )
+    await maybeGrantLoyaltyAfterAlliancePayment({
+      userId: sub?.user_id,
+      paymentId: payment.id,
+      metadata: payment.metadata,
+    })
+  }
+
   if (deliveryId) await markWebhookDeliveryProcessed(admin, deliveryId)
   return NextResponse.json({ ok: true, activated: true })
 }

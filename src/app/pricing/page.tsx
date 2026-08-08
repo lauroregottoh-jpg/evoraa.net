@@ -19,6 +19,7 @@ import {
 import { cn } from "@/utils/cn";
 import { PLANS, PUBLIC_PLAN_ORDER } from "@/lib/billing/plans";
 import { TestimonialsCarousel } from "@/components/marketing/TestimonialsCarousel";
+import { PricingLoyaltyTeaser } from "@/components/loyalty/LoyaltyProgramCard";
 
 /** Copy source: software-architecture/KELIA - Page d'accueil.docx — PAGE TARIFS */
 const PLAN_DESCRIPTIONS: Record<string, string> = {
@@ -322,6 +323,10 @@ export default function PricingPage() {
           })}
         </div>
       </section>
+
+      <div className="px-6 max-w-3xl mx-auto -mt-4 mb-4">
+        <PricingLoyaltyTeaser />
+      </div>
 
       <TestimonialsCarousel />
 

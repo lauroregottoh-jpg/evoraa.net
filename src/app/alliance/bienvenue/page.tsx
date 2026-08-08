@@ -57,6 +57,12 @@ export default async function AllianceBienvenuePage({
   } = await supabase.auth.getUser()
 
   const profileGaps: ProfileGapSuggestion[] = []
+  let loyaltyReward: {
+    bonusMessages: number
+    boosts: number
+    vip?: boolean
+  } | null = null
+
   if (user) {
     const { data: profile } = await supabase
       .from("profiles")
@@ -65,6 +71,34 @@ export default async function AllianceBienvenuePage({
       )
       .eq("user_id", user.id)
       .maybeSingle()
+
+    if (mode === "renewal") {
+      const { data: lastGrant } = await supabase
+        .from("loyalty_grants")
+        .select("bonus_messages, boosts, meta, created_at")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      if (lastGrant && Number(lastGrant.bonus_messages) > 0) {
+        const created = lastGrant.created_at
+          ? new Date(lastGrant.created_at as string).getTime()
+          : 0
+        // Afficher seulement si grant récent (< 48 h)
+        if (Date.now() - created < 48 * 3600_000) {
+          const meta =
+            lastGrant.meta && typeof lastGrant.meta === "object"
+              ? (lastGrant.meta as Record<string, unknown>)
+              : {}
+          loyaltyReward = {
+            bonusMessages: Number(lastGrant.bonus_messages) || 0,
+            boosts: Number(lastGrant.boosts) || 0,
+            vip: Boolean(meta.vip_session),
+          }
+        }
+      }
+    }
 
     if (profileNeedsOnboarding(profile)) {
       // Essentiels vraiment manquants — suggestion, pas de re-saisie de l’existant
@@ -122,6 +156,7 @@ export default async function AllianceBienvenuePage({
         missions={state.missions}
         mode={mode}
         profileGaps={profileGaps.slice(0, 3)}
+        loyaltyReward={loyaltyReward}
       />
     </MemberPage>
   )

@@ -1,6 +1,6 @@
 # Programme Fidélité Alliance — Référence officielle
 
-> **Statut :** version officielle à mettre en place.  
+> **Statut :** version officielle — **implémentée** (code app + migration SQL `20240101000030_alliance_loyalty.sql`).  
 > **Remplace entièrement** toutes les propositions antérieures de bonus fidélité.  
 > **Date :** 2026-08-07  
 > **Produit :** KELIAA · formule Alliance  
@@ -212,3 +212,348 @@ Cette version est la **référence officielle** du Programme Fidélité Alliance
 - [ ] Admin ops  
 - [ ] Tests : mois 1–3, interruption, réactivation, double webhook  
 - [ ] Déploiement prod **après** accord explicite
+
+
+# NOUVELLE SPÉCIFICATION – PROGRAMME DE FIDÉLITÉ KELIAA
+## (Cette spécification remplace toutes les propositions précédentes)
+
+## Objectif
+
+Mettre en place un véritable **Programme de Fidélité KELIAA** afin de récompenser l'ancienneté et l'engagement des membres.
+
+L'objectif n'est pas uniquement de récompenser les abonnés Alliance, mais également les membres Découverte qui restent actifs pendant plusieurs mois.
+
+Le système doit être entièrement automatique.
+
+---
+
+# PRINCIPE GÉNÉRAL
+
+Chaque utilisateur possède désormais un **Parcours de Fidélité**.
+
+Deux critères sont pris en compte :
+
+- la durée de présence sur KELIAA ;
+- l'activité réelle sur la plateforme.
+
+L'utilisateur progresse naturellement dans son parcours.
+
+À certains paliers, il débloque automatiquement une **nouvelle carte de fidélité**.
+
+Ces cartes remplacent progressivement la carte affichée dans la barre située en haut de l'application (Accueil, Alliance, Profil...).
+
+Ainsi, un utilisateur ancien et fidèle voit son interface évoluer naturellement.
+
+---
+
+# LES CARTES DE FIDÉLITÉ
+
+Prévoir plusieurs designs de cartes.
+
+Exemple :
+
+Carte 1
+Bienvenue
+
+↓
+
+Carte 2
+Membre actif
+
+↓
+
+Carte 3
+Membre engagé
+
+↓
+
+Carte 4
+Membre fidèle
+
+↓
+
+Carte 5
+Ambassadeur KELIAA
+
+Les noms pourront être modifiés ultérieurement.
+
+Chaque nouvelle carte possède :
+
+- un design différent ;
+- une couleur différente ;
+- une illustration différente ;
+- une animation lors du déblocage.
+
+Le changement de carte doit donner l'impression d'une évolution.
+
+---
+
+# MEMBRES DÉCOUVERTE
+
+Les membres Découverte peuvent eux aussi progresser.
+
+Condition :
+
+- être inscrit depuis au moins 6 mois ;
+- rester actif sur la plateforme.
+
+Activité prise en compte :
+
+- connexion régulière ;
+- profil complété ;
+- questionnaires réalisés ;
+- conversations engagées ;
+- utilisation normale de l'application.
+
+Si les conditions sont remplies :
+
+la carte actuelle est remplacée automatiquement par une nouvelle carte.
+
+Aucun bonus payant n'est offert.
+
+Il s'agit uniquement d'une reconnaissance de fidélité.
+
+L'objectif est de valoriser les utilisateurs fidèles, même sans abonnement.
+
+---
+
+# MEMBRES ALLIANCE
+
+Les membres Alliance bénéficient du même système de cartes.
+
+En plus de cela, ils reçoivent des récompenses exclusives.
+
+---
+
+# BONUS DE RENOUVELLEMENT
+
+Chaque renouvellement consécutif :
+
++15 messages bonus
+
+Ces messages sont ajoutés automatiquement.
+
+---
+
+# TOUS LES 3 MOIS
+
+Au lieu des +15 messages :
+
++30 messages bonus
+
++
+
+1 Boost Profil de 24 heures
+
+Exemple :
+
+Mois 1
+
++15
+
+Mois 2
+
++15
+
+Mois 3
+
++30
+
++
+
+Boost 24 h
+
+Puis le cycle recommence.
+
+---
+
+# APRÈS 12 MOIS CONSÉCUTIFS
+
+Le membre reçoit :
+
+- +30 messages bonus
+- 1 Boost Profil de 24 heures
+- invitation à une Session VIP Alliance organisée par KELIAA
+
+Cette session pourra prendre plusieurs formes :
+
+- coaching collectif ;
+- atelier privé ;
+- masterclass ;
+- rencontre VIP.
+
+Le format pourra évoluer.
+
+---
+
+# GESTION DES MESSAGES BONUS
+
+Les messages bonus :
+
+- sont cumulables ;
+- sont enregistrés définitivement ;
+- ne sont jamais supprimés.
+
+Ils sont consommés uniquement lorsque le quota normal de messages est épuisé.
+
+---
+
+# EN CAS DE DOWNGRADE
+
+Lorsque le membre quitte Alliance :
+
+- retour aux limitations de Découverte ;
+- les messages bonus restent enregistrés ;
+- ils deviennent simplement inactifs.
+
+Si Alliance est réactivé :
+
+les bonus restants redeviennent immédiatement disponibles.
+
+Aucun bonus gagné ne doit être perdu.
+
+---
+
+# DÉBLOCAGE D'UNE CARTE
+
+Lorsqu'une nouvelle carte est obtenue :
+
+Afficher une animation.
+
+Exemple :
+
+✨ Félicitations !
+
+Vous venez de débloquer votre nouvelle Carte de Fidélité.
+
+La nouvelle carte apparaît avec une animation premium.
+
+Puis :
+
+Continuer
+
+---
+
+# PAGE "MON PARCOURS"
+
+Créer une nouvelle section.
+
+Titre :
+
+Mon Parcours de Fidélité
+
+Afficher :
+
+- la carte actuelle ;
+- la prochaine carte à débloquer ;
+- les conditions pour l'obtenir ;
+- la progression actuelle.
+
+Exemple :
+
+━━━━━━━━━━━━━━
+
+Carte actuelle
+
+Membre engagé
+
+Progression
+
+██████░░░░
+
+Encore 42 jours avant votre prochaine carte.
+
+━━━━━━━━━━━━━━
+
+---
+
+# PAGE ALLIANCE
+
+Ajouter une nouvelle carte.
+
+Titre :
+
+Programme de Fidélité
+
+Afficher :
+
+- renouvellements ;
+- bonus obtenus ;
+- prochaine récompense ;
+- prochaine carte à débloquer.
+
+---
+
+# PAGE TARIFS
+
+Ajouter un bloc.
+
+Titre :
+
+Votre fidélité est récompensée.
+
+Texte :
+
+Chaque renouvellement Alliance vous permet de débloquer progressivement des récompenses exclusives et de faire évoluer votre Carte de Fidélité.
+
+---
+
+# PROFIL
+
+Afficher la carte actuelle.
+
+Exemple :
+
+Carte de Fidélité
+
+Membre fidèle
+
+ou
+
+Carte Alliance
+
+Membre engagé
+
+Cette carte doit être visible sur le profil.
+
+---
+
+# MATCHING
+
+Afficher discrètement la carte de fidélité sur les profils.
+
+Objectif :
+
+Valoriser les utilisateurs investis dans une démarche sérieuse.
+
+Cette information doit renforcer la confiance sans influencer le score de compatibilité.
+
+---
+
+# CONSOLE ADMINISTRATEUR
+
+Ajouter :
+
+- date d'obtention de la carte ;
+- historique des cartes ;
+- renouvellements ;
+- activité ;
+- messages bonus ;
+- boosts disponibles ;
+- progression ;
+- possibilité de changer une carte manuellement.
+
+---
+
+# CONTRAINTES
+
+Le système doit être :
+
+- entièrement automatique ;
+- évolutif ;
+- facilement configurable ;
+- administrable sans développement futur.
+
+Les noms des cartes, leurs couleurs, leurs conditions d'obtention et leurs récompenses devront être modifiables depuis la console d'administration.
+
+L'objectif est que ce Programme de Fidélité devienne un élément central de l'expérience KELIAA, en valorisant aussi bien la fidélité que l'engagement des membres.
