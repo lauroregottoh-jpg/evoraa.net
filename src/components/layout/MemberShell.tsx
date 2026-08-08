@@ -31,6 +31,8 @@ import { MemberReminders } from "@/components/layout/MemberReminders";
 import { logoutAction } from "@/app/actions/auth";
 import { OpsAdminEntryBanner } from "@/components/admin/OpsAdminEntryBanner";
 import { PwaInstallHint } from "@/components/pwa/PwaInstallHint";
+import { PwaMemberInstallCard } from "@/components/pwa/PwaMemberInstallCard";
+import { PwaInstallButton } from "@/components/pwa/PwaInstallButton";
 
 const SIDEBAR_KEY = "KELIAA_member_sidebar_open";
 
@@ -467,6 +469,11 @@ export function MemberShell({
             </div>
 
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              <PwaInstallButton
+                variant={isPaid ? "alliance" : "discovery"}
+                size="sm"
+                label="App"
+              />
               {isPaid ? (
                 <span className="hidden sm:inline-flex text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border bg-accent/15 text-accent border-accent/30">
                   {planLabel || "Alliance"}
@@ -562,6 +569,7 @@ export function MemberShell({
           {firstName ? <p className="sr-only">Espace de {firstName}</p> : null}
           <div className="mb-4 space-y-3">
             <OpsAdminEntryBanner />
+            <PwaMemberInstallCard isPaid={Boolean(isPaid)} />
             <PwaInstallHint />
           </div>
           {children}

@@ -2,72 +2,42 @@
 
 import * as React from "react"
 import { Download, X } from "lucide-react"
-
-type BeforeInstallPromptEvent = Event & {
-  prompt: () => Promise<void>
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>
-}
-
-const DISMISS_KEY = "keliaa_pwa_install_dismissed"
+import {
+  dismissPwaPrompt,
+  isPwaDismissed,
+  usePwaInstall,
+} from "@/components/pwa/usePwaInstall"
 
 /**
- * Hint « Installer KELIAA » — Android Chrome (beforeinstallprompt) + iOS Add to Home Screen.
+ * Hint compact membre — Android Chrome + iOS Add to Home Screen.
  */
 export function PwaInstallHint() {
-  const [deferred, setDeferred] = React.useState<BeforeInstallPromptEvent | null>(null)
-  const [iosHint, setIosHint] = React.useState(false)
+  const { canPrompt, isIos, isStandalone, ready, install } = usePwaInstall()
   const [visible, setVisible] = React.useState(false)
 
   React.useEffect(() => {
-    if (typeof window === "undefined") return
-    try {
-      if (localStorage.getItem(DISMISS_KEY) === "1") return
-    } catch {
-      /* ignore */
+    if (!ready || isStandalone || isPwaDismissed()) {
+      setVisible(false)
+      return
     }
-
-    const standalone =
-      window.matchMedia("(display-mode: standalone)").matches ||
-      // iOS
-      Boolean((navigator as Navigator & { standalone?: boolean }).standalone)
-    if (standalone) return
-
-    const onBip = (e: Event) => {
-      e.preventDefault()
-      setDeferred(e as BeforeInstallPromptEvent)
-      setVisible(true)
+    // Afficher si on peut installer, ou iOS, ou tip générique après un court délai
+    if (canPrompt || isIos) setVisible(true)
+    else {
+      const t = window.setTimeout(() => setVisible(true), 1200)
+      return () => window.clearTimeout(t)
     }
-    window.addEventListener("beforeinstallprompt", onBip)
-
-    const ua = navigator.userAgent || ""
-    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
-    if (isIOS && !standalone) {
-      setIosHint(true)
-      setVisible(true)
-    }
-
-    return () => window.removeEventListener("beforeinstallprompt", onBip)
-  }, [])
+  }, [ready, isStandalone, canPrompt, isIos])
 
   const dismiss = () => {
     setVisible(false)
-    try {
-      localStorage.setItem(DISMISS_KEY, "1")
-    } catch {
-      /* ignore */
-    }
+    dismissPwaPrompt()
   }
 
-  const install = async () => {
-    if (!deferred) return
-    await deferred.prompt()
-    try {
-      await deferred.userChoice
-    } catch {
-      /* ignore */
+  const onInstall = async () => {
+    if (canPrompt) {
+      await install()
+      setVisible(false)
     }
-    setDeferred(null)
-    dismiss()
   }
 
   if (!visible) return null
@@ -78,14 +48,14 @@ export function PwaInstallHint() {
       <div className="min-w-0 flex-1">
         <p className="text-sm font-semibold text-foreground">Installer KELIAA</p>
         <p className="text-[12px] text-muted-foreground mt-0.5 leading-relaxed">
-          {iosHint && !deferred
+          {isIos && !canPrompt
             ? "Sur iPhone : Partager → Sur l’écran d’accueil. Accès direct sans passer par le navigateur."
             : "Ajoutez l’app sur votre écran d’accueil pour un accès rapide (messagerie, EVA, matching)."}
         </p>
-        {deferred && (
+        {canPrompt && (
           <button
             type="button"
-            onClick={install}
+            onClick={onInstall}
             className="mt-2 inline-flex h-9 items-center rounded-xl bg-primary px-3 text-xs font-semibold text-primary-foreground"
           >
             Installer

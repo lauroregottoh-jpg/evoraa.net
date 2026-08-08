@@ -5,6 +5,7 @@ import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { AnalyticsScripts } from "@/components/analytics/AnalyticsScripts";
 import { RegisterServiceWorker } from "@/components/pwa/RegisterServiceWorker";
+import { PwaInstallBadge } from "@/components/pwa/PwaInstallBadge";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -134,6 +135,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <AnalyticsScripts />
           <RegisterServiceWorker />
+          <PwaInstallBadge />
           <SmoothScroll>{children}</SmoothScroll>
         </ThemeProvider>
       </body>
