@@ -1,232 +1,214 @@
-# Programme Fidélité Alliance — Spécification officielle
+# Programme Fidélité Alliance — Référence officielle
 
-> **Statut :** document de référence — **à valider avant toute implémentation / déploiement**.  
-> **Version :** 1.0 (officielle) — remplace toutes les propositions antérieures de bonus fidélité.  
+> **Statut :** version officielle à mettre en place.  
+> **Remplace entièrement** toutes les propositions antérieures de bonus fidélité.  
 > **Date :** 2026-08-07  
-> **Produit :** KELIAA · formule Alliance (`premium_plus`)
+> **Produit :** KELIAA · formule Alliance  
 
 ---
 
-## 0. Objectif
+## Objectif
 
-Créer un programme de fidélité **simple, automatique et durable** pour :
+Créer un programme de fidélité **simple, automatique et durable** afin d’encourager les renouvellements d’abonnement Alliance et d’améliorer la rétention des membres.
 
-- encourager les renouvellements Alliance ;
-- améliorer la rétention ;
-- récompenser sans dévaloriser l’offre (quota de base 100 messages / conversation reste le cœur du plan).
+Cette règle **annule et remplace** toutes les précédentes propositions concernant les bonus de fidélité.
 
-Ce document est la **référence unique**. Toute implémentation doit s’y conformer.
+Elle est plus équilibrée, plus rentable et crée une vraie fidélisation **sans dévaloriser** l’offre Alliance.
 
 ---
 
-## 1. Principes non négociables
+## Règle majeure — messages bonus
 
-1. **Automatique** — déclenché uniquement après **confirmation effective** d’un paiement (Mobile Money / carte).
-2. **Pas de double attribution** — un même renouvellement / cycle de facturation ne crédite qu’une fois.
-3. **Messages bonus cumulables** — acquis définitivement sur le compte ; **jamais supprimés**.
-4. **Consommation** — les bonus ne sont utilisés **qu’après** épuisement du quota standard Alliance.
-5. **Downgrade Découverte** — les bonus restent en solde mais **inactifs** ; ils redeviennent utilisables dès réactivation Alliance.
-6. **Interruption d’abonnement** — le **compteur de mois consécutifs** repart à zéro au prochain cycle Alliance ; le **solde bonus déjà gagné** est conservé.
-7. **Journalisation** — chaque attribution / ajustement admin est auditable.
-8. **Design** — charte KELIAA (or `#B8954A`, bordeaux `#5C1F28`, crème `#F8F4EE`), composants et animations existants.
+Les messages bonus sont **cumulables** et **ne jamais expirent** tant que le compte existe.
 
----
+| Règle | Détail |
+|-------|--------|
+| Acquisition | Définitive dès l’attribution |
+| Consommation | Uniquement **après** les 100 messages inclus Alliance |
+| Découverte | Solde **conservé** mais **inactif** |
+| Réactivation Alliance | Solde bonus **immédiatement** de nouveau utilisable |
+| Suppression | **Interdite** (aucun retrait d’une récompense gagnée) |
 
-## 2. Barème de récompenses (version officielle)
-
-### 2.1 Chaque mois consécutif
-
-| Mois consécutif | Messages bonus | Boost Profil 24 h | Session VIP |
-|-----------------|----------------|-------------------|-------------|
-| 1 | +15 | — | — |
-| 2 | +15 | — | — |
-| **3** | **+30** | **1×** | — |
-| 4 | +15 | — | — |
-| 5 | +15 | — | — |
-| **6** | **+30** | **1×** | — |
-| 7 | +15 | — | — |
-| 8 | +15 | — | — |
-| **9** | **+30** | **1×** | — |
-| 10 | +15 | — | — |
-| 11 | +15 | — | — |
-| **12** | **+30** | **1×** | **Invitation Session VIP Alliance** |
-
-**Règle palier 3 mois :** tous les 3 mois consécutifs (`mois % 3 === 0`), au lieu de +15 → **+30 messages + 1 Boost 24 h**.
-
-**Après 12 mois consécutifs :** récompenses du 12ᵉ mois + invitation **Session VIP Alliance** (coaching collectif / atelier / masterclass / visio privée — format décidé par l’équipe, pas de coaching 1:1 obligatoire).
-
-### 2.2 Formules multi-mois (achat anticipé)
-
-Si le membre paie une offre pack :
-
-| Durée achetée | Crédit immédiat cohérent |
-|---------------|--------------------------|
-| 1 mois | +15 (mois 1) |
-| 3 mois | +45 messages (équivalent 15+15+30) + 1 Boost 24 h (palier 3) |
-| 6 mois | +90 messages (équivalent des 6 mois) + 2 Boosts 24 h (paliers 3 et 6) |
-
-> Détail d’implémentation : créditer **mois par mois** dans le journal (6 lignes) ou **une ligne pack** avec `months_credited = N` — préférer **une ligne pack** + mise à jour du compteur `consecutive_months += N` pour éviter les doubles.
+Ainsi KELIAA ne retire jamais un avantage gagné, tout en gardant un argument fort pour revenir sur Alliance.
 
 ---
 
-## 3. Compteurs utilisateur
+## 1. Bonus de renouvellement mensuel
 
-Afficher clairement (profil, Alliance, quota messages) :
+À chaque renouvellement **consécutif** d’un abonnement Alliance, le membre reçoit automatiquement :
 
-| Compteur | Rôle |
-|----------|------|
-| **Messages standards** | Quota Alliance du plan (ex. 100 / conversation ou règle actuelle `entitlements`) |
-| **Messages fidélité** | Solde bonus cumulé (ex. `+30`) — consommé **en dernier** |
-| **Boosts profil** | Nombre de Boosts 24 h disponibles |
-| **Mois consécutifs** | Entier ≥ 0 |
-| **Éligibilité VIP 12 mois** | booléen + date d’atteinte |
+**+15 messages bonus**
 
-### 3.1 Ordre de consommation des messages
-
-1. Consommer le quota **standard** Alliance.  
-2. Si épuisé **et** membre Alliance actif → consommer **messages fidélité**.  
-3. Si Découverte → bonus **non utilisables** (solde conservé).
+Ces messages sont ajoutés à son compteur personnel.
 
 ---
 
-## 4. Attribution automatique (après paiement confirmé)
+## 2. Récompense spéciale tous les 3 mois
 
-Pipeline :
+Tous les **trois mois consécutifs**, le membre reçoit une récompense renforcée.
 
-1. Webhook / confirmation paiement (Moneroo, Bictorys, etc.).
-2. Vérifier `payment_id` / `invoice_id` **jamais déjà crédité** (`loyalty_grants.payment_ref` UNIQUE).
-3. Déterminer si le renouvellement est **consécutif** (écart raisonnable depuis `ends_at` précédent, ex. ≤ 3–7 jours de grâce).
-4. Si non consécutif → `consecutive_months = 1` (nouveau cycle) ; **ne pas** effacer `bonus_messages_balance`.
-5. Si consécutif → `consecutive_months += months_purchased`.
-6. Calculer bonus + boosts selon le barème.
-7. Créditer solde ; journaliser ; optionnellement déclencher UI récompense (`?loyalty=1`).
+**À la place** des +15 habituels :
 
-### 4.1 Animations post-paiement
+- **+30 messages bonus**
+- **1 Boost Profil de 24 heures**
 
-1. Badge Alliance.  
-2. Pluie d’étoiles dorées (léger).  
-3. Carte :
+### Exemple
 
-- Cas standard : « Merci pour votre fidélité ! +15 messages bonus »  
-- Cas palier 3/6/9/12 : « Nouveau palier — +30 messages + Boost 24 h »  
-- Cas 12 mois : mention Session VIP  
-
-Bouton **Continuer**.
+| Mois | Récompense |
+|------|------------|
+| 1 | +15 messages |
+| 2 | +15 messages |
+| **3** | **+30 messages + 1 Boost 24 h** |
+| 4 | +15 messages |
+| 5 | +15 messages |
+| **6** | **+30 messages + 1 Boost 24 h** |
+| 7 | +15 messages |
+| 8 | +15 messages |
+| **9** | **+30 messages + 1 Boost 24 h** |
+| 10 | +15 messages |
+| 11 | +15 messages |
+| **12** | **+30 messages + 1 Boost 24 h** |
 
 ---
 
-## 5. Affichages produit
+## 3. Récompense exceptionnelle après 12 mois
 
-### 5.1 Page Alliance (`/premium` ou espace Alliance)
+Les membres qui atteignent **12 mois consécutifs** d’abonnement Alliance rejoignent le cercle des membres les plus fidèles.
 
-Section **Programme Fidélité Alliance** :
+Ils reçoivent :
+
+- les récompenses du 12ᵉ mois (**+30 messages + Boost 24 h**) ;
+- une invitation à une **Session VIP Alliance**, organisée par l’équipe KELIAA.
+
+### Formats possibles de la Session VIP
+
+- coaching collectif exclusif ;
+- atelier interactif réservé aux membres fidèles ;
+- masterclass en direct ;
+- rencontre privée en visioconférence.
+
+**Objectif :** remercier les plus engagés **sans** créer une charge de coaching individuel difficile à maintenir.
+
+---
+
+## 4. Gestion des messages bonus
+
+- Cumulables.
+- Enregistrés **définitivement** sur le compte.
+- **Jamais** supprimés.
+- Utilisés uniquement lorsque le quota normal de messages est **entièrement consommé**.
+- Solde consultable à tout moment par le membre.
+
+---
+
+## 5. Retour à la formule Découverte
+
+Lorsque l’abonnement Alliance expire :
+
+- le membre retrouve les limitations Découverte ;
+- les bonus fidélité **restent enregistrés** ;
+- ils deviennent simplement **inactifs** ;
+- ils redeviennent accessibles dès la **réactivation** Alliance.
+
+**Aucun bonus gagné n’est supprimé.**
+
+> Note produit : le **compteur de mois consécutifs** repart à zéro après interruption ; le **solde bonus** et les Boosts non utilisés restent.
+
+---
+
+## 6. Affichage — page Alliance
+
+### Section : Programme Fidélité Alliance
+
+Texte :
 
 > Votre fidélité est récompensée. Chaque renouvellement vous offre des avantages supplémentaires pour poursuivre vos échanges et préparer votre projet de mariage avec sérénité.
 
-- Progression : `Mois X sur 12` + barre  
-- Prochaine récompense (messages / boost)  
-- Bouton **En savoir plus** → modal règles  
+### Progression (exemple)
 
-### 5.2 Page Tarifs (`/pricing`)
+```
+Mois 5 sur 12
 
-Carte sous les offres :
+████████░░░░
 
-**Vos avantages fidélité**
+Prochaine récompense :
 
-- +15 messages après chaque renouvellement mensuel  
-- Paliers tous les 3 mois : +30 + Boost 24 h  
-- Jusqu’à invitation Session VIP à 12 mois  
-- Attribution automatique, sans code promo  
-- Bonus conservés même en Découverte (inactifs jusqu’à retour Alliance)
++30 messages bonus
 
-### 5.3 Profil / quotas messages
++
 
-Deux compteurs visibles : standards + fidélité.
-
----
-
-## 6. Downgrade / réactivation
-
-| Événement | Compteur mois | Solde bonus | Boosts non utilisés |
-|-----------|---------------|-------------|---------------------|
-| Expire → Découverte | figé (réinit au prochain cycle) | **conservé, inactif** | **conservés, inactifs** |
-| Réactive Alliance | si interruption → repart à 1 | **réactivé immédiatement** | **réactivés** |
-
-**Aucun bonus gagné n’est jamais supprimé** (sauf ajustement admin exceptionnel journalisé).
-
----
-
-## 7. Administration (console ops)
-
-Prévoir :
-
-- mois consécutifs ;  
-- historique des grants ;  
-- solde messages bonus ;  
-- boosts disponibles ;  
-- éligibilité Session VIP 12 mois ;  
-- ajustement manuel (+/−) avec motif ;  
-- réinitialisation du **streak** uniquement (pas du solde) en cas d’interruption détectée.
-
----
-
-## 8. Modèle de données (proposition)
-
-```text
-loyalty_accounts
-  user_id PK
-  consecutive_months int default 0
-  bonus_messages_balance int default 0
-  profile_boosts_available int default 0
-  vip_session_eligible bool default false
-  vip_session_reached_at timestamptz null
-  updated_at
-
-loyalty_grants
-  id
-  user_id
-  payment_ref text UNIQUE NOT NULL
-  months_credited int
-  bonus_messages int
-  boosts int
-  kind: 'renewal' | 'pack' | 'admin_adjust' | 'milestone_3' | 'milestone_12'
-  meta jsonb
-  created_at
+Boost Profil 24 heures
 ```
 
-Intégration facturation : brancher après handlers de succès paiement existants (ne pas créditer sur `pending`).
+---
+
+## 7. Animation après renouvellement
+
+Après validation du paiement :
+
+1. Animation — badge Alliance.
+2. Carte de récompense.
+
+### Cas standard (+15)
+
+🎁 Merci pour votre fidélité !
+
+Vous venez de recevoir :
+
+✓ +15 messages bonus
+
+### Cas palier (3 / 6 / 9 / 12)
+
+🎉 Félicitations !
+
+Vous atteignez un nouveau palier de fidélité.
+
+Vous recevez :
+
+✓ +30 messages bonus  
+✓ 1 Boost Profil de 24 heures
+
+*(Au 12ᵉ mois : ajouter la mention Session VIP Alliance.)*
 
 ---
 
-## 9. Texte « Pourquoi récompensons-nous votre fidélité ? »
+## 8. Console d’administration
 
-> Construire une relation sérieuse demande du temps.  
-> Nous souhaitons remercier les membres qui s’engagent durablement dans cette démarche en leur offrant davantage de liberté pour poursuivre leurs échanges.
+Afficher / permettre :
 
----
-
-## 10. Hors scope de ce document (ne pas confondre)
-
-- Quotas Découverte / Alliance de base (déjà dans `plans` / `entitlements`).  
-- Communauté likes mutuels.  
-- Contenu marketing hors Alliance / Tarifs / post-paiement.
+- nombre de renouvellements consécutifs ;
+- historique des récompenses attribuées ;
+- solde de messages bonus ;
+- nombre de Boosts disponibles ;
+- statut d’éligibilité à la Session VIP des 12 mois ;
+- ajustement exceptionnel des bonus si nécessaire (journalisé).
 
 ---
 
-## 11. Checklist avant déploiement
+## Contraintes techniques (implémentation)
 
-- [ ] Validation produit / business de ce document  
-- [ ] Migration SQL + RLS  
-- [ ] Branchement webhooks paiement (idempotence `payment_ref`)  
-- [ ] UI Alliance + Tarifs + animation succès  
-- [ ] Consommation messages : standard puis bonus  
-- [ ] Écran admin  
-- [ ] Tests : 1er mois, palier 3, interruption, réactivation, double webhook  
-- [ ] Déploiement prod **uniquement après** validation explicite
+- Entièrement automatique.
+- Déclenchement **uniquement** après confirmation effective du paiement (Mobile Money / carte).
+- Pas de double attribution pour un même renouvellement / `payment_ref`.
+- Compatible Moneroo / Bictorys (et flux paiement existants).
+- Toutes les opérations journalisées (audit).
+- Design : charte KELIAA (or, bordeaux, crème), composants et animations existants.
 
 ---
 
-## 12. Décision
+## Conclusion
 
-**Ce fichier = version officielle.**  
-Implémentation et déploiement **uniquement après accord** sur ce document.
+Cette version est la **référence officielle** du Programme Fidélité Alliance. Elle remplace toutes les versions précédentes. Elle est simple à comprendre, facile à automatiser, économiquement maîtrisée et attractive pour la rétention long terme — sans jamais retirer un avantage déjà acquis.
+
+---
+
+## Checklist avant code / déploiement
+
+- [ ] Validation produit de **ce** document  
+- [ ] Migration + RLS + journal `loyalty_grants`  
+- [ ] Branchement webhooks paiement (idempotence)  
+- [ ] UI Alliance + animation post-paiement  
+- [ ] Consommation : quota standard → puis bonus  
+- [ ] Admin ops  
+- [ ] Tests : mois 1–3, interruption, réactivation, double webhook  
+- [ ] Déploiement prod **après** accord explicite
