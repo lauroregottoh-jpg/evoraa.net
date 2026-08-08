@@ -62,6 +62,12 @@ export default function CoupleRapportDemoClient() {
             </button>
           </div>
           <Link
+            href="/couple/dossier/demo"
+            className="text-xs font-semibold text-[#5C1F28] underline underline-offset-2"
+          >
+            Dossier démo
+          </Link>
+          <Link
             href="/couple"
             className="text-xs font-semibold text-[#5C1F28] underline underline-offset-2"
           >

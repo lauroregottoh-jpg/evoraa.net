@@ -4,6 +4,7 @@ import * as React from "react"
 import Link from "next/link"
 import { CouplePageFrame } from "@/components/couple/CouplePageFrame"
 import { CoupleShell } from "@/components/couple/CoupleShell"
+import { CoupleDeadlineBanner } from "@/components/couple/CoupleDeadlineBanner"
 import { getMyCoupleStateAction } from "@/app/actions/couple"
 
 export default function CoupleEspacePage() {
@@ -55,6 +56,17 @@ export default function CoupleEspacePage() {
               </p>
             </header>
 
+            <CoupleDeadlineBanner
+              createdAt={
+                (state.couple as { created_at?: string }).created_at ?? null
+              }
+              variant={
+                state.me?.questionnaireStatus === "COMPLETED"
+                  ? "info"
+                  : "warning"
+              }
+            />
+
             <section className="rounded-2xl border border-border/70 bg-white/80 p-5 space-y-3">
               <h2 className="font-serif text-xl font-bold">Où vous en êtes</h2>
               <ul className="space-y-2 text-sm">
@@ -66,7 +78,9 @@ export default function CoupleEspacePage() {
                       {state.me?.participantId === p.id ? " (vous)" : ""}
                     </span>
                     <span className="text-muted-foreground">
-                      {p.questionnaire_status}
+                      {p.questionnaire_status === "COMPLETED"
+                        ? "Questionnaire fermé"
+                        : p.questionnaire_status}
                     </span>
                   </li>
                 ))}
@@ -83,11 +97,17 @@ export default function CoupleEspacePage() {
 
             <div className="flex flex-wrap gap-2">
               <Link
+                href="/couple/dossier"
+                className="inline-flex h-10 items-center rounded-xl border border-[#B8954A]/40 bg-[#B8954A]/10 px-4 text-sm font-semibold text-[#5C1F28]"
+              >
+                Dossier livrables
+              </Link>
+              <Link
                 href="/couple/questionnaire"
                 className="inline-flex h-10 items-center rounded-xl bg-primary text-primary-foreground px-4 text-sm font-semibold"
               >
                 {state.me?.questionnaireStatus === "COMPLETED"
-                  ? "Questionnaire terminé"
+                  ? "Questionnaire fermé"
                   : "Continuer le questionnaire"}
               </Link>
               {state.report && (

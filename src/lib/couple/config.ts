@@ -14,10 +14,16 @@ export const COUPLE_ACCESS_DAYS = 365
 /** Validité invitation (jours). */
 export const COUPLE_INVITE_DAYS = 30
 
+/** Questionnaires + téléchargements à faire sous ce délai. */
+export const COUPLE_QUESTIONNAIRE_DEADLINE_DAYS = 30
+
+/** Marge opérationnelle après l’échéance (fermeture dure questionnaire). */
+export const COUPLE_GRACE_DAYS = 10
+
 export const COUPLE_QUESTIONNAIRE_VERSION = "1.0.0"
 export const COUPLE_SCORING_VERSION = "1.0.0"
-export const COUPLE_CONTENT_VERSION = "1.0.0"
-export const COUPLE_REPORT_VERSION = "1.0.0"
+export const COUPLE_CONTENT_VERSION = "1.1.0"
+export const COUPLE_REPORT_VERSION = "1.1.0"
 
 /** Feature flag — désactiver pour masquer le module en prod sans rollback. */
 export function isCoupleFeatureEnabled(): boolean {
@@ -47,3 +53,15 @@ export type QuestionnaireParticipantStatus =
   | "COMPLETED"
 
 export type ReportStatus = "PENDING" | "GENERATING" | "READY" | "FAILED"
+
+export function coupleQuestionnaireDeadlineAt(createdAt: string | Date): Date {
+  const d = new Date(createdAt)
+  d.setDate(d.getDate() + COUPLE_QUESTIONNAIRE_DEADLINE_DAYS)
+  return d
+}
+
+export function coupleQuestionnaireHardCloseAt(createdAt: string | Date): Date {
+  const d = coupleQuestionnaireDeadlineAt(createdAt)
+  d.setDate(d.getDate() + COUPLE_GRACE_DAYS)
+  return d
+}

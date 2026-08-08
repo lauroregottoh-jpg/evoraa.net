@@ -5,10 +5,11 @@ import { cn } from "@/utils/cn"
 
 const STEPS = [
   { href: "/couple/espace", label: "Espace" },
-  { href: "/couple/inviter", label: "Invitation" },
+  { href: "/couple/dossier", label: "Dossier" },
   { href: "/couple/questionnaire", label: "Questionnaire" },
-  { href: "/couple/resultats", label: "Résultats" },
   { href: "/couple/rapport", label: "Rapport" },
+  { href: "/couple/exercices", label: "Exercices" },
+  { href: "/couple/plan", label: "Plan" },
 ] as const
 
 export function CoupleShell({

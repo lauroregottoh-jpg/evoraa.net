@@ -8,6 +8,7 @@ import {
   COUPLE_REPORT_VERSION,
   COUPLE_SCORING_VERSION,
   COUPLE_CONTENT_VERSION,
+  coupleQuestionnaireHardCloseAt,
   isCoupleFeatureEnabled,
 } from "@/lib/couple/config"
 import { hashInviteToken } from "@/lib/couple/codes"
@@ -484,7 +485,7 @@ export async function getMyCoupleStateAction() {
   const { data: couple } = await admin
     .from("couples")
     .select(
-      "id, public_code, status, offer_id, access_expires_at, purchaser_user_id, offer_snapshot"
+      "id, public_code, status, offer_id, access_expires_at, purchaser_user_id, offer_snapshot, created_at"
     )
     .eq("id", membership.couple_id)
     .maybeSingle()
@@ -750,6 +751,15 @@ export async function saveCoupleAnswersAction(input: {
   const state = await getMyCoupleStateAction()
   if (!("me" in state) || !state.me || !state.couple) {
     return { error: "Aucun bilan couple actif." }
+  }
+
+  const createdAt =
+    (state.couple as { created_at?: string }).created_at || null
+  if (createdAt && Date.now() > coupleQuestionnaireHardCloseAt(createdAt).getTime()) {
+    return {
+      error:
+        "Questionnaire fermé : le délai de 30 jours + 10 jours de marge est dépassé. Le rapport déjà généré reste consultable.",
+    }
   }
 
   const admin = createAdminClient()

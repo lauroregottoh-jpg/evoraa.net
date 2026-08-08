@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { MemberPage } from "@/components/layout/MemberPage"
 import { CoupleShell } from "@/components/couple/CoupleShell"
+import { CoupleDeadlineBanner } from "@/components/couple/CoupleDeadlineBanner"
 import { COUPLE_BRAND } from "@/lib/couple/config"
 
 const TIMELINE = [
@@ -14,15 +15,15 @@ const TIMELINE = [
   },
   {
     title: "Questionnaires individuels",
-    body: "Chacun répond de son côté. Les réponses brutes restent confidentielles.",
+    body: "Chacun répond de son côté sous 30 jours (+ 10 j de marge). Les réponses brutes restent confidentielles.",
   },
   {
     title: "Analyse croisée",
     body: "Quand les deux ont terminé, nous croisons vos regards.",
   },
   {
-    title: "Rapport, exercices & plan",
-    body: "Vous recevez une lecture premium pour travailler concrètement.",
+    title: "Dossier livrables",
+    body: "Rapport slides, cahier d’exercices, plan d’action et téléchargements.",
   },
 ]
 
@@ -44,6 +45,9 @@ export default function CoupleOnboardingPage() {
               clarté.
             </p>
           </header>
+
+          <CoupleDeadlineBanner variant="warning" />
+
           <ul className="space-y-3">
             {TIMELINE.map((step, i) => (
               <li
@@ -63,6 +67,12 @@ export default function CoupleOnboardingPage() {
             ))}
           </ul>
           <div className="flex flex-wrap gap-3">
+            <Link
+              href="/couple/dossier"
+              className="inline-flex h-11 items-center rounded-xl border border-[#B8954A]/40 bg-[#B8954A]/10 px-5 text-sm font-semibold text-[#5C1F28]"
+            >
+              Voir le dossier
+            </Link>
             <Link
               href="/couple/inviter"
               className="inline-flex h-11 items-center rounded-xl bg-primary text-primary-foreground px-5 text-sm font-semibold"

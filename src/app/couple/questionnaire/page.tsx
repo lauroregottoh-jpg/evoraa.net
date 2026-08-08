@@ -6,18 +6,23 @@ import Link from "next/link"
 import { CouplePageFrame } from "@/components/couple/CouplePageFrame"
 import { CoupleShell } from "@/components/couple/CoupleShell"
 import {
+  CoupleDeadlineBanner,
+  coupleIsQuestionnaireHardClosed,
+} from "@/components/couple/CoupleDeadlineBanner"
+import {
   getCoupleLikertOptions,
   getCoupleQuestions,
 } from "@/lib/couple/questionBank"
 import type { CouplePrefillSuggestion } from "@/lib/couple/prefill"
 import {
   getCouplePrefillSuggestionsAction,
+  getMyCoupleStateAction,
   loadMyCoupleAnswersAction,
   saveCoupleAnswersAction,
 } from "@/app/actions/couple"
 import { cn } from "@/utils/cn"
 
-type Phase = "loading" | "done" | "review" | "questions"
+type Phase = "loading" | "done" | "closed" | "review" | "questions"
 
 export default function CoupleQuestionnairePage() {
   const router = useRouter()
@@ -32,9 +37,24 @@ export default function CoupleQuestionnairePage() {
   const [reviewIndex, setReviewIndex] = React.useState(0)
   const [error, setError] = React.useState<string | null>(null)
   const [saving, setSaving] = React.useState(false)
+  const [createdAt, setCreatedAt] = React.useState<string | null>(null)
 
   React.useEffect(() => {
     void (async () => {
+      const state = await getMyCoupleStateAction()
+      if ("couple" in state && state.couple) {
+        const ca = (state.couple as { created_at?: string }).created_at ?? null
+        setCreatedAt(ca)
+        if (
+          ca &&
+          coupleIsQuestionnaireHardClosed(ca) &&
+          state.me?.questionnaireStatus !== "COMPLETED"
+        ) {
+          setPhase("closed")
+          return
+        }
+      }
+
       const existing = await loadMyCoupleAnswersAction()
       if (existing.completed) {
         setPhase("done")
@@ -133,11 +153,49 @@ export default function CoupleQuestionnairePage() {
     )
   }
 
+  if (phase === "closed") {
+    return (
+      <CouplePageFrame>
+        <CoupleShell activeHref="/couple/questionnaire">
+          <div className="max-w-xl mx-auto space-y-5 py-8">
+            <CoupleDeadlineBanner createdAt={createdAt} variant="hard" />
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
+              Questionnaire fermé
+            </p>
+            <h1 className="font-serif text-3xl font-bold">
+              Délai dépassé — questionnaire fermé
+            </h1>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Les 30 jours + 10 jours de marge sont écoulés. Vous ne pouvez plus
+              modifier le questionnaire. Si un rapport a déjà été généré, il
+              reste consultable dans votre fenêtre d’accès.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/couple/dossier"
+                className="inline-flex h-11 items-center rounded-xl bg-primary text-primary-foreground px-5 text-sm font-semibold"
+              >
+                Voir le dossier
+              </Link>
+              <Link
+                href="/couple/rapport"
+                className="inline-flex h-11 items-center rounded-xl border px-5 text-sm font-semibold"
+              >
+                Rapport
+              </Link>
+            </div>
+          </div>
+        </CoupleShell>
+      </CouplePageFrame>
+    )
+  }
+
   if (phase === "done") {
     return (
       <CouplePageFrame>
         <CoupleShell activeHref="/couple/questionnaire">
           <div className="max-w-xl mx-auto space-y-5 py-8">
+            <CoupleDeadlineBanner createdAt={createdAt} variant="info" />
             <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
               Questionnaire fermé
             </p>
@@ -147,20 +205,20 @@ export default function CoupleQuestionnairePage() {
             <p className="text-sm text-muted-foreground leading-relaxed">
               Merci. Vos réponses sont enregistrées et restent confidentielles.
               Le rapport croisé se prépare lorsque votre partenaire a aussi
-              terminé.
+              terminé. Ce questionnaire ne peut plus être modifié.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
-                href="/couple/attente"
+                href="/couple/dossier"
                 className="inline-flex h-11 items-center rounded-xl bg-primary text-primary-foreground px-5 text-sm font-semibold"
               >
-                Voir l’attente
+                Voir le dossier
               </Link>
               <Link
-                href="/couple/espace"
+                href="/couple/attente"
                 className="inline-flex h-11 items-center rounded-xl border px-5 text-sm font-semibold"
               >
-                Espace couple
+                Voir l’attente
               </Link>
             </div>
           </div>
@@ -295,6 +353,7 @@ export default function CoupleQuestionnairePage() {
     <CouplePageFrame>
       <CoupleShell activeHref="/couple/questionnaire">
         <div className="max-w-xl mx-auto space-y-6">
+          <CoupleDeadlineBanner createdAt={createdAt} variant="warning" />
           <div className="space-y-2">
             <div className="flex justify-between text-xs text-muted-foreground">
               <span>

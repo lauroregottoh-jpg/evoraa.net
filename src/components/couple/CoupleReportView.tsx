@@ -2,16 +2,39 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { ChevronDown, Crown, Download, HeartHandshake, Printer } from "lucide-react"
-import type { CoupleReportDocument } from "@/lib/couple/report"
+import {
+  ChevronLeft,
+  ChevronRight,
+  Crown,
+  Download,
+  HeartHandshake,
+  Printer,
+} from "lucide-react"
+import type { CoupleReportDocument, CoupleReportSection } from "@/lib/couple/report"
+import { sectionBlocksFromLegacy } from "@/lib/couple/reportBlocks"
 import { isPremiumPlusOffer } from "@/lib/couple/offers"
+import { CoupleReportBlocks } from "@/components/couple/CoupleReportBlocks"
 import { cn } from "@/utils/cn"
 
 type Props = {
   doc: CoupleReportDocument
   demoLabel?: string
   className?: string
+  /** Masquer le bloc exercices/plan dans le rapport (liens vers cahiers). */
+  analysisOnly?: boolean
 }
+
+type Chapter =
+  | {
+      kind: "section"
+      id: string
+      page: number
+      title: string
+      subtitle?: string
+      section: CoupleReportSection
+    }
+  | { kind: "exercises"; id: string; page: number; title: string }
+  | { kind: "plan"; id: string; page: number; title: string }
 
 function estimatePages(doc: CoupleReportDocument): number {
   const sections = [...doc.sections, ...doc.premiumPlusExtras]
@@ -19,6 +42,14 @@ function estimatePages(doc: CoupleReportDocument): number {
   for (const s of sections) {
     words += s.paragraphs.join(" ").split(/\s+/).length
     words += (s.bullets || []).join(" ").split(/\s+/).length
+    for (const b of s.blocks || []) {
+      if (b.type === "paragraph" || b.type === "h2" || b.type === "callout") {
+        words += b.text.split(/\s+/).length
+      }
+      if (b.type === "ol" || b.type === "ul") {
+        words += b.items.join(" ").split(/\s+/).length
+      }
+    }
   }
   for (const ex of doc.exercises) {
     words += `${ex.title} ${ex.objective} ${ex.why} ${ex.steps.join(" ")} ${ex.questions.join(" ")}`.split(
@@ -26,28 +57,42 @@ function estimatePages(doc: CoupleReportDocument): number {
     ).length
   }
   words += doc.actionPlan.length * 40
-  // ~280 mots / page type dossier premium
   const pages = Math.round(words / 280)
   const target = isPremiumPlusOffer(doc.offerId) ? 50 : 30
   return Math.max(pages, Math.round(target * 0.55))
 }
 
+function blocksFor(section: CoupleReportSection) {
+  if (section.blocks?.length) return section.blocks
+  return sectionBlocksFromLegacy({
+    paragraphs: section.paragraphs,
+    bullets: section.bullets,
+    subtitleBlocks: section.subtitle
+      ? [{ type: "h2", text: section.subtitle }]
+      : undefined,
+  })
+}
+
 /**
- * Rapport Couple premium — palette carnet (crème / bordeaux / or).
+ * Rapport Couple — lecture type dossier / slides (crème · bordeaux · or).
  */
-export function CoupleReportView({ doc, demoLabel, className }: Props) {
+export function CoupleReportView({
+  doc,
+  demoLabel,
+  className,
+  analysisOnly = false,
+}: Props) {
   const isPP = isPremiumPlusOffer(doc.offerId)
   const pageEstimate = estimatePages(doc)
-  const printRef = React.useRef<HTMLElement>(null)
 
-  const chapters = React.useMemo(() => {
+  const chapters = React.useMemo((): Chapter[] => {
     const base = doc.sections.map((s, i) => ({
       kind: "section" as const,
       id: s.id,
       page: i + 1,
       title: s.title,
-      paragraphs: s.paragraphs,
-      bullets: s.bullets,
+      subtitle: s.subtitle,
+      section: s,
     }))
     let page = base.length
     const extras = doc.premiumPlusExtras.map((s) => {
@@ -57,76 +102,114 @@ export function CoupleReportView({ doc, demoLabel, className }: Props) {
         id: s.id,
         page,
         title: s.title,
-        paragraphs: s.paragraphs,
-        bullets: s.bullets,
+        subtitle: s.subtitle,
+        section: s,
       }
     })
-    const exercises = {
-      kind: "exercises" as const,
+    if (analysisOnly) return [...base, ...extras]
+    const exercises: Chapter = {
+      kind: "exercises",
       id: "exercices",
       page: page + 1,
       title: "Exercices à vivre ensemble",
     }
-    const plan = {
-      kind: "plan" as const,
+    const plan: Chapter = {
+      kind: "plan",
       id: "plan",
       page: page + 2,
       title: "Plan d’action",
     }
     return [...base, ...extras, exercises, plan]
-  }, [doc])
+  }, [doc, analysisOnly])
 
-  const [expandAll, setExpandAll] = React.useState(true)
-  const [openId, setOpenId] = React.useState<string | null>(null)
-  const isOpen = (id: string) => expandAll || openId === id
+  const [index, setIndex] = React.useState(0)
+  const current = chapters[Math.min(index, chapters.length - 1)]!
+
+  React.useEffect(() => {
+    setIndex(0)
+  }, [doc.offerId, doc.names.nameA, doc.names.nameB])
 
   const dateLabel = new Date(doc.versions.generation_date).toLocaleDateString(
     "fr-FR",
     { day: "numeric", month: "long", year: "numeric" }
   )
 
-  const handlePrint = () => {
-    setExpandAll(true)
-    window.setTimeout(() => window.print(), 150)
+  const go = (dir: -1 | 1) => {
+    setIndex((i) => Math.max(0, Math.min(chapters.length - 1, i + dir)))
   }
 
+  const handlePrint = () => window.print()
+
   const handleDownload = () => {
-    const html = [
+    const htmlParts: string[] = [
       `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"/><title>${doc.brand} — ${doc.names.nameA} & ${doc.names.nameB}</title>`,
-      `<style>body{font-family:Georgia,serif;max-width:720px;margin:2rem auto;padding:0 1rem;color:#1C1412;line-height:1.55}h1,h2{font-weight:700}h2{margin-top:2rem;border-top:1px solid #ddd;padding-top:1rem}.meta{color:#666;font-size:14px}</style></head><body>`,
+      `<style>
+        body{font-family:Georgia,"Times New Roman",serif;max-width:720px;margin:2rem auto;padding:0 1.25rem;color:#1C1412;line-height:1.7;font-size:16px;background:#FBF9F6}
+        h1{font-size:1.85rem;margin:0 0 .5rem} h2{font-size:1.35rem;margin:2.25rem 0 .75rem;color:#5C1F28;border-top:1px solid #B8954A55;padding-top:1.25rem}
+        h3{font-size:1.15rem;color:#5C1F28;margin:1.25rem 0 .5rem}
+        .meta{color:#666;font-size:14px} .sub{color:#8A6A2E;font-style:italic;margin-bottom:1rem}
+        ul,ol{padding-left:1.35rem} li{margin:.35rem 0}
+        .callout{border:1px solid #B8954A66;background:#B8954A12;padding:1rem 1.15rem;border-radius:12px;margin:1rem 0}
+        .fill{border:1px dashed #B8954A88;padding:1rem;margin:1rem 0;min-height:4rem;border-radius:12px}
+        .bar{height:10px;background:#1C141210;border-radius:999px;margin:.35rem 0 1rem}.bar>i{display:block;height:100%;border-radius:999px;background:#5C1F28}
+      </style></head><body>`,
       `<p class="meta">${doc.brand}</p>`,
       `<h1>Bilan de couple — ${doc.names.nameA} & ${doc.names.nameB}</h1>`,
       `<p class="meta">Score ${doc.globalScore}% · ${dateLabel} · ${isPP ? "Premium Plus" : "Essentiel"} · ~${pageEstimate} pages</p>`,
-      ...chapters.flatMap((ch) => {
-        if (ch.kind === "section") {
-          return [
-            `<h2>${ch.title}</h2>`,
-            ...ch.paragraphs.map((p) => `<p>${p}</p>`),
-            ...(ch.bullets?.length
-              ? [`<ul>${ch.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>`]
-              : []),
-          ]
+    ]
+
+    for (const ch of chapters) {
+      if (ch.kind === "section") {
+        htmlParts.push(`<h2>${ch.title}</h2>`)
+        if (ch.subtitle) htmlParts.push(`<p class="sub">${ch.subtitle}</p>`)
+        for (const b of blocksFor(ch.section)) {
+          if (b.type === "h2") htmlParts.push(`<h3>${b.text}</h3>`)
+          else if (b.type === "paragraph") htmlParts.push(`<p>${b.text}</p>`)
+          else if (b.type === "ol")
+            htmlParts.push(
+              `<ol>${b.items.map((x) => `<li>${x}</li>`).join("")}</ol>`
+            )
+          else if (b.type === "ul")
+            htmlParts.push(
+              `<ul>${b.items.map((x) => `<li>${x}</li>`).join("")}</ul>`
+            )
+          else if (b.type === "callout")
+            htmlParts.push(`<div class="callout">${b.text}</div>`)
+          else if (b.type === "scoreChart")
+            htmlParts.push(
+              `<p><strong>${b.label}</strong> — ${b.nameA} ${b.scoreA}% · ${b.nameB} ${b.scoreB}% · convergence ${b.convergence}%</p>
+               <div class="bar"><i style="width:${b.scoreA}%"></i></div>
+               <div class="bar"><i style="width:${b.scoreB}%;background:#B8954A"></i></div>`
+            )
+          else if (b.type === "fillBlank")
+            htmlParts.push(
+              `<div class="fill"><strong>${b.prompt}</strong><br/><br/><br/></div>`
+            )
+          else if (b.type === "rolePlay")
+            htmlParts.push(
+              `<div class="callout"><strong>${b.title}</strong><br/>${b.scene}<br/>A: ${b.roleA}<br/>B: ${b.roleB}</div>`
+            )
         }
-        if (ch.kind === "exercises") {
-          return [
-            `<h2>${ch.title}</h2>`,
-            ...doc.exercises.map(
-              (ex) =>
-                `<h3>${ex.title}</h3><p><strong>Objectif</strong> — ${ex.objective}</p><p>${ex.why}</p><ol>${ex.steps.map((s) => `<li>${s}</li>`).join("")}</ol>`
-            ),
-          ]
+      } else if (ch.kind === "exercises") {
+        htmlParts.push(`<h2>${ch.title}</h2><p class="meta">Voir aussi le cahier Exercices.</p>`)
+        for (const ex of doc.exercises) {
+          htmlParts.push(
+            `<h3>${ex.title}</h3><p><strong>Objectif</strong> — ${ex.objective}</p><ol>${ex.steps.map((s) => `<li>${s}</li>`).join("")}</ol>`
+          )
         }
-        return [
-          `<h2>${ch.title}</h2>`,
-          ...doc.actionPlan.map(
-            (s) =>
-              `<p><strong>Étape ${s.order} — ${s.what}</strong><br/>${s.how}<br/>Quand : ${s.when}</p>`
-          ),
-        ]
-      }),
-      `</body></html>`,
-    ].join("\n")
-    const blob = new Blob([html], { type: "text/html;charset=utf-8" })
+      } else {
+        htmlParts.push(`<h2>${ch.title}</h2>`)
+        for (const s of doc.actionPlan) {
+          htmlParts.push(
+            `<p><strong>Étape ${s.order} — ${s.what}</strong><br/>${s.how}<br/>Quand : ${s.when}</p>`
+          )
+        }
+      }
+    }
+    htmlParts.push(`</body></html>`)
+    const blob = new Blob([htmlParts.join("\n")], {
+      type: "text/html;charset=utf-8",
+    })
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
@@ -137,9 +220,8 @@ export function CoupleReportView({ doc, demoLabel, className }: Props) {
 
   return (
     <article
-      ref={printRef}
       className={cn(
-        "max-w-3xl mx-auto space-y-5 pb-16 text-[#1C1412] print:max-w-none",
+        "max-w-3xl mx-auto space-y-5 pb-20 text-[#1C1412] print:max-w-none",
         className
       )}
     >
@@ -158,9 +240,20 @@ export function CoupleReportView({ doc, demoLabel, className }: Props) {
         >
           <Download className="h-4 w-4" /> Télécharger
         </button>
+        <Link
+          href="/couple/exercices"
+          className="inline-flex h-10 items-center rounded-xl border border-[#B8954A]/40 bg-[#B8954A]/10 px-4 text-sm font-semibold text-[#5C1F28]"
+        >
+          Cahier exercices
+        </Link>
+        <Link
+          href="/couple/dossier"
+          className="inline-flex h-10 items-center rounded-xl border border-[#1C1412]/15 bg-white px-4 text-sm font-semibold"
+        >
+          Dossier
+        </Link>
       </div>
 
-      {/* Couverture */}
       <header className="relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#5C1F28] via-[#3D1519] to-[#1C1412] p-6 sm:p-9 text-[#FBF9F6] shadow-lg print:shadow-none">
         <div
           aria-hidden
@@ -196,9 +289,7 @@ export function CoupleReportView({ doc, demoLabel, className }: Props) {
             <p className="text-[10px] uppercase tracking-wider text-white/50">
               Volume estimé
             </p>
-            <p className="font-serif text-2xl font-bold">
-              ~{pageEstimate} pages
-            </p>
+            <p className="font-serif text-2xl font-bold">~{pageEstimate} pages</p>
           </div>
           <div className="max-w-sm">
             <p className="text-[10px] uppercase tracking-wider text-white/50">
@@ -226,9 +317,6 @@ export function CoupleReportView({ doc, demoLabel, className }: Props) {
             </span>
           ) : null}
         </div>
-        <p className="relative z-10 mt-4 text-sm text-white/75 leading-relaxed max-w-xl">
-          {doc.tagline} · {chapters.length} chapitres
-        </p>
       </header>
 
       {doc.safetyNotice ? (
@@ -237,165 +325,171 @@ export function CoupleReportView({ doc, demoLabel, className }: Props) {
         </div>
       ) : null}
 
-      <div className="flex flex-wrap items-center justify-between gap-2 px-1">
+      {/* Navigation slides */}
+      <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
         <p className="text-xs text-[#1C1412]/55">
-          {chapters.length} chapitres · indicateur de dynamique, pas un verdict
+          Chapitre {current.page} / {chapters.length}
         </p>
-        <button
-          type="button"
-          onClick={() => setExpandAll((v) => !v)}
-          className="text-xs font-bold text-[#5C1F28] underline underline-offset-2"
-        >
-          {expandAll ? "Replier tout" : "Tout déplier"}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => go(-1)}
+            disabled={index === 0}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[#1C1412]/15 bg-white disabled:opacity-40"
+            aria-label="Chapitre précédent"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => go(1)}
+            disabled={index >= chapters.length - 1}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[#1C1412]/15 bg-white disabled:opacity-40"
+            aria-label="Chapitre suivant"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+        </div>
       </div>
 
-      <div className="space-y-2.5">
-        {chapters.map((ch) => {
-          const open = isOpen(ch.id)
-          return (
-            <section
-              key={ch.id}
-              className="rounded-2xl border border-[#1C1412]/10 bg-white overflow-hidden shadow-sm"
-            >
-              <button
-                type="button"
-                onClick={() =>
-                  setOpenId((cur) =>
-                    cur === ch.id && !expandAll ? null : ch.id
-                  )
-                }
-                className="w-full flex items-start justify-between gap-3 p-4 sm:p-5 text-left"
+      <div className="flex gap-1 overflow-x-auto pb-1 print:hidden" role="tablist">
+        {chapters.map((ch, i) => (
+          <button
+            key={ch.id}
+            type="button"
+            role="tab"
+            aria-selected={i === index}
+            onClick={() => setIndex(i)}
+            className={cn(
+              "shrink-0 rounded-lg px-2.5 py-1 text-[10px] font-semibold transition-colors",
+              i === index
+                ? "bg-[#5C1F28] text-[#FBF9F6]"
+                : "bg-[#1C1412]/06 text-[#1C1412]/60 hover:bg-[#1C1412]/1"
+            )}
+            title={ch.title}
+          >
+            {ch.page}
+          </button>
+        ))}
+      </div>
+
+      {/* Slide chapitre */}
+      <section
+        key={current.id}
+        className="animate-in fade-in duration-300 rounded-[1.75rem] border border-[#1C1412]/10 bg-white/95 p-6 sm:p-9 shadow-sm min-h-[28rem] print:shadow-none print:border-0 print:p-0"
+      >
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#B8954A]">
+          Chapitre {current.page}
+          {current.id.startsWith("pp-") ? " · Premium Plus" : ""}
+        </p>
+        <h2 className="mt-2 font-serif text-2xl sm:text-3xl font-bold leading-tight text-[#1C1412]">
+          {current.title}
+        </h2>
+        {current.kind === "section" && current.subtitle ? (
+          <p className="mt-2 font-serif text-lg italic text-[#8A6A2E]">
+            {current.subtitle}
+          </p>
+        ) : null}
+
+        <div className="mt-6">
+          {current.kind === "section" ? (
+            <CoupleReportBlocks blocks={blocksFor(current.section)} />
+          ) : null}
+
+          {current.kind === "exercises" ? (
+            <div className="space-y-4">
+              <p className="text-base leading-relaxed text-[#1C1412]/85">
+                Les exercices sont conçus pour être vécus — pas seulement lus.
+                Ouvrez le cahier dédié pour les cartes grandes, zones à remplir
+                et jeux de rôle.
+              </p>
+              <Link
+                href="/couple/exercices"
+                className="inline-flex h-11 items-center rounded-xl bg-[#5C1F28] px-5 text-sm font-semibold text-[#FBF9F6]"
               >
-                <div className="min-w-0">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#B8954A]">
-                    Chapitre {ch.page}
-                    {ch.id.startsWith("pp-") ? " · Premium Plus" : ""}
+                Ouvrir le cahier d’exercices →
+              </Link>
+              <ul className="mt-4 space-y-2 text-base">
+                {doc.exercises.map((ex) => (
+                  <li key={ex.id} className="flex gap-2">
+                    <span className="text-[#B8954A]">•</span>
+                    <span>
+                      {ex.title}
+                      {ex.premiumPlus ? " (Premium Plus)" : ""}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
+          {current.kind === "plan" ? (
+            <ol className="space-y-4">
+              {doc.actionPlan.map((step) => (
+                <li
+                  key={step.order}
+                  className="rounded-2xl border border-[#1C1412]/10 bg-[#F8F4EE] p-5"
+                >
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#B8954A]">
+                    Étape {step.order}
                   </p>
-                  <h2 className="font-serif text-lg sm:text-xl font-bold text-[#1C1412]">
-                    {ch.title}
-                  </h2>
-                </div>
-                <ChevronDown
-                  className={cn(
-                    "h-4 w-4 text-[#1C1412]/40 shrink-0 mt-1 transition-transform",
-                    open && "rotate-180"
-                  )}
-                />
-              </button>
+                  <p className="font-serif text-xl font-bold mt-1">{step.what}</p>
+                  <p className="text-base mt-3 leading-relaxed">
+                    <span className="font-semibold">Comment — </span>
+                    {step.how}
+                  </p>
+                  <p className="text-base leading-relaxed">
+                    <span className="font-semibold">Quand — </span>
+                    {step.when}
+                  </p>
+                  <p className="text-sm mt-2 text-[#1C1412]/60">
+                    Signal : {step.progressSignal}
+                  </p>
+                </li>
+              ))}
+              <Link
+                href="/couple/plan"
+                className="inline-flex text-sm font-semibold text-[#5C1F28] underline underline-offset-2"
+              >
+                Voir le plan dédié →
+              </Link>
+            </ol>
+          ) : null}
+        </div>
+      </section>
 
-              {open ? (
-                <div className="px-4 sm:px-5 pb-5 space-y-3 border-t border-[#1C1412]/8 pt-4">
-                  {ch.kind === "section" ? (
-                    <>
-                      {ch.paragraphs.map((p, i) => (
-                        <p
-                          key={i}
-                          className="text-sm sm:text-[15px] leading-relaxed text-[#1C1412]/90"
-                        >
-                          {p}
-                        </p>
-                      ))}
-                      {ch.bullets?.length ? (
-                        <ul className="list-disc pl-5 space-y-1.5 text-sm text-[#1C1412]/90">
-                          {ch.bullets.map((b) => (
-                            <li key={b}>{b}</li>
-                          ))}
-                        </ul>
-                      ) : null}
-                    </>
-                  ) : null}
-
-                  {ch.kind === "exercises" ? (
-                    <div className="space-y-4">
-                      {doc.exercises.map((ex) => (
-                        <div
-                          key={ex.id}
-                          className="rounded-xl border border-[#B8954A]/25 bg-[#FBF9F6] p-4 space-y-2"
-                        >
-                          <div className="flex flex-wrap items-center gap-2">
-                            <h3 className="font-serif text-lg font-bold">
-                              {ex.title}
-                            </h3>
-                            {ex.premiumPlus ? (
-                              <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C1F28] bg-[#5C1F28]/10 px-2 py-0.5 rounded-full">
-                                Premium Plus
-                              </span>
-                            ) : null}
-                          </div>
-                          <p className="text-sm text-[#1C1412]/80">
-                            <span className="font-semibold">Objectif — </span>
-                            {ex.objective}
-                          </p>
-                          <p className="text-sm text-[#1C1412]/80">
-                            <span className="font-semibold">Pourquoi — </span>
-                            {ex.why}
-                          </p>
-                          <p className="text-xs text-[#1C1412]/55">
-                            Durée : {ex.duration} · Préparation : {ex.preparation}
-                          </p>
-                          <ol className="list-decimal pl-5 space-y-1 text-sm">
-                            {ex.steps.map((s) => (
-                              <li key={s}>{s}</li>
-                            ))}
-                          </ol>
-                          {ex.questions.length ? (
-                            <div>
-                              <p className="text-xs font-bold uppercase tracking-wider text-[#B8954A] mb-1">
-                                Questions
-                              </p>
-                              <ul className="list-disc pl-5 space-y-1 text-sm">
-                                {ex.questions.map((q) => (
-                                  <li key={q}>{q}</li>
-                                ))}
-                              </ul>
-                            </div>
-                          ) : null}
-                          <p className="text-sm italic text-[#5C1F28]">
-                            {ex.takeaway}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  ) : null}
-
-                  {ch.kind === "plan" ? (
-                    <ol className="space-y-3">
-                      {doc.actionPlan.map((step) => (
-                        <li
-                          key={step.order}
-                          className="rounded-xl border border-[#1C1412]/10 bg-[#F8F4EE] p-4"
-                        >
-                          <p className="text-[10px] font-bold uppercase tracking-wider text-[#B8954A]">
-                            Étape {step.order}
-                          </p>
-                          <p className="font-serif text-lg font-bold mt-0.5">
-                            {step.what}
-                          </p>
-                          <p className="text-sm mt-2 text-[#1C1412]/85">
-                            <span className="font-semibold">Comment — </span>
-                            {step.how}
-                          </p>
-                          <p className="text-sm text-[#1C1412]/85">
-                            <span className="font-semibold">Quand — </span>
-                            {step.when}
-                          </p>
-                          <p className="text-sm text-[#1C1412]/85">
-                            <span className="font-semibold">But — </span>
-                            {step.goal}
-                          </p>
-                          <p className="text-xs mt-1 text-[#1C1412]/55">
-                            Signal de progrès : {step.progressSignal}
-                          </p>
-                        </li>
-                      ))}
-                    </ol>
-                  ) : null}
-                </div>
+      {/* Impression : tous les chapitres */}
+      <div className="hidden print:block space-y-10">
+        {chapters.map((ch) =>
+          ch.kind === "section" ? (
+            <section key={`print-${ch.id}`} className="break-inside-avoid">
+              <h2 className="font-serif text-2xl font-bold">{ch.title}</h2>
+              {ch.subtitle ? (
+                <p className="italic text-[#8A6A2E] mb-3">{ch.subtitle}</p>
               ) : null}
+              <CoupleReportBlocks blocks={blocksFor(ch.section)} />
             </section>
-          )
-        })}
+          ) : null
+        )}
+      </div>
+
+      <div className="flex justify-between gap-3 print:hidden">
+        <button
+          type="button"
+          onClick={() => go(-1)}
+          disabled={index === 0}
+          className="inline-flex h-11 items-center gap-1 rounded-xl border px-4 text-sm font-semibold disabled:opacity-40"
+        >
+          <ChevronLeft className="h-4 w-4" /> Précédent
+        </button>
+        <button
+          type="button"
+          onClick={() => go(1)}
+          disabled={index >= chapters.length - 1}
+          className="inline-flex h-11 items-center gap-1 rounded-xl bg-[#5C1F28] px-4 text-sm font-semibold text-[#FBF9F6] disabled:opacity-40"
+        >
+          Suivant <ChevronRight className="h-4 w-4" />
+        </button>
       </div>
 
       <footer className="pt-4 border-t border-[#1C1412]/10 space-y-2 text-[11px] text-[#1C1412]/50">

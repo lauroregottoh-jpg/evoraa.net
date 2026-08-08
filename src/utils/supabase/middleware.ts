@@ -45,12 +45,14 @@ const PROTECTED_PREFIXES = [
   '/couple/exercices',
   '/couple/plan',
   '/couple/telecharger',
+  '/couple/dossier',
   '/couple/confirmation',
 ]
 
 /** Pages vente Couple + aperçus démo — accessibles sans compte. */
 const PUBLIC_EXCEPTIONS = [
   '/couple/rapport/demo',
+  '/couple/dossier/demo',
   '/couple/checkout',
   '/couple/offre',
 ]
