@@ -236,11 +236,23 @@ export async function toggleCommunityLikeAction(targetProfileId: string): Promis
 
   const { data: target } = await ctx.supabase
     .from("profiles")
-    .select("id, user_id, gender, privacy_settings")
+    .select("id, user_id, gender, privacy_settings, first_name, last_name")
     .eq("id", targetProfileId)
     .maybeSingle()
 
   if (!target) return { error: "Profil introuvable." }
+
+  const { isHiddenOperatorProfile } = await import(
+    "@/lib/community/hiddenProfiles"
+  )
+  if (
+    isHiddenOperatorProfile(
+      target.first_name as string | null,
+      target.last_name as string | null
+    )
+  ) {
+    return { error: "Profil introuvable." }
+  }
 
   const sameGender =
     Boolean(ctx.gender) &&

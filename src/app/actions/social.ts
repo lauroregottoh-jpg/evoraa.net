@@ -139,13 +139,27 @@ export async function getSocialInsights(): Promise<SocialInsights> {
   if (profileIds.length > 0) {
     const { data: profiles } = await ctx.supabase
       .from("profiles")
-      .select("id, first_name, city")
+      .select("id, first_name, last_name, city")
       .in("id", profileIds)
+    const { isHiddenOperatorProfile } = await import(
+      "@/lib/community/hiddenProfiles"
+    )
     nameById = new Map(
-      (profiles ?? []).map((p) => [
-        p.id as string,
-        { name: (p.first_name as string) || "Membre", city: (p.city as string | null) ?? null },
-      ])
+      (profiles ?? [])
+        .filter(
+          (p) =>
+            !isHiddenOperatorProfile(
+              p.first_name as string | null,
+              p.last_name as string | null
+            )
+        )
+        .map((p) => [
+          p.id as string,
+          {
+            name: (p.first_name as string) || "Membre",
+            city: (p.city as string | null) ?? null,
+          },
+        ])
     )
   }
 

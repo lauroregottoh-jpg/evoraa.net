@@ -248,8 +248,12 @@ export async function listConversations(): Promise<{
 
   const { data: profiles } = await supabase
     .from("profiles")
-    .select("id, user_id, first_name")
+    .select("id, user_id, first_name, last_name")
     .in("user_id", partnerUserIds)
+
+  const { isHiddenOperatorProfile } = await import(
+    "@/lib/community/hiddenProfiles"
+  )
 
   const profileByUser = new Map((profiles ?? []).map((p) => [p.user_id, p]))
 
@@ -284,6 +288,15 @@ export async function listConversations(): Promise<{
     if (!match) continue
     const partnerUserId = match.user_one === user.id ? match.user_two : match.user_one
     const partner = profileByUser.get(partnerUserId)
+    if (
+      partner &&
+      isHiddenOperatorProfile(
+        partner.first_name as string | null,
+        partner.last_name as string | null
+      )
+    ) {
+      continue
+    }
     const extra = extraByConv.get(conv.id)
 
     items.push({
@@ -337,9 +350,22 @@ export async function getConversationRoom(conversationId: string): Promise<{
   const partnerUserId = match.user_one === user.id ? match.user_two : match.user_one
   const { data: partner } = await supabase
     .from("profiles")
-    .select("id, user_id, first_name")
+    .select("id, user_id, first_name, last_name")
     .eq("user_id", partnerUserId)
     .maybeSingle()
+
+  const { isHiddenOperatorProfile } = await import(
+    "@/lib/community/hiddenProfiles"
+  )
+  if (
+    partner &&
+    isHiddenOperatorProfile(
+      partner.first_name as string | null,
+      partner.last_name as string | null
+    )
+  ) {
+    return { error: "Conversation introuvable." }
+  }
 
   const PAGE = 80
   const { data: messages, error: msgError } = await supabase

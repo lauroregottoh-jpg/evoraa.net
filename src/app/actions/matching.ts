@@ -34,6 +34,7 @@ const PROFILE_SELECT = `
   id,
   user_id,
   first_name,
+  last_name,
   gender,
   birth_date,
   city,
@@ -224,11 +225,23 @@ export async function getCompatibilitySuggestions(limit?: number): Promise<{
     return { error: error.message, suggestions: [] }
   }
 
+  const { isHiddenOperatorProfile } = await import(
+    "@/lib/community/hiddenProfiles"
+  )
+
   const candidates = (rows ?? [])
     .filter((row) => {
       const status = row.moderation_status as string | null
       // Soft launch : pending OK si profil assez complet ; rejected déjà exclu
       if (status === "rejected") return false
+      if (
+        isHiddenOperatorProfile(
+          row.first_name as string | null,
+          row.last_name as string | null
+        )
+      ) {
+        return false
+      }
       const privacy = row.privacy_settings
       if (!privacy || typeof privacy !== "object" || Array.isArray(privacy)) return true
       return !(privacy as Record<string, unknown>).retreat_mode
@@ -302,6 +315,18 @@ export async function getCompatibilityDetail(profileId: string): Promise<{
     .maybeSingle()
 
   if (error || !data) {
+    return { error: "Profil introuvable." }
+  }
+
+  const { isHiddenOperatorProfile } = await import(
+    "@/lib/community/hiddenProfiles"
+  )
+  if (
+    isHiddenOperatorProfile(
+      data.first_name as string | null,
+      data.last_name as string | null
+    )
+  ) {
     return { error: "Profil introuvable." }
   }
 
