@@ -198,114 +198,54 @@ export function CoffreLibrary({ resources, initialAccess }: Props) {
         </p>
       )}
 
-      {/* Domaines — clic pour filtrer les documents */}
-      <section aria-label="Domaines du Coffre" className="space-y-3">
-        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+      {/* Domaines — pastilles discrètes sur une ligne */}
+      <nav
+        aria-label="Domaines du Coffre"
+        className="flex flex-nowrap items-center gap-1 overflow-x-auto pb-0.5 -mx-1 px-1 scrollbar-thin"
+      >
+        <span className="shrink-0 mr-1 text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground/70">
           Domaines
-        </p>
-
-        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3">
-          {domainGroups.map((group, i) => {
-            const selected = activeGroup?.domain === group.domain
-            return (
-              <button
-                key={group.domain}
-                type="button"
-                onClick={() => setActiveDomain(group.domain)}
-                className={cn(
-                  "group relative text-left rounded-2xl border px-4 py-4 overflow-hidden",
-                  "transition-all duration-300 ease-out",
-                  "hover:-translate-y-0.5 hover:shadow-elevated",
-                  "animate-in fade-in slide-in-from-bottom-2 fill-mode-both",
-                  selected
-                    ? "border-transparent shadow-elevated"
-                    : "border-border/70 bg-white/90 shadow-card"
-                )}
-                style={{
-                  animationDelay: `${i * 45}ms`,
-                  ...(selected
-                    ? {
-                        background: `linear-gradient(145deg, ${group.tone} 0%, #1C1412 92%)`,
-                        color: group.ink,
-                      }
-                    : undefined),
-                }}
-              >
-                {!selected && (
-                  <span
-                    className="pointer-events-none absolute inset-x-0 top-0 h-1 opacity-90"
-                    style={{ backgroundColor: group.tone }}
-                  />
-                )}
-                <p
-                  className={cn(
-                    "text-[10px] font-bold uppercase tracking-[0.16em] mb-1.5",
-                    selected ? "opacity-80" : "text-muted-foreground"
-                  )}
-                >
-                  Domaine
-                </p>
-                <p
-                  className={cn(
-                    "font-serif text-lg sm:text-xl font-bold leading-snug",
-                    !selected && "text-foreground"
-                  )}
-                >
-                  {group.label}
-                </p>
-                <p
-                  className={cn(
-                    "mt-1.5 text-xs leading-relaxed line-clamp-2",
-                    selected ? "opacity-85" : "text-muted-foreground"
-                  )}
-                >
-                  {group.blurb}
-                </p>
-                <p
-                  className={cn(
-                    "mt-3 text-[11px] font-semibold",
-                    selected ? "text-accent" : "text-primary"
-                  )}
-                >
-                  {group.resources.length} document
-                  {group.resources.length > 1 ? "s" : ""}
-                </p>
-              </button>
-            )
-          })}
-        </div>
-      </section>
+        </span>
+        {domainGroups.map((group) => {
+          const selected = activeGroup?.domain === group.domain
+          return (
+            <button
+              key={group.domain}
+              type="button"
+              onClick={() => setActiveDomain(group.domain)}
+              className={cn(
+                "shrink-0 rounded-md px-2.5 py-1 text-[11px] sm:text-xs font-medium whitespace-nowrap transition-colors duration-200",
+                selected
+                  ? "bg-foreground/[0.08] text-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-foreground/[0.04]"
+              )}
+            >
+              {group.label}
+              <span className="ml-1 tabular-nums opacity-45">
+                {group.resources.length}
+              </span>
+            </button>
+          )
+        })}
+      </nav>
 
       {/* Documents du domaine actif */}
       {activeGroup && (
         <section
           key={activeGroup.domain}
           aria-labelledby="coffre-domain-docs-title"
-          className="space-y-5 animate-in fade-in slide-in-from-bottom-3 duration-500"
+          className="space-y-4 animate-in fade-in duration-300"
         >
-          <div className="space-y-2">
-            <p
-              className="text-[10px] font-bold uppercase tracking-[0.2em]"
-              style={{ color: activeGroup.tone }}
-            >
-              Documents
-            </p>
+          <div className="space-y-1">
             <h2
               id="coffre-domain-docs-title"
-              className="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-foreground"
+              className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-foreground"
             >
               {activeGroup.label}
             </h2>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xl">
-              {activeGroup.blurb} Type de fichier indiqué sur chaque carte
-              (journal, guide, prière…).
+              {activeGroup.blurb}
             </p>
-            <div
-              className="h-px w-full max-w-md origin-left animate-in fade-in duration-700"
-              style={{
-                background: `linear-gradient(90deg, ${activeGroup.tone}88, transparent)`,
-              }}
-            />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6">
