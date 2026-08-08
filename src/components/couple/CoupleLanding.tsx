@@ -12,10 +12,13 @@ import { CoupleOfferPrice } from "@/components/couple/CoupleOfferPrice"
 import {
   VizMap,
   VizPath,
-  VizReportUnlock,
   VizRingProgress,
   VizTwoGazes,
 } from "@/components/couple/CoupleVisuals"
+import {
+  VizDualFinish,
+  VizReportUnlockScene,
+} from "@/components/couple/CoupleSceneVisuals"
 import { COUPLE_BRAND, COUPLE_TAGLINE } from "@/lib/couple/config"
 import { cn } from "@/utils/cn"
 import {
@@ -45,10 +48,17 @@ export function CoupleLanding() {
     () => {
       gsap.utils.toArray<HTMLElement>(".ck-reveal").forEach((el) => {
         gsap.from(el, {
-          scrollTrigger: { trigger: el, start: "top 90%", once: true },
-          y: 16,
-          duration: 0.7,
+          scrollTrigger: {
+            trigger: el,
+            start: "top 92%",
+            once: true,
+            toggleActions: "play none none none",
+          },
+          y: 14,
+          duration: 0.65,
           ease: "power2.out",
+          immediateRender: false,
+          clearProps: "transform",
         })
       })
 
@@ -142,7 +152,7 @@ export function CoupleLanding() {
                   <p className="mt-2 font-serif text-2xl sm:text-3xl font-bold leading-snug">
                     {s.title}
                   </p>
-                  <p className="mt-3 text-base sm:text-lg text-[#1C1412]/75 leading-relaxed">
+                  <p className="mt-3 text-base sm:text-lg text-[#1C1412] leading-relaxed">
                     {s.body}
                   </p>
                 </li>
@@ -172,7 +182,7 @@ export function CoupleLanding() {
             {LANDING_HERO.tensions.map((t) => (
               <li
                 key={t}
-                className="flex gap-3 text-base sm:text-lg leading-relaxed text-[#1C1412]/85"
+                className="flex gap-3 text-base sm:text-lg leading-relaxed text-[#1C1412]"
               >
                 <span className="text-accent font-bold shrink-0">—</span>
                 <span>{t}</span>
@@ -199,7 +209,7 @@ export function CoupleLanding() {
               <h3 className="font-serif text-2xl sm:text-3xl font-bold">
                 Chacun répond en privé
               </h3>
-              <p className="text-base sm:text-lg text-[#1C1412]/75 leading-relaxed">
+              <p className="text-base sm:text-lg text-[#1C1412] leading-relaxed">
                 Sans regarder l’autre répondre. Sans modifier une réponse pour
                 éviter une discussion. Honnêtement. En confiance. Vos réponses
                 brutes restent confidentielles.
@@ -209,7 +219,7 @@ export function CoupleLanding() {
               <h3 className="font-serif text-2xl sm:text-3xl font-bold">
                 Puis KELIAA croise vos résultats
               </h3>
-              <p className="text-base sm:text-lg text-[#1C1412]/75 leading-relaxed">
+              <p className="text-base sm:text-lg text-[#1C1412] leading-relaxed">
                 La question n’est pas seulement « qui êtes-vous ? » — c’est{" "}
                 <strong className="text-foreground font-semibold underline decoration-accent/50 underline-offset-4">
                   que se passe-t-il lorsque vos deux façons de fonctionner se
@@ -234,12 +244,12 @@ export function CoupleLanding() {
             <h2 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
               Une carte de compréhension — pas un quiz
             </h2>
-            <p className="text-base sm:text-lg text-[#1C1412]/75 leading-relaxed">
+            <p className="text-base sm:text-lg text-[#1C1412] leading-relaxed">
               Chacun répond de son côté. Puis vos deux regards sont mis en
               relation : convergences, différences, forces, zones de vigilance,
               priorités.
             </p>
-            <p className="text-base sm:text-lg text-[#1C1412]/75 leading-relaxed">
+            <p className="text-base sm:text-lg text-[#1C1412] leading-relaxed">
               Vous repartez avec des mots sur ce que vous vivez déjà — et une
               idée claire de par où commencer.
             </p>
@@ -260,7 +270,7 @@ export function CoupleLanding() {
             <h2 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
               Vous ne recevez pas juste un score
             </h2>
-            <p className="text-base sm:text-lg text-[#1C1412]/75 leading-relaxed">
+            <p className="text-base sm:text-lg text-[#1C1412] leading-relaxed">
               Imaginez ouvrir votre dossier. Voici ce que vous y trouvez —
               développé, structuré, à lire à deux.
             </p>
@@ -274,7 +284,7 @@ export function CoupleLanding() {
                 <h3 className="font-serif text-xl sm:text-2xl font-bold text-primary">
                   {b.title}
                 </h3>
-                <p className="text-base sm:text-lg text-[#1C1412]/75 leading-relaxed">
+                <p className="text-base sm:text-lg text-[#1C1412] leading-relaxed">
                   {b.body}
                 </p>
               </article>
@@ -293,7 +303,7 @@ export function CoupleLanding() {
             <h2 className="font-serif text-3xl sm:text-4xl font-bold">
               {LANDING_TOOLS.title}
             </h2>
-            <p className="text-base sm:text-lg text-[#1C1412]/7">
+            <p className="text-base sm:text-lg text-[#1C1412]">
               {LANDING_TOOLS.subtitle}
             </p>
           </div>
@@ -306,7 +316,7 @@ export function CoupleLanding() {
                 <h3 className="font-serif text-xl sm:text-2xl font-bold">
                   {item.title}
                 </h3>
-                <p className="text-base sm:text-lg text-[#1C1412]/75 leading-relaxed">
+                <p className="text-base sm:text-lg text-[#1C1412] leading-relaxed">
                   {item.body}
                 </p>
               </div>
@@ -332,7 +342,7 @@ export function CoupleLanding() {
                 <h3 className="font-serif text-xl sm:text-2xl font-bold underline decoration-accent/40 underline-offset-4">
                   {a.title}
                 </h3>
-                <p className="text-base sm:text-lg text-[#1C1412]/75 leading-relaxed">
+                <p className="text-base sm:text-lg text-[#1C1412] leading-relaxed">
                   {a.body}
                 </p>
               </div>
@@ -342,28 +352,31 @@ export function CoupleLanding() {
       </section>
 
       {/* 08 — Parcours */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20">
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-white">
         <div className="max-w-4xl mx-auto">
           <div className="ck-reveal mb-10 space-y-2">
             <p className="couple-chapter text-xs font-bold uppercase text-primary">
               08 — Comment ça commence
             </p>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold">
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1C1412]">
               Comment ça se passe
             </h2>
           </div>
           <div className="grid grid-cols-[auto_1fr] gap-x-6 sm:gap-x-10">
-            <VizPath className="ck-reveal w-10 h-72 text-accent mt-1" />
-            <ol className="space-y-8 pb-2">
+            <VizPath className="ck-reveal w-10 h-80 text-accent mt-1" />
+            <ol className="space-y-6 pb-2">
               {LANDING_STEPS.map((step) => (
-                <li key={step.n} className="ck-reveal">
+                <li
+                  key={step.n}
+                  className="ck-reveal rounded-xl border border-[#1C1412]/12 bg-[#FBF9F6] px-4 py-4 sm:px-5 sm:py-5"
+                >
                   <p className="font-mono text-sm font-bold text-accent">
                     {step.n}
                   </p>
-                  <p className="font-serif text-xl sm:text-2xl font-bold">
+                  <p className="font-serif text-xl sm:text-2xl font-bold text-[#1C1412]">
                     {step.title}
                   </p>
-                  <p className="mt-1 text-base sm:text-lg text-[#1C1412]/7">
+                  <p className="mt-2 text-base sm:text-lg text-[#1C1412] leading-relaxed">
                     {step.body}
                   </p>
                 </li>
@@ -373,34 +386,36 @@ export function CoupleLanding() {
         </div>
       </section>
 
-      {/* 09 — Offres — plus visibles */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-24 border-t-2 border-primary/20">
+      {/* 09 — Offres */}
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-24 bg-[#F8F4EE]">
         <div className="max-w-5xl mx-auto space-y-12">
           <div className="ck-reveal max-w-2xl space-y-3">
             <p className="couple-chapter text-xs font-bold uppercase text-primary">
               09 — Niveaux d’accompagnement
             </p>
-            <h2 className="font-serif text-3xl sm:text-5xl font-bold underline decoration-accent/50 underline-offset-8">
+            <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#1C1412] underline decoration-accent/60 underline-offset-8">
               {LANDING_OFFERS.eyebrow}
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 md:gap-16">
-            <article className="ck-reveal space-y-5 border-t-4 border-[#1C1412]/20 pt-7">
-              <h3 className="font-serif text-3xl font-bold">Bilan Essentiel</h3>
+          <div className="grid md:grid-cols-2 gap-8 md:gap-10">
+            <article className="ck-reveal space-y-5 rounded-2xl border-2 border-[#1C1412]/15 bg-white p-6 sm:p-8 shadow-sm">
+              <h3 className="font-serif text-3xl font-bold text-[#1C1412]">
+                Bilan Essentiel
+              </h3>
               <CoupleOfferPrice offerId="couple_essential" />
-              <p className="text-base sm:text-lg text-[#1C1412]/8 leading-relaxed font-medium">
+              <p className="text-base sm:text-lg text-[#1C1412] leading-relaxed font-medium">
                 {LANDING_OFFERS.essentialFor}
               </p>
-              <ul className="space-y-2.5 text-base sm:text-lg text-[#1C1412]/8">
+              <ul className="space-y-3 text-base sm:text-lg text-[#1C1412]">
                 {LANDING_OFFERS.essentialFeatures.map((f) => (
                   <li key={f} className="flex gap-2">
-                    <span className="text-accent font-bold">—</span>
+                    <span className="text-accent font-bold shrink-0">—</span>
                     <span>{f}</span>
                   </li>
                 ))}
               </ul>
-              <p className="text-base text-[#1C1412]/7 leading-relaxed">
+              <p className="text-base sm:text-lg text-[#1C1412] leading-relaxed">
                 {LANDING_OFFERS.essentialClose}
               </p>
               <MagneticButton
@@ -412,19 +427,21 @@ export function CoupleLanding() {
               </MagneticButton>
             </article>
 
-            <article className="ck-reveal space-y-5 border-t-4 border-accent pt-7">
+            <article className="ck-reveal space-y-5 rounded-2xl border-2 border-accent bg-white p-6 sm:p-8 shadow-elevated">
               <p className="text-xs font-bold uppercase tracking-wider text-accent underline underline-offset-4">
                 Aller plus loin
               </p>
-              <h3 className="font-serif text-3xl font-bold">Bilan Premium Plus</h3>
+              <h3 className="font-serif text-3xl font-bold text-[#1C1412]">
+                Bilan Premium Plus
+              </h3>
               <CoupleOfferPrice offerId="couple_premium_plus" />
-              <p className="text-base sm:text-lg text-[#1C1412]/8 leading-relaxed font-medium">
+              <p className="text-base sm:text-lg text-[#1C1412] leading-relaxed font-medium">
                 {LANDING_OFFERS.premiumFor}
               </p>
-              <ul className="space-y-2.5 text-base sm:text-lg text-[#1C1412]/8">
+              <ul className="space-y-3 text-base sm:text-lg text-[#1C1412]">
                 {LANDING_OFFERS.premiumFeatures.map((f) => (
                   <li key={f} className="flex gap-2">
-                    <span className="text-accent font-bold">—</span>
+                    <span className="text-accent font-bold shrink-0">—</span>
                     <span className="font-medium">{f}</span>
                   </li>
                 ))}
@@ -441,20 +458,20 @@ export function CoupleLanding() {
         </div>
       </section>
 
-      {/* Imagine + unlock animation */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-24 bg-white/80">
+      {/* Imagine */}
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-24 bg-white">
         <div className="max-w-5xl mx-auto grid lg:grid-cols-[1fr_1.05fr] gap-12 items-center">
-          <div className="ck-reveal flex justify-center text-primary">
-            <VizReportUnlock className="w-72 h-52 sm:w-96 sm:h-72" />
+          <div className="ck-reveal">
+            <VizReportUnlockScene />
           </div>
           <div className="ck-reveal space-y-5">
             <p className="couple-chapter text-xs font-bold uppercase text-primary">
               10 — Imaginez
             </p>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold leading-tight text-[#1C1412]">
               {LANDING_IMAGINE.title}
             </h2>
-            <p className="text-base sm:text-lg text-[#1C1412]/75 leading-relaxed">
+            <p className="text-base sm:text-lg text-[#1C1412] leading-relaxed">
               {LANDING_IMAGINE.body}
             </p>
             <div className="space-y-3">
@@ -467,24 +484,21 @@ export function CoupleLanding() {
                 </p>
               ))}
             </div>
-            <p className="text-base sm:text-lg font-semibold">
+            <p className="text-base sm:text-lg font-semibold text-[#1C1412]">
               {LANDING_IMAGINE.close}
             </p>
           </div>
         </div>
       </section>
 
-      {/* Closing — bien visible */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 border-t border-[#1C1412]/10">
+      {/* Closing — un seul bloc */}
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#F8F4EE]">
         <div className="max-w-2xl space-y-6">
-          <h2 className="ck-reveal font-serif text-3xl sm:text-5xl font-bold leading-tight">
+          <h2 className="ck-reveal font-serif text-3xl sm:text-5xl font-bold leading-tight text-[#1C1412]">
             {LANDING_CLOSING.title}
           </h2>
-          <p className="ck-reveal text-lg sm:text-xl text-[#1C1412]/85 leading-relaxed">
+          <p className="ck-reveal text-lg sm:text-xl text-[#1C1412] leading-relaxed font-medium">
             {LANDING_CLOSING.body}
-          </p>
-          <p className="ck-reveal font-serif text-2xl sm:text-3xl font-bold text-primary underline decoration-accent/40 underline-offset-4">
-            {LANDING_CLOSING.bodyEnd}
           </p>
           <div className="ck-reveal flex flex-wrap gap-3 pt-2">
             <MagneticButton
@@ -505,24 +519,27 @@ export function CoupleLanding() {
         </div>
       </section>
 
-      {/* Pour finir — pas « dernière question » */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-white/70">
-        <div className="max-w-2xl space-y-6">
+      {/* Pour finir + dual */}
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-white">
+        <div className="max-w-2xl space-y-8">
           <div className="ck-reveal space-y-3">
             <p className="couple-chapter text-xs font-bold uppercase text-primary">
               {LANDING_CLOSING.finishTitle}
             </p>
-            <p className="text-base sm:text-lg text-[#1C1412]/8 leading-relaxed">
+            <p className="text-base sm:text-lg text-[#1C1412] leading-relaxed">
               {LANDING_CLOSING.lastPrompt}
             </p>
-            <p className="font-serif text-2xl sm:text-3xl italic text-primary leading-snug">
-              « {LANDING_CLOSING.lastQuote} »
-            </p>
-            <p className="text-lg sm:text-xl font-semibold">
-              {LANDING_CLOSING.start}
-            </p>
           </div>
-          <p className="ck-reveal text-base text-[#1C1412]/55 italic">
+          <div className="ck-reveal">
+            <VizDualFinish />
+          </div>
+          <p className="ck-reveal font-serif text-2xl sm:text-3xl italic text-primary leading-snug">
+            « {LANDING_CLOSING.lastQuote} »
+          </p>
+          <p className="ck-reveal text-lg sm:text-xl font-semibold text-[#1C1412]">
+            {LANDING_CLOSING.start}
+          </p>
+          <p className="ck-reveal text-base text-[#1C1412] italic">
             {COUPLE_BRAND} — {LANDING_CLOSING.tagline}
           </p>
           <MagneticButton href="/couple/offre" variant="primary" size="lg">

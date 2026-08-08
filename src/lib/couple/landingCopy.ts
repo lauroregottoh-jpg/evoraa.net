@@ -300,11 +300,10 @@ export const LANDING_IMAGINE = {
 
 export const LANDING_CLOSING = {
   title: "Votre couple a besoin de bien plus que d’espérer",
-  body: "Votre couple a besoin de clarté, de conversations et de compréhension…",
-  bodyEnd: "Votre couple n’a pas besoin de verdicts.",
+  body: "Votre couple a besoin de clarté, de conversations et de compréhension — pas de verdicts, ni d’incertitude.",
   finishTitle: "Pour finir",
   lastPrompt:
-    "Ce qui vous rapproche, ce qui vous différencie, ce qui pourrait devenir une difficulté — ou simplement :",
+    "Ce qui vous rapproche, ce qui vous différencie — ou simplement :",
   lastQuote: "Est-ce que nous sommes réellement aussi alignés que nous le pensons ?",
   start: "Faites le bilan pour le découvrir.",
   tagline:
