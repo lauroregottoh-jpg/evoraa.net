@@ -21,6 +21,7 @@ import {
   Home,
   UsersRound,
   MessageSquareHeart,
+  HeartHandshake,
 } from "lucide-react"
 import { cn } from "@/utils/cn"
 import { logoutAction } from "@/app/actions/auth"
@@ -34,6 +35,7 @@ export type AdminNavId =
   | "feedback"
   | "messages"
   | "alliance"
+  | "couple"
   | "matching"
   | "academy"
   | "eva"
@@ -111,6 +113,11 @@ export function AdminShell({
       label: "Alliance & paiements",
       icon: Crown,
       badge: badges.renewals || undefined,
+    },
+    {
+      id: "couple",
+      label: "KELYA Couple",
+      icon: HeartHandshake,
     },
     { id: "matching", label: "Matching Intelligence", icon: MessageCircle },
     { id: "academy", label: "Académie", icon: GraduationCap },

@@ -11,6 +11,8 @@ import { TestimonialsCarousel } from "@/components/marketing/TestimonialsCarouse
 import { ShareRecommendSection } from "@/components/marketing/ShareRecommendSection";
 import { MatchingPillarsShowcase } from "@/components/home/MatchingPillarsShowcase";
 import { PwaInstallHomeSection } from "@/components/pwa/PwaInstallHomeSection";
+import { HomeCoupleSection } from "@/components/home/HomeCoupleSection";
+import { HomeDualPricingSection } from "@/components/home/HomeDualPricingSection";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { AuthHashCatcher } from "@/components/auth/AuthHashCatcher";
 import {
@@ -413,6 +415,10 @@ export default function Home() {
       </section>
 
       <ShareRecommendSection />
+
+      <HomeCoupleSection />
+
+      <HomeDualPricingSection />
 
       <PwaInstallHomeSection />
 

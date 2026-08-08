@@ -563,7 +563,7 @@ export async function saveCoupleAnswersAction(input: {
   answers: Record<string, number>
   complete?: boolean
 }) {
-  const { supabase, user } = await requireUser()
+  const { user } = await requireUser()
   if (!user) return { error: "Non authentifié." }
 
   const state = await getMyCoupleStateAction()

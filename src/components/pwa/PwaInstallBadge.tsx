@@ -2,27 +2,31 @@
 
 import * as React from "react"
 import { Download, Smartphone, X } from "lucide-react"
-import { usePwaInstall, dismissPwaPrompt, isPwaDismissed } from "@/components/pwa/usePwaInstall"
+import {
+  usePwaInstall,
+  dismissPwaPrompt,
+  isPwaDismissed,
+} from "@/components/pwa/usePwaInstall"
 import { cn } from "@/utils/cn"
 
 /**
- * Badge flottant « Télécharger l’app » — toutes les pages (sauf déjà installé / dismissed).
+ * Badge flottant d’install — masqué si déjà installé ou dismiss.
  */
 export function PwaInstallBadge() {
-  const { canPrompt, isIos, isStandalone, ready, install } = usePwaInstall()
+  const { canPrompt, isIos, isInstalled, ready, install } = usePwaInstall()
   const [hidden, setHidden] = React.useState(true)
-  const [iosTip, setIosTip] = React.useState(false)
+  const [showHelp, setShowHelp] = React.useState(false)
 
   React.useEffect(() => {
     if (!ready) return
-    if (isStandalone || isPwaDismissed()) {
+    if (isInstalled || isPwaDismissed()) {
       setHidden(true)
       return
     }
     setHidden(false)
-  }, [ready, isStandalone])
+  }, [ready, isInstalled])
 
-  if (!ready || hidden || isStandalone) return null
+  if (!ready || hidden || isInstalled) return null
 
   const onInstall = async () => {
     if (canPrompt) {
@@ -30,7 +34,7 @@ export function PwaInstallBadge() {
       setHidden(true)
       return
     }
-    setIosTip(true)
+    setShowHelp(true)
   }
 
   const onDismiss = () => {
@@ -45,7 +49,7 @@ export function PwaInstallBadge() {
         "flex flex-col items-end gap-2 pointer-events-none"
       )}
     >
-      {iosTip && (
+      {showHelp && (
         <div className="pointer-events-auto max-w-[16rem] rounded-2xl border border-border bg-card px-3 py-2.5 text-[11px] text-muted-foreground shadow-elevated leading-relaxed">
           {isIos
             ? "iPhone : Partager → Sur l’écran d’accueil."
@@ -59,9 +63,13 @@ export function PwaInstallBadge() {
           className="inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground h-10 pl-3 pr-4 text-xs font-bold hover:brightness-110 transition-all"
         >
           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-black/15">
-            <Download className="h-3.5 w-3.5" />
+            {canPrompt ? (
+              <Download className="h-3.5 w-3.5" />
+            ) : (
+              <Smartphone className="h-3.5 w-3.5" />
+            )}
           </span>
-          Télécharger l’app
+          {canPrompt ? "Installer l’app" : "Comment installer"}
         </button>
         <button
           type="button"
@@ -72,9 +80,6 @@ export function PwaInstallBadge() {
           <X className="h-4 w-4" />
         </button>
       </div>
-      <p className="pointer-events-none sr-only">
-        <Smartphone className="inline" /> Installer KELIAA
-      </p>
     </div>
   )
 }

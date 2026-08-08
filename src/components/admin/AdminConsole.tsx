@@ -22,6 +22,7 @@ import {
 import { ACADEMY_MODULES } from "@/lib/academy/modules"
 import { PLANS } from "@/lib/billing/plans"
 import { OPS_CONSOLE_PATH } from "@/lib/admin/consolePath"
+import { AdminCouplePanel } from "@/components/admin/AdminCouplePanel"
 import {
   AdminShell,
   FunnelBar,
@@ -485,12 +486,13 @@ export function AdminConsole(props: Props) {
             </SectionCard>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
             {(
               [
                 ["members", "Gérer les membres"],
                 ["moderation", "Ouvrir la modération"],
                 ["alliance", "Alliance & paiements"],
+                ["couple", "KELYA Couple"],
                 ["academy", "Académie du mariage"],
               ] as const
             ).map(([id, label]) => (
@@ -873,6 +875,8 @@ export function AdminConsole(props: Props) {
           </div>
         </div>
       )}
+
+      {nav === "couple" && <AdminCouplePanel />}
 
       {/* ——— 6. MATCHING INTELLIGENCE ——— */}
       {nav === "matching" && (

@@ -10,7 +10,6 @@ type Variant = "primary" | "outline" | "soft" | "alliance" | "discovery"
 type Props = {
   variant?: Variant
   className?: string
-  /** Toujours visible même si déjà installé (affiche « App installée ») */
   showWhenInstalled?: boolean
   label?: string
   size?: "sm" | "md" | "lg"
@@ -28,9 +27,6 @@ const VARIANT_CLASS: Record<Variant, string> = {
     "bg-[#5C1F28] text-white hover:brightness-110 border border-transparent",
 }
 
-/**
- * Bouton d’installation app — espaces membres Découverte / Alliance + marketing.
- */
 export function PwaInstallButton({
   variant = "primary",
   className,
@@ -38,13 +34,13 @@ export function PwaInstallButton({
   label,
   size = "md",
 }: Props) {
-  const { canPrompt, isIos, isStandalone, ready, install } = usePwaInstall()
-  const [iosOpen, setIosOpen] = React.useState(false)
+  const { canPrompt, isIos, isInstalled, ready, install } = usePwaInstall()
+  const [showHelp, setShowHelp] = React.useState(false)
 
   if (!ready) return null
-  if (isStandalone && !showWhenInstalled) return null
+  if (isInstalled && !showWhenInstalled) return null
 
-  if (isStandalone) {
+  if (isInstalled) {
     return (
       <span
         className={cn(
@@ -62,22 +58,17 @@ export function PwaInstallButton({
   const text =
     label ||
     (canPrompt
-      ? "Télécharger l’app"
+      ? "Installer l’app"
       : isIos
         ? "Ajouter à l’écran d’accueil"
-        : "Installer KELIAA")
+        : "Comment installer")
 
   const onClick = async () => {
     if (canPrompt) {
       await install()
       return
     }
-    if (isIos) {
-      setIosOpen(true)
-      return
-    }
-    // Desktop / navigateurs sans beforeinstallprompt : ouvrir le menu navigateur
-    setIosOpen(true)
+    setShowHelp(true)
   }
 
   return (
@@ -91,18 +82,22 @@ export function PwaInstallButton({
           VARIANT_CLASS[variant]
         )}
       >
-        <Download className={size === "lg" ? "h-5 w-5" : "h-4 w-4"} />
+        {canPrompt ? (
+          <Download className={size === "lg" ? "h-5 w-5" : "h-4 w-4"} />
+        ) : (
+          <Smartphone className={size === "lg" ? "h-5 w-5" : "h-4 w-4"} />
+        )}
         {text}
       </button>
-      {iosOpen && (
+      {showHelp && (
         <p className="text-[11px] text-muted-foreground leading-relaxed max-w-xs rounded-lg border border-border bg-card/95 px-3 py-2 shadow-sm">
           {isIos
-            ? "Sur iPhone / iPad : appuyez sur Partager → « Sur l’écran d’accueil »."
-            : "Dans votre navigateur : menu ⋮ ou Partager → « Installer l’application » / « Ajouter à l’écran d’accueil »."}
+            ? "Sur iPhone / iPad : Partager → « Sur l’écran d’accueil »."
+            : "Menu ⋮ ou Partager → « Installer l’application » / « Ajouter à l’écran d’accueil ». Aucun fichier à télécharger."}
           <button
             type="button"
             className="ml-2 underline"
-            onClick={() => setIosOpen(false)}
+            onClick={() => setShowHelp(false)}
           >
             OK
           </button>

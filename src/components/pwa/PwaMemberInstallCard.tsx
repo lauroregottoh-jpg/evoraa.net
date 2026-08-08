@@ -1,7 +1,8 @@
 "use client"
 
-import { Download, Smartphone } from "lucide-react"
+import { Smartphone } from "lucide-react"
 import { PwaInstallButton } from "@/components/pwa/PwaInstallButton"
+import { usePwaInstall } from "@/components/pwa/usePwaInstall"
 import { cn } from "@/utils/cn"
 
 type Props = {
@@ -9,10 +10,11 @@ type Props = {
   className?: string
 }
 
-/**
- * Carte d’installation dans l’espace membre — variante Découverte ou Alliance.
- */
 export function PwaMemberInstallCard({ isPaid, className }: Props) {
+  const { isInstalled, ready } = usePwaInstall()
+
+  if (!ready || isInstalled) return null
+
   return (
     <div
       className={cn(
@@ -41,30 +43,23 @@ export function PwaMemberInstallCard({ isPaid, className }: Props) {
               : "Découverte — installez KELIAA sur votre téléphone"}
           </p>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            {isPaid
-              ? "Messagerie, EVA et Coffre Premium en un tap — sans repasser par le site."
-              : "Matching, EVA et parcours Découverte en accès direct depuis l’écran d’accueil."}
+            Accès direct depuis l’écran d’accueil — sans télécharger de fichier.
           </p>
         </div>
       </div>
       <PwaInstallButton
         variant={isPaid ? "alliance" : "discovery"}
         size="md"
-        label={isPaid ? "Télécharger l’app Alliance" : "Télécharger l’app"}
         className="shrink-0"
       />
     </div>
   )
 }
 
-/** Bouton compact pour la barre membre. */
-export function PwaMemberInstallNavButton({ isPaid }: { isPaid?: boolean }) {
-  return (
-    <PwaInstallButton
-      variant={isPaid ? "alliance" : "discovery"}
-      size="sm"
-      label="App"
-      className="shrink-0"
-    />
-  )
+export function PwaMemberInstallNavButton({
+  className,
+}: {
+  className?: string
+}) {
+  return <PwaInstallButton variant="soft" size="sm" label="App" className={className} />
 }

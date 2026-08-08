@@ -37,7 +37,7 @@ export function CoupleOfferPicker({ demoPricing }: Props) {
     }
     if (res.checkoutPath) {
       if (res.checkoutPath.startsWith("http")) {
-        window.location.href = res.checkoutPath
+        window.location.assign(res.checkoutPath)
       } else {
         router.push(res.checkoutPath)
       }

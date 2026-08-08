@@ -1,32 +1,28 @@
 "use client"
 
 import * as React from "react"
-import { Download, X } from "lucide-react"
+import { Smartphone, X } from "lucide-react"
 import {
   dismissPwaPrompt,
   isPwaDismissed,
   usePwaInstall,
 } from "@/components/pwa/usePwaInstall"
 
-/**
- * Hint compact membre — Android Chrome + iOS Add to Home Screen.
- */
 export function PwaInstallHint() {
-  const { canPrompt, isIos, isStandalone, ready, install } = usePwaInstall()
+  const { canPrompt, isIos, isInstalled, ready, install } = usePwaInstall()
   const [visible, setVisible] = React.useState(false)
 
   React.useEffect(() => {
-    if (!ready || isStandalone || isPwaDismissed()) {
+    if (!ready || isInstalled || isPwaDismissed()) {
       setVisible(false)
       return
     }
-    // Afficher si on peut installer, ou iOS, ou tip générique après un court délai
     if (canPrompt || isIos) setVisible(true)
     else {
       const t = window.setTimeout(() => setVisible(true), 1200)
       return () => window.clearTimeout(t)
     }
-  }, [ready, isStandalone, canPrompt, isIos])
+  }, [ready, isInstalled, canPrompt, isIos])
 
   const dismiss = () => {
     setVisible(false)
@@ -40,17 +36,19 @@ export function PwaInstallHint() {
     }
   }
 
-  if (!visible) return null
+  if (!visible || isInstalled) return null
 
   return (
     <div className="rounded-2xl border border-primary/20 bg-card px-4 py-3 flex items-start gap-3 shadow-sm">
-      <Download className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+      <Smartphone className="h-5 w-5 text-primary shrink-0 mt-0.5" />
       <div className="min-w-0 flex-1">
         <p className="text-sm font-semibold text-foreground">Installer KELIAA</p>
         <p className="text-[12px] text-muted-foreground mt-0.5 leading-relaxed">
           {isIos && !canPrompt
-            ? "Sur iPhone : Partager → Sur l’écran d’accueil. Accès direct sans passer par le navigateur."
-            : "Ajoutez l’app sur votre écran d’accueil pour un accès rapide (messagerie, EVA, matching)."}
+            ? "Sur iPhone : Partager → Sur l’écran d’accueil."
+            : canPrompt
+              ? "Ajoutez l’app sur votre écran d’accueil pour un accès rapide."
+              : "Via le menu du navigateur : Installer / Ajouter à l’écran d’accueil."}
         </p>
         {canPrompt && (
           <button

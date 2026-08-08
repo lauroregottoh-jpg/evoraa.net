@@ -10,12 +10,16 @@ export type BeforeInstallPromptEvent = Event & {
 export type PwaInstallState = {
   canPrompt: boolean
   isIos: boolean
+  /** App déjà installée (standalone, appinstalled, ou flag local). */
+  isInstalled: boolean
+  /** @deprecated alias de isInstalled — compat composants existants */
   isStandalone: boolean
   ready: boolean
   install: () => Promise<void>
 }
 
 const DISMISS_KEY = "keliaa_pwa_install_dismissed"
+const INSTALLED_KEY = "keliaa_pwa_installed"
 
 export function isPwaDismissed(): boolean {
   try {
@@ -33,19 +37,47 @@ export function dismissPwaPrompt() {
   }
 }
 
+export function isPwaMarkedInstalled(): boolean {
+  try {
+    return localStorage.getItem(INSTALLED_KEY) === "1"
+  } catch {
+    return false
+  }
+}
+
+export function markPwaInstalled() {
+  try {
+    localStorage.setItem(INSTALLED_KEY, "1")
+  } catch {
+    /* ignore */
+  }
+}
+
+function detectStandalone(): boolean {
+  if (typeof window === "undefined") return false
+  return (
+    window.matchMedia("(display-mode: standalone)").matches ||
+    Boolean((navigator as Navigator & { standalone?: boolean }).standalone)
+  )
+}
+
 export function usePwaInstall(): PwaInstallState {
-  const [deferred, setDeferred] = React.useState<BeforeInstallPromptEvent | null>(null)
+  const [deferred, setDeferred] = React.useState<BeforeInstallPromptEvent | null>(
+    null
+  )
   const [isIos, setIsIos] = React.useState(false)
-  const [isStandalone, setIsStandalone] = React.useState(false)
+  const [isInstalled, setIsInstalled] = React.useState(false)
   const [ready, setReady] = React.useState(false)
 
   React.useEffect(() => {
     if (typeof window === "undefined") return
 
-    const standalone =
-      window.matchMedia("(display-mode: standalone)").matches ||
-      Boolean((navigator as Navigator & { standalone?: boolean }).standalone)
-    setIsStandalone(standalone)
+    const standalone = detectStandalone()
+    const marked = isPwaMarkedInstalled()
+    if (standalone || marked) {
+      setIsInstalled(true)
+      if (standalone) markPwaInstalled()
+    }
 
     const ua = navigator.userAgent || ""
     const ios =
@@ -57,28 +89,53 @@ export function usePwaInstall(): PwaInstallState {
       e.preventDefault()
       setDeferred(e as BeforeInstallPromptEvent)
     }
+    const onInstalled = () => {
+      markPwaInstalled()
+      setIsInstalled(true)
+      setDeferred(null)
+    }
+
+    const mq = window.matchMedia("(display-mode: standalone)")
+    const onMq = () => {
+      if (detectStandalone()) {
+        markPwaInstalled()
+        setIsInstalled(true)
+      }
+    }
+
     window.addEventListener("beforeinstallprompt", onBip)
+    window.addEventListener("appinstalled", onInstalled)
+    mq.addEventListener?.("change", onMq)
     setReady(true)
 
-    return () => window.removeEventListener("beforeinstallprompt", onBip)
+    return () => {
+      window.removeEventListener("beforeinstallprompt", onBip)
+      window.removeEventListener("appinstalled", onInstalled)
+      mq.removeEventListener?.("change", onMq)
+    }
   }, [])
 
   const install = React.useCallback(async () => {
     if (!deferred) return
     await deferred.prompt()
     try {
-      await deferred.userChoice
+      const choice = await deferred.userChoice
+      if (choice.outcome === "accepted") {
+        markPwaInstalled()
+        setIsInstalled(true)
+        dismissPwaPrompt()
+      }
     } catch {
       /* ignore */
     }
     setDeferred(null)
-    dismissPwaPrompt()
   }, [deferred])
 
   return {
-    canPrompt: Boolean(deferred),
+    canPrompt: Boolean(deferred) && !isInstalled,
     isIos,
-    isStandalone,
+    isInstalled,
+    isStandalone: isInstalled,
     ready,
     install,
   }

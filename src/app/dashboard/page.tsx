@@ -12,6 +12,7 @@ import { DemoCompatibilityPanel } from "@/components/dashboard/DemoCompatibility
 import { CommunityTeaser } from "@/components/community/CommunityMemberCard"
 import { shouldShowDemoMatches } from "@/lib/demo/sarahGandeSimulations"
 import { Crown } from "lucide-react"
+import { DashboardCouplePromo } from "@/components/dashboard/DashboardCouplePromo"
 
 export default async function DashboardPage() {
   const [{ data, error }, community] = await Promise.all([
@@ -121,6 +122,8 @@ export default async function DashboardPage() {
         {banners.length > 0 ? (
           <DashboardAlertBanners banners={banners} />
         ) : null}
+
+        <DashboardCouplePromo isPaid={isPaid} />
 
         {!isPaid ? (
           <Link

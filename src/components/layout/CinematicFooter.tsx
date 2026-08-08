@@ -37,6 +37,11 @@ export function CinematicFooter() {
                   </Link>
                 </li>
                 <li>
+                  <Link href="/couple" className="hover:text-primary transition-colors">
+                    KELYA Couple
+                  </Link>
+                </li>
+                <li>
                   <Link href="/pricing" className="hover:text-primary transition-colors">
                     Tarifs
                   </Link>
