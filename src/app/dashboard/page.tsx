@@ -4,11 +4,11 @@ import { getDashboardData } from "@/app/actions/dashboard"
 import { listCommunityMembers } from "@/app/actions/community"
 import { Button } from "@/components/ui/button"
 import { DashboardAlertBanners } from "@/components/dashboard/DashboardAlertBanners"
-import { SelectionGrid, SelectionHeader } from "@/components/dashboard/SelectionGrid"
 import { AllianceIdentityHome } from "@/components/dashboard/AllianceIdentityHome"
 import { DiscoveryPathVisual } from "@/components/dashboard/DiscoveryPathVisual"
 import { DiscoveryWelcomeHero } from "@/components/dashboard/DiscoveryWelcomeHero"
 import { SimulatedMatchesPanel } from "@/components/dashboard/SimulatedMatchesPanel"
+import { DemoCompatibilityPanel } from "@/components/dashboard/DemoCompatibilityPanel"
 import { CommunityTeaser } from "@/components/community/CommunityMemberCard"
 import { shouldShowDemoMatches } from "@/lib/demo/sarahGandeSimulations"
 import { Crown } from "lucide-react"
@@ -43,14 +43,12 @@ export default async function DashboardPage() {
     matches: data.conversationCount,
   })
 
-  const allBanners = data.nextSteps
+  const banners = data.nextSteps
     .filter(
       (s) =>
-        s.tone === "photo" ||
         s.tone === "upgrade" ||
         s.tone === "renew" ||
-        s.tone === "tests" ||
-        s.tone === "profile"
+        s.tone === "tests"
     )
     .map((s) => ({
       id: s.id,
@@ -62,16 +60,8 @@ export default async function DashboardPage() {
     }))
     .filter((b) => {
       if (isPaid && b.tone === "upgrade") return false
-      if (isPaid && (b.tone === "photo" || b.tone === "profile")) return false
       return true
     })
-
-  const topBanners = isPaid
-    ? allBanners
-    : allBanners.filter((b) => b.tone !== "photo" && b.tone !== "profile")
-  const beforeSelectionBanners = !isPaid
-    ? allBanners.filter((b) => b.tone === "photo" || b.tone === "profile")
-    : []
 
   return (
     <MemberShell
@@ -88,72 +78,49 @@ export default async function DashboardPage() {
       isTrialBoost={usage.isTrialBoost}
     >
       <div className="space-y-8 pb-8">
-        {isPaid ? (
-          <>
-            <DiscoveryWelcomeHero firstName={firstName} variant="alliance" />
-            <AllianceIdentityHome
-              firstName={firstName}
-              lastName={data.lastName}
-              avatarUrl={data.avatarUrl}
-              gender={data.gender}
-              memberSinceLabel={data.memberSinceLabel}
-              isVerified={data.isVerified}
-              assessmentsDone={data.assessmentsDone}
-            />
-          </>
-        ) : (
-          <>
-            <DiscoveryWelcomeHero firstName={firstName} />
-            {topBanners.length > 0 ? (
-              <DashboardAlertBanners banners={topBanners} />
-            ) : null}
-          </>
-        )}
+        {/* 1. Bienvenue */}
+        <DiscoveryWelcomeHero
+          firstName={firstName}
+          variant={isPaid ? "alliance" : "discovery"}
+        />
 
-        {/* Communauté — juste après l’accueil */}
+        {isPaid ? (
+          <AllianceIdentityHome
+            firstName={firstName}
+            lastName={data.lastName}
+            avatarUrl={data.avatarUrl}
+            gender={data.gender}
+            memberSinceLabel={data.memberSinceLabel}
+            isVerified={data.isVerified}
+            assessmentsDone={data.assessmentsDone}
+          />
+        ) : null}
+
+        {/* 2. Communauté */}
         <CommunityTeaser
           members={community.members}
           sameSexFriendship={community.sameSexFriendship}
           isPaid={isPaid || community.isPaid}
         />
 
+        {/* 3. Marche à suivre (Découverte) */}
         {!isPaid ? (
           <DiscoveryPathVisual assessmentsDone={data.assessmentsDone} />
         ) : null}
 
+        {/* Démos — Discovery + Alliance tant que < 5 réels */}
         {showDemo ? (
-          <SimulatedMatchesPanel
-            variant={isPaid ? "alliance" : "discovery"}
-          />
+          <>
+            <DemoCompatibilityPanel />
+            <SimulatedMatchesPanel
+              variant={isPaid ? "alliance" : "discovery"}
+            />
+          </>
         ) : null}
 
-        {beforeSelectionBanners.length > 0 ? (
-          <DashboardAlertBanners banners={beforeSelectionBanners} />
+        {banners.length > 0 ? (
+          <DashboardAlertBanners banners={banners} />
         ) : null}
-
-        <section className="space-y-3">
-          <SelectionHeader
-            title={
-              isPaid ? "Découvrez vos compatibilités" : data.selectionTitle
-            }
-            subtitle={
-              isPaid
-                ? data.assessmentsDone < 5
-                  ? "Continuez vos questionnaires pour affiner vos suggestions."
-                  : "Profils alignés sur votre foi et votre projet de mariage."
-                : data.selectionSubtitle
-            }
-          />
-          <SelectionGrid items={data.topSuggestions} />
-          {isPaid && data.assessmentsDone < 5 ? (
-            <Link
-              href="/assessments"
-              className="inline-flex text-xs font-semibold text-primary underline"
-            >
-              Continuer mon questionnaire →
-            </Link>
-          ) : null}
-        </section>
 
         {!isPaid ? (
           <Link
@@ -166,8 +133,7 @@ export default async function DashboardPage() {
             <div className="min-w-0">
               <p className="font-serif text-lg font-bold">Passer Alliance</p>
               <p className="text-sm text-muted-foreground mt-0.5 leading-relaxed">
-                Débloquez mon Rapport Personnalisé, le Coffre Premium et un Matching
-                enrichi.
+                Matching enrichi, Rapport Personnalisé et Coffre Premium.
               </p>
               <span className="inline-block mt-2 text-xs font-bold text-accent">
                 Voir Alliance →

@@ -192,8 +192,9 @@ export function CommunityTeaser({
               Découvrir la communauté
             </h2>
             <p className="max-w-lg text-sm text-[#1C1412]/65 leading-relaxed">
-              Tous les membres inscrits — likez pour vous connecter. Les messages
-              s’ouvrent uniquement en like mutuel.
+              Au-delà du Matching — de belles amitiés et des personnes qui
+              partagent vos valeurs. Likez pour vous connecter ; les messages
+              s’ouvrent en like mutuel.
             </p>
           </div>
           <Link

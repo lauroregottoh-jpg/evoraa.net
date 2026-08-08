@@ -1,8 +1,7 @@
 import { MemberPage } from "@/components/layout/MemberPage"
 import { listCommunityMembers } from "@/app/actions/community"
 import { CommunityMemberCardView } from "@/components/community/CommunityMemberCard"
-import Link from "next/link"
-import { Crown, Users } from "lucide-react"
+import { Users } from "lucide-react"
 
 export const dynamic = "force-dynamic"
 
@@ -22,30 +21,10 @@ export default async function CommunautePage() {
             Découvrir la communauté
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-[#1C1412]/70 leading-relaxed">
-            Tous les membres inscrits. Vous ne pouvez pas écrire directement :
-            likez un profil — si la personne like en retour, les messages
-            s’ouvrent.
+            Au-delà du Matching, découvrez de belles amitiés et connectez avec
+            des personnes qui partagent vos valeurs. Likez un profil — un like
+            mutuel ouvre les messages. Pas de contact direct.
           </p>
-          {!isPaid ? (
-            <Link
-              href="/premium"
-              className="mt-4 inline-flex h-10 items-center gap-2 rounded-xl border border-[#B8954A]/40 bg-white px-4 text-xs font-bold text-[#5C1F28]"
-            >
-              <Crown className="h-3.5 w-3.5 text-[#B8954A]" />
-              Alliance · amitiés même sexe + Matching enrichi
-            </Link>
-          ) : !sameSexFriendship ? (
-            <Link
-              href="/settings"
-              className="mt-4 inline-flex h-10 items-center gap-2 rounded-xl border border-[#B8954A]/40 bg-[#B8954A]/15 px-4 text-xs font-bold text-[#5C1F28]"
-            >
-              Activer les amitiés même sexe dans Paramètres →
-            </Link>
-          ) : (
-            <p className="mt-3 text-xs font-semibold text-emerald-700">
-              Amitiés même sexe activées · Alliance
-            </p>
-          )}
         </header>
 
         {error ? (

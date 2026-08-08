@@ -87,14 +87,13 @@ export async function listCommunityMembers(limit = 48): Promise<{
   const { data: rows, error } = await ctx.supabase
     .from("profiles")
     .select(
-      "id, user_id, first_name, gender, birth_date, city, denomination, avatar_url, is_verified, identity_verified, privacy_settings, completion_percentage, moderation_status, deleted_at"
+      "id, user_id, first_name, last_name, gender, birth_date, city, denomination, avatar_url, is_verified, identity_verified, privacy_settings, completion_percentage, moderation_status, deleted_at, created_at"
     )
     .is("deleted_at", null)
     .neq("user_id", ctx.user.id)
     .neq("moderation_status", "rejected")
-    .gte("completion_percentage", 30)
-    .order("completion_percentage", { ascending: false })
-    .limit(Math.min(limit, 80))
+    .order("created_at", { ascending: false })
+    .limit(Math.min(Math.max(limit * 2, 40), 120))
 
   if (error) {
     return {
@@ -105,8 +104,23 @@ export async function listCommunityMembers(limit = 48): Promise<{
     }
   }
 
+  const { isHiddenOperatorProfile } = await import(
+    "@/lib/community/hiddenProfiles"
+  )
+
   const profiles = (rows || []).filter((p) => {
     if (privacyFlag(p.privacy_settings, "retreat_mode")) return false
+    if (
+      isHiddenOperatorProfile(
+        p.first_name as string | null,
+        p.last_name as string | null
+      )
+    ) {
+      return false
+    }
+    // Nouveaux inscrits visibles dès qu’ils ont un prénom
+    const name = String(p.first_name || "").trim()
+    if (!name) return false
     return true
   })
 
@@ -191,7 +205,7 @@ export async function listCommunityMembers(limit = 48): Promise<{
     }
   })
 
-  // Mettre Alliance / Boost en avant
+  // Alliance / Boost en avant, puis les plus récents
   members.sort((a, b) => {
     const rank = (x: CommunityMemberCard) =>
       x.badge === "alliance" ? 0 : x.badge === "boost" ? 1 : 2
@@ -199,7 +213,7 @@ export async function listCommunityMembers(limit = 48): Promise<{
   })
 
   return {
-    members,
+    members: members.slice(0, limit),
     sameSexFriendship: ctx.sameSexFriendship,
     isPaid: ctx.isPaid,
   }
@@ -236,7 +250,7 @@ export async function toggleCommunityLikeAction(targetProfileId: string): Promis
   if (sameGender && !ctx.sameSexFriendship) {
     return {
       error:
-        "Les amitiés entre personnes du même sexe se débloquent dans Alliance (Paramètres).",
+        "Pour liker un profil du même sexe (amitié), activez l’option dans Paramètres Alliance.",
       blockedSameSex: true,
     }
   }

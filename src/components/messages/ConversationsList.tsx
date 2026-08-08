@@ -5,30 +5,50 @@ import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import {
+  CalendarDays,
   ChevronRight,
   Clock,
   Inbox,
   MessageCircle,
+  Search,
   Sparkles,
+  X,
 } from "lucide-react"
 import type { ConversationListItem } from "@/app/actions/messaging"
 import type { DemoMatchThread } from "@/lib/demo/sarahGandeSimulations"
 import { cn } from "@/utils/cn"
 
+type FilterTab = "all" | "unread" | "recent" | "older"
+
+function parseDayKey(timestamp: string): string {
+  // timestamp is display string — use today/yesterday heuristics + raw
+  const t = timestamp.toLowerCase()
+  if (t.includes("instant") || t.includes("min") || t.includes("h")) {
+    return new Date().toISOString().slice(0, 10)
+  }
+  if (t.includes("hier")) {
+    const d = new Date()
+    d.setDate(d.getDate() - 1)
+    return d.toISOString().slice(0, 10)
+  }
+  return "other"
+}
+
 function ConvRow({ conv }: { conv: ConversationListItem }) {
   return (
-    <Link key={conv.id} href={`/messages/${conv.id}`} className="block group">
+    <Link href={`/messages/${conv.id}`} className="block group">
       <Card
-        className={`rounded-2xl border transition-all duration-300 ${
+        className={cn(
+          "rounded-2xl border transition-all duration-300",
           conv.unread
             ? "border-accent/60 bg-accent/5 shadow-sm"
-            : "border-border/60 bg-background/90 hover:border-border"
-        }`}
+            : "border-border/60 bg-background/90 hover:border-[#B8954A]/35"
+        )}
       >
         <CardContent className="p-4 sm:p-5 flex items-center justify-between gap-4">
           <div className="flex items-center gap-4 min-w-0">
             <div className="relative shrink-0">
-              <div className="w-11 h-11 rounded-full bg-gradient-to-br from-primary/30 via-accent/20 to-secondary flex items-center justify-center font-serif text-lg font-bold text-primary dark:text-accent shadow-inner">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/30 via-accent/20 to-secondary flex items-center justify-center font-serif text-lg font-bold text-primary shadow-inner">
                 {conv.partnerName[0]}
               </div>
               {conv.unread && (
@@ -48,17 +68,18 @@ function ConvRow({ conv }: { conv: ConversationListItem }) {
                 )}
               </div>
               <p
-                className={`text-xs truncate ${
+                className={cn(
+                  "text-xs truncate",
                   conv.unread
                     ? "font-medium text-foreground"
                     : "text-muted-foreground"
-                }`}
+                )}
               >
                 {conv.lastMessage}
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2 shrink-0 text-right">
+          <div className="flex flex-col items-end gap-1 shrink-0">
             <span className="text-[10px] text-muted-foreground font-sans">
               {conv.timestamp}
             </span>
@@ -67,27 +88,6 @@ function ConvRow({ conv }: { conv: ConversationListItem }) {
         </CardContent>
       </Card>
     </Link>
-  )
-}
-
-function SectionTitle({
-  icon: Icon,
-  label,
-  count,
-}: {
-  icon: React.ComponentType<{ className?: string }>
-  label: string
-  count: number
-}) {
-  if (count === 0) return null
-  return (
-    <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground pt-1">
-      <Icon className="h-3.5 w-3.5" />
-      {label}
-      <span className="rounded-full bg-secondary px-1.5 py-0.5 text-[9px] normal-case tracking-normal">
-        {count}
-      </span>
-    </p>
   )
 }
 
@@ -100,30 +100,151 @@ export function ConversationsList({
   error?: string
   demoThreads?: DemoMatchThread[]
 }) {
-  const hasDemo = demoThreads.length > 0
-  const unread = conversations.filter((c) => c.unread)
-  const read = conversations.filter((c) => !c.unread)
-  const recent = read.slice(0, 4)
-  const older = read.slice(4)
+  const [query, setQuery] = React.useState("")
+  const [day, setDay] = React.useState("")
+  const [tab, setTab] = React.useState<FilterTab>("all")
+
+  const filtered = React.useMemo(() => {
+    const q = query.trim().toLowerCase()
+    return conversations.filter((c) => {
+      if (q && !c.partnerName.toLowerCase().includes(q)) return false
+      if (day) {
+        const key = parseDayKey(c.timestamp)
+        if (day === "today" && key !== new Date().toISOString().slice(0, 10)) {
+          return false
+        }
+        if (day === "yesterday") {
+          const y = new Date()
+          y.setDate(y.getDate() - 1)
+          if (key !== y.toISOString().slice(0, 10)) return false
+        }
+        if (day.length === 10 && key !== day && key !== "other") {
+          // loose: if we can't parse exact day, keep when searching by calendar only if timestamp empty match
+          if (!c.timestamp) return false
+        }
+      }
+      if (tab === "unread" && !c.unread) return false
+      if (tab === "recent" && c.unread) return false
+      if (tab === "older") {
+        const idx = conversations.filter((x) => !x.unread).indexOf(c)
+        if (c.unread || idx < 4) return false
+      }
+      return true
+    })
+  }, [conversations, query, day, tab])
+
+  const unread = filtered.filter((c) => c.unread)
+  const recent = filtered.filter((c) => !c.unread).slice(0, 4)
+  const older = filtered.filter((c) => !c.unread).slice(4)
+  const hasDemo = demoThreads.length > 0 && !query && !day && tab === "all"
+
+  const tabs: { id: FilterTab; label: string; count?: number }[] = [
+    { id: "all", label: "Tous", count: conversations.length },
+    {
+      id: "unread",
+      label: "Non lus",
+      count: conversations.filter((c) => c.unread).length,
+    },
+    { id: "recent", label: "Récents" },
+    { id: "older", label: "Plus anciens" },
+  ]
 
   return (
-    <div className="space-y-6 py-6">
-      <div className="flex items-center justify-between border-b border-border/40 pb-5">
-        <div className="space-y-1">
-          <Badge
-            variant="outline"
-            className="border-accent/40 text-accent bg-accent/5 font-sans uppercase tracking-wider text-xs"
-          >
-            Messages
-          </Badge>
-          <h1 className="text-3xl sm:text-4xl font-serif font-bold text-foreground">
-            Vos messages
-          </h1>
+    <div className="space-y-5 py-4">
+      {/* Hero inbox */}
+      <header className="relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/30 bg-gradient-to-br from-[#FFFBF5] via-[#F8F4EE] to-[#F0E6D4] p-5 sm:p-7 shadow-card">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="space-y-1">
+            <Badge
+              variant="outline"
+              className="border-[#B8954A]/40 text-[#8B6914] bg-white/60 font-sans uppercase tracking-wider text-[10px]"
+            >
+              Messagerie
+            </Badge>
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#1C1412]">
+              Vos conversations
+            </h1>
+            <p className="text-sm text-[#1C1412]/65 max-w-md">
+              Recherchez par nom, filtrez par jour, et retrouvez vos échanges
+              classés.
+            </p>
+          </div>
+          <span className="rounded-full bg-[#5C1F28] px-3 py-1.5 text-xs font-bold text-[#F8F4EE]">
+            {conversations.length} conversation
+            {conversations.length > 1 ? "s" : ""}
+          </span>
         </div>
-        <Badge className="bg-primary/10 text-primary dark:text-accent border border-primary/20 rounded-full px-3 py-1">
-          {conversations.length + demoThreads.length}
-        </Badge>
-      </div>
+
+        <div className="mt-5 grid gap-3 sm:grid-cols-[1fr_auto_auto]">
+          <label className="relative block">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8B6914]" />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Tapez un prénom…"
+              className="h-11 w-full rounded-xl border border-[#B8954A]/30 bg-white pl-10 pr-9 text-sm outline-none focus:border-[#B8954A]"
+            />
+            {query ? (
+              <button
+                type="button"
+                aria-label="Effacer"
+                onClick={() => setQuery("")}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            ) : null}
+          </label>
+
+          <label className="relative flex items-center gap-2">
+            <CalendarDays className="h-4 w-4 text-[#8B6914] shrink-0" />
+            <select
+              value={day}
+              onChange={(e) => setDay(e.target.value)}
+              className="h-11 min-w-[9rem] rounded-xl border border-[#B8954A]/30 bg-white px-3 text-sm outline-none focus:border-[#B8954A]"
+            >
+              <option value="">Tous les jours</option>
+              <option value="today">Aujourd’hui</option>
+              <option value="yesterday">Hier</option>
+            </select>
+          </label>
+
+          <Link
+            href="/communaute"
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-[#5C1F28] px-4 text-xs font-bold text-[#F8F4EE]"
+          >
+            Communauté
+          </Link>
+        </div>
+
+        <div className="mt-4 flex flex-wrap gap-2">
+          {tabs.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => setTab(t.id)}
+              className={cn(
+                "inline-flex h-9 items-center gap-1.5 rounded-full px-3.5 text-xs font-bold transition",
+                tab === t.id
+                  ? "bg-[#5C1F28] text-[#F8F4EE]"
+                  : "border border-[#B8954A]/30 bg-white text-[#5C1F28] hover:bg-[#F7F0E0]"
+              )}
+            >
+              {t.label}
+              {typeof t.count === "number" ? (
+                <span
+                  className={cn(
+                    "rounded-full px-1.5 py-0.5 text-[10px]",
+                    tab === t.id ? "bg-white/20" : "bg-[#F7F0E0]"
+                  )}
+                >
+                  {t.count}
+                </span>
+              ) : null}
+            </button>
+          ))}
+        </div>
+      </header>
 
       {error && (
         <div className="rounded-2xl border border-destructive/30 bg-destructive/5 p-5 text-sm text-destructive">
@@ -137,55 +258,50 @@ export function ConversationsList({
             Aucun message pour le moment
           </p>
           <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
-            Likez dans la Communauté KELIAA — un like mutuel ouvre les messages.
+            Likez dans la Communauté — un like mutuel ouvre les messages.
           </p>
-          <div className="flex flex-col sm:flex-row gap-2 justify-center pt-1">
-            <Link
-              href="/communaute"
-              className="inline-flex items-center justify-center h-10 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-semibold"
-            >
-              Découvrir la communauté
-            </Link>
-            <Link
-              href="/compatibility"
-              className="inline-flex items-center justify-center h-10 px-4 rounded-xl border border-border text-sm font-semibold"
-            >
-              Voir mes compatibilités
-            </Link>
-          </div>
+          <Link
+            href="/communaute"
+            className="inline-flex items-center justify-center h-10 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-semibold"
+          >
+            Découvrir la communauté
+          </Link>
         </div>
       )}
 
       <div className="space-y-5">
-        {unread.length > 0 ? (
-          <div className="space-y-2">
-            <SectionTitle icon={Inbox} label="Non lus" count={unread.length} />
+        {(tab === "all" || tab === "unread") && unread.length > 0 ? (
+          <section className="space-y-2">
+            <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#8B6914]">
+              <Inbox className="h-3.5 w-3.5" /> Non lus · {unread.length}
+            </p>
             <div className="space-y-2">
               {unread.map((c) => (
                 <ConvRow key={c.id} conv={c} />
               ))}
             </div>
-          </div>
+          </section>
         ) : null}
 
-        {recent.length > 0 ? (
-          <div className="space-y-2">
-            <SectionTitle
-              icon={MessageCircle}
-              label="Récents"
-              count={recent.length}
-            />
+        {(tab === "all" || tab === "recent") && recent.length > 0 ? (
+          <section className="space-y-2">
+            <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+              <MessageCircle className="h-3.5 w-3.5" /> Récents · {recent.length}
+            </p>
             <div className="space-y-2">
               {recent.map((c) => (
                 <ConvRow key={c.id} conv={c} />
               ))}
             </div>
-          </div>
+          </section>
         ) : null}
 
-        {older.length > 0 ? (
-          <details className="group rounded-2xl border border-border/50 bg-secondary/20 open:bg-secondary/30">
-            <summary className="cursor-pointer list-none flex items-center justify-between gap-2 px-4 py-3 text-sm font-semibold text-foreground">
+        {(tab === "all" || tab === "older") && older.length > 0 ? (
+          <details
+            open={tab === "older"}
+            className="group rounded-2xl border border-border/50 bg-secondary/20"
+          >
+            <summary className="cursor-pointer list-none flex items-center justify-between gap-2 px-4 py-3 text-sm font-semibold">
               <span className="inline-flex items-center gap-1.5">
                 <Clock className="h-4 w-4 text-muted-foreground" />
                 Plus anciens ({older.length})
@@ -200,29 +316,27 @@ export function ConversationsList({
           </details>
         ) : null}
 
+        {filtered.length === 0 && conversations.length > 0 ? (
+          <p className="text-center text-sm text-muted-foreground py-8">
+            Aucun résultat pour ces critères.
+          </p>
+        ) : null}
+
         {hasDemo ? (
-          <div className="space-y-2">
+          <section className="space-y-2">
             <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#8B6914]">
               <span className="rounded bg-[#5C1F28] px-1.5 py-0.5 text-[9px] tracking-widest text-[#F3D9A4]">
                 Démo
               </span>
-              Aperçu (disparaît à 5 vrais échanges)
+              Aperçu (jusqu’à 5 vrais échanges)
             </p>
-            {demoThreads.map((t, i) => (
+            {demoThreads.map((t) => (
               <Link
                 key={t.id}
                 href={`/messages/demo/${t.id}`}
-                className="block group sim-inbox-row"
-                style={{ animationDelay: `${i * 90}ms` }}
+                className="block group"
               >
-                <Card
-                  className={cn(
-                    "rounded-2xl border border-dashed transition-all duration-300",
-                    t.unread
-                      ? "border-[#B8954A]/50 bg-[#F7F0E0]/80"
-                      : "border-[#B8954A]/30 bg-background/90 hover:border-[#B8954A]/45"
-                  )}
-                >
+                <Card className="rounded-2xl border border-dashed border-[#B8954A]/40 bg-[#F7F0E0]/50 hover:border-[#B8954A]/60 transition-all">
                   <CardContent className="p-4 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3 min-w-0">
                       <div
@@ -255,7 +369,7 @@ export function ConversationsList({
                 </Card>
               </Link>
             ))}
-          </div>
+          </section>
         ) : null}
       </div>
     </div>
