@@ -3,14 +3,17 @@
 import * as React from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { CreditCard, HeartHandshake, Smartphone } from "lucide-react"
+import { CreditCard, HeartHandshake, Smartphone, Tag } from "lucide-react"
 import {
   COUPLE_DEMO_AMOUNT_XOF,
   COUPLE_OFFERS,
   getCoupleChargeAmountXof,
   type CoupleOfferId,
 } from "@/lib/couple/offers"
-import { startCoupleCheckoutAction } from "@/app/actions/couple"
+import {
+  previewCoupleCouponAction,
+  startCoupleCheckoutAction,
+} from "@/app/actions/couple"
 import type { BictorysPaymentMode } from "@/lib/billing/bictorys"
 import { cn } from "@/utils/cn"
 
@@ -23,6 +26,7 @@ type Props = {
   /** Après login : démarrer le paiement une fois */
   autostart?: boolean
   initialPaymentMode?: BictorysPaymentMode
+  initialPromoCode?: string
   className?: string
 }
 
@@ -37,6 +41,7 @@ export function CoupleCheckoutPanel({
   initialOfferId = "couple_essential",
   autostart = false,
   initialPaymentMode,
+  initialPromoCode = "",
   className,
 }: Props) {
   const router = useRouter()
@@ -44,6 +49,10 @@ export function CoupleCheckoutPanel({
   const [paymentMode, setPaymentMode] = React.useState<BictorysPaymentMode>(
     initialPaymentMode ?? suggestedMode
   )
+  const [promoOpen, setPromoOpen] = React.useState(Boolean(initialPromoCode))
+  const [promoCode, setPromoCode] = React.useState(initialPromoCode)
+  const [promoAmount, setPromoAmount] = React.useState<number | null>(null)
+  const [promoHint, setPromoHint] = React.useState<string | null>(null)
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
   const autostartDone = React.useRef(false)
@@ -57,10 +66,35 @@ export function CoupleCheckoutPanel({
     else setPaymentMode(suggestedMode)
   }, [initialPaymentMode, suggestedMode])
 
+  React.useEffect(() => {
+    if (!initialPromoCode.trim()) return
+    setPromoOpen(true)
+    setPromoCode(initialPromoCode)
+    void previewCoupleCouponAction(initialPromoCode).then((r) => {
+      if (r.ok && r.amountXof != null) {
+        setPromoAmount(r.amountXof)
+        setPromoHint(r.message || "Code appliqué.")
+      }
+    })
+  }, [initialPromoCode])
+
   const offer = COUPLE_OFFERS[offerId]
-  const charge = demoPricing
+  const baseCharge = demoPricing
     ? COUPLE_DEMO_AMOUNT_XOF
     : getCoupleChargeAmountXof(offer)
+  const charge = promoAmount ?? baseCharge
+
+  const applyPromo = async () => {
+    setPromoHint(null)
+    const r = await previewCoupleCouponAction(promoCode)
+    if (r.ok && r.amountXof != null) {
+      setPromoAmount(r.amountXof)
+      setPromoHint(r.message || "Code appliqué.")
+    } else {
+      setPromoAmount(null)
+      setPromoHint(r.message || "Code invalide.")
+    }
+  }
 
   const pay = React.useCallback(async () => {
     setLoading(true)
@@ -69,6 +103,7 @@ export function CoupleCheckoutPanel({
       const res = await startCoupleCheckoutAction({
         offerId,
         paymentMode: showModePicker ? paymentMode : undefined,
+        promoCode: promoCode.trim() || undefined,
       })
       if (res.requiresAuth && res.checkoutPath) {
         router.push(res.checkoutPath)
@@ -84,11 +119,13 @@ export function CoupleCheckoutPanel({
         } else {
           router.push(res.checkoutPath)
         }
+        return
       }
+      setError("Aucune URL de paiement reçue. Réessayez.")
     } finally {
       setLoading(false)
     }
-  }, [offerId, paymentMode, showModePicker, router])
+  }, [offerId, paymentMode, showModePicker, promoCode, router])
 
   React.useEffect(() => {
     if (!autostart || autostartDone.current) return
@@ -118,7 +155,7 @@ export function CoupleCheckoutPanel({
         </p>
       </div>
 
-      {demoPricing && (
+      {demoPricing && !promoAmount && (
         <div className="rounded-xl border border-[#B8954A]/35 bg-[#B8954A]/10 px-4 py-3 text-sm">
           <p className="font-semibold text-[#1C1412]">
             Mode démo — {COUPLE_DEMO_AMOUNT_XOF} FCFA
@@ -132,9 +169,9 @@ export function CoupleCheckoutPanel({
       <div className="space-y-3">
         {(Object.keys(COUPLE_OFFERS) as CoupleOfferId[]).map((id) => {
           const o = COUPLE_OFFERS[id]
-          const amount = demoPricing
+          const amount = promoAmount ?? (demoPricing
             ? COUPLE_DEMO_AMOUNT_XOF
-            : getCoupleChargeAmountXof(o)
+            : getCoupleChargeAmountXof(o))
           const active = offerId === id
           return (
             <button
@@ -178,9 +215,14 @@ export function CoupleCheckoutPanel({
                   </div>
                 </div>
                 <div className="shrink-0 text-right">
-                  {demoPricing && amount !== o.amountXof && (
+                  {(demoPricing || promoAmount) && amount !== o.amountXof && (
                     <p className="text-xs text-[#1C1412]/45 line-through">
                       {o.amountXof.toLocaleString("fr-FR")}
+                    </p>
+                  )}
+                  {promoAmount && demoPricing && (
+                    <p className="text-xs text-[#1C1412]/45 line-through">
+                      {COUPLE_DEMO_AMOUNT_XOF.toLocaleString("fr-FR")}
                     </p>
                   )}
                   <p className="font-serif text-xl font-bold text-[#5C1F28]">
@@ -194,6 +236,49 @@ export function CoupleCheckoutPanel({
             </button>
           )
         })}
+      </div>
+
+      <div>
+        <button
+          type="button"
+          onClick={() => setPromoOpen((v) => !v)}
+          className="inline-flex items-center gap-2 text-sm font-semibold text-[#5C1F28] hover:underline"
+        >
+          <Tag className="h-4 w-4" />
+          J&apos;ai un code
+        </button>
+        {promoOpen && (
+          <div className="mt-2 flex flex-wrap gap-2">
+            <input
+              value={promoCode}
+              onChange={(e) => {
+                setPromoCode(e.target.value)
+                setPromoAmount(null)
+                setPromoHint(null)
+              }}
+              placeholder="Code"
+              autoComplete="off"
+              className="flex-1 min-w-[10rem] rounded-xl border border-[#1C1412]/15 bg-[#FBF9F6] px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#B8954A]/50"
+            />
+            <button
+              type="button"
+              onClick={() => void applyPromo()}
+              className="rounded-xl border border-[#1C1412]/15 px-4 py-2.5 text-sm font-semibold text-[#1C1412] hover:bg-[#F8F4EE]"
+            >
+              Appliquer
+            </button>
+          </div>
+        )}
+        {promoHint && (
+          <p
+            className={cn(
+              "mt-2 text-xs",
+              promoAmount ? "text-[#5C1F28] font-semibold" : "text-destructive"
+            )}
+          >
+            {promoHint}
+          </p>
+        )}
       </div>
 
       {showModePicker && (
@@ -223,7 +308,12 @@ export function CoupleCheckoutPanel({
       <div className="flex flex-wrap items-end justify-between gap-3 border-t border-[#1C1412]/10 pt-4">
         <div>
           <p className="text-xs text-[#1C1412]/55">Total à payer</p>
-          <p className="font-serif text-2xl font-bold text-[#1C1412]">
+          <p className="font-serif text-2xl font-bold text-[#1C1412] flex items-baseline gap-2">
+            {promoAmount ? (
+              <span className="text-lg text-[#1C1412]/40 line-through font-sans font-normal">
+                {baseCharge.toLocaleString("fr-FR")}
+              </span>
+            ) : null}
             {charge.toLocaleString("fr-FR")} FCFA
           </p>
           <p className="text-[11px] text-[#1C1412]/55">
@@ -240,9 +330,7 @@ export function CoupleCheckoutPanel({
       >
         {loading
           ? "Préparation du paiement…"
-          : demoPricing
-            ? `Payer ${COUPLE_DEMO_AMOUNT_XOF} FCFA (démo)`
-            : `Payer ${charge.toLocaleString("fr-FR")} FCFA`}
+          : `Payer ${charge.toLocaleString("fr-FR")} FCFA`}
       </button>
 
       <p className="text-center text-[11px] text-[#1C1412]/55">
@@ -255,7 +343,7 @@ export function CoupleCheckoutPanel({
         </p>
       )}
       <p className="text-center text-xs text-[#1C1412]/55">
-        Déjà un code ?{" "}
+        Déjà un code d&apos;invitation partenaire ?{" "}
         <Link href="/couple/rejoindre" className="font-semibold text-[#5C1F28]">
           Rejoindre le bilan →
         </Link>

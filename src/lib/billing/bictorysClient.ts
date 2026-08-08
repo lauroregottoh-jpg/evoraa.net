@@ -98,6 +98,13 @@ export async function bictorysCreateCharge(args: {
     ? cancelPath
     : `${args.appBaseUrl}${cancelPath}`
 
+  if (args.amount < 100) {
+    return {
+      ok: false as const,
+      error: `Montant Bictorys invalide (${args.amount} XOF). Minimum : 100 FCFA.`,
+    }
+  }
+
   if (returnUrl.includes("localhost") || cancelUrl.includes("localhost")) {
     return {
       ok: false as const,
@@ -114,7 +121,8 @@ export async function bictorysCreateCharge(args: {
         : "Dakar"
 
   const body = {
-    amount: args.amount,
+    // Bictorys exige un entier XOF ; minimum documenté = 100.
+    amount: Math.round(args.amount),
     currency: "XOF",
     country: merchantCountry,
     paymentReference: args.paymentId,

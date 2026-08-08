@@ -51,6 +51,8 @@ async function requireUser() {
 export async function startCoupleCheckoutAction(input: {
   offerId: string
   paymentMode?: string | null
+  /** Code d’audit discret — non public. */
+  promoCode?: string | null
 }): Promise<{
   error?: string
   checkoutPath?: string
@@ -66,17 +68,25 @@ export async function startCoupleCheckoutAction(input: {
   const gatePay = await assertPaymentsNotPaused()
   if (!gatePay.ok) return { error: gatePay.error }
 
+  const {
+    BICTORYS_MIN_AMOUNT_XOF,
+    COUPLE_AUDIT_AMOUNT_XOF,
+    isCoupleAuditCoupon,
+  } = await import("@/lib/couple/auditCoupon")
+
   const parsedMode =
     parseBictorysPaymentMode(input.paymentMode) ?? input.paymentMode ?? null
   const modeQuery =
     parsedMode === "card" || parsedMode === "mobile_money"
       ? `&mode=${parsedMode}`
       : ""
+  const couponQuery = input.promoCode?.trim()
+    ? `&code=${encodeURIComponent(input.promoCode.trim())}`
+    : ""
 
   const { supabase, user } = await requireUser()
   if (!user) {
-    // Après login → retour sur le checkout vente (panel MM/carte) qui relance le paiement.
-    const next = `/couple/checkout/${offer.id}?autostart=1${modeQuery}`
+    const next = `/couple/checkout/${offer.id}?autostart=1${modeQuery}${couponQuery}`
     return {
       requiresAuth: true,
       error: "Connectez-vous pour acheter le bilan.",
@@ -99,10 +109,20 @@ export async function startCoupleCheckoutAction(input: {
         )
       : null
 
-  // Faux paiement uniquement en mode démo paiements (comme Alliance) — pas si Moneroo.
-  const demo = isDemoPaymentsEnv()
-  const chargeAmount = getCoupleChargeAmountXof(offer)
-  const offerSnapshot = snapshotCoupleOffer(offer, chargeAmount)
+  const auditCoupon = isCoupleAuditCoupon(input.promoCode)
+  const listPrice = getCoupleChargeAmountXof(offer)
+  const chargeAmount = auditCoupon ? COUPLE_AUDIT_AMOUNT_XOF : listPrice
+  // Sous le plancher Bictorys : confirmation interne (sinon l’API refuse 10/17 FCFA).
+  const useInternalConfirm =
+    isDemoPaymentsEnv() ||
+    auditCoupon ||
+    (liveProvider === "bictorys" && chargeAmount < BICTORYS_MIN_AMOUNT_XOF)
+
+  const offerSnapshot = {
+    ...snapshotCoupleOffer(offer, chargeAmount),
+    audit_coupon: auditCoupon,
+    allow_internal_confirm: useInternalConfirm,
+  }
   const transactionRef = `${liveProvider.toUpperCase()}-COUPLE-${user.id.slice(0, 8)}-${Date.now()}`
 
   const { data: subscription, error: subError } = await supabase
@@ -118,7 +138,11 @@ export async function startCoupleCheckoutAction(input: {
     .single()
 
   if (subError || !subscription) {
-    return { error: "Impossible de préparer le paiement." }
+    return {
+      error:
+        subError?.message ||
+        "Impossible de préparer le paiement (abonnement).",
+    }
   }
 
   const metadata = {
@@ -127,17 +151,20 @@ export async function startCoupleCheckoutAction(input: {
     plan_name: offer.marketingName,
     amount_xof: chargeAmount,
     list_price_xof: offer.amountXof,
+    charged_list_xof: listPrice,
     demo_pricing: isCoupleDemoPricing(),
     offer_snapshot: offerSnapshot,
     payment_mode: paymentMode,
     provider: liveProvider,
-    demo_mode: demo,
+    demo_mode: useInternalConfirm,
+    allow_internal_confirm: useInternalConfirm,
+    audit_coupon: auditCoupon,
   }
 
+  // Ne pas envoyer user_id : la table payments n’a pas cette colonne (cf. Alliance).
   const { data: payment, error: payError } = await supabase
     .from("payments")
     .insert({
-      user_id: user.id,
       subscription_id: subscription.id,
       provider: liveProvider,
       amount: chargeAmount,
@@ -150,10 +177,16 @@ export async function startCoupleCheckoutAction(input: {
     .single()
 
   if (payError || !payment) {
-    return { error: "Impossible de créer le paiement." }
+    return {
+      error:
+        payError?.message ||
+        "Impossible de créer le paiement. Réessayez ou contactez le support.",
+    }
   }
 
-  await supabase.from("couple_purchases").insert({
+  // RLS couple_purchases : pas d’INSERT user → service role.
+  const admin = createAdminClient()
+  const { error: purchaseErr } = await admin.from("couple_purchases").insert({
     purchaser_user_id: user.id,
     payment_id: payment.id,
     offer_id: offer.id,
@@ -162,8 +195,15 @@ export async function startCoupleCheckoutAction(input: {
     status: "pending",
     offer_snapshot: offerSnapshot,
   })
+  if (purchaseErr) {
+    return {
+      error:
+        purchaseErr.message ||
+        "Impossible d’enregistrer l’achat couple. Réessayez.",
+    }
+  }
 
-  if (demo) {
+  if (useInternalConfirm) {
     return {
       checkoutPath: `/couple/checkout/${offer.id}?paymentId=${payment.id}&demo=1`,
     }
@@ -180,6 +220,11 @@ export async function startCoupleCheckoutAction(input: {
     if (liveProvider === "bictorys") {
       const apiKey = process.env.BICTORYS_API_KEY
       if (!apiKey) return { error: "BICTORYS_API_KEY manquant." }
+      if (chargeAmount < BICTORYS_MIN_AMOUNT_XOF) {
+        return {
+          error: `Montant trop bas pour Bictorys (minimum ${BICTORYS_MIN_AMOUNT_XOF} FCFA).`,
+        }
+      }
 
       const result = await bictorysCreateCharge({
         apiKey,
@@ -290,16 +335,33 @@ export async function startCoupleCheckoutAction(input: {
   }
 }
 
-/** Confirmation démo (local / PAYMENTS_DEMO_MODE). */
+/** Aperçu discret d’un code (sans révéler le code attendu). */
+export async function previewCoupleCouponAction(code: string): Promise<{
+  ok: boolean
+  amountXof?: number
+  message?: string
+}> {
+  const { isCoupleAuditCoupon, COUPLE_AUDIT_AMOUNT_XOF } = await import(
+    "@/lib/couple/auditCoupon"
+  )
+  if (!code?.trim()) return { ok: false }
+  if (isCoupleAuditCoupon(code)) {
+    return {
+      ok: true,
+      amountXof: COUPLE_AUDIT_AMOUNT_XOF,
+      message: "Code appliqué.",
+    }
+  }
+  return { ok: false, message: "Code invalide." }
+}
+
+/** Confirmation micro-montant / coupon d’audit / mode démo paiements. */
 export async function confirmCoupleDemoPaymentAction(paymentId: string): Promise<{
   error?: string
   coupleId?: string
   inviteToken?: string
 }> {
   if (!isCoupleFeatureEnabled()) return { error: "Module indisponible." }
-  if (!isDemoPaymentsEnv() && process.env.NODE_ENV === "production") {
-    return { error: "Démo paiement désactivée." }
-  }
 
   const { user } = await requireUser()
   if (!user) return { error: "Non authentifié." }
@@ -307,16 +369,36 @@ export async function confirmCoupleDemoPaymentAction(paymentId: string): Promise
   const admin = createAdminClient()
   const { data: payment } = await admin
     .from("payments")
-    .select("id, user_id, amount, status, metadata, subscription_id")
+    .select("id, amount, status, metadata, subscription_id")
     .eq("id", paymentId)
     .maybeSingle()
 
-  if (!payment || payment.user_id !== user.id) {
+  if (!payment) {
+    return { error: "Paiement introuvable." }
+  }
+
+  const { data: sub } = await admin
+    .from("subscriptions")
+    .select("user_id")
+    .eq("id", payment.subscription_id)
+    .maybeSingle()
+
+  if (!sub || sub.user_id !== user.id) {
     return { error: "Paiement introuvable." }
   }
 
   const meta = (payment.metadata || {}) as Record<string, unknown>
   if (meta.product !== "couple") return { error: "Ce paiement n’est pas un bilan couple." }
+
+  const allowInternal =
+    isDemoPaymentsEnv() ||
+    meta.allow_internal_confirm === true ||
+    meta.audit_coupon === true ||
+    meta.demo_mode === true
+
+  if (!allowInternal) {
+    return { error: "Confirmation interne non autorisée pour ce paiement." }
+  }
 
   const offerId = String(meta.offer_id || "") as CoupleOfferId
   if (offerId !== "couple_essential" && offerId !== "couple_premium_plus") {
@@ -328,15 +410,23 @@ export async function confirmCoupleDemoPaymentAction(paymentId: string): Promise
       .from("payments")
       .update({
         status: "completed",
-        transaction_reference: `DEMO-COUPLE-${Date.now()}`,
-        metadata: { ...meta, couple_paid_at: new Date().toISOString(), demo: true },
+        transaction_reference: `INTERNAL-COUPLE-${Date.now()}`,
+        metadata: {
+          ...meta,
+          couple_paid_at: new Date().toISOString(),
+          internal_confirm: true,
+        },
       })
       .eq("id", payment.id)
       .eq("status", "pending")
 
     await admin
       .from("subscriptions")
-      .update({ status: "paid_couple", starts_at: new Date().toISOString(), ends_at: null })
+      .update({
+        status: "paid_couple",
+        starts_at: new Date().toISOString(),
+        ends_at: null,
+      })
       .eq("id", payment.subscription_id)
 
     await admin
@@ -361,6 +451,7 @@ export async function confirmCoupleDemoPaymentAction(paymentId: string): Promise
   })
 
   revalidatePath("/couple")
+  revalidatePath("/couple/espace")
   return {
     coupleId: result.coupleId,
     inviteToken: result.inviteToken || undefined,

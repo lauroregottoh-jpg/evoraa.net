@@ -29,6 +29,7 @@ export default function CoupleCheckoutClient({
   const isDemo = search.get("demo") === "1"
   const autostart = search.get("autostart") === "1"
   const modeFromQuery = parseBictorysPaymentMode(search.get("mode"))
+  const codeFromQuery = search.get("code") || ""
 
   const offerMeta = getCoupleOffer(offer)
   const offerId: CoupleOfferId =
@@ -74,8 +75,8 @@ export default function CoupleCheckoutClient({
           ) : null}
         </p>
         <p className="text-sm leading-relaxed text-[#1C1412]/80">
-          Mode démo activé — confirmez le paiement pour créer votre couple et
-          obtenir l’invitation partenaire.
+          Confirmez pour activer votre bilan couple et accéder à l’onboarding /
+          espace de travail.
         </p>
         <button
           type="button"
@@ -83,9 +84,7 @@ export default function CoupleCheckoutClient({
           onClick={() => void confirm()}
           className="inline-flex h-11 items-center justify-center rounded-xl bg-[#5C1F28] text-white px-5 text-sm font-semibold disabled:opacity-60"
         >
-          {loading
-            ? "Confirmation…"
-            : `Confirmer ${COUPLE_DEMO_AMOUNT_XOF} FCFA (démo)`}
+          {loading ? "Confirmation…" : "Confirmer et ouvrir mon espace couple"}
         </button>
         {error && (
           <p className="text-sm text-destructive" role="alert">
@@ -118,6 +117,7 @@ export default function CoupleCheckoutClient({
         suggestedMode={suggestedMode}
         initialOfferId={offerId}
         initialPaymentMode={modeFromQuery ?? undefined}
+        initialPromoCode={codeFromQuery}
         autostart={autostart && !isDemo}
       />
     </div>
