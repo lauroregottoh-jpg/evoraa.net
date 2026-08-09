@@ -23,7 +23,7 @@ export const DEMO_COUPLE_NAMES = {
 export const DEMO_COUPLE_META = {
   label: "Exemple — Daniel & Naomi",
   status: "Fiancés · relation 6 ans · mariage envisagé",
-  note: "Données fictives pour visualiser la forme du rapport. Aucun couple réel.",
+  note: "Données fictives générées par le moteur de décision KELIAA Couple™ (priorités ≤3, ressources catalogue, charte rédaction). Aucun couple réel.",
 } as const
 
 /** Profil Likert moyen par dimension (1–5) — écarts sur finances / projet / carrière. */
@@ -94,6 +94,7 @@ export function buildDemoCoupleReport(
     offerId,
     names: { ...DEMO_COUPLE_NAMES },
     scoring: getDemoCoupleScoring(),
+    context: "fiançailles",
   })
 }
 

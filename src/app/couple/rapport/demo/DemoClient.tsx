@@ -26,10 +26,10 @@ export default function CoupleRapportDemoClient() {
   return (
     <div className="min-h-screen bg-[#FBF9F6]">
       <div className="sticky top-0 z-30 border-b border-[#1C1412]/10 bg-[#FBF9F6]/95 backdrop-blur-md">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#5C1F28]">
-              Aperçu démo
+              Aperçu démo · moteur décision
             </p>
             <p className="text-sm font-medium text-[#1C1412]">
               {DEMO_COUPLE_META.label}
@@ -74,12 +74,12 @@ export default function CoupleRapportDemoClient() {
             Landing Couple
           </Link>
         </div>
-        <p className="max-w-3xl mx-auto px-4 sm:px-6 pb-3 text-xs text-[#1C1412]/55">
+        <p className="max-w-6xl mx-auto px-4 sm:px-6 pb-3 text-xs text-[#1C1412]/55">
           {DEMO_COUPLE_META.status} — {DEMO_COUPLE_META.note}
         </p>
       </div>
 
-      <div className="px-4 sm:px-6 py-8 sm:py-10">
+      <div className="px-3 sm:px-6 py-6 sm:py-8">
         <CoupleReportView
           doc={doc}
           demoLabel={
