@@ -1,7 +1,6 @@
 /**
  * Golden fixtures — couples de référence pour non-régression du moteur.
- * Les scores exacts évolueront avec la banque ; les bandes d’interprétation restent stables.
- * Attentes moteur v1.4 : priorités ≤3, sections doc 86, ressources catalogue pinnées.
+ * Attentes moteur v1.5 : spine Premium maître, priorités ≤3, modules PP sélectionnés.
  */
 export const GOLDEN_COUPLES = [
   {
@@ -12,17 +11,18 @@ export const GOLDEN_COUPLES = [
     maxPriorities: 3,
     expectSectionIds: [
       "accueil",
-      "intro",
+      "lire",
       "regard",
-      "score",
       "profil-a",
       "profil-b",
       "croisement",
-      "convergences",
-      "ecarts",
-      "vigilance",
-      "priorites",
-      "ressources",
+      "communication",
+      "desaccords",
+      "forces",
+      "dynamique-phrase",
+      "plan",
+      "suivi",
+      "carte-relationnelle",
       "conclusion",
     ],
   },
@@ -33,6 +33,7 @@ export const GOLDEN_COUPLES = [
     minScore: 40,
     maxScore: 79,
     maxPriorities: 3,
+    note: "Le contenu (priorités / dynamique) doit différer de la démo Daniel & Naomi.",
   },
   {
     id: "EX-divergent",
