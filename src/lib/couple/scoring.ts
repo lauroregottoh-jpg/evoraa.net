@@ -77,7 +77,7 @@ export function interpretGlobalScore(score: number): {
     band: "high",
     title: "Une belle convergence — à entretenir",
     paragraph:
-      "Vos réponses montrent de nombreuses convergences. Cela ne signifie pas que vous n’avez « rien à travailler ». Même les couples très alignés gagnent à nommer les nuances, prévenir l’usure et cultiver volontairement ce qui les unit. Ce bilan vous propose des pistes pour approfondir, pas pour vous endormir.",
+      "Vos réponses montrent de nombreuses convergences. Cela ne signifie pas que vous n’avez « rien à travailler ». Même les couples très alignés gagnent à nommer les nuances, prévenir l’usure et cultiver volontairement ce qui les unit. Ce bilan propose des pistes pour approfondir.",
   }
 }
 

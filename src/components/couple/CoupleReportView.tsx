@@ -74,6 +74,70 @@ function blocksFor(section: CoupleReportSection) {
   })
 }
 
+function chapterToHtml(ch: Chapter, doc: CoupleReportDocument): string {
+  const parts: string[] = [
+    `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"/><title>${ch.title} — ${doc.names.nameA} & ${doc.names.nameB}</title>`,
+    `<style>body{font-family:Georgia,serif;max-width:720px;margin:2rem auto;padding:0 1.25rem;color:#1C1412;line-height:1.7;background:#FBF9F6}h1{font-size:1.6rem;color:#5C1F28}.meta{color:#666;font-size:13px}h2{font-size:1.2rem;color:#5C1F28;margin-top:1.5rem}ul,ol{padding-left:1.3rem}.fill{border:1px dashed #B8954A88;padding:1rem;min-height:4rem;margin:1rem 0;border-radius:12px}.callout{border:1px solid #B8954A66;background:#B8954A12;padding:1rem;border-radius:12px;margin:1rem 0}</style></head><body>`,
+    `<p class="meta">${doc.brand} · Chapitre ${ch.page}</p>`,
+    `<h1>${ch.title}</h1>`,
+  ]
+  if (ch.kind === "section" && ch.subtitle) {
+    parts.push(`<p class="meta"><em>${ch.subtitle}</em></p>`)
+  }
+  if (ch.kind === "section") {
+    for (const b of blocksFor(ch.section)) {
+      if (b.type === "h2") parts.push(`<h2>${b.text}</h2>`)
+      else if (b.type === "paragraph") parts.push(`<p>${b.text}</p>`)
+      else if (b.type === "ol")
+        parts.push(`<ol>${b.items.map((x) => `<li>${x}</li>`).join("")}</ol>`)
+      else if (b.type === "ul")
+        parts.push(`<ul>${b.items.map((x) => `<li>${x}</li>`).join("")}</ul>`)
+      else if (b.type === "callout")
+        parts.push(`<div class="callout">${b.text}</div>`)
+      else if (b.type === "scoreChart")
+        parts.push(
+          `<p><strong>${b.label}</strong> — ${b.nameA} ${b.scoreA}% · ${b.nameB} ${b.scoreB}%</p>`
+        )
+      else if (b.type === "fillBlank")
+        parts.push(`<div class="fill"><strong>${b.prompt}</strong><br/><br/><br/></div>`)
+      else if (b.type === "rolePlay")
+        parts.push(
+          `<div class="callout"><strong>${b.title}</strong><br/>${b.scene}<br/>A: ${b.roleA}<br/>B: ${b.roleB}</div>`
+        )
+    }
+  } else if (ch.kind === "exercises") {
+    for (const ex of doc.exercises) {
+      parts.push(`<h2>${ex.title}</h2>`)
+      parts.push(`<p><strong>Objectif</strong> — ${ex.objective}</p>`)
+      parts.push(`<p>${ex.why}</p>`)
+      parts.push(`<ol>${ex.steps.map((s) => `<li>${s}</li>`).join("")}</ol>`)
+      for (const p of ex.fillPrompts || []) {
+        parts.push(`<div class="fill"><strong>${p}</strong><br/><br/><br/></div>`)
+      }
+    }
+  } else {
+    for (const s of doc.actionPlan) {
+      parts.push(
+        `<h2>Étape ${s.order} — ${s.what}</h2><p>${s.how}</p><p><em>${s.when}</em></p>`
+      )
+    }
+  }
+  parts.push(`</body></html>`)
+  return parts.join("\n")
+}
+
+function downloadChapter(ch: Chapter, doc: CoupleReportDocument) {
+  const blob = new Blob([chapterToHtml(ch, doc)], {
+    type: "text/html;charset=utf-8",
+  })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement("a")
+  a.href = url
+  a.download = `keliaa-couple-ch${ch.page}-${ch.id}.html`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
 function ChapterBody({
   ch,
   doc,
@@ -86,29 +150,85 @@ function ChapterBody({
   }
   if (ch.kind === "exercises") {
     return (
-      <div className="space-y-4">
+      <div className="space-y-8">
         <p className="text-base leading-relaxed text-[#1C1412]/85">
-          Les exercices sont conçus pour être vécus — pas seulement lus. Ouvrez
-          le cahier dédié pour les cartes grandes, zones à remplir et jeux de
-          rôle.
+          Cahier d’exercices inclus dans ce bilan — mêmes consignes que la page
+          Exercices. Imprimez ou téléchargez ce chapitre pour écrire à la main.
         </p>
+        {doc.exercises.map((ex) => (
+          <div
+            key={ex.id}
+            className="rounded-2xl border border-[#1C1412]/10 bg-[#FBF9F6] p-5 sm:p-6 space-y-4"
+          >
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="font-serif text-xl sm:text-2xl font-bold">
+                {ex.title}
+              </h3>
+              {ex.premiumPlus ? (
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C1F28] bg-[#5C1F28]/10 px-2 py-0.5 rounded-full">
+                  Premium Plus
+                </span>
+              ) : null}
+            </div>
+            <p className="text-base leading-relaxed">
+              <span className="font-semibold text-[#5C1F28]">Objectif — </span>
+              {ex.objective}
+            </p>
+            <p className="text-base leading-relaxed text-[#1C1412]/80">{ex.why}</p>
+            <p className="text-sm text-[#8A6A2E]">
+              Durée : {ex.duration}
+            </p>
+            <div>
+              <p className="font-serif text-lg font-bold text-[#5C1F28]">Consignes</p>
+              <ol className="mt-2 list-decimal pl-5 space-y-2 text-base leading-relaxed">
+                {ex.steps.map((s) => (
+                  <li key={s}>{s}</li>
+                ))}
+              </ol>
+            </div>
+            {(ex.fillPrompts?.length ? ex.fillPrompts : ["Écrire ici…"]).map(
+              (prompt) => (
+                <div
+                  key={prompt}
+                  className="rounded-xl border border-dashed border-[#B8954A]/50 bg-white p-4"
+                >
+                  <p className="text-sm font-semibold text-[#5C1F28]">{prompt}</p>
+                  <div className="mt-3 space-y-3">
+                    {[0, 1, 2].map((i) => (
+                      <div key={i} className="h-8 border-b border-[#1C1412]/20" />
+                    ))}
+                  </div>
+                </div>
+              )
+            )}
+            {ex.rolePlay ? (
+              <div className="rounded-xl border border-[#5C1F28]/15 bg-white p-4 space-y-2">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[#B8954A]">
+                  Jeu de rôle
+                </p>
+                <p className="font-serif text-lg font-bold">{ex.rolePlay.title}</p>
+                <p className="text-sm leading-relaxed">{ex.rolePlay.scene}</p>
+                <div className="grid gap-2 sm:grid-cols-2 text-sm">
+                  <div className="rounded-lg bg-[#5C1F28]/08 p-3">
+                    <p className="font-bold text-[#5C1F28]">{doc.names.nameA}</p>
+                    <p className="mt-1">{ex.rolePlay.roleA}</p>
+                  </div>
+                  <div className="rounded-lg bg-[#B8954A]/15 p-3">
+                    <p className="font-bold text-[#8A6A2E]">{doc.names.nameB}</p>
+                    <p className="mt-1">{ex.rolePlay.roleB}</p>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+            <p className="text-sm italic text-[#5C1F28]">{ex.takeaway}</p>
+          </div>
+        ))}
         <Link
           href="/couple/exercices"
-          className="inline-flex h-11 items-center rounded-xl bg-[#5C1F28] px-5 text-sm font-semibold text-[#FBF9F6]"
+          className="inline-flex text-sm font-semibold text-[#5C1F28] underline underline-offset-2"
         >
-          Ouvrir le cahier d’exercices →
+          Ouvrir aussi le cahier dédié →
         </Link>
-        <ul className="mt-4 space-y-2 text-base">
-          {doc.exercises.map((ex) => (
-            <li key={ex.id} className="flex gap-2">
-              <span className="text-[#B8954A]">•</span>
-              <span>
-                {ex.title}
-                {ex.premiumPlus ? " (Premium Plus)" : ""}
-              </span>
-            </li>
-          ))}
-        </ul>
       </div>
     )
   }
@@ -136,12 +256,6 @@ function ChapterBody({
           </p>
         </li>
       ))}
-      <Link
-        href="/couple/plan"
-        className="inline-flex text-sm font-semibold text-[#5C1F28] underline underline-offset-2"
-      >
-        Voir le plan dédié →
-      </Link>
     </ol>
   )
 }
@@ -163,18 +277,29 @@ function ChapterCard({
         className
       )}
     >
-      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#B8954A]">
-        Chapitre {ch.page}
-        {ch.id.startsWith("pp-") ? " · Premium Plus" : ""}
-      </p>
-      <h2 className="mt-2 font-serif text-2xl sm:text-3xl font-bold leading-tight text-[#1C1412]">
-        {ch.title}
-      </h2>
-      {ch.kind === "section" && ch.subtitle ? (
-        <p className="mt-2 font-serif text-lg italic text-[#8A6A2E]">
-          {ch.subtitle}
-        </p>
-      ) : null}
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#B8954A]">
+            Chapitre {ch.page}
+            {ch.id.startsWith("pp-") ? " · Premium Plus" : ""}
+          </p>
+          <h2 className="mt-2 font-serif text-2xl sm:text-3xl font-bold leading-tight text-[#1C1412]">
+            {ch.title}
+          </h2>
+          {ch.kind === "section" && ch.subtitle ? (
+            <p className="mt-2 font-serif text-lg italic text-[#8A6A2E]">
+              {ch.subtitle}
+            </p>
+          ) : null}
+        </div>
+        <button
+          type="button"
+          onClick={() => downloadChapter(ch, doc)}
+          className="print:hidden inline-flex h-9 shrink-0 items-center gap-1.5 rounded-xl border border-[#1C1412]/15 bg-white px-3 text-xs font-semibold"
+        >
+          <Download className="h-3.5 w-3.5" /> Télécharger
+        </button>
+      </div>
       <div className="mt-6">
         <ChapterBody ch={ch} doc={doc} />
       </div>

@@ -208,18 +208,18 @@ export const DIMENSION_LIBRARY: Record<CoupleDimensionId, DimLibrary> = {
     bHigher:
       "{B} se situe nettement plus haut sur la prudence / priorité financière. {A} peut accepter davantage de construire progressivement. Sans règles communes, chacun projette des peurs sur l’autre.",
     vigilance:
-      "Écart important sur les finances. Ce n’est pas « qui a raison sur l’argent » : c’est clarifier seuils, peurs, projets qui peuvent commencer maintenant vs ceux qui attendent une sécurité minimale.",
+      "Écart important sur les finances. Avant toute solution : nommez précisément ce qui diverge (seuil de décision, épargne, peurs, timing des projets).",
     questions: [
       "À partir de quel montant décidons-nous forcément ensemble ?",
-      "Qu’est-ce qui me rassure avant une dépense / un engagement important ?",
-      "Quels projets peuvent avancer avant d’atteindre l’objectif financier idéal ?",
+      "Qu’est-ce qui me rassure avant une dépense ou un engagement important ?",
+      "Quels projets peuvent avancer maintenant, et lesquels doivent attendre une sécurité minimale ?",
     ],
     actions: [
-      "Rédiger 3 règles financières pour 90 jours (seuil commun, autonomie, revue mensuelle).",
-      "Nommer 1 peur d’argent chacun sans se juger.",
+      "Écrire trois règles d’argent pour les 90 prochains jours : montant à décider à deux, marge personnelle, date de revue mensuelle.",
+      "Chacun nomme une peur liée à l’argent, sans se juger.",
     ],
     conflictPattern:
-      "L’un parle sécurité / délais ; l’autre parle avancement / vie qui passe — les deux ont peur de perdre quelque chose.",
+      "L’un parle sécurité et délais ; l’autre parle d’avancer dans la vie — les deux ont peur de perdre quelque chose.",
   },
   famille: {
     measures:
@@ -290,18 +290,18 @@ export const DIMENSION_LIBRARY: Record<CoupleDimensionId, DimLibrary> = {
     bHigher:
       "{B} se situe plus haut sur l’avancée / la clarté du projet de vie. {A} peut prioriser d’autres conditions (sécurité, carrière) avant certaines étapes. Ce n’est pas de l’incompatibilité : c’est un écart de calendrier et de critères.",
     vigilance:
-      "Écart structurant sur le projet de vie. Sans dates et critères communs, l’un attend, l’autre presse — et la frustration monte.",
+      "Écart important sur le projet de vie. Sans dates et critères communs, l’un attend, l’autre presse — et la frustration monte.",
     questions: [
       "Quelles étapes sont non négociables pour moi dans les 24 mois ?",
-      "Qu’est-ce qui doit être vrai avant que je me sente prêt(e) pour X ?",
+      "Qu’est-ce qui doit être vrai avant que je me sente prêt(e) pour la prochaine étape ?",
       "Quels projets peuvent commencer maintenant sans attendre le « parfait » ?",
     ],
     actions: [
-      "Construire une frise à deux : 6 / 12 / 24 mois (logement, engagement, famille, travail).",
-      "Choisir 1 étape à clarifier sous 14 jours avec une date de revue.",
+      "Sur une feuille, noter ensemble ce que vous voulez pour les 6, 12 et 24 prochains mois (logement, engagement, famille, travail).",
+      "Choisir une seule étape à clarifier dans les 14 jours, avec une date pour en reparler.",
     ],
     conflictPattern:
-      "L’un sécurise les fondations ; l’autre veut faire avancer la construction — les deux ont raison partiellement.",
+      "L’un veut d’abord sécuriser les bases ; l’autre veut faire avancer le projet — les deux ont raison en partie.",
   },
   carriere: {
     measures:
@@ -309,18 +309,18 @@ export const DIMENSION_LIBRARY: Record<CoupleDimensionId, DimLibrary> = {
     force:
       "Vous semblez relativement alignés sur la place du travail et des aspirations dans votre vie de couple.",
     aHigher:
-      "{A} accorde une place plus importante à la progression / stabilité professionnelle. {B} peut vouloir que d’autres projets (couple, famille, vie) ne soient pas repoussés indéfiniment. Nommez le « jusqu’à quand ».",
+      "{A} accorde une place plus importante à la progression ou à la stabilité professionnelle. {B} peut vouloir que le couple, la famille ou d’autres projets ne soient pas repoussés sans fin. Il faut dire clairement « jusqu’à quand ».",
     bHigher:
-      "{B} accorde une place plus importante à la carrière / aspirations. {A} peut craindre que le couple passe après. Clarifiez ce qui est temporaire vs structurel.",
+      "{B} accorde une place plus importante à la carrière. {A} peut craindre que le couple passe après. Clarifiez ce qui est temporaire et ce qui est durable.",
     vigilance:
-      "Écart marqué carrière / couple. Sans accord sur les saisons (période d’effort vs période de foyer), l’un se sent seul, l’autre incompris.",
+      "Écart important entre carrière et couple. Sans accord sur une période d’effort professionnel et une période où le foyer reprend la priorité, l’un se sent seul, l’autre incompris.",
     questions: [
       "Quelle ambition professionnelle est non négociable pour moi ?",
-      "Quel sacrifice suis-je prêt(e) / pas prêt(e) à faire pour la carrière de l’autre ?",
-      "Jusqu’à quelle date cette priorité carrière reste-t-elle « saison » ?",
+      "Quel sacrifice suis-je prêt(e) — ou pas prêt(e) — à faire pour la carrière de l’autre ?",
+      "Jusqu’à quelle date cette priorité carrière reste-t-elle temporaire ?",
     ],
     actions: [
-      "Écrire un accord de saison : 6–12 mois, objectifs, et ce qui reste protégé pour le couple.",
+      "Écrire un accord simple pour 6 à 12 mois : objectifs professionnels, et ce qui reste protégé pour le couple (temps, week-ends, décisions).",
     ],
   },
   enfants: {
@@ -329,19 +329,19 @@ export const DIMENSION_LIBRARY: Record<CoupleDimensionId, DimLibrary> = {
     force:
       "Vous semblez relativement alignés sur la question des enfants / de la parentalité — un sujet souvent explosif s’il reste flou.",
     aHigher:
-      "{A} se situe plus haut sur l’urgence ou la clarté du projet enfants. {B} peut vouloir attendre, d’autres conditions, ou une vision différente. Ce sujet ne se « négocie » pas à la légère : il se clarifie avec respect.",
+      "{A} se situe plus haut sur l’urgence ou la clarté du projet enfants. {B} peut vouloir attendre, d’autres conditions, ou une vision différente. Ce sujet se clarifie avec respect, sans pression.",
     bHigher:
-      "{B} se situe plus haut sur le projet enfants / parentalité. {A} peut prioriser d’autres étapes avant. L’écart de timing est l’enjeu — pas l’amour.",
+      "{B} se situe plus haut sur le projet enfants / parentalité. {A} peut prioriser d’autres étapes avant. L’enjeu est surtout le timing — pas l’amour.",
     vigilance:
-      "Écart important sur enfants / parentalité. C’est un domaine structurant : dates, conditions, et limites personnelles doivent être dites clairement, sans pression humiliante.",
+      "Écart important sur enfants / parentalité. Dates, conditions et limites personnelles doivent être dites clairement, sans humiliation.",
     questions: [
       "Est-ce que je veux des enfants ? Si oui, dans quel horizon ?",
       "Quelles conditions sont indispensables pour moi avant ?",
       "Que se passe-t-il si nos horizons ne se rejoignent pas ?",
     ],
     actions: [
-      "Chacun écrit sa position (désir / timing / conditions) puis lecture croisée sans interruption.",
-      "Fixer une revue du sujet à une date précise (pas « on verra »).",
+      "Chacun écrit sa position (désir, timing, conditions), puis lecture croisée sans interruption.",
+      "Fixer une date précise pour en reparler (pas « on verra »).",
     ],
   },
   autonomie: {
@@ -489,6 +489,20 @@ export function interpretDimension(
   }
 }
 
+export function describeGapPlain(
+  d: DimensionPairScore,
+  names: CoupleNames
+): string {
+  const higher = whoHigher(d)
+  const who =
+    higher === "A"
+      ? `${names.nameA} se situe nettement plus haut (${d.scoreA} %) que ${names.nameB} (${d.scoreB} %).`
+      : higher === "B"
+        ? `${names.nameB} se situe nettement plus haut (${d.scoreB} %) que ${names.nameA} (${d.scoreA} %).`
+        : `Vos scores sont proches (${d.scoreA} % et ${d.scoreB} %), mais le niveau ou le statut invite à regarder de près.`
+  return `Écart observé : ${d.gap} points. ${names.nameA} : ${d.scoreA} % · ${names.nameB} : ${d.scoreB} %. ${who}`
+}
+
 export function profileHighlights(
   scoring: { dimensions: DimensionPairScore[] },
   seat: "A" | "B",
@@ -499,29 +513,95 @@ export function profileHighlights(
     const sy = seat === "A" ? y.scoreA : y.scoreB
     return sy - sx
   })
-  const highs = scored.slice(0, 3)
-  const lows = scored.slice(-2).reverse()
+  const highs = scored.slice(0, 4)
+  const lows = [...scored].sort((x, y) => {
+    const sx = seat === "A" ? x.scoreA : x.scoreB
+    const sy = seat === "A" ? y.scoreA : y.scoreB
+    return sx - sy
+  }).slice(0, 3)
   const me = seat === "A" ? names.nameA : names.nameB
   const other = seat === "A" ? names.nameB : names.nameA
+  const scoreOf = (d: DimensionPairScore) =>
+    seat === "A" ? d.scoreA : d.scoreB
+
+  const byId = (id: string) =>
+    scoring.dimensions.find((d) => d.dimension === id)
+
+  const emotions = byId("emotions")
+  const conflits = byId("conflits")
+  const comm = byId("communication")
+  const affection = byId("affection")
+  const limites = byId("limites")
+  const finances = byId("finances")
+
+  const emoScore = emotions ? scoreOf(emotions) : 50
+  const confScore = conflits ? scoreOf(conflits) : 50
+  const affScore = affection ? scoreOf(affection) : 50
+
+  let emotionalStyle: string
+  if (emoScore >= 70 && affScore >= 70) {
+    emotionalStyle = `${me}, le test dessine une personne assez à l’aise pour nommer ce qu’elle ressent et pour chercher la proximité. Vous apportez de la chaleur — à condition que l’autre se sente capable de suivre le rythme sans se sentir jugé(e).`
+  } else if (emoScore < 55 && confScore >= 65) {
+    emotionalStyle = `${me}, vous semblez plutôt réguler par le calme ou l’analyse, tout en pouvant affronter un désaccord. Votre partenaire peut parfois lire ce calme comme de la distance, alors que chez vous c’est souvent une façon de rester digne.`
+  } else if (affScore >= 75 && emoScore < 60) {
+    emotionalStyle = `${me}, l’affection et la présence comptent beaucoup pour vous, même si les mots émotionnels ne viennent pas toujours facilement. Vous aimez souvent « montrer » plutôt que « expliquer longuement ».`
+  } else {
+    emotionalStyle = `${me}, votre fonctionnement émotionnel se situe dans une zone intermédiaire : vous n’êtes ni fermé(e) ni en sur-expression constante. Le défi est surtout de traduire vos besoins avant que la frustration ne parle à votre place.`
+  }
+
+  const conflictStyle =
+    confScore >= 70
+      ? `Face au conflit, vous tendez à entrer dans le sujet. ${other} gagnerait à savoir que ce n’est pas forcément de l’agression : c’est souvent votre façon de ne pas laisser pourrir.`
+      : confScore < 50
+        ? `Face au conflit, vous avez probablement besoin de temps ou de sécurité avant de parler. Sans cela, on peut vous croire fuyant(e) alors que vous cherchez surtout à ne pas blesser ou à ne pas exploser.`
+        : `Face au conflit, vous n’êtes ni systématiquement dans l’attaque ni dans la fuite. Ce qui compte pour vous, c’est un cadre respectueux.`
+
+  const securityNote = limites
+    ? scoreOf(limites) >= 75
+      ? `Sur les limites et la confiance, vous vous situez haut (${scoreOf(limites)} %). Le respect, la non-humiliation et la clarté du « non » sont pour vous des fondations — pas des détails.`
+      : `Sur les limites et la confiance (${scoreOf(limites)} %), le test invite à vérifier que vous vous sentez réellement en sécurité pour dire non et pour être entendu(e).`
+    : ""
+
+  const moneyNote = finances
+    ? scoreOf(finances) >= 75
+      ? `L’argent et la sécurité matérielle pèsent lourd dans votre lecture du couple (${scoreOf(finances)} %). Ce n’est pas de l’avarice : c’est souvent une façon de protéger l’avenir.`
+      : scoreOf(finances) <= 55
+        ? `Sur les finances (${scoreOf(finances)} %), vous semblez moins « tout sécuriser d’abord » que votre partenaire éventuel. Vous pouvez accepter d’avancer pendant que les bases se construisent.`
+        : ""
+    : ""
 
   const narrative = [
-    `${me}, vos scores les plus élevés portent surtout sur : ${highs.map((d) => d.label).join(", ")}. Ce sont des ressources que vous apportez au couple — des zones où vous êtes plus clair(e), plus engagé(e) ou plus à l’aise.`,
-    `Vos scores plus bas concernent notamment : ${lows.map((d) => d.label).join(", ")}. Ce n’est pas une faiblesse morale : c’est souvent un besoin de sécurité, un rythme différent, ou un sujet encore peu clarifié.`,
-    `Ce que ${other} gagnerait à comprendre : vos scores élevés ne sont pas des exigences capricieuses ; vos scores bas ne sont pas du désintérêt. Nommez le besoin derrière le chiffre.`,
-  ]
-
-  for (const d of highs) {
-    const lib = DIMENSION_LIBRARY[d.dimension]
-    narrative.push(
-      `Sur « ${d.label} » (${seat === "A" ? d.scoreA : d.scoreB} %) : ${fillNames(lib.force, names)}`
-    )
-  }
-  for (const d of lows) {
-    const ix = interpretDimension(d, names)
-    narrative.push(
-      `Sur « ${d.label} » (${seat === "A" ? d.scoreA : d.scoreB} %) — point de vigilance personnelle : ${ix.meaning}`
-    )
-  }
+    `Portrait de ${me} — ce que ce bilan révèle de vous dans le couple (pas un diagnostic médical).`,
+    emotionalStyle,
+    conflictStyle,
+    comm
+      ? `Communication (${scoreOf(comm)} %) : ${
+          scoreOf(comm) >= 70
+            ? "vous avez des ressources pour exprimer et écouter — gardez-les surtout quand le sujet devient sensible."
+            : "vous gagnez à formuler plus tôt ce dont vous avez besoin, avant que le silence ou l’allusion ne fasse le travail."
+        }`
+      : "",
+    securityNote,
+    moneyNote,
+    `Vos appuis personnels les plus nets : ${highs.map((d) => `${d.label} (${scoreOf(d)} %)`).join(", ")}. Ce sont les zones où vous êtes le plus clair(e), engagé(e) ou à l’aise.`,
+    ...highs.slice(0, 3).map((d) => {
+      const lib = DIMENSION_LIBRARY[d.dimension]
+      return `${d.label} (${scoreOf(d)} %) — ${fillNames(lib.force, names)}`
+    }),
+    `Vos zones plus sensibles : ${lows.map((d) => `${d.label} (${scoreOf(d)} %)`).join(", ")}. Ce n’est pas une faiblesse morale : c’est souvent un besoin de sécurité, un rythme, ou un sujet encore peu clarifié.`,
+    ...lows.map((d) => {
+      const lib = DIMENSION_LIBRARY[d.dimension]
+      const higher = whoHigher(d)
+      const iAmHigher =
+        (seat === "A" && higher === "A") || (seat === "B" && higher === "B")
+      const iAmLower =
+        (seat === "A" && higher === "B") || (seat === "B" && higher === "A")
+      if (iAmHigher) return `${d.label} — vous êtes plus haut(e) que ${other} ici. ${fillNames(seat === "A" ? lib.aHigher : lib.bHigher, names)}`
+      if (iAmLower) return `${d.label} — ${other} est plus haut(e) que vous ici. ${fillNames(seat === "A" ? lib.bHigher : lib.aHigher, names)}`
+      return `${d.label} (${scoreOf(d)} %) — ${lib.measures}`
+    }),
+    `Ce que ${other} gagnerait à comprendre sur ${me} : vos scores élevés ne sont pas des exigences capricieuses ; vos scores plus bas ne sont pas du désintérêt. Derrière chaque chiffre, il y a un besoin. Le nommer change le climat.`,
+  ].filter(Boolean)
 
   return { highs, lows, narrative }
 }
