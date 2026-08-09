@@ -8,6 +8,8 @@ import {
   Crown,
   Download,
   HeartHandshake,
+  LayoutList,
+  Maximize2,
   Printer,
 } from "lucide-react"
 import type { CoupleReportDocument, CoupleReportSection } from "@/lib/couple/report"
@@ -20,7 +22,6 @@ type Props = {
   doc: CoupleReportDocument
   demoLabel?: string
   className?: string
-  /** Masquer le bloc exercices/plan dans le rapport (liens vers cahiers). */
   analysisOnly?: boolean
 }
 
@@ -73,8 +74,116 @@ function blocksFor(section: CoupleReportSection) {
   })
 }
 
+function ChapterBody({
+  ch,
+  doc,
+}: {
+  ch: Chapter
+  doc: CoupleReportDocument
+}) {
+  if (ch.kind === "section") {
+    return <CoupleReportBlocks blocks={blocksFor(ch.section)} />
+  }
+  if (ch.kind === "exercises") {
+    return (
+      <div className="space-y-4">
+        <p className="text-base leading-relaxed text-[#1C1412]/85">
+          Les exercices sont conçus pour être vécus — pas seulement lus. Ouvrez
+          le cahier dédié pour les cartes grandes, zones à remplir et jeux de
+          rôle.
+        </p>
+        <Link
+          href="/couple/exercices"
+          className="inline-flex h-11 items-center rounded-xl bg-[#5C1F28] px-5 text-sm font-semibold text-[#FBF9F6]"
+        >
+          Ouvrir le cahier d’exercices →
+        </Link>
+        <ul className="mt-4 space-y-2 text-base">
+          {doc.exercises.map((ex) => (
+            <li key={ex.id} className="flex gap-2">
+              <span className="text-[#B8954A]">•</span>
+              <span>
+                {ex.title}
+                {ex.premiumPlus ? " (Premium Plus)" : ""}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+  return (
+    <ol className="space-y-4">
+      {doc.actionPlan.map((step) => (
+        <li
+          key={step.order}
+          className="rounded-2xl border border-[#1C1412]/10 bg-[#F8F4EE] p-5"
+        >
+          <p className="text-[10px] font-bold uppercase tracking-wider text-[#B8954A]">
+            Étape {step.order}
+          </p>
+          <p className="font-serif text-xl font-bold mt-1">{step.what}</p>
+          <p className="text-base mt-3 leading-relaxed">
+            <span className="font-semibold">Comment — </span>
+            {step.how}
+          </p>
+          <p className="text-base leading-relaxed">
+            <span className="font-semibold">Quand — </span>
+            {step.when}
+          </p>
+          <p className="text-sm mt-2 text-[#1C1412]/60">
+            Signal : {step.progressSignal}
+          </p>
+        </li>
+      ))}
+      <Link
+        href="/couple/plan"
+        className="inline-flex text-sm font-semibold text-[#5C1F28] underline underline-offset-2"
+      >
+        Voir le plan dédié →
+      </Link>
+    </ol>
+  )
+}
+
+function ChapterCard({
+  ch,
+  doc,
+  className,
+}: {
+  ch: Chapter
+  doc: CoupleReportDocument
+  className?: string
+}) {
+  return (
+    <section
+      id={`ch-${ch.id}`}
+      className={cn(
+        "scroll-mt-24 rounded-[1.75rem] border border-[#1C1412]/10 bg-white/95 p-6 sm:p-9 shadow-sm",
+        className
+      )}
+    >
+      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#B8954A]">
+        Chapitre {ch.page}
+        {ch.id.startsWith("pp-") ? " · Premium Plus" : ""}
+      </p>
+      <h2 className="mt-2 font-serif text-2xl sm:text-3xl font-bold leading-tight text-[#1C1412]">
+        {ch.title}
+      </h2>
+      {ch.kind === "section" && ch.subtitle ? (
+        <p className="mt-2 font-serif text-lg italic text-[#8A6A2E]">
+          {ch.subtitle}
+        </p>
+      ) : null}
+      <div className="mt-6">
+        <ChapterBody ch={ch} doc={doc} />
+      </div>
+    </section>
+  )
+}
+
 /**
- * Rapport Couple — lecture type dossier / slides (crème · bordeaux · or).
+ * Rapport Couple — lecture dossier (scroll) + mode focus optionnel.
  */
 export function CoupleReportView({
   doc,
@@ -84,6 +193,8 @@ export function CoupleReportView({
 }: Props) {
   const isPP = isPremiumPlusOffer(doc.offerId)
   const pageEstimate = estimatePages(doc)
+  const [mode, setMode] = React.useState<"scroll" | "focus">("scroll")
+  const [index, setIndex] = React.useState(0)
 
   const chapters = React.useMemo((): Chapter[] => {
     const base = doc.sections.map((s, i) => ({
@@ -107,22 +218,24 @@ export function CoupleReportView({
       }
     })
     if (analysisOnly) return [...base, ...extras]
-    const exercises: Chapter = {
-      kind: "exercises",
-      id: "exercices",
-      page: page + 1,
-      title: "Exercices à vivre ensemble",
-    }
-    const plan: Chapter = {
-      kind: "plan",
-      id: "plan",
-      page: page + 2,
-      title: "Plan d’action",
-    }
-    return [...base, ...extras, exercises, plan]
+    return [
+      ...base,
+      ...extras,
+      {
+        kind: "exercises" as const,
+        id: "exercices",
+        page: page + 1,
+        title: "Exercices à vivre ensemble",
+      },
+      {
+        kind: "plan" as const,
+        id: "plan",
+        page: page + 2,
+        title: "Plan d’action",
+      },
+    ]
   }, [doc, analysisOnly])
 
-  const [index, setIndex] = React.useState(0)
   const current = chapters[Math.min(index, chapters.length - 1)]!
 
   React.useEffect(() => {
@@ -145,11 +258,9 @@ export function CoupleReportView({
       `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"/><title>${doc.brand} — ${doc.names.nameA} & ${doc.names.nameB}</title>`,
       `<style>
         body{font-family:Georgia,"Times New Roman",serif;max-width:720px;margin:2rem auto;padding:0 1.25rem;color:#1C1412;line-height:1.7;font-size:16px;background:#FBF9F6}
-        h1{font-size:1.85rem;margin:0 0 .5rem} h2{font-size:1.35rem;margin:2.25rem 0 .75rem;color:#5C1F28;border-top:1px solid #B8954A55;padding-top:1.25rem}
-        h3{font-size:1.15rem;color:#5C1F28;margin:1.25rem 0 .5rem}
-        .meta{color:#666;font-size:14px} .sub{color:#8A6A2E;font-style:italic;margin-bottom:1rem}
-        ul,ol{padding-left:1.35rem} li{margin:.35rem 0}
-        .callout{border:1px solid #B8954A66;background:#B8954A12;padding:1rem 1.15rem;border-radius:12px;margin:1rem 0}
+        h1{font-size:1.85rem} h2{font-size:1.35rem;margin:2.25rem 0 .75rem;color:#5C1F28;border-top:1px solid #B8954A55;padding-top:1.25rem}
+        h3{font-size:1.15rem;color:#5C1F28} .meta{color:#666;font-size:14px} .sub{color:#8A6A2E;font-style:italic}
+        ul,ol{padding-left:1.35rem} .callout{border:1px solid #B8954A66;background:#B8954A12;padding:1rem;border-radius:12px;margin:1rem 0}
         .fill{border:1px dashed #B8954A88;padding:1rem;margin:1rem 0;min-height:4rem;border-radius:12px}
         .bar{height:10px;background:#1C141210;border-radius:999px;margin:.35rem 0 1rem}.bar>i{display:block;height:100%;border-radius:999px;background:#5C1F28}
       </style></head><body>`,
@@ -157,7 +268,6 @@ export function CoupleReportView({
       `<h1>Bilan de couple — ${doc.names.nameA} & ${doc.names.nameB}</h1>`,
       `<p class="meta">Score ${doc.globalScore}% · ${dateLabel} · ${isPP ? "Premium Plus" : "Essentiel"} · ~${pageEstimate} pages</p>`,
     ]
-
     for (const ch of chapters) {
       if (ch.kind === "section") {
         htmlParts.push(`<h2>${ch.title}</h2>`)
@@ -166,32 +276,24 @@ export function CoupleReportView({
           if (b.type === "h2") htmlParts.push(`<h3>${b.text}</h3>`)
           else if (b.type === "paragraph") htmlParts.push(`<p>${b.text}</p>`)
           else if (b.type === "ol")
-            htmlParts.push(
-              `<ol>${b.items.map((x) => `<li>${x}</li>`).join("")}</ol>`
-            )
+            htmlParts.push(`<ol>${b.items.map((x) => `<li>${x}</li>`).join("")}</ol>`)
           else if (b.type === "ul")
-            htmlParts.push(
-              `<ul>${b.items.map((x) => `<li>${x}</li>`).join("")}</ul>`
-            )
+            htmlParts.push(`<ul>${b.items.map((x) => `<li>${x}</li>`).join("")}</ul>`)
           else if (b.type === "callout")
             htmlParts.push(`<div class="callout">${b.text}</div>`)
           else if (b.type === "scoreChart")
             htmlParts.push(
-              `<p><strong>${b.label}</strong> — ${b.nameA} ${b.scoreA}% · ${b.nameB} ${b.scoreB}% · convergence ${b.convergence}%</p>
-               <div class="bar"><i style="width:${b.scoreA}%"></i></div>
-               <div class="bar"><i style="width:${b.scoreB}%;background:#B8954A"></i></div>`
+              `<p><strong>${b.label}</strong> — ${b.nameA} ${b.scoreA}% · ${b.nameB} ${b.scoreB}% · convergence ${b.convergence}%</p>`
             )
           else if (b.type === "fillBlank")
-            htmlParts.push(
-              `<div class="fill"><strong>${b.prompt}</strong><br/><br/><br/></div>`
-            )
+            htmlParts.push(`<div class="fill"><strong>${b.prompt}</strong><br/><br/><br/></div>`)
           else if (b.type === "rolePlay")
             htmlParts.push(
               `<div class="callout"><strong>${b.title}</strong><br/>${b.scene}<br/>A: ${b.roleA}<br/>B: ${b.roleB}</div>`
             )
         }
       } else if (ch.kind === "exercises") {
-        htmlParts.push(`<h2>${ch.title}</h2><p class="meta">Voir aussi le cahier Exercices.</p>`)
+        htmlParts.push(`<h2>${ch.title}</h2>`)
         for (const ex of doc.exercises) {
           htmlParts.push(
             `<h3>${ex.title}</h3><p><strong>Objectif</strong> — ${ex.objective}</p><ol>${ex.steps.map((s) => `<li>${s}</li>`).join("")}</ol>`
@@ -240,17 +342,37 @@ export function CoupleReportView({
         >
           <Download className="h-4 w-4" /> Télécharger
         </button>
+        <div className="inline-flex rounded-xl border border-[#1C1412]/15 bg-white p-1">
+          <button
+            type="button"
+            onClick={() => setMode("scroll")}
+            className={cn(
+              "inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-xs font-bold",
+              mode === "scroll"
+                ? "bg-[#5C1F28] text-white"
+                : "text-[#1C1412]/70"
+            )}
+          >
+            <LayoutList className="h-3.5 w-3.5" /> Défilement
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("focus")}
+            className={cn(
+              "inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-xs font-bold",
+              mode === "focus"
+                ? "bg-[#5C1F28] text-white"
+                : "text-[#1C1412]/70"
+            )}
+          >
+            <Maximize2 className="h-3.5 w-3.5" /> Focus
+          </button>
+        </div>
         <Link
           href="/couple/exercices"
           className="inline-flex h-10 items-center rounded-xl border border-[#B8954A]/40 bg-[#B8954A]/10 px-4 text-sm font-semibold text-[#5C1F28]"
         >
           Cahier exercices
-        </Link>
-        <Link
-          href="/couple/dossier"
-          className="inline-flex h-10 items-center rounded-xl border border-[#1C1412]/15 bg-white px-4 text-sm font-semibold"
-        >
-          Dossier
         </Link>
       </div>
 
@@ -274,7 +396,6 @@ export function CoupleReportView({
           {doc.names.nameA} & {doc.names.nameB}
         </p>
         <p className="relative z-10 mt-1 text-sm text-white/70">{dateLabel}</p>
-
         <div className="relative z-10 mt-6 flex flex-wrap items-end gap-5">
           <div>
             <p className="text-[10px] uppercase tracking-wider text-white/50">
@@ -300,7 +421,6 @@ export function CoupleReportView({
             </p>
           </div>
         </div>
-
         <div className="relative z-10 mt-5 flex flex-wrap gap-2">
           {isPP ? (
             <span className="inline-flex items-center gap-1 rounded-full border border-[#B8954A]/50 bg-[#B8954A]/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#F3D9A4]">
@@ -325,171 +445,94 @@ export function CoupleReportView({
         </div>
       ) : null}
 
-      {/* Navigation slides */}
-      <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
-        <p className="text-xs text-[#1C1412]/55">
-          Chapitre {current.page} / {chapters.length}
+      {/* Sommaire — ancre en mode défilement */}
+      <nav className="rounded-2xl border border-[#1C1412]/10 bg-[#F8F4EE]/80 p-4 print:hidden">
+        <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#B8954A] mb-2">
+          Sommaire · {chapters.length} chapitres
         </p>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => go(-1)}
-            disabled={index === 0}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[#1C1412]/15 bg-white disabled:opacity-40"
-            aria-label="Chapitre précédent"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => go(1)}
-            disabled={index >= chapters.length - 1}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[#1C1412]/15 bg-white disabled:opacity-40"
-            aria-label="Chapitre suivant"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-        </div>
-      </div>
-
-      <div className="flex gap-1 overflow-x-auto pb-1 print:hidden" role="tablist">
-        {chapters.map((ch, i) => (
-          <button
-            key={ch.id}
-            type="button"
-            role="tab"
-            aria-selected={i === index}
-            onClick={() => setIndex(i)}
-            className={cn(
-              "shrink-0 rounded-lg px-2.5 py-1 text-[10px] font-semibold transition-colors",
-              i === index
-                ? "bg-[#5C1F28] text-[#FBF9F6]"
-                : "bg-[#1C1412]/06 text-[#1C1412]/60 hover:bg-[#1C1412]/1"
-            )}
-            title={ch.title}
-          >
-            {ch.page}
-          </button>
-        ))}
-      </div>
-
-      {/* Slide chapitre */}
-      <section
-        key={current.id}
-        className="animate-in fade-in duration-300 rounded-[1.75rem] border border-[#1C1412]/10 bg-white/95 p-6 sm:p-9 shadow-sm min-h-[28rem] print:shadow-none print:border-0 print:p-0"
-      >
-        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#B8954A]">
-          Chapitre {current.page}
-          {current.id.startsWith("pp-") ? " · Premium Plus" : ""}
-        </p>
-        <h2 className="mt-2 font-serif text-2xl sm:text-3xl font-bold leading-tight text-[#1C1412]">
-          {current.title}
-        </h2>
-        {current.kind === "section" && current.subtitle ? (
-          <p className="mt-2 font-serif text-lg italic text-[#8A6A2E]">
-            {current.subtitle}
-          </p>
-        ) : null}
-
-        <div className="mt-6">
-          {current.kind === "section" ? (
-            <CoupleReportBlocks blocks={blocksFor(current.section)} />
-          ) : null}
-
-          {current.kind === "exercises" ? (
-            <div className="space-y-4">
-              <p className="text-base leading-relaxed text-[#1C1412]/85">
-                Les exercices sont conçus pour être vécus — pas seulement lus.
-                Ouvrez le cahier dédié pour les cartes grandes, zones à remplir
-                et jeux de rôle.
-              </p>
-              <Link
-                href="/couple/exercices"
-                className="inline-flex h-11 items-center rounded-xl bg-[#5C1F28] px-5 text-sm font-semibold text-[#FBF9F6]"
+        <ol className="columns-1 sm:columns-2 gap-x-6 text-sm space-y-1">
+          {chapters.map((ch, i) => (
+            <li key={ch.id} className="break-inside-avoid">
+              <button
+                type="button"
+                className="text-left text-[#5C1F28] hover:underline"
+                onClick={() => {
+                  if (mode === "focus") {
+                    setIndex(i)
+                  } else {
+                    document
+                      .getElementById(`ch-${ch.id}`)
+                      ?.scrollIntoView({ behavior: "smooth", block: "start" })
+                  }
+                }}
               >
-                Ouvrir le cahier d’exercices →
-              </Link>
-              <ul className="mt-4 space-y-2 text-base">
-                {doc.exercises.map((ex) => (
-                  <li key={ex.id} className="flex gap-2">
-                    <span className="text-[#B8954A]">•</span>
-                    <span>
-                      {ex.title}
-                      {ex.premiumPlus ? " (Premium Plus)" : ""}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+                {ch.page}. {ch.title}
+              </button>
+            </li>
+          ))}
+        </ol>
+      </nav>
+
+      {mode === "focus" ? (
+        <div className="space-y-4 print:hidden">
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-xs text-[#1C1412]/55">
+              Focus {current.page} / {chapters.length}
+            </p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => go(-1)}
+                disabled={index === 0}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border disabled:opacity-40"
+                aria-label="Précédent"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => go(1)}
+                disabled={index >= chapters.length - 1}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border disabled:opacity-40"
+                aria-label="Suivant"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
             </div>
-          ) : null}
-
-          {current.kind === "plan" ? (
-            <ol className="space-y-4">
-              {doc.actionPlan.map((step) => (
-                <li
-                  key={step.order}
-                  className="rounded-2xl border border-[#1C1412]/10 bg-[#F8F4EE] p-5"
-                >
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-[#B8954A]">
-                    Étape {step.order}
-                  </p>
-                  <p className="font-serif text-xl font-bold mt-1">{step.what}</p>
-                  <p className="text-base mt-3 leading-relaxed">
-                    <span className="font-semibold">Comment — </span>
-                    {step.how}
-                  </p>
-                  <p className="text-base leading-relaxed">
-                    <span className="font-semibold">Quand — </span>
-                    {step.when}
-                  </p>
-                  <p className="text-sm mt-2 text-[#1C1412]/60">
-                    Signal : {step.progressSignal}
-                  </p>
-                </li>
-              ))}
-              <Link
-                href="/couple/plan"
-                className="inline-flex text-sm font-semibold text-[#5C1F28] underline underline-offset-2"
-              >
-                Voir le plan dédié →
-              </Link>
-            </ol>
-          ) : null}
+          </div>
+          <ChapterCard ch={current} doc={doc} className="min-h-[28rem]" />
+          <div className="flex justify-between gap-3">
+            <button
+              type="button"
+              onClick={() => go(-1)}
+              disabled={index === 0}
+              className="inline-flex h-11 items-center gap-1 rounded-xl border px-4 text-sm font-semibold disabled:opacity-40"
+            >
+              <ChevronLeft className="h-4 w-4" /> Précédent
+            </button>
+            <button
+              type="button"
+              onClick={() => go(1)}
+              disabled={index >= chapters.length - 1}
+              className="inline-flex h-11 items-center gap-1 rounded-xl bg-[#5C1F28] px-4 text-sm font-semibold text-[#FBF9F6] disabled:opacity-40"
+            >
+              Suivant <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
         </div>
-      </section>
+      ) : (
+        <div className="space-y-6 print:hidden">
+          {chapters.map((ch) => (
+            <ChapterCard key={ch.id} ch={ch} doc={doc} />
+          ))}
+        </div>
+      )}
 
-      {/* Impression : tous les chapitres */}
+      {/* Impression : toujours tout le dossier */}
       <div className="hidden print:block space-y-10">
-        {chapters.map((ch) =>
-          ch.kind === "section" ? (
-            <section key={`print-${ch.id}`} className="break-inside-avoid">
-              <h2 className="font-serif text-2xl font-bold">{ch.title}</h2>
-              {ch.subtitle ? (
-                <p className="italic text-[#8A6A2E] mb-3">{ch.subtitle}</p>
-              ) : null}
-              <CoupleReportBlocks blocks={blocksFor(ch.section)} />
-            </section>
-          ) : null
-        )}
-      </div>
-
-      <div className="flex justify-between gap-3 print:hidden">
-        <button
-          type="button"
-          onClick={() => go(-1)}
-          disabled={index === 0}
-          className="inline-flex h-11 items-center gap-1 rounded-xl border px-4 text-sm font-semibold disabled:opacity-40"
-        >
-          <ChevronLeft className="h-4 w-4" /> Précédent
-        </button>
-        <button
-          type="button"
-          onClick={() => go(1)}
-          disabled={index >= chapters.length - 1}
-          className="inline-flex h-11 items-center gap-1 rounded-xl bg-[#5C1F28] px-4 text-sm font-semibold text-[#FBF9F6] disabled:opacity-40"
-        >
-          Suivant <ChevronRight className="h-4 w-4" />
-        </button>
+        {chapters.map((ch) => (
+          <ChapterCard key={`print-${ch.id}`} ch={ch} doc={doc} />
+        ))}
       </div>
 
       <footer className="pt-4 border-t border-[#1C1412]/10 space-y-2 text-[11px] text-[#1C1412]/50">

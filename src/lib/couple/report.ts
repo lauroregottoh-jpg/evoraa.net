@@ -21,6 +21,11 @@ import {
 } from "@/lib/couple/scoring"
 import type { CoupleReportBlock } from "@/lib/couple/reportBlocks"
 import { sectionBlocksFromLegacy } from "@/lib/couple/reportBlocks"
+import {
+  explainConvergenceMetric,
+  interpretDimension,
+  profileHighlights,
+} from "@/lib/couple/interpretations"
 
 export type CoupleReportNames = {
   nameA: string
@@ -100,32 +105,32 @@ function dimList(items: DimensionPairScore[], max = 4): string {
 }
 
 function forceParagraph(d: DimensionPairScore, names: CoupleReportNames): string {
-  return `Sur « ${d.label} », ${names.nameA} et ${names.nameB} se rejoignent nettement (convergence ${d.convergence} %). Cette proximité est une ressource : elle facilite la confiance et réduit les malentendus. Elle mérite d’être nommée et entretenue — pas considérée comme acquise à jamais.`
+  const ix = interpretDimension(d, names)
+  return `${ix.data} ${ix.meaning} ${explainConvergenceMetric(d.gap, d.convergence)}`
 }
 
-function differenceParagraph(d: DimensionPairScore, names: CoupleReportNames): string {
-  return `Sur « ${d.label} », vos réponses divergent (écart ${d.gap} points). Ce n’est pas une condamnation : c’est une invitation à clarifier ce que chacun vit, attend ou craint. ${names.nameA} se situe autour de ${d.scoreA} %, ${names.nameB} autour de ${d.scoreB} %. L’objectif n’est pas d’effacer la différence, mais de la rendre parlable et travaillable.`
+function differenceParagraph(
+  d: DimensionPairScore,
+  names: CoupleReportNames
+): string {
+  const ix = interpretDimension(d, names)
+  return `${ix.data} ${ix.meaning} ${ix.notConclude} Pour échanger : ${ix.questions[0] ?? ""}`
 }
 
-/** Chapitre long par dimension — profondeur type modèles EX / 05_MODELES. */
+/** Chapitre dimension — interprétation réelle (pas de template clone). */
 function dimensionDeepChapter(
   d: DimensionPairScore,
   names: CoupleReportNames
 ): CoupleReportSection {
-  const a = names.nameA
-  const b = names.nameB
-  const statusLine =
-    d.status === "convergence"
-      ? `Sur cet axe, vos réponses convergent nettement (convergence ${d.convergence} %).`
-      : d.status === "vigilance"
-        ? `Sur cet axe, une vigilance particulière s’impose (écart ${d.gap} pts, niveaux ${d.scoreA} % / ${d.scoreB} %).`
-        : `Sur cet axe, une différence réelle apparaît (écart ${d.gap} pts).`
-
+  const ix = interpretDimension(d, names)
   const paragraphs = [
-    `${statusLine} ${a} se situe autour de ${d.scoreA} %, ${b} autour de ${d.scoreB} %. Ces chiffres ne jugent ni l’amour ni la valeur de chacun : ils décrivent une manière d’habiter le couple aujourd’hui.`,
-    `Lorsque le sujet « ${d.label.toLowerCase()} » revient dans votre quotidien, l’un peut avoir l’impression d’être entendu rapidement, tandis que l’autre peut avoir l’impression de devoir trop expliquer — ou l’inverse.`,
-    `Pour ${a} : dites votre besoin en « j’ai besoin de… » plutôt qu’en reproche. Pour ${b} : reformulez avant de répondre.`,
-    `Piège à éviter : le procès d’intention. Préférez observation + besoin + proposition datée.`,
+    ix.measures,
+    ix.data,
+    ix.meaning,
+    ix.notConclude,
+    ix.conflictPattern
+      ? `Dynamique typique sur cet axe : ${ix.conflictPattern}`
+      : `Sur cet axe, l’enjeu n’est pas d’effacer la différence mais de la rendre parlable.`,
   ]
 
   const blocks: CoupleReportBlock[] = [
@@ -134,47 +139,51 @@ function dimensionDeepChapter(
       label: d.label,
       scoreA: d.scoreA,
       scoreB: d.scoreB,
-      nameA: a,
-      nameB: b,
+      nameA: names.nameA,
+      nameB: names.nameB,
       convergence: d.convergence,
     },
-    { type: "h2", text: "Ce que ça signifie" },
-    { type: "paragraph", text: paragraphs[0]! },
-    { type: "paragraph", text: paragraphs[1]! },
-    { type: "h2", text: "Pour chacun" },
-    {
-      type: "ol",
-      items: [
-        `${a} — nommez un besoin précis lié à « ${d.label} ».`,
-        `${b} — reformulez ce que vous avez compris avant de répondre.`,
-        "Le couple — une seule demande concrète pour les 7 prochains jours.",
-      ],
-    },
-    { type: "h2", text: "À faire cette semaine" },
-    {
-      type: "ul",
-      items: [
-        "Choisir un exemple réel des 14 derniers jours sur cet axe.",
-        "En parler 3 minutes chacun, sans interruption.",
-        "Noter un micro-ajustement daté.",
-      ],
-    },
+    { type: "h2", text: "Ce que mesure cet axe" },
+    { type: "paragraph", text: ix.measures },
     {
       type: "callout",
-      tone: "gold",
-      text: `Signal de progrès : deux conversations sur « ${d.label} » sans humiliation, avec un ajustement tenu.`,
+      tone: "info",
+      text: explainConvergenceMetric(d.gap, d.convergence),
     },
+    { type: "h2", text: "Ce que vos réponses montrent" },
+    { type: "paragraph", text: ix.data },
+    { type: "h2", text: "Interprétation" },
+    { type: "paragraph", text: ix.meaning },
     {
-      type: "fillBlank",
-      prompt: `Ce que je voudrais que mon partenaire comprenne sur « ${d.label} » :`,
-      lines: 3,
+      type: "callout",
+      tone: d.status === "vigilance" ? "alert" : "gold",
+      text: `${ix.levelLabel} — ${ix.notConclude}`,
     },
   ]
 
+  if (ix.conflictPattern) {
+    blocks.push(
+      { type: "h2", text: "Motif de conflit fréquent" },
+      { type: "paragraph", text: ix.conflictPattern }
+    )
+  }
+
+  blocks.push(
+    { type: "h2", text: "Questions pour échanger" },
+    { type: "ol", items: ix.questions },
+    { type: "h2", text: "À mettre en place" },
+    { type: "ul", items: ix.actions },
+    {
+      type: "fillBlank",
+      prompt: `Ce qui diffère vraiment pour nous sur « ${d.label} » :`,
+      lines: 3,
+    }
+  )
+
   return {
     id: `dim-${d.dimension}`,
-    title: `${d.label} — lecture croisée`,
-    subtitle: "Comprendre · Nommer · Ajuster",
+    title: `${d.label} — ${ix.levelLabel}`,
+    subtitle: "Données · Sens · Questions · Action",
     paragraphs,
     blocks,
   }
@@ -370,26 +379,34 @@ function buildPremiumPlusDepth(
   ]
 }
 
-function buildCoreExercises(priorities: DimensionPairScore[]): CoupleExercise[] {
-  const focus = priorities[0]?.label ?? "la communication"
+function buildCoreExercises(
+  priorities: DimensionPairScore[],
+  names?: { nameA: string; nameB: string }
+): CoupleExercise[] {
+  const focus = priorities[0]
+  const focusLabel = focus?.label ?? "la communication"
+  const ix = focus && names ? interpretDimension(focus, names) : null
   return [
     {
       id: "ex-comprendre",
-      title: "Ce que j’aimerais que tu comprennes",
-      objective: "Mettre des mots précis sur un besoin relationnel sans accuser.",
-      why: `Votre bilan met en avant « ${focus} » comme zone prioritaire. Cet exercice crée un cadre sûr pour en parler.`,
+      title: `Ce que j’aimerais que tu comprennes — ${focusLabel}`,
+      objective: `Clarifier ce qui diffère vraiment sur « ${focusLabel} » sans accuser.`,
+      why:
+        ix?.meaning ??
+        `Votre bilan met en avant « ${focusLabel} » comme zone prioritaire.`,
       duration: "25–35 minutes",
       preparation:
         "Choisissez un moment calme. Téléphones de côté. Convenez que chacun parle sans être interrompu.",
       steps: [
-        "Chacun écrit pendant 8 minutes : « Ce que j’aimerais que tu comprennes sur moi dans notre couple ».",
+        `Chacun écrit pendant 8 minutes sur « ${focusLabel} » : ce que je vis, ce que je crains, ce dont j’ai besoin.`,
         "À tour de rôle, lisez votre texte (3 minutes max).",
         "L’autre reformule ce qu’il a compris, sans défendre ni corriger.",
-        "Notez ensemble une seule chose concrète à essayer cette semaine.",
+        ix?.actions[0]
+          ? `Notez ensemble : ${ix.actions[0]}`
+          : "Notez ensemble une seule chose concrète à essayer cette semaine.",
       ],
-      questions: [
+      questions: ix?.questions ?? [
         "Qu’est-ce qui m’a touché(e) dans ce que j’ai entendu ?",
-        "Qu’est-ce qui reste encore flou ?",
         "Quelle demande précise puis-je formuler sans attaquer ?",
       ],
       share: "Partagez uniquement ce que vous avez écrit — pas vos hypothèses sur l’autre.",
@@ -398,24 +415,29 @@ function buildCoreExercises(priorities: DimensionPairScore[]): CoupleExercise[] 
       takeaway:
         "La compréhension précède la solution. Une demande claire vaut mieux qu’un reproche vague.",
       nextAction:
-        "Cette semaine, choisissez une situation réelle et appliquez la même structure (écrire → lire → reformuler).",
+        ix?.actions[1] ??
+        "Cette semaine, appliquez la même structure sur une situation réelle.",
       fillPrompts: [
-        "Ce que j’aimerais que tu comprennes sur moi :",
+        `Sur « ${focusLabel} », ce que je veux que tu comprennes :`,
         "Ce que j’ai entendu et retenu :",
-        "Notre micro-ajustement cette semaine :",
+        "Notre micro-ajustement daté :",
       ],
       rolePlay: {
-        title: "Jeu de rôle — reformulation",
+        title: `Jeu de rôle — ${focusLabel}`,
         roleA: "Parle 2 minutes de ton besoin (sans accuser).",
         roleB: "Reformule uniquement : « Ce que j’entends, c’est… »",
-        scene: "Sujet : un moment récent lié à « " + focus + " ».",
+        scene: ix?.conflictPattern
+          ? `Scène : ${ix.conflictPattern}`
+          : `Sujet : un moment récent lié à « ${focusLabel} ».`,
       },
     },
     {
       id: "ex-reparation",
       title: "Réparer après friction",
       objective: "Installer un rituel de réparation après tension.",
-      why: "Sans réparation, les écarts s’accumulent même quand l’amour est réel.",
+      why: priorities[1]
+        ? `Utile surtout quand « ${priorities[1].label} » ou « ${focusLabel} » monte en pression.`
+        : "Sans réparation, les écarts s’accumulent même quand l’amour est réel.",
       duration: "15–20 minutes",
       preparation: "Acceptez que le but n’est pas de « gagner » mais de rétablir le lien.",
       steps: [
@@ -488,35 +510,34 @@ function buildPremiumExercises(): CoupleExercise[] {
   ]
 }
 
-function buildActionPlan(priorities: DimensionPairScore[]): CoupleActionStep[] {
-  const p1 = priorities[0]?.label ?? "la communication"
-  const p2 = priorities[1]?.label ?? "les conflits"
-  return [
-    {
+function buildActionPlan(priorities: DimensionPairScore[], names: CoupleReportNames): CoupleActionStep[] {
+  const steps: CoupleActionStep[] = priorities.slice(0, 3).map((d, i) => {
+    const ix = interpretDimension(d, names)
+    return {
+      order: i + 1,
+      what: `Travailler « ${d.label} » (priorité ${i + 1})`,
+      how: `${ix.actions[0] ?? "Clarifier attentes."} Questions guides : ${ix.questions.slice(0, 2).join(" · ")}`,
+      when:
+        i === 0
+          ? "Dans les 7 prochains jours, créneau de 30 minutes."
+          : i === 1
+            ? "Chaque semaine, jour fixe, pendant 4 semaines."
+            : "J+30 après la lecture du rapport.",
+      goal: ix.meaning.slice(0, 160) + (ix.meaning.length > 160 ? "…" : ""),
+      progressSignal: ix.actions[1] ?? "Vous pouvez citer un ajustement tenu.",
+    }
+  })
+  if (!steps.length) {
+    steps.push({
       order: 1,
-      what: `Ouvrir une conversation structurée sur « ${p1} »`,
-      how: "Utilisez l’exercice « Ce que j’aimerais que tu comprennes » sans chercher à tout résoudre le même soir.",
-      when: "Dans les 7 prochains jours, créneau de 30 minutes bloqué dans vos agendas.",
-      goal: "Nommer le sujet sans monter en pression.",
-      progressSignal: "Chacun peut reformuler le besoin de l’autre en une phrase exacte.",
-    },
-    {
-      order: 2,
-      what: `Installer un micro-rituel lié à « ${p2} »`,
-      how: "Choisissez un geste hebdomadaire (check-in de 10 min, marche, prière/partage selon votre cadre).",
-      when: "Chaque semaine, jour fixe, pendant 4 semaines.",
-      goal: "Créer de la régularité plutôt que des conversations uniquement en crise.",
-      progressSignal: "Le rituel a eu lieu au moins 3 semaines sur 4.",
-    },
-    {
-      order: 3,
-      what: "Revue de couple à 30 jours",
-      how: "Relisez vos priorités du bilan et notez ce qui a bougé (même un peu).",
-      when: "J+30 après la lecture du rapport.",
-      goal: "Constater le progrès sans attendre la perfection.",
-      progressSignal: "Vous pouvez citer 2 changements concrets observés.",
-    },
-  ]
+      what: "Entretenir vos convergences",
+      how: "Relisez vos forces et choisissez un rituel hebdomadaire de 15 min.",
+      when: "Cette semaine.",
+      goal: "Ne pas laisser l’alignement s’user.",
+      progressSignal: "Le rituel a eu lieu.",
+    })
+  }
+  return steps
 }
 
 export function buildCoupleReport(args: {
@@ -528,7 +549,7 @@ export function buildCoupleReport(args: {
   const interpretation = interpretGlobalScore(scoring.globalScore)
   const generationDate = new Date().toISOString()
 
-  const topDim = scoring.dimensions[0]
+  const topDim = scoring.priorities[0] ?? scoring.dimensions[0]
   const sections: CoupleReportSection[] = [
     withBlocks({
       id: "accueil",
@@ -673,107 +694,313 @@ export function buildCoupleReport(args: {
     withBlocks({
       id: "forces",
       title: "Vos grandes forces",
-      subtitle: "Ce qui vous porte déjà",
-      paragraphs: scoring.strengths.slice(0, 4).map((d) => forceParagraph(d, names)),
+      subtitle: "Ressources à nommer et entretenir",
+      paragraphs: scoring.strengths.slice(0, 5).map((d) => forceParagraph(d, names)),
+      blocks: [
+        {
+          type: "callout",
+          tone: "gold",
+          text: "Une force = axe où vous êtes alignés et à un niveau utile. Ce n’est pas « acquis pour toujours » : ça s’entretient.",
+        },
+        { type: "h2", text: "Vos appuis (interprétation)" },
+        ...scoring.strengths.slice(0, 5).flatMap((d) => {
+          const ix = interpretDimension(d, names)
+          return [
+            {
+              type: "paragraph" as const,
+              text: `• ${d.label} — ${names.nameA} ${d.scoreA} % · ${names.nameB} ${d.scoreB} % (convergence ${d.convergence} %)`,
+            },
+            { type: "paragraph" as const, text: ix.meaning },
+          ]
+        }),
+      ],
     }),
     withBlocks({
       id: "convergences",
       title: "Vos principales convergences",
-      subtitle: "Là où vous vous rejoignez",
+      subtitle: "Ce que signifie « convergence »",
       paragraphs: [
-        "Les convergences sont les zones où vos réponses se rejoignent. Elles facilitent la coopération et la confiance.",
+        "La convergence mesure l’alignement de vos scores sur un axe : 100 % signifie un écart quasi nul entre vous. Ce n’est pas une note d’amour, ni une garantie d’avenir — c’est un indicateur d’accord de réponses.",
+        ...scoring.convergences.slice(0, 8).map((d) => {
+          const ix = interpretDimension(d, names)
+          return `${d.label} (${d.convergence} %) — ${ix.meaning}`
+        }),
       ],
-      bullets: scoring.convergences.slice(0, 6).map(
-        (d) =>
-          `${d.label} — convergence ${d.convergence} % (${names.nameA} ${d.scoreA} % · ${names.nameB} ${d.scoreB} %)`
-      ),
+      blocks: [
+        {
+          type: "callout",
+          tone: "info",
+          text: "Convergence 100 % = vos réponses se rejoignent sur cet axe. Cela facilite la confiance, mais reste à entretenir (pas « acquis pour toujours »).",
+        },
+        { type: "h2", text: "Liste des convergences fortes" },
+        {
+          type: "ul",
+          items: scoring.convergences.slice(0, 8).map((d) => {
+            const ix = interpretDimension(d, names)
+            return `${d.label} — conv. ${d.convergence} % (${names.nameA} ${d.scoreA} % · ${names.nameB} ${d.scoreB} %) · ${ix.levelLabel}`
+          }),
+        },
+        { type: "h2", text: "Lecture courte" },
+        ...scoring.convergences.slice(0, 5).map((d) => ({
+          type: "paragraph" as const,
+          text: interpretDimension(d, names).meaning,
+        })),
+      ],
     }),
     withBlocks({
       id: "differences",
       title: "Vos différences",
-      subtitle: "Matière à construire",
+      subtitle: "Ce qui diffère — et quoi mettre en place",
       paragraphs:
         scoring.divergences.length > 0
-          ? scoring.divergences.slice(0, 4).map((d) => differenceParagraph(d, names))
+          ? scoring.divergences.slice(0, 6).map((d) => differenceParagraph(d, names))
           : [
-              "Peu de divergences marquées ressortent dans cette version. Continuez à vérifier que les accords implicites restent explicites — le silence confortable peut parfois masquer un besoin non dit.",
+              "Peu de divergences marquées ressortent. Vérifiez quand même que les accords implicites restent explicites.",
+            ],
+      blocks:
+        scoring.divergences.length > 0
+          ? [
+              {
+                type: "callout" as const,
+                tone: "gold" as const,
+                text: "Une différence n’est pas une accusation. C’est ce qui n’est pas encore assez clair pour échanger et décider.",
+              },
+              ...scoring.divergences.slice(0, 6).flatMap((d) => {
+                const ix = interpretDimension(d, names)
+                return [
+                  { type: "h2" as const, text: d.label },
+                  {
+                    type: "scoreChart" as const,
+                    label: d.label,
+                    scoreA: d.scoreA,
+                    scoreB: d.scoreB,
+                    nameA: names.nameA,
+                    nameB: names.nameB,
+                    convergence: d.convergence,
+                  },
+                  { type: "paragraph" as const, text: ix.data },
+                  { type: "paragraph" as const, text: ix.meaning },
+                  {
+                    type: "ol" as const,
+                    items: [
+                      `Échanger : ${ix.questions[0]}`,
+                      `Mettre en place : ${ix.actions[0]}`,
+                    ],
+                  },
+                ]
+              }),
+            ]
+          : [
+              {
+                type: "paragraph" as const,
+                text: "Peu de divergences marquées. Continuez à expliciter les accords implicites.",
+              },
             ],
     }),
     withBlocks({
       id: "vigilance",
       title: "Zones de vigilance",
-      subtitle: "Ralentir · Clarifier · Respecter",
+      subtitle: "Écarts structurants à clarifier",
+      paragraphs: scoring.vigilanceZones.length
+        ? scoring.vigilanceZones.slice(0, 5).map((d) => {
+            const ix = interpretDimension(d, names)
+            return `${ix.data} ${ix.meaning}`
+          })
+        : [
+            "Aucune zone de vigilance majeure aux seuils actuels. Restez attentifs aux micro-tensions du quotidien.",
+          ],
+      blocks: scoring.vigilanceZones.length
+        ? [
+            {
+              type: "callout" as const,
+              tone: "alert" as const,
+              text: "Vigilance = écart important (≥ 35 pts) ou niveau bas. Ce n’est pas une accusation : c’est un signal pour ralentir, expliquer ce qui diffère, et poser une action datée.",
+            },
+            ...scoring.vigilanceZones.slice(0, 5).flatMap((d) => {
+              const ix = interpretDimension(d, names)
+              return [
+                { type: "h2" as const, text: `Vigilance — ${d.label}` },
+                {
+                  type: "scoreChart" as const,
+                  label: d.label,
+                  scoreA: d.scoreA,
+                  scoreB: d.scoreB,
+                  nameA: names.nameA,
+                  nameB: names.nameB,
+                  convergence: d.convergence,
+                },
+                { type: "paragraph" as const, text: `Ce que mesure cet axe : ${ix.measures}` },
+                { type: "paragraph" as const, text: ix.meaning },
+                { type: "ol" as const, items: ix.questions },
+                { type: "ul" as const, items: ix.actions },
+              ]
+            }),
+          ]
+        : [
+            {
+              type: "paragraph" as const,
+              text: "Aucune zone de vigilance majeure aux seuils actuels.",
+            },
+          ],
+    }),
+    (() => {
+      const profA = profileHighlights(scoring, "A", names)
+      return withBlocks({
+        id: "profil-a",
+        title: `Profil individuel — ${names.nameA}`,
+        subtitle: "Hauts · bas · ce que l’autre gagnerait à comprendre",
+        paragraphs: profA.narrative,
+        blocks: [
+          { type: "h2", text: "Points hauts" },
+          {
+            type: "ul",
+            items: profA.highs.map(
+              (d) =>
+                `${d.label} — ${d.scoreA} % (partenaire ${d.scoreB} %)`
+            ),
+          },
+          { type: "h2", text: "Points plus bas" },
+          {
+            type: "ul",
+            items: profA.lows.map(
+              (d) =>
+                `${d.label} — ${d.scoreA} % (partenaire ${d.scoreB} %)`
+            ),
+          },
+          ...profA.narrative.map((t) => ({
+            type: "paragraph" as const,
+            text: t,
+          })),
+        ],
+      })
+    })(),
+    (() => {
+      const profB = profileHighlights(scoring, "B", names)
+      return withBlocks({
+        id: "profil-b",
+        title: `Profil individuel — ${names.nameB}`,
+        subtitle: "Hauts · bas · ce que l’autre gagnerait à comprendre",
+        paragraphs: profB.narrative,
+        blocks: [
+          { type: "h2", text: "Points hauts" },
+          {
+            type: "ul",
+            items: profB.highs.map(
+              (d) =>
+                `${d.label} — ${d.scoreB} % (partenaire ${d.scoreA} %)`
+            ),
+          },
+          { type: "h2", text: "Points plus bas" },
+          {
+            type: "ul",
+            items: profB.lows.map(
+              (d) =>
+                `${d.label} — ${d.scoreB} % (partenaire ${d.scoreA} %)`
+            ),
+          },
+          ...profB.narrative.map((t) => ({
+            type: "paragraph" as const,
+            text: t,
+          })),
+        ],
+      })
+    })(),
+    (() => {
+      const top = scoring.priorities.slice(0, 3)
+      const patterns = top
+        .map((d) => interpretDimension(d, names).conflictPattern)
+        .filter(Boolean) as string[]
+      return withBlocks({
+        id: "dynamique",
+        title: "Votre dynamique à deux",
+        subtitle: "Motifs de conflit · boucles · réparation",
+        paragraphs: [
+          "À deux, vous créez un système : ce que l’un fait influence ce que l’autre ressent. Observez le motif qui se répète, pas « qui a tort ».",
+          patterns.length
+            ? `Sur vos priorités actuelles, les motifs fréquents sont : ${patterns.join(" · ")}`
+            : "Peu de motifs de conflit structurants ressortent des écarts majeurs — restez attentifs aux micro-tensions.",
+          "La réparation (geste, mot, reprise datée) bat le silence prolongé. Sans réparation, même un petit écart devient une histoire.",
+        ],
+        blocks: [
+          { type: "h2", text: "Motifs liés à vos priorités" },
+          {
+            type: "ol",
+            items: top.length
+              ? top.map((d) => {
+                  const ix = interpretDimension(d, names)
+                  return `${d.label} — ${ix.conflictPattern ?? ix.meaning}`
+                })
+              : ["Dynamique globalement fluide sur les grands écarts."],
+          },
+          {
+            type: "callout",
+            tone: "gold",
+            text: "Question de couple : notre façon de résoudre renforce-t-elle la proximité, ou crée-t-elle un gagnant et un perdant ?",
+          },
+        ],
+      })
+    })(),
+    withBlocks({
+      id: "priorites",
+      title: "Vos priorités",
+      subtitle: "Domaines 1 à 5 — travail concret",
       paragraphs: [
-        "Une zone de vigilance n’est pas une accusation. C’est un signal : ici, le couple gagne à ralentir, clarifier et parfois se faire accompagner.",
-        ...(scoring.vigilanceZones.length
-          ? scoring.vigilanceZones
-              .slice(0, 3)
-              .map(
-                (d) =>
-                  `Sur « ${d.label} », l’écart ou le niveau bas (${d.gap} pts d’écart) invite à une conversation honnête et respectueuse.`
-              )
-          : [
-              "Aucune zone de vigilance majeure n’apparaît dans les seuils actuels. Restez attentifs aux micro-tensions du quotidien.",
-            ]),
+        "Voici les domaines prioritaires issus de vos écarts. Travaillez-les un par un — une priorité tenue vaut dix intentions.",
+        ...scoring.priorities.slice(0, 5).map((d, i) => {
+          const ix = interpretDimension(d, names)
+          return `Priorité ${i + 1} — ${d.label} : ${ix.meaning} Action : ${ix.actions[0]}`
+        }),
       ],
       blocks: [
         {
           type: "callout",
           tone: "alert",
-          text: "Vigilance ≠ accusation. C’est un signal pour ralentir et clarifier.",
+          text: "Ces priorités viennent de vos scores (écarts / vigilance), pas d’un jugement moral.",
         },
-        {
-          type: "ul",
-          items: scoring.vigilanceZones.length
-            ? scoring.vigilanceZones.slice(0, 3).map(
-                (d) =>
-                  `${d.label} — écart ${d.gap} pts (${names.nameA} ${d.scoreA} % · ${names.nameB} ${d.scoreB} %)`
-              )
-            : ["Aucune zone majeure aux seuils actuels — restez attentifs au quotidien."],
-        },
+        ...scoring.priorities.slice(0, 5).flatMap((d, i) => {
+          const ix = interpretDimension(d, names)
+          return [
+            { type: "h2" as const, text: `Priorité ${i + 1} — ${d.label}` },
+            {
+              type: "scoreChart" as const,
+              label: d.label,
+              scoreA: d.scoreA,
+              scoreB: d.scoreB,
+              nameA: names.nameA,
+              nameB: names.nameB,
+              convergence: d.convergence,
+            },
+            { type: "paragraph" as const, text: ix.measures },
+            { type: "paragraph" as const, text: ix.meaning },
+            { type: "ol" as const, items: ix.questions },
+            { type: "ul" as const, items: ix.actions },
+          ]
+        }),
       ],
     }),
-    withBlocks({
-      id: "profil-a",
-      title: `Profil individuel — ${names.nameA}`,
-      subtitle: "Ce que vous apportez",
-      paragraphs: [
-        `${names.nameA}, vos réponses dessinent une manière personnelle d’habiter le couple. Les dimensions où vous vous situez le plus haut sont autant de ressources que vous apportez à la relation.`,
-        `Ce que ${names.nameB} gagnerait à comprendre : vos besoins ne sont pas des exigences capricieuses ; ce sont des conditions de sécurité et d’élan. Les nommer clairement aide le couple à cesser de deviner.`,
-      ],
-    }),
-    withBlocks({
-      id: "profil-b",
-      title: `Profil individuel — ${names.nameB}`,
-      subtitle: "Ce que vous apportez",
-      paragraphs: [
-        `${names.nameB}, votre profil complète celui de ${names.nameA}. Là où vous divergez, il y a souvent une complémentarité possible — à condition de ne pas transformer la différence en procès.`,
-        `Ce que ${names.nameA} gagnerait à comprendre : votre façon de réagir (ou de vous taire) a une logique. La rendre visible réduit les malentendus.`,
-      ],
-    }),
-    withBlocks({
-      id: "dynamique",
-      title: "Votre dynamique à deux",
-      subtitle: "Le système que vous créez",
-      paragraphs: [
-        "À deux, vous créez un système : ce que l’un fait influence ce que l’autre ressent, et inversement. Les cycles relationnels (approche / retrait, critique / défense, silence / pression) naissent souvent de bonnes intentions mal synchronisées.",
-        "Observez non pas « qui a tort », mais « quel motif se répète ». C’est ce motif que le plan d’action et les exercices cherchent à assouplir.",
-      ],
-    }),
-    withBlocks({
-      id: "priorites",
-      title: "Vos priorités",
-      subtitle: "Une priorité tenue vaut dix intentions",
-      paragraphs: [
-        "Travaillez d’abord ce qui a le plus d’impact relationnel, pas tout en même temps. Un couple progresse mieux avec une priorité tenue qu’avec dix intentions abandonnées.",
-        "Pour chaque priorité : nommez le besoin, choisissez un micro-ajustement, fixez une date de revue courte.",
-      ],
-      bullets: scoring.priorities.slice(0, 5).map(
-        (d, i) =>
-          `Priorité ${i + 1} — ${d.label} : clarifier les attentes, puis pratiquer un micro-ajustement hebdomadaire.`
+    // Chapitres dimension : priorités + vigilances + différences d’abord, puis le reste
+    ...[
+      ...scoring.priorities,
+      ...scoring.vigilanceZones.filter(
+        (v) => !scoring.priorities.some((p) => p.dimension === v.dimension)
       ),
-    }),
-    ...scoring.dimensions.map((d) => dimensionDeepChapter(d, names)),
+      ...scoring.divergences.filter(
+        (v) =>
+          !scoring.priorities.some((p) => p.dimension === v.dimension) &&
+          !scoring.vigilanceZones.some((p) => p.dimension === v.dimension)
+      ),
+      ...scoring.strengths
+        .filter(
+          (v) =>
+            !scoring.priorities.some((p) => p.dimension === v.dimension) &&
+            !scoring.divergences.some((p) => p.dimension === v.dimension)
+        )
+        .slice(0, 4),
+    ]
+      .filter(
+        (d, i, arr) => arr.findIndex((x) => x.dimension === d.dimension) === i
+      )
+      .map((d) => dimensionDeepChapter(d, names)),
     withBlocks({
       id: "reco",
       title: "Recommandations",
@@ -831,11 +1058,11 @@ export function buildCoupleReport(args: {
     : []
 
   const exercises = [
-    ...buildCoreExercises(scoring.priorities),
+    ...buildCoreExercises(scoring.priorities, names),
     ...(isPremiumPlusOffer(offerId) ? buildPremiumExercises() : []),
   ]
 
-  const actionPlan = buildActionPlan(scoring.priorities)
+  const actionPlan = buildActionPlan(scoring.priorities, names)
   if (isPremiumPlusOffer(offerId)) {
     actionPlan.push({
       order: 4,
