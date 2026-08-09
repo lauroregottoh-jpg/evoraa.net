@@ -20,7 +20,7 @@ export function CoupleReportBlocks({
             return (
               <h3
                 key={key}
-                className="font-serif text-xl sm:text-2xl font-bold text-[#5C1F28] pt-1"
+                className="font-serif text-[18pt] sm:text-[20pt] font-bold text-[#5C1F28] pt-2 leading-snug"
               >
                 {block.text}
               </h3>
@@ -29,7 +29,7 @@ export function CoupleReportBlocks({
             return (
               <p
                 key={key}
-                className="text-base sm:text-[17px] leading-[1.75] text-[#1C1412]/92"
+                className="text-[14pt] leading-[1.65] text-[#1C1412]"
               >
                 {block.text}
               </p>
@@ -38,7 +38,7 @@ export function CoupleReportBlocks({
             return (
               <ol
                 key={key}
-                className="list-decimal pl-6 space-y-2.5 text-base sm:text-[17px] leading-relaxed"
+                className="list-decimal pl-6 space-y-3 text-[14pt] leading-[1.65]"
               >
                 {block.items.map((item) => (
                   <li key={item}>{item}</li>
@@ -49,7 +49,7 @@ export function CoupleReportBlocks({
             return (
               <ul
                 key={key}
-                className="list-disc pl-6 space-y-2.5 text-base sm:text-[17px] leading-relaxed"
+                className="list-disc pl-6 space-y-3 text-[14pt] leading-[1.65]"
               >
                 {block.items.map((item) => (
                   <li key={item}>{item}</li>
@@ -67,7 +67,7 @@ export function CoupleReportBlocks({
               <aside
                 key={key}
                 className={cn(
-                  "rounded-2xl border px-5 py-4 text-base leading-relaxed",
+                  "rounded-2xl border px-5 py-4 text-[14pt] leading-[1.65]",
                   tone
                 )}
               >
@@ -115,25 +115,25 @@ export function CoupleReportBlocks({
                 key={key}
                 className="rounded-2xl border border-[#5C1F28]/20 bg-[#FBF9F6] p-5 space-y-3"
               >
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
+                <p className="text-[12pt] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
                   Jeu de rôle
                 </p>
-                <p className="font-serif text-xl font-bold">{block.title}</p>
-                <p className="text-base leading-relaxed text-[#1C1412]/85">
+                <p className="font-serif text-[18pt] font-bold">{block.title}</p>
+                <p className="text-[14pt] leading-[1.65] text-[#1C1412]">
                   {block.scene}
                 </p>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="rounded-xl bg-[#5C1F28]/08 p-4">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-[#5C1F28]">
+                    <p className="text-[12pt] font-bold uppercase tracking-wider text-[#5C1F28]">
                       Rôle A
                     </p>
-                    <p className="mt-1 text-sm leading-relaxed">{block.roleA}</p>
+                    <p className="mt-1 text-[14pt] leading-[1.65]">{block.roleA}</p>
                   </div>
                   <div className="rounded-xl bg-[#B8954A]/15 p-4">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-[#8A6A2E]">
+                    <p className="text-[12pt] font-bold uppercase tracking-wider text-[#8A6A2E]">
                       Rôle B
                     </p>
-                    <p className="mt-1 text-sm leading-relaxed">{block.roleB}</p>
+                    <p className="mt-1 text-[14pt] leading-[1.65]">{block.roleB}</p>
                   </div>
                 </div>
               </div>

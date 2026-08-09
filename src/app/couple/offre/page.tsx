@@ -7,7 +7,7 @@ import { isDemoPaymentsEnv, resolveLiveProvider } from "@/lib/billing/provider"
 
 export const metadata = {
   title: `Offres & paiement | ${COUPLE_BRAND}`,
-  description: `Choisissez Essentiel ou Premium Plus et payez par Mobile Money ou carte. ${COUPLE_TAGLINE}`,
+  description: `Choisissez Premium ou Premium Plus et payez par Mobile Money ou carte. ${COUPLE_TAGLINE}`,
 }
 
 export default function CoupleOffrePage() {
@@ -28,9 +28,9 @@ export default function CoupleOffrePage() {
               Offres & paiement
             </h1>
             <p className="text-sm sm:text-base text-[#1C1412]/70 max-w-xl leading-relaxed">
-              Premium Plus = tout l’Essentiel + analyses, scénarios, protocoles
-              et charte. Payez ici par Mobile Money ou carte — sans passer par
-              l’espace membre.
+              Premium Plus = tout le Premium + Points d’approfondissement,
+              analyses, scénarios, protocoles et charte. Payez ici par Mobile
+              Money ou carte — sans passer par l’espace membre.
             </p>
           </header>
 

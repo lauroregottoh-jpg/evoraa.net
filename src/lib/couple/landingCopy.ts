@@ -236,53 +236,61 @@ export const LANDING_STEPS = [
 
 export const LANDING_REPORT_BLOCKS = [
   {
-    title: "Vos forces",
-    body: "Ce qui fonctionne déjà entre vous. Ce qui constitue une vraie ressource pour votre relation — et sur quoi vous pouvez vous appuyer dès maintenant.",
+    title: "Bienvenue & mode d’emploi",
+    body: "Comment lire votre bilan sans vous défendre — d’abord les forces, puis les différences.",
   },
   {
-    title: "Vos convergences",
-    body: "Les domaines où vos attentes et vos visions se rejoignent. Les terrains communs qui donnent de la stabilité à votre couple.",
+    title: "Votre couple en un regard",
+    body: "Score global (indicateur, pas verdict), convergences et points d’attention en une vue claire.",
   },
   {
-    title: "Vos différences",
-    body: "Les sujets sur lesquels vous ne voyez pas forcément les choses de la même manière — sans que cela signifie un échec, mais un terrain à clarifier.",
+    title: "Deux portraits individuels",
+    body: "Ce que le test révèle de chacun dans le couple — structures parallèles, pas un simple échange de prénoms.",
   },
   {
-    title: "Zones de vigilance",
-    body: "Les écarts qui méritent d’être regardés avant qu’ils ne deviennent des tensions répétitives ou des malentendus installés.",
+    title: "Dynamique croisée",
+    body: "Ce qui se passe quand vos deux profils se rencontrent — une phrase de dynamique centrale à retenir.",
   },
   {
-    title: "Vos priorités",
-    body: "Les quelques sujets sur lesquels il serait réellement utile de commencer. Par quoi commencer, pourquoi, et quelle première action poser.",
+    title: "Communication & désaccords",
+    body: "Règles concrètes, cycles possibles, exercices pour entendre ce qui se trouve derrière les mots.",
   },
   {
-    title: "Une lecture à deux",
-    body: "Vous passez de « nous avons un problème » à « nous savons ce que nous devons comprendre et travailler » — ensemble.",
+    title: "Forces & grandes différences",
+    body: "Ce qui vous porte déjà, puis jusqu’à 3 grandes différences développées avec exercices Premium.",
+  },
+  {
+    title: "Plan d’action, suivi, carte relationnelle",
+    body: "Actions datées, check-ins, synthèse finale — puis conclusion Voir · Choisir · Agir.",
+  },
+  {
+    title: "Premium Plus — Points d’approfondissement",
+    body: "Dynamique profonde, décisions, com sous tension, affection, argent, familles… sélectionnés selon vos résultats.",
   },
 ] as const
 
 export const LANDING_OFFERS = {
   eyebrow: "Alors, quelle expérience choisir ?",
   essentialFor:
-    "Pour les couples qui veulent comprendre leur dynamique et savoir par où commencer.",
+    "Pour les couples qui veulent le bilan de référence KELIAA COUPLE™ — comprendre leur dynamique et savoir par où commencer.",
   essentialClose:
-    "Vous voulez simplement comprendre ce qui se passe entre vous et savoir quoi travailler ? Commencez ici.",
+    "Vous voulez un vrai rapport Premium (format A4), pas juste un score ? Commencez ici.",
   essentialFeatures: [
     "Analyse individuelle de chaque partenaire",
-    "Analyse croisée du couple",
-    "Forces, convergences, différences, vigilance",
-    "Priorités et recommandations",
-    "Exercices + plan d’action",
-    "Rapport personnalisé (repère 35–50 pages)",
+    "Analyse croisée et dynamique centrale",
+    "Forces, convergences, grandes différences",
+    "Exercices Premium + plan d’action",
+    "Carte relationnelle",
+    "Rapport A4 personnalisé (corps ≥ 14 pt)",
   ],
-  premiumFor: "Tout l’Essentiel. Puis davantage de profondeur.",
+  premiumFor: "Tout le Premium. Puis les Points d’approfondissement Premium Plus.",
   premiumFeatures: [
-    "Dynamiques relationnelles approfondies",
-    "Scénarios relationnels concrets",
-    "Conversations guidées détaillées",
-    "Protocoles de travail progressifs",
-    "Charte relationnelle",
-    "Plan d’action étendu · rapport 50–70 pages",
+    "100 % du Bilan Premium",
+    "Points PP sélectionnés selon vos résultats",
+    "Protocoles et conversations guidées",
+    "Charte relationnelle et scénarios",
+    "Plan d’action étendu",
+    "Même format A4, plus de profondeur",
   ],
 } as const
 
@@ -340,8 +348,8 @@ export const LANDING_FAQ = [
     a: "Oui. Les documents prévus dans votre offre peuvent être téléchargés et conservés pour les relire ou travailler dessus ensemble.",
   },
   {
-    q: "Le Premium Plus remplace-t-il le Bilan Essentiel ?",
-    a: "Non. Premium Plus comprend le Bilan Essentiel et ajoute des analyses et ressources supplémentaires.",
+    q: "Le Premium Plus remplace-t-il le Bilan Premium ?",
+    a: "Non. Premium Plus comprend 100 % du Bilan Premium et ajoute des Points d’approfondissement sélectionnés selon vos résultats.",
   },
   {
     q: "Est-ce une thérapie de couple ?",

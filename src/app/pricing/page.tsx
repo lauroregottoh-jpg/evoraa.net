@@ -458,7 +458,7 @@ export default function PricingPage() {
                 ))}
               </ul>
               <MagneticButton href="/couple/offre" variant="outline" className="w-full">
-                Choisir Essentiel
+                Choisir Premium
               </MagneticButton>
             </article>
 

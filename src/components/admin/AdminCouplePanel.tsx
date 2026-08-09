@@ -52,7 +52,7 @@ function Kpi({
 }
 
 function offerLabel(id: string) {
-  if (id === "couple_essential") return "Essentiel"
+  if (id === "couple_essential") return "Premium"
   if (id === "couple_premium_plus") return "Premium Plus"
   return id
 }
@@ -329,7 +329,7 @@ export function AdminCouplePanel() {
             {(
               [
                 ["all", "Toutes offres"],
-                ["couple_essential", "Essentiel"],
+                ["couple_essential", "Premium"],
                 ["couple_premium_plus", "Premium Plus"],
               ] as const
             ).map(([id, label]) => (

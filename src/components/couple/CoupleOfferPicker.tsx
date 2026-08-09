@@ -50,7 +50,7 @@ export function CoupleOfferPicker({ demoPricing }: Props) {
         <div className="rounded-xl border border-accent/35 bg-accent/10 px-4 py-3 text-sm text-foreground">
           <p className="font-semibold">Mode démo — {COUPLE_DEMO_AMOUNT_XOF} FCFA</p>
           <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-            Essentiel et Premium Plus sont facturés {COUPLE_DEMO_AMOUNT_XOF}{" "}
+            Premium et Premium Plus sont facturés {COUPLE_DEMO_AMOUNT_XOF}{" "}
             FCFA pour vivre tout le parcours (onboarding, invitation,
             questionnaires, rapport). Les prix catalogue restent affichés barrés.
           </p>

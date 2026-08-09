@@ -6,8 +6,8 @@
 - Fiancés · relation 6 ans · mariage envisagé
 - Score global : **84%** — Une belle convergence — à entretenir
 - Offre : `couple_essential`
-- Versions : contenu 1.5.0 · rapport 1.5.0
-- Généré : 2026-08-09T02:48:30.970Z
+- Versions : contenu 1.6.0 · rapport 1.6.0
+- Généré : 2026-08-09T03:04:50.357Z
 
 ## Méta démo
 

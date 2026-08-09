@@ -46,7 +46,7 @@ export default function CoupleRapportDemoClient() {
                   : "text-[#1C1412]/70 hover:bg-[#F8F4EE]"
               )}
             >
-              Essentiel
+              Premium
             </button>
             <button
               type="button"
@@ -85,7 +85,7 @@ export default function CoupleRapportDemoClient() {
           demoLabel={
             offerId === "couple_premium_plus"
               ? "Démo Premium Plus"
-              : "Démo Essentiel"
+              : "Démo Premium"
           }
         />
       </div>

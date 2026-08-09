@@ -403,7 +403,7 @@ export function CoupleLanding() {
           <div className="grid md:grid-cols-2 gap-8 md:gap-10">
             <article className="ck-reveal space-y-5 rounded-2xl border-2 border-[#1C1412]/15 bg-white p-6 sm:p-8 shadow-sm">
               <h3 className="font-serif text-3xl font-bold text-[#1C1412]">
-                Bilan Essentiel
+                Bilan Premium
               </h3>
               <CoupleOfferPrice offerId="couple_essential" />
               <p className="text-base sm:text-lg text-[#1C1412] leading-relaxed font-medium">
@@ -425,7 +425,7 @@ export function CoupleLanding() {
                 variant="outline"
                 size="lg"
               >
-                Choisir Essentiel — 30 000 FCFA
+                Choisir Premium — 30 000 FCFA
               </MagneticButton>
             </article>
 
