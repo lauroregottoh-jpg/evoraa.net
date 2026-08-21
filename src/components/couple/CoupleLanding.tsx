@@ -29,7 +29,9 @@ import {
   LANDING_HERO,
   LANDING_IMAGINE,
   LANDING_OFFERS,
+  LANDING_PRICE_DISPLAY,
   LANDING_REPORT_BLOCKS,
+  LANDING_REPORT_PILLARS,
   LANDING_SITUATIONS,
   LANDING_STEPS,
   LANDING_TOOLS,
@@ -105,7 +107,7 @@ export function CoupleLanding() {
       </PageHero>
 
       {/* 01 — Situations + curseur scroll */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20">
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#F3EEE6]">
         <div className="max-w-4xl mx-auto grid lg:grid-cols-[3.5rem_1fr] gap-6 lg:gap-10">
           <div
             className="hidden lg:flex flex-col items-center gap-3 sticky top-28 self-start pt-2"
@@ -169,7 +171,7 @@ export function CoupleLanding() {
       </section>
 
       {/* 02 — Tensions : 5 tirets */}
-      <section className="px-6 sm:px-12 lg:px-20 py-14 sm:py-16 border-y border-[#1C1412]/8">
+      <section className="px-6 sm:px-12 lg:px-20 py-14 sm:py-16 bg-[#EDE6DC] border-y border-[#1C1412]/8">
         <div className="max-w-5xl mx-auto grid lg:grid-cols-[1fr_1.15fr] gap-10 lg:gap-14 items-start">
           <div className="ck-reveal space-y-4">
             <p className="couple-chapter text-xs font-bold uppercase text-primary">
@@ -195,7 +197,7 @@ export function CoupleLanding() {
       </section>
 
       {/* 03 — Deux personnes (était 04) */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-white/70">
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#F8F4EE]">
         <div className="max-w-5xl mx-auto space-y-10">
           <div className="ck-reveal space-y-3">
             <p className="couple-chapter text-xs font-bold uppercase text-primary">
@@ -234,7 +236,7 @@ export function CoupleLanding() {
       </section>
 
       {/* 04 — Carte (était 03) — animation plus grande */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-24">
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-24 bg-[#F3EEE6]">
         <div className="max-w-5xl mx-auto grid lg:grid-cols-[1.05fr_1fr] gap-12 items-center">
           <div className="ck-reveal flex justify-center text-primary">
             <VizMap className="w-72 h-48 sm:w-96 sm:h-64" />
@@ -262,8 +264,41 @@ export function CoupleLanding() {
         </div>
       </section>
 
+      {/* Piliers rapport — mise en valeur */}
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#5C1F28] text-[#FBF9F6]">
+        <div className="max-w-5xl mx-auto space-y-10">
+          <div className="ck-reveal max-w-2xl space-y-3">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#F3D9A4]">
+              {LANDING_REPORT_PILLARS.eyebrow}
+            </p>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
+              {LANDING_REPORT_PILLARS.title}
+            </h2>
+            <p className="text-base sm:text-lg text-white/75 leading-relaxed">
+              {LANDING_REPORT_PILLARS.close}
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {LANDING_REPORT_PILLARS.items.map((item) => (
+              <article
+                key={item.title}
+                className={cn(
+                  "ck-reveal rounded-2xl p-5 sm:p-6 bg-gradient-to-br text-[#FBF9F6] border border-white/10",
+                  item.accent
+                )}
+              >
+                <h3 className="font-serif text-xl font-bold">{item.title}</h3>
+                <p className="mt-2 text-sm text-white/80 leading-relaxed">
+                  {item.body}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* 05 — Rapport 2×2 */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 border-y border-[#1C1412]/8">
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#EDE6DC] border-y border-[#1C1412]/8">
         <div className="max-w-5xl mx-auto space-y-10">
           <div className="ck-reveal max-w-2xl space-y-3">
             <p className="couple-chapter text-xs font-bold uppercase text-primary">
@@ -296,9 +331,9 @@ export function CoupleLanding() {
       </section>
 
       {/* 06 — Action enrichie */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20">
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#FBF9F6]">
         <div className="max-w-4xl mx-auto space-y-10">
-          <div className="ck-reveal space-y-3">
+          <div className="ck-reveal space-y-3 rounded-2xl bg-[#E8DFD2] border border-[#5C1F28]/10 p-6 sm:p-8">
             <p className="couple-chapter text-xs font-bold uppercase text-primary">
               06 — Et ensuite
             </p>
@@ -309,16 +344,19 @@ export function CoupleLanding() {
               {LANDING_TOOLS.subtitle}
             </p>
           </div>
-          <div className="grid sm:grid-cols-2 gap-8 sm:gap-10">
+          <div className="grid sm:grid-cols-2 gap-5 sm:gap-6">
             {LANDING_TOOLS.items.map((item, i) => (
-              <div key={item.title} className="ck-reveal space-y-2">
-                <p className="font-mono text-sm font-bold text-accent">
+              <div
+                key={item.title}
+                className="ck-reveal space-y-2 rounded-2xl border border-[#5C1F28]/08 bg-[#FFFCF8] p-5 sm:p-6 shadow-sm"
+              >
+                <p className="font-mono text-sm font-bold text-[#B8954A]">
                   {String(i + 1).padStart(2, "0")}
                 </p>
-                <h3 className="font-serif text-xl sm:text-2xl font-bold">
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#1C1412]">
                   {item.title}
                 </h3>
-                <p className="text-base sm:text-lg text-[#1C1412] leading-relaxed">
+                <p className="text-base sm:text-lg text-[#1C1412]/80 leading-relaxed">
                   {item.body}
                 </p>
               </div>
@@ -328,7 +366,7 @@ export function CoupleLanding() {
       </section>
 
       {/* 07 — Pour qui */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-white/70">
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#F3EEE6]">
         <div className="max-w-4xl mx-auto space-y-10">
           <div className="ck-reveal space-y-2">
             <p className="couple-chapter text-xs font-bold uppercase text-primary">
@@ -354,7 +392,7 @@ export function CoupleLanding() {
       </section>
 
       {/* 08 — Parcours */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-white">
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#EDE6DC] border-y border-[#1C1412]/8">
         <div className="max-w-4xl mx-auto">
           <div className="ck-reveal mb-10 space-y-2">
             <p className="couple-chapter text-xs font-bold uppercase text-primary">
@@ -425,7 +463,11 @@ export function CoupleLanding() {
                 variant="outline"
                 size="lg"
               >
-                Choisir Premium — 30 000 FCFA
+                Choisir Premium —{" "}
+                {LANDING_PRICE_DISPLAY.couple_essential.coupleTotalXof.toLocaleString(
+                  "fr-FR"
+                )}{" "}
+                FCFA
               </MagneticButton>
             </article>
 
@@ -453,7 +495,11 @@ export function CoupleLanding() {
                 variant="primary"
                 size="lg"
               >
-                Choisir Premium Plus — 50 000 FCFA
+                Choisir Premium Plus —{" "}
+                {LANDING_PRICE_DISPLAY.couple_premium_plus.coupleTotalXof.toLocaleString(
+                  "fr-FR"
+                )}{" "}
+                FCFA
               </MagneticButton>
             </article>
           </div>
@@ -461,12 +507,12 @@ export function CoupleLanding() {
       </section>
 
       {/* Imagine */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-24 bg-white">
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-24 bg-[#F3EEE6]">
         <div className="max-w-5xl mx-auto grid lg:grid-cols-[1fr_1.05fr] gap-12 items-center">
           <div className="ck-reveal">
             <VizReportUnlockScene />
           </div>
-          <div className="ck-reveal space-y-5">
+          <div className="ck-reveal space-y-5 rounded-2xl bg-[#E8DFD2]/70 border border-[#5C1F28]/10 p-6 sm:p-8">
             <p className="couple-chapter text-xs font-bold uppercase text-primary">
               10 — Imaginez
             </p>
@@ -509,14 +555,22 @@ export function CoupleLanding() {
                 variant="primary"
                 size="lg"
               >
-                Commencer — 30 000 FCFA
+                Commencer —{" "}
+                {LANDING_PRICE_DISPLAY.couple_essential.coupleTotalXof.toLocaleString(
+                  "fr-FR"
+                )}{" "}
+                FCFA
               </MagneticButton>
               <MagneticButton
                 href="/couple/offre?offer=couple_premium_plus#payer"
                 variant="outline"
                 size="lg"
               >
-                Premium Plus — 50 000 FCFA
+                Premium Plus —{" "}
+                {LANDING_PRICE_DISPLAY.couple_premium_plus.coupleTotalXof.toLocaleString(
+                  "fr-FR"
+                )}{" "}
+                FCFA
               </MagneticButton>
             </div>
           </div>
@@ -533,12 +587,12 @@ export function CoupleLanding() {
       </section>
 
       {/* Pour finir — animation gauche, texte + CTA droite */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-white">
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#EDE6DC]">
         <div className="max-w-5xl mx-auto grid lg:grid-cols-[1.05fr_1fr] gap-10 lg:gap-14 items-center">
           <div className="ck-reveal order-2 lg:order-1">
             <VizDualFinish />
           </div>
-          <div className="ck-reveal order-1 lg:order-2 space-y-6">
+          <div className="ck-reveal order-1 lg:order-2 space-y-6 rounded-2xl bg-[#FBF9F6] border border-[#5C1F28]/10 p-6 sm:p-8">
             <p className="couple-chapter text-xs font-bold uppercase text-primary">
               {LANDING_CLOSING.finishTitle}
             </p>
@@ -554,18 +608,18 @@ export function CoupleLanding() {
             <p className="text-base text-[#1C1412] italic">
               {COUPLE_BRAND} — {LANDING_CLOSING.tagline}
             </p>
-            <MagneticButton href="/couple/offre" variant="primary" size="lg">
-              Je commence
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </MagneticButton>
-            <div>
-              <Link
-                href="/couple/espace"
-                className="text-base font-semibold text-primary"
-              >
-                Accéder à mon espace couple →
-              </Link>
-            </div>
+          <MagneticButton href="/couple/offre" variant="primary" size="lg">
+            Je commence
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </MagneticButton>
+          <div>
+            <Link
+              href="/couple/espace"
+              className="text-base font-semibold text-primary"
+            >
+              Découvrir mon tableau de bord couple →
+            </Link>
+          </div>
           </div>
         </div>
       </section>

@@ -60,8 +60,8 @@ export function buildEvaSystemPrompt(adminExtra?: string): string {
 
   const livePlans = `
 ## Tarifs LIVE (code — prioritaire)
-- Découverte (${PLANS.free.amountXof} FCFA): ${PLANS.free.limits.dailySuggestions} sugg/j, ${PLANS.free.limits.conversationsPerMonth} convos/mois, ${PLANS.free.limits.messagesPerConversation} msg/convo, EVA ${PLANS.free.limits.evaQuestionsPerDay}/j
-- Alliance (${PLANS.premium_plus.amountXof} FCFA/mois): ${PLANS.premium_plus.limits.dailySuggestions} sugg/j, ${PLANS.premium_plus.limits.conversationsPerMonth} convos/mois, ${PLANS.premium_plus.limits.messagesPerConversation} msg/convo, EVA ${PLANS.premium_plus.limits.evaQuestionsPerDay}/j
+- Découverte (${PLANS.free.amountXof} FCFA): ${PLANS.free.limits.dailyLikes} likes/j, ${PLANS.free.limits.conversationsPerMonth} convos/mois, ${PLANS.free.limits.messagesPerConversation} msg/convo, EVA ${PLANS.free.limits.evaQuestionsPerDay}/j
+- Alliance (${PLANS.premium_plus.amountXof} FCFA/mois): ${PLANS.premium_plus.limits.dailyLikes} likes/j, ${PLANS.premium_plus.limits.conversationsPerMonth} convos/mois, ${PLANS.premium_plus.limits.messagesPerConversation} msg/convo, EVA ${PLANS.premium_plus.limits.evaQuestionsPerDay}/j
 `
 
   return [

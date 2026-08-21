@@ -44,7 +44,9 @@ next-env.d.ts
 
 # Inspiration assets (large local media — keep local)
 /INSPIRATION FARATA/
-*.mp4
+# Product CTA video is under public/videos (deployed). Ignore other local mp4s.
+/docs/**/*.mp4
+/INSPIRATION*/**/*.mp4
 
 # Reference bundles downloaded locally
 /skills integration de paiement/

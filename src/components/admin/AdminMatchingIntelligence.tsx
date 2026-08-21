@@ -20,6 +20,7 @@ import {
   type SavedCampaignSegment,
   type PlatformSettingRow,
 } from "@/app/actions/admin"
+import { runMatchingSweepAction } from "@/app/actions/matching"
 
 function parseSavedSegments(settings: PlatformSettingRow[]): SavedCampaignSegment[] {
   const row = settings.find((s) => s.key === "campaign_segments")
@@ -162,6 +163,26 @@ export function MatchingIntelligencePanel({
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          {isFullAdmin ? (
+            <Button
+              type="button"
+              size="sm"
+              className="rounded-xl"
+              disabled={busy === "match-sweep"}
+              onClick={() =>
+                void run("match-sweep", async () => {
+                  const res = await runMatchingSweepAction()
+                  if (res.error) return { error: res.error }
+                  return {
+                    success: true,
+                    message: `${res.viewers ?? 0} profils · ${res.pairsWritten ?? 0} paires · ${res.notified ?? 0} relances`,
+                  }
+                })
+              }
+            >
+              {busy === "match-sweep" ? "Calcul…" : "Calculer les matchs maintenant"}
+            </Button>
+          ) : null}
           {(
             [
               ["overview", "Vue data"],

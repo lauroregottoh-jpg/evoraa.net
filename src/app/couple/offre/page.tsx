@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { CinematicLayout } from "@/components/layout/CinematicLayout"
+import { MemberPage } from "@/components/layout/MemberPage"
+import { CoupleShell } from "@/components/couple/CoupleShell"
 import { CoupleOffreCheckout } from "@/components/couple/CoupleOffreCheckout"
 import { COUPLE_BRAND, COUPLE_TAGLINE } from "@/lib/couple/config"
 import { isCoupleDemoPricing } from "@/lib/couple/offers"
@@ -10,6 +11,8 @@ export const metadata = {
   description: `Choisissez Premium ou Premium Plus et payez par Mobile Money ou carte. ${COUPLE_TAGLINE}`,
 }
 
+export const dynamic = "force-dynamic"
+
 export default function CoupleOffrePage() {
   const demoPricing = isCoupleDemoPricing()
   const provider = resolveLiveProvider()
@@ -17,9 +20,9 @@ export default function CoupleOffrePage() {
   const showModePicker = provider === "bictorys" && !demoMode
 
   return (
-    <CinematicLayout>
-      <div className="bg-[#FBF9F6] min-h-[70vh]">
-        <div className="max-w-xl mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-8">
+    <MemberPage dense contentWidth="wide">
+      <CoupleShell activeHref="/couple/offre" showWelcome={false} variant="sales">
+        <div className="max-w-xl mx-auto space-y-8 pb-6">
           <header className="space-y-2">
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#5C1F28]">
               {COUPLE_BRAND}
@@ -29,8 +32,8 @@ export default function CoupleOffrePage() {
             </h1>
             <p className="text-sm sm:text-base text-[#1C1412]/70 max-w-xl leading-relaxed">
               Premium Plus = tout le Premium + Points d’approfondissement,
-              analyses, scénarios, protocoles et charte. Payez ici par Mobile
-              Money ou carte — sans passer par l’espace membre.
+              analyses, scénarios, protocoles et charte. Payez ici dans KELIAA
+              par Mobile Money ou carte — puis accédez à votre espace couple.
             </p>
           </header>
 
@@ -48,9 +51,16 @@ export default function CoupleOffrePage() {
             <Link href="/couple/espace" className="font-semibold text-[#5C1F28]">
               Déjà acheteur ? Espace couple
             </Link>
+            {" · "}
+            <Link
+              href="/couple/rejoindre"
+              className="font-semibold text-[#5C1F28]"
+            >
+              J’ai un code partenaire
+            </Link>
           </p>
         </div>
-      </div>
-    </CinematicLayout>
+      </CoupleShell>
+    </MemberPage>
   )
 }

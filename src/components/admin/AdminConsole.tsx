@@ -24,6 +24,10 @@ import { PLANS } from "@/lib/billing/plans"
 import { OPS_CONSOLE_PATH } from "@/lib/admin/consolePath"
 import { AdminCouplePanel } from "@/components/admin/AdminCouplePanel"
 import {
+  AdminCoachingPanel,
+  AdminProductsHub,
+} from "@/components/admin/AdminCoachingPanel"
+import {
   AdminShell,
   FunnelBar,
   KpiCard,
@@ -48,6 +52,7 @@ import {
   YoutubeConfigEditor,
 } from "@/components/admin/AdminOpsV2Panels"
 import { MatchingIntelligencePanel } from "@/components/admin/AdminMatchingIntelligence"
+import { AdminEngagementBriefing } from "@/components/admin/AdminEngagementBriefing"
 import { AdminLoyaltyPanel, AdminLoyaltyAllianceNote } from "@/components/admin/AdminLoyaltyPanel"
 import { AdminMemberMessagesPanel } from "@/components/admin/AdminMemberMessagesPanel"
 import { AdminStaffTeamPanel } from "@/components/admin/AdminStaffTeamPanel"
@@ -172,6 +177,8 @@ type Props = {
     createdAt: string | null
     userOne: string
     userTwo: string
+    nameOne?: string
+    nameTwo?: string
   }>
   recommendations: Array<{
     id: string
@@ -222,7 +229,7 @@ function settingText(settings: PlatformSettingRow[], key: string, fallback = "")
 
 export function AdminConsole(props: Props) {
   const isFullAdmin = props.viewerRole === "admin"
-  const [nav, setNav] = React.useState<AdminNavId>("members")
+  const [nav, setNav] = React.useState<AdminNavId>("dashboard")
   const [modTab, setModTab] = React.useState<"photos" | "reports" | "pending">("photos")
   const [search, setSearch] = React.useState("")
   const [busy, setBusy] = React.useState("")
@@ -323,7 +330,7 @@ export function AdminConsole(props: Props) {
                 Bienvenue Admin
               </h1>
               <p className="text-sm text-muted-foreground mt-1">
-                Pilotage KELIAA : membres, modération, Alliance, matching, EVA.
+                Pilotage KELIAA : membres, Alliance, Couple, Coaching, matching.
               </p>
             </div>
             <p className="text-xs text-muted-foreground">
@@ -336,12 +343,12 @@ export function AdminConsole(props: Props) {
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <KpiCard label="Membres" value={props.stats.users} hint="Profils totaux" />
+            <KpiCard label="Inscriptions" value={props.stats.users} hint="Profils totaux" />
             <KpiCard
-              label="Alliance actives"
+              label="Alliance (premium)"
               value={props.retention.activeAlliance}
               tone="green"
-              hint={`${props.retention.conversionPaidPct}% conversion`}
+              hint={`${props.retention.conversionPaidPct}% · membres uniques non expirés`}
             />
             <KpiCard
               label="Revenus"
@@ -356,6 +363,23 @@ export function AdminConsole(props: Props) {
               hint={`${props.stats.pendingPhotos} photos · ${props.stats.openReports} signalements`}
             />
           </div>
+
+          <AdminProductsHub
+            allianceActive={props.retention.activeAlliance}
+            registrations={props.stats.users}
+            reportsOpen={props.stats.openReports}
+            onOpen={(id) => setNav(id)}
+          />
+
+          <SectionCard title="Briefing Eva — engagement">
+            <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+              Point du jour : likes (qui like qui), réciproques, scan des discussions et
+              lecture des messages. Mis à jour à chaque ouverture, archivé jour par jour.
+            </p>
+            <Button type="button" onClick={() => setNav("engagement")}>
+              Ouvrir le Briefing Eva →
+            </Button>
+          </SectionCard>
 
           <SectionCard title="Matching Intelligence — aperçu">
             <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-3">
@@ -493,6 +517,8 @@ export function AdminConsole(props: Props) {
                 ["moderation", "Ouvrir la modération"],
                 ["alliance", "Alliance & paiements"],
                 ["couple", "KELYA Couple"],
+                ["coaching", "Coaching"],
+                ["vocals", "Vocaux & transcriptions"],
                 ["academy", "Académie du mariage"],
               ] as const
             ).map(([id, label]) => (
@@ -877,6 +903,26 @@ export function AdminConsole(props: Props) {
       )}
 
       {nav === "couple" && <AdminCouplePanel />}
+      {nav === "coaching" && <AdminCoachingPanel />}
+
+      {nav === "engagement" && <AdminEngagementBriefing isFullAdmin={isFullAdmin} />}
+      {nav === "vocals" && (
+        <div className="space-y-4">
+          <div>
+            <h1 className="font-serif text-3xl font-bold">Vocaux & retranscriptions</h1>
+            <p className="text-sm text-muted-foreground mt-1 max-w-2xl leading-relaxed">
+              Onglet Discussions : écoutez les vocaux membres et relancez la
+              retranscription. Le texte n’est jamais montré à l’autre personne.
+              Les séances coaching (LiveKit) remplissent aussi l’onglet
+              Transcriptions du menu Coaching.
+            </p>
+          </div>
+          <AdminEngagementBriefing
+            isFullAdmin={isFullAdmin}
+            defaultTab="conversations"
+          />
+        </div>
+      )}
 
       {/* ——— 6. MATCHING INTELLIGENCE ——— */}
       {nav === "matching" && (
@@ -931,7 +977,8 @@ export function AdminConsole(props: Props) {
                     <div key={m.id} className="py-3 text-sm space-y-1">
                       <div className="flex justify-between gap-2">
                         <p className="font-semibold">
-                          Compatibilité {m.score != null ? `${Math.round(m.score)}%` : "—"}
+                          {m.nameOne || "Membre"} ↔ {m.nameTwo || "Membre"}
+                          {m.score != null ? ` · ${Math.round(m.score)}%` : ""}
                         </p>
                         <Badge variant="outline">{m.status || "—"}</Badge>
                       </div>

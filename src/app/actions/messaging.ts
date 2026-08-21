@@ -1,12 +1,35 @@
 "use server"
 
+import { after } from "next/server"
 import { revalidatePath } from "next/cache"
 import { createClient } from "@/utils/supabase/server"
+import { createAdminClient } from "@/utils/supabase/admin"
 import { getUserEntitlements } from "@/lib/billing/entitlements"
 import {
   consumeLoyaltyBonusMessage,
   getLoyaltyAccount,
 } from "@/lib/loyalty/account"
+import {
+  consumeMessageCredit,
+  getMessageCreditBalance,
+} from "@/lib/billing/messageCredits"
+import { transcribeStoredVoiceNote, cleanClientTranscript } from "@/lib/messaging/transcribeVoice"
+import {
+  VOICE_NOTE_BUCKET,
+  VOICE_NOTE_MAX_BYTES,
+  VOICE_NOTE_MAX_DURATION_MS,
+  VOICE_NOTE_SIGNED_URL_SECONDS,
+  extensionForMime,
+  normalizeAudioMime,
+  voicePreviewLabel,
+} from "@/lib/messaging/voiceNotes"
+import {
+  VOICE_SANDBOX_DISPLAY,
+  VOICE_SANDBOX_EMAIL,
+  VOICE_SANDBOX_FIRST,
+  VOICE_SANDBOX_LAST,
+} from "@/lib/messaging/voiceSandbox"
+import { enforceRateLimit, RL } from "@/lib/security/rateLimit"
 
 export type ConversationListItem = {
   id: string
@@ -18,6 +41,8 @@ export type ConversationListItem = {
   unread: boolean
 }
 
+export type ChatMessageKind = "text" | "voice"
+
 export type ChatMessageDTO = {
   id: string
   senderId: string
@@ -25,6 +50,9 @@ export type ChatMessageDTO = {
   createdAt: string
   isRead: boolean
   isMine: boolean
+  kind: ChatMessageKind
+  durationMs: number | null
+  audioUrl: string | null
 }
 
 export type ConversationRoomDTO = {
@@ -39,7 +67,113 @@ export type ConversationRoomDTO = {
   freeLimit: number
   /** Solde fidélité (utilisable seulement si Alliance) */
   bonusMessagesRemaining: number
+  /** Crédits tests / invitations (expirent sous 20 jours) */
+  testCreditsRemaining: number
+  testCreditsExpiresAt: string | null
   hasMoreOlder: boolean
+  /** Vocaux : Alliance (et comptes ops). Lecture possible pour les deux. */
+  voiceNotesEnabled: boolean
+}
+
+const MESSAGE_SELECT =
+  "id, sender_id, message, is_read, created_at, kind, audio_path, audio_duration_ms"
+const LEGACY_MESSAGE_SELECT = "id, sender_id, message, is_read, created_at"
+
+function isMissingVoiceColumn(message: string | undefined): boolean {
+  const m = (message || "").toLowerCase()
+  return (
+    m.includes("kind") ||
+    m.includes("audio_path") ||
+    m.includes("audio_duration") ||
+    m.includes("transcript")
+  )
+}
+
+type MessageRow = {
+  id: string
+  sender_id: string
+  message: string
+  is_read: boolean | null
+  created_at: string | null
+  kind?: string | null
+  audio_path?: string | null
+  audio_duration_ms?: number | null
+}
+
+async function signedVoiceUrls(paths: string[]): Promise<Map<string, string>> {
+  const unique = [...new Set(paths.filter(Boolean))]
+  const map = new Map<string, string>()
+  if (!unique.length) return map
+  try {
+    const admin = createAdminClient()
+    const { data, error } = await admin.storage
+      .from(VOICE_NOTE_BUCKET)
+      .createSignedUrls(unique, VOICE_NOTE_SIGNED_URL_SECONDS)
+    if (error) {
+      console.error("[voice] signed urls", error.message)
+      return map
+    }
+    for (const row of data ?? []) {
+      if (row.path && row.signedUrl) map.set(row.path, row.signedUrl)
+    }
+  } catch (e) {
+    console.error("[voice] signed urls", e)
+  }
+  return map
+}
+
+function mapChatMessage(
+  m: MessageRow,
+  userId: string,
+  urlByPath: Map<string, string>
+): ChatMessageDTO {
+  const kind: ChatMessageKind = m.kind === "voice" ? "voice" : "text"
+  const path = m.audio_path || null
+  return {
+    id: m.id,
+    senderId: m.sender_id,
+    text: m.message,
+    createdAt: m.created_at ?? new Date().toISOString(),
+    isRead: Boolean(m.is_read),
+    isMine: m.sender_id === userId,
+    kind,
+    durationMs: m.audio_duration_ms ?? null,
+    audioUrl: kind === "voice" && path ? urlByPath.get(path) ?? null : null,
+  }
+}
+
+async function consumeOutgoingQuota(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string,
+  conversationId: string
+): Promise<{ error?: string }> {
+  const { count: myCount } = await supabase
+    .from("messages")
+    .select("id", { count: "exact", head: true })
+    .eq("conversation_id", conversationId)
+    .eq("sender_id", userId)
+
+  const entitlements = await getUserEntitlements(userId)
+  const messageLimit = entitlements.limits.messagesPerConversation
+  const count = myCount ?? 0
+
+  if (count >= messageLimit) {
+    const usedCredit = await consumeMessageCredit(userId)
+    if (usedCredit) return {}
+    if (entitlements.isPaid) {
+      const usedBonus = await consumeLoyaltyBonusMessage(userId)
+      if (!usedBonus) {
+        return {
+          error: `Limite de messages atteinte pour votre offre ${entitlements.planName}. Faites un test (+10) ou invitez (+5), valables 20 jours — ou consultez /premium.`,
+        }
+      }
+    } else {
+      return {
+        error: `Limite de messages atteinte. Faites un questionnaire (+10 messages, 20 jours) ou invitez quelqu’un à un test (+5).`,
+      }
+    }
+  }
+  return {}
 }
 
 function formatListTime(iso: string | null): string {
@@ -251,7 +385,7 @@ export async function listConversations(): Promise<{
     .select("id, user_id, first_name, last_name")
     .in("user_id", partnerUserIds)
 
-  const { isHiddenOperatorProfile } = await import(
+  const { isHiddenOperatorProfile, isVoiceSandboxProfile } = await import(
     "@/lib/community/hiddenProfiles"
   )
 
@@ -293,6 +427,10 @@ export async function listConversations(): Promise<{
       isHiddenOperatorProfile(
         partner.first_name as string | null,
         partner.last_name as string | null
+      ) &&
+      !isVoiceSandboxProfile(
+        partner.first_name as string | null,
+        partner.last_name as string | null
       )
     ) {
       continue
@@ -301,7 +439,12 @@ export async function listConversations(): Promise<{
 
     items.push({
       id: conv.id,
-      partnerName: partner?.first_name || "Membre",
+      partnerName: isVoiceSandboxProfile(
+        partner?.first_name as string | null,
+        partner?.last_name as string | null
+      )
+        ? VOICE_SANDBOX_DISPLAY
+        : partner?.first_name || "Membre",
       partnerProfileId: partner?.id || "",
       harmonyScore: Math.round(Number(match.compatibility_score ?? 0)),
       lastMessage:
@@ -354,12 +497,16 @@ export async function getConversationRoom(conversationId: string): Promise<{
     .eq("user_id", partnerUserId)
     .maybeSingle()
 
-  const { isHiddenOperatorProfile } = await import(
+  const { isHiddenOperatorProfile, isVoiceSandboxProfile } = await import(
     "@/lib/community/hiddenProfiles"
   )
   if (
     partner &&
     isHiddenOperatorProfile(
+      partner.first_name as string | null,
+      partner.last_name as string | null
+    ) &&
+    !isVoiceSandboxProfile(
       partner.first_name as string | null,
       partner.last_name as string | null
     )
@@ -368,19 +515,30 @@ export async function getConversationRoom(conversationId: string): Promise<{
   }
 
   const PAGE = 80
-  const { data: messages, error: msgError } = await supabase
+  let { data: messages, error: msgError } = await supabase
     .from("messages")
-    .select("id, sender_id, message, is_read, created_at")
+    .select(MESSAGE_SELECT)
     .eq("conversation_id", conversationId)
     .order("created_at", { ascending: false })
     .limit(PAGE + 1)
+
+  if (msgError && isMissingVoiceColumn(msgError.message)) {
+    const retry = await supabase
+      .from("messages")
+      .select(LEGACY_MESSAGE_SELECT)
+      .eq("conversation_id", conversationId)
+      .order("created_at", { ascending: false })
+      .limit(PAGE + 1)
+    messages = retry.data
+    msgError = retry.error
+  }
 
   if (msgError) {
     return { error: msgError.message }
   }
 
   const hasMoreOlder = (messages?.length ?? 0) > PAGE
-  const pageRows = (messages ?? []).slice(0, PAGE).reverse()
+  const pageRows = ((messages ?? []) as MessageRow[]).slice(0, PAGE).reverse()
 
   // Mark partner messages as read
   await supabase
@@ -390,20 +548,21 @@ export async function getConversationRoom(conversationId: string): Promise<{
     .neq("sender_id", user.id)
     .eq("is_read", false)
 
-  const mapped: ChatMessageDTO[] = pageRows.map((m) => ({
-    id: m.id,
-    senderId: m.sender_id,
-    text: m.message,
-    createdAt: m.created_at ?? new Date().toISOString(),
-    isRead: Boolean(m.is_read),
-    isMine: m.sender_id === user.id,
-  }))
+  const urlByPath = await signedVoiceUrls(
+    pageRows
+      .filter((m) => m.kind === "voice" && m.audio_path)
+      .map((m) => m.audio_path as string)
+  )
+  const mapped: ChatMessageDTO[] = pageRows.map((m) =>
+    mapChatMessage(m, user.id, urlByPath)
+  )
 
   const entitlements = await getUserEntitlements(user.id)
   const messageLimit = entitlements.limits.messagesPerConversation
   const loyalty = await getLoyaltyAccount(user.id, {
     isPaid: entitlements.isPaid,
   })
+  const credits = await getMessageCreditBalance(user.id)
   const { count: myMessageCount } = await supabase
     .from("messages")
     .select("id", { count: "exact", head: true })
@@ -413,7 +572,12 @@ export async function getConversationRoom(conversationId: string): Promise<{
   return {
     room: {
       id: conversationId,
-      partnerName: partner?.first_name || "Membre",
+      partnerName: isVoiceSandboxProfile(
+        partner?.first_name as string | null,
+        partner?.last_name as string | null
+      )
+        ? VOICE_SANDBOX_DISPLAY
+        : partner?.first_name || "Membre",
       partnerProfileId: partner?.id || "",
       partnerUserId,
       harmonyScore: Math.round(Number(match.compatibility_score ?? 0)),
@@ -423,7 +587,10 @@ export async function getConversationRoom(conversationId: string): Promise<{
       bonusMessagesRemaining: entitlements.isPaid
         ? loyalty.bonusMessagesBalance
         : 0,
+      testCreditsRemaining: credits.remaining,
+      testCreditsExpiresAt: credits.nextExpiresAt,
       hasMoreOlder,
+      voiceNotesEnabled: entitlements.isPaid,
     },
   }
 }
@@ -452,28 +619,38 @@ export async function loadOlderMessagesAction(
   }
 
   const PAGE = 80
-  const { data: rows, error } = await supabase
+  let { data: rows, error } = await supabase
     .from("messages")
-    .select("id, sender_id, message, is_read, created_at")
+    .select(MESSAGE_SELECT)
     .eq("conversation_id", conversationId)
     .lt("created_at", beforeCreatedAt)
     .order("created_at", { ascending: false })
     .limit(PAGE + 1)
 
+  if (error && isMissingVoiceColumn(error.message)) {
+    const retry = await supabase
+      .from("messages")
+      .select(LEGACY_MESSAGE_SELECT)
+      .eq("conversation_id", conversationId)
+      .lt("created_at", beforeCreatedAt)
+      .order("created_at", { ascending: false })
+      .limit(PAGE + 1)
+    rows = retry.data
+    error = retry.error
+  }
+
   if (error) return { error: error.message }
 
   const hasMoreOlder = (rows?.length ?? 0) > PAGE
-  const pageRows = (rows ?? []).slice(0, PAGE).reverse()
+  const pageRows = ((rows ?? []) as MessageRow[]).slice(0, PAGE).reverse()
+  const urlByPath = await signedVoiceUrls(
+    pageRows
+      .filter((m) => m.kind === "voice" && m.audio_path)
+      .map((m) => m.audio_path as string)
+  )
 
   return {
-    messages: pageRows.map((m) => ({
-      id: m.id,
-      senderId: m.sender_id,
-      text: m.message,
-      createdAt: m.created_at ?? new Date().toISOString(),
-      isRead: Boolean(m.is_read),
-      isMine: m.sender_id === user.id,
-    })),
+    messages: pageRows.map((m) => mapChatMessage(m, user.id, urlByPath)),
     hasMoreOlder,
   }
 }
@@ -507,30 +684,8 @@ export async function sendMessageAction(
     return { error: "Accès non autorisé à cette conversation." }
   }
 
-  const { count: myCount } = await supabase
-    .from("messages")
-    .select("id", { count: "exact", head: true })
-    .eq("conversation_id", conversationId)
-    .eq("sender_id", user.id)
-
-  const entitlements = await getUserEntitlements(user.id)
-  const messageLimit = entitlements.limits.messagesPerConversation
-  const count = myCount ?? 0
-
-  if (count >= messageLimit) {
-    if (entitlements.isPaid) {
-      const usedBonus = await consumeLoyaltyBonusMessage(user.id)
-      if (!usedBonus) {
-        return {
-          error: `Limite de messages atteinte pour votre offre ${entitlements.planName}. Consultez votre solde fidélité sur /premium.`,
-        }
-      }
-    } else {
-      return {
-        error: `Limite de messages atteinte pour votre offre ${entitlements.planName}. Passez Alliance sur /billing.`,
-      }
-    }
-  }
+  const quota = await consumeOutgoingQuota(supabase, user.id, conversationId)
+  if (quota.error) return { error: quota.error }
 
   const { data, error } = await supabase
     .from("messages")
@@ -540,7 +695,7 @@ export async function sendMessageAction(
       message: trimmed,
       is_read: false,
     })
-    .select("id, sender_id, message, is_read, created_at")
+    .select(LEGACY_MESSAGE_SELECT)
     .single()
 
   if (error || !data) {
@@ -552,13 +707,310 @@ export async function sendMessageAction(
   revalidatePath("/premium")
 
   return {
-    message: {
-      id: data.id,
-      senderId: data.sender_id,
-      text: data.message,
-      createdAt: data.created_at ?? new Date().toISOString(),
-      isRead: Boolean(data.is_read),
-      isMine: true,
-    },
+    message: mapChatMessage(data as MessageRow, user.id, new Map()),
   }
+}
+
+export async function getVoicePlaybackUrlAction(
+  conversationId: string,
+  messageId: string
+): Promise<{ error?: string; url?: string }> {
+  const { supabase, user } = await getAuthUser()
+  if (!user) return { error: "Vous devez être connecté." }
+
+  const { data: conversation } = await supabase
+    .from("conversations")
+    .select("id, match_id")
+    .eq("id", conversationId)
+    .maybeSingle()
+  if (!conversation) return { error: "Conversation introuvable." }
+
+  const { data: match } = await supabase
+    .from("matches")
+    .select("user_one, user_two")
+    .eq("id", conversation.match_id)
+    .maybeSingle()
+  if (!match || (match.user_one !== user.id && match.user_two !== user.id)) {
+    return { error: "Accès non autorisé à cette conversation." }
+  }
+
+  const { data: row } = await supabase
+    .from("messages")
+    .select("id, audio_path, kind")
+    .eq("id", messageId)
+    .eq("conversation_id", conversationId)
+    .maybeSingle()
+
+  if (!row?.audio_path || row.kind !== "voice") {
+    return { error: "Vocal introuvable." }
+  }
+
+  const urls = await signedVoiceUrls([row.audio_path as string])
+  const url = urls.get(row.audio_path as string)
+  if (!url) return { error: "Lecture indisponible. Réessayez." }
+  return { url }
+}
+
+export async function sendVoiceNoteAction(
+  formData: FormData
+): Promise<{ error?: string; message?: ChatMessageDTO }> {
+  const conversationId = String(formData.get("conversationId") || "").trim()
+  const durationRaw = Number(formData.get("durationMs") || 0)
+  const clientTranscript = cleanClientTranscript(
+    String(formData.get("clientTranscript") || "")
+  )
+  const file = formData.get("audio")
+  if (!conversationId) return { error: "Conversation manquante." }
+  if (!(file instanceof File) || file.size < 400) {
+    return { error: "Enregistrement trop court. Réessayez." }
+  }
+  if (file.size > VOICE_NOTE_MAX_BYTES) {
+    return { error: "Vocal trop lourd (max 2 Mo). Parlez un peu moins longtemps." }
+  }
+
+  const mime =
+    normalizeAudioMime(file.type) ||
+    (file.name.endsWith(".m4a") || file.name.endsWith(".mp4")
+      ? "audio/mp4"
+      : file.name.endsWith(".ogg")
+        ? "audio/ogg"
+        : "audio/webm")
+
+  const durationMs = Math.min(
+    VOICE_NOTE_MAX_DURATION_MS + 5_000,
+    Math.max(800, Math.round(durationRaw || 0))
+  )
+  if (durationRaw > VOICE_NOTE_MAX_DURATION_MS + 8_000) {
+    return { error: "Vocal trop long (max 60 secondes)." }
+  }
+
+  const { supabase, user } = await getAuthUser()
+  if (!user) return { error: "Vous devez être connecté." }
+
+  const entitlements = await getUserEntitlements(user.id)
+  if (!entitlements.isPaid) {
+    return {
+      error: "Les vocaux sont réservés à Alliance. Passez Alliance sur /billing.",
+    }
+  }
+
+  const rl = await enforceRateLimit({
+    ...RL.voiceNote,
+    subject: user.id,
+  })
+  if (!rl.ok) return { error: rl.error }
+
+  const { data: conversation } = await supabase
+    .from("conversations")
+    .select("id, match_id")
+    .eq("id", conversationId)
+    .maybeSingle()
+  if (!conversation) return { error: "Conversation introuvable." }
+
+  const { data: match } = await supabase
+    .from("matches")
+    .select("id, user_one, user_two")
+    .eq("id", conversation.match_id)
+    .maybeSingle()
+  if (!match || (match.user_one !== user.id && match.user_two !== user.id)) {
+    return { error: "Accès non autorisé à cette conversation." }
+  }
+
+  const quota = await consumeOutgoingQuota(supabase, user.id, conversationId)
+  if (quota.error) return { error: quota.error }
+
+  const messageId = crypto.randomUUID()
+  const ext = extensionForMime(mime)
+  const audioPath = `${conversationId}/${messageId}.${ext}`
+
+  let admin
+  try {
+    admin = createAdminClient()
+  } catch {
+    return { error: "Stockage vocal indisponible. Contactez le support." }
+  }
+
+  const bytes = Buffer.from(await file.arrayBuffer())
+  const { error: upErr } = await admin.storage
+    .from(VOICE_NOTE_BUCKET)
+    .upload(audioPath, bytes, {
+      contentType: mime,
+      upsert: false,
+    })
+
+  if (upErr) {
+    console.error("[voice] upload", upErr.message)
+    return { error: "Impossible d’enregistrer le vocal. Réessayez." }
+  }
+
+  const preview = voicePreviewLabel(durationMs)
+  const hasServerTranscriber = Boolean(
+    process.env.GROQ_API_KEY?.trim() || process.env.OPENAI_API_KEY?.trim()
+  )
+  const { data, error } = await supabase
+    .from("messages")
+    .insert({
+      id: messageId,
+      conversation_id: conversationId,
+      sender_id: user.id,
+      message: preview,
+      is_read: false,
+      kind: "voice",
+      audio_path: audioPath,
+      audio_duration_ms: durationMs,
+      audio_mime: mime,
+      transcript_text: clientTranscript,
+      transcript_status: clientTranscript
+        ? hasServerTranscriber
+          ? "pending"
+          : "ready"
+        : hasServerTranscriber
+          ? "pending"
+          : "none",
+    })
+    .select(MESSAGE_SELECT)
+    .single()
+
+  if (error || !data) {
+    await admin.storage.from(VOICE_NOTE_BUCKET).remove([audioPath])
+    return { error: error?.message || "Échec d'envoi du vocal." }
+  }
+
+  after(() =>
+    transcribeStoredVoiceNote({
+      messageId,
+      audioPath,
+      mime,
+      clientTranscript,
+    }).catch((e) => console.error("[voice] after transcribe", e))
+  )
+
+  const urlByPath = await signedVoiceUrls([audioPath])
+
+  revalidatePath("/messages")
+  revalidatePath(`/messages/${conversationId}`)
+  revalidatePath("/premium")
+
+  return {
+    message: mapChatMessage(data as MessageRow, user.id, urlByPath),
+  }
+}
+
+export async function openVoiceSandboxAction(): Promise<{
+  error?: string
+  conversationId?: string
+}> {
+  const { user } = await getAuthUser()
+  if (!user) return { error: "Vous devez être connecté." }
+
+  const entitlements = await getUserEntitlements(user.id)
+  if (!entitlements.isPaid) {
+    return {
+      error:
+        "Les vocaux sont réservés à Alliance. Passez Alliance sur /billing, puis réessayez.",
+    }
+  }
+
+  let admin
+  try {
+    admin = createAdminClient()
+  } catch {
+    return { error: "Impossible d’ouvrir le banc d’essai vocal." }
+  }
+
+  const lookup = async () => {
+    const { data } = await admin.rpc("get_auth_user_id_by_email" as never, {
+      p_email: VOICE_SANDBOX_EMAIL,
+    } as never)
+    if (typeof data === "string" && data.length > 10) return data
+    return null
+  }
+
+  let sandboxUserId = await lookup()
+  if (!sandboxUserId) {
+    const { data: created, error: createErr } = await admin.auth.admin.createUser({
+      email: VOICE_SANDBOX_EMAIL,
+      password: `${crypto.randomUUID()}Aa1!`,
+      email_confirm: true,
+      user_metadata: { keliaa_sandbox: "voice" },
+    })
+    sandboxUserId = created?.user?.id ?? (await lookup())
+    if (!sandboxUserId) {
+      return {
+        error: createErr?.message || "Impossible de créer le partenaire d’essai.",
+      }
+    }
+  }
+
+  if (sandboxUserId === user.id) {
+    return { error: "Utilisez votre compte fondateur, pas Echo." }
+  }
+
+  await admin
+    .from("profiles")
+    .update({
+      first_name: VOICE_SANDBOX_FIRST,
+      last_name: VOICE_SANDBOX_LAST,
+    })
+    .eq("user_id", sandboxUserId)
+
+  const { data: asOne } = await admin
+    .from("matches")
+    .select("id")
+    .eq("user_one", user.id)
+    .eq("user_two", sandboxUserId)
+    .maybeSingle()
+  const { data: asTwo } = asOne
+    ? { data: null }
+    : await admin
+        .from("matches")
+        .select("id")
+        .eq("user_one", sandboxUserId)
+        .eq("user_two", user.id)
+        .maybeSingle()
+
+  let matchId = (asOne?.id as string | undefined) || (asTwo?.id as string | undefined)
+  if (!matchId) {
+    const { data: createdMatch, error: matchErr } = await admin
+      .from("matches")
+      .insert({
+        user_one: user.id,
+        user_two: sandboxUserId,
+        compatibility_score: 100,
+        status: "accepted",
+      })
+      .select("id")
+      .single()
+    if (matchErr || !createdMatch) {
+      return { error: matchErr?.message || "Impossible d’ouvrir le match d’essai." }
+    }
+    matchId = createdMatch.id as string
+  } else {
+    await admin.from("matches").update({ status: "accepted" }).eq("id", matchId)
+  }
+
+  const { data: existingConv } = await admin
+    .from("conversations")
+    .select("id")
+    .eq("match_id", matchId)
+    .maybeSingle()
+
+  let conversationId = existingConv?.id as string | undefined
+  if (!conversationId) {
+    const { data: createdConv, error: convErr } = await admin
+      .from("conversations")
+      .insert({ match_id: matchId })
+      .select("id")
+      .single()
+    if (convErr || !createdConv) {
+      return {
+        error: convErr?.message || "Impossible d’ouvrir la conversation d’essai.",
+      }
+    }
+    conversationId = createdConv.id as string
+  }
+
+  revalidatePath("/messages")
+  revalidatePath(`/messages/${conversationId}`)
+  return { conversationId }
 }

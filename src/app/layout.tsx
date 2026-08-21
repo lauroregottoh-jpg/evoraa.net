@@ -5,7 +5,6 @@ import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { AnalyticsScripts } from "@/components/analytics/AnalyticsScripts";
 import { RegisterServiceWorker } from "@/components/pwa/RegisterServiceWorker";
-import { PwaInstallBadge } from "@/components/pwa/PwaInstallBadge";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -50,8 +49,11 @@ export const metadata: Metadata = {
     telephone: false,
   },
   icons: {
-    icon: [{ url: "/favicon-keliaa.png", type: "image/png" }],
-    apple: [{ url: "/apple-icon.png", type: "image/png" }],
+    icon: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
   openGraph: {
     type: "website",
@@ -135,7 +137,6 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <AnalyticsScripts />
           <RegisterServiceWorker />
-          <PwaInstallBadge />
           <SmoothScroll>{children}</SmoothScroll>
         </ThemeProvider>
       </body>

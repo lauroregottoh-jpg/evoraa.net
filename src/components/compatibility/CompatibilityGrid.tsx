@@ -48,9 +48,10 @@ export function CompatibilityGrid({
           Découvrir vos compatibilités
         </h1>
         <p className="text-muted-foreground text-sm max-w-2xl leading-relaxed">
-          Suggestions calculées à partir de votre profil et de vos questionnaires (foi,
-          communication, foyer, finances…). Cliquez un profil pour voir les points de match.
-          Seuls les profils ≥ 60&nbsp;% vous sont proposés.
+          Suggestions à partir de votre demande (profil d’accueil) et, dès
+          qu’il y a des tests, du matching à 5 piliers. Les profils sans tests
+          sont des <strong>suggestions</strong> — pas un diagnostic complet.
+          Invitez l’autre à un questionnaire pour vérifier la compatibilité.
         </p>
         <div className="flex flex-wrap items-center gap-2 pt-1">
           <Button
@@ -101,7 +102,8 @@ export function CompatibilityGrid({
         <div className="rounded-2xl border border-border/60 bg-card p-8 text-center space-y-4">
           <p className="font-serif text-xl text-foreground">Aucune suggestion pour le moment</p>
           <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-            Complétez vos questionnaires pour affiner le matching, ou revenez plus tard.
+            Complétez vos questionnaires pour affiner, ou invitez quelqu’un à un
+            test depuis une suggestion.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
@@ -136,6 +138,9 @@ export function CompatibilityGrid({
                 domainScores: profile.domainScores,
                 photoUrl: profile.photoUrl,
                 isBlurred: globalBlur,
+                basis: profile.basis,
+                partnerTestsCount: profile.partnerTestsCount,
+                missingOnPartner: profile.missingOnPartner,
               }}
             />
           ))}

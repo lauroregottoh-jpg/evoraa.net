@@ -40,6 +40,8 @@ export async function startCoachingCheckoutAction(input: {
   moduleId?: string | null
   moduleTitle?: string | null
   brief?: CoachingCheckoutBrief | null
+  splitPlan?: Record<string, unknown> | null
+  displayAnonymous?: boolean | null
 }): Promise<{ error?: string; checkoutPath?: string; requiresAuth?: boolean }> {
   const minutes: CoachingDurationMinutes =
     input.minutes === 60 ? 60 : 30
@@ -155,6 +157,8 @@ export async function startCoachingCheckoutAction(input: {
         moduleTitle: input.moduleTitle || null,
         payment_mode: paymentMode,
         coaching_brief: coachingBrief,
+        split_plan: input.splitPlan || null,
+        display_anonymous: Boolean(input.displayAnonymous),
       },
     })
     .select("id")
@@ -208,6 +212,8 @@ export async function startCoachingCheckoutAction(input: {
         moduleTitle: input.moduleTitle || null,
         payment_mode: paymentMode,
         coaching_brief: coachingBrief,
+        split_plan: input.splitPlan || null,
+        display_anonymous: Boolean(input.displayAnonymous),
         bictorys: result.raw,
       },
     })

@@ -35,26 +35,13 @@ const PROTECTED_PREFIXES = [
   '/coffre-premium',
   '/rapport',
   '/alliance',
-  '/couple/espace',
-  '/couple/onboarding',
-  '/couple/inviter',
-  '/couple/questionnaire',
-  '/couple/attente',
-  '/couple/resultats',
-  '/couple/rapport',
-  '/couple/exercices',
-  '/couple/plan',
-  '/couple/telecharger',
-  '/couple/dossier',
-  '/couple/confirmation',
+  '/couple',
 ]
 
-/** Pages vente Couple + aperçus démo — accessibles sans compte. */
+/** Pages Couple démo — accessibles sans compte. */
 const PUBLIC_EXCEPTIONS = [
   '/couple/rapport/demo',
   '/couple/dossier/demo',
-  '/couple/checkout',
-  '/couple/offre',
 ]
 
 const ADMIN_PREFIXES = [OPS_CONSOLE_PATH, '/moderation']
@@ -67,6 +54,10 @@ const ALLOWED_API_PREFIXES = [
   '/api/cron/abandoned-payments',
   '/api/cron/email-outbox',
   '/api/cron/profile-reminders',
+  '/api/cron/daily-bug-hunt',
+  '/api/cron/capacity-check',
+  '/api/cron/coaching-reminders',
+  '/api/cron/daily-ops-digest',
   '/api/health/config',
 ]
 

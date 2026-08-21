@@ -13,6 +13,8 @@ import { CommunityTeaser } from "@/components/community/CommunityMemberCard"
 import { shouldShowDemoMatches } from "@/lib/demo/sarahGandeSimulations"
 import { Crown } from "lucide-react"
 import { DashboardCouplePromo } from "@/components/dashboard/DashboardCouplePromo"
+import { KeliaaBuddyNudge } from "@/components/engagement/KeliaaBuddyNudge"
+import { MessageCreditsCallout } from "@/components/engagement/MessageCreditsCallout"
 
 export default async function DashboardPage() {
   const [{ data, error }, community] = await Promise.all([
@@ -84,6 +86,9 @@ export default async function DashboardPage() {
           firstName={firstName}
           variant={isPaid ? "alliance" : "discovery"}
         />
+
+        <KeliaaBuddyNudge href="/compatibility" />
+        <MessageCreditsCallout />
 
         {isPaid ? (
           <AllianceIdentityHome

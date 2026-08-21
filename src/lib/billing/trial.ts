@@ -1,10 +1,12 @@
 import type { PlanLimits } from "@/lib/billing/plans"
 
-/** Boost Découverte pendant les 30 premiers jours (option A du plan pricing). */
+/**
+ * Boost Découverte : léger (suggestions / likes), sans dépasser
+ * les plafonds messages & conversations du plan FREE.
+ */
 export const TRIAL_BOOST_LIMITS: Partial<PlanLimits> = {
   dailySuggestions: 5,
-  conversationsPerMonth: 8,
-  messagesPerConversation: 8,
+  dailyLikes: 5,
 }
 
 export function isTrialActive(trialEndsAt: string | null | undefined): boolean {
@@ -18,7 +20,12 @@ export function applyTrialBoost(
   trialEndsAt: string | null | undefined
 ): PlanLimits {
   if (planId !== "free" || !isTrialActive(trialEndsAt)) return limits
-  return { ...limits, ...TRIAL_BOOST_LIMITS }
+  return {
+    ...limits,
+    ...TRIAL_BOOST_LIMITS,
+    // Toujours aligner dailyLikes sur dailySuggestions après boost
+    dailyLikes: TRIAL_BOOST_LIMITS.dailyLikes ?? limits.dailyLikes,
+  }
 }
 
 export function trialDaysRemaining(trialEndsAt: string | null | undefined): number | null {

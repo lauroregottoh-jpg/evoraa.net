@@ -1,6 +1,7 @@
 import { Suspense } from "react"
 import CoupleCheckoutClient from "./CheckoutClient"
-import { CinematicLayout } from "@/components/layout/CinematicLayout"
+import { MemberPage } from "@/components/layout/MemberPage"
+import { CoupleShell } from "@/components/couple/CoupleShell"
 import { isCoupleDemoPricing, getCoupleOffer } from "@/lib/couple/offers"
 import { isDemoPaymentsEnv, resolveLiveProvider } from "@/lib/billing/provider"
 import { notFound } from "next/navigation"
@@ -33,8 +34,8 @@ export default async function CoupleCheckoutPage({
   const showModePicker = provider === "bictorys" && !demoMode
 
   return (
-    <CinematicLayout>
-      <div className="bg-[#FBF9F6] min-h-[70vh]">
+    <MemberPage dense contentWidth="wide">
+      <CoupleShell activeHref="/couple/offre" showWelcome={false} variant="sales">
         <Suspense
           fallback={
             <p className="p-8 text-sm text-[#1C1412]/60">Chargement…</p>
@@ -47,7 +48,7 @@ export default async function CoupleCheckoutPage({
             suggestedMode="mobile_money"
           />
         </Suspense>
-      </div>
-    </CinematicLayout>
+      </CoupleShell>
+    </MemberPage>
   )
 }

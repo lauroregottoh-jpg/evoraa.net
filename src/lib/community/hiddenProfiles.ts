@@ -47,6 +47,14 @@ const HIDDEN_NAME_FRAGMENTS = [
 /** Sarah uniquement avec ces noms de famille (comptes test). */
 const SARAH_HIDDEN_LAST = ["gande", "gandy", "dandee"]
 
+/** Banc d’essai vocaux — masqué de la communauté, visible dans tes messages. */
+export function isVoiceSandboxProfile(
+  firstName?: string | null,
+  lastName?: string | null
+): boolean {
+  return normalizePart(firstName) === "echo" && normalizePart(lastName) === "sandbox"
+}
+
 export function isHiddenOperatorProfile(
   firstName?: string | null,
   lastName?: string | null
@@ -56,6 +64,8 @@ export function isHiddenOperatorProfile(
   const full = `${f} ${l}`.trim()
 
   if (!f && !l) return false
+
+  if (isVoiceSandboxProfile(firstName, lastName)) return true
 
   // Atintoh / variantes — partout dans le nom affiché
   if (HIDDEN_NAME_FRAGMENTS.some((frag) => full.includes(frag))) return true

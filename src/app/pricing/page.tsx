@@ -81,8 +81,8 @@ const ALLIANCE_COMPARE_ROWS = [
     alliance: "Fidélité : +15 msgs, Boosts, Session VIP",
   },
   {
-    decouverte: "Découverte de la plateforme",
-    alliance: "Expérience complète orientée mariage",
+    decouverte: "Messages texte uniquement",
+    alliance: "Messages + vocaux (dans KELIAA, max 60 s)",
   },
 ];
 
@@ -407,37 +407,37 @@ export default function PricingPage() {
       {/* ——— COUPLES ——— */}
       <section
         id="couples"
-        className="py-16 px-6 sm:px-12 lg:px-20 bg-secondary/25 scroll-mt-28"
+        className="py-16 px-6 sm:px-12 lg:px-20 bg-[#EDE6DC] scroll-mt-28"
       >
         <div className="max-w-5xl mx-auto space-y-10">
-          <div className="text-center max-w-2xl mx-auto space-y-3">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent">
+          <div className="text-center max-w-2xl mx-auto space-y-3 rounded-2xl bg-[#5C1F28] text-[#FBF9F6] p-6 sm:p-8">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#F3D9A4]">
               {COUPLE_BRAND}
             </p>
             <h2 className="font-serif text-3xl sm:text-4xl font-bold">
               Pour les couples — bilan relationnel
             </h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              Fiancés, cheminants, jeunes mariés ou couples établis : un bilan
-              ponctuel pour comprendre convergences, différences et priorités —
-              sans verdict d’incompatibilité. Tarif couple (deux participants).
+            <p className="text-sm text-white/75 leading-relaxed">
+              Vous ne recevez pas juste un score : compréhension, priorités et
+              plan d’action. Tarif de lancement pour vous deux.
             </p>
             <Link
               href="/couple"
-              className="inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline"
+              className="inline-flex text-sm font-semibold text-[#F3D9A4] underline-offset-4 hover:underline"
             >
               Lire la page de présentation complète →
             </Link>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <article className="rounded-2xl border border-border bg-white p-6 sm:p-8 flex flex-col gap-4">
+            <article className="rounded-2xl border border-[#5C1F28]/15 bg-[#FBF9F6] p-6 sm:p-8 flex flex-col gap-4">
               <h3 className="font-serif text-2xl font-bold">
                 {essential.marketingName}
               </h3>
               <div>
                 <p className="text-xs text-muted-foreground line-through">
-                  40 000 FCFA
+                  {(essential.compareAtXof ?? 20_000).toLocaleString("fr-FR")}{" "}
+                  FCFA
                 </p>
                 <p className="font-serif text-3xl font-bold text-primary">
                   {essential.amountXof.toLocaleString("fr-FR")}{" "}
@@ -446,7 +446,9 @@ export default function PricingPage() {
                   </span>
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  soit 15 000 FCFA par personne — pour vous deux
+                  soit{" "}
+                  {Math.round(essential.amountXof / 2).toLocaleString("fr-FR")}{" "}
+                  FCFA par personne — pour vous deux
                 </p>
               </div>
               <ul className="space-y-2 text-sm flex-1">
@@ -462,7 +464,7 @@ export default function PricingPage() {
               </MagneticButton>
             </article>
 
-            <article className="rounded-2xl border-2 border-accent bg-white p-6 sm:p-8 flex flex-col gap-4 shadow-elevated relative">
+            <article className="rounded-2xl border-2 border-accent bg-[#FBF9F6] p-6 sm:p-8 flex flex-col gap-4 shadow-elevated relative">
               <span className="absolute -top-3 left-6 text-[10px] font-bold uppercase tracking-wider bg-accent text-accent-foreground px-3 py-1 rounded-full">
                 Le plus choisi
               </span>
@@ -471,7 +473,7 @@ export default function PricingPage() {
               </h3>
               <div>
                 <p className="text-xs text-muted-foreground line-through">
-                  60 000 FCFA
+                  {(premium.compareAtXof ?? 50_000).toLocaleString("fr-FR")} FCFA
                 </p>
                 <p className="font-serif text-3xl font-bold text-primary">
                   {premium.amountXof.toLocaleString("fr-FR")}{" "}
@@ -480,7 +482,9 @@ export default function PricingPage() {
                   </span>
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  soit 25 000 FCFA par personne — pour vous deux
+                  soit{" "}
+                  {Math.round(premium.amountXof / 2).toLocaleString("fr-FR")}{" "}
+                  FCFA par personne — tarif de lancement
                 </p>
               </div>
               <ul className="space-y-2 text-sm flex-1">

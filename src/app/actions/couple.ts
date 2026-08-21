@@ -11,7 +11,10 @@ import {
   coupleQuestionnaireHardCloseAt,
   isCoupleFeatureEnabled,
 } from "@/lib/couple/config"
-import { hashInviteToken } from "@/lib/couple/codes"
+import {
+  couplePartnerJoinPath,
+  coupleSpacePath,
+} from "@/lib/couple/inviteLinks"
 import {
   fulfillCouplePurchase,
   refreshCoupleInvite,
@@ -368,6 +371,7 @@ export async function confirmCoupleDemoPaymentAction(paymentId: string): Promise
   error?: string
   coupleId?: string
   inviteToken?: string
+  inviteCode?: string
 }> {
   if (!isCoupleFeatureEnabled()) return { error: "Module indisponible." }
 
@@ -458,11 +462,26 @@ export async function confirmCoupleDemoPaymentAction(paymentId: string): Promise
     displayName: (profile?.first_name as string) || null,
   })
 
+  if (result.inviteCode && user.email) {
+    const { sendCoupleAccessEmail } = await import("@/lib/couple/inviteEmail")
+    const { coupleAbsoluteUrl, couplePartnerJoinPath, coupleSpacePath, coupleAppBaseUrl } =
+      await import("@/lib/couple/inviteLinks")
+    const base = coupleAppBaseUrl()
+    await sendCoupleAccessEmail({
+      to: user.email,
+      firstName: (profile?.first_name as string) || "",
+      spaceUrl: coupleAbsoluteUrl(coupleSpacePath(), base),
+      partnerUrl: coupleAbsoluteUrl(couplePartnerJoinPath(result.inviteCode), base),
+      inviteCode: result.inviteCode,
+    })
+  }
+
   revalidatePath("/couple")
   revalidatePath("/couple/espace")
   return {
     coupleId: result.coupleId,
     inviteToken: result.inviteToken || undefined,
+    inviteCode: result.inviteCode || undefined,
   }
 }
 
@@ -563,7 +582,7 @@ export async function regenerateCoupleInviteAction(coupleId: string) {
     return { error: "Les deux places sont déjà prises." }
   }
 
-  const { inviteToken, inviteCode } = await refreshCoupleInvite({
+  const { inviteCode } = await refreshCoupleInvite({
     admin,
     coupleId,
     userId: user.id,
@@ -573,7 +592,8 @@ export async function regenerateCoupleInviteAction(coupleId: string) {
   revalidatePath("/couple/inviter")
   return {
     inviteCode,
-    inviteUrl: `${appBaseUrl()}/couple/join?token=${inviteToken}`,
+    inviteUrl: `${appBaseUrl()}${couplePartnerJoinPath(inviteCode)}`,
+    spaceUrl: `${appBaseUrl()}${coupleSpacePath()}`,
   }
 }
 

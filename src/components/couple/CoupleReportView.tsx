@@ -96,6 +96,14 @@ function chapterToHtml(ch: Chapter, doc: CoupleReportDocument): string {
         parts.push(
           `<div class="callout"><strong>${b.title}</strong><br/>${b.scene}<br/>A: ${b.roleA}<br/>B: ${b.roleB}</div>`
         )
+      else if (b.type === "cycleFlow")
+        parts.push(
+          `<div class="callout"><strong>${b.title}</strong><ol>${b.steps.map((s) => `<li>${s}</li>`).join("")}</ol></div>`
+        )
+      else if (b.type === "visualCards")
+        parts.push(
+          `<div class="callout"><strong>${b.title}</strong>${b.cards.map((c) => `<p><strong>${c.label}</strong> — ${c.body}</p>`).join("")}</div>`
+        )
     }
   } else if (ch.kind === "exercises") {
     for (const ex of doc.exercises) {
@@ -335,6 +343,14 @@ export function CoupleReportView({
             )
           else if (b.type === "fillBlank")
             htmlParts.push(`<div class="fill"><strong>${b.prompt}</strong><br/><br/><br/></div>`)
+          else if (b.type === "cycleFlow")
+            htmlParts.push(
+              `<div class="callout"><strong>${b.title}</strong><ol>${b.steps.map((s) => `<li>${s}</li>`).join("")}</ol></div>`
+            )
+          else if (b.type === "visualCards")
+            htmlParts.push(
+              `<div class="callout"><strong>${b.title}</strong>${b.cards.map((c) => `<p><strong>${c.label}</strong> — ${c.body}</p>`).join("")}</div>`
+            )
         }
       } else if (ch.kind === "exercises") {
         htmlParts.push(`<h1>${ch.title}</h1>`)

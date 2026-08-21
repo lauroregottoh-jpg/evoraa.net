@@ -47,10 +47,11 @@ export default function CoupleCheckoutClient({
       setError(res.error)
       return
     }
-    const q = res.inviteToken
-      ? `?inviteToken=${encodeURIComponent(res.inviteToken)}`
-      : ""
-    router.push(`/couple/confirmation${q}`)
+    const q = new URLSearchParams()
+    if (res.inviteCode) q.set("inviteCode", res.inviteCode)
+    if (res.inviteToken) q.set("inviteToken", res.inviteToken)
+    const suffix = q.toString() ? `?${q.toString()}` : ""
+    router.push(`/couple/confirmation${suffix}`)
   }
 
   if (isDemo && paymentId) {

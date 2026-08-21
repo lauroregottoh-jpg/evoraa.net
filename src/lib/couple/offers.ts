@@ -10,8 +10,10 @@ export type CoupleOffer = {
   id: CoupleOfferId
   name: string
   marketingName: string
-  /** Prix catalogue (production). */
+  /** Prix facturé (tarif de lancement). */
   amountXof: number
+  /** Prix barré (ancrage promo). */
+  compareAtXof?: number
   currency: "XOF"
   description: string
   features: string[]
@@ -24,7 +26,8 @@ export const COUPLE_OFFERS: Record<CoupleOfferId, CoupleOffer> = {
     id: "couple_essential",
     name: "Premium",
     marketingName: "Bilan Premium",
-    amountXof: 30_000,
+    amountXof: 10_000,
+    compareAtXof: 20_000,
     currency: "XOF",
     description:
       "Le bilan de référence KELIAA COUPLE™ — questionnaires, portraits, dynamique croisée, grandes différences, exercices et plan d’action (trame document maître Premium).",
@@ -42,7 +45,8 @@ export const COUPLE_OFFERS: Record<CoupleOfferId, CoupleOffer> = {
     id: "couple_premium_plus",
     name: "Premium Plus",
     marketingName: "Bilan Premium Plus",
-    amountXof: 50_000,
+    amountXof: 20_000,
+    compareAtXof: 50_000,
     currency: "XOF",
     description:
       "100 % du Bilan Premium, plus les Points d’approfondissement Premium Plus (dynamique, décisions, communication, affection, argent, familles…).",
@@ -83,11 +87,12 @@ export function snapshotCoupleOffer(offer: CoupleOffer, chargedAmount?: number) 
     offer_id: offer.id,
     plan_name: offer.marketingName,
     price_paid: price,
-    list_price: offer.amountXof,
+    list_price: offer.compareAtXof ?? offer.amountXof,
+    launch_price: offer.amountXof,
     demo_pricing: isCoupleDemoPricing(),
     currency: offer.currency,
     features: offer.features,
-    features_version: "1.0.0",
-    content_version: "1.0.0",
+    features_version: "1.1.0",
+    content_version: "1.7.0",
   }
 }

@@ -138,6 +138,58 @@ export function CoupleReportBlocks({
                 </div>
               </div>
             )
+          case "cycleFlow":
+            return (
+              <div
+                key={key}
+                className="rounded-2xl border border-[#5C1F28]/20 bg-[#F8F4EE] p-5 sm:p-6"
+              >
+                <p className="text-[12pt] font-bold uppercase tracking-[0.16em] text-[#B8954A]">
+                  Schéma
+                </p>
+                <p className="font-serif text-[18pt] font-bold text-[#5C1F28] mt-1">
+                  {block.title}
+                </p>
+                <ol className="mt-4 space-y-0">
+                  {block.steps.map((step, si) => (
+                    <li key={step} className="flex flex-col items-stretch">
+                      <div className="rounded-xl border border-[#5C1F28]/15 bg-white px-4 py-3 text-[14pt] leading-[1.5]">
+                        <span className="font-bold text-[#B8954A] mr-2">
+                          {si + 1}.
+                        </span>
+                        {step}
+                      </div>
+                      {si < block.steps.length - 1 ? (
+                        <div className="flex justify-center py-1 text-[#5C1F28] text-[18pt] leading-none">
+                          ↓
+                        </div>
+                      ) : null}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )
+          case "visualCards":
+            return (
+              <div key={key} className="space-y-3">
+                <p className="font-serif text-[18pt] font-bold text-[#5C1F28]">
+                  {block.title}
+                </p>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {block.cards.map((card) => (
+                    <div
+                      key={card.label}
+                      className="rounded-2xl border border-[#B8954A]/35 bg-gradient-to-br from-white to-[#F8F4EE] p-4"
+                    >
+                      <p className="text-[12pt] font-bold uppercase tracking-wider text-[#B8954A]">
+                        {card.label}
+                      </p>
+                      <p className="mt-2 text-[14pt] leading-[1.55]">{card.body}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
           default:
             return null
         }

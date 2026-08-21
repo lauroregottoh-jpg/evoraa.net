@@ -25,15 +25,16 @@ import {
   Route,
   Users,
   HeartHandshake,
+  Video,
+  ChevronDown,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { DevSessionSwitcher } from "@/components/dev/DevSessionSwitcher";
 import { MemberReminders } from "@/components/layout/MemberReminders";
 import { logoutAction } from "@/app/actions/auth";
 import { OpsAdminEntryBanner } from "@/components/admin/OpsAdminEntryBanner";
-import { PwaInstallHint } from "@/components/pwa/PwaInstallHint";
-import { PwaMemberInstallCard } from "@/components/pwa/PwaMemberInstallCard";
 import { PwaInstallButton } from "@/components/pwa/PwaInstallButton";
+import { CoachingSessionReminders } from "@/components/coaching/CoachingSessionReminders";
 
 const SIDEBAR_KEY = "KELIAA_member_sidebar_open";
 
@@ -47,40 +48,48 @@ type NavItem = {
   allianceGold?: boolean;
 };
 
-/** Découverte — ordre classique. */
+/** Découverte — liens directs (hors groupes déroulants). */
 const PRIMARY_FREE: NavItem[] = [
   { href: "/dashboard", label: "Accueil", icon: LayoutGrid },
   { href: "/communaute", label: "Communauté", icon: Users },
   { href: "/compatibility", label: "Compatibilités", icon: Heart },
   { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/assessments", label: "Tests", icon: ClipboardList },
-  { href: "/premium", label: "Alliance", icon: Crown, accent: true },
-  { href: "/rapport", label: "Rapport", icon: ClipboardList },
-  { href: "/coffre-premium", label: "Coffre Premium", icon: Library },
   { href: "/profile", label: "Profil", icon: User },
   { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
-  { href: "/coaching", label: "Coaching", icon: Phone },
-  { href: "/couple/espace", label: "KELYA Couple", icon: HeartHandshake },
+  { href: "/couple", label: "KELYA Couple", icon: HeartHandshake },
 ];
 
 /**
- * Alliance — Accueil, puis Communauté, puis bloc upgradé,
- * puis le reste comme avant.
+ * Alliance — liens directs (Premium / Coaching en groupes).
  */
 const PRIMARY_ALLIANCE: NavItem[] = [
   { href: "/dashboard", label: "Accueil", icon: LayoutGrid },
   { href: "/communaute", label: "Communauté", icon: Users },
+  { href: "/compatibility", label: "Compatibilités", icon: Heart },
+  { href: "/messages", label: "Messages", icon: MessageCircle },
+  { href: "/assessments", label: "Tests", icon: ClipboardList, allianceGold: true },
+  { href: "/profile", label: "Profil", icon: User },
+  { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
+  { href: "/couple", label: "KELYA Couple", icon: HeartHandshake },
+];
+
+const PREMIUM_FREE: NavItem[] = [
+  { href: "/premium", label: "Passer Alliance", icon: Crown, accent: true },
+  { href: "/rapport", label: "Rapport", icon: ClipboardList },
+  { href: "/coffre-premium", label: "Coffre Premium", icon: Library },
+];
+
+const PREMIUM_ALLIANCE: NavItem[] = [
   { href: "/alliance/parcours", label: "Parcours", icon: Route, allianceGold: true },
   { href: "/rapport", label: "Rapport", icon: ClipboardList, allianceGold: true },
   { href: "/coffre-premium", label: "Coffre Premium", icon: Library, allianceGold: true },
-  { href: "/assessments", label: "Tests", icon: ClipboardList, allianceGold: true },
-  { href: "/compatibility", label: "Compatibilités", icon: Heart },
-  { href: "/messages", label: "Messages", icon: MessageCircle },
-  { href: "/premium", label: "Alliance", icon: Crown, accent: true },
-  { href: "/profile", label: "Profil", icon: User },
-  { href: "/academie-mariage", label: "Académie", icon: GraduationCap },
+  { href: "/premium", label: "Gérer Alliance", icon: Crown, accent: true },
+];
+
+const COACHING_NAV: NavItem[] = [
   { href: "/coaching", label: "Coaching", icon: Phone },
-  { href: "/couple/espace", label: "KELYA Couple", icon: HeartHandshake },
+  { href: "/coaching/session", label: "Faire votre session", icon: Video },
 ];
 
 const SECONDARY = [
@@ -95,7 +104,7 @@ const BOTTOM_PRIMARY = [
   { href: "/dashboard", label: "Accueil", icon: LayoutGrid },
   { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/assessments", label: "Tests", icon: ClipboardList },
-  { href: "/couple/espace", label: "KELYA", icon: HeartHandshake },
+  { href: "/couple", label: "KELYA", icon: HeartHandshake },
 ] as const;
 
 const ACCOUNT_HREFS = [
@@ -106,9 +115,11 @@ const ACCOUNT_HREFS = [
   "/settings",
   "/academie-mariage",
   "/coaching",
+  "/coaching/session",
   "/coffre-premium",
   "/rapport",
   "/alliance",
+  "/couple",
 ];
 
 export type MemberShellProps = {
@@ -117,6 +128,8 @@ export type MemberShellProps = {
   planLabel?: string;
   isPaid?: boolean;
   dense?: boolean;
+  /** Largeur du contenu principal (Couple présentation = wide). */
+  contentWidth?: "default" | "wide" | "full";
   completionPercentage?: number;
   hasAvatar?: boolean;
   assessmentsDone?: number;
@@ -137,6 +150,7 @@ export function MemberShell({
   planLabel = "Alliance",
   isPaid = false,
   dense = false,
+  contentWidth = "default",
   completionPercentage = 0,
   hasAvatar = true,
   assessmentsDone = 0,
@@ -156,6 +170,10 @@ export function MemberShell({
   const [accountOpen, setAccountOpen] = React.useState(false);
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
   const [sidebarReady, setSidebarReady] = React.useState(false);
+  const [navCompteOpen, setNavCompteOpen] = React.useState(false);
+  /** Premium + Coaching ouverts par défaut pour rester trouvables. */
+  const [navPremiumOpen, setNavPremiumOpen] = React.useState(true);
+  const [navCoachingOpen, setNavCoachingOpen] = React.useState(true);
   const accountRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -195,6 +213,12 @@ export function MemberShell({
     if (base === "/alliance/parcours") {
       return pathname === "/alliance/parcours" || pathname.startsWith("/alliance/");
     }
+    if (base === "/coaching") {
+      return pathname === "/coaching" || pathname === "/coaching/form";
+    }
+    if (base === "/couple") {
+      return pathname === "/couple" || pathname.startsWith("/couple/");
+    }
     return pathname === base || pathname.startsWith(`${base}/`);
   };
 
@@ -204,6 +228,16 @@ export function MemberShell({
     setMobileOpen(false);
     setAccountOpen(false);
   }, [pathname]);
+
+  React.useEffect(() => {
+    const premiumHrefs = (isPaid ? PREMIUM_ALLIANCE : PREMIUM_FREE).map(
+      (i) => i.href
+    );
+    if (SECONDARY.some((i) => isActive(i.href))) setNavCompteOpen(true);
+    if (premiumHrefs.some((h) => isActive(h))) setNavPremiumOpen(true);
+    if (COACHING_NAV.some((i) => isActive(i.href))) setNavCoachingOpen(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- sync groups on route
+  }, [pathname, isPaid]);
 
   React.useEffect(() => {
     if (!accountOpen) return;
@@ -266,6 +300,123 @@ export function MemberShell({
   };
 
   const primaryItems = isPaid ? PRIMARY_ALLIANCE : PRIMARY_FREE;
+  const premiumItems = isPaid ? PREMIUM_ALLIANCE : PREMIUM_FREE;
+
+  const renderItem = (item: NavItem, compact: boolean) => {
+    const Icon = item.icon;
+    const accent = Boolean(item.accent);
+    const gold = Boolean(item.allianceGold);
+    return (
+      <a
+        key={item.href}
+        href={item.href}
+        onClick={go(item.href)}
+        title={compact ? item.label : undefined}
+        className={navLinkClass(item.href, {
+          accent,
+          allianceGold: gold,
+          compact,
+        })}
+      >
+        <Icon
+          className={cn(
+            "h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110",
+            (accent || gold) && !isActive(item.href) && "text-[#F3D9A4]",
+            gold && isActive(item.href) && "text-[#F3D9A4]"
+          )}
+        />
+        <span
+          className={cn(
+            "truncate transition-all duration-300",
+            compact ? "w-0 opacity-0 overflow-hidden" : "w-auto opacity-100"
+          )}
+        >
+          {item.label}
+        </span>
+        {compact && isActive(item.href) ? (
+          <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full bg-[#B8954A]" />
+        ) : null}
+        {!compact && gold && !accent ? (
+          <span
+            className="ml-auto text-[9px] font-bold uppercase tracking-wider text-[#B8954A]/90"
+            aria-hidden
+          >
+            ★
+          </span>
+        ) : null}
+      </a>
+    );
+  };
+
+  const renderGroup = (opts: {
+    compact: boolean;
+    label: string;
+    open: boolean;
+    setOpen: (v: boolean | ((p: boolean) => boolean)) => void;
+    items: NavItem[];
+    icon: React.ComponentType<{ className?: string }>;
+    active: boolean;
+  }) => {
+    const Icon = opts.icon;
+    if (opts.compact) {
+      return (
+        <div className="space-y-0.5">
+          <button
+            type="button"
+            title={opts.label}
+            onClick={() => opts.setOpen((v) => !v)}
+            className={cn(
+              "relative flex w-full items-center justify-center rounded-xl py-2.5",
+              opts.active
+                ? "bg-white/18 text-white"
+                : "text-white/72 hover:text-white hover:bg-white/10"
+            )}
+          >
+            <Icon className="h-4 w-4" />
+            {opts.active ? (
+              <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full bg-[#B8954A]" />
+            ) : null}
+          </button>
+          {opts.open
+            ? opts.items.map((item) => renderItem(item, true))
+            : null}
+        </div>
+      );
+    }
+    return (
+      <div className="space-y-0.5">
+        <button
+          type="button"
+          onClick={() => opts.setOpen((v) => !v)}
+          aria-expanded={opts.open}
+          className={cn(
+            "flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all",
+            "border border-white/15",
+            opts.active || opts.open
+              ? "bg-white/14 text-white border-[#B8954A]/45"
+              : "text-white/85 hover:text-white hover:bg-white/10"
+          )}
+        >
+          <Icon className="h-4 w-4 shrink-0 text-[#F3D9A4]" />
+          <span className="truncate flex-1 text-left">{opts.label}</span>
+          <span className="text-[9px] font-bold uppercase tracking-wider text-white/45 mr-0.5">
+            {opts.open ? "Réduire" : "Ouvrir"}
+          </span>
+          <ChevronDown
+            className={cn(
+              "h-4 w-4 shrink-0 opacity-70 transition-transform",
+              opts.open && "rotate-180"
+            )}
+          />
+        </button>
+        {opts.open ? (
+          <div className="ml-2 pl-2 border-l border-white/15 space-y-0.5">
+            {opts.items.map((item) => renderItem(item, false))}
+          </div>
+        ) : null}
+      </div>
+    );
+  };
 
   const renderNavLinks = (compact: boolean) => (
     <>
@@ -276,90 +427,41 @@ export function MemberShell({
       ) : (
         <div className="h-3" />
       )}
-      {primaryItems.map((item) => {
-        const Icon = item.icon;
-        const accent = Boolean(item.accent);
-        const gold = Boolean(item.allianceGold);
-        return (
-          <a
-            key={item.href}
-            href={item.href}
-            onClick={go(item.href)}
-            title={compact ? item.label : undefined}
-            className={navLinkClass(item.href, {
-              accent,
-              allianceGold: gold,
-              compact,
-            })}
-          >
-            <Icon
-              className={cn(
-                "h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110",
-                (accent || gold) && !isActive(item.href) && "text-[#F3D9A4]",
-                gold && isActive(item.href) && "text-[#F3D9A4]"
-              )}
-            />
-            <span
-              className={cn(
-                "truncate transition-all duration-300",
-                compact
-                  ? "w-0 opacity-0 overflow-hidden"
-                  : "w-auto opacity-100"
-              )}
-            >
-              {item.label}
-            </span>
-            {compact && isActive(item.href) ? (
-              <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full bg-[#B8954A]" />
-            ) : null}
-            {!compact && gold && !accent ? (
-              <span
-                className="ml-auto text-[9px] font-bold uppercase tracking-wider text-[#B8954A]/90"
-                aria-hidden
-              >
-                ★
-              </span>
-            ) : null}
-          </a>
-        );
+      {primaryItems.map((item) => renderItem(item, compact))}
+
+      {renderGroup({
+        compact,
+        label: isPaid ? "Premium" : "Premium",
+        open: navPremiumOpen,
+        setOpen: setNavPremiumOpen,
+        items: premiumItems,
+        icon: Crown,
+        active: premiumItems.some((i) => isActive(i.href)),
       })}
 
-      {!compact ? (
-        <p className="px-3 pt-3 pb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/45">
-          Compte
-        </p>
-      ) : (
-        <div className="my-2 mx-2 border-t border-white/15" />
-      )}
-      <div className="space-y-0.5 pb-2">
-        {SECONDARY.map((item) => {
-          const Icon = item.icon;
-          return (
-            <a
-              key={`${item.href}-${item.label}`}
-              href={item.href}
-              onClick={go(item.href)}
-              title={compact ? item.label : undefined}
-              className={cn(
-                navLinkClass(item.href, { compact }),
-                "text-[13px]"
-              )}
-            >
-              <Icon className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110" />
-              <span
-                className={cn(
-                  "truncate transition-all duration-300",
-                  compact
-                    ? "w-0 opacity-0 overflow-hidden"
-                    : "w-auto opacity-100"
-                )}
-              >
-                {item.label}
-              </span>
-            </a>
-          );
-        })}
-      </div>
+      {renderGroup({
+        compact,
+        label: "Coaching",
+        open: navCoachingOpen,
+        setOpen: setNavCoachingOpen,
+        items: COACHING_NAV,
+        icon: Phone,
+        active: COACHING_NAV.some((i) => isActive(i.href)),
+      })}
+
+      {renderGroup({
+        compact,
+        label: "Compte",
+        open: navCompteOpen,
+        setOpen: setNavCompteOpen,
+        items: SECONDARY.map((s) => ({
+          href: s.href,
+          label: s.label,
+          icon: s.icon,
+        })),
+        icon: Settings,
+        active: SECONDARY.some((i) => isActive(i.href)),
+      })}
     </>
   );
 
@@ -474,8 +576,8 @@ export function MemberShell({
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
               <PwaInstallButton
                 variant={isPaid ? "alliance" : "discovery"}
-                size="sm"
-                label="App"
+                size="md"
+                label="Télécharger l’app"
               />
               {isPaid ? (
                 <span className="hidden sm:inline-flex text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border bg-accent/15 text-accent border-accent/30">
@@ -564,16 +666,20 @@ export function MemberShell({
 
         <main
           className={cn(
-            "mx-auto w-full max-w-3xl px-4 sm:px-6",
+            "mx-auto w-full px-4 sm:px-6",
+            contentWidth === "full"
+              ? "max-w-none"
+              : contentWidth === "wide"
+                ? "max-w-5xl"
+                : "max-w-3xl",
             dense ? "py-4 sm:py-6" : "py-6 sm:py-8",
             "pb-24 md:pb-10 flex-1"
           )}
         >
           {firstName ? <p className="sr-only">Espace de {firstName}</p> : null}
-          <div className="mb-4 space-y-3">
+          <div className="mb-4">
             <OpsAdminEntryBanner />
-            <PwaMemberInstallCard isPaid={Boolean(isPaid)} />
-            <PwaInstallHint />
+            <CoachingSessionReminders />
           </div>
           {children}
         </main>

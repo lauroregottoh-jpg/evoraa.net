@@ -5,6 +5,7 @@ import { createClient } from "@/utils/supabase/server"
 import { getUserEntitlements } from "@/lib/billing/entitlements"
 import {
   FREE_DAILY_SUGGESTIONS,
+  MIN_MATCH_COMPLETION,
   type MatchableProfile,
   type ScoredMatch,
 } from "@/lib/matching/types"
@@ -172,6 +173,10 @@ export type CompatibilityListItem = {
   photoUrl?: string
   isVerified: boolean
   level: ScoredMatch["level"]
+  basis: ScoredMatch["basis"]
+  viewerTestsCount: number
+  partnerTestsCount: number
+  missingOnPartner: ScoredMatch["missingOnPartner"]
 }
 
 export async function getCompatibilitySuggestions(limit?: number): Promise<{
@@ -186,7 +191,7 @@ export async function getCompatibilitySuggestions(limit?: number): Promise<{
 
   const viewer = loaded.viewer
   if (
-    (viewer.completion_percentage ?? 0) < 50 ||
+    (viewer.completion_percentage ?? 0) < MIN_MATCH_COMPLETION ||
     viewer.onboarding_status === "step1_account" ||
     viewer.onboarding_status === "step2_profile"
   ) {
@@ -211,7 +216,7 @@ export async function getCompatibilitySuggestions(limit?: number): Promise<{
     .is("deleted_at", null)
     .neq("user_id", viewer.user_id)
     .neq("moderation_status", "rejected")
-    .gte("completion_percentage", 50)
+    .gte("completion_percentage", MIN_MATCH_COMPLETION)
     .order("completion_percentage", { ascending: false })
     .limit(120)
 
@@ -282,6 +287,10 @@ export async function getCompatibilitySuggestions(limit?: number): Promise<{
       photoUrl: match.profile.avatar_url ?? undefined,
       isVerified: Boolean(match.profile.is_verified),
       level: match.level,
+      basis: match.basis,
+      viewerTestsCount: match.viewerTestsCount,
+      partnerTestsCount: match.partnerTestsCount,
+      missingOnPartner: match.missingOnPartner,
     })),
   }
 }
@@ -301,6 +310,11 @@ export async function getCompatibilityDetail(profileId: string): Promise<{
     insights: ScoredMatch["insights"]
     answers: { question: string; answer: string }[]
     isVerified: boolean
+    basis: ScoredMatch["basis"]
+    viewerTestsCount: number
+    partnerTestsCount: number
+    missingOnPartner: ScoredMatch["missingOnPartner"]
+    partnerUserId: string
   }
 }> {
   const loaded = await loadViewerProfile()
@@ -381,6 +395,11 @@ export async function getCompatibilityDetail(profileId: string): Promise<{
       domainScores: scored.domainScores,
       insights: scored.insights,
       isVerified: Boolean(candidate.is_verified),
+      basis: scored.basis,
+      viewerTestsCount: scored.viewerTestsCount,
+      partnerTestsCount: scored.partnerTestsCount,
+      missingOnPartner: scored.missingOnPartner,
+      partnerUserId: candidate.user_id,
       answers: [
         {
           question: "La place de la foi dans mon quotidien",
@@ -406,4 +425,139 @@ export async function refreshCompatibilitySuggestions() {
   const result = await getCompatibilitySuggestions()
   revalidatePath("/compatibility")
   return result
+}
+
+/**
+ * Calcule et enregistre les suggestions pour tous les profils éligibles (OPS).
+ */
+export async function runMatchingSweepAction(): Promise<{
+  error?: string
+  viewers?: number
+  pairsWritten?: number
+  notified?: number
+}> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return { error: "Non authentifié." }
+
+  const { canFullAdminOps, resolveAuthEmail } = await import(
+    "@/lib/admin/consolePath"
+  )
+  const { createAdminClient } = await import("@/utils/supabase/admin")
+  const admin = createAdminClient()
+  const { data: roleRow } = await admin
+    .from("profiles")
+    .select("role")
+    .eq("user_id", user.id)
+    .maybeSingle()
+  if (
+    !canFullAdminOps({
+      role: (roleRow?.role as string) || null,
+      email: resolveAuthEmail(user),
+    })
+  ) {
+    return { error: "Réservé aux administrateurs." }
+  }
+
+  const { isHiddenOperatorProfile } = await import(
+    "@/lib/community/hiddenProfiles"
+  )
+  const { data: rows } = await admin
+    .from("profiles")
+    .select(PROFILE_SELECT)
+    .is("deleted_at", null)
+    .neq("moderation_status", "rejected")
+    .gte("completion_percentage", MIN_MATCH_COMPLETION)
+    .limit(200)
+
+  const pool = (rows ?? [])
+    .filter((row) => {
+      const r = row as Record<string, unknown>
+      if (
+        isHiddenOperatorProfile(
+          (r.first_name as string | null) ?? null,
+          (r.last_name as string | null) ?? null
+        )
+      ) {
+        return false
+      }
+      const status = r.onboarding_status as string | null
+      return status !== "step1_account" && status !== "step2_profile"
+    })
+    .map((row) => mapProfile(row as Record<string, unknown>))
+
+  let pairsWritten = 0
+  let notified = 0
+  const appUrl =
+    process.env.NEXT_PUBLIC_APP_URL || "https://www.keliaa.org"
+
+  for (const viewer of pool) {
+    const others = pool.filter((p) => p.user_id !== viewer.user_id)
+    const ranked = rankMatches(viewer, others, 8)
+    if (ranked.length === 0) continue
+    await persistMatchesAdmin(admin, viewer.user_id, ranked)
+    pairsWritten += ranked.length
+
+    const top = ranked[0]
+    if (!top) continue
+    const since = new Date()
+    since.setDate(since.getDate() - 7)
+    const { data: recent } = await admin
+      .from("notifications")
+      .select("id")
+      .eq("user_id", viewer.user_id)
+      .eq("title", "Une suggestion KELIAA vous attend")
+      .gte("created_at", since.toISOString())
+      .limit(1)
+      .maybeSingle()
+    if (recent?.id) continue
+
+    const partnerName = top.profile.first_name || "un profil"
+    await admin.from("notifications").insert({
+      user_id: viewer.user_id,
+      title: "Une suggestion KELIAA vous attend",
+      body: `${partnerName} vous est proposé(e) à ${top.score}% d’harmonie. Ouvrez Compatibilités pour voir et écrire.`,
+      is_read: false,
+    })
+    notified += 1
+
+    try {
+      const { data: authUser } = await admin.auth.admin.getUserById(
+        viewer.user_id
+      )
+      const email = authUser.user?.email
+      if (email) {
+        const { sendEmailWithRetry } = await import("@/lib/email/outbox")
+        const { suggestionMatchEmailHtml } = await import(
+          "@/lib/email/templates"
+        )
+        await sendEmailWithRetry({
+          to: email,
+          subject: "KELIAA — une suggestion de compatibilité",
+          html: suggestionMatchEmailHtml({
+            firstName: viewer.first_name || "",
+            appUrl,
+            partnerFirstName: partnerName,
+            score: top.score,
+          }),
+        })
+      }
+    } catch {
+      /* best-effort */
+    }
+  }
+
+  revalidatePath("/compatibility")
+  revalidatePath("/ops-keliaa-hx7")
+  return { viewers: pool.length, pairsWritten, notified }
+}
+
+async function persistMatchesAdmin(
+  admin: ReturnType<typeof import("@/utils/supabase/admin").createAdminClient>,
+  viewerUserId: string,
+  matches: ScoredMatch[]
+) {
+  await persistMatches(admin as never, viewerUserId, matches)
 }

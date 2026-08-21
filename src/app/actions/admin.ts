@@ -219,6 +219,8 @@ export async function getAdminDashboardData() {
         createdAt: string | null
         userOne: string
         userTwo: string
+        nameOne: string
+        nameTwo: string
       }>,
       recommendations: [] as Array<{
         id: string
@@ -317,6 +319,24 @@ export async function getAdminDashboardData() {
     .order("created_at", { ascending: false })
     .limit(500)
 
+  const matchUserIds = [
+    ...new Set(
+      (matchRows ?? []).flatMap((m) => [m.user_one as string, m.user_two as string])
+    ),
+  ].filter(Boolean)
+  const nameByUserId = new Map<string, string>()
+  if (matchUserIds.length > 0) {
+    const { data: matchProfiles } = await supabase
+      .from("profiles")
+      .select("user_id, first_name, last_name")
+      .in("user_id", matchUserIds)
+    for (const p of matchProfiles ?? []) {
+      const name =
+        [p.first_name, p.last_name].filter(Boolean).join(" ").trim() || "Membre"
+      nameByUserId.set(p.user_id as string, name)
+    }
+  }
+
   const recoRes = await supabase
     .from("church_recommendations")
     .select(
@@ -373,11 +393,6 @@ export async function getAdminDashboardData() {
     .select("id", { count: "exact", head: true })
     .eq("gender", "F")
 
-  const { count: activeSubs } = await supabase
-    .from("subscriptions")
-    .select("id", { count: "exact", head: true })
-    .eq("status", "active")
-
   const { count: openReports } = await supabase
     .from("reports")
     .select("id", { count: "exact", head: true })
@@ -398,17 +413,33 @@ export async function getAdminDashboardData() {
     .select("id", { count: "exact", head: true })
     .gte("completion_percentage", 70)
 
-  const { count: activeAlliance } = await supabase
+  // Expire les abonnements périmés encore marqués active (sinon le KPI ops gonfle)
+  await supabase
     .from("subscriptions")
-    .select("id", { count: "exact", head: true })
+    .update({ status: "expired" })
+    .eq("status", "active")
+    .lt("ends_at", nowIso)
+
+  const { data: allianceRows } = await supabase
+    .from("subscriptions")
+    .select("user_id")
     .eq("status", "active")
     .eq("plan", "premium_plus")
+    .or(`ends_at.is.null,ends_at.gt.${nowIso}`)
 
-  const { count: activeLegacyPremium } = await supabase
+  const { data: legacyPremiumRows } = await supabase
     .from("subscriptions")
-    .select("id", { count: "exact", head: true })
+    .select("user_id")
     .eq("status", "active")
     .eq("plan", "premium")
+    .or(`ends_at.is.null,ends_at.gt.${nowIso}`)
+
+  const activeAlliance = new Set(
+    (allianceRows || []).map((r) => r.user_id as string).filter(Boolean)
+  ).size
+  const activeLegacyPremium = new Set(
+    (legacyPremiumRows || []).map((r) => r.user_id as string).filter(Boolean)
+  ).size
 
   const { count: expiredSubs30d } = await supabase
     .from("subscriptions")
@@ -438,6 +469,13 @@ export async function getAdminDashboardData() {
     .eq("status", "active")
     .gte("ends_at", nowIso)
     .lte("ends_at", in7Iso)
+
+  // Recalculer les abonnements actifs après expiration des périmés
+  const { count: activeSubs } = await supabase
+    .from("subscriptions")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "active")
+    .or(`ends_at.is.null,ends_at.gt.${nowIso}`)
 
   const { count: views30d } = await supabase
     .from("profile_views")
@@ -708,14 +746,20 @@ export async function getAdminDashboardData() {
       matchId: c.match_id as string,
       createdAt: c.created_at as string | null,
     })),
-    matches: (matchRows ?? []).map((m) => ({
-      id: m.id as string,
-      score: m.compatibility_score != null ? Number(m.compatibility_score) : null,
-      status: (m.status as string) || null,
-      createdAt: m.created_at as string | null,
-      userOne: m.user_one as string,
-      userTwo: m.user_two as string,
-    })),
+    matches: (matchRows ?? []).map((m) => {
+      const oneId = m.user_one as string
+      const twoId = m.user_two as string
+      return {
+        id: m.id as string,
+        score: m.compatibility_score != null ? Number(m.compatibility_score) : null,
+        status: (m.status as string) || null,
+        createdAt: m.created_at as string | null,
+        userOne: oneId,
+        userTwo: twoId,
+        nameOne: nameByUserId.get(oneId) || oneId.slice(0, 8),
+        nameTwo: nameByUserId.get(twoId) || twoId.slice(0, 8),
+      }
+    }),
     recommendations: (recoRows ?? []).map((r) => ({
       id: r.id as string,
       profileId: r.profile_id as string,

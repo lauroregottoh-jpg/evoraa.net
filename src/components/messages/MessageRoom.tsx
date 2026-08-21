@@ -11,12 +11,16 @@ import { Card } from "@/components/ui/card";
 import { ArrowLeft, Send, Sparkles, ShieldCheck, Flag } from "lucide-react";
 import {
   sendMessageAction,
+  sendVoiceNoteAction,
   loadOlderMessagesAction,
+  getVoicePlaybackUrlAction,
   type ChatMessageDTO,
   type ConversationRoomDTO,
 } from "@/app/actions/messaging";
 import { createClient } from "@/utils/supabase/client";
 import { SafetyReportModal } from "@/components/safety/SafetyReportModal";
+import { VoiceNotePlayer } from "@/components/messages/VoiceNotePlayer";
+import { VoiceNoteRecorder } from "@/components/messages/VoiceNoteRecorder";
 
 function formatMsgTime(iso: string) {
   return new Date(iso).toLocaleTimeString("fr-FR", {
@@ -89,6 +93,8 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
             message: string
             is_read: boolean | null
             created_at: string | null
+            kind?: string | null
+            audio_duration_ms?: number | null
           }
           setMessages((prev) => {
             if (prev.some((m) => m.id === row.id)) return prev
@@ -100,6 +106,9 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
               createdAt: row.created_at ?? new Date().toISOString(),
               isRead: Boolean(row.is_read),
               isMine,
+              kind: row.kind === "voice" ? "voice" : "text",
+              durationMs: row.audio_duration_ms ?? null,
+              audioUrl: null,
             }
             return [...prev, next]
           })
@@ -148,6 +157,56 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
     }
   }
 
+  const handleVoiceSend = async (
+    blob: Blob,
+    durationMs: number,
+    transcript: string
+  ) => {
+    if (isSending) return
+    setIsSending(true)
+    setError("")
+    try {
+      const fd = new FormData()
+      fd.append("conversationId", room.id)
+      fd.append("durationMs", String(durationMs))
+      if (transcript) fd.append("clientTranscript", transcript)
+      const ext = blob.type.includes("mp4") ? "m4a" : "webm"
+      fd.append("audio", blob, `vocal.${ext}`)
+      const result = await sendVoiceNoteAction(fd)
+      if (result.error) {
+        setError(result.error)
+        return
+      }
+      if (result.message) {
+        setMessages((prev) =>
+          prev.some((m) => m.id === result.message!.id)
+            ? prev
+            : [...prev, result.message!]
+        )
+        setRoom((prev) => ({
+          ...prev,
+          messageCount: prev.messageCount + 1,
+        }))
+      }
+      router.refresh()
+    } finally {
+      setIsSending(false)
+    }
+  }
+
+  const resolveVoiceUrl = async (messageId: string, current: string | null) => {
+    if (current) return current
+    const res = await getVoicePlaybackUrlAction(room.id, messageId)
+    if (res.url) {
+      setMessages((prev) =>
+        prev.map((m) => (m.id === messageId ? { ...m, audioUrl: res.url! } : m))
+      )
+      return res.url
+    }
+    if (res.error) setError(res.error)
+    return null
+  }
+
   const handleSendTrigger = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim()) return
@@ -160,13 +219,18 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
 
   const remaining = Math.max(
     0,
-    room.freeLimit - room.messageCount + (room.bonusMessagesRemaining || 0)
+    room.freeLimit -
+      room.messageCount +
+      (room.bonusMessagesRemaining || 0) +
+      (room.testCreditsRemaining || 0)
   )
   const standardLeft = Math.max(0, room.freeLimit - room.messageCount)
+  const extra =
+    (room.bonusMessagesRemaining || 0) + (room.testCreditsRemaining || 0)
   const messageQuotaReached = remaining <= 0
   const remainingLabel =
-    (room.bonusMessagesRemaining || 0) > 0
-      ? `${standardLeft} + ${room.bonusMessagesRemaining} bonus`
+    extra > 0
+      ? `${standardLeft} + ${extra} extra`
       : `${remaining} msg restants`
 
   return (
@@ -192,7 +256,10 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
                 )}
               </div>
               <span className="text-[11px] text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                <ShieldCheck className="h-3 w-3" /> Espace modéré · {remainingLabel}
+                <ShieldCheck className="h-3 w-3" />{" "}
+                {room.voiceNotesEnabled
+                  ? `Espace modéré · vocaux · ${remainingLabel}`
+                  : `Espace modéré · ${remainingLabel}`}
               </span>
             </div>
           </div>
@@ -271,7 +338,16 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
                   : "bg-secondary/90 text-foreground border border-border/60 rounded-bl-none"
               }`}
             >
-              <p>{m.text}</p>
+              {m.kind === "voice" ? (
+                <VoiceNotePlayer
+                  src={m.audioUrl}
+                  durationMs={m.durationMs}
+                  mine={m.isMine}
+                  onNeedSrc={() => resolveVoiceUrl(m.id, m.audioUrl)}
+                />
+              ) : (
+                <p>{m.text}</p>
+              )}
             </div>
             <span className="text-[10px] text-muted-foreground mt-1 px-1 font-sans">
               {formatMsgTime(m.createdAt)}
@@ -306,6 +382,13 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
           }}
           disabled={messageQuotaReached || isSending}
           className="h-12 rounded-xl bg-background border-border/80 text-sm focus:ring-accent"
+        />
+
+        <VoiceNoteRecorder
+          enabled={room.voiceNotesEnabled}
+          disabled={messageQuotaReached}
+          isSending={isSending}
+          onSend={handleVoiceSend}
         />
 
         <Button

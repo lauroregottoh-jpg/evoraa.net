@@ -22,6 +22,9 @@ import {
   UsersRound,
   MessageSquareHeart,
   HeartHandshake,
+  Phone,
+  Heart,
+  Mic,
 } from "lucide-react"
 import { cn } from "@/utils/cn"
 import { logoutAction } from "@/app/actions/auth"
@@ -36,7 +39,10 @@ export type AdminNavId =
   | "messages"
   | "alliance"
   | "couple"
+  | "coaching"
   | "matching"
+  | "engagement"
+  | "vocals"
   | "academy"
   | "eva"
   | "marketing"
@@ -119,7 +125,14 @@ export function AdminShell({
       label: "KELYA Couple",
       icon: HeartHandshake,
     },
+    {
+      id: "coaching",
+      label: "Coaching",
+      icon: Phone,
+    },
     { id: "matching", label: "Matching Intelligence", icon: MessageCircle },
+    { id: "engagement", label: "Briefing Eva", icon: Heart },
+    { id: "vocals", label: "Vocaux & transcriptions", icon: Mic },
     { id: "academy", label: "Académie", icon: GraduationCap },
     { id: "eva", label: "Coach EVA", icon: Sparkles },
     { id: "marketing", label: "Contenu & marketing", icon: Megaphone },

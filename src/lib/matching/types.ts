@@ -71,11 +71,22 @@ export type ScoredMatch = {
   /** Alertes d'interaction détectées. */
   insights: MatchInsight[]
   level: "excellent" | "high" | "moderate" | "low"
+  /** demande = profil d'accueil seulement ; tests = au moins un questionnaire croisé. */
+  basis: "demande" | "tests"
+  viewerTestsCount: number
+  partnerTestsCount: number
+  missingOnPartner: Array<
+    "personality" | "spiritual" | "relationship" | "couple_life" | "finances"
+  >
 }
 
 export const FREE_DAILY_SUGGESTIONS = 3
-/** Seuil minimum pour apparaître en suggestion (après questionnaires). */
+/** Seuil minimum quand les deux ont des tests croisés. */
 export const MIN_RECOMMENDED_SCORE = 62
+/** Seuil plus bas : suggestion selon la demande (tests incomplets). */
+export const MIN_DEMANDE_SCORE = 48
+/** Profil assez rempli pour entrer dans le bassin (onboarding, pas les 5 tests). */
+export const MIN_MATCH_COMPLETION = 30
 /** Un score ≥ 90 exige au moins N piliers partagés. */
 export const HIGH_SCORE_MIN_PILLARS = 4
 /** Un score ≥ 95 exige au moins N piliers partagés. */

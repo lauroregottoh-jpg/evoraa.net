@@ -25,6 +25,18 @@ export type CoupleReportBlock =
       roleB: string
       scene: string
     }
+  /** Schéma de cycle / mécanisme (Directive §10). */
+  | {
+      type: "cycleFlow"
+      title: string
+      steps: string[]
+    }
+  /** Carte visuelle multi-blocs (Directive §11). */
+  | {
+      type: "visualCards"
+      title: string
+      cards: Array<{ label: string; body: string }>
+    }
 
 export function paragraphsToBlocks(paragraphs: string[]): CoupleReportBlock[] {
   return paragraphs.map((text) => ({ type: "paragraph" as const, text }))

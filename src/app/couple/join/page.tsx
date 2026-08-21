@@ -20,7 +20,7 @@ function JoinInner() {
     void joinCoupleWithTokenAction(token).then((res) => {
       if (res.requiresAuth) {
         router.replace(
-          `/login?next=${encodeURIComponent(`/couple/join?token=${token}`)}`
+          `/register?next=${encodeURIComponent(`/couple/join?token=${token}`)}`
         )
         return
       }

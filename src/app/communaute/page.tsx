@@ -1,6 +1,7 @@
 import { MemberPage } from "@/components/layout/MemberPage"
 import { listCommunityMembers } from "@/app/actions/community"
 import { CommunityMemberCardView } from "@/components/community/CommunityMemberCard"
+import { CommunityHeroWithVideo } from "@/components/community/CommunityMatchingVideoCta"
 import { Users } from "lucide-react"
 
 export const dynamic = "force-dynamic"
@@ -26,6 +27,8 @@ export default async function CommunautePage() {
             mutuel ouvre les messages. Pas de contact direct.
           </p>
         </header>
+
+        <CommunityHeroWithVideo />
 
         {error ? (
           <p className="text-sm text-destructive">{error}</p>

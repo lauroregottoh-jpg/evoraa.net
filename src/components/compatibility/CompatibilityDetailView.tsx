@@ -19,7 +19,9 @@ import {
 } from "lucide-react";
 import { startConversationFromProfile } from "@/app/actions/messaging";
 import { FavoriteButton } from "@/components/social/FavoriteButton";
+import { InviteToTestBlock } from "@/components/compatibility/InviteToTestBlock";
 import type { DomainScore, MatchInsight } from "@/lib/matching/types";
+import type { AssessmentSlug } from "@/lib/assessments/questionBank";
 
 export type CompatibilityDetailData = {
   id: string;
@@ -38,6 +40,11 @@ export type CompatibilityDetailData = {
   insights?: MatchInsight[];
   answers: { question: string; answer: string }[];
   isVerified: boolean;
+  basis?: "demande" | "tests";
+  viewerTestsCount?: number;
+  partnerTestsCount?: number;
+  missingOnPartner?: AssessmentSlug[];
+  partnerUserId?: string;
 };
 
 export function CompatibilityDetailView({
@@ -131,7 +138,9 @@ export function CompatibilityDetailView({
               « {profile.bio} »
             </p>
             <p className="text-xs text-muted-foreground">
-              Score détaillé ci-dessous — domaines, interactions et points de vigilance.
+              {profile.basis === "demande"
+                ? "Suggestion selon votre demande — les tests n’ont pas encore été remplis des deux côtés. Ce n’est pas un diagnostic complet."
+                : "Score détaillé ci-dessous — domaines, interactions et points de vigilance."}
             </p>
             <Button
               onClick={handleStart}
@@ -149,6 +158,13 @@ export function CompatibilityDetailView({
           </div>
         </div>
       </Card>
+
+      <InviteToTestBlock
+        partnerName={profile.name}
+        partnerUserId={profile.partnerUserId || ""}
+        missingOnPartner={profile.missingOnPartner || []}
+        viewerTestsCount={profile.viewerTestsCount || 0}
+      />
 
       <EvaExplanationBlock
         partnerName={profile.name}

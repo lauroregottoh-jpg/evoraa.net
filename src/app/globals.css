@@ -438,6 +438,19 @@
   }
 }
 
+@keyframes keliaa-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-5px);
+  }
+  60% {
+    transform: translateY(-2px);
+  }
+}
+
 .rapport-reveal {
   animation: rapportRevealUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
 }

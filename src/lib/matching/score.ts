@@ -1,5 +1,7 @@
 import type { MatchableProfile, MatchingIndicators, DomainScore } from "./types"
 import {
+  MIN_DEMANDE_SCORE,
+  MIN_MATCH_COMPLETION,
   MIN_RECOMMENDED_SCORE,
   type ScoredMatch,
 } from "./types"
@@ -7,6 +9,10 @@ import {
   applyMatchConfidenceCaps,
   computeDimensionMatchScore,
 } from "./dimensionMatch"
+import {
+  completedAssessmentSlugs,
+  missingAssessmentSlugs,
+} from "./testCoverage"
 
 function normalizeGender(value: string | null | undefined): "M" | "F" | null {
   if (!value) return null
@@ -155,7 +161,7 @@ export function isEligibleCandidate(profile: MatchableProfile, viewerId: string)
   if (profile.deleted_at) return false
   if (profile.moderation_status === "rejected") return false
   if (profile.onboarding_status === "banned") return false
-  if ((profile.completion_percentage ?? 0) < 50) return false
+  if ((profile.completion_percentage ?? 0) < MIN_MATCH_COMPLETION) return false
   if (
     profile.onboarding_status === "step1_account" ||
     profile.onboarding_status === "step2_profile"
@@ -228,7 +234,7 @@ function buildReasons(
   }
 
   if (reasons.length === 0) {
-    reasons.push("Compatibilité de base sur le profil d'accueil")
+    reasons.push("Suggestion selon votre demande (profil d'accueil)")
   }
 
   return reasons.slice(0, 4)
@@ -307,6 +313,8 @@ export function scorePair(viewer: MatchableProfile, candidate: MatchableProfile)
     title: i.title,
     message: i.message,
   }))
+  const basis: ScoredMatch["basis"] =
+    psych != null && psych.sharedPillars > 0 ? "tests" : "demande"
 
   if (psych != null) {
     const psychWeight = Math.min(0.85, 0.4 + psych.sharedPillars * 0.09)
@@ -314,10 +322,11 @@ export function scorePair(viewer: MatchableProfile, candidate: MatchableProfile)
     score = applyMatchConfidenceCaps(blended, psych.sharedPillars, psych.matchRatio)
     if (!indicators.hits.includes("psych")) indicators.hits.push("psych")
   } else {
-    score = Math.min(profileScore, 72)
+    score = Math.min(profileScore, 68)
   }
 
-  if (score < MIN_RECOMMENDED_SCORE) return null
+  const minScore = basis === "tests" ? MIN_RECOMMENDED_SCORE : MIN_DEMANDE_SCORE
+  if (score < minScore) return null
 
   const reasons = buildReasons(viewer, candidate, indicators.hits, {
     denomination,
@@ -347,6 +356,8 @@ export function scorePair(viewer: MatchableProfile, candidate: MatchableProfile)
         reasons.push(top.title)
       }
     }
+  } else if (!reasons.some((r) => r.toLowerCase().includes("suggestion"))) {
+    reasons.unshift("Suggestion selon votre demande — tests encore incomplets")
   }
 
   return {
@@ -357,6 +368,10 @@ export function scorePair(viewer: MatchableProfile, candidate: MatchableProfile)
     domainScores,
     insights: insights.slice(0, 5),
     level: compatibilityLevel(score),
+    basis,
+    viewerTestsCount: completedAssessmentSlugs(viewer.psychometric_results).length,
+    partnerTestsCount: completedAssessmentSlugs(candidate.psychometric_results).length,
+    missingOnPartner: missingAssessmentSlugs(candidate.psychometric_results),
   }
 }
 

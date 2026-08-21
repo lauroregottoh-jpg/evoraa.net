@@ -20,10 +20,10 @@ export const COUPLE_QUESTIONNAIRE_DEADLINE_DAYS = 30
 /** Marge opérationnelle après l’échéance (fermeture dure questionnaire). */
 export const COUPLE_GRACE_DAYS = 10
 
-export const COUPLE_QUESTIONNAIRE_VERSION = "1.0.0"
-export const COUPLE_SCORING_VERSION = "1.0.0"
-export const COUPLE_CONTENT_VERSION = "1.6.0"
-export const COUPLE_REPORT_VERSION = "1.6.0"
+export const COUPLE_QUESTIONNAIRE_VERSION = "1.1.0"
+export const COUPLE_SCORING_VERSION = "1.1.0"
+export const COUPLE_CONTENT_VERSION = "1.8.0"
+export const COUPLE_REPORT_VERSION = "1.8.0"
 
 /** Feature flag — désactiver pour masquer le module en prod sans rollback. */
 export function isCoupleFeatureEnabled(): boolean {

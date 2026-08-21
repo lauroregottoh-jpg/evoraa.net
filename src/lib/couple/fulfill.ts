@@ -58,10 +58,16 @@ export async function fulfillCouplePurchase(args: {
       .eq("purchase_id", existing.id)
       .maybeSingle()
     if (couple) {
+      const { data: invite } = await args.admin
+        .from("couple_invitations")
+        .select("invite_code")
+        .eq("couple_id", couple.id)
+        .eq("status", "ACTIVE")
+        .maybeSingle()
       return {
         coupleId: couple.id,
         inviteToken: "",
-        inviteCode: "",
+        inviteCode: (invite?.invite_code as string) || "",
         already: true,
       }
     }

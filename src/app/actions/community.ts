@@ -283,6 +283,23 @@ export async function toggleCommunityLikeAction(targetProfileId: string): Promis
     return { liked: false, mutual: false }
   }
 
+  // Plafond likes / jour (= dailyLikes / dailySuggestions du plan)
+  const entitlements = await getUserEntitlements(ctx.user.id)
+  const likeCap =
+    entitlements.limits.dailyLikes ?? entitlements.limits.dailySuggestions
+  const dayStart = new Date()
+  dayStart.setHours(0, 0, 0, 0)
+  const { count: likesToday } = await ctx.supabase
+    .from("profile_favorites")
+    .select("id", { count: "exact", head: true })
+    .eq("owner_profile_id", ctx.profileId)
+    .gte("created_at", dayStart.toISOString())
+  if ((likesToday ?? 0) >= likeCap) {
+    return {
+      error: `Limite atteinte : ${likeCap} like${likeCap > 1 ? "s" : ""} / jour sur votre formule. Revenez demain ou passez Alliance pour en avoir davantage.`,
+    }
+  }
+
   const { error } = await ctx.supabase.from("profile_favorites").insert({
     owner_profile_id: ctx.profileId,
     target_profile_id: targetProfileId,
@@ -318,17 +335,46 @@ export async function toggleCommunityLikeAction(targetProfileId: string): Promis
     if (mutual) {
       await admin.from("notifications").insert({
         user_id: target.user_id,
-        title: "Like mutuel — vous pouvez échanger",
-        body: `${liker} a aussi aimé votre profil. Ouvrez Messages pour commencer la conversation.`,
+        title: "Vous avez un match !",
+        body: `${liker} a liké en retour. Vous pouvez maintenant commencer à échanger.`,
         is_read: false,
       })
     } else {
       await admin.from("notifications").insert({
         user_id: target.user_id,
-        title: "Quelqu’un a aimé votre profil",
-        body: `${liker} a aimé votre profil. Likez en retour dans la Communauté pour pouvoir échanger.`,
+        title: "Quelqu’un s’intéresse à votre profil",
+        body: `Cette personne vous a liké. Si son profil vous intéresse, likez-la en retour pour ouvrir la conversation.`,
         is_read: false,
       })
+    }
+    try {
+      const { data: authUser } = await admin.auth.admin.getUserById(
+        target.user_id as string
+      )
+      const email = authUser.user?.email
+      if (email) {
+        const { sendEmailWithRetry } = await import("@/lib/email/outbox")
+        const { likedYouEmailHtml } = await import("@/lib/email/templates")
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.keliaa.org"
+        const { data: targetProfile } = await admin
+          .from("profiles")
+          .select("first_name")
+          .eq("user_id", target.user_id)
+          .maybeSingle()
+        await sendEmailWithRetry({
+          to: email,
+          subject: mutual
+            ? "KELIAA — vous avez un match"
+            : "KELIAA — quelqu’un a liké votre profil",
+          html: likedYouEmailHtml({
+            firstName: (targetProfile?.first_name as string) || "",
+            appUrl,
+            mutual,
+          }),
+        })
+      }
+    } catch {
+      /* best-effort email */
     }
   } catch {
     /* best-effort */

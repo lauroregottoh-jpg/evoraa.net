@@ -20,9 +20,11 @@ import {
   loadMyCoupleAnswersAction,
   saveCoupleAnswersAction,
 } from "@/app/actions/couple"
+import { CouplePaywallOverlay } from "@/components/couple/CouplePaywallOverlay"
+import { CoupleHeroCard } from "@/components/couple/CoupleHeroCard"
 import { cn } from "@/utils/cn"
 
-type Phase = "loading" | "done" | "closed" | "review" | "questions"
+type Phase = "loading" | "locked" | "done" | "closed" | "review" | "questions"
 
 export default function CoupleQuestionnairePage() {
   const router = useRouter()
@@ -42,17 +44,19 @@ export default function CoupleQuestionnairePage() {
   React.useEffect(() => {
     void (async () => {
       const state = await getMyCoupleStateAction()
-      if ("couple" in state && state.couple) {
-        const ca = (state.couple as { created_at?: string }).created_at ?? null
-        setCreatedAt(ca)
-        if (
-          ca &&
-          coupleIsQuestionnaireHardClosed(ca) &&
-          state.me?.questionnaireStatus !== "COMPLETED"
-        ) {
-          setPhase("closed")
-          return
-        }
+      if (!("couple" in state) || !state.couple) {
+        setPhase("locked")
+        return
+      }
+      const ca = (state.couple as { created_at?: string }).created_at ?? null
+      setCreatedAt(ca)
+      if (
+        ca &&
+        coupleIsQuestionnaireHardClosed(ca) &&
+        state.me?.questionnaireStatus !== "COMPLETED"
+      ) {
+        setPhase("closed")
+        return
       }
 
       const existing = await loadMyCoupleAnswersAction()
@@ -65,7 +69,11 @@ export default function CoupleQuestionnairePage() {
 
       if (Object.keys(saved).length > 0) {
         const firstUnanswered = questions.findIndex((q) => !saved[q.id])
-        setIndex(firstUnanswered >= 0 ? firstUnanswered : Math.max(0, questions.length - 1))
+        setIndex(
+          firstUnanswered >= 0
+            ? firstUnanswered
+            : Math.max(0, questions.length - 1)
+        )
         setPhase("questions")
         return
       }
@@ -153,6 +161,42 @@ export default function CoupleQuestionnairePage() {
     )
   }
 
+  if (phase === "locked") {
+    return (
+      <CouplePageFrame>
+        <CoupleShell activeHref="/couple/questionnaire">
+          <CouplePaywallOverlay
+            title="Questionnaire verrouillé"
+            body="72 questions vous attendent. Débloquez le bilan pour commencer — le paiement s’ouvre depuis ce bouton."
+          >
+            <div className="max-w-lg space-y-4">
+              <CoupleHeroCard
+                eyebrow="Questionnaire"
+                title="Questionnaire Premium"
+                body="72 questions individuelles et confidentielles — pour croiser vos deux regards."
+                status={`Aperçu · 1 / ${questions.length}`}
+              />
+              <div className="space-y-4 rounded-2xl border bg-[#F8F4EE] p-6">
+                <div className="h-2 rounded-full bg-[#1C1412]/10" />
+                <p className="font-serif text-lg font-semibold text-[#1C1412]/50">
+                  Aperçu de la première question…
+                </p>
+                <div className="space-y-2 opacity-40">
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <div
+                      key={n}
+                      className="h-11 rounded-xl border border-[#1C1412]/10 bg-white"
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </CouplePaywallOverlay>
+        </CoupleShell>
+      </CouplePageFrame>
+    )
+  }
+
   if (phase === "closed") {
     return (
       <CouplePageFrame>
@@ -195,18 +239,13 @@ export default function CoupleQuestionnairePage() {
       <CouplePageFrame>
         <CoupleShell activeHref="/couple/questionnaire">
           <div className="max-w-xl mx-auto space-y-5 py-8">
+            <CoupleHeroCard
+              eyebrow="Questionnaire"
+              title="Votre questionnaire est terminé"
+              body="Vos réponses sont enregistrées et restent confidentielles. Le rapport croisé se prépare lorsque votre partenaire a aussi terminé."
+              status="Questionnaire fermé"
+            />
             <CoupleDeadlineBanner createdAt={createdAt} variant="info" />
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
-              Questionnaire fermé
-            </p>
-            <h1 className="font-serif text-3xl font-bold">
-              Votre questionnaire est terminé
-            </h1>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              Merci. Vos réponses sont enregistrées et restent confidentielles.
-              Le rapport croisé se prépare lorsque votre partenaire a aussi
-              terminé. Ce questionnaire ne peut plus être modifié.
-            </p>
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/couple/dossier"
@@ -353,16 +392,14 @@ export default function CoupleQuestionnairePage() {
     <CouplePageFrame>
       <CoupleShell activeHref="/couple/questionnaire">
         <div className="max-w-xl mx-auto space-y-6">
+          <CoupleHeroCard
+            eyebrow="Questionnaire"
+            title="Questionnaire Premium"
+            body="Répondez honnêtement, seul(e). Vos réponses restent confidentielles jusqu’au rapport croisé."
+            status={`Question ${index + 1} / ${questions.length} · ${progress}%`}
+          />
           <CoupleDeadlineBanner createdAt={createdAt} variant="warning" />
           <div className="space-y-2">
-            <div className="flex justify-between text-xs text-muted-foreground">
-              <span>
-                Question {index + 1} / {questions.length}
-              </span>
-              <span>
-                {answeredCount} répondues · {progress}%
-              </span>
-            </div>
             <div className="h-1.5 rounded-full bg-border/60 overflow-hidden">
               <div
                 className="h-full bg-primary transition-all duration-300"

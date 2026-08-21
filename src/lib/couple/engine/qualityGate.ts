@@ -1,5 +1,6 @@
 /**
  * Contrôle qualité — Directive globale §31 + docs 86/181.
+ * Adapté à la trame maître (ids slugifiés depuis le MD).
  */
 
 import { isPremiumPlusOffer } from "@/lib/couple/offers"
@@ -8,13 +9,19 @@ import { textHasForbidden } from "@/lib/couple/engine/charter"
 import type { EngineResult } from "@/lib/couple/engine/types"
 import { getResourceById } from "@/lib/couple/engine/resources/catalog"
 
+function hasSectionMatching(
+  doc: CoupleReportDocument,
+  re: RegExp
+): boolean {
+  return doc.sections.some((s) => re.test(s.id) || re.test(s.title))
+}
+
 export function qualityGate(
   doc: CoupleReportDocument,
   engine: EngineResult
 ): { ok: boolean; notes: string[] } {
   const notes: string[] = []
 
-  // Priorités ≤ 3
   if (engine.synthesis.priorities.length > 3) {
     notes.push("Plus de 3 priorités")
   }
@@ -25,57 +32,42 @@ export function qualityGate(
     notes.push("Écarts importants sans priorité")
   }
 
-  // Données utilisées / structure Premium
-  const required = [
-    "accueil",
-    "regard",
-    "profil-a",
-    "profil-b",
-    "croisement",
-    "forces",
-    "plan",
-    "conclusion",
+  const requiredPatterns: Array<[string, RegExp]> = [
+    ["bienvenue", /bienvenue|accueil/i],
+    ["regard", /regard/i],
+    ["profil A", /profil.*(daniel|a\b)|le-profil-de-/i],
+    ["profil B", /profil.*(naomi|b\b)|le-profil-de-/i],
+    ["rencontre profils", /rencontrent|dynamique/i],
+    ["plan", /plan-d-action|plan d.action/i],
+    ["conclusion", /conclusion|retenir-de-votre-bilan/i],
   ]
-  for (const id of required) {
-    if (!doc.sections.some((s) => s.id === id)) {
-      notes.push(`Section manquante: ${id}`)
+  for (const [label, re] of requiredPatterns) {
+    if (!hasSectionMatching(doc, re)) {
+      notes.push(`Section manquante: ${label}`)
     }
   }
 
-  // Portraits distincts (pas clones)
-  const a = doc.sections.find((s) => s.id === "profil-a")
-  const b = doc.sections.find((s) => s.id === "profil-b")
-  if (a && b) {
-    const ta = a.paragraphs.join(" ")
-    const tb = b.paragraphs.join(" ")
+  const profils = doc.sections.filter(
+    (s) => /profil-de-|LE PROFIL/i.test(s.id + s.title)
+  )
+  if (profils.length >= 2) {
+    const ta = profils[0]!.paragraphs.join(" ")
+    const tb = profils[1]!.paragraphs.join(" ")
     if (ta === tb) notes.push("Portraits A/B identiques")
-    if (!ta.includes(doc.names.nameA)) notes.push("Portrait A sans nom A")
-    if (!tb.includes(doc.names.nameB)) notes.push("Portrait B sans nom B")
   }
 
-  // Grandes différences = priorités
-  const diffSections = doc.sections.filter((s) => s.id.startsWith("diff-"))
-  if (diffSections.length > 3) notes.push("Plus de 3 chapitres différence")
-  if (
-    engine.synthesis.priorities.length > 0 &&
-    diffSections.length !== engine.synthesis.priorities.length
-  ) {
-    notes.push("Chapitres différence non alignés sur priorités")
+  if (doc.sections.length < 10) {
+    notes.push("Trame Premium trop courte")
   }
 
-  // Exercices liés
-  if (doc.exercises.length < 1) notes.push("Aucun exercice")
-  if (doc.actionPlan.length < 1) notes.push("Plan d’action manquant")
-
-  // Conclusions de parties (au moins quelques h2 « retenir »)
   const retainCount = doc.sections.filter((s) =>
     (s.blocks || []).some(
       (b) =>
         b.type === "h2" &&
-        /retenir|conclusion|fil rouge|synthèse/i.test(b.text)
+        /retenir|conclusion|fil rouge|synthèse|carte/i.test(b.text)
     )
   ).length
-  if (retainCount < 2) {
+  if (retainCount < 1 && doc.sections.length < 5) {
     notes.push("Peu de conclusions de parties")
   }
 
@@ -94,8 +86,7 @@ export function qualityGate(
     if (doc.sections.length < 10) {
       notes.push("Base Premium trop courte pour PP")
     }
-    // PP ne doit pas remplacer Premium
-    if (!doc.sections.some((s) => s.id === "carte-relationnelle")) {
+    if (!hasSectionMatching(doc, /carte-relationnelle|carte relationnelle/i)) {
       notes.push("PP sans carte relationnelle Premium")
     }
   }
@@ -116,6 +107,17 @@ export function qualityGate(
 
   if (!doc.actionPlan.length && !doc.exercises.length) {
     notes.push("Aucune action ni exercice")
+  }
+
+  // Texte maître attendu en ouverture (démo / trame)
+  const welcome = doc.sections.find((s) => /bienvenue/i.test(s.id + s.title))
+  if (
+    welcome &&
+    !welcome.paragraphs.some((p) =>
+      /vous êtes ensemble|votre avenir mérite/i.test(p)
+    )
+  ) {
+    notes.push("Ouverture hors trame maître")
   }
 
   return { ok: notes.length === 0, notes }

@@ -10,7 +10,6 @@ import { StoryJourneyCard } from "@/components/home/StoryJourneyCard";
 import { TestimonialsCarousel } from "@/components/marketing/TestimonialsCarousel";
 import { ShareRecommendSection } from "@/components/marketing/ShareRecommendSection";
 import { MatchingPillarsShowcase } from "@/components/home/MatchingPillarsShowcase";
-import { PwaInstallHomeSection } from "@/components/pwa/PwaInstallHomeSection";
 import { HomeCoupleSection } from "@/components/home/HomeCoupleSection";
 import { HomeDualPricingSection } from "@/components/home/HomeDualPricingSection";
 import { MagneticButton } from "@/components/ui/magnetic-button";
@@ -419,8 +418,6 @@ export default function Home() {
       <HomeCoupleSection />
 
       <HomeDualPricingSection />
-
-      <PwaInstallHomeSection />
 
       {/* CTA final */}
       <section className="py-28 px-6 sm:px-12 relative overflow-hidden bg-primary text-white">

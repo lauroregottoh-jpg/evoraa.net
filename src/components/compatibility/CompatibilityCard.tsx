@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Sparkles, MapPin, Eye, EyeOff, ArrowRight } from "lucide-react";
 import type { DomainScore } from "@/lib/matching/types";
+import type { AssessmentSlug } from "@/lib/assessments/questionBank";
 
 export interface CompatibilityProfile {
   id: string;
@@ -19,6 +20,9 @@ export interface CompatibilityProfile {
   domainScores?: DomainScore[];
   photoUrl?: string;
   isBlurred?: boolean;
+  basis?: "demande" | "tests";
+  partnerTestsCount?: number;
+  missingOnPartner?: AssessmentSlug[];
 }
 
 interface CompatibilityCardProps {
@@ -87,6 +91,16 @@ export function CompatibilityCard({
             {profile.harmonyScore}% d&apos;harmonie
           </span>
         </div>
+        {profile.basis === "demande" ? (
+          <div className="absolute bottom-3 left-3 right-3">
+            <span className="inline-flex max-w-full rounded-lg bg-[#5C1F28]/90 px-2.5 py-1 text-[10px] font-semibold leading-snug text-[#F8F4EE]">
+              Suggestion selon votre demande — tests pas encore remplis
+              {(profile.partnerTestsCount ?? 0) > 0
+                ? ` (${profile.partnerTestsCount}/5)`
+                : ""}
+            </span>
+          </div>
+        ) : null}
 
         {allowReveal && profile.photoUrl && (
           <button

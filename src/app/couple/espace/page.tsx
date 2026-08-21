@@ -2,11 +2,93 @@
 
 import * as React from "react"
 import Link from "next/link"
+import {
+  ClipboardList,
+  FileText,
+  FolderOpen,
+  Route,
+  Sparkles,
+  Users,
+} from "lucide-react"
 import { CouplePageFrame } from "@/components/couple/CouplePageFrame"
-import { CoupleShell } from "@/components/couple/CoupleShell"
+import {
+  CoupleDashTile,
+  CoupleShell,
+} from "@/components/couple/CoupleShell"
 import { CoupleDeadlineBanner } from "@/components/couple/CoupleDeadlineBanner"
+import { CoupleHeroCard } from "@/components/couple/CoupleHeroCard"
+import { CouplePaywallOverlay } from "@/components/couple/CouplePaywallOverlay"
 import { getMyCoupleStateAction } from "@/app/actions/couple"
 
+function DashboardGrid({
+  locked,
+  questionnaireLabel,
+  hasReport,
+}: {
+  locked?: boolean
+  questionnaireLabel: string
+  hasReport?: boolean
+}) {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      <CoupleDashTile
+        href="/couple/questionnaire"
+        title="Questionnaire"
+        description="72 questions individuelles et confidentielles — chacun répond de son côté."
+        icon={ClipboardList}
+        locked={locked}
+        accent
+        status={questionnaireLabel}
+      />
+      <CoupleDashTile
+        href="/couple/dossier"
+        title="Dossier"
+        description="Composition des livrables : rapport, exercices, plan — téléchargeables à part."
+        icon={FolderOpen}
+        locked={locked}
+      />
+      <CoupleDashTile
+        href="/couple/rapport"
+        title="Rapport"
+        description="Lecture croisée de votre dynamique de couple, chapitre par chapitre."
+        icon={FileText}
+        locked={locked || !hasReport}
+        status={
+          locked
+            ? "Verrouillé"
+            : hasReport
+              ? "Prêt"
+              : "Disponible après les deux questionnaires"
+        }
+      />
+      <CoupleDashTile
+        href="/couple/exercices"
+        title="Exercices"
+        description="Cahier pratique pour ancrer les prises de conscience du bilan."
+        icon={Sparkles}
+        locked={locked || !hasReport}
+      />
+      <CoupleDashTile
+        href="/couple/plan"
+        title="Plan d’action"
+        description="Étapes concrètes pour avancer ensemble après le bilan."
+        icon={Route}
+        locked={locked || !hasReport}
+      />
+      <CoupleDashTile
+        href="/couple/inviter"
+        title="Partenaire"
+        description="Inviter ou suivre l’avancement de votre conjoint(e)."
+        icon={Users}
+        locked={locked}
+      />
+    </div>
+  )
+}
+
+/**
+ * Tableau de bord client Couple — belle grille de modules + verrous.
+ */
 export default function CoupleEspacePage() {
   const [state, setState] = React.useState<
     Awaited<ReturnType<typeof getMyCoupleStateAction>> | null
@@ -16,45 +98,40 @@ export default function CoupleEspacePage() {
     void getMyCoupleStateAction().then(setState)
   }, [])
 
+  const lockedPreview = (
+    <div className="space-y-5">
+      <CoupleHeroCard
+        eyebrow="Tableau de bord"
+        title="Votre espace couple"
+        body="Voici ce que vous débloquez après le paiement : questionnaire, dossier, rapport, exercices et plan."
+        status="Aperçu — débloquez pour accéder"
+      />
+      <DashboardGrid locked questionnaireLabel="Verrouillé" hasReport={false} />
+    </div>
+  )
+
   return (
-    <CouplePageFrame>
-      <CoupleShell activeHref="/couple/espace">
+    <CouplePageFrame contentWidth="wide">
+      <CoupleShell activeHref="/couple/espace" variant="app">
         {!state ? (
           <p className="text-sm text-muted-foreground">Chargement…</p>
         ) : "error" in state && state.error ? (
           <p className="text-sm text-destructive">{state.error}</p>
         ) : !state.couple ? (
-          <div className="space-y-4 max-w-lg">
-            <h1 className="font-serif text-3xl font-bold">Aucun bilan actif</h1>
-            <p className="text-sm text-muted-foreground">
-              Achetez un bilan ou rejoignez celui de votre partenaire.
-            </p>
-            <div className="flex gap-3">
-              <Link
-                href="/couple/offre"
-                className="inline-flex h-10 items-center rounded-xl bg-primary text-primary-foreground px-4 text-sm font-semibold"
-              >
-                Voir les offres
-              </Link>
-              <Link
-                href="/couple/rejoindre"
-                className="inline-flex h-10 items-center rounded-xl border px-4 text-sm font-semibold"
-              >
-                Entrer un code
-              </Link>
-            </div>
-          </div>
+          <CouplePaywallOverlay
+            title="Débloquez votre bilan"
+            body="Vous voyez déjà la forme de votre espace. Le paiement (ou un code partenaire) ouvre questionnaire et livrables."
+          >
+            {lockedPreview}
+          </CouplePaywallOverlay>
         ) : (
-          <div className="space-y-6 max-w-2xl">
-            <header className="space-y-1">
-              <h1 className="font-serif text-3xl font-bold">Votre espace couple</h1>
-              <p className="text-sm text-muted-foreground">
-                Code couple {state.couple.public_code} · statut{" "}
-                <span className="font-medium text-foreground">
-                  {state.couple.status}
-                </span>
-              </p>
-            </header>
+          <div className="space-y-5">
+            <CoupleHeroCard
+              eyebrow="Tableau de bord"
+              title="Votre espace couple"
+              body="Suivez l’avancement à deux et ouvrez chaque module quand vous êtes prêts."
+              status={`Code ${state.couple.public_code} · ${state.couple.status}`}
+            />
 
             <CoupleDeadlineBanner
               createdAt={
@@ -67,75 +144,60 @@ export default function CoupleEspacePage() {
               }
             />
 
-            <section className="rounded-2xl border border-border/70 bg-white/80 p-5 space-y-3">
-              <h2 className="font-serif text-xl font-bold">Où vous en êtes</h2>
+            <section className="rounded-2xl border border-[#B8954A]/30 bg-[#FBF9F6] p-5 space-y-3">
+              <h2 className="font-serif text-xl font-bold text-[#5C1F28]">
+                Où vous en êtes
+              </h2>
               <ul className="space-y-2 text-sm">
                 {(state.participants || []).map((p) => (
-                  <li key={p.id} className="flex justify-between gap-3">
+                  <li
+                    key={p.id}
+                    className="flex justify-between gap-3 rounded-xl bg-white border border-[#1C1412]/8 px-3 py-2.5"
+                  >
                     <span>
                       Place {p.seat}
                       {p.display_name ? ` — ${p.display_name}` : ""}
                       {state.me?.participantId === p.id ? " (vous)" : ""}
                     </span>
-                    <span className="text-muted-foreground">
+                    <span className="text-muted-foreground font-medium">
                       {p.questionnaire_status === "COMPLETED"
-                        ? "Questionnaire fermé"
+                        ? "Terminé"
                         : p.questionnaire_status}
                     </span>
                   </li>
                 ))}
               </ul>
-              {(state.participants?.length || 0) < 2 && (
+              {(state.participants?.length || 0) < 2 ? (
                 <p className="text-xs text-muted-foreground">
                   En attente du partenaire —{" "}
-                  <Link href="/couple/inviter" className="underline text-primary">
+                  <Link
+                    href="/couple/inviter"
+                    className="underline text-primary font-semibold"
+                  >
                     inviter
                   </Link>
                 </p>
-              )}
+              ) : null}
             </section>
 
-            <div className="flex flex-wrap gap-2">
-              <Link
-                href="/couple/dossier"
-                className="inline-flex h-10 items-center rounded-xl border border-[#B8954A]/40 bg-[#B8954A]/10 px-4 text-sm font-semibold text-[#5C1F28]"
-              >
-                Dossier livrables
+            <DashboardGrid
+              questionnaireLabel={
+                state.me?.questionnaireStatus === "COMPLETED"
+                  ? "Terminé"
+                  : "À poursuivre"
+              }
+              hasReport={Boolean(state.report)}
+            />
+
+            <p className="text-center text-xs text-muted-foreground">
+              <Link href="/couple" className="underline">
+                Retour à la présentation KELYA Couple
               </Link>
-              <Link
-                href="/couple/questionnaire"
-                className="inline-flex h-10 items-center rounded-xl bg-primary text-primary-foreground px-4 text-sm font-semibold"
-              >
-                {state.me?.questionnaireStatus === "COMPLETED"
-                  ? "Questionnaire fermé"
-                  : "Continuer le questionnaire"}
+              {" · "}
+              <Link href="/couple/offre" className="underline">
+                Offres & paiement
               </Link>
-              {state.report && (
-                <>
-                  <Link
-                    href="/couple/resultats"
-                    className="inline-flex h-10 items-center rounded-xl border px-4 text-sm font-semibold"
-                  >
-                    Résultats
-                  </Link>
-                  <Link
-                    href="/couple/rapport"
-                    className="inline-flex h-10 items-center rounded-xl border px-4 text-sm font-semibold"
-                  >
-                    Rapport
-                  </Link>
-                </>
-              )}
-              {!state.report &&
-                state.me?.questionnaireStatus === "COMPLETED" && (
-                  <Link
-                    href="/couple/attente"
-                    className="inline-flex h-10 items-center rounded-xl border px-4 text-sm font-semibold"
-                  >
-                    Voir l’attente
-                  </Link>
-                )}
-            </div>
+            </p>
           </div>
         )}
       </CoupleShell>

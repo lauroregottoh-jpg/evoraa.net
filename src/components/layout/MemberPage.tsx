@@ -8,10 +8,15 @@ import { COFFRE_INITIAL_UNLOCKS } from "@/lib/coffre/unlock"
 type MemberPageProps = {
   children: React.ReactNode
   dense?: boolean
+  contentWidth?: "default" | "wide" | "full"
 }
 
 /** Shell membre unifié : menu + rappels profil / Alliance sur toutes les pages. */
-export async function MemberPage({ children, dense }: MemberPageProps) {
+export async function MemberPage({
+  children,
+  dense,
+  contentWidth,
+}: MemberPageProps) {
   const [usage, supabase, assessments] = await Promise.all([
     getUsageSnapshot(),
     createClient(),
@@ -52,6 +57,7 @@ export async function MemberPage({ children, dense }: MemberPageProps) {
       planLabel={usage?.planName}
       isPaid={Boolean(usage?.isPaid)}
       dense={dense}
+      contentWidth={contentWidth}
       completionPercentage={completionPercentage}
       hasAvatar={hasAvatar}
       assessmentsDone={assessmentsDone}

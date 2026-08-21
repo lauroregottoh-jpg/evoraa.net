@@ -57,14 +57,25 @@ export default function CoupleInviterPage() {
             </div>
           )}
 
-          {url && (
+          {url ? (
             <div className="rounded-2xl border bg-white/80 p-4">
               <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">
-                Lien
+                Lien à envoyer
               </p>
               <p className="text-xs break-all font-mono">{url}</p>
             </div>
-          )}
+          ) : code ? (
+            <div className="rounded-2xl border bg-white/80 p-4">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                Lien à envoyer
+              </p>
+              <p className="text-xs break-all font-mono">
+                {typeof window !== "undefined"
+                  ? `${window.location.origin}/couple/rejoindre?code=${encodeURIComponent(code)}`
+                  : `/couple/rejoindre?code=${code}`}
+              </p>
+            </div>
+          ) : null}
 
           <button
             type="button"

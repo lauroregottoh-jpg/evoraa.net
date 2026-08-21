@@ -88,30 +88,111 @@ export type Database = {
         }
         Relationships: []
       }
+      assessment_invites: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          invitee_id: string
+          inviter_id: string
+          status: string
+          test_slug: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          invitee_id: string
+          inviter_id: string
+          status?: string
+          test_slug: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          invitee_id?: string
+          inviter_id?: string
+          status?: string
+          test_slug?: string
+        }
+        Relationships: []
+      }
+      message_credit_lots: {
+        Row: {
+          amount: number
+          created_at: string
+          expires_at: string
+          id: string
+          remaining: number
+          source: string
+          source_key: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          expires_at: string
+          id?: string
+          remaining: number
+          source: string
+          source_key: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          expires_at?: string
+          id?: string
+          remaining?: number
+          source?: string
+          source_key?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
+          audio_duration_ms: number | null
+          audio_mime: string | null
+          audio_path: string | null
           conversation_id: string
           created_at: string | null
           id: string
           is_read: boolean | null
+          kind: string
           message: string
           sender_id: string
+          transcript_status: string
+          transcript_text: string | null
         }
         Insert: {
+          audio_duration_ms?: number | null
+          audio_mime?: string | null
+          audio_path?: string | null
           conversation_id: string
           created_at?: string | null
           id?: string
           is_read?: boolean | null
+          kind?: string
           message: string
           sender_id: string
+          transcript_status?: string
+          transcript_text?: string | null
         }
         Update: {
+          audio_duration_ms?: number | null
+          audio_mime?: string | null
+          audio_path?: string | null
           conversation_id?: string
           created_at?: string | null
           id?: string
           is_read?: boolean | null
+          kind?: string
           message?: string
           sender_id?: string
+          transcript_status?: string
+          transcript_text?: string | null
         }
         Relationships: [
           {

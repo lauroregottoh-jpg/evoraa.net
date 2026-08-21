@@ -17,6 +17,7 @@ import {
   type CoachingDurationMinutes,
   type CoachingPackId,
 } from "@/lib/billing/coachingOffers"
+import { creditsFromPackSessions } from "@/lib/coaching/domain"
 import { startCoachingCheckoutAction } from "@/app/actions/coaching"
 import { PaymentModePicker } from "@/components/billing/PaymentModePicker"
 import type { BictorysPaymentMode } from "@/lib/billing/bictorys"
@@ -81,10 +82,35 @@ export function CoachingCheckoutPanel({
   const [message, setMessage] = React.useState("")
   const [objectives, setObjectives] = React.useState<string[]>(["", "", "", ""])
   const [phone, setPhone] = React.useState("")
+  const [displayAnonymous, setDisplayAnonymous] = React.useState(false)
+  /** Répartition : séances de 30 min vs 60 min à partir des crédits du pack. */
+  const [splitMode, setSplitMode] = React.useState<"as_pack" | "all_30" | "mix_60">(
+    "as_pack"
+  )
 
   const packs = React.useMemo(() => getCoachingPacks(minutes), [minutes])
   const selected = packs.find((p) => p.id === packId) || packs[0]
   const objCount = objectiveCount(minutes)
+  const totalCredits = creditsFromPackSessions(
+    selected.sessions,
+    selected.minutes
+  )
+  const splitSummary = React.useMemo(() => {
+    if (splitMode === "as_pack") {
+      return `${selected.sessions}× ${selected.minutes} min (${totalCredits} crédit${totalCredits > 1 ? "s" : ""})`
+    }
+    if (splitMode === "all_30") {
+      return `${totalCredits}× 30 min (${totalCredits} crédit${totalCredits > 1 ? "s" : ""})`
+    }
+    const sessions60 = Math.floor(totalCredits / 2)
+    const rem30 = totalCredits % 2
+    return [
+      sessions60 > 0 ? `${sessions60}× 60 min` : null,
+      rem30 > 0 ? `${rem30}× 30 min` : null,
+    ]
+      .filter(Boolean)
+      .join(" + ")
+  }, [splitMode, selected, totalCredits])
 
   React.useEffect(() => {
     setMode(suggestedMode)
@@ -168,6 +194,13 @@ export function CoachingCheckoutPanel({
           phone: phone.trim(),
           objectives: cleanedObjectives,
         },
+        splitPlan: {
+          mode: splitMode,
+          summary: splitSummary,
+          totalCredits,
+          displayAnonymous,
+        },
+        displayAnonymous,
       })
       if (r.error) {
         setError(r.error)
@@ -483,7 +516,11 @@ export function CoachingCheckoutPanel({
                             ) : null}
                           </p>
                           <p className="text-xs text-muted-foreground mt-0.5">
-                            {p.hint}
+                            {p.hint} ·{" "}
+                            {creditsFromPackSessions(p.sessions, p.minutes)} crédit
+                            {creditsFromPackSessions(p.sessions, p.minutes) > 1
+                              ? "s"
+                              : ""}
                           </p>
                         </div>
                         <div className="text-right shrink-0">
@@ -505,6 +542,66 @@ export function CoachingCheckoutPanel({
                   )
                 })}
               </div>
+
+              <div className="rounded-2xl border border-primary/15 bg-[#FBF8F3] p-4 space-y-3">
+                <div>
+                  <p className="text-sm font-semibold">Répartition des séances</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    1 crédit = 30 min. Choisissez comment utiliser vos{" "}
+                    {totalCredits} crédit{totalCredits > 1 ? "s" : ""} dès
+                    l’achat.
+                  </p>
+                </div>
+                <div className="grid gap-2">
+                  {(
+                    [
+                      {
+                        id: "as_pack" as const,
+                        label: `Comme l’offre · ${selected.sessions}× ${selected.minutes} min`,
+                      },
+                      {
+                        id: "all_30" as const,
+                        label: `Tout en 30 min · ${totalCredits} séance${totalCredits > 1 ? "s" : ""}`,
+                      },
+                      {
+                        id: "mix_60" as const,
+                        label: "Privilégier des séances d’1 h (2 crédits)",
+                      },
+                    ] as const
+                  ).map((opt) => (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onClick={() => setSplitMode(opt.id)}
+                      className={cn(
+                        "text-left rounded-xl border px-3 py-2.5 text-sm font-medium",
+                        splitMode === opt.id
+                          ? "border-primary bg-primary/[0.06]"
+                          : "border-border bg-white"
+                      )}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-primary font-semibold">{splitSummary}</p>
+              </div>
+
+              <label className="flex items-start gap-2 text-sm rounded-xl border bg-white px-3 py-3">
+                <input
+                  type="checkbox"
+                  checked={displayAnonymous}
+                  onChange={(e) => setDisplayAnonymous(e.target.checked)}
+                  className="mt-0.5"
+                />
+                <span>
+                  <strong className="font-semibold">Anonymat d’affichage</strong>
+                  <span className="block text-xs text-muted-foreground mt-0.5">
+                    Votre nom n’apparaît pas dans la salle. KELIAA et le coach
+                    conservent votre identité pour le suivi.
+                  </span>
+                </span>
+              </label>
             </>
           )}
 
@@ -523,6 +620,10 @@ export function CoachingCheckoutPanel({
                   <p className="text-xs text-muted-foreground">Formule</p>
                   <p className="text-sm font-semibold">
                     {selected.label} · {minutes === 30 ? "30 min" : "1 h"}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Répartition : {splitSummary}
+                    {displayAnonymous ? " · anonymat d’affichage" : ""}
                   </p>
                 </div>
                 <p className="font-serif text-2xl font-bold text-primary">

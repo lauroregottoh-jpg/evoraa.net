@@ -258,7 +258,7 @@ export async function POST(request: NextRequest) {
 
     try {
       const { fulfillCouplePurchase } = await import("@/lib/couple/fulfill")
-      await fulfillCouplePurchase({
+      const fulfilled = await fulfillCouplePurchase({
         admin,
         paymentId: payment.id,
         purchaserUserId: payment.user_id,
@@ -266,6 +266,34 @@ export async function POST(request: NextRequest) {
         amountXof: Number(payment.amount) || 0,
         displayName: (profile?.first_name as string) || null,
       })
+      if (fulfilled.inviteCode) {
+        const { data: authUser } = await admin.auth.admin.getUserById(
+          payment.user_id
+        )
+        const email = authUser.user?.email
+        if (email) {
+          const { sendCoupleAccessEmail } = await import(
+            "@/lib/couple/inviteEmail"
+          )
+          const {
+            coupleAbsoluteUrl,
+            couplePartnerJoinPath,
+            coupleSpacePath,
+            coupleAppBaseUrl,
+          } = await import("@/lib/couple/inviteLinks")
+          const base = coupleAppBaseUrl()
+          await sendCoupleAccessEmail({
+            to: email,
+            firstName: (profile?.first_name as string) || "",
+            spaceUrl: coupleAbsoluteUrl(coupleSpacePath(), base),
+            partnerUrl: coupleAbsoluteUrl(
+              couplePartnerJoinPath(fulfilled.inviteCode),
+              base
+            ),
+            inviteCode: fulfilled.inviteCode,
+          })
+        }
+      }
     } catch (err) {
       captureError(err instanceof Error ? err.message : "couple fulfill", {
         source: "bictorys_couple_fulfill",
@@ -311,7 +339,12 @@ export async function POST(request: NextRequest) {
         .maybeSingle()
       if (refreshed?.status === "completed") {
         if (deliveryId) await markWebhookDeliveryProcessed(admin, deliveryId)
-        return NextResponse.json({ ok: true, activated: true, coaching: true, already: true })
+        return NextResponse.json({
+          ok: true,
+          activated: true,
+          coaching: true,
+          already: true,
+        })
       }
       captureError(coachPayErr.message, { source: "bictorys_coaching_complete" })
       return NextResponse.json({ error: "Activation coaching impossible" }, { status: 500 })
@@ -325,6 +358,29 @@ export async function POST(request: NextRequest) {
         ends_at: null,
       })
       .eq("id", payment.subscription_id)
+
+    // Crédits ledger : 1 crédit = 30 min ; séance 60 min = 2 crédits
+    try {
+      const sessions = Number(paymentMeta.sessions || paymentMeta.packSessions || 1)
+      const minutes = Number(paymentMeta.minutes || 30) === 60 ? 60 : 30
+      const credits = Math.max(1, sessions * (minutes / 30))
+      await admin.from("coaching_credits_ledger").insert({
+        user_id: payment.user_id,
+        delta_credits: credits,
+        reason: "purchase",
+        ref_payment_id: payment.id,
+        metadata: {
+          packId: paymentMeta.packId,
+          sessions,
+          minutes,
+        },
+      })
+    } catch (ledgerErr) {
+      captureError(
+        ledgerErr instanceof Error ? ledgerErr.message : "ledger",
+        { source: "bictorys_coaching_credits" }
+      )
+    }
 
     await logPaymentEvent({
       paymentId: payment.id,

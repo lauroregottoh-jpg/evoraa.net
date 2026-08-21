@@ -4,4 +4,5 @@ node_modules
 INSPIRATION FARATA
 skills integration de paiement
 __MACOSX
-*.mp4
+docs/**/*.mp4
+/INSPIRATION*/**/*.mp4

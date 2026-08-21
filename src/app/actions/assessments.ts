@@ -17,7 +17,7 @@ import {
 import { buildGrowthAxes } from "@/lib/assessments/growth"
 import { createNotification } from "@/app/actions/notifications"
 import { getUsageSnapshot } from "@/lib/billing/usage"
-import { TEST_IDS } from "@/lib/assessments/testIds"
+import { MESSAGE_CREDIT_PER_TEST } from "@/lib/matching/testCoverage"
 
 const TEST_INDEX: Record<AssessmentSlug, number> = {
   personality: 1,
@@ -224,7 +224,20 @@ export async function submitAssessmentAction(
       completedCount >= 5
         ? "Les 5 piliers sont complétés — matching optimisé."
         : `${completedCount}/5 questionnaires complétés.`
+    }${
+      !existingResult?.id
+        ? ` +${MESSAGE_CREDIT_PER_TEST} messages (valables 20 jours).`
+        : ""
     }`,
+  })
+
+  const { grantCreditsForCompletedTest } = await import(
+    "@/app/actions/assessmentInvites"
+  )
+  await grantCreditsForCompletedTest({
+    userId: user.id,
+    slug,
+    isFirstCompletion: !existingResult?.id,
   })
 
   // Rapport Alliance : reconstruction automatique à la prochaine lecture

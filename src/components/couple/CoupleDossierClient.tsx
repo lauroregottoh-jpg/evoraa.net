@@ -13,6 +13,8 @@ import {
 import { CouplePageFrame } from "@/components/couple/CouplePageFrame"
 import { CoupleShell } from "@/components/couple/CoupleShell"
 import { CoupleDeadlineBanner } from "@/components/couple/CoupleDeadlineBanner"
+import { CouplePaywallOverlay } from "@/components/couple/CouplePaywallOverlay"
+import { CoupleHeroCard } from "@/components/couple/CoupleHeroCard"
 import { getMyCoupleStateAction, getCoupleReportAction } from "@/app/actions/couple"
 import { cn } from "@/utils/cn"
 
@@ -28,29 +30,49 @@ type Piece = {
 const PIECES: Piece[] = [
   {
     id: "rapport",
-    title: "Rapport chapitres",
-    description: "Lecture type dossier — slides, sous-titres, graphiques A/B.",
+    title: "Rapport — chapitres de lecture",
+    description:
+      "Bienvenue, regard, profils, dynamique… chaque chapitre se lit et se télécharge à part.",
+    href: "/couple/rapport",
+    icon: <FileText className="h-5 w-5" />,
+  },
+  {
+    id: "convergences",
+    title: "Dossier — convergences & forces",
+    description:
+      "Ce qui vous unit : à ouvrir ensemble quand vous voulez consolider le positif.",
+    href: "/couple/rapport",
+    icon: <Sparkles className="h-5 w-5" />,
+  },
+  {
+    id: "differences",
+    title: "Dossier — différences & priorités",
+    description:
+      "Les écarts et les 3 priorités : un livrable distinct pour les conversations sensibles.",
     href: "/couple/rapport",
     icon: <FileText className="h-5 w-5" />,
   },
   {
     id: "exercices",
     title: "Cahier d’exercices",
-    description: "Cartes ludiques, zones à remplir, jeux de rôle, export.",
+    description:
+      "Exercices séparés du rapport de lecture — zones à remplir, export imprimable.",
     href: "/couple/exercices",
     icon: <BookOpen className="h-5 w-5" />,
   },
   {
     id: "plan",
     title: "Plan d’action",
-    description: "Étapes datées pour mettre le bilan en mouvement.",
+    description:
+      "Étapes datées, à télécharger et suivre hors du rapport narratif.",
     href: "/couple/plan",
     icon: <ClipboardList className="h-5 w-5" />,
   },
   {
     id: "telecharger",
-    title: "Téléchargements",
-    description: "HTML / impression soignée de vos livrables.",
+    title: "Centre de téléchargements",
+    description:
+      "Exporter chapitre par chapitre, exercices et plan — sans tout mélanger.",
     href: "/couple/telecharger",
     icon: <Download className="h-5 w-5" />,
   },
@@ -67,13 +89,18 @@ export function CoupleDossierClient({ demo = false }: Props) {
     demo ? "couple_premium_plus" : null
   )
 
+  const [needsPurchase, setNeedsPurchase] = React.useState(false)
+
   React.useEffect(() => {
     if (demo) {
       setOfferId("couple_premium_plus")
       setHasReport(true)
       return
     }
-    void getMyCoupleStateAction().then(setState)
+    void getMyCoupleStateAction().then((s) => {
+      setState(s)
+      if (!("couple" in s) || !s.couple) setNeedsPurchase(true)
+    })
     void getCoupleReportAction().then((res) => {
       if (res.report) {
         setHasReport(true)
@@ -87,7 +114,7 @@ export function CoupleDossierClient({ demo = false }: Props) {
     (state?.participants?.length === 2 &&
       state.participants.every((p) => p.questionnaire_status === "COMPLETED"))
 
-  const unlocked = demo || (bothDone && hasReport)
+  const unlocked = demo || (!needsPurchase && bothDone && hasReport)
   const isPP = offerId === "couple_premium_plus" || demo
   const createdAt =
     state && "couple" in state && state.couple
@@ -121,27 +148,45 @@ export function CoupleDossierClient({ demo = false }: Props) {
             </p>
           ) : null}
 
-          <header className="relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#5C1F28] via-[#3D1519] to-[#1C1412] p-7 sm:p-9 text-[#FBF9F6]">
-            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
-              Votre dossier
-            </p>
-            <h1 className="mt-2 font-serif text-3xl sm:text-4xl font-bold leading-tight">
-              Composition des livrables
-            </h1>
-            <p className="mt-3 text-sm sm:text-base text-white/75 max-w-md leading-relaxed">
-              Rapport enrichi, cahier d’exercices, plan d’action et
-              téléchargements — pour motiver la fin des questionnaires et garder
-              une lecture premium.
-            </p>
-            <p className="mt-4 text-xs text-white/55">
-              {unlocked
-                ? "Dossier débloqué"
-                : bothDone
-                  ? "Analyse en cours — dossier bientôt disponible"
-                  : "Verrouillé tant que les deux questionnaires ne sont pas terminés"}
-            </p>
-          </header>
+          <CoupleHeroCard
+            eyebrow="Votre dossier"
+            title="Composition des livrables"
+            body="Rapport enrichi, cahier d’exercices, plan d’action et téléchargements — pour motiver la fin des questionnaires et garder une lecture premium."
+            status={
+              needsPurchase
+                ? "Aperçu — débloquez le bilan pour accéder aux livrables"
+                : unlocked
+                  ? "Dossier débloqué"
+                  : bothDone
+                    ? "Analyse en cours — dossier bientôt disponible"
+                    : "Verrouillé tant que les deux questionnaires ne sont pas terminés"
+            }
+          />
 
+          {needsPurchase && !demo ? (
+            <CouplePaywallOverlay
+              title="Dossier livrables verrouillé"
+              body="Rapport, exercices et plan d’action sont séparés pour que vous puissiez télécharger et travailler pièce par pièce. Débloquez le bilan pour ouvrir le dossier."
+            >
+              <ul className="space-y-3 pointer-events-none">
+                {pieces.slice(0, 4).map((p) => (
+                  <li
+                    key={p.id}
+                    className="flex gap-4 rounded-2xl border border-[#1C1412]/10 bg-[#F8F4EE]/80 p-5 opacity-80"
+                  >
+                    <Lock className="h-5 w-5 text-[#5C1F28]/50" />
+                    <div>
+                      <p className="font-serif text-lg font-bold">{p.title}</p>
+                      <p className="text-sm text-[#1C1412]/60">{p.description}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </CouplePaywallOverlay>
+          ) : null}
+
+          {!needsPurchase || demo ? (
+          <>
           {!demo ? (
             <CoupleDeadlineBanner
               createdAt={createdAt}
@@ -227,6 +272,8 @@ export function CoupleDossierClient({ demo = false }: Props) {
                 Voir le rapport démo →
               </Link>
             </p>
+          ) : null}
+          </>
           ) : null}
         </div>
       </CoupleShell>

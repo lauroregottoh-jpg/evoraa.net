@@ -107,6 +107,13 @@ export const RL = {
   },
   contact: { action: "contact", limit: 20, windowSeconds: 60 * 60, failClosed: false },
   eva: { action: "eva", limit: 60, windowSeconds: 60 * 60, failClosed: false },
+  /** Vocaux Alliance — 30 / heure / membre */
+  voiceNote: {
+    action: "voice_note",
+    limit: 30,
+    windowSeconds: 60 * 60,
+    failClosed: false,
+  },
   /** Back-office — 100 req / min / userId (parity Evora D-ADMIN-05) */
   adminUserId: {
     action: "admin_userid",

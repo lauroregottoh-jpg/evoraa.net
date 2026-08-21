@@ -182,3 +182,110 @@ export function supabaseConfirmSignupTemplateHint(appUrl: string) {
     ctaHref: "{{ .ConfirmationURL }}",
   }).replaceAll(appUrl, "{{ .SiteURL }}")
 }
+
+export function coachingBookingConfirmEmailHtml(input: {
+  firstName: string
+  coachName: string
+  whenLabel: string
+  minutes: number
+  sessionUrl: string
+}) {
+  const name = input.firstName.trim() || "ami(e)"
+  return brandedEmailShell({
+    title: "Séance de coaching réservée",
+    preheader: `Avec ${input.coachName} · ${input.whenLabel}`,
+    bodyHtml: `
+      <p>Bonjour ${name},</p>
+      <p>Votre séance avec <strong>${input.coachName}</strong> est confirmée.</p>
+      <p><strong>Quand :</strong> ${input.whenLabel}<br/>
+      <strong>Durée :</strong> ${input.minutes} minutes</p>
+      <p>Le jour J, ouvrez votre espace coaching et cliquez sur <strong>Rejoindre la réunion</strong>. Vous attendrez en salle d’attente jusqu’à l’arrivée du coach.</p>
+    `,
+    ctaLabel: "Ouvrir mon espace coaching",
+    ctaHref: input.sessionUrl,
+  })
+}
+
+export function coachingSessionReminderEmailHtml(input: {
+  firstName: string
+  coachName: string
+  whenLabel: string
+  urgency: "24h" | "1h"
+  sessionUrl: string
+}) {
+  const name = input.firstName.trim() || "ami(e)"
+  const title =
+    input.urgency === "1h"
+      ? "Votre séance commence bientôt"
+      : "Rappel : séance demain"
+  const lead =
+    input.urgency === "1h"
+      ? "Dans moins d’une heure, votre séance de coaching démarre."
+      : "Rappel : votre séance de coaching a lieu dans les prochaines 24 heures."
+  return brandedEmailShell({
+    title,
+    preheader: `${input.coachName} · ${input.whenLabel}`,
+    bodyHtml: `
+      <p>Bonjour ${name},</p>
+      <p>${lead}</p>
+      <p><strong>Coach :</strong> ${input.coachName}<br/>
+      <strong>Horaires :</strong> ${input.whenLabel}</p>
+      <p>Rejoignez la salle d’attente depuis votre espace. La réunion s’ouvre automatiquement quand le coach se connecte.</p>
+    `,
+    ctaLabel: "Rejoindre la réunion",
+    ctaHref: input.sessionUrl,
+  })
+}
+
+export function likedYouEmailHtml(input: {
+  firstName: string
+  appUrl: string
+  mutual: boolean
+}) {
+  const name = input.firstName.trim() || "ami(e)"
+  if (input.mutual) {
+    return brandedEmailShell({
+      title: "Vous avez un match",
+      preheader: "Quelqu’un a liké en retour — vous pouvez écrire.",
+      bodyHtml: `
+        <p>Bonjour ${name},</p>
+        <p>Bonne nouvelle : quelqu’un a liké votre profil <strong>en retour</strong>. La conversation est débloquée dans KELIAA.</p>
+        <p>Écrivez avec respect, sans quitter l’application.</p>
+      `,
+      ctaLabel: "Ouvrir mes messages",
+      ctaHref: `${input.appUrl}/messages`,
+    })
+  }
+  return brandedEmailShell({
+    title: "Quelqu’un s’intéresse à votre profil",
+    preheader: "Un membre KELIAA a liké votre profil.",
+    bodyHtml: `
+      <p>Bonjour ${name},</p>
+      <p>Un membre a liké votre profil. Si cette personne vous intéresse aussi, likez en retour pour ouvrir la conversation.</p>
+    `,
+    ctaLabel: "Voir la communauté",
+    ctaHref: `${input.appUrl}/communaute`,
+  })
+}
+
+export function suggestionMatchEmailHtml(input: {
+  firstName: string
+  appUrl: string
+  partnerFirstName: string
+  score: number
+}) {
+  const name = input.firstName.trim() || "ami(e)"
+  return brandedEmailShell({
+    title: "Une suggestion de compatibilité",
+    preheader: `${input.partnerFirstName} · ${input.score}%`,
+    bodyHtml: `
+      <p>Bonjour ${name},</p>
+      <p>KELIAA vous propose <strong>${input.partnerFirstName}</strong> à <strong>${input.score}%</strong> d’harmonie (suggestion selon votre demande et vos tests).</p>
+      <p>Ouvrez Compatibilités pour voir pourquoi, inviter à un test, ou liker pour ouvrir la conversation.</p>
+    `,
+    ctaLabel: "Voir mes suggestions",
+    ctaHref: `${input.appUrl}/compatibility`,
+  })
+}
+
+

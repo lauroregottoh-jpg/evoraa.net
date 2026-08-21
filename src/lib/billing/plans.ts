@@ -1,7 +1,13 @@
 export type PlanId = "free" | "premium" | "premium_plus"
 
 export type PlanLimits = {
+  /**
+   * Propositions / likes par jour (communauté + suggestions compatibilité).
+   * Même plafond pour les deux actions « découvrir ».
+   */
   dailySuggestions: number
+  /** Alias sémantique — identique à dailySuggestions. */
+  dailyLikes: number
   /** Nouvelles conversations initiées / mois */
   conversationsPerMonth: number
   messagesPerConversation: number
@@ -39,17 +45,20 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
     features: [
       "Création de profil & questionnaires",
       "Communauté KELIAA : découvrir & liker les membres",
-      "3 suggestions de compatibilité / jour",
+      "3 likes / propositions par jour",
       "5 nouvelles conversations / mois",
-      "5 messages envoyés / conversation",
+      "7 messages envoyés / conversation",
+      "Messages texte (vocaux : Alliance)",
       "EVA : 3 questions / jour",
       "Inspiration (conseil du jour)",
       "Bouclier de bienveillance",
+      "Coaching : aperçu (séances via crédits)",
     ],
     limits: {
       dailySuggestions: 3,
+      dailyLikes: 3,
       conversationsPerMonth: 5,
-      messagesPerConversation: 5,
+      messagesPerConversation: 7,
       evaQuestionsPerDay: 3,
     },
   },
@@ -61,12 +70,13 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
     description: "Ancien plan — non proposé aux nouveaux inscrits.",
     public: false,
     features: [
-      "10 suggestions / jour",
+      "10 likes / propositions / jour",
       "15 conversations / mois",
       "70 messages / conversation",
     ],
     limits: {
       dailySuggestions: 10,
+      dailyLikes: 10,
       conversationsPerMonth: 15,
       messagesPerConversation: 70,
       evaQuestionsPerDay: 10,
@@ -89,9 +99,10 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
       "Le Coffre Premium (vignettes exclusives · 3 puis +2 / mois)",
       "Communauté : likes mutuels → messages débloqués",
       "Programme Fidélité : +15 msgs / mois, paliers + Boost, Session VIP à 12 mois",
-      "15 suggestions de compatibilité / jour (vs 3)",
+      "15 likes / propositions par jour (vs 3)",
       "25 nouvelles conversations sérieuses / mois (vs 5)",
       "100 messages / conversation + solde bonus fidélité",
+      "Vocaux dans la messagerie (max 60 s, stockés sur le compte)",
       "EVA : 20 questions / jour (vs 3)",
       "Score de compatibilité détaillé & Badge Alliance",
       "Priorité soft dans les suggestions",
@@ -100,6 +111,7 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
     ],
     limits: {
       dailySuggestions: 15,
+      dailyLikes: 15,
       conversationsPerMonth: 25,
       messagesPerConversation: 100,
       evaQuestionsPerDay: 20,

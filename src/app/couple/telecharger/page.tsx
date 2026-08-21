@@ -5,6 +5,7 @@ import Link from "next/link"
 import { CouplePageFrame } from "@/components/couple/CouplePageFrame"
 import { CoupleShell } from "@/components/couple/CoupleShell"
 import { CoupleDeadlineBanner } from "@/components/couple/CoupleDeadlineBanner"
+import { CoupleRequirePaid } from "@/components/couple/CoupleRequirePaid"
 import { getCoupleReportAction } from "@/app/actions/couple"
 import type { CoupleReportDocument } from "@/lib/couple/report"
 import type { CoupleReportBlock } from "@/lib/couple/reportBlocks"
@@ -27,6 +28,10 @@ function renderBlocks(blocks: CoupleReportBlock[]): string {
         return `<div class="fill"><strong>${b.prompt}</strong><br/><br/><br/></div>`
       if (b.type === "rolePlay")
         return `<div class="callout"><strong>${b.title}</strong><br/>${b.scene}<br/>A: ${b.roleA}<br/>B: ${b.roleB}</div>`
+      if (b.type === "cycleFlow")
+        return `<div class="callout"><strong>${b.title}</strong><ol>${b.steps.map((s) => `<li>${s}</li>`).join("")}</ol></div>`
+      if (b.type === "visualCards")
+        return `<div class="callout"><strong>${b.title}</strong>${b.cards.map((c) => `<p><strong>${c.label}</strong> — ${c.body}</p>`).join("")}</div>`
       return ""
     })
     .join("")
@@ -104,44 +109,53 @@ export default function CoupleTelechargerPage() {
   return (
     <CouplePageFrame>
       <CoupleShell activeHref="/couple/telecharger">
-        <div className="max-w-lg space-y-4">
-          <h1 className="font-serif text-3xl font-bold">Télécharger mon dossier</h1>
-          <CoupleDeadlineBanner variant="info" />
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            Rapport structuré (sous-titres, listes, graphiques), exercices et
-            plan d’action en HTML imprimable / PDF navigateur.
-          </p>
-          {error && <p className="text-sm text-destructive">{error}</p>}
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              disabled={!doc}
-              onClick={download}
-              className="inline-flex h-11 items-center rounded-xl bg-primary text-primary-foreground px-5 text-sm font-semibold disabled:opacity-60"
-            >
-              Télécharger le dossier complet
-            </button>
-            <Link
-              href="/couple/exercices"
-              className="inline-flex h-11 items-center rounded-xl border px-5 text-sm font-semibold"
-            >
-              Cahier exercices
-            </Link>
-            <Link
-              href="/couple/dossier"
-              className="inline-flex h-11 items-center rounded-xl border px-5 text-sm font-semibold"
-            >
-              Aperçu dossier
-            </Link>
+        <CoupleRequirePaid
+          title="Téléchargements verrouillés"
+          body="Chapitres, exercices et plan se téléchargent séparément après le paiement du bilan."
+          previewTitle="Centre de téléchargements"
+          previewDescription="Exporter pièce par pièce — sans tout mélanger."
+        >
+          <div className="max-w-lg space-y-4">
+            <h1 className="font-serif text-3xl font-bold">
+              Télécharger mon dossier
+            </h1>
+            <CoupleDeadlineBanner variant="info" />
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Rapport structuré (sous-titres, listes, graphiques), exercices et
+              plan d’action en HTML imprimable / PDF navigateur.
+            </p>
+            {error && <p className="text-sm text-destructive">{error}</p>}
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                disabled={!doc}
+                onClick={download}
+                className="inline-flex h-11 items-center rounded-xl bg-primary text-primary-foreground px-5 text-sm font-semibold disabled:opacity-60"
+              >
+                Télécharger le dossier complet
+              </button>
+              <Link
+                href="/couple/exercices"
+                className="inline-flex h-11 items-center rounded-xl border px-5 text-sm font-semibold"
+              >
+                Cahier exercices
+              </Link>
+              <Link
+                href="/couple/dossier"
+                className="inline-flex h-11 items-center rounded-xl border px-5 text-sm font-semibold"
+              >
+                Aperçu dossier
+              </Link>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              L’accès interactif peut expirer ; le téléchargement local reste le
+              filet de sécurité.{" "}
+              <Link href="/couple/rapport" className="underline">
+                Voir le rapport
+              </Link>
+            </p>
           </div>
-          <p className="text-xs text-muted-foreground">
-            L’accès interactif peut expirer ; le téléchargement local reste le
-            filet de sécurité.{" "}
-            <Link href="/couple/rapport" className="underline">
-              Voir le rapport
-            </Link>
-          </p>
-        </div>
+        </CoupleRequirePaid>
       </CoupleShell>
     </CouplePageFrame>
   )

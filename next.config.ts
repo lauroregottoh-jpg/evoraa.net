@@ -15,7 +15,9 @@ const securityHeaders = [
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   {
     key: "Permissions-Policy",
-    value: "camera=(), microphone=(), geolocation=(), interest-cohort=()",
+    // Micro/caméra pour Daily Prebuilt (sous-domaines *.daily.co) + self
+    value:
+      "camera=*, microphone=*, geolocation=(), interest-cohort=()",
   },
   { key: "X-DNS-Prefetch-Control", value: "off" },
 ];

@@ -146,6 +146,15 @@ export async function getDashboardData(): Promise<{
   const texts = cms.texts
 
   const nextSteps: DashboardNextStep[] = []
+  // Toujours visible (rappel produit) — dismissible côté client
+  nextSteps.push({
+    id: "mutual-likes",
+    title: "Like en retour = conversation débloquée",
+    body: "Quand quelqu’un aime votre profil et que vous aimez le sien en retour, la messagerie s’ouvre. Complétez aussi vos tests pour un matching juste.",
+    href: "/compatibility",
+    cta: "Voir les profils",
+    tone: "tests",
+  })
   if (!hasAvatar) {
     nextSteps.push({
       id: "photo",
@@ -295,7 +304,7 @@ export async function getDashboardData(): Promise<{
       })),
       usage,
       social,
-      nextSteps: nextSteps.slice(0, 3),
+      nextSteps: nextSteps.slice(0, 4),
       dailyPrimary: editorial.primary,
       mission,
       selectionTitle: texts.selection_title,

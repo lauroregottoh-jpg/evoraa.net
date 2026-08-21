@@ -11,6 +11,7 @@ import { loginAction } from "@/app/actions/auth"
 import { isNextRedirectError } from "@/lib/auth/criticalPath"
 import { startGoogleOAuth } from "@/lib/auth/oauthGoogle"
 import { TurnstileField } from "@/components/auth/TurnstileField"
+import { KeliaaBuddyNudge } from "@/components/engagement/KeliaaBuddyNudge"
 import {
   Lock,
   Mail,
@@ -215,6 +216,9 @@ export function AuthOverlayForm({
             KELIAA
           </Link>
           <p className="text-sm text-white/85">Retrouvez votre espace sécurisé</p>
+          <div className="mx-auto mt-4 max-w-sm">
+            <KeliaaBuddyNudge />
+          </div>
         </div>
 
         <div className="rounded-2xl border border-white/20 bg-white/95 backdrop-blur-xl shadow-elevated p-6 sm:p-8 space-y-5">

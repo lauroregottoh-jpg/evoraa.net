@@ -4,17 +4,20 @@ import * as React from "react"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
+import { useRouter } from "next/navigation"
 import {
   CalendarDays,
   ChevronRight,
   Clock,
   Inbox,
   MessageCircle,
+  Mic,
   Search,
   Sparkles,
   X,
 } from "lucide-react"
 import type { ConversationListItem } from "@/app/actions/messaging"
+import { openVoiceSandboxAction } from "@/app/actions/messaging"
 import type { DemoMatchThread } from "@/lib/demo/sarahGandeSimulations"
 import { cn } from "@/utils/cn"
 
@@ -32,6 +35,53 @@ function parseDayKey(timestamp: string): string {
     return d.toISOString().slice(0, 10)
   }
   return "other"
+}
+
+function VoiceSandboxOpener() {
+  const router = useRouter()
+  const [busy, setBusy] = React.useState(false)
+  const [error, setError] = React.useState("")
+
+  const open = async () => {
+    setBusy(true)
+    setError("")
+    try {
+      const res = await openVoiceSandboxAction()
+      if (res.error || !res.conversationId) {
+        setError(res.error || "Impossible d’ouvrir l’essai.")
+        return
+      }
+      router.push(`/messages/${res.conversationId}`)
+      router.refresh()
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className="mt-4 rounded-2xl border-2 border-[#B8954A]/60 bg-[#F7F0E0] px-4 py-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-sm font-bold text-foreground">Tester les vocaux ici</p>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Ouvre une discussion avec Echo (essai privé). Enregistrez, envoyez,
+            réécoutez. La retranscription se voit dans OPS → Vocaux &
+            transcriptions.
+          </p>
+        </div>
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => void open()}
+          className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#5C1F28] px-4 text-xs font-bold text-[#F8F4EE] disabled:opacity-60"
+        >
+          <Mic className="h-3.5 w-3.5" />
+          {busy ? "Ouverture…" : "Ouvrir l’essai vocaux"}
+        </button>
+      </div>
+      {error ? <p className="text-xs text-destructive mt-2">{error}</p> : null}
+    </div>
+  )
 }
 
 function ConvRow({ conv }: { conv: ConversationListItem }) {
@@ -216,6 +266,8 @@ export function ConversationsList({
             Communauté
           </Link>
         </div>
+
+        <VoiceSandboxOpener />
 
         <div className="mt-4 flex flex-wrap gap-2">
           {tabs.map((t) => (

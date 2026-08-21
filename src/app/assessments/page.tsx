@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { MemberPage } from "@/components/layout/MemberPage"
-import { getAssessmentsProgress } from "@/app/actions/assessments"
+import { listIncomingAssessmentInvites } from "@/app/actions/assessmentInvites"
+import { MessageCreditsCallout } from "@/components/engagement/MessageCreditsCallout"
 import { ASSESSMENT_RETAKE_COOLDOWN_DAYS } from "@/lib/assessments/constants"
 import { PillarBadges } from "@/components/assessments/PillarBadges"
 import { AssessmentPillarCards } from "@/components/assessments/AssessmentPillarCards"
@@ -11,6 +12,7 @@ import { getUsageSnapshot } from "@/lib/billing/usage"
 import { Crown, Sparkles, KeyRound } from "lucide-react"
 import type { AssessmentSlug } from "@/lib/assessments/questionBank"
 import { ESSENTIAL_ASSESSMENTS } from "@/lib/rapport/personalized/assessments.catalog"
+import { KeliaaTestVideoBlock } from "@/components/community/CommunityMatchingVideoCta"
 
 export const dynamic = "force-dynamic"
 
@@ -20,7 +22,7 @@ export default async function AssessmentsHubPage() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  const [{ progress, allDone, error }, usage, profileRes] = await Promise.all([
+  const [{ progress, allDone, error }, usage, profileRes, incoming] = await Promise.all([
     getAssessmentsProgress(),
     getUsageSnapshot(user?.id),
     user
@@ -30,6 +32,7 @@ export default async function AssessmentsHubPage() {
           .eq("user_id", user.id)
           .maybeSingle()
       : Promise.resolve({ data: null }),
+    listIncomingAssessmentInvites(),
   ])
 
   const isAlliance = Boolean(usage?.isPaid)
@@ -79,8 +82,8 @@ export default async function AssessmentsHubPage() {
             </h1>
             <p className="text-sm text-white/85 leading-relaxed max-w-2xl">
               {isAlliance
-                ? "Avec Alliance, chaque test Matching alimente aussi votre Rapport Personnalisé. Les 10 clés ci-dessous ouvrent les chapitres du bilan."
-                : "En Découverte, commencez par les 5 tests de compatibilité. Les 10 clés du Rapport et Premium+ restent visibles en aperçu verrouillé."}
+                ? "Avec Alliance, chaque test Matching alimente aussi votre Rapport Personnalisé. Les 10 clés ci-dessous ouvrent les chapitres du bilan. Premier passage d’un test : +10 messages (20 jours)."
+                : "En Découverte, commencez par les 5 tests de compatibilité (+10 messages chacun, 20 jours). Les 10 clés du Rapport restent en aperçu verrouillé."}
             </p>
 
             {isAlliance ? (
@@ -155,6 +158,38 @@ export default async function AssessmentsHubPage() {
             </div>
           </div>
         </header>
+
+        {incoming.invites.length > 0 ? (
+          <div className="relative z-10 space-y-3 rounded-[1.35rem] border border-[#B8954A]/40 bg-[#F7F0E0] p-5">
+            <p className="font-serif text-lg font-bold text-[#5C1F28]">
+              On vous invite à tester votre compatibilité
+            </p>
+            <ul className="space-y-2">
+              {incoming.invites.map((inv) => (
+                <li
+                  key={inv.id}
+                  className="flex flex-wrap items-center justify-between gap-2 text-sm text-[#3D1519]"
+                >
+                  <span>
+                    <strong>{inv.inviterName}</strong> vous recommande / vous
+                    invite à faire le test « {inv.testTitle} » afin de tester
+                    votre compatibilité.
+                  </span>
+                  <Link
+                    href={`/assessments/${inv.testSlug}`}
+                    className="inline-flex h-9 items-center rounded-xl bg-[#5C1F28] px-3 text-xs font-bold text-[#F8F4EE]"
+                  >
+                    Faire ce test
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        <div className="relative z-10">
+          <MessageCreditsCallout />
+        </div>
 
         <div className="relative z-10 rounded-[1.35rem] border border-border/70 bg-gradient-to-br from-white via-secondary/40 to-accent/[0.06] p-5 shadow-card">
           <PillarBadges
@@ -233,6 +268,8 @@ export default async function AssessmentsHubPage() {
             showHeaders={false}
           />
         </section>
+
+        <KeliaaTestVideoBlock />
 
         {/* ——— 3. PREMIUM+ À VENIR (bloc séparé) ——— */}
         <section className="relative z-10 space-y-4 rounded-[1.75rem] border border-dashed border-accent/40 bg-gradient-to-br from-accent/[0.05] via-white to-white p-5 sm:p-7">

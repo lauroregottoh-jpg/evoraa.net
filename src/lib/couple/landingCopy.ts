@@ -62,17 +62,17 @@ export const LANDING_SITUATIONS = [
 
 export type LandingSituationId = (typeof LANDING_SITUATIONS)[number]["id"]
 
-/** Affichage marketing des prix (doc) — le montant facturé reste amountXof côté serveur. */
+/** Affichage marketing — tarif de lancement (facturé = coupleTotalXof). */
 export const LANDING_PRICE_DISPLAY = {
   couple_essential: {
-    compareAtXof: 40_000,
-    perPersonXof: 15_000,
-    coupleTotalXof: 30_000,
+    compareAtXof: 20_000,
+    perPersonXof: 5_000,
+    coupleTotalXof: 10_000,
   },
   couple_premium_plus: {
-    compareAtXof: 60_000,
-    perPersonXof: 25_000,
-    coupleTotalXof: 50_000,
+    compareAtXof: 50_000,
+    perPersonXof: 10_000,
+    coupleTotalXof: 20_000,
   },
 } as const
 
