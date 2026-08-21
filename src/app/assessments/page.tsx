@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { MemberPage } from "@/components/layout/MemberPage"
+import { getAssessmentsProgress } from "@/app/actions/assessments"
 import { listIncomingAssessmentInvites } from "@/app/actions/assessmentInvites"
 import { MessageCreditsCallout } from "@/components/engagement/MessageCreditsCallout"
 import { ASSESSMENT_RETAKE_COOLDOWN_DAYS } from "@/lib/assessments/constants"

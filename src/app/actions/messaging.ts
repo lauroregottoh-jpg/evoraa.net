@@ -529,7 +529,7 @@ export async function getConversationRoom(conversationId: string): Promise<{
       .eq("conversation_id", conversationId)
       .order("created_at", { ascending: false })
       .limit(PAGE + 1)
-    messages = retry.data
+    messages = (retry.data as typeof messages) ?? null
     msgError = retry.error
   }
 
@@ -635,7 +635,7 @@ export async function loadOlderMessagesAction(
       .lt("created_at", beforeCreatedAt)
       .order("created_at", { ascending: false })
       .limit(PAGE + 1)
-    rows = retry.data
+    rows = (retry.data as typeof rows) ?? null
     error = retry.error
   }
 

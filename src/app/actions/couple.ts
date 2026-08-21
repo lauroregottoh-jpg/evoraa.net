@@ -11,6 +11,7 @@ import {
   coupleQuestionnaireHardCloseAt,
   isCoupleFeatureEnabled,
 } from "@/lib/couple/config"
+import { hashInviteToken } from "@/lib/couple/codes"
 import {
   couplePartnerJoinPath,
   coupleSpacePath,
