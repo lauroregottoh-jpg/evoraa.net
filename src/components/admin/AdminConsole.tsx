@@ -943,9 +943,14 @@ export function AdminConsole(props: Props) {
 
           <div className="border-t border-border pt-6 space-y-4">
             <div>
-              <h2 className="font-serif text-2xl font-bold">Ops matching & conversations</h2>
+              <h2 className="font-serif text-2xl font-bold">
+                Qui a été matché avec qui
+              </h2>
               <p className="text-sm text-muted-foreground mt-1">
-                Santé temps réel · audit des appariements et conversations.
+                Paires enregistrées (noms + % d’harmonie). Les scores des tests
+                sont dans l’onglet Membres ci-dessus. Cliquez « Calculer les
+                matchs maintenant » pour relancer tout le bassin et envoyer
+                notifications + mails.
               </p>
             </div>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -968,23 +973,32 @@ export function AdminConsole(props: Props) {
                 </p>
               )}
             <div className="grid lg:grid-cols-2 gap-4">
-              <SectionCard title="Matches récents (score)">
-                <div className="divide-y divide-border max-h-96 overflow-y-auto">
+              <SectionCard title="Paires · nom ↔ nom · score %">
+                <div className="divide-y divide-border max-h-[28rem] overflow-y-auto">
                   {props.matches.length === 0 && (
-                    <p className="text-sm text-muted-foreground py-4">Aucun match.</p>
+                    <p className="text-sm text-muted-foreground py-4">
+                      Aucun match en base. Lancez « Calculer les matchs
+                      maintenant » plus haut.
+                    </p>
                   )}
                   {props.matches.map((m) => (
                     <div key={m.id} className="py-3 text-sm space-y-1">
-                      <div className="flex justify-between gap-2">
-                        <p className="font-semibold">
+                      <div className="flex justify-between gap-2 items-start">
+                        <p className="font-semibold text-foreground">
                           {m.nameOne || "Membre"} ↔ {m.nameTwo || "Membre"}
-                          {m.score != null ? ` · ${Math.round(m.score)}%` : ""}
                         </p>
-                        <Badge variant="outline">{m.status || "—"}</Badge>
+                        <span className="shrink-0 rounded-full bg-[#5C1F28] text-[#F8F4EE] text-xs font-bold px-2.5 py-1">
+                          {m.score != null ? `${Math.round(m.score)}%` : "—"}
+                        </span>
                       </div>
-                      <p className="text-[11px] font-mono text-muted-foreground">
-                        {m.userOne.slice(0, 8)}… ↔ {m.userTwo.slice(0, 8)}…
-                      </p>
+                      <div className="flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+                        <Badge variant="outline">{m.status || "—"}</Badge>
+                        <span>
+                          {m.createdAt
+                            ? new Date(m.createdAt).toLocaleString("fr-FR")
+                            : ""}
+                        </span>
+                      </div>
                     </div>
                   ))}
                 </div>

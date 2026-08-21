@@ -18,15 +18,3 @@ export function coupleAbsoluteUrl(path: string, baseUrl: string) {
   const p = path.startsWith("/") ? path : `/${path}`
   return `${base}${p}`
 }
-
-
-export function couplePartnerJoinPath(inviteCode: string) {
-  const code = inviteCode.trim().toUpperCase()
-  return `/couple/rejoindre?code=${encodeURIComponent(code)}`
-}
-
-export function coupleAbsoluteUrl(path: string, baseUrl: string) {
-  const base = baseUrl.replace(/\/$/, "")
-  const p = path.startsWith("/") ? path : `/${path}`
-  return `${base}${p}`
-}
