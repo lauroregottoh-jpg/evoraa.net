@@ -9,6 +9,7 @@ export type PaymentEventType =
   | "payment_failed"
   | "sandbox_probe"
   | "sandbox_test"
+  | "admin_link_checkout"
 
 type LogArgs = {
   paymentId?: string | null
