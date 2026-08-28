@@ -218,6 +218,30 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Montant incohérent" }, { status: 400 })
   }
 
+  const paymentMeta =
+    typeof payment.metadata === "object" && payment.metadata
+      ? (payment.metadata as Record<string, unknown>)
+      : {}
+
+  if (paymentMeta.product === "admin_link") {
+    const { fulfillAdminPaymentLink } = await import("@/lib/billing/fulfillAdminPaymentLink")
+    const fulfilled = await fulfillAdminPaymentLink({
+      admin,
+      paymentId: payment.id,
+      subscriptionId: payment.subscription_id,
+      paymentMeta,
+      transactionId: monerooId,
+      webhookBody: body,
+      provider: "moneroo",
+    })
+    if (!fulfilled.ok) {
+      captureError(fulfilled.error, { source: "moneroo_admin_link" })
+      return NextResponse.json({ error: fulfilled.error }, { status: 500 })
+    }
+    if (deliveryId) await markWebhookDeliveryProcessed(admin, deliveryId)
+    return NextResponse.json({ ok: true, activated: true, adminLink: true })
+  }
+
   const { error: activateError } = await admin.rpc("activate_pending_payment" as never, {
     p_payment_id: payment.id,
     p_transaction_ref: monerooId,

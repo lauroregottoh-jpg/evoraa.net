@@ -394,6 +394,26 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true, activated: true, coaching: true })
   }
 
+  // Lien de paiement admin (montant libre) — pas d'activation Alliance.
+  if (paymentMeta.product === "admin_link") {
+    const { fulfillAdminPaymentLink } = await import("@/lib/billing/fulfillAdminPaymentLink")
+    const fulfilled = await fulfillAdminPaymentLink({
+      admin,
+      paymentId: payment.id,
+      subscriptionId: payment.subscription_id,
+      paymentMeta,
+      transactionId: transactionId || payment.id,
+      webhookBody: body,
+      provider: "bictorys",
+    })
+    if (!fulfilled.ok) {
+      captureError(fulfilled.error, { source: "bictorys_admin_link" })
+      return NextResponse.json({ error: fulfilled.error }, { status: 500 })
+    }
+    if (deliveryId) await markWebhookDeliveryProcessed(admin, deliveryId)
+    return NextResponse.json({ ok: true, activated: true, adminLink: true })
+  }
+
   const { data: subscription } = await admin
     .from("subscriptions")
     .select("id, user_id")

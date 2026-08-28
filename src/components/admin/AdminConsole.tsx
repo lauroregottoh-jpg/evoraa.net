@@ -816,6 +816,19 @@ export function AdminConsole(props: Props) {
               hint="Relances auto (cron) — voir aussi paiements pending"
             />
           </div>
+          <div className="rounded-2xl border-2 border-emerald-600/30 bg-emerald-50 px-5 py-4 space-y-3">
+            <p className="text-sm font-bold text-foreground">Liens de paiement (montant libre)</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Créez un lien, envoyez-le à quelqu&apos;un — il paie le montant exact. Idéal pour vos
+              autres activités (hors espace membre).
+            </p>
+            <a
+              href={`${OPS_CONSOLE_PATH}/liens-paiement`}
+              className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-700 text-white px-5 text-sm font-bold"
+            >
+              Créer un lien de paiement →
+            </a>
+          </div>
           <div className="rounded-2xl border-2 border-accent/40 bg-accent/10 px-5 py-4 space-y-3">
             <p className="text-sm font-bold text-foreground">Démo paiement Alliance — 17 FCFA</p>
             <p className="text-xs text-muted-foreground leading-relaxed">
