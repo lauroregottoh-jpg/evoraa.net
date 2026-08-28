@@ -1,8 +1,5 @@
-"use server"
-
 import type { SupabaseClient } from "@supabase/supabase-js"
 import { logPaymentEvent } from "@/lib/billing/paymentAudit"
-import { ADMIN_PAYMENT_LINK_PRODUCT } from "@/lib/billing/adminPaymentLinks"
 
 type AdminClient = SupabaseClient
 
@@ -72,8 +69,4 @@ export async function fulfillAdminPaymentLink(args: {
   })
 
   return { ok: true }
-}
-
-export function isAdminPaymentLinkProduct(meta: Record<string, unknown>): boolean {
-  return meta.product === ADMIN_PAYMENT_LINK_PRODUCT
 }
