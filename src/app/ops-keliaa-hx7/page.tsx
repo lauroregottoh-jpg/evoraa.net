@@ -144,6 +144,7 @@ export default async function OpsConsolePage() {
           openReports: 0,
           pendingPhotos: 0,
           revenueXof: 0,
+          independentRevenueXof: 0,
         }
       }
       retention={data.retention || emptyRetention}

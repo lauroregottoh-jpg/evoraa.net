@@ -15,10 +15,12 @@ export function AdminPaymentLinksPanel({
   hasBictorys,
   hasMoneroo,
   paymentProvider,
+  embedded = false,
 }: {
   hasBictorys: boolean
   hasMoneroo: boolean
   paymentProvider: string
+  embedded?: boolean
 }) {
   const [amount, setAmount] = React.useState("5000")
   const [label, setLabel] = React.useState("")
@@ -79,14 +81,22 @@ export function AdminPaymentLinksPanel({
     <div className="space-y-6 max-w-2xl">
       <div className="rounded-2xl border border-border bg-card p-6 space-y-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Liens de paiement · admin seulement
-          </p>
+          {!embedded && (
+            <p className="text-[11px] font-bold uppercase tracking-widest text-emerald-800">
+              Hors plateforme — pas un produit KELIAA
+            </p>
+          )}
           <h2 className="font-serif text-2xl font-bold mt-1">Créer un lien de paiement</h2>
           <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
-            Indiquez un montant, générez un lien, envoyez-le à la personne. Elle paie le montant
-            exact — l&apos;argent arrive sur votre compte{" "}
-            <strong>{paymentProvider}</strong> (sans activer Alliance ni autre produit membre).
+            Pour le coaching, une formation ou toute prestation en dehors de l&apos;application
+            membre. Indiquez un montant, générez un lien neutre, envoyez-le à la personne. Elle paie
+            le montant exact — l&apos;argent arrive sur votre compte{" "}
+            <strong>{paymentProvider}</strong>. Aucun abonnement Alliance ni produit membre
+            n&apos;est activé.
+          </p>
+          <p className="text-xs text-muted-foreground mt-2 rounded-lg border border-emerald-600/20 bg-emerald-50/80 px-3 py-2">
+            Ces encaissements sont suivis à part et ne sont pas comptés dans les revenus
+            plateforme.
           </p>
         </div>
 
@@ -115,7 +125,7 @@ export function AdminPaymentLinksPanel({
               value={label}
               onChange={(e) => setLabel(e.target.value)}
               className="mt-1 w-full rounded-xl border border-border bg-background px-4 py-3 text-sm"
-              placeholder="Ex. Coaching mars, acompte formation…"
+              placeholder="Ex. Séance coaching, acompte formation…"
             />
           </label>
 
@@ -133,15 +143,17 @@ export function AdminPaymentLinksPanel({
             type="button"
             disabled={busy || !canPay}
             onClick={() => void createLink()}
-            className="w-full inline-flex h-12 items-center justify-center rounded-xl bg-accent text-accent-foreground text-sm font-bold disabled:opacity-60"
+            className="w-full inline-flex h-12 items-center justify-center rounded-xl bg-emerald-700 text-white text-sm font-bold disabled:opacity-60"
           >
             {busy ? "Création…" : "Générer le lien de paiement"}
           </button>
         </div>
 
         {lastLink && (
-          <div className="rounded-xl border-2 border-accent/30 bg-accent/5 p-4 space-y-2">
-            <p className="text-sm font-semibold">Lien créé — {lastLink.amount.toLocaleString("fr-FR")} FCFA</p>
+          <div className="rounded-xl border-2 border-emerald-600/30 bg-emerald-50/50 p-4 space-y-2">
+            <p className="text-sm font-semibold">
+              Lien créé — {lastLink.amount.toLocaleString("fr-FR")} FCFA
+            </p>
             <p className="text-xs text-muted-foreground break-all">{lastLink.url}</p>
             <button
               type="button"
@@ -163,7 +175,7 @@ export function AdminPaymentLinksPanel({
       {links.length > 0 && (
         <div className="rounded-2xl border border-border bg-card overflow-hidden">
           <div className="px-4 py-3 border-b border-border">
-            <h3 className="text-sm font-bold">Liens récents</h3>
+            <h3 className="text-sm font-bold">Encaissements récents (hors plateforme)</h3>
           </div>
           <div className="divide-y divide-border max-h-80 overflow-y-auto">
             {links.map((l) => (
@@ -201,9 +213,11 @@ export function AdminPaymentLinksPanel({
         </div>
       )}
 
-      <Link href={OPS_CONSOLE_PATH} className="text-sm text-primary underline">
-        ← Retour console ops
-      </Link>
+      {!embedded && (
+        <Link href={OPS_CONSOLE_PATH} className="text-sm text-primary underline">
+          ← Retour console ops
+        </Link>
+      )}
     </div>
   )
 }

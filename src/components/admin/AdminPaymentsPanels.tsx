@@ -9,6 +9,7 @@ import {
   adminBictorysSandboxCharge,
   type AdminOpsFlags,
 } from "@/app/actions/admin"
+import { isIndependentPaymentMetadata } from "@/lib/billing/adminPaymentLinks"
 import { PaymentModePicker } from "@/components/billing/PaymentModePicker"
 import type { BictorysPaymentMode } from "@/lib/billing/bictorys"
 import { bictorysPaymentModeLabel } from "@/lib/billing/bictorys"
@@ -51,6 +52,7 @@ function eventLabel(type: string) {
     payment_failed: "Paiement échoué",
     sandbox_probe: "Probe clé API",
     sandbox_test: "Test sandbox",
+    admin_link_checkout: "Encaissement indépendant",
   }
   return map[type] || type
 }
@@ -109,6 +111,7 @@ export function PaymentsAuditPanel({
           )}
           {payments.map((p) => {
             const mode = paymentModeFromMeta(p.metadata)
+            const independent = isIndependentPaymentMetadata(p.metadata)
             return (
               <div key={p.id} className="py-3 flex justify-between gap-2 text-sm">
                 <div className="min-w-0">
@@ -119,6 +122,11 @@ export function PaymentsAuditPanel({
                     {p.transaction_reference || p.id}
                   </p>
                   <div className="flex flex-wrap gap-1 mt-1">
+                    {independent && (
+                      <Badge variant="secondary" className="text-[10px] bg-emerald-100 text-emerald-800">
+                        Hors plateforme
+                      </Badge>
+                    )}
                     {p.provider && (
                       <Badge variant="outline" className="text-[10px]">
                         {p.provider}

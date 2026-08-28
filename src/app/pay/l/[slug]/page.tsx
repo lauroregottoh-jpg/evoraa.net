@@ -1,9 +1,16 @@
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getPaymentLinkPublic } from "@/app/actions/paymentLinks"
 import { PaymentLinkCheckout } from "@/components/billing/PaymentLinkCheckout"
 import { resolveLiveProvider } from "@/lib/billing/provider"
 
 export const dynamic = "force-dynamic"
+
+export const metadata: Metadata = {
+  title: "Paiement",
+  description: "Page de paiement sécurisée.",
+  robots: { index: false, follow: false },
+}
 
 type Props = {
   params: Promise<{ slug: string }>

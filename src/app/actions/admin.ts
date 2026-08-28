@@ -491,13 +491,19 @@ export async function getAdminDashboardData() {
     .select("id", { count: "exact", head: true })
     .eq("moderation_status", "pending")
 
-  const { data: revenueSum, error: revenueErr } = await supabase.rpc(
-    "sum_completed_payments" as never
-  )
+  const [{ data: revenueSum, error: revenueErr }, { data: independentSum, error: independentErr }] =
+    await Promise.all([
+      supabase.rpc("sum_completed_payments" as never),
+      supabase.rpc("sum_independent_payments" as never),
+    ])
   if (revenueErr) {
     console.error("[admin] revenue sum", revenueErr.message)
   }
+  if (independentErr) {
+    console.error("[admin] independent revenue sum", independentErr.message)
+  }
   const revenue = Number(revenueSum ?? 0)
+  const independentRevenueXof = Number(independentSum ?? 0)
 
   const totalUsers = usersCount ?? 0
   const paidActive = (activeAlliance ?? 0) + (activeLegacyPremium ?? 0)
@@ -789,6 +795,7 @@ export async function getAdminDashboardData() {
       openReports: openReports ?? 0,
       pendingPhotos: pendingPhotosCount ?? 0,
       revenueXof: revenue,
+      independentRevenueXof,
     },
     retention,
     breakdowns,

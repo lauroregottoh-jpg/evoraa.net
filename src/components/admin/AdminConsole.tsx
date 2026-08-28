@@ -66,7 +66,9 @@ import {
 } from "@/components/admin/AdminPaymentsPanels"
 import { AdminOpsAuditPanel } from "@/components/admin/AdminOpsAuditPanel"
 import { AdminOpsHealthBanner } from "@/components/admin/AdminOpsHealthBanner"
+import { AdminPaymentLinksPanel } from "@/components/admin/AdminPaymentLinksPanel"
 import { DistBars, SparkColumns } from "@/components/admin/AdminCharts"
+import { isIndependentPaymentMetadata } from "@/lib/billing/adminPaymentLinks"
 import { cn } from "@/utils/cn"
 import type { MatchingIntelligence } from "@/lib/admin/matchingIntelligence"
 import type { FeedbackRow } from "@/app/actions/feedback"
@@ -78,6 +80,7 @@ type Props = {
     openReports: number
     pendingPhotos: number
     revenueXof: number
+    independentRevenueXof: number
   }
   retention: AdminRetention
   breakdowns: AdminBreakdowns
@@ -351,10 +354,10 @@ export function AdminConsole(props: Props) {
               hint={`${props.retention.conversionPaidPct}% · membres uniques non expirés`}
             />
             <KpiCard
-              label="Revenus"
+              label="Revenus plateforme"
               value={`${props.stats.revenueXof.toLocaleString("fr-FR")} F`}
               tone="gold"
-              hint="Paiements completed"
+              hint="Alliance & produits membre — hors encaissements indépendants"
             />
             <KpiCard
               label="À traiter"
@@ -808,26 +811,13 @@ export function AdminConsole(props: Props) {
               label="Revenus Alliance (estim.)"
               value={`${props.stats.revenueXof.toLocaleString("fr-FR")} F`}
               tone="gold"
-              hint="Paiements completed Alliance"
+              hint="Paiements completed — produits membre uniquement"
             />
             <KpiCard
               label="Paiements abandonnés"
               value={props.retention.renewalsDue7d}
               hint="Relances auto (cron) — voir aussi paiements pending"
             />
-          </div>
-          <div className="rounded-2xl border-2 border-emerald-600/30 bg-emerald-50 px-5 py-4 space-y-3">
-            <p className="text-sm font-bold text-foreground">Liens de paiement (montant libre)</p>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Créez un lien, envoyez-le à quelqu&apos;un — il paie le montant exact. Idéal pour vos
-              autres activités (hors espace membre).
-            </p>
-            <a
-              href={`${OPS_CONSOLE_PATH}/liens-paiement`}
-              className="inline-flex h-11 items-center justify-center rounded-xl bg-emerald-700 text-white px-5 text-sm font-bold"
-            >
-              Créer un lien de paiement →
-            </a>
           </div>
           <div className="rounded-2xl border-2 border-accent/40 bg-accent/10 px-5 py-4 space-y-3">
             <p className="text-sm font-bold text-foreground">Démo paiement Alliance — 17 FCFA</p>
@@ -883,8 +873,10 @@ export function AdminConsole(props: Props) {
             setMsg={setMsg}
           />
           <PaymentsAuditPanel
-            payments={props.payments}
-            paymentEvents={props.paymentEvents}
+            payments={props.payments.filter((p) => !isIndependentPaymentMetadata(p.metadata))}
+            paymentEvents={props.paymentEvents.filter(
+              (e) => e.eventType !== "admin_link_checkout"
+            )}
           />
           <AdminOpsAuditPanel />
           <div className="grid lg:grid-cols-1 gap-4 max-w-2xl">
@@ -912,6 +904,34 @@ export function AdminConsole(props: Props) {
               </div>
             </SectionCard>
           </div>
+        </div>
+      )}
+
+      {nav === "encaissements" && (
+        <div className="space-y-6">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-emerald-800 mb-1">
+              Hors plateforme — pas un produit KELIAA
+            </p>
+            <h1 className="font-serif text-3xl font-bold">Encaissements indépendants</h1>
+            <p className="text-sm text-muted-foreground mt-1 max-w-2xl leading-relaxed">
+              Coaching, formations, prestations externes : créez un lien de paiement au montant
+              libre. L&apos;argent arrive sur votre compte marchand — sans activer Alliance ni
+              aucun produit membre. Ces montants ne sont pas comptés dans les revenus plateforme.
+            </p>
+          </div>
+          <KpiCard
+            label="Encaissements indépendants (total)"
+            value={`${props.stats.independentRevenueXof.toLocaleString("fr-FR")} F`}
+            tone="green"
+            hint="Coaching & prestations hors app — séparé des revenus Alliance"
+          />
+          <AdminPaymentLinksPanel
+            hasBictorys={Boolean(props.ops.hasBictorys)}
+            hasMoneroo={Boolean(props.ops.hasMoneroo)}
+            paymentProvider={props.ops.paymentProvider}
+            embedded
+          />
         </div>
       )}
 

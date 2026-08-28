@@ -127,6 +127,8 @@ export async function adminCreatePaymentLink(input: {
 
   const metadata = {
     product: ADMIN_PAYMENT_LINK_PRODUCT,
+    channel: "independent",
+    is_platform_product: false,
     slug,
     label,
     amount_xof: amount,
@@ -171,7 +173,7 @@ export async function adminCreatePaymentLink(input: {
     return { error: linkError?.message || "Impossible de créer le lien." }
   }
 
-  revalidatePath(`${OPS_CONSOLE_PATH}/liens-paiement`)
+  revalidatePath(`${OPS_CONSOLE_PATH}/encaissements-independants`)
   revalidatePath(OPS_CONSOLE_PATH)
 
   return {
@@ -325,7 +327,7 @@ export async function startPaymentLinkCheckout(input: {
       amount,
       description: label.slice(0, 80),
       customerName: (input.customerName || "Client").slice(0, 80),
-      customerEmail: (input.customerEmail || "client@keliaa.org").slice(0, 120),
+      customerEmail: (input.customerEmail || "paiement@encaissement.local").slice(0, 120),
       paymentMode,
       appBaseUrl: baseUrl,
       successPath: returnPath,
@@ -370,9 +372,9 @@ export async function startPaymentLinkCheckout(input: {
       amountXof: amount,
       description: label.slice(0, 120),
       returnUrl: `${baseUrl}${returnPath}`,
-      customerEmail: (input.customerEmail || "client@keliaa.org").slice(0, 120),
+      customerEmail: (input.customerEmail || "paiement@encaissement.local").slice(0, 120),
       customerFirstName: name[0] || "Client",
-      customerLastName: name[1] || "KELIAA",
+      customerLastName: name[1] || ".",
       metadata: {
         keliaa_payment_id: payment.id,
         admin_link_slug: safe,

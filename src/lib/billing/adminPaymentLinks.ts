@@ -2,6 +2,12 @@ import { randomBytes } from "crypto"
 
 export const ADMIN_PAYMENT_LINK_PRODUCT = "admin_link" as const
 
+/** Paiement hors produits membre (coaching, prestations externes, etc.). */
+export function isIndependentPaymentMetadata(metadata: unknown): boolean {
+  if (!metadata || typeof metadata !== "object") return false
+  return (metadata as { product?: string }).product === ADMIN_PAYMENT_LINK_PRODUCT
+}
+
 export function generatePaymentLinkSlug(): string {
   return randomBytes(8).toString("base64url").slice(0, 12).toLowerCase()
 }
