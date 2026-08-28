@@ -84,6 +84,15 @@ export function AdminShell({
 
   const menuMain: NavItem[] = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+    ...(viewerRole === "admin"
+      ? [
+          {
+            id: "encaissements" as const,
+            label: "Encaissements indép.",
+            icon: Banknote,
+          },
+        ]
+      : []),
     { id: "analytics", label: "Analytique", icon: BarChart3 },
     {
       id: "members",
@@ -112,14 +121,6 @@ export function AdminShell({
       id: "messages",
       label: "Messages membres",
       icon: Bell,
-    },
-  ]
-
-  const menuHorsPlateforme: NavItem[] = [
-    {
-      id: "encaissements",
-      label: "Encaissements indépendants",
-      icon: Banknote,
     },
   ]
 
@@ -222,7 +223,6 @@ export function AdminShell({
 
       <nav className="flex-1 overflow-y-auto px-3 py-4">
         <NavGroup title="Menu" items={menuMain} />
-        <NavGroup title="Hors plateforme" items={menuHorsPlateforme} />
         <NavGroup title="Ops" items={menuOps} />
         <NavGroup title="Général" items={menuGeneral} />
       </nav>

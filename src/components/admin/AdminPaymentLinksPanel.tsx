@@ -11,6 +11,45 @@ import { PaymentModePicker } from "@/components/billing/PaymentModePicker"
 import type { BictorysPaymentMode } from "@/lib/billing/bictorys"
 import { OPS_CONSOLE_PATH } from "@/lib/admin/consolePath"
 
+export function AdminIndependentPaymentsDashboardCard({
+  totalXof,
+  onOpen,
+}: {
+  totalXof: number
+  onOpen: () => void
+}) {
+  return (
+    <div className="rounded-2xl border-2 border-emerald-600/40 bg-gradient-to-br from-emerald-50 to-white p-5 sm:p-6 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-2">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-emerald-800">
+            Hors plateforme KELIAA
+          </p>
+          <h2 className="font-serif text-2xl font-bold text-foreground">
+            Encaissements indépendants
+          </h2>
+          <p className="text-sm text-muted-foreground max-w-xl leading-relaxed">
+            Coaching, formations, prestations externes : créez un lien de paiement au montant
+            libre. Ces montants ne sont pas comptés dans les revenus Alliance ni dans les
+            chiffres plateforme ci-dessous.
+          </p>
+          <p className="text-2xl font-bold tabular-nums text-emerald-800">
+            {totalXof.toLocaleString("fr-FR")}{" "}
+            <span className="text-base font-semibold text-emerald-700/80">FCFA encaissés</span>
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={onOpen}
+          className="shrink-0 inline-flex h-12 items-center justify-center rounded-xl bg-emerald-700 px-6 text-sm font-bold text-white hover:bg-emerald-800 transition-colors"
+        >
+          Gérer les liens de paiement →
+        </button>
+      </div>
+    </div>
+  )
+}
+
 export function AdminPaymentLinksPanel({
   hasBictorys,
   hasMoneroo,

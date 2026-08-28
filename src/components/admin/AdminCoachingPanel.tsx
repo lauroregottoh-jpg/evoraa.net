@@ -361,11 +361,15 @@ export function AdminProductsHub({
   allianceActive,
   registrations,
   reportsOpen,
+  independentRevenueXof,
+  showIndependentPayments,
 }: {
-  onOpen: (id: "alliance" | "couple" | "coaching") => void
+  onOpen: (id: "alliance" | "couple" | "coaching" | "encaissements") => void
   allianceActive: number
   registrations: number
   reportsOpen: number
+  independentRevenueXof?: number
+  showIndependentPayments?: boolean
 }) {
   const [open, setOpen] = React.useState<string | null>("coaching")
   const [coupleKpis, setCoupleKpis] = React.useState<{
@@ -441,7 +445,39 @@ export function AdminProductsHub({
   ]
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-6">
+      {showIndependentPayments && (
+        <div className="space-y-3">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-emerald-800">
+              Hors plateforme
+            </p>
+            <h2 className="font-serif text-2xl font-bold">Encaissements indépendants</h2>
+          </div>
+          <div className="rounded-2xl border-2 border-emerald-600/30 bg-emerald-50/60 overflow-hidden shadow-sm">
+            <div className="px-4 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <p className="font-serif text-lg font-bold">Coaching & prestations externes</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Montant libre · liens de paiement · non compté dans les revenus KELIAA
+                </p>
+                <p className="text-sm font-bold text-emerald-800 mt-2 tabular-nums">
+                  {(independentRevenueXof ?? 0).toLocaleString("fr-FR")} FCFA encaissés
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => onOpen("encaissements")}
+                className="inline-flex h-10 items-center rounded-xl bg-emerald-700 px-4 text-sm font-semibold text-white shrink-0"
+              >
+                Ouvrir l&apos;onglet →
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="space-y-3">
       <div className="flex items-end justify-between gap-3">
         <div>
           <p className="text-[11px] font-bold uppercase tracking-widest text-[#8B6914]">
@@ -492,6 +528,7 @@ export function AdminProductsHub({
           </div>
         )
       })}
+      </div>
     </div>
   )
 }

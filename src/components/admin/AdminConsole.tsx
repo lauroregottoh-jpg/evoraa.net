@@ -66,7 +66,10 @@ import {
 } from "@/components/admin/AdminPaymentsPanels"
 import { AdminOpsAuditPanel } from "@/components/admin/AdminOpsAuditPanel"
 import { AdminOpsHealthBanner } from "@/components/admin/AdminOpsHealthBanner"
-import { AdminPaymentLinksPanel } from "@/components/admin/AdminPaymentLinksPanel"
+import {
+  AdminIndependentPaymentsDashboardCard,
+  AdminPaymentLinksPanel,
+} from "@/components/admin/AdminPaymentLinksPanel"
 import { DistBars, SparkColumns } from "@/components/admin/AdminCharts"
 import { isIndependentPaymentMetadata } from "@/lib/billing/adminPaymentLinks"
 import { cn } from "@/utils/cn"
@@ -345,6 +348,13 @@ export function AdminConsole(props: Props) {
             </p>
           </div>
 
+          {isFullAdmin && (
+            <AdminIndependentPaymentsDashboardCard
+              totalXof={props.stats.independentRevenueXof}
+              onOpen={() => setNav("encaissements")}
+            />
+          )}
+
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <KpiCard label="Inscriptions" value={props.stats.users} hint="Profils totaux" />
             <KpiCard
@@ -371,6 +381,8 @@ export function AdminConsole(props: Props) {
             allianceActive={props.retention.activeAlliance}
             registrations={props.stats.users}
             reportsOpen={props.stats.openReports}
+            independentRevenueXof={props.stats.independentRevenueXof}
+            showIndependentPayments={isFullAdmin}
             onOpen={(id) => setNav(id)}
           />
 
