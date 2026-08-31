@@ -4,9 +4,14 @@ import { revalidatePath } from "next/cache"
 import { createAdminClient } from "@/utils/supabase/admin"
 import {
   ADMIN_PAYMENT_LINK_PRODUCT,
+  computePaymentLinkExpiresAt,
   generatePaymentLinkSlug,
+  isAdminPaymentLinkExpired,
   paymentLinkAbsoluteUrl,
   paymentLinkPublicPath,
+  TEMPORARY_LINK_DURATION_HOURS,
+  type AdminPaymentLinkDurationType,
+  type TemporaryLinkDurationKey,
 } from "@/lib/billing/adminPaymentLinks"
 import {
   getBictorysEnabledPaymentModes,
@@ -65,13 +70,50 @@ export type AdminPaymentLinkRow = {
   paymentId: string | null
   createdAt: string | null
   paidAt: string | null
+  durationType: AdminPaymentLinkDurationType
+  expiresAt: string | null
   url: string
+}
+
+function mapPaymentLinkRow(
+  row: Record<string, unknown>,
+  baseUrl: string
+): AdminPaymentLinkRow {
+  const slug = String(row.slug)
+  return {
+    id: String(row.id),
+    slug,
+    amount: Number(row.amount),
+    currency: String(row.currency),
+    label: (row.label as string) || null,
+    status: String(row.status),
+    paymentId: (row.payment_id as string) || null,
+    createdAt: (row.created_at as string) || null,
+    paidAt: (row.paid_at as string) || null,
+    durationType: (row.duration_type as AdminPaymentLinkDurationType) || "permanent",
+    expiresAt: (row.expires_at as string) || null,
+    url: baseUrl ? paymentLinkAbsoluteUrl(slug, baseUrl) : paymentLinkPublicPath(slug),
+  }
+}
+
+async function markLinkExpiredIfNeeded(
+  admin: ReturnType<typeof createAdminClient>,
+  link: { id: string; expires_at?: string | null; status?: string | null }
+) {
+  if (link.status === "completed" || link.status === "expired") return
+  if (!isAdminPaymentLinkExpired({ expiresAt: link.expires_at as string | null })) return
+  await admin
+    .from("admin_payment_links")
+    .update({ status: "expired" })
+    .eq("id", link.id)
 }
 
 export async function adminCreatePaymentLink(input: {
   amount: number
   label?: string | null
   paymentMode?: string | null
+  durationType?: AdminPaymentLinkDurationType | null
+  temporaryDuration?: TemporaryLinkDurationKey | null
 }): Promise<{ error?: string; link?: AdminPaymentLinkRow }> {
   const gate = await requireFullAdminUser()
   if (gate.error || !gate.user) return { error: gate.error || "Accès refusé." }
@@ -100,6 +142,13 @@ export async function adminCreatePaymentLink(input: {
   }
 
   const label = (input.label || "").trim().slice(0, 120) || null
+  const durationType: AdminPaymentLinkDurationType =
+    input.durationType === "temporary" ? "temporary" : "permanent"
+  const temporaryHours =
+    durationType === "temporary"
+      ? TEMPORARY_LINK_DURATION_HOURS[input.temporaryDuration ?? "d7"]
+      : null
+  const expiresAt = computePaymentLinkExpiresAt(durationType, temporaryHours)
   const slug = generatePaymentLinkSlug()
   const admin = createAdminClient()
 
@@ -131,6 +180,8 @@ export async function adminCreatePaymentLink(input: {
     product: ADMIN_PAYMENT_LINK_PRODUCT,
     channel: "independent",
     is_platform_product: false,
+    duration_type: durationType,
+    expires_at: expiresAt,
     slug,
     label,
     amount_xof: amount,
@@ -167,8 +218,12 @@ export async function adminCreatePaymentLink(input: {
       payment_id: payment.id,
       created_by: gate.user.id,
       status: "pending",
+      duration_type: durationType,
+      expires_at: expiresAt,
     })
-    .select("id, slug, amount, currency, label, status, payment_id, created_at, paid_at")
+    .select(
+      "id, slug, amount, currency, label, status, payment_id, created_at, paid_at, duration_type, expires_at"
+    )
     .single()
 
   if (linkError || !link) {
@@ -179,18 +234,7 @@ export async function adminCreatePaymentLink(input: {
   revalidatePath(OPS_CONSOLE_PATH)
 
   return {
-    link: {
-      id: String(link.id),
-      slug: String(link.slug),
-      amount: Number(link.amount),
-      currency: String(link.currency),
-      label: (link.label as string) || null,
-      status: String(link.status),
-      paymentId: (link.payment_id as string) || null,
-      createdAt: (link.created_at as string) || null,
-      paidAt: (link.paid_at as string) || null,
-      url: paymentLinkAbsoluteUrl(slug, baseUrl),
-    },
+    link: mapPaymentLinkRow(link as Record<string, unknown>, baseUrl),
   }
 }
 
@@ -205,25 +249,18 @@ export async function adminListPaymentLinks(limit = 30): Promise<{
   const admin = createAdminClient()
   const { data, error } = await admin
     .from("admin_payment_links")
-    .select("id, slug, amount, currency, label, status, payment_id, created_at, paid_at")
+    .select(
+      "id, slug, amount, currency, label, status, payment_id, created_at, paid_at, duration_type, expires_at"
+    )
     .order("created_at", { ascending: false })
     .limit(Math.min(limit, 100))
 
   if (error) return { error: error.message, links: [] }
 
   return {
-    links: (data || []).map((row) => ({
-      id: String(row.id),
-      slug: String(row.slug),
-      amount: Number(row.amount),
-      currency: String(row.currency),
-      label: (row.label as string) || null,
-      status: String(row.status),
-      paymentId: (row.payment_id as string) || null,
-      createdAt: (row.created_at as string) || null,
-      paidAt: (row.paid_at as string) || null,
-      url: baseUrl ? paymentLinkAbsoluteUrl(String(row.slug), baseUrl) : paymentLinkPublicPath(String(row.slug)),
-    })),
+    links: (data || []).map((row) =>
+      mapPaymentLinkRow(row as Record<string, unknown>, baseUrl)
+    ),
   }
 }
 
@@ -241,6 +278,7 @@ export async function getPaymentLinkCheckoutConfig(): Promise<{
 
 export async function getPaymentLinkPublic(slug: string): Promise<{
   error?: string
+  expired?: boolean
   link?: {
     slug: string
     amount: number
@@ -248,6 +286,8 @@ export async function getPaymentLinkPublic(slug: string): Promise<{
     label: string | null
     status: string
     paidAt: string | null
+    durationType: AdminPaymentLinkDurationType
+    expiresAt: string | null
   }
 }> {
   const safe = slug.trim().toLowerCase()
@@ -256,23 +296,40 @@ export async function getPaymentLinkPublic(slug: string): Promise<{
   const admin = createAdminClient()
   const { data, error } = await admin
     .from("admin_payment_links")
-    .select("slug, amount, currency, label, status, paid_at")
+    .select("id, slug, amount, currency, label, status, paid_at, expires_at, duration_type")
     .eq("slug", safe)
     .maybeSingle()
 
   if (error) return { error: error.message }
   if (!data) return { error: "Lien introuvable ou expiré." }
 
-  return {
-    link: {
-      slug: String(data.slug),
-      amount: Number(data.amount),
-      currency: String(data.currency),
-      label: (data.label as string) || null,
-      status: String(data.status),
-      paidAt: (data.paid_at as string) || null,
-    },
+  await markLinkExpiredIfNeeded(admin, {
+    id: data.id as string,
+    expires_at: data.expires_at as string | null,
+    status: data.status as string,
+  })
+
+  const expired =
+    data.status === "expired" ||
+    isAdminPaymentLinkExpired({
+      expiresAt: data.expires_at as string | null,
+      status: data.status as string,
+    })
+
+  const linkPayload = {
+    slug: String(data.slug),
+    amount: Number(data.amount),
+    currency: String(data.currency),
+    label: (data.label as string) || null,
+    status: expired ? "expired" : String(data.status),
+    paidAt: (data.paid_at as string) || null,
+    durationType: (data.duration_type as AdminPaymentLinkDurationType) || "permanent",
+    expiresAt: (data.expires_at as string) || null,
   }
+
+  if (expired) return { expired: true, link: linkPayload }
+
+  return { link: linkPayload }
 }
 
 export async function startPaymentLinkCheckout(input: {
@@ -290,11 +347,28 @@ export async function startPaymentLinkCheckout(input: {
   const admin = createAdminClient()
   const { data: link } = await admin
     .from("admin_payment_links")
-    .select("id, slug, amount, currency, label, status, payment_id")
+    .select("id, slug, amount, currency, label, status, payment_id, expires_at, duration_type")
     .eq("slug", safe)
     .maybeSingle()
 
   if (!link) return { error: "Lien introuvable." }
+
+  await markLinkExpiredIfNeeded(admin, {
+    id: link.id as string,
+    expires_at: link.expires_at as string | null,
+    status: link.status as string,
+  })
+
+  if (
+    link.status === "expired" ||
+    isAdminPaymentLinkExpired({
+      expiresAt: link.expires_at as string | null,
+      status: link.status as string,
+    })
+  ) {
+    return { error: "Ce lien de paiement a expiré." }
+  }
+
   if (link.status === "completed") return { error: "Ce paiement a déjà été effectué." }
 
   const paymentId = link.payment_id as string

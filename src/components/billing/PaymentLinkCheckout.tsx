@@ -15,6 +15,7 @@ export function PaymentLinkCheckout({
   cancelled,
   provider,
   enabledPaymentModes = ["mobile_money"],
+  expired = false,
 }: {
   slug: string
   amount: number
@@ -25,6 +26,7 @@ export function PaymentLinkCheckout({
   cancelled?: boolean
   provider: string
   enabledPaymentModes?: BictorysPaymentMode[]
+  expired?: boolean
 }) {
   const defaultMode = enabledPaymentModes[0] ?? "mobile_money"
   const [mode, setMode] = React.useState<BictorysPaymentMode>(defaultMode)
@@ -75,6 +77,20 @@ export function PaymentLinkCheckout({
           <h1 className="text-xl font-semibold text-neutral-900">Paiement confirmé</h1>
           <p className="text-sm text-neutral-600">
             {amount.toLocaleString("fr-FR")} {currency} — merci, votre paiement a bien été reçu.
+          </p>
+        </div>
+      </main>
+    )
+  }
+
+  if (expired) {
+    return (
+      <main className="min-h-screen flex items-center justify-center p-6 bg-neutral-100">
+        <div className="w-full max-w-md rounded-2xl border border-neutral-200 bg-white p-8 text-center space-y-3">
+          <h1 className="text-xl font-semibold text-neutral-900">Lien expiré</h1>
+          <p className="text-sm text-neutral-600">
+            Ce lien de paiement n&apos;est plus valide. Demandez un nouveau lien à la personne
+            qui vous l&apos;a envoyé.
           </p>
         </div>
       </main>

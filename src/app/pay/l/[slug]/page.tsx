@@ -43,6 +43,7 @@ export default async function PublicPaymentLinkPage({ params, searchParams }: Pr
       cancelled={sp.cancel === "1"}
       provider={resolveLiveProvider()}
       enabledPaymentModes={checkoutConfig.enabledPaymentModes}
+      expired={Boolean(result.expired)}
     />
   )
 }

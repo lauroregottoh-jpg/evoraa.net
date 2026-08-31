@@ -9,6 +9,11 @@ import {
 } from "@/app/actions/paymentLinks"
 import { PaymentModePicker } from "@/components/billing/PaymentModePicker"
 import type { BictorysPaymentMode } from "@/lib/billing/bictorys"
+import {
+  adminPaymentLinkDurationLabel,
+  type AdminPaymentLinkDurationType,
+  type TemporaryLinkDurationKey,
+} from "@/lib/billing/adminPaymentLinks"
 import { OPS_CONSOLE_PATH } from "@/lib/admin/consolePath"
 
 export function AdminIndependentPaymentsDashboardCard({
@@ -65,6 +70,10 @@ export function AdminPaymentLinksPanel({
 }) {
   const [amount, setAmount] = React.useState("5000")
   const [label, setLabel] = React.useState("")
+  const [durationType, setDurationType] =
+    React.useState<AdminPaymentLinkDurationType>("permanent")
+  const [temporaryDuration, setTemporaryDuration] =
+    React.useState<TemporaryLinkDurationKey>("d7")
   const [mode, setMode] = React.useState<BictorysPaymentMode>("mobile_money")
   const [busy, setBusy] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
@@ -92,6 +101,8 @@ export function AdminPaymentLinksPanel({
         amount: Number(amount),
         label: label || null,
         paymentMode: mode,
+        durationType,
+        temporaryDuration: durationType === "temporary" ? temporaryDuration : null,
       })
       if (r.error) {
         setError(r.error)
@@ -170,6 +181,58 @@ export function AdminPaymentLinksPanel({
             />
           </label>
 
+          <div className="space-y-2">
+            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Validité du lien
+            </span>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setDurationType("permanent")}
+                className={`rounded-xl border px-3 py-3 text-left text-sm transition-colors ${
+                  durationType === "permanent"
+                    ? "border-emerald-600 bg-emerald-50 ring-1 ring-emerald-600"
+                    : "border-border bg-background hover:bg-secondary/40"
+                }`}
+              >
+                <p className="font-semibold">Permanent</p>
+                <p className="text-[11px] text-muted-foreground mt-1">
+                  Reste actif jusqu&apos;au paiement
+                </p>
+              </button>
+              <button
+                type="button"
+                onClick={() => setDurationType("temporary")}
+                className={`rounded-xl border px-3 py-3 text-left text-sm transition-colors ${
+                  durationType === "temporary"
+                    ? "border-emerald-600 bg-emerald-50 ring-1 ring-emerald-600"
+                    : "border-border bg-background hover:bg-secondary/40"
+                }`}
+              >
+                <p className="font-semibold">Temporaire</p>
+                <p className="text-[11px] text-muted-foreground mt-1">
+                  Expire automatiquement
+                </p>
+              </button>
+            </div>
+            {durationType === "temporary" && (
+              <label className="block text-sm">
+                <span className="text-xs text-muted-foreground">Durée</span>
+                <select
+                  value={temporaryDuration}
+                  onChange={(e) =>
+                    setTemporaryDuration(e.target.value as TemporaryLinkDurationKey)
+                  }
+                  className="mt-1 w-full rounded-xl border border-border bg-background px-4 py-3 text-sm"
+                >
+                  <option value="h24">24 heures</option>
+                  <option value="d7">7 jours</option>
+                  <option value="d30">30 jours</option>
+                </select>
+              </label>
+            )}
+          </div>
+
           {hasBictorys && paymentProvider === "bictorys" && (
             <PaymentModePicker
               value={mode}
@@ -199,6 +262,14 @@ export function AdminPaymentLinksPanel({
           <div className="rounded-xl border-2 border-emerald-600/30 bg-emerald-50/50 p-4 space-y-2">
             <p className="text-sm font-semibold">
               Lien créé — {lastLink.amount.toLocaleString("fr-FR")} FCFA
+              <span className="text-muted-foreground font-normal">
+                {" "}
+                ·{" "}
+                {adminPaymentLinkDurationLabel({
+                  durationType: lastLink.durationType,
+                  expiresAt: lastLink.expiresAt,
+                })}
+              </span>
             </p>
             <p className="text-xs text-muted-foreground break-all">{lastLink.url}</p>
             <button
@@ -235,6 +306,12 @@ export function AdminPaymentLinksPanel({
                     </span>
                   </p>
                   {l.label && <p className="text-xs text-muted-foreground">{l.label}</p>}
+                  <p className="text-xs text-muted-foreground">
+                    {adminPaymentLinkDurationLabel({
+                      durationType: l.durationType,
+                      expiresAt: l.expiresAt,
+                    })}
+                  </p>
                 </div>
                 <div className="flex items-center gap-2">
                   <a
