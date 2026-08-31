@@ -3,6 +3,7 @@ import CoupleCheckoutClient from "./CheckoutClient"
 import { MemberPage } from "@/components/layout/MemberPage"
 import { CoupleShell } from "@/components/couple/CoupleShell"
 import { isCoupleDemoPricing, getCoupleOffer } from "@/lib/couple/offers"
+import { getBictorysEnabledPaymentModes } from "@/lib/billing/bictorys"
 import { isDemoPaymentsEnv, resolveLiveProvider } from "@/lib/billing/provider"
 import { notFound } from "next/navigation"
 import { COUPLE_BRAND } from "@/lib/couple/config"
@@ -31,7 +32,10 @@ export default async function CoupleCheckoutPage({
 
   const provider = resolveLiveProvider()
   const demoMode = isDemoPaymentsEnv()
-  const showModePicker = provider === "bictorys" && !demoMode
+  const enabledPaymentModes =
+    provider === "bictorys" ? getBictorysEnabledPaymentModes() : []
+  const showModePicker =
+    provider === "bictorys" && !demoMode && enabledPaymentModes.length > 1
 
   return (
     <MemberPage dense contentWidth="wide">
@@ -46,6 +50,7 @@ export default async function CoupleCheckoutPage({
             demoPricing={isCoupleDemoPricing()}
             showModePicker={showModePicker}
             suggestedMode="mobile_money"
+            enabledPaymentModes={enabledPaymentModes}
           />
         </Suspense>
       </CoupleShell>

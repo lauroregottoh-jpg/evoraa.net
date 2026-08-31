@@ -97,6 +97,7 @@ export default async function OpsConsolePage() {
     hasBictorys: false,
     paymentProvider: "demo",
     bictorysSandbox: false,
+    bictorysPaymentModes: ["mobile_money"] as Array<"mobile_money" | "card">,
     hasResend: false,
     hasCronSecret: false,
     hasServiceRole: false,

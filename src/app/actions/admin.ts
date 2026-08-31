@@ -131,6 +131,7 @@ export type AdminOpsFlags = {
   hasBictorys: boolean
   paymentProvider: string
   bictorysSandbox: boolean
+  bictorysPaymentModes: Array<"mobile_money" | "card">
   hasResend: boolean
   hasCronSecret: boolean
   hasServiceRole: boolean
@@ -673,6 +674,7 @@ export async function getAdminDashboardData() {
   const { resolveLiveProvider, isDemoPaymentsEnv } = await import(
     "@/lib/billing/provider"
   )
+  const { getBictorysEnabledPaymentModes } = await import("@/lib/billing/bictorys")
   const paymentProvider = resolveLiveProvider()
   const ops: AdminOpsFlags = {
     paymentsDemoMode: isDemoPaymentsEnv(),
@@ -680,6 +682,7 @@ export async function getAdminDashboardData() {
     hasBictorys,
     paymentProvider,
     bictorysSandbox: process.env.BICTORYS_API_KEY?.startsWith("test_") ?? false,
+    bictorysPaymentModes: hasBictorys ? getBictorysEnabledPaymentModes() : [],
     hasResend: Boolean(process.env.RESEND_API_KEY),
     hasCronSecret: Boolean(process.env.CRON_SECRET),
     hasServiceRole: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),

@@ -21,6 +21,7 @@ type Props = {
   demoPricing: boolean
   showModePicker?: boolean
   suggestedMode?: BictorysPaymentMode
+  enabledPaymentModes?: BictorysPaymentMode[]
   /** Pré-sélection depuis /couple/checkout/[offer] ou ?offer= */
   initialOfferId?: CoupleOfferId
   /** Après login : démarrer le paiement une fois */
@@ -38,6 +39,7 @@ export function CoupleCheckoutPanel({
   demoPricing,
   showModePicker = true,
   suggestedMode = "mobile_money",
+  enabledPaymentModes = ["mobile_money"],
   initialOfferId = "couple_essential",
   autostart = false,
   initialPaymentMode,
@@ -273,12 +275,13 @@ export function CoupleCheckoutPanel({
         )}
       </div>
 
-      {showModePicker && (
+      {(showModePicker || enabledPaymentModes.length === 1) && (
         <div className="space-y-3">
           <p className="text-sm font-semibold text-[#1C1412]">
             Comment voulez-vous payer ?
           </p>
           <div className="grid sm:grid-cols-2 gap-3">
+            {enabledPaymentModes.includes("mobile_money") && (
             <PayModeCard
               active={paymentMode === "mobile_money"}
               onClick={() => setPaymentMode("mobile_money")}
@@ -286,6 +289,8 @@ export function CoupleCheckoutPanel({
               title="Mobile Money"
               brands={["Orange", "Wave", "Moov"]}
             />
+            )}
+            {enabledPaymentModes.includes("card") && (
             <PayModeCard
               active={paymentMode === "card"}
               onClick={() => setPaymentMode("card")}
@@ -293,6 +298,7 @@ export function CoupleCheckoutPanel({
               title="Carte bancaire"
               brands={["Visa", "Mastercard"]}
             />
+            )}
           </div>
         </div>
       )}

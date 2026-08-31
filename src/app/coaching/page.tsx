@@ -45,6 +45,7 @@ export default async function CoachingPage({
   const page = (
     <CoachingSalesPage
       suggestedMode={hints?.suggestedMode ?? "mobile_money"}
+      enabledPaymentModes={hints?.enabledPaymentModes ?? ["mobile_money"]}
       moduleId={sp.module}
       moduleTitle={sp.moduleTitle}
       initialFirstName={initialFirstName}

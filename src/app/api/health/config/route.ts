@@ -66,6 +66,7 @@ export async function GET(request: Request) {
       hasBictorysWebhookSecret: Boolean(process.env.BICTORYS_WEBHOOK_SECRET),
       bictorysSandbox: apiKey.startsWith("test_"),
       bictorysMerchantCountry: process.env.BICTORYS_MERCHANT_COUNTRY || "TG",
+      bictorysPaymentMode: process.env.BICTORYS_PAYMENT_MODE || "mobile_money",
       hasCinetPay: Boolean(
         process.env.CINETPAY_API_KEY && process.env.CINETPAY_SITE_ID
       ),

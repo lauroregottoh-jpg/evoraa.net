@@ -52,6 +52,7 @@ export default async function AdminIndependentPaymentsPage() {
         hasBictorys={Boolean(ops?.hasBictorys)}
         hasMoneroo={Boolean(ops?.hasMoneroo)}
         paymentProvider={ops?.paymentProvider || "unknown"}
+        bictorysPaymentModes={ops?.bictorysPaymentModes ?? ["mobile_money"]}
       />
     </main>
   )

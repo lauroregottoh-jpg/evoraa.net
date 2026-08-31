@@ -11,6 +11,7 @@ import type { BictorysPaymentMode } from "@/lib/billing/bictorys"
  */
 export function CoachingSalesPage({
   suggestedMode,
+  enabledPaymentModes = ["mobile_money"],
   moduleId,
   moduleTitle,
   initialFirstName,
@@ -19,6 +20,7 @@ export function CoachingSalesPage({
   hasCredits,
 }: {
   suggestedMode: BictorysPaymentMode
+  enabledPaymentModes?: BictorysPaymentMode[]
   moduleId?: string
   moduleTitle?: string
   initialFirstName: string
@@ -137,6 +139,7 @@ export function CoachingSalesPage({
       <div id="payer" className="scroll-mt-24">
         <CoachingCheckoutPanel
           suggestedMode={suggestedMode}
+          enabledPaymentModes={enabledPaymentModes}
           moduleId={moduleId}
           moduleTitle={moduleTitle}
           initialFirstName={initialFirstName}

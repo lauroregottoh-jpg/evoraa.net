@@ -15,11 +15,13 @@ export default function CoupleCheckoutClient({
   demoPricing,
   showModePicker,
   suggestedMode,
+  enabledPaymentModes = ["mobile_money"],
 }: {
   offer: string
   demoPricing: boolean
   showModePicker: boolean
   suggestedMode: BictorysPaymentMode
+  enabledPaymentModes?: BictorysPaymentMode[]
 }) {
   const search = useSearchParams()
   const router = useRouter()
@@ -116,6 +118,7 @@ export default function CoupleCheckoutClient({
         demoPricing={demoPricing}
         showModePicker={showModePicker}
         suggestedMode={suggestedMode}
+        enabledPaymentModes={enabledPaymentModes}
         initialOfferId={offerId}
         initialPaymentMode={modeFromQuery ?? undefined}
         initialPromoCode={codeFromQuery}

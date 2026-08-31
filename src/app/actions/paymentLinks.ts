@@ -9,8 +9,10 @@ import {
   paymentLinkPublicPath,
 } from "@/lib/billing/adminPaymentLinks"
 import {
+  getBictorysEnabledPaymentModes,
   parseBictorysPaymentMode,
   resolveBictorysPaymentMode,
+  type BictorysPaymentMode,
 } from "@/lib/billing/bictorys"
 import { bictorysCreateCharge } from "@/lib/billing/bictorysClient"
 import { monerooInitializePayment } from "@/lib/billing/monerooClient"
@@ -222,6 +224,18 @@ export async function adminListPaymentLinks(limit = 30): Promise<{
       paidAt: (row.paid_at as string) || null,
       url: baseUrl ? paymentLinkAbsoluteUrl(String(row.slug), baseUrl) : paymentLinkPublicPath(String(row.slug)),
     })),
+  }
+}
+
+export async function getPaymentLinkCheckoutConfig(): Promise<{
+  enabledPaymentModes: BictorysPaymentMode[]
+  provider: string
+}> {
+  const provider = resolveLiveProvider()
+  return {
+    provider,
+    enabledPaymentModes:
+      provider === "bictorys" ? getBictorysEnabledPaymentModes() : [],
   }
 }
 

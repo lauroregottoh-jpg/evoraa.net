@@ -53,12 +53,14 @@ type StepN = 1 | 2 | 3
 
 export function CoachingCheckoutPanel({
   suggestedMode = "mobile_money",
+  enabledPaymentModes = ["mobile_money"],
   moduleId,
   moduleTitle,
   initialFirstName = "",
   initialLastName = "",
 }: {
   suggestedMode?: BictorysPaymentMode
+  enabledPaymentModes?: BictorysPaymentMode[]
   moduleId?: string | null
   moduleTitle?: string | null
   initialFirstName?: string
@@ -632,7 +634,12 @@ export function CoachingCheckoutPanel({
                 </p>
               </div>
 
-              <PaymentModePicker value={mode} onChange={setMode} />
+              <PaymentModePicker
+                value={mode}
+                onChange={setMode}
+                suggested={suggestedMode}
+                enabledModes={enabledPaymentModes}
+              />
 
               {error ? (
                 <p className="text-xs text-destructive rounded-xl border border-destructive/20 bg-destructive/5 px-3 py-2">

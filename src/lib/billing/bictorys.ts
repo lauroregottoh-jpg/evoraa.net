@@ -2,6 +2,26 @@ export type BictorysPaymentMode = "mobile_money" | "card"
 
 export const BICTORYS_VALID_MODES = new Set<BictorysPaymentMode>(["mobile_money", "card"])
 
+/** Modes réellement activés côté marchand Bictorys (voir BICTORYS_PAYMENT_MODE). */
+export function getBictorysEnabledPaymentModes(): BictorysPaymentMode[] {
+  const raw = process.env.BICTORYS_PAYMENT_MODE?.trim()
+  if (!raw) return ["mobile_money"]
+
+  const modes = raw
+    .split(/[,;|]+/)
+    .map((s) => s.trim().toLowerCase())
+    .filter((s): s is BictorysPaymentMode =>
+      BICTORYS_VALID_MODES.has(s as BictorysPaymentMode)
+    )
+
+  const unique = [...new Set(modes)]
+  return unique.length > 0 ? unique : ["mobile_money"]
+}
+
+export function isBictorysPaymentModeEnabled(mode: BictorysPaymentMode): boolean {
+  return getBictorysEnabledPaymentModes().includes(mode)
+}
+
 /** UEMOA — Mobile Money pre-selected */
 const UEMOA_COUNTRIES = new Set(["SN", "CI", "ML", "BF", "BJ", "TG", "GW", "NE"])
 
@@ -74,13 +94,19 @@ export function resolveBictorysPaymentMode(
   country: string | null | undefined,
   override?: string | null
 ): BictorysPaymentMode {
+  const enabled = getBictorysEnabledPaymentModes()
+  let mode: BictorysPaymentMode = "mobile_money"
+
   if (override && BICTORYS_VALID_MODES.has(override as BictorysPaymentMode)) {
-    return override as BictorysPaymentMode
+    mode = override as BictorysPaymentMode
+  } else {
+    const code = normalizeCountryCode(country)
+    if (code && CARD_PREFERRED.has(code)) mode = "card"
+    else if (code && UEMOA_COUNTRIES.has(code)) mode = "mobile_money"
   }
-  const code = normalizeCountryCode(country)
-  if (code && CARD_PREFERRED.has(code)) return "card"
-  if (code && UEMOA_COUNTRIES.has(code)) return "mobile_money"
-  return "mobile_money"
+
+  if (enabled.includes(mode)) return mode
+  return enabled[0] ?? "mobile_money"
 }
 
 export function bictorysPaymentModeLabel(mode: BictorysPaymentMode): string {

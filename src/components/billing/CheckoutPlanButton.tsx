@@ -15,6 +15,7 @@ export function CheckoutPlanButton({
   variant = "outline",
   showModePicker = false,
   suggestedMode = "mobile_money",
+  enabledPaymentModes = ["mobile_money"],
 }: {
   planId: PlanId
   label: string
@@ -22,6 +23,7 @@ export function CheckoutPlanButton({
   variant?: "primary" | "outline" | "secondary"
   showModePicker?: boolean
   suggestedMode?: BictorysPaymentMode
+  enabledPaymentModes?: BictorysPaymentMode[]
 }) {
   const router = useRouter()
   const [loading, setLoading] = React.useState(false)
@@ -69,6 +71,7 @@ export function CheckoutPlanButton({
           value={paymentMode}
           onChange={setPaymentMode}
           suggested={suggestedMode}
+          enabledModes={enabledPaymentModes}
         />
       )}
       <button

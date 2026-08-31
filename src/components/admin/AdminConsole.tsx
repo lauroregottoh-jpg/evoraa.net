@@ -942,6 +942,7 @@ export function AdminConsole(props: Props) {
             hasBictorys={Boolean(props.ops.hasBictorys)}
             hasMoneroo={Boolean(props.ops.hasMoneroo)}
             paymentProvider={props.ops.paymentProvider}
+            bictorysPaymentModes={props.ops.bictorysPaymentModes}
             embedded
           />
         </div>

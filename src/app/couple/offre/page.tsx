@@ -4,6 +4,7 @@ import { CoupleShell } from "@/components/couple/CoupleShell"
 import { CoupleOffreCheckout } from "@/components/couple/CoupleOffreCheckout"
 import { COUPLE_BRAND, COUPLE_TAGLINE } from "@/lib/couple/config"
 import { isCoupleDemoPricing } from "@/lib/couple/offers"
+import { getBictorysEnabledPaymentModes } from "@/lib/billing/bictorys"
 import { isDemoPaymentsEnv, resolveLiveProvider } from "@/lib/billing/provider"
 
 export const metadata = {
@@ -17,7 +18,10 @@ export default function CoupleOffrePage() {
   const demoPricing = isCoupleDemoPricing()
   const provider = resolveLiveProvider()
   const demoMode = isDemoPaymentsEnv()
-  const showModePicker = provider === "bictorys" && !demoMode
+  const enabledPaymentModes =
+    provider === "bictorys" ? getBictorysEnabledPaymentModes() : []
+  const showModePicker =
+    provider === "bictorys" && !demoMode && enabledPaymentModes.length > 1
 
   return (
     <MemberPage dense contentWidth="wide">
@@ -41,6 +45,7 @@ export default function CoupleOffrePage() {
             demoPricing={demoPricing}
             showModePicker={showModePicker}
             suggestedMode="mobile_money"
+            enabledPaymentModes={enabledPaymentModes}
           />
 
           <p className="text-center text-sm text-[#1C1412]/55">

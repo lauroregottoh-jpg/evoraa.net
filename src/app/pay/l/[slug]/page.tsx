@@ -1,6 +1,9 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { getPaymentLinkPublic } from "@/app/actions/paymentLinks"
+import {
+  getPaymentLinkCheckoutConfig,
+  getPaymentLinkPublic,
+} from "@/app/actions/paymentLinks"
 import { PaymentLinkCheckout } from "@/components/billing/PaymentLinkCheckout"
 import { resolveLiveProvider } from "@/lib/billing/provider"
 
@@ -20,7 +23,10 @@ type Props = {
 export default async function PublicPaymentLinkPage({ params, searchParams }: Props) {
   const { slug } = await params
   const sp = await searchParams
-  const result = await getPaymentLinkPublic(slug)
+  const [result, checkoutConfig] = await Promise.all([
+    getPaymentLinkPublic(slug),
+    getPaymentLinkCheckoutConfig(),
+  ])
 
   if (result.error || !result.link) {
     notFound()
@@ -36,6 +42,7 @@ export default async function PublicPaymentLinkPage({ params, searchParams }: Pr
       paid={sp.paid === "1"}
       cancelled={sp.cancel === "1"}
       provider={resolveLiveProvider()}
+      enabledPaymentModes={checkoutConfig.enabledPaymentModes}
     />
   )
 }

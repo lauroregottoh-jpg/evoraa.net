@@ -20,6 +20,7 @@ const EnvSchema = z.object({
   RESEND_API_KEY: z.string().optional(),
   BICTORYS_API_KEY: z.string().optional(),
   BICTORYS_WEBHOOK_SECRET: z.string().optional(),
+  BICTORYS_PAYMENT_MODE: z.string().optional(),
   MONEROO_SECRET_KEY: z.string().optional(),
   MONEROO_WEBHOOK_SECRET: z.string().optional(),
   NODE_ENV: z.enum(["development", "test", "production"]).optional(),

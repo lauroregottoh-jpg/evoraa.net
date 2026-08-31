@@ -14,6 +14,7 @@ export function PaymentLinkCheckout({
   paid,
   cancelled,
   provider,
+  enabledPaymentModes = ["mobile_money"],
 }: {
   slug: string
   amount: number
@@ -23,8 +24,10 @@ export function PaymentLinkCheckout({
   paid?: boolean
   cancelled?: boolean
   provider: string
+  enabledPaymentModes?: BictorysPaymentMode[]
 }) {
-  const [mode, setMode] = React.useState<BictorysPaymentMode>("mobile_money")
+  const defaultMode = enabledPaymentModes[0] ?? "mobile_money"
+  const [mode, setMode] = React.useState<BictorysPaymentMode>(defaultMode)
   const [email, setEmail] = React.useState("")
   const [name, setName] = React.useState("")
   const [busy, setBusy] = React.useState(false)
@@ -120,7 +123,12 @@ export function PaymentLinkCheckout({
         </div>
 
         {provider === "bictorys" && (
-          <PaymentModePicker value={mode} onChange={setMode} suggested="mobile_money" />
+          <PaymentModePicker
+            value={mode}
+            onChange={setMode}
+            suggested="mobile_money"
+            enabledModes={enabledPaymentModes}
+          />
         )}
 
         <button

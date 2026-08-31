@@ -5,6 +5,24 @@ import type { BictorysPaymentMode } from "@/lib/billing/bictorys"
 const execFileP = promisify(execFile)
 const MAX_RETRIES_ON_WAF_403 = 3
 
+function formatBictorysChargeError(status: number, responseBody: string): string {
+  const body = responseBody.slice(0, 400)
+  const lower = body.toLowerCase()
+
+  if (
+    lower.includes("401-7") ||
+    lower.includes("card payment is not activated")
+  ) {
+    return "Le paiement par carte bancaire n'est pas encore activé sur ce compte marchand. Choisissez Mobile Money (Wave, Orange Money, MTN…)."
+  }
+
+  if (lower.includes("payment_category") && lower.includes("invalid")) {
+    return "Mode de paiement non disponible. Utilisez Mobile Money."
+  }
+
+  return `Bictorys ${status}: ${body.slice(0, 180)}`
+}
+
 export function bictorysApiUrl(apiKey: string) {
   return apiKey.startsWith("test_")
     ? "https://api.test.bictorys.com"
@@ -152,9 +170,10 @@ export async function bictorysCreateCharge(args: {
   )
 
   if (status < 200 || status >= 300) {
+    const friendly = formatBictorysChargeError(status, responseBody)
     return {
       ok: false as const,
-      error: `Bictorys ${status}: ${responseBody.slice(0, 180)}`,
+      error: friendly,
     }
   }
 

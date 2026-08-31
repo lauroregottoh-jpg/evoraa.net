@@ -52,7 +52,7 @@ export default async function BillingPage() {
                 Renouvelez pour garder vos quotas et votre badge.
               </p>
             </div>
-            <CheckoutPlanButton planId="premium_plus" label="Renouveler Alliance" showModePicker={checkoutHints?.showModePicker} suggestedMode={checkoutHints?.suggestedMode} />
+            <CheckoutPlanButton planId="premium_plus" label="Renouveler Alliance" showModePicker={checkoutHints?.showModePicker} suggestedMode={checkoutHints?.suggestedMode} enabledPaymentModes={checkoutHints?.enabledPaymentModes} />
           </div>
         )}
 
@@ -131,6 +131,7 @@ export default async function BillingPage() {
               label="Passer Alliance"
               showModePicker={checkoutHints?.showModePicker}
               suggestedMode={checkoutHints?.suggestedMode}
+              enabledPaymentModes={checkoutHints?.enabledPaymentModes}
             />
           </div>
         )}
@@ -146,6 +147,7 @@ export default async function BillingPage() {
               label="Renouveler 30 jours"
               showModePicker={checkoutHints?.showModePicker}
               suggestedMode={checkoutHints?.suggestedMode}
+              enabledPaymentModes={checkoutHints?.enabledPaymentModes}
             />
           </div>
         )}

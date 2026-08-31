@@ -235,7 +235,11 @@ export function BictorysSandboxPanel({
               </label>
             </div>
 
-            <PaymentModePicker value={mode} onChange={setMode} />
+            <PaymentModePicker
+              value={mode}
+              onChange={setMode}
+              enabledModes={ops.bictorysPaymentModes}
+            />
 
             <Button
               size="sm"

@@ -84,8 +84,9 @@ export default async function PremiumPage() {
         </div>
 
         <AllianceCheckoutPanel
-          showModePicker={checkoutHints?.showModePicker ?? true}
+          showModePicker={checkoutHints?.showModePicker ?? false}
           suggestedMode={checkoutHints?.suggestedMode ?? "mobile_money"}
+          enabledPaymentModes={checkoutHints?.enabledPaymentModes ?? ["mobile_money"]}
           isPaid={Boolean(usage?.isPaid)}
         />
 

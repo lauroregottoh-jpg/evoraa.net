@@ -15,10 +15,12 @@ import type { BictorysPaymentMode } from "@/lib/billing/bictorys"
 export function AllianceCheckoutPanel({
   showModePicker = true,
   suggestedMode = "mobile_money",
+  enabledPaymentModes = ["mobile_money"],
   isPaid = false,
 }: {
   showModePicker?: boolean
   suggestedMode?: BictorysPaymentMode
+  enabledPaymentModes?: BictorysPaymentMode[]
   isPaid?: boolean
 }) {
   const router = useRouter()
@@ -189,10 +191,11 @@ export function AllianceCheckoutPanel({
         )}
       </div>
 
-      {showModePicker && (
+      {(showModePicker || enabledPaymentModes.length === 1) && (
         <div className="space-y-3">
           <p className="text-sm font-semibold text-foreground">Comment voulez-vous payer ?</p>
           <div className="grid sm:grid-cols-2 gap-3">
+            {enabledPaymentModes.includes("mobile_money") && (
             <PayModeCard
               active={paymentMode === "mobile_money"}
               onClick={() => setPaymentMode("mobile_money")}
@@ -200,6 +203,8 @@ export function AllianceCheckoutPanel({
               title="Mobile Money"
               brands={["Orange", "Wave", "Moov"]}
             />
+            )}
+            {enabledPaymentModes.includes("card") && (
             <PayModeCard
               active={paymentMode === "card"}
               onClick={() => setPaymentMode("card")}
@@ -207,6 +212,7 @@ export function AllianceCheckoutPanel({
               title="Carte bancaire"
               brands={["Visa", "Mastercard"]}
             />
+            )}
           </div>
         </div>
       )}

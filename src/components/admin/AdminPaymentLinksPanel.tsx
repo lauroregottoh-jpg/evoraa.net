@@ -54,11 +54,13 @@ export function AdminPaymentLinksPanel({
   hasBictorys,
   hasMoneroo,
   paymentProvider,
+  bictorysPaymentModes = ["mobile_money"],
   embedded = false,
 }: {
   hasBictorys: boolean
   hasMoneroo: boolean
   paymentProvider: string
+  bictorysPaymentModes?: Array<"mobile_money" | "card">
   embedded?: boolean
 }) {
   const [amount, setAmount] = React.useState("5000")
@@ -169,7 +171,12 @@ export function AdminPaymentLinksPanel({
           </label>
 
           {hasBictorys && paymentProvider === "bictorys" && (
-            <PaymentModePicker value={mode} onChange={setMode} suggested="mobile_money" />
+            <PaymentModePicker
+              value={mode}
+              onChange={setMode}
+              suggested="mobile_money"
+              enabledModes={bictorysPaymentModes}
+            />
           )}
 
           {!canPay && (

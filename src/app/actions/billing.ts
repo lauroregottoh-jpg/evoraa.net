@@ -6,6 +6,7 @@ import { createAdminClient } from "@/utils/supabase/admin"
 import { getActiveSubscription, getUserEntitlements } from "@/lib/billing/entitlements"
 import { isPaidPlan, PLANS, type PlanId } from "@/lib/billing/plans"
 import {
+  getBictorysEnabledPaymentModes,
   parseBictorysPaymentMode,
   resolveBictorysPaymentMode,
   type BictorysPaymentMode,
@@ -30,6 +31,7 @@ export async function getCheckoutHints(): Promise<{
   suggestedMode: BictorysPaymentMode
   country: string | null
   showModePicker: boolean
+  enabledPaymentModes: BictorysPaymentMode[]
 } | null> {
   const supabase = await createClient()
   const {
@@ -45,6 +47,8 @@ export async function getCheckoutHints(): Promise<{
 
   const provider = resolveLiveProvider()
   const demoMode = isDemoPayments()
+  const enabledPaymentModes =
+    provider === "bictorys" ? getBictorysEnabledPaymentModes() : []
   const suggestedMode = resolveBictorysPaymentMode(profile?.country as string | null)
 
   return {
@@ -52,7 +56,8 @@ export async function getCheckoutHints(): Promise<{
     demoMode,
     suggestedMode,
     country: (profile?.country as string) || null,
-    showModePicker: provider === "bictorys" && !demoMode,
+    enabledPaymentModes,
+    showModePicker: provider === "bictorys" && !demoMode && enabledPaymentModes.length > 1,
   }
 }
 
