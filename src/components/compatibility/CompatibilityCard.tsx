@@ -56,8 +56,8 @@ export function CompatibilityCard({
   const domains = (profile.domainScores ?? []).slice(0, 5);
 
   return (
-    <Card className="rounded-2xl border-border/60 bg-background/90 backdrop-blur-md shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden group">
-      <div className="relative h-48 sm:h-56 bg-secondary/80 overflow-hidden border-b border-border/40">
+    <Card className="rounded-2xl flex flex-col justify-between overflow-hidden group transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5" style={{ background: "#FFFFFF", border: "1px solid #C9BBAF", boxShadow: "0 2px 14px -4px rgba(45,16,32,0.09)" }}>
+      <div className="relative h-48 sm:h-56 overflow-hidden" style={{ background: "#F2EBE0", borderBottom: "1px solid #C9BBAF" }}>
         {profile.photoUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -85,9 +85,9 @@ export function CompatibilityCard({
           </div>
         )}
 
-        <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-background/95 backdrop-blur-md px-3 py-1.5 rounded-full border border-accent/40 shadow-xs">
-          <Sparkles className="h-4 w-4 text-accent fill-accent" />
-          <span className="font-serif font-bold text-sm text-foreground">
+        <div className="absolute top-3 left-3 flex items-center gap-1.5 backdrop-blur-md px-3 py-1.5 rounded-full" style={{ background: "#2D1020", border: "1px solid rgba(184,149,74,0.5)" }}>
+          <Sparkles className="h-4 w-4" style={{ color: "#B8954A", fill: "#B8954A" }} />
+          <span className="font-serif font-bold text-sm" style={{ color: "#F2EBE0" }}>
             {profile.harmonyScore}% d&apos;harmonie
           </span>
         </div>
@@ -125,18 +125,18 @@ export function CompatibilityCard({
       </div>
 
       <CardHeader className="space-y-1 pb-3 pt-4 px-5">
-        <div className="flex items-center justify-between">
-          <h3 className="font-serif text-2xl font-bold text-foreground">
+        <div className="flex items-center justify-between gap-2">
+          <h3 className="font-serif text-2xl font-bold" style={{ color: "#2D1020" }}>
             {profile.name}, {profile.age} ans
           </h3>
-          <Badge
-            variant="outline"
-            className="text-[10px] uppercase font-sans border-border/80 text-muted-foreground"
+          <span
+            className="text-[10px] uppercase font-bold tracking-wider shrink-0 px-2 py-0.5 rounded-full"
+            style={{ background: "#F2EBE0", color: "#7A4F55", border: "1px solid #C9BBAF" }}
           >
             {profile.community}
-          </Badge>
+          </span>
         </div>
-        <p className="text-xs text-muted-foreground flex items-center gap-1">
+        <p className="text-xs flex items-center gap-1" style={{ color: "#7A4F55" }}>
           <MapPin className="h-3.5 w-3.5" /> {profile.city}
         </p>
       </CardHeader>
@@ -152,16 +152,13 @@ export function CompatibilityCard({
                 <div key={d.id} className="flex items-center gap-2 text-xs">
                   <span className={`h-1.5 w-1.5 rounded-full shrink-0 ${statusDot(d.status)}`} />
                   <span className="text-muted-foreground w-[7.5rem] truncate">{d.label}</span>
-                  <div className="flex-1 h-1.5 rounded-full bg-secondary overflow-hidden">
+                  <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "#F2EBE0" }}>
                     <div
-                      className={`h-full rounded-full ${
-                        d.status === "strong"
-                          ? "bg-emerald-500/80"
-                          : d.status === "watch"
-                            ? "bg-amber-500/80"
-                            : "bg-rose-500/70"
-                      }`}
-                      style={{ width: `${Math.max(6, Math.min(100, d.score))}%` }}
+                      className="h-full rounded-full"
+                      style={{
+                        width: `${Math.max(6, Math.min(100, d.score))}%`,
+                        background: d.status === "strong" ? "#2D1020" : d.status === "watch" ? "#B8954A" : "#7A4F55",
+                      }}
                     />
                   </div>
                   <span className="font-serif font-semibold w-8 text-right tabular-nums">
@@ -181,7 +178,8 @@ export function CompatibilityCard({
             {profile.reasons.map((reason, idx) => (
               <span
                 key={idx}
-                className="text-xs bg-accent/10 text-accent-foreground dark:text-accent font-medium px-2.5 py-1 rounded-lg border border-accent/20 flex items-center gap-1"
+                className="text-xs font-medium px-2.5 py-1 rounded-lg flex items-center gap-1"
+                style={{ background: "#F2EBE0", color: "#2D1020", border: "1px solid rgba(184,149,74,0.3)" }}
               >
                 ✓ {reason}
               </span>
@@ -190,15 +188,15 @@ export function CompatibilityCard({
         </div>
       </CardContent>
 
-      <CardFooter className="px-5 pt-2 pb-5 border-t border-border/30 bg-secondary/20">
+      <CardFooter className="px-5 pt-2 pb-5" style={{ borderTop: "1px solid #C9BBAF", background: "#F2EBE0" }}>
         <Link href={`/compatibility/${profile.id}`} className="w-full">
-          <Button
-            variant="outline"
-            className="w-full rounded-xl h-10 text-xs font-medium border-border/80 hover:bg-primary hover:text-primary-foreground transition-all"
+          <button
+            className="w-full flex items-center justify-center gap-2 rounded-full h-10 text-sm font-semibold transition-all hover:opacity-90"
+            style={{ background: "#2D1020", color: "#F2EBE0" }}
           >
             <span>Consulter le Diagnostic d&apos;EVA</span>
-            <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-          </Button>
+            <ArrowRight className="h-3.5 w-3.5" />
+          </button>
         </Link>
       </CardFooter>
     </Card>

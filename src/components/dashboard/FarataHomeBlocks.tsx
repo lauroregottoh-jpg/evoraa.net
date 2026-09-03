@@ -21,32 +21,37 @@ import type { UsageSnapshot } from "@/lib/billing/usage"
 import type { SocialInsights } from "@/app/actions/social"
 import type { EditorialItem } from "@/lib/editorial/library"
 
+/* ─── Palette Farata ─── */
+const F = {
+  bg: "#F2EBE0",
+  primary: "#2D1020",
+  gold: "#B8954A",
+  goldLight: "#D4AF72",
+  border: "#C9BBAF",
+  borderGold: "rgba(184,149,74,0.4)",
+  muted: "#7A4F55",
+  white: "#FFFFFF",
+}
+
 function EditorialIcon({ category }: { category: EditorialItem["category"] }) {
   const common = "h-3.5 w-3.5"
   switch (category) {
-    case "defi":
-      return <Target className={common} />
+    case "defi":       return <Target className={common} />
     case "question":
-    case "conversation":
-      return <HelpCircle className={common} />
+    case "conversation": return <HelpCircle className={common} />
     case "verset":
-    case "verset_explique":
-      return <BookOpen className={common} />
-    case "erreur":
-      return <AlertTriangle className={common} />
+    case "verset_explique": return <BookOpen className={common} />
+    case "erreur":     return <AlertTriangle className={common} />
     case "conseil":
     case "conseil_coach":
-    case "astuce":
-      return <Lightbulb className={common} />
-    case "citation":
-      return <Quote className={common} />
-    case "encouragement":
-      return <Heart className={common} />
-    default:
-      return <Sparkles className={common} />
+    case "astuce":     return <Lightbulb className={common} />
+    case "citation":   return <Quote className={common} />
+    case "encouragement": return <Heart className={common} />
+    default:           return <Sparkles className={common} />
   }
 }
 
+/* ─── Carte éditoriale du jour ─── */
 export function DailyEditorialCard({
   item,
   featured = false,
@@ -61,52 +66,60 @@ export function DailyEditorialCard({
 
   return (
     <section
-      className={cn(
-        "rounded-2xl border border-border bg-card p-5 space-y-2",
-        featured && "border-primary/25 bg-gradient-to-br from-secondary/50 to-card"
-      )}
+      className="rounded-2xl p-5 space-y-3"
+      style={{
+        background: featured ? F.primary : F.white,
+        border: `1px solid ${featured ? F.borderGold : F.border}`,
+        boxShadow: "0 2px 12px -4px rgba(45,16,32,0.08)",
+      }}
     >
-      <p className="text-[10px] font-bold uppercase tracking-widest text-primary flex items-center gap-1.5">
+      {/* Label */}
+      <p
+        className="text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5"
+        style={{ color: featured ? F.gold : F.gold }}
+      >
         <EditorialIcon category={item.category} />
         {item.label}
       </p>
+
+      {/* Divider or */}
+      <div className="h-px w-8 rounded-full" style={{ background: F.gold, opacity: 0.5 }} />
+
       {item.title ? (
-        <p className="font-semibold text-sm text-foreground">{item.title}</p>
+        <p
+          className="font-semibold text-sm"
+          style={{ color: featured ? F.bg : F.primary }}
+        >
+          {item.title}
+        </p>
       ) : null}
+
       <p
         className={cn(
-          "leading-relaxed text-foreground",
+          "leading-relaxed",
           featured ? "font-serif text-base sm:text-lg" : "text-sm",
           quoteStyle && "italic"
         )}
+        style={{ color: featured ? "rgba(242,235,224,0.88)" : F.primary }}
       >
         {quoteStyle ? `« ${item.body} »` : item.body}
       </p>
+
       {item.source ? (
-        <p className="text-xs text-primary font-medium">{item.source}</p>
+        <p className="text-xs font-semibold" style={{ color: F.gold }}>
+          {item.source}
+        </p>
       ) : null}
     </section>
   )
 }
 
-/** Legacy — prefer DailyEditorialCard */
-export function DailyReminderCard({
-  text,
-  source,
-}: {
-  text: string
-  source: string
-}) {
+/** Legacy */
+export function DailyReminderCard({ text, source }: { text: string; source: string }) {
   return (
     <DailyEditorialCard
       featured
-      item={{
-        id: "legacy-reminder",
-        category: "pensee",
-        label: "Pensée du jour",
-        body: text,
-        source,
-      }}
+      item={{ id: "legacy-reminder", category: "pensee", label: "Pensée du jour", body: text, source }}
     />
   )
 }
@@ -114,17 +127,12 @@ export function DailyReminderCard({
 export function DailyTipCard({ title, body }: { title: string; body: string }) {
   return (
     <DailyEditorialCard
-      item={{
-        id: "legacy-tip",
-        category: "conseil",
-        label: "Conseil du jour",
-        title,
-        body,
-      }}
+      item={{ id: "legacy-tip", category: "conseil", label: "Conseil du jour", title, body }}
     />
   )
 }
 
+/* ─── Grille d'accès rapide ─── */
 export function QuickAccessGrid({
   unreadMessages,
   social,
@@ -140,7 +148,8 @@ export function QuickAccessGrid({
       label: "Messages",
       sub: unreadMessages > 0 ? `${unreadMessages} non lu(s)` : "Conversations",
       icon: MessageCircle,
-      tone: "bg-emerald-500/15 text-emerald-700",
+      iconBg: "#2D1020",
+      iconColor: "#F2EBE0",
       lock: false,
     },
     {
@@ -148,7 +157,8 @@ export function QuickAccessGrid({
       label: "Compatibilités",
       sub: "Suggestions",
       icon: Heart,
-      tone: "bg-rose-500/15 text-rose-700",
+      iconBg: "#7A4F55",
+      iconColor: "#F2EBE0",
       lock: false,
     },
     {
@@ -156,7 +166,8 @@ export function QuickAccessGrid({
       label: "Inspiration",
       sub: "Bibliothèque",
       icon: MessageSquareHeart,
-      tone: "bg-teal-500/15 text-teal-800",
+      iconBg: "#B8954A",
+      iconColor: "#2D1020",
       lock: false,
     },
     {
@@ -164,7 +175,8 @@ export function QuickAccessGrid({
       label: "Visiteurs",
       sub: isPaid ? `${social.visitorCount}` : "Alliance",
       icon: Eye,
-      tone: "bg-violet-500/15 text-violet-700",
+      iconBg: isPaid ? "#2D1020" : "#DDD0C4",
+      iconColor: isPaid ? "#F2EBE0" : "#7A4F55",
       lock: !isPaid,
     },
     {
@@ -172,7 +184,8 @@ export function QuickAccessGrid({
       label: "Favoris",
       sub: isPaid ? `${social.favoriteCount}` : "Mes coups de ♥",
       icon: Star,
-      tone: "bg-amber-500/15 text-amber-700",
+      iconBg: isPaid ? "#B8954A" : "#DDD0C4",
+      iconColor: isPaid ? "#2D1020" : "#7A4F55",
       lock: !isPaid,
     },
   ] as const
@@ -185,21 +198,31 @@ export function QuickAccessGrid({
           <Link
             key={item.label}
             href={item.href}
-            className="relative rounded-2xl border border-border bg-card p-4 text-center hover:border-primary/30 transition-colors"
+            className="relative rounded-2xl p-4 text-center transition-all hover:scale-[1.02] hover:shadow-md"
+            style={{
+              background: F.white,
+              border: `1px solid ${F.border}`,
+              boxShadow: "0 2px 10px -4px rgba(45,16,32,0.07)",
+            }}
           >
             {item.lock && (
-              <Lock className="absolute top-2 right-2 h-3.5 w-3.5 text-accent" />
+              <Lock
+                className="absolute top-2 right-2 h-3.5 w-3.5"
+                style={{ color: F.gold }}
+              />
             )}
             <div
-              className={cn(
-                "mx-auto h-11 w-11 rounded-full flex items-center justify-center",
-                item.tone
-              )}
+              className="mx-auto h-11 w-11 rounded-full flex items-center justify-center"
+              style={{ background: item.iconBg }}
             >
-              <Icon className="h-5 w-5" />
+              <Icon className="h-5 w-5" style={{ color: item.iconColor }} />
             </div>
-            <p className="text-sm font-semibold mt-2.5">{item.label}</p>
-            <p className="text-[11px] text-muted-foreground mt-0.5">{item.sub}</p>
+            <p className="text-sm font-semibold mt-2.5" style={{ color: F.primary }}>
+              {item.label}
+            </p>
+            <p className="text-[11px] mt-0.5" style={{ color: F.muted }}>
+              {item.sub}
+            </p>
           </Link>
         )
       })}
@@ -207,65 +230,105 @@ export function QuickAccessGrid({
   )
 }
 
+/* ─── Quota conversations ─── */
 export function DailyQuotaCard({ usage }: { usage: UsageSnapshot }) {
   const used = usage.conversationsUsed
   const limit = usage.conversationsLimit
   const pct = limit > 0 ? Math.min(100, Math.round((used / limit) * 100)) : 0
 
   return (
-    <section className="rounded-2xl border border-border bg-card p-4 sm:p-5">
+    <section
+      className="rounded-2xl p-4 sm:p-5"
+      style={{
+        background: F.white,
+        border: `1px solid ${F.border}`,
+        boxShadow: "0 2px 10px -4px rgba(45,16,32,0.07)",
+      }}
+    >
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
-          <div className="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-            <Send className="h-4 w-4" />
+          <div
+            className="h-10 w-10 rounded-full flex items-center justify-center shrink-0"
+            style={{ background: "#F2EBE0" }}
+          >
+            <Send className="h-4 w-4" style={{ color: F.primary }} />
           </div>
           <div className="min-w-0">
-            <p className="font-semibold text-sm">Initiatives ce mois</p>
-            <p className="text-xs text-muted-foreground">
+            <p className="font-semibold text-sm" style={{ color: F.primary }}>
+              Initiatives ce mois
+            </p>
+            <p className="text-xs" style={{ color: F.muted }}>
               {usage.conversationsRemaining} conversation(s) restante(s) · {usage.planName}
             </p>
           </div>
         </div>
-        <p className="font-serif text-xl font-bold text-primary shrink-0">
+        <p className="font-serif text-xl font-bold shrink-0" style={{ color: F.gold }}>
           {used}/{limit}
         </p>
       </div>
-      <div className="mt-3 h-2 rounded-full bg-secondary overflow-hidden">
+
+      {/* Barre de progression */}
+      <div
+        className="mt-3 h-2 rounded-full overflow-hidden"
+        style={{ background: "#F2EBE0" }}
+      >
         <div
-          className="h-full rounded-full bg-primary transition-all"
-          style={{ width: `${Math.max(pct, used > 0 ? 4 : 0)}%` }}
+          className="h-full rounded-full transition-all"
+          style={{
+            width: `${Math.max(pct, used > 0 ? 4 : 0)}%`,
+            background: `linear-gradient(90deg, ${F.primary}, ${F.gold})`,
+          }}
         />
       </div>
     </section>
   )
 }
 
+/* ─── Teaser académie ─── */
 export function AcademyTeaser() {
   return (
     <Link
       href="/academie-mariage"
-      className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 sm:p-5 hover:border-primary/30 transition-colors"
+      className="flex items-center gap-3 rounded-2xl p-4 sm:p-5 transition-all hover:scale-[1.01] hover:shadow-md"
+      style={{
+        background: F.white,
+        border: `1px solid ${F.borderGold}`,
+        boxShadow: "0 2px 10px -4px rgba(45,16,32,0.07)",
+      }}
     >
-      <div className="h-11 w-11 rounded-xl bg-accent/20 text-accent-foreground flex items-center justify-center shrink-0">
-        <GraduationCap className="h-5 w-5" />
+      <div
+        className="h-11 w-11 rounded-xl flex items-center justify-center shrink-0"
+        style={{ background: "#F2EBE0" }}
+      >
+        <GraduationCap className="h-5 w-5" style={{ color: F.primary }} />
       </div>
       <div className="min-w-0">
-        <h2 className="font-serif text-lg font-bold">Académie du mariage</h2>
-        <p className="text-xs text-muted-foreground mt-0.5">
-          Apprenez et préparez-vous — modules pratiques pour célibataires chrétiens
+        <h2 className="font-serif text-lg font-bold" style={{ color: F.primary }}>
+          Académie du mariage
+        </h2>
+        <p className="text-xs mt-0.5 leading-relaxed" style={{ color: F.muted }}>
+          Modules pratiques pour célibataires chrétiens
         </p>
       </div>
+      <span className="ml-auto text-xs font-bold shrink-0" style={{ color: F.gold }}>
+        →
+      </span>
     </Link>
   )
 }
 
+/* ─── FAB Coach ─── */
 export function CoachFab() {
   return (
     <Link
       href="/help"
-      className="fixed bottom-20 sm:bottom-6 right-4 z-40 inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground pl-1.5 pr-4 py-1.5 shadow-lg hover:brightness-110 transition"
+      className="fixed bottom-20 sm:bottom-6 right-4 z-40 inline-flex items-center gap-2 pl-1.5 pr-4 py-1.5 rounded-full shadow-lg transition hover:brightness-110"
+      style={{ background: F.primary, color: F.bg }}
     >
-      <span className="h-9 w-9 rounded-full bg-accent text-accent-foreground flex items-center justify-center text-xs font-bold">
+      <span
+        className="h-9 w-9 rounded-full flex items-center justify-center text-xs font-bold"
+        style={{ background: F.gold, color: F.primary }}
+      >
         EVA
       </span>
       <span className="text-sm font-semibold">Coach</span>

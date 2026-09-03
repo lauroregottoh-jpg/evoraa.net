@@ -85,56 +85,65 @@ function VoiceSandboxOpener() {
 function ConvRow({ conv }: { conv: ConversationListItem }) {
   return (
     <Link href={`/messages/${conv.id}`} className="block group">
-      <Card
-        className={cn(
-          "rounded-2xl border transition-all duration-300",
-          conv.unread
-            ? "border-accent/60 bg-accent/5 shadow-sm"
-            : "border-border/60 bg-background/90 hover:border-[#B8954A]/35"
-        )}
+      <div
+        className="rounded-2xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+        style={{
+          background: conv.unread ? "#FFFFFF" : "#FFFFFF",
+          border: conv.unread ? "1px solid rgba(184,149,74,0.55)" : "1px solid #C9BBAF",
+          boxShadow: conv.unread
+            ? "0 2px 12px -4px rgba(184,149,74,0.2)"
+            : "0 2px 8px -4px rgba(45,16,32,0.07)",
+        }}
       >
-        <CardContent className="p-4 sm:p-5 flex items-center justify-between gap-4">
+        <div className="p-4 sm:p-5 flex items-center justify-between gap-4">
           <div className="flex items-center gap-4 min-w-0">
+            {/* Avatar */}
             <div className="relative shrink-0">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/30 via-accent/20 to-secondary flex items-center justify-center font-serif text-lg font-bold text-primary shadow-inner">
+              <div
+                className="w-12 h-12 rounded-full flex items-center justify-center font-serif text-lg font-bold"
+                style={{ background: "#2D1020", color: "#F2EBE0" }}
+              >
                 {conv.partnerName[0]}
               </div>
               {conv.unread && (
-                <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-accent border-2 border-background" />
+                <span
+                  className="absolute -top-1 -right-1 w-3 h-3 rounded-full"
+                  style={{ background: "#B8954A", border: "2px solid #FFFFFF" }}
+                />
               )}
             </div>
+            {/* Texte */}
             <div className="space-y-0.5 min-w-0">
               <div className="flex items-center gap-2">
-                <h3 className="font-serif font-bold text-base text-foreground truncate">
+                <h3 className="font-serif font-bold text-base truncate" style={{ color: "#2D1020" }}>
                   {conv.partnerName}
                 </h3>
                 {conv.harmonyScore > 0 && (
-                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold bg-accent/15 text-accent px-1.5 py-0.5 rounded-full border border-accent/30 shrink-0">
-                    <Sparkles className="h-2.5 w-2.5 fill-accent" />{" "}
+                  <span
+                    className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0"
+                    style={{ background: "#2D1020", color: "#B8954A" }}
+                  >
+                    <Sparkles className="h-2.5 w-2.5" style={{ fill: "#B8954A", color: "#B8954A" }} />
                     {conv.harmonyScore}%
                   </span>
                 )}
               </div>
               <p
-                className={cn(
-                  "text-xs truncate",
-                  conv.unread
-                    ? "font-medium text-foreground"
-                    : "text-muted-foreground"
-                )}
+                className="text-xs truncate"
+                style={{ color: conv.unread ? "#2D1020" : "#7A4F55", fontWeight: conv.unread ? 600 : 400 }}
               >
                 {conv.lastMessage}
               </p>
             </div>
           </div>
           <div className="flex flex-col items-end gap-1 shrink-0">
-            <span className="text-[10px] text-muted-foreground font-sans">
+            <span className="text-[10px]" style={{ color: "#B8954A" }}>
               {conv.timestamp}
             </span>
-            <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition-transform" />
+            <ChevronRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" style={{ color: "#C9BBAF" }} />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </Link>
   )
 }

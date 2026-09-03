@@ -5,13 +5,14 @@ import { Check, Lock } from "lucide-react"
 import { cn } from "@/utils/cn"
 
 const STEPS = [
-  { id: "tests", label: "Test premium", href: "/assessments" },
+  { id: "tests", label: "Tests premium", href: "/assessments" },
   { id: "rapport", label: "Rapport personnalisé", href: "/rapport/global" },
   { id: "matching", label: "Matching enrichi", href: "/compatibility" },
 ] as const
 
 /**
- * État sobre du parcours Alliance — accueil.
+ * Strip parcours Alliance — style Farata.
+ * Fond ivoire, items blancs avec accents or/bordeaux.
  */
 export function AllianceLevelStrip({
   assessmentsDone = 0,
@@ -27,10 +28,24 @@ export function AllianceLevelStrip({
   }
 
   return (
-    <section className="rounded-2xl border border-border/60 bg-[#F2EBE0] px-4 py-5 sm:px-6 space-y-4">
-      <h2 className="font-serif text-xl font-bold text-foreground">
-        Niveau d’Alliance
-      </h2>
+    <section
+      className="rounded-2xl px-5 py-5 sm:px-6 space-y-3"
+      style={{ background: "#F2EBE0", border: "1px solid rgba(184,149,74,0.25)" }}
+    >
+      {/* En-tête */}
+      <div className="flex items-center justify-between gap-2">
+        <h2 className="font-serif text-lg font-bold" style={{ color: "#2D1020" }}>
+          Votre parcours Alliance
+        </h2>
+        <div className="h-px flex-1 mx-3 rounded-full" style={{ background: "#B8954A", opacity: 0.35 }} />
+        <span
+          className="text-[10px] font-bold uppercase tracking-widest"
+          style={{ color: "#B8954A" }}
+        >
+          {Object.values(done).filter(Boolean).length} / {STEPS.length}
+        </span>
+      </div>
+
       <ul className="space-y-2">
         {STEPS.map((step) => {
           const unlocked = done[step.id as keyof typeof done]
@@ -39,19 +54,24 @@ export function AllianceLevelStrip({
               <Link
                 href={step.href}
                 className={cn(
-                  "flex items-center gap-3 rounded-xl border px-3 py-3 text-sm transition-colors",
+                  "flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-colors",
                   unlocked
-                    ? "border-[#B8954A]/45 bg-[#B8954A]/10 text-foreground"
-                    : "border-border/70 bg-white text-muted-foreground"
+                    ? "bg-white hover:bg-white/80"
+                    : "bg-white/60 hover:bg-white/80"
                 )}
+                style={{
+                  border: unlocked
+                    ? "1px solid rgba(184,149,74,0.55)"
+                    : "1px solid rgba(201,187,175,0.6)",
+                }}
               >
+                {/* Icône étape */}
                 <span
-                  className={cn(
-                    "flex h-7 w-7 items-center justify-center rounded-full shrink-0",
-                    unlocked
-                      ? "bg-[#2D1020] text-[#F2EBE0]"
-                      : "bg-secondary text-muted-foreground"
-                  )}
+                  className="flex h-7 w-7 items-center justify-center rounded-full shrink-0"
+                  style={{
+                    background: unlocked ? "#2D1020" : "#DDD0C4",
+                    color: unlocked ? "#F2EBE0" : "#7A4F55",
+                  }}
                 >
                   {unlocked ? (
                     <Check className="h-3.5 w-3.5" />
@@ -59,9 +79,19 @@ export function AllianceLevelStrip({
                     <Lock className="h-3.5 w-3.5" />
                   )}
                 </span>
-                <span className="font-medium">{step.label}</span>
-                <span className="ml-auto text-[11px] font-semibold uppercase tracking-wide">
-                  {unlocked ? "Disponible" : "À débloquer"}
+
+                <span
+                  className="font-semibold"
+                  style={{ color: unlocked ? "#2D1020" : "#7A4F55" }}
+                >
+                  {step.label}
+                </span>
+
+                <span
+                  className="ml-auto text-[10px] font-bold uppercase tracking-wider"
+                  style={{ color: unlocked ? "#B8954A" : "#C9BBAF" }}
+                >
+                  {unlocked ? "Disponible ✓" : "À débloquer"}
                 </span>
               </Link>
             </li>
