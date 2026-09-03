@@ -35,7 +35,7 @@ export const LANDING_SITUATIONS = [
     label: "Intérêt mutuel",
     title: "Vous vous intéressez l’un à l’autre",
     body: "Vous souhaitez savoir où cette relation peut vous mener.",
-    accent: "from-[#5C1F28] to-[#8B2E3A]",
+    accent: "from-[#641F2B] to-[#8B2E3A]",
   },
   {
     id: "path",
@@ -109,7 +109,7 @@ export const LANDING_REPORT_PILLARS = {
     {
       title: "Vos forces",
       body: "Ce qui fonctionne déjà entre vous — une vraie ressource pour votre relation.",
-      accent: "from-[#5C1F28] to-[#8B2E3A]",
+      accent: "from-[#641F2B] to-[#8B2E3A]",
     },
     {
       title: "Vos convergences",

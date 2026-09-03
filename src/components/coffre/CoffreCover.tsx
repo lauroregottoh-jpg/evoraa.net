@@ -27,7 +27,7 @@ export function CoffreCover({ resource, locked, className }: Props) {
         showImage
           ? undefined
           : {
-              background: `linear-gradient(155deg, ${meta.tone} 0%, #1C1412 78%)`,
+              background: `linear-gradient(155deg, ${meta.tone} 0%, #2B2421 78%)`,
             }
       }
     >
@@ -51,11 +51,11 @@ export function CoffreCover({ resource, locked, className }: Props) {
             className="absolute inset-0 opacity-[0.14]"
             style={{
               backgroundImage:
-                "radial-gradient(circle at 20% 15%, rgba(248,244,238,0.45), transparent 45%), radial-gradient(circle at 85% 80%, rgba(184,149,74,0.35), transparent 40%)",
+                "radial-gradient(circle at 20% 15%, rgba(255,253,249,0.45), transparent 45%), radial-gradient(circle at 85% 80%, rgba(215,184,102,0.35), transparent 40%)",
             }}
           />
           <div
-            className="absolute inset-3 rounded-[0.85rem] border border-[#B8954A]/35"
+            className="absolute inset-3 rounded-[0.85rem] border border-[#D7B866]/35"
             aria-hidden
           />
           <div
@@ -80,8 +80,8 @@ export function CoffreCover({ resource, locked, className }: Props) {
         >
           {meta.label}
         </span>
-        <span className="inline-flex items-center gap-1 rounded-full border border-[#B8954A]/55 bg-gradient-to-r from-[#5C1F28] to-[#8B6914] px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-[#F8F4EE] shadow-sm">
-          <Crown className="h-3 w-3 text-[#F3D9A4]" />
+        <span className="inline-flex items-center gap-1 rounded-full border border-[#D7B866]/55 bg-gradient-to-r from-[#641F2B] to-[#A78335] px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-[#FFFDF9] shadow-sm">
+          <Crown className="h-3 w-3 text-[#E8D49A]" />
           Premium
         </span>
       </div>

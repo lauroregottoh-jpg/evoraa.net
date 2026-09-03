@@ -21,7 +21,7 @@ export const DEMO_COMPATIBILITIES: DemoCompatibilityCard[] = [
     city: "Lomé",
     score: 91,
     community: "Assemblées de Dieu",
-    gradient: "from-[#5C1F28] to-[#B8954A]",
+    gradient: "from-[#641F2B] to-[#D7B866]",
     highlight: "Foi · projet de foyer · communication",
   },
   {
@@ -31,7 +31,7 @@ export const DEMO_COMPATIBILITIES: DemoCompatibilityCard[] = [
     city: "Accra",
     score: 87,
     community: "Église protestante",
-    gradient: "from-[#1C3A2A] to-[#B8954A]",
+    gradient: "from-[#1C3A2A] to-[#D7B866]",
     highlight: "Valeurs · spiritualité · rythme de vie",
   },
   {
@@ -41,7 +41,7 @@ export const DEMO_COMPATIBILITIES: DemoCompatibilityCard[] = [
     city: "Abidjan",
     score: 84,
     community: "Communauté évangélique",
-    gradient: "from-[#2A1810] to-[#5C1F28]",
+    gradient: "from-[#2A1810] to-[#641F2B]",
     highlight: "Vision mariage · famille · respect",
   },
   {
@@ -51,7 +51,7 @@ export const DEMO_COMPATIBILITIES: DemoCompatibilityCard[] = [
     city: "Cotonou",
     score: 79,
     community: "Baptist",
-    gradient: "from-[#1C2840] to-[#B8954A]",
+    gradient: "from-[#1C2840] to-[#D7B866]",
     highlight: "Personnalités · priorités · fiabilité",
   },
 ]

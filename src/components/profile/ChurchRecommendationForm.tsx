@@ -96,8 +96,8 @@ export function ChurchRecommendationForm() {
             />
           </div>
 
-          <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#B8954A]/40 bg-[#F7F0E0]/40 px-4 py-6 text-center hover:bg-[#F7F0E0]/70">
-            <FileImage className="h-7 w-7 text-[#B8954A]" />
+          <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#D7B866]/40 bg-[#EFE5DA]/40 px-4 py-6 text-center hover:bg-[#EFE5DA]/70">
+            <FileImage className="h-7 w-7 text-[#D7B866]" />
             <span className="text-sm font-semibold text-foreground">
               {file ? file.name : "PDF ou image de la recommandation *"}
             </span>

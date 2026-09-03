@@ -138,13 +138,13 @@ export function SettingsForm({
         <Card
           className={`rounded-2xl border transition-all ${
             sameSexFriendship
-              ? "border-[#B8954A]/50 bg-[#B8954A]/10"
-              : "border-[#B8954A]/30 bg-background/90"
+              ? "border-[#D7B866]/50 bg-[#D7B866]/10"
+              : "border-[#D7B866]/30 bg-background/90"
           }`}
         >
           <CardHeader className="border-b border-border/40 pb-4">
             <CardTitle className="font-serif text-2xl text-foreground flex items-center gap-2">
-              <Badge className="bg-[#B8954A] text-[#1C1412]">Alliance</Badge>
+              <Badge className="bg-[#D7B866] text-[#2B2421]">Alliance</Badge>
               Amitiés même sexe
             </CardTitle>
             <CardDescription className="text-xs text-muted-foreground">
@@ -169,8 +169,8 @@ export function SettingsForm({
               variant={sameSexFriendship ? "default" : "outline"}
               className={`rounded-xl h-10 px-5 font-medium shrink-0 ${
                 sameSexFriendship
-                  ? "bg-[#5C1F28] hover:bg-[#5C1F28]/90 text-[#F8F4EE]"
-                  : "border-[#B8954A]/40"
+                  ? "bg-[#641F2B] hover:bg-[#641F2B]/90 text-[#FFFDF9]"
+                  : "border-[#D7B866]/40"
               }`}
             >
               {sameSexFriendship ? "Activé" : "Débloquer"}

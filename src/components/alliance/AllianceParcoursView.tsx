@@ -89,7 +89,7 @@ export function AllianceParcoursView({
         </div>
       </section>
 
-      <section className="rounded-[1.75rem] border-2 border-[#B8954A]/40 bg-gradient-to-br from-[#B8954A]/12 via-white to-card p-6 sm:p-8 space-y-6 shadow-elevated">
+      <section className="rounded-[1.75rem] border-2 border-[#D7B866]/40 bg-gradient-to-br from-[#D7B866]/12 via-white to-card p-6 sm:p-8 space-y-6 shadow-elevated">
         <div className="text-center space-y-1">
           <p className="text-[11px] font-bold uppercase tracking-widest text-accent">
             Schéma visuel
@@ -106,12 +106,12 @@ export function AllianceParcoursView({
         <div className="relative">
           <div
             aria-hidden
-            className="hidden sm:block absolute left-8 right-8 top-[2.15rem] h-1 rounded-full bg-gradient-to-r from-[#B8954A]/30 via-[#B8954A] to-[#B8954A]/30"
+            className="hidden sm:block absolute left-8 right-8 top-[2.15rem] h-1 rounded-full bg-gradient-to-r from-[#D7B866]/30 via-[#D7B866] to-[#D7B866]/30"
           />
           <ol className="grid sm:grid-cols-4 gap-4 relative z-10">
             {ALLIANCE_STAGES.map((stage, i) => (
               <li key={stage.id} className="flex flex-col items-center text-center gap-3">
-                <span className="flex h-16 w-16 items-center justify-center rounded-full border-4 border-[#B8954A] bg-white font-serif text-2xl font-bold text-[#7A5F28] shadow-md">
+                <span className="flex h-16 w-16 items-center justify-center rounded-full border-4 border-[#D7B866] bg-white font-serif text-2xl font-bold text-[#A78335] shadow-md">
                   {i + 1}
                 </span>
                 <div className="space-y-1 px-1">
@@ -128,7 +128,7 @@ export function AllianceParcoursView({
         </div>
 
         {/* Première mission — schéma */}
-        <div className="rounded-2xl border border-[#B8954A]/30 bg-white/90 p-5 space-y-4">
+        <div className="rounded-2xl border border-[#D7B866]/30 bg-white/90 p-5 space-y-4">
           <div className="flex items-center justify-between gap-2">
             <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
               Première mission · schéma
@@ -148,7 +148,7 @@ export function AllianceParcoursView({
                         "flex h-8 w-8 items-center justify-center rounded-full border-2 text-xs font-bold",
                         done
                           ? "border-emerald-500 bg-emerald-500 text-white"
-                          : "border-[#B8954A] bg-[#B8954A]/15 text-[#7A5F28]"
+                          : "border-[#D7B866] bg-[#D7B866]/15 text-[#A78335]"
                       )}
                     >
                       {done ? <Check className="h-3.5 w-3.5" /> : i + 1}
@@ -157,7 +157,7 @@ export function AllianceParcoursView({
                       <span
                         className={cn(
                           "w-0.5 flex-1 min-h-[1.25rem]",
-                          done ? "bg-emerald-400" : "bg-[#B8954A]/35"
+                          done ? "bg-emerald-400" : "bg-[#D7B866]/35"
                         )}
                       />
                     ) : null}
@@ -168,7 +168,7 @@ export function AllianceParcoursView({
                       "flex-1 mb-2 rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors",
                       done
                         ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-800"
-                        : "border-border hover:border-[#B8954A]/50 bg-card"
+                        : "border-border hover:border-[#D7B866]/50 bg-card"
                     )}
                   >
                     {m.title}

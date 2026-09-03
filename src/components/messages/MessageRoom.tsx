@@ -8,10 +8,11 @@ import { BenevolenceShield, checkBenevolence } from "@/components/messages/Benev
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, Send, Sparkles, ShieldCheck, Flag } from "lucide-react";
+import { ArrowLeft, Send, Sparkles, Flag } from "lucide-react";
 import {
   sendMessageAction,
   sendVoiceNoteAction,
+  deleteOwnMessageAction,
   loadOlderMessagesAction,
   getVoicePlaybackUrlAction,
   type ChatMessageDTO,
@@ -29,6 +30,12 @@ function formatMsgTime(iso: string) {
   });
 }
 
+const DELETE_WINDOW_MS = 30_000;
+
+function canDeleteMessage(createdAt: string) {
+  return Date.now() - new Date(createdAt).getTime() <= DELETE_WINDOW_MS;
+}
+
 export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }) {
   const router = useRouter();
   const [room, setRoom] = React.useState(initialRoom);
@@ -42,7 +49,13 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
     Boolean(initialRoom.hasMoreOlder)
   );
   const [loadingOlder, setLoadingOlder] = React.useState(false);
+  const [deleteTick, setDeleteTick] = React.useState(0);
   const bottomRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const id = window.setInterval(() => setDeleteTick((t) => t + 1), 1000);
+    return () => window.clearInterval(id);
+  }, []);
 
   React.useEffect(() => {
     setRoom(initialRoom);
@@ -207,6 +220,21 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
     return null
   }
 
+  const deleteMessage = async (messageId: string) => {
+    setError("")
+    const res = await deleteOwnMessageAction(room.id, messageId)
+    if (res.error) {
+      setError(res.error)
+      return
+    }
+    setMessages((prev) => prev.filter((m) => m.id !== messageId))
+    setRoom((prev) => ({
+      ...prev,
+      messageCount: Math.max(0, prev.messageCount - 1),
+    }))
+    router.refresh()
+  }
+
   const handleSendTrigger = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim()) return
@@ -224,14 +252,9 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
       (room.bonusMessagesRemaining || 0) +
       (room.testCreditsRemaining || 0)
   )
-  const standardLeft = Math.max(0, room.freeLimit - room.messageCount)
-  const extra =
-    (room.bonusMessagesRemaining || 0) + (room.testCreditsRemaining || 0)
   const messageQuotaReached = remaining <= 0
   const remainingLabel =
-    extra > 0
-      ? `${standardLeft} + ${extra} extra`
-      : `${remaining} msg restants`
+    remaining <= 0 ? "0 msg restants" : `${remaining} msg restants`
 
   return (
     <div className="space-y-6 py-4">
@@ -255,11 +278,8 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
                   </span>
                 )}
               </div>
-              <span className="text-[11px] text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                <ShieldCheck className="h-3 w-3" />{" "}
-                {room.voiceNotesEnabled
-                  ? `Espace modéré · vocaux · ${remainingLabel}`
-                  : `Espace modéré · ${remainingLabel}`}
+              <span className="text-[11px] text-muted-foreground">
+                {remainingLabel}
               </span>
             </div>
           </div>
@@ -326,7 +346,10 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
             Premier message : posez une question respectueuse sur la foi, le foyer ou le rythme de vie.
           </p>
         )}
-        {messages.map((m) => (
+        {messages.map((m) => {
+          const showDelete = m.isMine && canDeleteMessage(m.createdAt);
+
+          return (
           <div
             key={m.id}
             className={`flex flex-col ${m.isMine ? "items-end" : "items-start"}`}
@@ -349,11 +372,22 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
                 <p>{m.text}</p>
               )}
             </div>
-            <span className="text-[10px] text-muted-foreground mt-1 px-1 font-sans">
-              {formatMsgTime(m.createdAt)}
-            </span>
+            <div className="flex items-center gap-2 mt-1 px-1">
+              <span className="text-[10px] text-muted-foreground font-sans">
+                {formatMsgTime(m.createdAt)}
+              </span>
+              {showDelete ? (
+                <button
+                  type="button"
+                  onClick={() => void deleteMessage(m.id)}
+                  className="text-[10px] font-medium text-destructive hover:underline"
+                >
+                  Supprimer
+                </button>
+              ) : null}
+            </div>
           </div>
-        ))}
+        )})}
         <div ref={bottomRef} />
       </Card>
 
@@ -374,7 +408,7 @@ export function MessageRoom({ room: initialRoom }: { room: ConversationRoomDTO }
       <form onSubmit={handleSendTrigger} className="flex items-center gap-3 pt-2">
         <Input
           type="text"
-          placeholder={`Écrire un message respectueux à ${room.partnerName}...`}
+          placeholder="Écrire un message…"
           value={input}
           onChange={(e) => {
             setInput(e.target.value)

@@ -143,7 +143,7 @@ export function CoupleDossierClient({ demo = false }: Props) {
       <CoupleShell activeHref="/couple/dossier">
         <div className="max-w-2xl space-y-8 pb-16">
           {demo ? (
-            <p className="text-xs font-semibold text-[#B8954A]">
+            <p className="text-xs font-semibold text-[#D7B866]">
               Aperçu démo — Daniel & Naomi · forme du dossier livrable
             </p>
           ) : null}
@@ -172,12 +172,12 @@ export function CoupleDossierClient({ demo = false }: Props) {
                 {pieces.slice(0, 4).map((p) => (
                   <li
                     key={p.id}
-                    className="flex gap-4 rounded-2xl border border-[#1C1412]/10 bg-[#F8F4EE]/80 p-5 opacity-80"
+                    className="flex gap-4 rounded-2xl border border-[#2B2421]/10 bg-[#FFFDF9]/80 p-5 opacity-80"
                   >
-                    <Lock className="h-5 w-5 text-[#5C1F28]/50" />
+                    <Lock className="h-5 w-5 text-[#641F2B]/50" />
                     <div>
                       <p className="font-serif text-lg font-bold">{p.title}</p>
-                      <p className="text-sm text-[#1C1412]/60">{p.description}</p>
+                      <p className="text-sm text-[#2B2421]/60">{p.description}</p>
                     </div>
                   </li>
                 ))}
@@ -204,31 +204,31 @@ export function CoupleDossierClient({ demo = false }: Props) {
                   className={cn(
                     "flex gap-4 rounded-2xl border p-5 transition-colors",
                     locked
-                      ? "border-[#1C1412]/10 bg-[#F8F4EE]/80 opacity-80"
-                      : "border-[#B8954A]/30 bg-white hover:border-[#B8954A]/55"
+                      ? "border-[#2B2421]/10 bg-[#FFFDF9]/80 opacity-80"
+                      : "border-[#D7B866]/30 bg-white hover:border-[#D7B866]/55"
                   )}
                 >
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#5C1F28]/10 text-[#5C1F28]">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#641F2B]/10 text-[#641F2B]">
                     {locked ? <Lock className="h-5 w-5" /> : p.icon}
                   </div>
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
                       <p className="font-serif text-lg font-bold">{p.title}</p>
                       {p.premiumPlus ? (
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C1F28] bg-[#5C1F28]/10 px-2 py-0.5 rounded-full">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#641F2B] bg-[#641F2B]/10 px-2 py-0.5 rounded-full">
                           Premium Plus
                         </span>
                       ) : null}
                     </div>
-                    <p className="mt-1 text-sm text-[#1C1412]/70 leading-relaxed">
+                    <p className="mt-1 text-sm text-[#2B2421]/70 leading-relaxed">
                       {p.description}
                     </p>
                     {locked ? (
-                      <p className="mt-2 text-xs text-[#1C1412]/50">
+                      <p className="mt-2 text-xs text-[#2B2421]/50">
                         Disponible après questionnaires + génération du rapport
                       </p>
                     ) : (
-                      <p className="mt-2 text-xs font-semibold text-[#5C1F28]">
+                      <p className="mt-2 text-xs font-semibold text-[#641F2B]">
                         Ouvrir →
                       </p>
                     )}
@@ -253,7 +253,7 @@ export function CoupleDossierClient({ demo = false }: Props) {
             <div className="flex flex-wrap gap-2">
               <Link
                 href="/couple/questionnaire"
-                className="inline-flex h-11 items-center rounded-xl bg-[#5C1F28] px-5 text-sm font-semibold text-[#FBF9F6]"
+                className="inline-flex h-11 items-center rounded-xl bg-[#641F2B] px-5 text-sm font-semibold text-[#FCFAF6]"
               >
                 Continuer le questionnaire
               </Link>
@@ -267,8 +267,8 @@ export function CoupleDossierClient({ demo = false }: Props) {
           ) : null}
 
           {demo ? (
-            <p className="text-sm text-[#1C1412]/60">
-              <Link href="/couple/rapport/demo" className="font-semibold text-[#5C1F28] underline">
+            <p className="text-sm text-[#2B2421]/60">
+              <Link href="/couple/rapport/demo" className="font-semibold text-[#641F2B] underline">
                 Voir le rapport démo →
               </Link>
             </p>

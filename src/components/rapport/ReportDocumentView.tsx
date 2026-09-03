@@ -82,14 +82,14 @@ export function ReportDocumentView({
         <button
           type="button"
           onClick={() => window.print()}
-          className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#B8954A] px-4 text-xs font-bold text-[#1C1412] shadow-sm hover:brightness-105 transition"
+          className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#D7B866] px-4 text-xs font-bold text-[#2B2421] shadow-sm hover:brightness-105 transition"
         >
           <Printer className="h-3.5 w-3.5" />
           Imprimer
         </button>
         <a
           href="/rapport/telecharger?dl=1"
-          className="inline-flex h-10 items-center gap-2 rounded-xl border border-[#B8954A]/45 bg-white px-4 text-xs font-bold text-[#7A5F28] hover:bg-[#B8954A]/5 transition"
+          className="inline-flex h-10 items-center gap-2 rounded-xl border border-[#D7B866]/45 bg-white px-4 text-xs font-bold text-[#A78335] hover:bg-[#D7B866]/5 transition"
         >
           <Download className="h-3.5 w-3.5" />
           Télécharger
@@ -98,7 +98,7 @@ export function ReportDocumentView({
 
       {/* ——— COUVERTURE PREMIUM ——— */}
       <OrnamentFrame>
-        <section className="rapport-reveal relative overflow-hidden rounded-[1.75rem] border-2 border-[#B8954A]/55 bg-gradient-to-br from-[#1C1412] via-[#2A1810] to-[#5C1F28] text-[#F8F4EE] p-8 sm:p-12 shadow-elevated print:border print:shadow-none">
+        <section className="rapport-reveal relative overflow-hidden rounded-[1.75rem] border-2 border-[#D7B866]/55 bg-gradient-to-br from-[#2B2421] via-[#2A1810] to-[#641F2B] text-[#FFFDF9] p-8 sm:p-12 shadow-elevated print:border print:shadow-none">
           <div
             aria-hidden
             className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-50 print:hidden"
@@ -110,7 +110,7 @@ export function ReportDocumentView({
 
           <div className="relative z-10 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-8">
             <div className="space-y-3 min-w-0">
-              <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#F3D9A4]">
+              <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#E8D49A]">
                 KELIAA ALLIANCE™
               </p>
               <h1 className="font-serif text-3xl sm:text-5xl font-bold leading-tight">
@@ -120,12 +120,12 @@ export function ReportDocumentView({
                     : "Rapport Personnalisé"}
                 </span>
               </h1>
-              <p className="text-base text-[#F3D9A4]/90">
+              <p className="text-base text-[#E8D49A]/90">
                 Préparation au Mariage
               </p>
               <div className="pt-1">
                 {isAlliance ? (
-                  <span className="rapport-cover-seal inline-flex items-center gap-1.5 rounded-full border border-[#B8954A]/50 bg-[#B8954A]/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#F3D9A4]">
+                  <span className="rapport-cover-seal inline-flex items-center gap-1.5 rounded-full border border-[#D7B866]/50 bg-[#D7B866]/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#E8D49A]">
                     <Crown className="h-3 w-3" /> {living.base.offerLabel}
                   </span>
                 ) : (
@@ -159,7 +159,7 @@ export function ReportDocumentView({
           </div>
 
           <div className="relative z-10 mt-8 rounded-2xl border border-white/15 bg-black/25 backdrop-blur-sm p-5 space-y-3">
-            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#E8D49A]">
               {living.confidentialLabel}
             </p>
             <dl className="grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm">
@@ -174,13 +174,13 @@ export function ReportDocumentView({
             <div className="pt-2">
               <div className="flex justify-between text-[10px] text-white/50 mb-1.5">
                 <span>Progression du document</span>
-                <span className="text-[#F3D9A4] font-bold">
+                <span className="text-[#E8D49A] font-bold">
                   {living.completenessPercent}%
                 </span>
               </div>
               <div className="h-2 rounded-full bg-white/10 overflow-hidden">
                 <div
-                  className="rapport-bar-fill h-full rounded-full bg-gradient-to-r from-[#8A6A2E] via-[#B8954A] to-[#F3D9A4]"
+                  className="rapport-bar-fill h-full rounded-full bg-gradient-to-r from-[#8A6A2E] via-[#D7B866] to-[#E8D49A]"
                   style={{ width: `${living.completenessPercent}%` }}
                 />
               </div>
@@ -207,7 +207,7 @@ export function ReportDocumentView({
       {!complete && living.statusBlock ? (
         <DocPage number={++page} title="Où en êtes-vous aujourd’hui ?">
           <div className="grid sm:grid-cols-[140px_1fr] gap-6 items-start mb-5">
-            <div className="mx-auto sm:mx-0 rounded-2xl border border-[#B8954A]/25 bg-white p-2 shadow-sm">
+            <div className="mx-auto sm:mx-0 rounded-2xl border border-[#D7B866]/25 bg-white p-2 shadow-sm">
               <ScoreRing
                 value={living.completenessPercent}
                 label="En cours"
@@ -226,7 +226,7 @@ export function ReportDocumentView({
                     key={item}
                     className="flex gap-2 text-sm text-foreground/85"
                   >
-                    <span className="text-[#B8954A] font-bold">✓</span>
+                    <span className="text-[#D7B866] font-bold">✓</span>
                     {item}
                   </li>
                 ))}
@@ -239,7 +239,7 @@ export function ReportDocumentView({
                     key={item}
                     className="flex gap-2 text-sm text-muted-foreground"
                   >
-                    <span className="text-[#B8954A]/60">○</span>
+                    <span className="text-[#D7B866]/60">○</span>
                     {item}
                   </li>
                 ))}
@@ -257,15 +257,15 @@ export function ReportDocumentView({
                 Niveau de préparation actuel
               </p>
               <PrepStars score={living.glance.score} />
-              <p className="font-serif text-4xl font-bold text-[#1C1412]">
+              <p className="font-serif text-4xl font-bold text-[#2B2421]">
                 {living.glance.score}{" "}
-                <span className="text-lg text-[#B8954A]">/ 100</span>
+                <span className="text-lg text-[#D7B866]">/ 100</span>
               </p>
               <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                 {living.glance.narrative}
               </p>
             </div>
-            <div className="mx-auto rounded-2xl border border-[#B8954A]/30 bg-white p-3 shadow-sm">
+            <div className="mx-auto rounded-2xl border border-[#D7B866]/30 bg-white p-3 shadow-sm">
               <ScoreRing
                 value={living.glance.score}
                 label="Préparation"
@@ -291,7 +291,7 @@ export function ReportDocumentView({
                     className="rapport-reveal flex gap-3 items-start"
                     style={{ animationDelay: `${i * 90}ms` }}
                   >
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#B8954A]/15 text-xs font-bold text-[#7A5F28] border border-[#B8954A]/30">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#D7B866]/15 text-xs font-bold text-[#A78335] border border-[#D7B866]/30">
                       {i + 1}
                     </span>
                     <span className="text-sm text-foreground/90 pt-1">{p}</span>
@@ -316,7 +316,7 @@ export function ReportDocumentView({
       </DocPage>
 
       <DocPage number={++page} title="Votre portrait relationnel">
-        <div className="rounded-2xl border border-[#B8954A]/20 bg-[#B8954A]/[0.04] p-5 sm:p-6">
+        <div className="rounded-2xl border border-[#D7B866]/20 bg-[#D7B866]/[0.04] p-5 sm:p-6">
           <p className="text-sm text-foreground/90 leading-relaxed whitespace-pre-line">
             {portrait?.body}
           </p>
@@ -330,7 +330,7 @@ export function ReportDocumentView({
           </p>
         ) : null}
         {forceCards.length > 0 ? (
-          <div className="mb-6 rounded-2xl border border-[#B8954A]/25 bg-white p-4">
+          <div className="mb-6 rounded-2xl border border-[#D7B866]/25 bg-white p-4">
             <p className="text-[10px] font-bold uppercase tracking-widest text-accent mb-3">
               Lecture graphique
             </p>
@@ -369,21 +369,21 @@ export function ReportDocumentView({
 
       {!complete && living.nextStep ? (
         <DocPage number={++page} title="Votre prochaine étape">
-          <div className="rounded-2xl border-2 border-[#B8954A]/40 bg-gradient-to-br from-[#B8954A]/15 via-white to-[#F8F4EE] p-6 space-y-4">
+          <div className="rounded-2xl border-2 border-[#D7B866]/40 bg-gradient-to-br from-[#D7B866]/15 via-white to-[#FFFDF9] p-6 space-y-4">
             <p className="text-sm text-foreground/90 leading-relaxed">
               {living.nextStep.completenessNote}
             </p>
             <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
               Évaluation recommandée
             </p>
-            <h3 className="font-serif text-3xl font-bold text-[#1C1412]">
+            <h3 className="font-serif text-3xl font-bold text-[#2B2421]">
               {living.nextStep.title}
             </h3>
             <ul className="grid sm:grid-cols-2 gap-2">
               {living.nextStep.why.map((w) => (
                 <li
                   key={w}
-                  className="rounded-xl border border-[#B8954A]/20 bg-white/80 px-3 py-2 text-sm text-muted-foreground"
+                  className="rounded-xl border border-[#D7B866]/20 bg-white/80 px-3 py-2 text-sm text-muted-foreground"
                 >
                   · {w}
                 </li>
@@ -447,10 +447,10 @@ export function ReportDocumentView({
               {ch.sections?.map((s) => (
                 <div
                   key={s.heading}
-                  className="rounded-xl border border-[#B8954A]/15 bg-white/70 p-4 space-y-1.5"
+                  className="rounded-xl border border-[#D7B866]/15 bg-white/70 p-4 space-y-1.5"
                 >
                   <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#B8954A]" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#D7B866]" />
                     {s.heading}
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
@@ -487,10 +487,10 @@ export function ReportDocumentView({
           {planCards.map((card, i) => (
             <div
               key={card.id}
-              className="rapport-reveal relative overflow-hidden rounded-2xl border border-[#B8954A]/35 bg-gradient-to-br from-[#B8954A]/12 via-white to-white p-5 space-y-2"
+              className="rapport-reveal relative overflow-hidden rounded-2xl border border-[#D7B866]/35 bg-gradient-to-br from-[#D7B866]/12 via-white to-white p-5 space-y-2"
               style={{ animationDelay: `${i * 100}ms` }}
             >
-              <div className="absolute -right-2 -top-2 font-serif text-6xl font-bold text-[#B8954A]/10 select-none">
+              <div className="absolute -right-2 -top-2 font-serif text-6xl font-bold text-[#D7B866]/10 select-none">
                 {i + 1}
               </div>
               <p className="text-[10px] font-bold uppercase tracking-widest text-accent relative">
@@ -523,7 +523,7 @@ export function ReportDocumentView({
           {(ressources?.bullets ?? []).map((b) => (
             <li
               key={b}
-              className="rounded-xl border border-[#B8954A]/20 bg-[#B8954A]/[0.05] px-3 py-2.5 text-sm text-foreground/90"
+              className="rounded-xl border border-[#D7B866]/20 bg-[#D7B866]/[0.05] px-3 py-2.5 text-sm text-foreground/90"
             >
               · {b}
             </li>
@@ -532,7 +532,7 @@ export function ReportDocumentView({
         <div className="flex flex-wrap gap-2 print:hidden">
           <Link
             href="/coaching"
-            className="inline-flex h-10 items-center rounded-xl bg-[#B8954A] px-4 text-xs font-bold text-[#1C1412]"
+            className="inline-flex h-10 items-center rounded-xl bg-[#D7B866] px-4 text-xs font-bold text-[#2B2421]"
           >
             Réserver une séance de coaching
           </Link>
@@ -547,7 +547,7 @@ export function ReportDocumentView({
 
       <DocPage number={++page} title={evolution?.title || "Progression"}>
         <div className="mb-4 flex justify-center sm:justify-start">
-          <div className="rounded-2xl border border-[#B8954A]/25 bg-white p-3 shadow-sm">
+          <div className="rounded-2xl border border-[#D7B866]/25 bg-white p-3 shadow-sm">
             <ScoreRing
               value={living.completenessPercent}
               label="Progression Alliance"
@@ -564,7 +564,7 @@ export function ReportDocumentView({
               <Link
                 key={a.href + a.label}
                 href={a.href}
-                className="flex items-center justify-between rounded-xl border border-[#B8954A]/30 bg-[#B8954A]/10 px-4 py-3 text-sm font-semibold text-[#7A5F28] hover:bg-[#B8954A]/18 transition"
+                className="flex items-center justify-between rounded-xl border border-[#D7B866]/30 bg-[#D7B866]/10 px-4 py-3 text-sm font-semibold text-[#A78335] hover:bg-[#D7B866]/18 transition"
               >
                 {a.label}
                 <ArrowRight className="h-4 w-4" />
@@ -579,7 +579,7 @@ export function ReportDocumentView({
           {conclusion?.body}
         </p>
         {conclusion?.bullets?.length ? (
-          <div className="mt-6 rounded-2xl border border-[#B8954A]/35 bg-gradient-to-br from-[#B8954A]/10 to-white p-5 space-y-2">
+          <div className="mt-6 rounded-2xl border border-[#D7B866]/35 bg-gradient-to-br from-[#D7B866]/10 to-white p-5 space-y-2">
             <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
               Résumé de votre progression
             </p>
@@ -602,7 +602,7 @@ export function ReportDocumentView({
           <div className="flex flex-wrap gap-2">
             <a
               href="/rapport/telecharger?dl=1"
-              className="inline-flex h-10 items-center gap-2 rounded-xl border border-[#B8954A]/40 bg-white px-4 text-xs font-bold"
+              className="inline-flex h-10 items-center gap-2 rounded-xl border border-[#D7B866]/40 bg-white px-4 text-xs font-bold"
             >
               <Download className="h-3.5 w-3.5" /> Télécharger
             </a>
@@ -625,7 +625,7 @@ function MetaRow({ label, value }: { label: string; value: string }) {
       <dt className="text-[10px] uppercase tracking-wider text-white/45">
         {label}
       </dt>
-      <dd className="font-medium text-[#F3D9A4]">{value}</dd>
+      <dd className="font-medium text-[#E8D49A]">{value}</dd>
     </div>
   )
 }
@@ -644,10 +644,10 @@ function VisualPanel({
       className={cn(
         "rounded-2xl border p-4 space-y-3",
         tone === "accent"
-          ? "border-[#B8954A]/35 bg-gradient-to-br from-[#B8954A]/10 to-white"
+          ? "border-[#D7B866]/35 bg-gradient-to-br from-[#D7B866]/10 to-white"
           : tone === "muted"
             ? "border-border/70 bg-secondary/30"
-            : "border-[#B8954A]/25 bg-white"
+            : "border-[#D7B866]/25 bg-white"
       )}
     >
       <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
@@ -662,9 +662,9 @@ function PartDivider({ title }: { title: string }) {
   return (
     <div className="rapport-reveal pt-6 pb-2 text-center space-y-3">
       <div className="flex items-center justify-center gap-3">
-        <span className="h-px w-10 bg-gradient-to-r from-transparent to-[#B8954A]" />
-        <span className="h-2 w-2 rotate-45 border border-[#B8954A] bg-[#F3D9A4]/40" />
-        <span className="h-px w-10 bg-gradient-to-l from-transparent to-[#B8954A]" />
+        <span className="h-px w-10 bg-gradient-to-r from-transparent to-[#D7B866]" />
+        <span className="h-2 w-2 rotate-45 border border-[#D7B866] bg-[#E8D49A]/40" />
+        <span className="h-px w-10 bg-gradient-to-l from-transparent to-[#D7B866]" />
       </div>
       <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-accent">
         KELIAA Alliance™
@@ -694,12 +694,12 @@ function DocPage({
           "rapport-reveal rapport-page-premium rounded-[1.5rem] border p-6 sm:p-8 space-y-4 print:shadow-none print:break-inside-avoid",
           locked
             ? "locked border-dashed border-border/80"
-            : "border-[#B8954A]/35"
+            : "border-[#D7B866]/35"
         )}
       >
-        <header className="space-y-1 border-b border-[#B8954A]/20 pb-4">
+        <header className="space-y-1 border-b border-[#D7B866]/20 pb-4">
           <div className="flex items-center gap-2">
-            <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-md bg-[#B8954A]/15 px-1.5 text-[10px] font-bold text-[#7A5F28]">
+            <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-md bg-[#D7B866]/15 px-1.5 text-[10px] font-bold text-[#A78335]">
               {number}
             </span>
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent">
@@ -729,7 +729,7 @@ function NarrativeBlock({
       className={cn(
         "rapport-reveal rounded-2xl border p-5 space-y-2",
         kind === "force"
-          ? "border-[#B8954A]/35 bg-gradient-to-br from-[#B8954A]/10 via-white to-white"
+          ? "border-[#D7B866]/35 bg-gradient-to-br from-[#D7B866]/10 via-white to-white"
           : "border-primary/15 bg-primary/[0.03]"
       )}
     >
@@ -739,7 +739,7 @@ function NarrativeBlock({
             className={cn(
               "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold",
               kind === "force"
-                ? "bg-[#B8954A] text-[#1C1412]"
+                ? "bg-[#D7B866] text-[#2B2421]"
                 : "bg-primary/15 text-primary"
             )}
           >
@@ -765,7 +765,7 @@ function NarrativeBlock({
 function LockedCta({ hint, href }: { hint?: string; href?: string }) {
   const target = href || "/assessments"
   return (
-    <div className="rounded-xl border border-dashed border-[#B8954A]/40 bg-white/80 p-4 space-y-3 print:hidden">
+    <div className="rounded-xl border border-dashed border-[#D7B866]/40 bg-white/80 p-4 space-y-3 print:hidden">
       <p className="text-sm font-medium text-foreground/90">
         {hint ||
           "Cette analyse n’est pas encore disponible. Réalisez l’évaluation rattachée pour l’enrichir automatiquement."}

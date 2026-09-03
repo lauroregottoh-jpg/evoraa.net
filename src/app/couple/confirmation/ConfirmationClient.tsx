@@ -45,22 +45,22 @@ export default function CoupleConfirmationClient() {
       <div className="max-w-2xl mx-auto space-y-8 py-6 px-1">
         <CoupleUnlockReveal onContinueHref="/couple/onboarding" />
 
-        <div className="space-y-4 rounded-2xl border border-[#1C1412]/10 bg-white p-5 sm:p-6">
-          <h2 className="font-serif text-xl font-bold text-[#1C1412]">
+        <div className="space-y-4 rounded-2xl border border-[#2B2421]/10 bg-white p-5 sm:p-6">
+          <h2 className="font-serif text-xl font-bold text-[#2B2421]">
             Partagez l’accès — {COUPLE_BRAND}
           </h2>
-          <p className="text-sm text-[#1C1412]/80 leading-relaxed">
+          <p className="text-sm text-[#2B2421]/80 leading-relaxed">
             Envoyez le lien et le code à l’autre. S’il/elle n’a pas de compte, le
             lien demande l’inscription. Après inscription, un nouveau clic ouvre
             l’espace. S’il/elle est déjà inscrit(e), on lui demande le code.
           </p>
 
           {inviteCode ? (
-            <div className="rounded-xl border border-[#B8954A]/40 bg-[#F8F4EE] p-4 space-y-1">
+            <div className="rounded-xl border border-[#D7B866]/40 bg-[#FFFDF9] p-4 space-y-1">
               <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                 Code à communiquer
               </p>
-              <p className="font-mono text-2xl font-bold tracking-widest text-[#5C1F28]">
+              <p className="font-mono text-2xl font-bold tracking-widest text-[#641F2B]">
                 {inviteCode}
               </p>
               <button
@@ -102,7 +102,7 @@ export default function CoupleConfirmationClient() {
           </div>
 
           {tokenPath && !inviteCode ? (
-            <p className="text-xs rounded-xl border bg-[#F8F4EE] px-3 py-2 break-all">
+            <p className="text-xs rounded-xl border bg-[#FFFDF9] px-3 py-2 break-all">
               Lien d’invitation : <span className="font-mono">{tokenPath}</span>
             </p>
           ) : null}
@@ -118,13 +118,13 @@ export default function CoupleConfirmationClient() {
             </a>
             <Link
               href="/couple/espace"
-              className="inline-flex h-11 items-center rounded-xl bg-[#5C1F28] text-white px-5 text-sm font-semibold"
+              className="inline-flex h-11 items-center rounded-xl bg-[#641F2B] text-white px-5 text-sm font-semibold"
             >
               Ouvrir notre espace
             </Link>
             <Link
               href="/couple/inviter"
-              className="inline-flex h-11 items-center rounded-xl border border-[#1C1412]/15 px-5 text-sm font-semibold"
+              className="inline-flex h-11 items-center rounded-xl border border-[#2B2421]/15 px-5 text-sm font-semibold"
             >
               Voir / régénérer
             </Link>

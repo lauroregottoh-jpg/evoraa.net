@@ -48,12 +48,12 @@ export function DemoMessageRoom({ thread }: { thread: DemoMatchThread }) {
   }
 
   return (
-    <div className="mx-auto flex min-h-[70vh] max-w-2xl flex-col overflow-hidden rounded-[1.5rem] border border-[#B8954A]/30 bg-[#FFFBF5] shadow-elevated">
+    <div className="mx-auto flex min-h-[70vh] max-w-2xl flex-col overflow-hidden rounded-[1.5rem] border border-[#D7B866]/30 bg-[#FFFBF5] shadow-elevated">
       {/* Header */}
-      <header className="flex items-center gap-3 border-b border-[#B8954A]/20 bg-white/80 px-4 py-3 backdrop-blur-sm">
+      <header className="flex items-center gap-3 border-b border-[#D7B866]/20 bg-white/80 px-4 py-3 backdrop-blur-sm">
         <Link
           href="/messages"
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-[#B8954A]/25 text-[#5C1F28] hover:bg-[#F7F0E0]"
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-[#D7B866]/25 text-[#641F2B] hover:bg-[#EFE5DA]"
           aria-label="Retour"
         >
           <ArrowLeft className="h-4 w-4" />
@@ -68,29 +68,29 @@ export function DemoMessageRoom({ thread }: { thread: DemoMatchThread }) {
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <h1 className="truncate font-serif text-lg font-bold text-[#1C1412]">
+            <h1 className="truncate font-serif text-lg font-bold text-[#2B2421]">
               {thread.partnerFirstName}
             </h1>
             {thread.verified ? (
-              <Crown className="h-3.5 w-3.5 shrink-0 text-[#B8954A]" />
+              <Crown className="h-3.5 w-3.5 shrink-0 text-[#D7B866]" />
             ) : null}
             <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-600/15 px-1.5 py-0.5 text-[10px] font-bold text-emerald-700">
               <Heart className="h-2.5 w-2.5 fill-current" /> {thread.score}%
             </span>
           </div>
-          <p className="flex items-center gap-1 text-[11px] text-[#1C1412]/55">
+          <p className="flex items-center gap-1 text-[11px] text-[#2B2421]/55">
             <MapPin className="h-3 w-3" />
             {thread.city} · {thread.community}
           </p>
         </div>
-        <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-[#B8954A]/30 bg-[#F7F0E0] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-[#8B6914]">
+        <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-[#D7B866]/30 bg-[#EFE5DA] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-[#A78335]">
           <Sparkles className="h-3 w-3" /> Aperçu
         </span>
       </header>
 
       {/* Messages */}
       <div className="flex-1 space-y-3 overflow-y-auto px-4 py-5">
-        <p className="demo-msg-in mx-auto mb-4 max-w-sm rounded-2xl border border-[#B8954A]/20 bg-white/70 px-3 py-2 text-center text-[11px] text-[#1C1412]/55">
+        <p className="demo-msg-in mx-auto mb-4 max-w-sm rounded-2xl border border-[#D7B866]/20 bg-white/70 px-3 py-2 text-center text-[11px] text-[#2B2421]/55">
           {thread.matchedLabel} · Conversation simulée pour prévisualiser
           l’expérience KELIAA
         </p>
@@ -108,15 +108,15 @@ export function DemoMessageRoom({ thread }: { thread: DemoMatchThread }) {
               className={cn(
                 "max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm",
                 m.fromMe
-                  ? "rounded-br-md bg-[#5C1F28] text-[#F8F4EE]"
-                  : "rounded-bl-md border border-[#B8954A]/20 bg-white text-[#1C1412]"
+                  ? "rounded-br-md bg-[#641F2B] text-[#FFFDF9]"
+                  : "rounded-bl-md border border-[#D7B866]/20 bg-white text-[#2B2421]"
               )}
             >
               <p>{m.text}</p>
               <p
                 className={cn(
                   "mt-1 text-[10px]",
-                  m.fromMe ? "text-white/55" : "text-[#1C1412]/40"
+                  m.fromMe ? "text-white/55" : "text-[#2B2421]/40"
                 )}
               >
                 {formatTime(m.at)}
@@ -128,7 +128,7 @@ export function DemoMessageRoom({ thread }: { thread: DemoMatchThread }) {
       </div>
 
       {/* Composer */}
-      <div className="border-t border-[#B8954A]/20 bg-white/90 p-3">
+      <div className="border-t border-[#D7B866]/20 bg-white/90 p-3">
         <div className="flex items-center gap-2">
           <input
             value={draft}
@@ -140,12 +140,12 @@ export function DemoMessageRoom({ thread }: { thread: DemoMatchThread }) {
               }
             }}
             placeholder={`Écrire à ${thread.partnerFirstName}…`}
-            className="h-11 flex-1 rounded-xl border border-[#B8954A]/30 bg-[#FFFBF5] px-3 text-sm outline-none focus:border-[#B8954A]"
+            className="h-11 flex-1 rounded-xl border border-[#D7B866]/30 bg-[#FFFBF5] px-3 text-sm outline-none focus:border-[#D7B866]"
           />
           <button
             type="button"
             onClick={send}
-            className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#5C1F28] text-[#F8F4EE] hover:bg-[#5C1F28]/90"
+            className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#641F2B] text-[#FFFDF9] hover:bg-[#641F2B]/90"
             aria-label="Envoyer"
           >
             <Send className="h-4 w-4" />

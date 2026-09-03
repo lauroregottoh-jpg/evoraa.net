@@ -383,7 +383,15 @@ export function rankMatches(
   return candidates
     .map((candidate) => scorePair(viewer, candidate))
     .filter((match): match is ScoredMatch => match !== null)
-    .sort((a, b) => b.score - a.score)
+    .sort((a, b) => {
+      // Profils avec tests complétés en priorité
+      if (a.basis !== b.basis) {
+        return a.basis === "tests" ? -1 : 1
+      }
+      const testsDelta = b.partnerTestsCount - a.partnerTestsCount
+      if (testsDelta !== 0) return testsDelta
+      return b.score - a.score
+    })
     .slice(0, limit)
 }
 

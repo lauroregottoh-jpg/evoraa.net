@@ -373,13 +373,13 @@ export default function Home() {
       <TestimonialsCarousel />
 
       {/* Imaginez votre histoire */}
-      <section className="py-28 px-6 sm:px-12 relative overflow-hidden bg-[#1C1412] text-white">
+      <section className="py-28 px-6 sm:px-12 relative overflow-hidden bg-[#2B2421] text-white">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-40"
           style={{
             backgroundImage:
-              "radial-gradient(circle at 50% 20%, rgba(184,149,74,0.22), transparent 45%), radial-gradient(circle at 80% 80%, rgba(92,31,40,0.35), transparent 40%)",
+              "radial-gradient(circle at 50% 20%, rgba(215,184,102,0.22), transparent 45%), radial-gradient(circle at 80% 80%, rgba(100,31,43,0.35), transparent 40%)",
           }}
         />
         <div className="relative z-10 mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[0.85fr_1.15fr]">

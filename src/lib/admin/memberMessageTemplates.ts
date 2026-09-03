@@ -61,7 +61,7 @@ export const BUILTIN_ADMIN_MESSAGE_TEMPLATES: AdminMessageTemplate[] = [
     label: "Annonce Communauté",
     scope: "broadcast",
     title: "Nouveauté : Communauté KELIAA",
-    body: "Bonjour {{prenom}},\n\nLa Communauté KELIAA est ouverte : découvrez les membres, likez avec intention. Un like mutuel débloque la conversation.\n\nL’équipe KELIAA",
+    body: "Bonjour {{prenom}},\n\nLa Communauté KELIAA est ouverte : découvrez les membres, likez ou envoyez un message directement.\n\nL’équipe KELIAA",
   },
   {
     id: "broadcast_general",

@@ -105,12 +105,12 @@ export function CoachingLiveTranscript({
   if (!active) return null
 
   return (
-    <div className="rounded-xl border border-[#B8954A]/30 bg-[#F7F0E0] px-3 py-2.5 text-xs text-[#3D1519]">
+    <div className="rounded-xl border border-[#D7B866]/30 bg-[#EFE5DA] px-3 py-2.5 text-xs text-[#451923]">
       <p className="font-semibold">
         Transcription de la séance
         {listening ? " · en cours" : supported ? " · en pause" : " · non disponible ici"}
       </p>
-      <p className="mt-1 text-[#3D1519]/75 leading-relaxed">
+      <p className="mt-1 text-[#451923]/75 leading-relaxed">
         {supported
           ? "Vous parlez dans KELIAA ; le texte est enregistré pour l’équipe (pas affiché à l’autre personne)."
           : "Ouvrez Chrome ou Edge pour la retranscription automatique. La salle audio fonctionne quand même."}

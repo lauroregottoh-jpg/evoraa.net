@@ -372,7 +372,7 @@ export function CoachingSessionRoom({
           <button
             type="button"
             onClick={leaveLobby}
-            className="inline-flex h-11 items-center rounded-xl border border-[#5C1F28]/25 bg-white px-4 text-sm font-semibold text-[#5C1F28]"
+            className="inline-flex h-11 items-center rounded-xl border border-[#641F2B]/25 bg-white px-4 text-sm font-semibold text-[#641F2B]"
           >
             Quitter la salle d’attente
           </button>
@@ -387,11 +387,11 @@ export function CoachingSessionRoom({
   }
 
   return (
-    <div className="rounded-2xl border border-[#5C1F28]/25 bg-gradient-to-br from-[#1C1412] via-[#3D1519] to-[#5C1F28] text-[#FBF9F6] overflow-hidden">
+    <div className="rounded-2xl border border-[#641F2B]/25 bg-gradient-to-br from-[#2B2421] via-[#451923] to-[#641F2B] text-[#FCFAF6] overflow-hidden">
       <div className="p-4 sm:p-5 space-y-3 border-b border-white/10">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#F3D9A4]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#E8D49A]">
               Salle de coaching
             </p>
             <h2 className="font-serif text-xl sm:text-2xl font-bold mt-1">
@@ -412,7 +412,7 @@ export function CoachingSessionRoom({
 
           {startedAt ? (
             <div className="rounded-xl border border-white/20 bg-white/10 px-4 py-3 min-w-[140px]">
-              <p className="text-[10px] uppercase tracking-wider text-[#F3D9A4] font-bold">
+              <p className="text-[10px] uppercase tracking-wider text-[#E8D49A] font-bold">
                 Temps restant
               </p>
               <p className="font-mono text-3xl font-bold mt-1 tabular-nums">
@@ -438,7 +438,7 @@ export function CoachingSessionRoom({
             type="button"
             onClick={() => void hangUp()}
             disabled={busy}
-            className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#F3D9A4] px-4 text-sm font-bold text-[#5C1F28] disabled:opacity-60"
+            className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#E8D49A] px-4 text-sm font-bold text-[#641F2B] disabled:opacity-60"
           >
             <PhoneOff className="h-4 w-4" />
             {canComplete ? "Terminer · valider" : "Quitter (sans valider)"}
@@ -464,7 +464,7 @@ export function CoachingSessionRoom({
         )}
       </div>
 
-      <div className="p-5 sm:p-6 space-y-4 bg-[#FBF9F6] text-[#1C1412]">
+      <div className="p-5 sm:p-6 space-y-4 bg-[#FCFAF6] text-[#2B2421]">
         <CoachingLiveTranscript
           sessionId={sessionId}
           role={role}
@@ -472,10 +472,10 @@ export function CoachingSessionRoom({
         />
 
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#D7B866]">
             Messages
           </p>
-          <h3 className="font-serif text-lg font-bold text-[#5C1F28]">
+          <h3 className="font-serif text-lg font-bold text-[#641F2B]">
             Échanges dans KELIAA
           </h3>
         </div>
@@ -487,7 +487,7 @@ export function CoachingSessionRoom({
             messages.map((m) => (
               <div
                 key={m.id}
-                className="rounded-lg border border-[#B8954A]/20 bg-[#FBF9F6] px-3 py-2 text-sm"
+                className="rounded-lg border border-[#D7B866]/20 bg-[#FCFAF6] px-3 py-2 text-sm"
               >
                 <p className="text-[10px] uppercase tracking-wider text-[#8A6A2E] font-semibold">
                   {m.fromRole === "coach" ? "Message du coach" : "Vos messages"}
@@ -515,7 +515,7 @@ export function CoachingSessionRoom({
                 setSending(false)
                 void refreshMessages()
               }}
-              className="rounded-xl border border-[#5C1F28]/25 bg-white px-3 py-2 text-xs font-semibold hover:bg-[#5C1F28]/5 disabled:opacity-50"
+              className="rounded-xl border border-[#641F2B]/25 bg-white px-3 py-2 text-xs font-semibold hover:bg-[#641F2B]/5 disabled:opacity-50"
             >
               {t.label}
             </button>

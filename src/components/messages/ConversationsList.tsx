@@ -59,21 +59,19 @@ function VoiceSandboxOpener() {
   }
 
   return (
-    <div className="mt-4 rounded-2xl border-2 border-[#B8954A]/60 bg-[#F7F0E0] px-4 py-4">
+    <div className="mt-4 rounded-2xl border-2 border-[#D7B866]/60 bg-[#EFE5DA] px-4 py-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-sm font-bold text-foreground">Tester les vocaux ici</p>
+          <p className="text-sm font-bold text-foreground">Essai vocaux</p>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Ouvre une discussion avec Echo (essai privé). Enregistrez, envoyez,
-            réécoutez. La retranscription se voit dans OPS → Vocaux &
-            transcriptions.
+            Discussion privée avec Echo pour tester l&apos;enregistrement.
           </p>
         </div>
         <button
           type="button"
           disabled={busy}
           onClick={() => void open()}
-          className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#5C1F28] px-4 text-xs font-bold text-[#F8F4EE] disabled:opacity-60"
+          className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#641F2B] px-4 text-xs font-bold text-[#FFFDF9] disabled:opacity-60"
         >
           <Mic className="h-3.5 w-3.5" />
           {busy ? "Ouverture…" : "Ouvrir l’essai vocaux"}
@@ -92,7 +90,7 @@ function ConvRow({ conv }: { conv: ConversationListItem }) {
           "rounded-2xl border transition-all duration-300",
           conv.unread
             ? "border-accent/60 bg-accent/5 shadow-sm"
-            : "border-border/60 bg-background/90 hover:border-[#B8954A]/35"
+            : "border-border/60 bg-background/90 hover:border-[#D7B866]/35"
         )}
       >
         <CardContent className="p-4 sm:p-5 flex items-center justify-between gap-4">
@@ -202,24 +200,24 @@ export function ConversationsList({
   return (
     <div className="space-y-5 py-4">
       {/* Hero inbox */}
-      <header className="relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/30 bg-gradient-to-br from-[#FFFBF5] via-[#F8F4EE] to-[#F0E6D4] p-5 sm:p-7 shadow-card">
+      <header className="relative overflow-hidden rounded-[1.75rem] border border-[#D7B866]/30 bg-gradient-to-br from-[#FFFBF5] via-[#FFFDF9] to-[#F0E6D4] p-5 sm:p-7 shadow-card">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="space-y-1">
             <Badge
               variant="outline"
-              className="border-[#B8954A]/40 text-[#8B6914] bg-white/60 font-sans uppercase tracking-wider text-[10px]"
+              className="border-[#D7B866]/40 text-[#A78335] bg-white/60 font-sans uppercase tracking-wider text-[10px]"
             >
               Messagerie
             </Badge>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#1C1412]">
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#2B2421]">
               Vos conversations
             </h1>
-            <p className="text-sm text-[#1C1412]/65 max-w-md">
+            <p className="text-sm text-[#2B2421]/65 max-w-md">
               Recherchez par nom, filtrez par jour, et retrouvez vos échanges
               classés.
             </p>
           </div>
-          <span className="rounded-full bg-[#5C1F28] px-3 py-1.5 text-xs font-bold text-[#F8F4EE]">
+          <span className="rounded-full bg-[#641F2B] px-3 py-1.5 text-xs font-bold text-[#FFFDF9]">
             {conversations.length} conversation
             {conversations.length > 1 ? "s" : ""}
           </span>
@@ -227,12 +225,12 @@ export function ConversationsList({
 
         <div className="mt-5 grid gap-3 sm:grid-cols-[1fr_auto_auto]">
           <label className="relative block">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8B6914]" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#A78335]" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Tapez un prénom…"
-              className="h-11 w-full rounded-xl border border-[#B8954A]/30 bg-white pl-10 pr-9 text-sm outline-none focus:border-[#B8954A]"
+              className="h-11 w-full rounded-xl border border-[#D7B866]/30 bg-white pl-10 pr-9 text-sm outline-none focus:border-[#D7B866]"
             />
             {query ? (
               <button
@@ -247,11 +245,11 @@ export function ConversationsList({
           </label>
 
           <label className="relative flex items-center gap-2">
-            <CalendarDays className="h-4 w-4 text-[#8B6914] shrink-0" />
+            <CalendarDays className="h-4 w-4 text-[#A78335] shrink-0" />
             <select
               value={day}
               onChange={(e) => setDay(e.target.value)}
-              className="h-11 min-w-[9rem] rounded-xl border border-[#B8954A]/30 bg-white px-3 text-sm outline-none focus:border-[#B8954A]"
+              className="h-11 min-w-[9rem] rounded-xl border border-[#D7B866]/30 bg-white px-3 text-sm outline-none focus:border-[#D7B866]"
             >
               <option value="">Tous les jours</option>
               <option value="today">Aujourd’hui</option>
@@ -261,7 +259,7 @@ export function ConversationsList({
 
           <Link
             href="/communaute"
-            className="inline-flex h-11 items-center justify-center rounded-xl bg-[#5C1F28] px-4 text-xs font-bold text-[#F8F4EE]"
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-[#641F2B] px-4 text-xs font-bold text-[#FFFDF9]"
           >
             Communauté
           </Link>
@@ -278,8 +276,8 @@ export function ConversationsList({
               className={cn(
                 "inline-flex h-9 items-center gap-1.5 rounded-full px-3.5 text-xs font-bold transition",
                 tab === t.id
-                  ? "bg-[#5C1F28] text-[#F8F4EE]"
-                  : "border border-[#B8954A]/30 bg-white text-[#5C1F28] hover:bg-[#F7F0E0]"
+                  ? "bg-[#641F2B] text-[#FFFDF9]"
+                  : "border border-[#D7B866]/30 bg-white text-[#641F2B] hover:bg-[#EFE5DA]"
               )}
             >
               {t.label}
@@ -287,7 +285,7 @@ export function ConversationsList({
                 <span
                   className={cn(
                     "rounded-full px-1.5 py-0.5 text-[10px]",
-                    tab === t.id ? "bg-white/20" : "bg-[#F7F0E0]"
+                    tab === t.id ? "bg-white/20" : "bg-[#EFE5DA]"
                   )}
                 >
                   {t.count}
@@ -310,13 +308,13 @@ export function ConversationsList({
             Aucun message pour le moment
           </p>
           <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
-            Likez dans la Communauté — un like mutuel ouvre les messages.
+            Likez ou envoyez un message depuis un profil.
           </p>
           <Link
-            href="/communaute"
+            href="/compatibility"
             className="inline-flex items-center justify-center h-10 px-4 rounded-xl bg-primary text-primary-foreground text-sm font-semibold"
           >
-            Découvrir la communauté
+            Voir les compatibilités
           </Link>
         </div>
       )}
@@ -324,7 +322,7 @@ export function ConversationsList({
       <div className="space-y-5">
         {(tab === "all" || tab === "unread") && unread.length > 0 ? (
           <section className="space-y-2">
-            <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#8B6914]">
+            <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#A78335]">
               <Inbox className="h-3.5 w-3.5" /> Non lus · {unread.length}
             </p>
             <div className="space-y-2">
@@ -376,8 +374,8 @@ export function ConversationsList({
 
         {hasDemo ? (
           <section className="space-y-2">
-            <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#8B6914]">
-              <span className="rounded bg-[#5C1F28] px-1.5 py-0.5 text-[9px] tracking-widest text-[#F3D9A4]">
+            <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#A78335]">
+              <span className="rounded bg-[#641F2B] px-1.5 py-0.5 text-[9px] tracking-widest text-[#E8D49A]">
                 Démo
               </span>
               Aperçu (jusqu’à 5 vrais échanges)
@@ -388,7 +386,7 @@ export function ConversationsList({
                 href={`/messages/demo/${t.id}`}
                 className="block group"
               >
-                <Card className="rounded-2xl border border-dashed border-[#B8954A]/40 bg-[#F7F0E0]/50 hover:border-[#B8954A]/60 transition-all">
+                <Card className="rounded-2xl border border-dashed border-[#D7B866]/40 bg-[#EFE5DA]/50 hover:border-[#D7B866]/60 transition-all">
                   <CardContent className="p-4 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3 min-w-0">
                       <div
@@ -404,7 +402,7 @@ export function ConversationsList({
                           <h3 className="font-serif font-bold text-base truncate">
                             {t.partnerFirstName}
                           </h3>
-                          <span className="text-[9px] font-bold uppercase text-[#8B6914]">
+                          <span className="text-[9px] font-bold uppercase text-[#A78335]">
                             Démo
                           </span>
                         </div>
@@ -413,7 +411,7 @@ export function ConversationsList({
                         </p>
                       </div>
                     </div>
-                    <span className="inline-flex items-center gap-1 rounded-lg bg-[#5C1F28] px-2.5 py-1 text-[10px] font-bold text-[#F8F4EE]">
+                    <span className="inline-flex items-center gap-1 rounded-lg bg-[#641F2B] px-2.5 py-1 text-[10px] font-bold text-[#FFFDF9]">
                       Ouvrir
                       <ChevronRight className="h-3.5 w-3.5" />
                     </span>

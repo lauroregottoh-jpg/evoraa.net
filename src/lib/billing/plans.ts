@@ -97,7 +97,7 @@ export const PLANS: Record<PlanId, PlanDefinition> = {
       "Les 10 clés + Matching KELIAA™ à 5 piliers",
       "Forces, vigilances, chapitres qui se débloquent",
       "Le Coffre Premium (vignettes exclusives · 3 puis +2 / mois)",
-      "Communauté : likes mutuels → messages débloqués",
+      "Messages directs + likes (Communauté)",
       "Programme Fidélité : +15 msgs / mois, paliers + Boost, Session VIP à 12 mois",
       "15 likes / propositions par jour (vs 3)",
       "25 nouvelles conversations sérieuses / mois (vs 5)",
