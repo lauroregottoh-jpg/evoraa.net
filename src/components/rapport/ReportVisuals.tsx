@@ -41,7 +41,7 @@ export function ScoreRing({
           cy={size / 2}
           r={r}
           fill="none"
-          stroke="rgba(184,149,74,0.18)"
+          stroke="rgba(215,184,102,0.18)"
           strokeWidth={stroke}
         />
         <circle
@@ -59,21 +59,21 @@ export function ScoreRing({
         />
         <defs>
           <linearGradient id="rapportGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#F3D9A4" />
-            <stop offset="55%" stopColor="#B8954A" />
+            <stop offset="0%" stopColor="#E8D49A" />
+            <stop offset="55%" stopColor="#D7B866" />
             <stop offset="100%" stopColor="#8A6A2E" />
           </linearGradient>
         </defs>
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-        <p className="font-serif text-3xl font-bold text-[#1C1412] leading-none">
+        <p className="font-serif text-3xl font-bold text-[#2B2421] leading-none">
           {pct}
         </p>
-        <p className="text-[9px] font-bold uppercase tracking-wider text-[#B8954A] mt-1">
+        <p className="text-[9px] font-bold uppercase tracking-wider text-[#D7B866] mt-1">
           / {max}
         </p>
       </div>
-      <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[#7A5F28] text-center max-w-[9rem]">
+      <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[#A78335] text-center max-w-[9rem]">
         {label}
       </p>
     </div>
@@ -103,13 +103,13 @@ export function ForceBars({
               <p className="text-sm font-medium text-foreground/90 truncate">
                 {item.label}
               </p>
-              <span className="text-[11px] font-bold text-[#B8954A] tabular-nums shrink-0">
+              <span className="text-[11px] font-bold text-[#D7B866] tabular-nums shrink-0">
                 {v}
               </span>
             </div>
-            <div className="h-2.5 rounded-full bg-[#B8954A]/12 overflow-hidden border border-[#B8954A]/15">
+            <div className="h-2.5 rounded-full bg-[#D7B866]/12 overflow-hidden border border-[#D7B866]/15">
               <div
-                className="rapport-bar-fill h-full rounded-full bg-gradient-to-r from-[#8A6A2E] via-[#B8954A] to-[#F3D9A4]"
+                className="rapport-bar-fill h-full rounded-full bg-gradient-to-r from-[#8A6A2E] via-[#D7B866] to-[#E8D49A]"
                 style={{
                   width: `${v}%`,
                   animationDelay: `${200 + i * 100}ms`,
@@ -136,7 +136,7 @@ export function PrepStars({ score }: { score: number }) {
           key={i}
           className={cn(
             "rapport-star inline-block text-lg leading-none",
-            i < filled ? "text-[#B8954A]" : "text-[#B8954A]/25"
+            i < filled ? "text-[#D7B866]" : "text-[#D7B866]/25"
           )}
           style={{ animationDelay: `${i * 60}ms` }}
         >
@@ -176,7 +176,7 @@ export function MonthTimeline({
     <div className="relative space-y-0 pl-2">
       <div
         aria-hidden
-        className="absolute left-[1.15rem] top-3 bottom-3 w-px bg-gradient-to-b from-[#B8954A] via-[#B8954A]/40 to-transparent"
+        className="absolute left-[1.15rem] top-3 bottom-3 w-px bg-gradient-to-b from-[#D7B866] via-[#D7B866]/40 to-transparent"
       />
       {months.map((m, i) => (
         <div
@@ -184,7 +184,7 @@ export function MonthTimeline({
           className="rapport-reveal relative flex gap-4 pb-5 last:pb-0"
           style={{ animationDelay: `${i * 120}ms` }}
         >
-          <div className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-[#B8954A] bg-gradient-to-br from-[#F3D9A4] to-[#B8954A] font-serif text-sm font-bold text-[#1C1412] shadow-sm">
+          <div className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-[#D7B866] bg-gradient-to-br from-[#E8D49A] to-[#D7B866] font-serif text-sm font-bold text-[#2B2421] shadow-sm">
             {i + 1}
           </div>
           <div className="min-w-0 pt-1">
@@ -207,12 +207,12 @@ export function ChapterProgressDots({
 }) {
   const done = items.filter((i) => i.unlocked).length
   return (
-    <div className="rounded-2xl border border-[#B8954A]/25 bg-gradient-to-br from-[#B8954A]/[0.08] via-white to-[#F8F4EE] p-4 space-y-3">
+    <div className="rounded-2xl border border-[#D7B866]/25 bg-gradient-to-br from-[#D7B866]/[0.08] via-white to-[#FFFDF9] p-4 space-y-3">
       <div className="flex items-center justify-between">
         <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
           Dimensions analysées
         </p>
-        <p className="text-xs font-bold text-[#7A5F28]">
+        <p className="text-xs font-bold text-[#A78335]">
           {done}/{items.length}
         </p>
       </div>
@@ -224,7 +224,7 @@ export function ChapterProgressDots({
             className={cn(
               "rapport-reveal aspect-square rounded-xl border flex items-center justify-center text-[10px] font-bold transition-transform",
               item.unlocked
-                ? "border-[#B8954A]/50 bg-[#B8954A]/15 text-[#7A5F28]"
+                ? "border-[#D7B866]/50 bg-[#D7B866]/15 text-[#A78335]"
                 : "border-dashed border-border/70 bg-white/60 text-muted-foreground/50"
             )}
             style={{ animationDelay: `${i * 50}ms` }}

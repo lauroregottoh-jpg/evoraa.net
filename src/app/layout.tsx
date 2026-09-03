@@ -1,15 +1,15 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Cormorant_Garamond, DM_Sans } from "next/font/google";
+import { Cormorant_Garamond, Inter } from "next/font/google";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { AnalyticsScripts } from "@/components/analytics/AnalyticsScripts";
 import { RegisterServiceWorker } from "@/components/pwa/RegisterServiceWorker";
 import "./globals.css";
 
-const dmSans = DM_Sans({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-dm-sans",
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -24,7 +24,7 @@ const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "https://keliaa.org";
 
 export const viewport: Viewport = {
-  themeColor: "#0F1F1A",
+  themeColor: "#F7F1E8",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -50,8 +50,10 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
+      { url: "/favicon.png", sizes: "any", type: "image/png" },
       { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
       { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+      { url: "/icons/monogram.png", sizes: "512x512", type: "image/png" },
     ],
     apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
@@ -100,7 +102,7 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${dmSans.variable} ${cormorant.variable}`}
+      className={`${inter.variable} ${cormorant.variable}`}
       suppressHydrationWarning
     >
       <body className="antialiased min-h-screen bg-background text-foreground">

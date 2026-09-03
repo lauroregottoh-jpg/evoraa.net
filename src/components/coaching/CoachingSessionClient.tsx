@@ -74,8 +74,8 @@ export function CoachingSessionClient() {
       />
     ) : showCoachGate && !coachReady ? (
       <div className="max-w-lg mx-auto space-y-6 pb-10">
-        <header className="rounded-[1.75rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#5C1F28] via-[#3D1519] to-[#1C1412] p-7 text-[#FBF9F6]">
-          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
+        <header className="rounded-[1.75rem] border border-[#D7B866]/35 bg-gradient-to-br from-[#641F2B] via-[#451923] to-[#2B2421] p-7 text-[#FCFAF6]">
+          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#E8D49A]">
             Espace coach
           </p>
           <h1 className="mt-2 font-serif text-3xl font-bold">
@@ -105,7 +105,7 @@ export function CoachingSessionClient() {
           <button
             type="submit"
             disabled={codeLoading}
-            className="w-full h-11 rounded-xl bg-[#5C1F28] text-[#FBF9F6] text-sm font-bold disabled:opacity-60"
+            className="w-full h-11 rounded-xl bg-[#641F2B] text-[#FCFAF6] text-sm font-bold disabled:opacity-60"
           >
             {codeLoading ? "Vérification…" : "Entrer"}
           </button>
@@ -132,8 +132,8 @@ export function CoachingSessionClient() {
       <div className="max-w-3xl mx-auto pb-10">
         <CoachingLockOverlay>
           <div className="min-h-[28rem] space-y-4 p-2">
-            <div className="rounded-[1.75rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#5C1F28] to-[#1C1412] p-8 text-[#FBF9F6]">
-              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
+            <div className="rounded-[1.75rem] border border-[#D7B866]/35 bg-gradient-to-br from-[#641F2B] to-[#2B2421] p-8 text-[#FCFAF6]">
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#E8D49A]">
                 Faire votre session
               </p>
               <h1 className="mt-2 font-serif text-3xl font-bold">

@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { Mic, Square, Trash2, Send } from "lucide-react"
+import { Loader2, Mic, Square } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { formatVoiceDuration, VOICE_NOTE_MAX_DURATION_MS } from "@/lib/messaging/voiceNotes"
 
@@ -65,20 +65,19 @@ export function VoiceNoteRecorder({
   isSending: boolean
   onSend: (blob: Blob, durationMs: number, transcript: string) => Promise<void>
 }) {
-  const [phase, setPhase] = React.useState<"idle" | "recording" | "review">("idle")
+  const [phase, setPhase] = React.useState<"idle" | "recording" | "sending">("idle")
   const [elapsed, setElapsed] = React.useState(0)
   const [error, setError] = React.useState("")
-  const [previewUrl, setPreviewUrl] = React.useState<string | null>(null)
-  const previewUrlRef = React.useRef<string | null>(null)
+  const [showPremiumHint, setShowPremiumHint] = React.useState(false)
   const recorderRef = React.useRef<MediaRecorder | null>(null)
   const chunksRef = React.useRef<Blob[]>([])
   const streamRef = React.useRef<MediaStream | null>(null)
   const startedAtRef = React.useRef(0)
-  const blobRef = React.useRef<Blob | null>(null)
-  const durationRef = React.useRef(0)
   const timerRef = React.useRef<number | null>(null)
   const transcriptRef = React.useRef("")
   const recognitionRef = React.useRef<{ stop: () => void } | null>(null)
+  const onSendRef = React.useRef(onSend)
+  onSendRef.current = onSend
 
   const stopTracks = () => {
     streamRef.current?.getTracks().forEach((t) => t.stop())
@@ -106,7 +105,6 @@ export function VoiceNoteRecorder({
       clearTimer()
       stopTracks()
       stopRecognition()
-      if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current)
     }
   }, [])
 
@@ -143,13 +141,24 @@ export function VoiceNoteRecorder({
           VOICE_NOTE_MAX_DURATION_MS,
           Date.now() - startedAtRef.current
         )
-        blobRef.current = blob
-        durationRef.current = ms
-        const url = URL.createObjectURL(blob)
-        if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current)
-        previewUrlRef.current = url
-        setPreviewUrl(url)
-        setPhase("review")
+        if (blob.size < 400) {
+          setPhase("idle")
+          setElapsed(0)
+          setError("Enregistrement trop court.")
+          return
+        }
+        setPhase("sending")
+        void onSendRef
+          .current(blob, ms, transcriptRef.current.trim())
+          .then(() => {
+            setPhase("idle")
+            setElapsed(0)
+          })
+          .catch(() => {
+            setPhase("idle")
+            setElapsed(0)
+            setError("Échec d’envoi. Réessayez.")
+          })
       }
       recorderRef.current = rec
       startedAtRef.current = Date.now()
@@ -171,32 +180,54 @@ export function VoiceNoteRecorder({
     }
   }
 
-  const cancelReview = () => {
-    blobRef.current = null
-    if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current)
-    previewUrlRef.current = null
-    setPreviewUrl(null)
-    setPhase("idle")
-    setElapsed(0)
-  }
-
-  const send = async () => {
-    const blob = blobRef.current
-    if (!blob) return
-    await onSend(blob, durationRef.current, transcriptRef.current.trim())
-    cancelReview()
+  const cancelRecording = () => {
+    clearTimer()
+    stopRecognition()
+    const rec = recorderRef.current
+    if (rec && rec.state !== "inactive") {
+      rec.onstop = () => {
+        stopTracks()
+        chunksRef.current = []
+        setPhase("idle")
+        setElapsed(0)
+      }
+      rec.stop()
+    } else {
+      stopTracks()
+      setPhase("idle")
+      setElapsed(0)
+    }
   }
 
   if (!enabled) {
     return (
-      <Link
-        href="/billing"
-        className="flex h-12 w-12 items-center justify-center rounded-xl border border-border/80 text-muted-foreground hover:text-foreground hover:bg-secondary/60 shrink-0"
-        title="Vocaux réservés à Alliance"
-        aria-label="Vocaux réservés à Alliance"
-      >
-        <Mic className="h-4 w-4" />
-      </Link>
+      <div className="relative shrink-0">
+        <button
+          type="button"
+          onClick={() => setShowPremiumHint((v) => !v)}
+          className="relative flex h-12 w-12 items-center justify-center rounded-xl border border-border/80 text-muted-foreground opacity-55 hover:opacity-80 shrink-0"
+          aria-label="Fonctionnalité Premium"
+          title="Fonctionnalité Premium"
+        >
+          <Mic className="h-4 w-4" />
+          <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#641F2B] text-[9px] text-white">
+            🔒
+          </span>
+        </button>
+        {showPremiumHint ? (
+          <div className="absolute bottom-14 right-0 z-20 w-44 rounded-xl border border-border bg-[#FCFAF6] p-3 shadow-md">
+            <p className="text-xs font-semibold text-foreground">
+              Fonctionnalité Premium
+            </p>
+            <Link
+              href="/premium"
+              className="mt-2 inline-flex text-[11px] font-bold text-[#641F2B] underline underline-offset-2"
+            >
+              Découvrir Premium
+            </Link>
+          </div>
+        ) : null}
+      </div>
     )
   }
 
@@ -211,39 +242,28 @@ export function VoiceNoteRecorder({
           variant="destructive"
           className="h-12 w-12 rounded-xl"
           onClick={finishRecording}
-          aria-label="Arrêter l’enregistrement"
+          aria-label="Arrêter et envoyer"
+          title="Arrêter et envoyer"
         >
           <Square className="h-4 w-4 fill-current" />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          className="h-12 px-2 rounded-xl text-xs"
+          onClick={cancelRecording}
+          aria-label="Annuler"
+        >
+          Annuler
         </Button>
       </div>
     )
   }
 
-  if (phase === "review") {
+  if (phase === "sending" || isSending) {
     return (
-      <div className="flex items-center gap-2 shrink-0">
-        {previewUrl ? (
-          <audio src={previewUrl} controls className="h-10 max-w-[140px]" />
-        ) : null}
-        <Button
-          type="button"
-          variant="ghost"
-          className="h-12 w-12 rounded-xl"
-          onClick={cancelReview}
-          disabled={isSending}
-          aria-label="Supprimer le vocal"
-        >
-          <Trash2 className="h-4 w-4" />
-        </Button>
-        <Button
-          type="button"
-          className="h-12 px-4 rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground"
-          onClick={() => void send()}
-          disabled={isSending}
-        >
-          <Send className="h-4 w-4" />
-        </Button>
-        {error ? <p className="text-xs text-destructive">{error}</p> : null}
+      <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-border/80 shrink-0">
+        <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
       </div>
     )
   }

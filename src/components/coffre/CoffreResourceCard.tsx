@@ -52,7 +52,7 @@ export function CoffreResourceCard({
       <div className="relative">
         <CoffreCover resource={resource} locked={locked} />
         {locked && (
-          <div className="absolute inset-0 flex items-center justify-center bg-[#1C1412]/25 backdrop-blur-[1px]">
+          <div className="absolute inset-0 flex items-center justify-center bg-[#2B2421]/25 backdrop-blur-[1px]">
             <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/15 text-white shadow-lg">
               <Lock className="h-5 w-5" />
             </span>

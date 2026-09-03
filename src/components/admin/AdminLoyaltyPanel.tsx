@@ -171,8 +171,8 @@ export function AdminLoyaltyPanel({
 
 export function AdminLoyaltyAllianceNote() {
   return (
-    <div className="rounded-xl border border-[#B8954A]/35 bg-[#FFFBF5] px-4 py-3 text-xs text-[#1C1412]/80 space-y-1.5">
-      <p className="font-bold text-[#5C1F28]">Programme Fidélité Alliance</p>
+    <div className="rounded-xl border border-[#D7B866]/35 bg-[#FFFBF5] px-4 py-3 text-xs text-[#2B2421]/80 space-y-1.5">
+      <p className="font-bold text-[#641F2B]">Programme Fidélité Alliance</p>
       <p>
         Attribution auto à chaque paiement Alliance : +15 msgs / mois ; tous les 3
         mois +30 + Boost 24 h ; mois 12 = Session VIP.

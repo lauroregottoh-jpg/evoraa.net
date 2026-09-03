@@ -16,7 +16,7 @@ export function InviteToTestBlock({
   partnerName: string
   partnerUserId: string
   missingOnPartner: AssessmentSlug[]
-  viewerTestsCount: number
+  viewerTestsCount?: number
 }) {
   const [busy, setBusy] = React.useState<string | null>(null)
   const [note, setNote] = React.useState("")
@@ -37,8 +37,8 @@ export function InviteToTestBlock({
       }
       setNote(
         res.already
-          ? "Invitation déjà envoyée pour ce test."
-          : `Invitation envoyée. ${partnerName} verra : vous l’invitez à faire « ${assessmentTitle(slug)} ». +5 messages (20 jours).`
+          ? "Demande déjà envoyée pour ce test."
+          : `${partnerName} verra la proposition dans ses tests. +5 messages à l’envoi, +5 de plus si le test est complété.`
       )
     } finally {
       setBusy(null)
@@ -46,21 +46,21 @@ export function InviteToTestBlock({
   }
 
   return (
-    <div className="rounded-2xl border border-[#B8954A]/40 bg-[#F7F0E0]/50 p-5 space-y-3">
+    <div className="rounded-2xl border border-[#D7B866]/40 bg-[#EFE5DA]/50 p-5 space-y-3">
       <p className="font-serif text-lg font-bold text-foreground">
-        Inviter {partnerName} à un test
+        Proposer un test · {partnerName}
       </p>
       <p className="text-sm text-muted-foreground leading-relaxed">
-        {partnerName} n’a pas encore rempli ces questionnaires. L’invitation
-        s’affiche chez lui/elle : « vous recommande / vous invite à faire ce
-        test afin de tester votre compatibilité ». +5 messages à l’envoi, +5
-        de plus s’il/elle le fait (20 jours).
+        {partnerName} fait partie de vos étoiles. Proposez un questionnaire de
+        compatibilité : la demande apparaît dans ses tests, avec votre nom.
+        Vous gagnez des messages supplémentaires (+5 à l&apos;envoi, +5 si le
+        test est complété).
       </p>
       {viewerTestsCount === 0 ? (
         <p className="text-xs text-muted-foreground">
-          Faites au moins un test de votre côté pour un matching plus juste.{" "}
+          Commencez par un test de votre côté pour un matching plus juste.{" "}
           <Link href="/assessments" className="font-semibold underline">
-            Mes tests
+            Faire un test
           </Link>
         </p>
       ) : null}
@@ -75,7 +75,7 @@ export function InviteToTestBlock({
             disabled={busy === slug}
             onClick={() => void send(slug)}
           >
-            {busy === slug ? "…" : `Inviter : ${assessmentTitle(slug)}`}
+            {busy === slug ? "…" : `Proposer · ${assessmentTitle(slug)}`}
           </Button>
         ))}
       </div>

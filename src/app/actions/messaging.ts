@@ -896,6 +896,72 @@ export async function sendVoiceNoteAction(
   }
 }
 
+const MESSAGE_DELETE_WINDOW_MS = 30_000
+
+export async function deleteOwnMessageAction(
+  conversationId: string,
+  messageId: string
+): Promise<{ error?: string }> {
+  const { supabase, user } = await getAuthUser()
+  if (!user) return { error: "Vous devez être connecté." }
+
+  const { data: conversation } = await supabase
+    .from("conversations")
+    .select("id, match_id")
+    .eq("id", conversationId)
+    .maybeSingle()
+  if (!conversation) return { error: "Conversation introuvable." }
+
+  const { data: match } = await supabase
+    .from("matches")
+    .select("user_one, user_two")
+    .eq("id", conversation.match_id)
+    .maybeSingle()
+  if (!match || (match.user_one !== user.id && match.user_two !== user.id)) {
+    return { error: "Accès non autorisé à cette conversation." }
+  }
+
+  const { data: row } = await supabase
+    .from("messages")
+    .select("id, sender_id, created_at, kind, audio_path")
+    .eq("id", messageId)
+    .eq("conversation_id", conversationId)
+    .maybeSingle()
+
+  if (!row || row.sender_id !== user.id) {
+    return { error: "Message introuvable." }
+  }
+
+  const ageMs = Date.now() - new Date(row.created_at as string).getTime()
+  if (ageMs > MESSAGE_DELETE_WINDOW_MS) {
+    return { error: "Délai de suppression expiré (30 secondes)." }
+  }
+
+  if (row.kind === "voice" && row.audio_path) {
+    try {
+      const admin = createAdminClient()
+      await admin.storage
+        .from(VOICE_NOTE_BUCKET)
+        .remove([row.audio_path as string])
+    } catch {
+      /* storage cleanup best-effort */
+    }
+  }
+
+  const { error } = await supabase
+    .from("messages")
+    .delete()
+    .eq("id", messageId)
+    .eq("sender_id", user.id)
+
+  if (error) return { error: error.message || "Suppression impossible." }
+
+  revalidatePath("/messages")
+  revalidatePath(`/messages/${conversationId}`)
+
+  return {}
+}
+
 export async function openVoiceSandboxAction(): Promise<{
   error?: string
   conversationId?: string

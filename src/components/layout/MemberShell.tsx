@@ -276,18 +276,18 @@ export function MemberShell({
       compact ? "justify-center px-0 py-2.5" : "gap-2.5 px-3 py-2",
       accent &&
         !active &&
-        "text-[#F3D9A4] bg-white/10 border border-[#B8954A]/35 hover:bg-white/15",
+        "text-[#E8D49A] bg-white/10 border border-[#D7B866]/35 hover:bg-white/15",
       accent &&
         active &&
-        "bg-[#B8954A] text-[#1C1412] border border-[#B8954A] shadow-sm",
+        "bg-[#D7B866] text-[#2B2421] border border-[#D7B866] shadow-sm",
       gold &&
         !accent &&
         !active &&
-        "text-[#F3D9A4]/95 hover:text-[#F8E7C0] hover:bg-[#B8954A]/15",
+        "text-[#E8D49A]/95 hover:text-[#E8D49A] hover:bg-[#D7B866]/15",
       gold &&
         !accent &&
         active &&
-        "bg-[#B8954A]/25 text-[#F3D9A4] shadow-[inset_0_0_0_1px_rgba(184,149,74,0.45)]",
+        "bg-[#D7B866]/25 text-[#E8D49A] shadow-[inset_0_0_0_1px_rgba(215,184,102,0.45)]",
       !accent &&
         !gold &&
         active &&
@@ -321,8 +321,8 @@ export function MemberShell({
         <Icon
           className={cn(
             "h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110",
-            (accent || gold) && !isActive(item.href) && "text-[#F3D9A4]",
-            gold && isActive(item.href) && "text-[#F3D9A4]"
+            (accent || gold) && !isActive(item.href) && "text-[#E8D49A]",
+            gold && isActive(item.href) && "text-[#E8D49A]"
           )}
         />
         <span
@@ -334,11 +334,11 @@ export function MemberShell({
           {item.label}
         </span>
         {compact && isActive(item.href) ? (
-          <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full bg-[#B8954A]" />
+          <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full bg-[#D7B866]" />
         ) : null}
         {!compact && gold && !accent ? (
           <span
-            className="ml-auto text-[9px] font-bold uppercase tracking-wider text-[#B8954A]/90"
+            className="ml-auto text-[9px] font-bold uppercase tracking-wider text-[#D7B866]/90"
             aria-hidden
           >
             ★
@@ -374,7 +374,7 @@ export function MemberShell({
           >
             <Icon className="h-4 w-4" />
             {opts.active ? (
-              <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full bg-[#B8954A]" />
+              <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full bg-[#D7B866]" />
             ) : null}
           </button>
           {opts.open
@@ -393,11 +393,11 @@ export function MemberShell({
             "flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all",
             "border border-white/15",
             opts.active || opts.open
-              ? "bg-white/14 text-white border-[#B8954A]/45"
+              ? "bg-white/14 text-white border-[#D7B866]/45"
               : "text-white/85 hover:text-white hover:bg-white/10"
           )}
         >
-          <Icon className="h-4 w-4 shrink-0 text-[#F3D9A4]" />
+          <Icon className="h-4 w-4 shrink-0 text-[#E8D49A]" />
           <span className="truncate flex-1 text-left">{opts.label}</span>
           <span className="text-[9px] font-bold uppercase tracking-wider text-white/45 mr-0.5">
             {opts.open ? "Réduire" : "Ouvrir"}
@@ -488,8 +488,8 @@ export function MemberShell({
       <aside
         className={cn(
           "hidden md:flex shrink-0 flex-col sticky top-0 h-screen z-40",
-          "bg-[#5C1F28] text-[#F8F4EE]",
-          "border-r border-[#3D141A]/80 shadow-[4px_0_24px_-12px_rgba(92,31,40,0.35)]",
+          "bg-[#641F2B] text-[#FFFDF9]",
+          "border-r border-[#3D141A]/80 shadow-[4px_0_24px_-12px_rgba(100,31,43,0.35)]",
           "transition-[width] duration-300 ease-out",
           sidebarReady ? (sidebarOpen ? "md:w-56 lg:w-60" : "md:w-[4.25rem]") : "md:w-56 lg:w-60",
           sidebarOpen ? "px-3 py-4 gap-3" : "px-2 py-4 gap-3"
@@ -505,7 +505,7 @@ export function MemberShell({
             href="/dashboard"
             onClick={go("/dashboard")}
             className={cn(
-              "font-serif font-bold tracking-tight text-[#F8F4EE] transition-all duration-300",
+              "font-serif font-bold tracking-tight text-[#FFFDF9] transition-all duration-300",
               sidebarOpen ? "text-2xl px-1" : "text-lg"
             )}
             title="KELIAA"
@@ -532,7 +532,7 @@ export function MemberShell({
         </div>
 
         <div
-          className="pointer-events-none h-px w-full shrink-0 bg-gradient-to-r from-transparent via-[#B8954A]/50 to-transparent opacity-80"
+          className="pointer-events-none h-px w-full shrink-0 bg-gradient-to-r from-transparent via-[#D7B866]/50 to-transparent opacity-80"
           aria-hidden
         />
 
@@ -552,7 +552,7 @@ export function MemberShell({
             <div className="flex items-center gap-3 min-w-0">
               <button
                 type="button"
-                className="md:hidden p-2 rounded-lg border border-border shrink-0 bg-[#5C1F28] text-white border-[#5C1F28]"
+                className="md:hidden p-2 rounded-lg border border-border shrink-0 bg-[#641F2B] text-white border-[#641F2B]"
                 onClick={() => setMobileOpen((v) => !v)}
                 aria-label="Ouvrir le menu"
                 aria-expanded={mobileOpen}
@@ -596,41 +596,41 @@ export function MemberShell({
                 <button
                   type="button"
                   onClick={() => setAccountOpen((v) => !v)}
-                  className="inline-flex items-center justify-center rounded-full w-9 h-9 border border-[#5C1F28]/25 bg-[#5C1F28]/[0.08] hover:bg-[#5C1F28]/15 transition-colors"
+                  className="inline-flex items-center justify-center rounded-full w-9 h-9 border border-[#641F2B]/25 bg-[#641F2B]/[0.08] hover:bg-[#641F2B]/15 transition-colors"
                   title="Compte"
                   aria-label="Menu compte"
                   aria-expanded={accountOpen}
                 >
-                  <User className="h-4 w-4 text-[#5C1F28]" />
+                  <User className="h-4 w-4 text-[#641F2B]" />
                 </button>
                 {accountOpen && (
                   <div
                     role="menu"
-                    className="absolute right-0 mt-2 w-56 rounded-2xl border border-[#3D141A]/80 bg-[#5C1F28] text-[#F8F4EE] shadow-2xl z-[200] overflow-hidden py-1.5 animate-in fade-in zoom-in-95 duration-200"
+                    className="absolute right-0 mt-2 w-56 rounded-2xl border border-[#3D141A]/80 bg-[#641F2B] text-[#FFFDF9] shadow-2xl z-[200] overflow-hidden py-1.5 animate-in fade-in zoom-in-95 duration-200"
                   >
                     <a
                       href="/profile"
                       onClick={go("/profile")}
-                      className="flex items-center gap-2.5 px-3.5 py-2.5 text-sm font-semibold text-[#F8F4EE]/90 hover:bg-white/12 hover:text-white transition-colors"
+                      className="flex items-center gap-2.5 px-3.5 py-2.5 text-sm font-semibold text-[#FFFDF9]/90 hover:bg-white/12 hover:text-white transition-colors"
                     >
-                      <User className="h-4 w-4 text-[#F3D9A4]" />
+                      <User className="h-4 w-4 text-[#E8D49A]" />
                       Profil
                     </a>
                     <a
                       href="/settings"
                       onClick={go("/settings")}
-                      className="flex items-center gap-2.5 px-3.5 py-2.5 text-sm font-semibold text-[#F8F4EE]/90 hover:bg-white/12 hover:text-white transition-colors"
+                      className="flex items-center gap-2.5 px-3.5 py-2.5 text-sm font-semibold text-[#FFFDF9]/90 hover:bg-white/12 hover:text-white transition-colors"
                     >
-                      <Settings className="h-4 w-4 text-[#F3D9A4]" />
+                      <Settings className="h-4 w-4 text-[#E8D49A]" />
                       Paramètres
                     </a>
-                    <div className="my-1.5 mx-3 h-px bg-gradient-to-r from-transparent via-[#B8954A]/55 to-transparent" />
+                    <div className="my-1.5 mx-3 h-px bg-gradient-to-r from-transparent via-[#D7B866]/55 to-transparent" />
                     <form action={logoutAction} className="px-1.5 pb-0.5">
                       <button
                         type="submit"
-                        className="flex w-full items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#F8F4EE]/90 hover:bg-white/12 hover:text-white transition-colors"
+                        className="flex w-full items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#FFFDF9]/90 hover:bg-white/12 hover:text-white transition-colors"
                       >
-                        <LogOut className="h-4 w-4 text-[#F3D9A4]" />
+                        <LogOut className="h-4 w-4 text-[#E8D49A]" />
                         Déconnexion
                       </button>
                     </form>
@@ -641,8 +641,8 @@ export function MemberShell({
           </div>
 
           {mobileOpen && (
-            <div className="md:hidden border-t border-[#3D141A] bg-[#5C1F28] px-3 py-3 max-h-[75vh] overflow-y-auto z-[70] animate-in slide-in-from-top-2 fade-in duration-300 member-sidebar-scroll">
-              <nav className="flex flex-col gap-0.5 text-[#F8F4EE]" aria-label="Navigation membre">
+            <div className="md:hidden border-t border-[#3D141A] bg-[#641F2B] px-3 py-3 max-h-[75vh] overflow-y-auto z-[70] animate-in slide-in-from-top-2 fade-in duration-300 member-sidebar-scroll">
+              <nav className="flex flex-col gap-0.5 text-[#FFFDF9]" aria-label="Navigation membre">
                 {renderNavLinks(false)}
               </nav>
               <div className="mt-3">{logoutButton(false)}</div>
@@ -685,7 +685,7 @@ export function MemberShell({
         </main>
 
         <nav
-          className="md:hidden fixed bottom-0 inset-x-0 z-[60] border-t border-[#3D141A]/40 bg-[#5C1F28] text-white backdrop-blur-md"
+          className="md:hidden fixed bottom-0 inset-x-0 z-[60] border-t border-[#3D141A]/40 bg-[#641F2B] text-white backdrop-blur-md"
           aria-label="Navigation mobile"
         >
           <div className="mx-auto max-w-lg grid grid-cols-5 h-16">
@@ -699,7 +699,7 @@ export function MemberShell({
                   onClick={go(item.href)}
                   className={cn(
                     "flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold cursor-pointer transition-colors",
-                    active ? "text-[#F3D9A4]" : "text-white/65"
+                    active ? "text-[#E8D49A]" : "text-white/75"
                   )}
                 >
                   <Icon className="h-5 w-5" />
@@ -712,7 +712,7 @@ export function MemberShell({
               onClick={() => setMobileOpen(true)}
               className={cn(
                 "flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold transition-colors",
-                accountActive || mobileOpen ? "text-[#F3D9A4]" : "text-white/65"
+                accountActive || mobileOpen ? "text-[#E8D49A]" : "text-white/75"
               )}
             >
               <Menu className="h-5 w-5" />

@@ -64,7 +64,7 @@ export function CoachingEndQuestionnaire({
   if (aborted) {
     return (
       <div className="rounded-2xl border bg-white p-6 space-y-3 text-center">
-        <h2 className="font-serif text-2xl font-bold text-[#5C1F28]">
+        <h2 className="font-serif text-2xl font-bold text-[#641F2B]">
           Séance non validée
         </h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
@@ -74,7 +74,7 @@ export function CoachingEndQuestionnaire({
         <button
           type="button"
           onClick={onDone}
-          className="h-11 rounded-xl bg-[#5C1F28] px-5 text-sm font-bold text-[#FBF9F6]"
+          className="h-11 rounded-xl bg-[#641F2B] px-5 text-sm font-bold text-[#FCFAF6]"
         >
           Retour
         </button>
@@ -85,7 +85,7 @@ export function CoachingEndQuestionnaire({
   if (done) {
     return (
       <div className="rounded-2xl border bg-white p-6 space-y-3 text-center">
-        <h2 className="font-serif text-2xl font-bold text-[#5C1F28]">Merci</h2>
+        <h2 className="font-serif text-2xl font-bold text-[#641F2B]">Merci</h2>
         <p className="text-sm text-muted-foreground">
           {role === "coach"
             ? "Votre rapport de coaching est enregistré."
@@ -94,7 +94,7 @@ export function CoachingEndQuestionnaire({
         <button
           type="button"
           onClick={onDone}
-          className="h-11 rounded-xl bg-[#5C1F28] px-5 text-sm font-bold text-[#FBF9F6]"
+          className="h-11 rounded-xl bg-[#641F2B] px-5 text-sm font-bold text-[#FCFAF6]"
         >
           Retour
         </button>
@@ -108,10 +108,10 @@ export function CoachingEndQuestionnaire({
       className="rounded-2xl border bg-white p-6 space-y-5"
     >
       <div>
-        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
+        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#D7B866]">
           {role === "coach" ? "Rapport de coaching" : "Fin de séance"}
         </p>
-        <h2 className="font-serif text-2xl font-bold text-[#5C1F28] mt-1">
+        <h2 className="font-serif text-2xl font-bold text-[#641F2B] mt-1">
           {role === "coach" ? "Canevas de rédaction" : "Votre retour"}
         </h2>
         <p className="text-sm text-muted-foreground mt-1">
@@ -125,7 +125,7 @@ export function CoachingEndQuestionnaire({
         <div className="space-y-4">
           {COACHING_REPORT_FIELDS.map((f) => (
             <label key={f.id} className="block space-y-1.5 text-sm">
-              <span className="font-semibold text-[#5C1F28]">{f.label}</span>
+              <span className="font-semibold text-[#641F2B]">{f.label}</span>
               <span className="block text-xs text-muted-foreground">{f.hint}</span>
               <textarea
                 value={report[f.id] || ""}
@@ -191,7 +191,7 @@ export function CoachingEndQuestionnaire({
       <button
         type="submit"
         disabled={loading}
-        className="h-11 w-full rounded-xl bg-[#5C1F28] text-sm font-bold text-[#FBF9F6] disabled:opacity-60"
+        className="h-11 w-full rounded-xl bg-[#641F2B] text-sm font-bold text-[#FCFAF6] disabled:opacity-60"
       >
         {loading
           ? "Envoi…"

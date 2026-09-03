@@ -11,11 +11,9 @@ import { loginAction } from "@/app/actions/auth"
 import { isNextRedirectError } from "@/lib/auth/criticalPath"
 import { startGoogleOAuth } from "@/lib/auth/oauthGoogle"
 import { TurnstileField } from "@/components/auth/TurnstileField"
-import { KeliaaBuddyNudge } from "@/components/engagement/KeliaaBuddyNudge"
 import {
   Lock,
   Mail,
-  ArrowRight,
   AlertCircle,
   CheckCircle,
   Loader2,
@@ -216,9 +214,6 @@ export function AuthOverlayForm({
             KELIAA
           </Link>
           <p className="text-sm text-white/85">Retrouvez votre espace sécurisé</p>
-          <div className="mx-auto mt-4 max-w-sm">
-            <KeliaaBuddyNudge />
-          </div>
         </div>
 
         <div className="rounded-2xl border border-white/20 bg-white/95 backdrop-blur-xl shadow-elevated p-6 sm:p-8 space-y-5">
@@ -310,13 +305,7 @@ export function AuthOverlayForm({
               disabled={isLoading || loadingGoogle}
               className="w-full h-11 rounded-xl"
             >
-              {isLoading ? (
-                "Vérification…"
-              ) : (
-                <span className="flex items-center gap-2">
-                  Accéder à mon espace <ArrowRight className="h-4 w-4" />
-                </span>
-              )}
+              {isLoading ? "Vérification…" : "Se connecter"}
             </Button>
 
             <p className="text-center text-xs text-muted-foreground">
@@ -325,29 +314,25 @@ export function AuthOverlayForm({
                 href="/register"
                 className="font-medium text-accent hover:underline"
               >
-                Créer un compte
+                Créez votre compte
               </Link>
-            </p>
-
-            <p className="text-center text-xs text-muted-foreground leading-relaxed">
-              Vous avez des problèmes pour vous connecter ?{" "}
-              <Link
-                href="/faq"
-                className="font-semibold text-primary underline underline-offset-2 hover:opacity-90"
-              >
-                Voir la FAQ
-              </Link>
-              {" · "}
-              <Link
-                href="/register/help"
-                className="font-semibold text-primary underline underline-offset-2 hover:opacity-90"
-              >
-                Aide inscription
-              </Link>
-              .
             </p>
           </form>
         </div>
+
+        <p className="mt-6 text-center text-xs text-white/80 space-x-3">
+          <Link href="/faq" className="hover:underline">
+            FAQ
+          </Link>
+          <span aria-hidden>|</span>
+          <Link href="/register/help" className="hover:underline">
+            Aide
+          </Link>
+          <span aria-hidden>|</span>
+          <Link href="/register" className="hover:underline">
+            Inscription
+          </Link>
+        </p>
       </div>
     </div>
   )

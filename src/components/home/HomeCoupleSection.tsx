@@ -12,7 +12,7 @@ export function HomeCoupleSection() {
         className="absolute inset-0 opacity-90"
         style={{
           background:
-            "linear-gradient(135deg, #F8F4EE 0%, #EDE6DC 45%, #E8DFD2 100%)",
+            "linear-gradient(135deg, #FFFDF9 0%, #EDE6DC 45%, #E8DFD2 100%)",
         }}
       />
       <div className="relative z-10 max-w-3xl mx-auto space-y-6 gsap-fade-up text-center sm:text-left">

@@ -66,12 +66,12 @@ export function PersonalizedReportView({
 
   return (
     <article className="space-y-5 max-w-3xl mx-auto">
-      <header className="relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/40 bg-gradient-to-br from-[#1C1412] via-[#2A1810] to-[#5C1F28] p-6 sm:p-8 text-[#F8F4EE] shadow-elevated">
+      <header className="relative overflow-hidden rounded-[1.75rem] border border-[#D7B866]/40 bg-gradient-to-br from-[#2B2421] via-[#2A1810] to-[#641F2B] p-6 sm:p-8 text-[#FFFDF9] shadow-elevated">
         <div
           aria-hidden
           className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-40"
         />
-        <p className="relative z-10 text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
+        <p className="relative z-10 text-[10px] font-bold uppercase tracking-[0.22em] text-[#E8D49A]">
           KELIAA · Rapport complet
         </p>
         <h1 className="relative z-10 mt-3 font-serif text-3xl sm:text-4xl font-bold leading-tight">
@@ -88,13 +88,13 @@ export function PersonalizedReportView({
         <div className="relative z-10 mt-5 space-y-2">
           <div className="flex items-center justify-between text-[11px] text-white/60">
             <span>Complétude du rapport</span>
-            <span className="font-bold text-[#F3D9A4]">
+            <span className="font-bold text-[#E8D49A]">
               {living.completenessPercent}%
             </span>
           </div>
           <div className="h-2 rounded-full bg-white/10 overflow-hidden">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#B8954A] to-[#F3D9A4] transition-all duration-700"
+              className="h-full rounded-full bg-gradient-to-r from-[#D7B866] to-[#E8D49A] transition-all duration-700"
               style={{ width: `${Math.min(100, living.completenessPercent)}%` }}
             />
           </div>
@@ -113,7 +113,7 @@ export function PersonalizedReportView({
             <p className="text-[10px] uppercase tracking-wider text-white/50">
               Parties ouvertes
             </p>
-            <p className="font-serif text-2xl font-bold text-[#F3D9A4]">
+            <p className="font-serif text-2xl font-bold text-[#E8D49A]">
               {unlockedCount}
               <span className="text-base text-white/45 font-normal">
                 /{ordered.length}
@@ -135,7 +135,7 @@ export function PersonalizedReportView({
 
         <div className="relative z-10 mt-4 flex flex-wrap gap-2">
           {isAlliance ? (
-            <span className="inline-flex items-center gap-1 rounded-full border border-[#B8954A]/50 bg-[#B8954A]/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#F3D9A4]">
+            <span className="inline-flex items-center gap-1 rounded-full border border-[#D7B866]/50 bg-[#D7B866]/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#E8D49A]">
               <Crown className="h-3 w-3" /> {base.offerLabel}
             </span>
           ) : (
@@ -190,7 +190,7 @@ export function PersonalizedReportView({
       </div>
 
       {living.nextUnlock ? (
-        <div className="rounded-2xl border border-[#B8954A]/35 bg-gradient-to-r from-[#B8954A]/15 via-white to-primary/[0.04] px-4 py-3.5 flex flex-wrap items-center justify-between gap-3">
+        <div className="rounded-2xl border border-[#D7B866]/35 bg-gradient-to-r from-[#D7B866]/15 via-white to-primary/[0.04] px-4 py-3.5 flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm">
             <Sparkles className="inline h-4 w-4 text-accent mr-1.5" />
             Prochaine clé : <strong>{living.nextUnlock.title}</strong> → enrichit
@@ -198,7 +198,7 @@ export function PersonalizedReportView({
           </p>
           <Link
             href={living.nextUnlock.href}
-            className="inline-flex h-9 items-center gap-1 rounded-xl bg-[#B8954A] px-3 text-xs font-bold text-[#1C1412]"
+            className="inline-flex h-9 items-center gap-1 rounded-xl bg-[#D7B866] px-3 text-xs font-bold text-[#2B2421]"
           >
             Faire le test <ArrowRight className="h-3.5 w-3.5" />
           </Link>
@@ -215,7 +215,7 @@ export function PersonalizedReportView({
               className={cn(
                 "rounded-2xl border overflow-hidden transition-colors",
                 chapter.unlocked
-                  ? "border-[#B8954A]/35 bg-card shadow-sm"
+                  ? "border-[#D7B866]/35 bg-card shadow-sm"
                   : "border-dashed border-border/80 bg-secondary/25"
               )}
             >
@@ -293,7 +293,7 @@ export function PersonalizedReportView({
                           href={
                             variant === "global" ? "/rapport" : "/rapport/global"
                           }
-                          className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#B8954A] px-4 text-sm font-bold text-[#1C1412]"
+                          className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#D7B866] px-4 text-sm font-bold text-[#2B2421]"
                         >
                           {variant === "global"
                             ? "Retour au hub Rapport"
@@ -328,7 +328,7 @@ export function PersonalizedReportView({
                               className={cn(
                                 "rounded-xl border p-4 space-y-2.5",
                                 card.kind === "force"
-                                  ? "border-[#B8954A]/35 bg-[#B8954A]/[0.06]"
+                                  ? "border-[#D7B866]/35 bg-[#D7B866]/[0.06]"
                                   : "border-primary/20 bg-primary/[0.03]"
                               )}
                             >
@@ -405,7 +405,7 @@ export function PersonalizedReportView({
                             <Link
                               key={a.href + a.label}
                               href={a.href}
-                              className="inline-flex h-10 items-center justify-between rounded-xl border border-[#B8954A]/30 bg-[#B8954A]/10 px-4 text-sm font-semibold text-[#7A5F28]"
+                              className="inline-flex h-10 items-center justify-between rounded-xl border border-[#D7B866]/30 bg-[#D7B866]/10 px-4 text-sm font-semibold text-[#A78335]"
                             >
                               {a.label}
                               <ArrowRight className="h-3.5 w-3.5" />

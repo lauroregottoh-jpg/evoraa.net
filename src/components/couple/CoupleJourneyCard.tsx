@@ -79,7 +79,7 @@ export function CoupleJourneyCard() {
         <div className="my-6 flex items-center justify-center">
           <SeatInitial seat="1" label="Partenaire A" />
           <div className="relative mx-3 h-px flex-1 bg-gradient-to-r from-white/10 via-accent to-white/10">
-            <HeartHandshake className="absolute left-1/2 top-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent p-2 text-[#1C1412] shadow-lg" />
+            <HeartHandshake className="absolute left-1/2 top-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent p-2 text-[#2B2421] shadow-lg" />
           </div>
           <SeatInitial seat="2" label="Partenaire B" accent />
         </div>

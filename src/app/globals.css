@@ -1,39 +1,81 @@
 @import "tailwindcss";
 
+/*
+  KELIAA Charte V2 — système épuré
+  Identité : IVOIRE → CRÈME → BLANC CASSÉ → BORDEAUX → CHAMPAGNE
+  Modes : quotidien (clair) · émotionnel (bordeaux ponctuel) · premium (sombre + champagne)
+*/
+
+:root {
+  --keliaa-ivory: #F7F1E8;
+  --keliaa-cream: #EFE5DA;
+  --keliaa-off-white: #FCFAF6;
+  --keliaa-burgundy: #641F2B;
+  --keliaa-champagne: #D7B866;
+
+  --keliaa-text: #2B2421;
+  --keliaa-text-secondary: #706761;
+  --keliaa-text-muted: #938982;
+  --keliaa-white: #FFFDF9;
+
+  --keliaa-success: #6D947C;
+  --keliaa-warning: #C59A4A;
+  --keliaa-error: #B35D5D;
+  --keliaa-info: #7C8D91;
+  --keliaa-border: #E4DCD2;
+
+  --keliaa-burgundy-deep: #451923;
+  --keliaa-burgundy-soft: #8A4B55;
+  --keliaa-champagne-light: #E8D49A;
+  --keliaa-gold-dark: #A78335;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 30px;
+}
+
 @theme {
-  /* KELIAA — palette harmonisée (pierre chaude + bordeaux + or, hors cluster cream générique) */
-  --color-background: #F3EFE8;
-  --color-foreground: #1C1412;
+  --color-background: #F7F1E8;
+  --color-foreground: #2B2421;
 
-  --color-primary: #5C1F28;
-  --color-primary-foreground: #F8F4EE;
+  --color-card: #FCFAF6;
+  --color-card-foreground: #2B2421;
 
-  --color-secondary: #E8E0D4;
-  --color-secondary-foreground: #1C1412;
+  --color-primary: #641F2B;
+  --color-primary-foreground: #FFFDF9;
 
-  --color-muted: #E8E0D4;
-  --color-muted-foreground: #5C534A;
+  --color-secondary: #EFE5DA;
+  --color-secondary-foreground: #2B2421;
 
-  --color-accent: #B8954A;
-  --color-accent-foreground: #1C1412;
+  --color-muted: #EFE5DA;
+  --color-muted-foreground: #706761;
 
-  --color-destructive: #9F1239;
-  --color-destructive-foreground: #F8F4EE;
+  --color-accent: #D7B866;
+  --color-accent-foreground: #2B2421;
 
-  --color-border: #D9D0C4;
-  --color-input: #D9D0C4;
-  --color-ring: #B8954A;
+  --color-destructive: #B35D5D;
+  --color-destructive-foreground: #FFFDF9;
 
-  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --color-success: #6D947C;
+  --color-warning: #C59A4A;
+  --color-info: #7C8D91;
+
+  --color-border: #E4DCD2;
+  --color-input: #E4DCD2;
+  --color-ring: #D7B866;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
 
-  --shadow-premium: 0 12px 40px -12px rgba(92, 31, 40, 0.12);
-  --shadow-card: 0 4px 20px -4px rgba(92, 31, 40, 0.08);
-  --shadow-elevated: 0 18px 48px -14px rgba(92, 31, 40, 0.14);
+  --shadow-premium: 0 16px 45px rgba(43, 36, 33, 0.10);
+  --shadow-card: 0 8px 30px rgba(43, 36, 33, 0.08);
+  --shadow-elevated: 0 16px 45px rgba(43, 36, 33, 0.10);
 
-  --radius-lg: 0.5rem;
-  --radius-md: 0.375rem;
-  --radius-sm: 0.25rem;
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 10px;
+  --radius-xl: 30px;
 }
 
 @layer base {
@@ -44,57 +86,88 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-serif);
+    color: var(--keliaa-text);
+    letter-spacing: -0.02em;
   }
-  h1 { font-size: 3rem; line-height: 3.5rem; font-weight: 700; }
-  h2 { font-size: 2.25rem; line-height: 2.5rem; font-weight: 600; }
-  h3 { font-size: 1.5rem; line-height: 2rem; font-weight: 600; }
-
-  @media (max-width: 640px) {
-    h1 { font-size: 2.25rem; line-height: 2.5rem; }
-    h2 { font-size: 1.75rem; line-height: 2rem; }
-    h3 { font-size: 1.25rem; line-height: 1.75rem; }
-  }
+  h1 { font-size: clamp(2.25rem, 6vw, 3.625rem); line-height: 0.98; font-weight: 600; }
+  h2 { font-size: clamp(1.875rem, 5vw, 2.75rem); line-height: 1.05; font-weight: 600; }
+  h3 { font-size: 1.625rem; line-height: 1.1; font-weight: 600; }
 }
 
 @layer utilities {
+  .surface-0 {
+    background: var(--keliaa-ivory);
+  }
+  .surface-1 {
+    background: var(--keliaa-off-white);
+    border: 1px solid var(--keliaa-border);
+  }
+  .surface-2 {
+    background: var(--keliaa-cream);
+  }
+  .surface-premium {
+    background: linear-gradient(135deg, #451923, #3B2420);
+    color: var(--keliaa-white);
+  }
+
   .glass {
-    background: rgba(243, 239, 232, 0.85);
+    background: rgba(247, 241, 232, 0.88);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(217, 208, 196, 0.7);
+    border: 1px solid rgba(228, 220, 210, 0.8);
   }
 
   .glass-card {
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(252, 250, 246, 0.94);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(217, 208, 196, 0.6);
-    box-shadow: var(--shadow-premium);
+    border: 1px solid rgba(228, 220, 210, 0.7);
+    box-shadow: var(--shadow-card);
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, #5C1F28, #B8954A);
+    background: linear-gradient(135deg, #641F2B, #D7B866);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .card-kelia {
-    background: #FFFFFF;
-    border: 1px solid #D9D0C4;
+    background: var(--keliaa-off-white);
+    border: 1px solid var(--keliaa-border);
     box-shadow: var(--shadow-card);
-    border-radius: 0.5rem;
+    border-radius: var(--radius-md);
   }
 
   .encart-kelia {
-    background: #FFFFFF;
-    border: 1px solid var(--color-border);
-    border-left: 4px solid var(--color-primary);
+    background: var(--keliaa-off-white);
+    border: 1px solid var(--keliaa-border);
+    border-left: 4px solid var(--keliaa-burgundy);
     box-shadow: var(--shadow-card);
+  }
+
+  .btn-keliaa {
+    background: var(--keliaa-burgundy);
+    color: var(--keliaa-white);
+    border-radius: 14px;
+    min-height: 52px;
+    padding: 14px 22px;
+    font-weight: 600;
+  }
+
+  .btn-keliaa-premium {
+    background: var(--keliaa-champagne);
+    color: var(--keliaa-text);
+    border-radius: 14px;
+    min-height: 52px;
+    padding: 14px 22px;
+    font-weight: 600;
   }
 }
 
@@ -129,11 +202,11 @@
 @keyframes coffreUnlock {
   0% {
     transform: scale(0.98);
-    box-shadow: 0 0 0 0 rgba(184, 149, 74, 0.45);
+    box-shadow: 0 0 0 0 rgba(215,184,102, 0.45);
   }
   55% {
     transform: scale(1.015);
-    box-shadow: 0 0 0 12px rgba(184, 149, 74, 0);
+    box-shadow: 0 0 0 12px rgba(215,184,102, 0);
   }
   100% {
     transform: scale(1);
@@ -357,7 +430,7 @@
 /* Barre de scroll visible sur le menu membre (bordeaux) */
 .member-sidebar-scroll {
   scrollbar-width: thin;
-  scrollbar-color: rgba(248, 244, 238, 0.45) rgba(255, 255, 255, 0.08);
+  scrollbar-color: rgba(255,253,249, 0.45) rgba(255, 255, 255, 0.08);
 }
 .member-sidebar-scroll::-webkit-scrollbar {
   width: 8px;
@@ -368,13 +441,13 @@
   margin-block: 4px;
 }
 .member-sidebar-scroll::-webkit-scrollbar-thumb {
-  background: rgba(248, 244, 238, 0.4);
+  background: rgba(255,253,249, 0.4);
   border-radius: 999px;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 .member-sidebar-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(248, 244, 238, 0.6);
+  background: rgba(255,253,249, 0.6);
   background-clip: padding-box;
 }
 
@@ -431,10 +504,10 @@
 @keyframes rapportSealPulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(184, 149, 74, 0.35);
+    box-shadow: 0 0 0 0 rgba(215,184,102, 0.35);
   }
   50% {
-    box-shadow: 0 0 0 10px rgba(184, 149, 74, 0);
+    box-shadow: 0 0 0 10px rgba(215,184,102, 0);
   }
 }
 
@@ -476,7 +549,7 @@
   position: absolute;
   width: 18px;
   height: 18px;
-  border-color: #b8954a;
+  border-color: #D7B866;
   pointer-events: none;
   z-index: 2;
 }
@@ -511,10 +584,10 @@
 
 .rapport-page-premium {
   background:
-    linear-gradient(180deg, rgba(184, 149, 74, 0.06), transparent 28%),
+    linear-gradient(180deg, rgba(215,184,102, 0.06), transparent 28%),
     linear-gradient(135deg, #fffefb 0%, #f8f4ee 48%, #fff 100%);
   box-shadow:
-    0 1px 0 rgba(184, 149, 74, 0.2) inset,
+    0 1px 0 rgba(215,184,102, 0.2) inset,
     0 12px 40px -24px rgba(28, 20, 18, 0.35);
 }
 
@@ -528,7 +601,7 @@
 }
 
 .rapport-gold-text {
-  background: linear-gradient(105deg, #f3d9a4, #b8954a 40%, #f3d9a4 70%, #8a6a2e);
+  background: linear-gradient(105deg, #f3d9a4, #D7B866 40%, #f3d9a4 70%, #8a6a2e);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -538,7 +611,7 @@
 
 .rapport-pattern {
   background-image: radial-gradient(
-    rgba(184, 149, 74, 0.12) 1px,
+    rgba(215,184,102, 0.12) 1px,
     transparent 1px
   );
   background-size: 14px 14px;
@@ -590,8 +663,8 @@
   }
 
   .rapport-gold-text {
-    color: #b8954a !important;
-    -webkit-text-fill-color: #b8954a;
+    color: #D7B866 !important;
+    -webkit-text-fill-color: #D7B866;
     background: none !important;
   }
 }
@@ -619,10 +692,10 @@
 @keyframes matchingNumGlow {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(184, 149, 74, 0.35);
+    box-shadow: 0 0 0 0 rgba(215,184,102, 0.35);
   }
   50% {
-    box-shadow: 0 0 16px 2px rgba(184, 149, 74, 0.45);
+    box-shadow: 0 0 16px 2px rgba(215,184,102, 0.45);
   }
 }
 
@@ -748,8 +821,8 @@
 }
 
 .couple-sit-active {
-  color: #5c1f28;
-  border-color: #b8954a;
+  color: #641F2B;
+  border-color: #D7B866;
 }
 
 /* Scène Imagine — verrou / rapport / duo */
@@ -1066,7 +1139,7 @@
   }
   50% {
     transform: scale(1.08);
-    box-shadow: 0 0 24px 4px rgba(184, 149, 74, 0.35);
+    box-shadow: 0 0 24px 4px rgba(215,184,102, 0.35);
   }
 }
 
@@ -1216,10 +1289,10 @@
 @keyframes simOpenMsgPulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(92, 31, 40, 0.25);
+    box-shadow: 0 0 0 0 rgba(100,31,43, 0.25);
   }
   50% {
-    box-shadow: 0 0 0 6px rgba(92, 31, 40, 0);
+    box-shadow: 0 0 0 6px rgba(100,31,43, 0);
   }
 }
 

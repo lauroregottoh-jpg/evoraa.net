@@ -16,9 +16,10 @@ import {
   Eye,
   MapPin,
   BookOpen,
+  Heart,
 } from "lucide-react";
 import { startConversationFromProfile } from "@/app/actions/messaging";
-import { FavoriteButton } from "@/components/social/FavoriteButton";
+import { toggleCommunityLikeAction } from "@/app/actions/community";
 import { InviteToTestBlock } from "@/components/compatibility/InviteToTestBlock";
 import type { DomainScore, MatchInsight } from "@/lib/matching/types";
 import type { AssessmentSlug } from "@/lib/assessments/questionBank";
@@ -57,7 +58,25 @@ export function CompatibilityDetailView({
   const router = useRouter();
   const [photoRequested, setPhotoRequested] = React.useState(false);
   const [isStarting, setIsStarting] = React.useState(false);
+  const [isLiking, setIsLiking] = React.useState(false);
+  const [liked, setLiked] = React.useState(false);
   const [startError, setStartError] = React.useState("");
+
+  const handleLike = async () => {
+    if (!profile || isLiking) return;
+    setIsLiking(true);
+    setStartError("");
+    try {
+      const result = await toggleCommunityLikeAction(profile.id);
+      if (result.error) {
+        setStartError(result.error);
+        return;
+      }
+      setLiked(Boolean(result.liked));
+    } finally {
+      setIsLiking(false);
+    }
+  };
 
   const handleStart = async () => {
     if (!profile) return;
@@ -139,21 +158,34 @@ export function CompatibilityDetailView({
             </p>
             <p className="text-xs text-muted-foreground">
               {profile.basis === "demande"
-                ? "Suggestion selon votre demande — les tests n’ont pas encore été remplis des deux côtés. Ce n’est pas un diagnostic complet."
-                : "Score détaillé ci-dessous — domaines, interactions et points de vigilance."}
+                ? "Compatibilité à préciser"
+                : null}
             </p>
-            <Button
-              onClick={handleStart}
-              disabled={isStarting}
-              className="w-full h-11 rounded-xl"
-            >
-              <MessageSquareText className="mr-2 h-4 w-4" />
-              {isStarting ? "Ouverture…" : "Écrire"}
-            </Button>
-            <p className="text-[11px] text-center text-muted-foreground">
-              Échange respectueux — soumis à vos quotas du mois
-            </p>
-            <FavoriteButton targetProfileId={profile.id} />
+            <div className="space-y-2">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                Connecter avec quelqu’un
+              </p>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={isLiking}
+                  onClick={() => void handleLike()}
+                  className="flex-1 h-11 rounded-xl"
+                >
+                  <Heart className={`mr-2 h-4 w-4 ${liked ? "fill-current" : ""}`} />
+                  {liked ? "Aimé" : "Liker"}
+                </Button>
+                <Button
+                  onClick={handleStart}
+                  disabled={isStarting}
+                  className="flex-1 h-11 rounded-xl"
+                >
+                  <MessageSquareText className="mr-2 h-4 w-4" />
+                  {isStarting ? "Ouverture…" : "Envoyer un message"}
+                </Button>
+              </div>
+            </div>
             {startError && <p className="text-xs text-destructive">{startError}</p>}
           </div>
         </div>

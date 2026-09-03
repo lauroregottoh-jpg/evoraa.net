@@ -59,32 +59,32 @@ export function CoachingClientHub({
 
   return (
     <div className="space-y-8">
-      <section className="rounded-2xl border border-[#5C1F28]/15 bg-[#FBF9F6] p-5 sm:p-6 space-y-5">
+      <section className="rounded-2xl border border-[#641F2B]/15 bg-[#FCFAF6] p-5 sm:p-6 space-y-5">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#D7B866]">
             Réserver mon coaching
           </p>
-          <h2 className="font-serif text-xl font-bold text-[#5C1F28] mt-1">
+          <h2 className="font-serif text-xl font-bold text-[#641F2B] mt-1">
             Crédits & préférence coach
           </h2>
-          <p className="text-sm text-[#1C1412]/70 mt-1">
+          <p className="text-sm text-[#2B2421]/70 mt-1">
             1 crédit = {COACHING_CREDIT_DISPLAY_MINUTES} minutes de séance.
             Choisissez le type de coach souhaité — le système propose un coach
             disponible selon votre préférence.
           </p>
         </div>
 
-        <div className="rounded-xl bg-white border border-[#B8954A]/30 px-4 py-3">
+        <div className="rounded-xl bg-white border border-[#D7B866]/30 px-4 py-3">
           <p className="text-xs uppercase tracking-wider text-[#8A6A2E] font-semibold">
             Mes crédits
           </p>
-          <p className="font-serif text-3xl font-bold text-[#5C1F28] mt-1">
+          <p className="font-serif text-3xl font-bold text-[#641F2B] mt-1">
             {balance === null ? "…" : balance}
           </p>
         </div>
 
         <div className="space-y-2">
-          <p className="text-sm font-medium text-[#1C1412]">
+          <p className="text-sm font-medium text-[#2B2421]">
             Je préfère un coach…
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -102,8 +102,8 @@ export function CoachingClientHub({
                 className={cn(
                   "rounded-xl border px-3 py-3 text-sm font-semibold transition-colors",
                   pref === opt.id
-                    ? "border-[#5C1F28] bg-[#5C1F28] text-[#F8F4EE]"
-                    : "border-[#5C1F28]/20 bg-white text-[#1C1412] hover:border-[#5C1F28]/40"
+                    ? "border-[#641F2B] bg-[#641F2B] text-[#FFFDF9]"
+                    : "border-[#641F2B]/20 bg-white text-[#2B2421] hover:border-[#641F2B]/40"
                 )}
               >
                 {opt.label}
@@ -111,17 +111,17 @@ export function CoachingClientHub({
             ))}
           </div>
           {saved ? (
-            <p className="text-xs text-[#5C1F28]">Préférence enregistrée.</p>
+            <p className="text-xs text-[#641F2B]">Préférence enregistrée.</p>
           ) : null}
         </div>
       </section>
 
       {!hideHistoryPlaceholder ? (
-        <section className="rounded-2xl border border-[#1C1412]/10 bg-white p-5 sm:p-6 space-y-3">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
+        <section className="rounded-2xl border border-[#2B2421]/10 bg-white p-5 sm:p-6 space-y-3">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#D7B866]">
             Suivre mes sessions
           </p>
-          <h2 className="font-serif text-xl font-bold text-[#5C1F28]">
+          <h2 className="font-serif text-xl font-bold text-[#641F2B]">
             Mes séances de coaching
           </h2>
           {linked.length > 0 ? (
@@ -129,14 +129,14 @@ export function CoachingClientHub({
               {linked.map((c) => (
                 <li
                   key={c.id}
-                  className="rounded-xl border border-[#B8954A]/25 bg-[#FBF9F6] px-4 py-3"
+                  className="rounded-xl border border-[#D7B866]/25 bg-[#FCFAF6] px-4 py-3"
                 >
                   Coach associé : <strong>{c.name}</strong>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-[#1C1412]/60 leading-relaxed">
+            <p className="text-sm text-[#2B2421]/60 leading-relaxed">
               Aucune séance planifiée pour le moment. Achetez des crédits,
               indiquez votre préférence de genre, puis réservez sur le
               calendrier — votre coach apparaîtra dans l’historique.
@@ -144,7 +144,7 @@ export function CoachingClientHub({
           )}
         </section>
       ) : linked.length > 0 ? (
-        <section className="rounded-2xl border border-[#1C1412]/10 bg-white p-5 space-y-2">
+        <section className="rounded-2xl border border-[#2B2421]/10 bg-white p-5 space-y-2">
           <p className="text-xs font-semibold text-[#8A6A2E]">Coach(s) associé(s)</p>
           <ul className="text-sm space-y-1">
             {linked.map((c) => (

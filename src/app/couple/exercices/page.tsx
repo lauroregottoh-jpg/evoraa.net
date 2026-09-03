@@ -66,7 +66,7 @@ export default function CoupleExercicesPage() {
                     onClick={() =>
                       setDoc(buildDemoCoupleReport("couple_premium_plus"))
                     }
-                    className="inline-flex h-10 items-center rounded-xl border border-[#B8954A]/40 px-4 text-sm font-semibold text-[#5C1F28]"
+                    className="inline-flex h-10 items-center rounded-xl border border-[#D7B866]/40 px-4 text-sm font-semibold text-[#641F2B]"
                   >
                     Prévisualiser le cahier
                   </button>

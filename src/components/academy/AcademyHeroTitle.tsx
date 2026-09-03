@@ -10,7 +10,7 @@ export function AcademyHeroTitle({ className }: { className?: string }) {
     <header
       className={cn(
         "relative overflow-hidden rounded-[1.75rem] border border-primary/20",
-        "bg-gradient-to-br from-[#5C1F28] via-[#722F37] to-[#3D141A]",
+        "bg-gradient-to-br from-[#641F2B] via-[#722F37] to-[#3D141A]",
         "px-6 py-10 sm:px-10 sm:py-12 text-center shadow-elevated",
         className
       )}
@@ -33,14 +33,14 @@ export function AcademyHeroTitle({ className }: { className?: string }) {
       />
 
       <div className="relative z-10 space-y-4">
-        <div className="academy-hero-badge mx-auto inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#F3D9A4]">
+        <div className="academy-hero-badge mx-auto inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#E8D49A]">
           <GraduationCap className="h-3.5 w-3.5" />
           Formation KELIAA
         </div>
 
-        <h1 className="academy-hero-title font-serif text-4xl sm:text-5xl md:text-[3.25rem] font-bold leading-[1.1] text-[#F8F4EE]">
+        <h1 className="academy-hero-title font-serif text-4xl sm:text-5xl md:text-[3.25rem] font-bold leading-[1.1] text-[#FFFDF9]">
           <span className="block academy-hero-line">Académie</span>
-          <span className="block academy-hero-line academy-hero-line-2 mt-1 bg-gradient-to-r from-[#F3D9A4] via-[#D4AF37] to-[#F3D9A4] bg-clip-text text-transparent">
+          <span className="block academy-hero-line academy-hero-line-2 mt-1 bg-gradient-to-r from-[#E8D49A] via-[#D4AF37] to-[#E8D49A] bg-clip-text text-transparent">
             du mariage
           </span>
         </h1>

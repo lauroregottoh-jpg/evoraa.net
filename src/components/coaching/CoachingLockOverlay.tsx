@@ -26,18 +26,18 @@ export function CoachingLockOverlay({
       >
         {children}
       </div>
-      <div className="absolute inset-0 z-10 flex items-start justify-center p-4 pt-10 sm:pt-16 bg-[#FBF9F6]/55 backdrop-blur-[2px]">
-        <div className="w-full max-w-md rounded-2xl border border-[#B8954A]/40 bg-white shadow-elevated p-6 space-y-4 text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#5C1F28]/10 text-[#5C1F28]">
+      <div className="absolute inset-0 z-10 flex items-start justify-center p-4 pt-10 sm:pt-16 bg-[#FCFAF6]/55 backdrop-blur-[2px]">
+        <div className="w-full max-w-md rounded-2xl border border-[#D7B866]/40 bg-white shadow-elevated p-6 space-y-4 text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#641F2B]/10 text-[#641F2B]">
             <Lock className="h-5 w-5" />
           </div>
-          <h2 className="font-serif text-2xl font-bold text-[#5C1F28]">
+          <h2 className="font-serif text-2xl font-bold text-[#641F2B]">
             {title}
           </h2>
-          <p className="text-sm text-[#1C1412]/75 leading-relaxed">{body}</p>
+          <p className="text-sm text-[#2B2421]/75 leading-relaxed">{body}</p>
           <Link
             href="/coaching#payer"
-            className="inline-flex h-11 items-center justify-center rounded-xl bg-[#5C1F28] px-5 text-sm font-semibold text-[#FBF9F6] w-full sm:w-auto"
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-[#641F2B] px-5 text-sm font-semibold text-[#FCFAF6] w-full sm:w-auto"
           >
             Voir l’offre coaching
           </Link>

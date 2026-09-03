@@ -42,17 +42,11 @@ export function CompatibilityGrid({
   };
 
   return (
-    <div className="space-y-8 py-6">
+    <div id="suggestions" className="space-y-8 py-6 scroll-mt-6">
       <div className="space-y-3 border-b border-border/40 pb-6">
         <h1 className="text-3xl sm:text-4xl font-serif font-bold text-foreground">
-          Découvrir vos compatibilités
+          Votre compatibilité
         </h1>
-        <p className="text-muted-foreground text-sm max-w-2xl leading-relaxed">
-          Suggestions à partir de votre demande (profil d’accueil) et, dès
-          qu’il y a des tests, du matching à 5 piliers. Les profils sans tests
-          sont des <strong>suggestions</strong> — pas un diagnostic complet.
-          Invitez l’autre à un questionnaire pour vérifier la compatibilité.
-        </p>
         <div className="flex flex-wrap items-center gap-2 pt-1">
           <Button
             type="button"
@@ -76,7 +70,7 @@ export function CompatibilityGrid({
               </>
             ) : (
               <>
-                <EyeOff className="h-3.5 w-3.5" /> Flouter (optionnel)
+                <EyeOff className="h-3.5 w-3.5" /> Flouter
               </>
             )}
           </button>
@@ -102,8 +96,7 @@ export function CompatibilityGrid({
         <div className="rounded-2xl border border-border/60 bg-card p-8 text-center space-y-4">
           <p className="font-serif text-xl text-foreground">Aucune suggestion pour le moment</p>
           <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-            Complétez vos questionnaires pour affiner, ou invitez quelqu’un à un
-            test depuis une suggestion.
+            Complétez vos questionnaires pour affiner les suggestions.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link

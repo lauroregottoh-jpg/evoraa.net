@@ -13,15 +13,15 @@ export default async function CommunautePage() {
   return (
     <MemberPage>
       <div className="space-y-6 py-4 max-w-5xl mx-auto">
-        <header className="relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#FFFBF5] via-[#F8F4EE] to-[#F0E6D4] p-6 sm:p-8 shadow-card">
-          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#8B6914] inline-flex items-center gap-1.5">
-            <Users className="h-3.5 w-3.5 text-[#B8954A]" />
+        <header className="relative overflow-hidden rounded-[1.75rem] border border-[#D7B866]/35 bg-gradient-to-br from-[#FFFBF5] via-[#FFFDF9] to-[#F0E6D4] p-6 sm:p-8 shadow-card">
+          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#A78335] inline-flex items-center gap-1.5">
+            <Users className="h-3.5 w-3.5 text-[#D7B866]" />
             Communauté KELIAA
           </p>
-          <h1 className="mt-2 font-serif text-3xl sm:text-4xl font-bold text-[#1C1412]">
+          <h1 className="mt-2 font-serif text-3xl sm:text-4xl font-bold text-[#2B2421]">
             Découvrir la communauté
           </h1>
-          <p className="mt-2 max-w-2xl text-sm text-[#1C1412]/70 leading-relaxed">
+          <p className="mt-2 max-w-2xl text-sm text-[#2B2421]/70 leading-relaxed">
             Au-delà du Matching, découvrez de belles amitiés et connectez avec
             des personnes qui partagent vos valeurs. Likez un profil — un like
             mutuel ouvre les messages. Pas de contact direct.

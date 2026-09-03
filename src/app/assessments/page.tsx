@@ -2,8 +2,6 @@ import Link from "next/link"
 import { MemberPage } from "@/components/layout/MemberPage"
 import { getAssessmentsProgress } from "@/app/actions/assessments"
 import { listIncomingAssessmentInvites } from "@/app/actions/assessmentInvites"
-import { MessageCreditsCallout } from "@/components/engagement/MessageCreditsCallout"
-import { ASSESSMENT_RETAKE_COOLDOWN_DAYS } from "@/lib/assessments/constants"
 import { PillarBadges } from "@/components/assessments/PillarBadges"
 import { AssessmentPillarCards } from "@/components/assessments/AssessmentPillarCards"
 import { DiscoveryAssessmentCards } from "@/components/rapport/DiscoveryAssessmentCards"
@@ -69,29 +67,25 @@ export default async function AssessmentsHubPage() {
   return (
     <MemberPage>
       <div className="relative space-y-10 py-2 max-w-4xl mx-auto">
-        <header className="relative z-10 overflow-hidden rounded-[1.75rem] border border-primary/20 bg-gradient-to-br from-[#5C1F28] via-[#722F37] to-[#3D141A] p-6 sm:p-8 text-[#F8F4EE] shadow-elevated">
-          <div
-            aria-hidden
-            className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-35"
-          />
+        <header className="relative z-10 overflow-hidden rounded-[1.75rem] border border-border bg-[#FCFAF6] p-6 sm:p-8 shadow-card">
           <div className="relative z-10 space-y-4">
-            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
-              {isAlliance ? "Tests · Matching & Rapport" : "Espace Découverte · Tests"}
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground">
+              {isAlliance ? "Tests · Matching & Rapport" : "Tests"}
             </p>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold leading-tight text-primary">
               Choisissez un test
             </h1>
-            <p className="text-sm text-white/85 leading-relaxed max-w-2xl">
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
               {isAlliance
-                ? "Avec Alliance, chaque test Matching alimente aussi votre Rapport Personnalisé. Les 10 clés ci-dessous ouvrent les chapitres du bilan. Premier passage d’un test : +10 messages (20 jours)."
-                : "En Découverte, commencez par les 5 tests de compatibilité (+10 messages chacun, 20 jours). Les 10 clés du Rapport restent en aperçu verrouillé."}
+                ? "Chaque test Matching alimente aussi votre Rapport Personnalisé."
+                : "5 tests de compatibilité pour affiner votre matching."}
             </p>
 
             {isAlliance ? (
-              <div className="rounded-2xl border border-[#B8954A]/45 bg-[#B8954A]/15 p-4 space-y-3">
+              <div className="rounded-2xl border border-accent/40 bg-accent/10 p-4 space-y-3">
                 <div className="flex items-center gap-2">
-                  <KeyRound className="h-4 w-4 text-[#F3D9A4]" />
-                  <p className="text-[11px] font-bold uppercase tracking-widest text-[#F3D9A4]">
+                  <KeyRound className="h-4 w-4 text-accent" />
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-[#A78335]">
                     Progression des 10 clés
                   </p>
                 </div>
@@ -104,11 +98,11 @@ export default async function AssessmentsHubPage() {
                         key={a.id}
                         className={
                           done
-                            ? "rounded-lg border border-[#F3D9A4]/50 bg-[#B8954A]/30 px-2 py-1.5 text-[10px] font-semibold text-[#F8F4EE]"
-                            : "rounded-lg border border-white/15 bg-white/5 px-2 py-1.5 text-[10px] font-medium text-white/70"
+                            ? "rounded-lg border border-accent/50 bg-accent/25 px-2 py-1.5 text-[10px] font-semibold text-foreground"
+                            : "rounded-lg border border-border bg-secondary/60 px-2 py-1.5 text-[10px] font-medium text-muted-foreground"
                         }
                       >
-                        <span className="text-[#F3D9A4] font-bold">
+                        <span className="text-[#A78335] font-bold">
                           {String(a.order).padStart(2, "0")}
                         </span>{" "}
                         {a.title.replace(
@@ -126,59 +120,57 @@ export default async function AssessmentsHubPage() {
               {next ? (
                 <Link
                   href={`/assessments/${next.slug}`}
-                  className="inline-flex h-12 items-center justify-center rounded-xl bg-[#B8954A] px-6 text-sm font-bold text-[#1C1412]"
+                  className="inline-flex h-12 items-center justify-center rounded-xl bg-primary px-6 text-sm font-bold text-primary-foreground"
                 >
                   {doneCount === 0
-                    ? "Commencer un test de compatibilité →"
+                    ? "Commencer un test →"
                     : `Continuer · ${next.name.replace(/^Compatibilité\s+/i, "")} →`}
                 </Link>
               ) : null}
               {!isAlliance ? (
                 <Link
                   href="/premium"
-                  className="inline-flex h-12 items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-5 text-sm font-semibold"
+                  className="inline-flex h-12 items-center gap-2 rounded-xl border border-border bg-transparent px-5 text-sm font-semibold text-primary"
                 >
-                  <Crown className="h-4 w-4 text-[#F3D9A4]" />
-                  Débloquer Alliance
+                  <Crown className="h-4 w-4 text-accent" />
+                  Découvrir Premium
                 </Link>
               ) : (
                 <Link
                   href="/rapport/global"
-                  className="inline-flex h-12 items-center rounded-xl border border-[#B8954A]/45 bg-[#B8954A]/20 px-5 text-sm font-semibold text-[#F3D9A4]"
+                  className="inline-flex h-12 items-center rounded-xl bg-accent px-5 text-sm font-semibold text-accent-foreground"
                 >
                   Voir mon rapport
                 </Link>
               )}
-              <p className="text-xs text-white/65">
+              <p className="text-xs text-muted-foreground">
                 Matching {doneCount}/5
                 {isAlliance
                   ? ` · Rapport ${living.completenessPercent}%`
-                  : ""}{" "}
-                · maj {ASSESSMENT_RETAKE_COOLDOWN_DAYS} j
+                  : ""}
               </p>
             </div>
           </div>
         </header>
 
         {incoming.invites.length > 0 ? (
-          <div className="relative z-10 space-y-3 rounded-[1.35rem] border border-[#B8954A]/40 bg-[#F7F0E0] p-5">
-            <p className="font-serif text-lg font-bold text-[#5C1F28]">
-              On vous invite à tester votre compatibilité
+          <div className="relative z-10 space-y-3 rounded-[1.35rem] border border-border bg-[#FCFAF6] p-5">
+            <p className="font-serif text-lg font-bold text-primary">
+              Invitations à un test
             </p>
             <ul className="space-y-2">
               {incoming.invites.map((inv) => (
                 <li
                   key={inv.id}
-                  className="flex flex-wrap items-center justify-between gap-2 text-sm text-[#3D1519]"
+                  className="flex flex-wrap items-center justify-between gap-2 text-sm text-foreground"
                 >
                   <span>
-                    <strong>{inv.inviterName}</strong> vous recommande / vous
-                    invite à faire le test « {inv.testTitle} » afin de tester
-                    votre compatibilité.
+                    <strong>{inv.inviterName}</strong> vous invite à faire «{" "}
+                    {inv.testTitle} ».
                   </span>
                   <Link
                     href={`/assessments/${inv.testSlug}`}
-                    className="inline-flex h-9 items-center rounded-xl bg-[#5C1F28] px-3 text-xs font-bold text-[#F8F4EE]"
+                    className="inline-flex h-9 items-center rounded-xl bg-primary px-3 text-xs font-bold text-primary-foreground"
                   >
                     Faire ce test
                   </Link>
@@ -188,11 +180,7 @@ export default async function AssessmentsHubPage() {
           </div>
         ) : null}
 
-        <div className="relative z-10">
-          <MessageCreditsCallout />
-        </div>
-
-        <div className="relative z-10 rounded-[1.35rem] border border-border/70 bg-gradient-to-br from-white via-secondary/40 to-accent/[0.06] p-5 shadow-card">
+        <div className="relative z-10 rounded-[1.35rem] border border-border bg-[#FCFAF6] p-5 shadow-card">
           <PillarBadges
             pillars={progress.map((p) => ({
               slug: p.slug,
@@ -205,60 +193,46 @@ export default async function AssessmentsHubPage() {
           <p className="relative z-10 text-sm text-destructive">{error}</p>
         ) : null}
 
-        {/* ——— 1. COMPATIBILITÉ · 5 CLÉS (bien distinct, grand) ——— */}
-        <section className="relative z-10 space-y-4 rounded-[1.75rem] border-2 border-primary/25 bg-gradient-to-br from-white via-white to-primary/[0.04] p-5 sm:p-7 shadow-card">
+        <section className="relative z-10 space-y-4 rounded-[1.75rem] border border-border bg-[#FCFAF6] p-5 sm:p-7 shadow-card">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary inline-flex items-center gap-1.5">
               <Sparkles className="h-4 w-4" />
-              Formule Découverte
+              Matching
             </p>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold mt-1 leading-tight">
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold mt-1 leading-tight text-primary">
               Tests de compatibilité
             </h2>
-            <p className="text-base text-muted-foreground mt-2 max-w-2xl leading-relaxed">
-              <strong className="text-foreground">5 clés</strong> pour le
-              Matching — accessibles dès maintenant.
-            </p>
           </div>
           <AssessmentPillarCards items={[...progress]} />
         </section>
 
-        {/* ——— 2. 10 CLÉS DU RAPPORT (Alliance mis en avant — Découverte + Alliance) ——— */}
-        <section className="relative z-10 space-y-4 rounded-[1.75rem] border-2 border-[#B8954A]/55 bg-gradient-to-br from-[#B8954A]/18 via-white to-[#F8F4EE] p-5 sm:p-7 shadow-elevated ring-2 ring-[#B8954A]/25">
-          <div className="space-y-2">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#8B6914] inline-flex items-center gap-1.5 flex-wrap">
-              <Crown className="h-4 w-4 text-[#B8954A]" />
-              Formule Alliance
-              <span className="rounded-full bg-[#B8954A] px-2 py-0.5 text-[9px] font-bold uppercase text-[#1C1412]">
-                Inclus
-              </span>
+        <section className="relative z-10 space-y-4 rounded-[1.75rem] border border-accent/35 bg-[#FCFAF6] p-5 sm:p-7 shadow-card">
+          <div className="space-y-3">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#A78335] inline-flex items-center gap-1.5 flex-wrap">
+              <Crown className="h-4 w-4 text-accent" />
+              Alliance
               {!isAlliance ? (
-                <span className="rounded-full border border-[#B8954A]/50 bg-white px-2 py-0.5 text-[9px] font-bold uppercase text-[#5C1F28]">
-                  Aperçu Découverte
+                <span className="rounded-full border border-border bg-white px-2 py-0.5 text-[9px] font-bold uppercase text-primary">
+                  Aperçu
                 </span>
               ) : null}
             </p>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold leading-tight text-[#1C1412]">
-              Les 10 clés de votre rapport
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold leading-tight text-foreground">
+              Rapport personnalisé
             </h2>
-            <p className="text-sm text-[#1C1412]/70 leading-relaxed max-w-2xl">
-              {isAlliance
-                ? "Chaque clé ouvre un chapitre de votre Rapport Personnalisé. Faites le test lié, puis lisez l’analyse dans le rapport global."
-                : "Avec Alliance, ces 10 clés sont incluses et alimentent votre Rapport Personnalisé. En Découverte, l’aperçu reste visible mais verrouillé — passez Alliance pour les ouvrir."}
-            </p>
             {!isAlliance ? (
               <Link
                 href="/premium"
-                className="inline-flex h-11 items-center rounded-xl bg-[#5C1F28] px-5 text-sm font-bold text-[#F8F4EE]"
+                className="inline-flex h-11 items-center rounded-xl bg-primary px-5 text-sm font-bold text-primary-foreground"
               >
-                Passer Alliance pour débloquer →
+                Découvrir Premium
               </Link>
             ) : (
               <Link
                 href="/rapport/global"
-                className="inline-flex h-11 items-center rounded-xl border border-[#B8954A]/40 bg-[#B8954A]/15 px-5 text-sm font-bold text-[#7A5F28]"
+                className="inline-flex h-11 items-center rounded-xl bg-accent px-5 text-sm font-bold text-accent-foreground"
               >
-                Ouvrir mon Rapport Personnalisé →
+                Ouvrir mon rapport
               </Link>
             )}
           </div>
