@@ -7,7 +7,7 @@ export function VizReportUnlockScene({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "relative mx-auto w-full max-w-md aspect-[5/4] rounded-2xl border border-[#A07070]/15 bg-white overflow-hidden shadow-sm",
+        "relative mx-auto w-full max-w-md aspect-[5/4] rounded-2xl border border-[#7F5557]/15 bg-white overflow-hidden shadow-sm",
         className
       )}
       aria-hidden
@@ -31,7 +31,7 @@ export function VizReportUnlockScene({ className }: { className?: string }) {
             width="36"
             height="30"
             rx="6"
-            fill="#A07070"
+            fill="#7F5557"
             stroke="currentColor"
             strokeWidth="2"
           />
@@ -61,7 +61,7 @@ export function VizReportUnlockScene({ className }: { className?: string }) {
       {/* Couple discussing */}
       <div className="couple-scene-duo absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-end gap-8 sm:gap-12">
         <div className="relative flex flex-col items-center">
-          <div className="couple-scene-bubble absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-accent px-2.5 py-1 text-[10px] font-bold text-[#A07070]">
+          <div className="couple-scene-bubble absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-accent px-2.5 py-1 text-[10px] font-bold text-[#7F5557]">
             Je vois…
           </div>
           <div className="h-10 w-10 rounded-full bg-primary/90 border-2 border-accent" />
@@ -94,21 +94,21 @@ export function VizDualFinish({ className }: { className?: string }) {
           <p className="font-serif text-base sm:text-lg font-bold text-primary leading-snug">
             Ce qui vous rapproche
           </p>
-          <p className="mt-2 text-xs text-[#A07070]/70 leading-relaxed">
+          <p className="mt-2 text-xs text-[#7F5557]/70 leading-relaxed">
             Convergences, forces, terrains communs
           </p>
         </div>
         <div className="couple-dual-heart shrink-0 self-center flex h-11 w-11 items-center justify-center rounded-full bg-accent text-primary font-bold text-lg">
           vs
         </div>
-        <div className="couple-dual-right flex-1 rounded-xl border-2 border-[#A07070] bg-[#F2EBE0] px-3 py-4 text-center shadow-sm">
+        <div className="couple-dual-right flex-1 rounded-xl border-2 border-[#7F5557] bg-[#F2EBE0] px-3 py-4 text-center shadow-sm">
           <p className="text-[10px] font-bold uppercase tracking-wider text-primary mb-1">
             Différences
           </p>
           <p className="font-serif text-base sm:text-lg font-bold text-primary leading-snug">
             Ce qui vous différencie
           </p>
-          <p className="mt-2 text-xs text-[#A07070]/70 leading-relaxed">
+          <p className="mt-2 text-xs text-[#7F5557]/70 leading-relaxed">
             Écarts, vigilance, sujets à clarifier
           </p>
         </div>

@@ -46,15 +46,15 @@ export function CoachingWalletPanel() {
   }
 
   return (
-    <section className="rounded-2xl border border-[#A07070]/15 bg-[#F2EBE0] p-5 space-y-4">
+    <section className="rounded-2xl border border-[#7F5557]/15 bg-[#F2EBE0] p-5 space-y-4">
       <div>
         <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
           Mon coaching
         </p>
-        <h2 className="font-serif text-xl font-bold text-[#A07070] mt-1">
+        <h2 className="font-serif text-xl font-bold text-[#7F5557] mt-1">
           Crédits & coach
         </h2>
-        <p className="text-sm text-[#A07070]/70 mt-1">
+        <p className="text-sm text-[#7F5557]/70 mt-1">
           1 crédit = {COACHING_CREDIT_DISPLAY_MINUTES} minutes de séance
           (budget technique 40 min côté serveur).
         </p>
@@ -64,33 +64,33 @@ export function CoachingWalletPanel() {
         <p className="text-xs uppercase tracking-wider text-[#8A6A2E] font-semibold">
           Mes crédits
         </p>
-        <p className="font-serif text-3xl font-bold text-[#A07070] mt-1">
+        <p className="font-serif text-3xl font-bold text-[#7F5557] mt-1">
           {balance === null ? "…" : balance}
         </p>
       </div>
 
       <form onSubmit={onLink} className="space-y-2">
-        <label className="block text-sm font-medium text-[#A07070]">
+        <label className="block text-sm font-medium text-[#7F5557]">
           Code coach
           <input
             value={code}
             onChange={(e) => setCode(e.target.value)}
             placeholder="ex. KE-4827"
-            className="mt-1 w-full rounded-xl border border-[#A07070]/20 bg-white px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-xl border border-[#7F5557]/20 bg-white px-3 py-2 text-sm"
             autoCapitalize="characters"
           />
         </label>
         <button
           type="submit"
           disabled={busy || !code.trim()}
-          className="rounded-xl bg-[#A07070] text-[#F2EBE0] px-4 py-2 text-sm font-semibold disabled:opacity-50"
+          className="rounded-xl bg-[#7F5557] text-[#F2EBE0] px-4 py-2 text-sm font-semibold disabled:opacity-50"
         >
           Associer mon coach
         </button>
       </form>
 
       {msg ? (
-        <p className="text-sm text-[#A07070] bg-[#A07070]/08 rounded-lg px-3 py-2">
+        <p className="text-sm text-[#7F5557] bg-[#7F5557]/08 rounded-lg px-3 py-2">
           {msg}
         </p>
       ) : null}
@@ -107,7 +107,7 @@ export function CoachingWalletPanel() {
           ))}
         </ul>
       ) : (
-        <p className="text-xs text-[#A07070]/55">
+        <p className="text-xs text-[#7F5557]/55">
           Aucun coach lié pour l’instant. Entrez le code remis par votre coach.
         </p>
       )}

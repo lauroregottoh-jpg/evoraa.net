@@ -12,7 +12,7 @@ export function PwaInstallHomeSection() {
 
   return (
     <section className="relative py-12 sm:py-14 px-6 sm:px-12 lg:px-20">
-      <div className="max-w-5xl mx-auto rounded-2xl border border-border/70 bg-gradient-to-r from-[#0F1F1A] to-[#A07070] px-5 py-5 sm:px-8 sm:py-6 flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
+      <div className="max-w-5xl mx-auto rounded-2xl border border-border/70 bg-gradient-to-r from-[#0F1F1A] to-[#7F5557] px-5 py-5 sm:px-8 sm:py-6 flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
         <div className="flex items-start gap-3 text-white min-w-0">
           <Smartphone className="h-5 w-5 text-accent shrink-0 mt-0.5" />
           <div>

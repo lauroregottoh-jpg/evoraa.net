@@ -59,25 +59,25 @@ export default function CoupleCheckoutClient({
   if (isDemo && paymentId) {
     return (
       <div className="max-w-lg mx-auto space-y-4 py-10 px-4">
-        <h1 className="font-serif text-3xl font-bold text-[#A07070]">
+        <h1 className="font-serif text-3xl font-bold text-[#7F5557]">
           Confirmation démo
         </h1>
-        <p className="text-sm text-[#A07070]/70 leading-relaxed">
+        <p className="text-sm text-[#7F5557]/70 leading-relaxed">
           Offre :{" "}
-          <span className="font-medium text-[#A07070]">
+          <span className="font-medium text-[#7F5557]">
             {offerMeta?.marketingName ?? offer}
           </span>
           {demoPricing ? (
             <>
               {" "}
               ·{" "}
-              <span className="font-semibold text-[#A07070]">
+              <span className="font-semibold text-[#7F5557]">
                 {COUPLE_DEMO_AMOUNT_XOF} FCFA (démo)
               </span>
             </>
           ) : null}
         </p>
-        <p className="text-sm leading-relaxed text-[#A07070]/80">
+        <p className="text-sm leading-relaxed text-[#7F5557]/80">
           Confirmez pour activer votre bilan couple et accéder à l’onboarding /
           espace de travail.
         </p>
@@ -85,7 +85,7 @@ export default function CoupleCheckoutClient({
           type="button"
           disabled={loading}
           onClick={() => void confirm()}
-          className="inline-flex h-11 items-center justify-center rounded-xl bg-[#A07070] text-white px-5 text-sm font-semibold disabled:opacity-60"
+          className="inline-flex h-11 items-center justify-center rounded-xl bg-[#7F5557] text-white px-5 text-sm font-semibold disabled:opacity-60"
         >
           {loading ? "Confirmation…" : "Confirmer et ouvrir mon espace couple"}
         </button>
@@ -94,7 +94,7 @@ export default function CoupleCheckoutClient({
             {error}
           </p>
         )}
-        <Link href="/couple/offre" className="text-sm font-semibold text-[#A07070]">
+        <Link href="/couple/offre" className="text-sm font-semibold text-[#7F5557]">
           ← Retour aux offres
         </Link>
       </div>
@@ -104,13 +104,13 @@ export default function CoupleCheckoutClient({
   return (
     <div className="max-w-xl mx-auto py-10 px-4 sm:px-6">
       <div className="mb-6 space-y-1">
-        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#A07070]">
+        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#7F5557]">
           KELYA Couple
         </p>
-        <h1 className="font-serif text-3xl font-bold text-[#A07070]">
+        <h1 className="font-serif text-3xl font-bold text-[#7F5557]">
           Paiement du bilan
         </h1>
-        <p className="text-sm text-[#A07070]/65">
+        <p className="text-sm text-[#7F5557]/65">
           Mobile Money ou carte — sans passer par l’espace membre.
         </p>
       </div>

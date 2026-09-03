@@ -39,20 +39,20 @@ export function CoupleDeadlineBanner({
 
   const tone =
     variant === "hard"
-      ? "border-[#A07070]/40 bg-[#A07070]/10"
+      ? "border-[#7F5557]/40 bg-[#7F5557]/10"
       : variant === "warning"
         ? "border-[#B8954A]/50 bg-[#B8954A]/12"
-        : "border-[#A07070]/12 bg-[#F2EBE0]"
+        : "border-[#7F5557]/12 bg-[#F2EBE0]"
 
   return (
     <aside
       className={cn(
-        "rounded-2xl border px-4 py-3.5 sm:px-5 sm:py-4 text-sm leading-relaxed text-[#A07070]",
+        "rounded-2xl border px-4 py-3.5 sm:px-5 sm:py-4 text-sm leading-relaxed text-[#7F5557]",
         tone,
         className
       )}
     >
-      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#A07070]">
+      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#7F5557]">
         Délais du bilan
       </p>
       <p className="mt-1.5">
@@ -63,7 +63,7 @@ export function CoupleDeadlineBanner({
         {COUPLE_QUESTIONNAIRE_DEADLINE_DAYS + COUPLE_GRACE_DAYS}).
       </p>
       {daysLeft != null ? (
-        <p className="mt-2 text-xs text-[#A07070]/65">
+        <p className="mt-2 text-xs text-[#7F5557]/65">
           {daysLeft > 0
             ? `Il reste environ ${daysLeft} jour${daysLeft > 1 ? "s" : ""} avant l’échéance principale.`
             : hardCloseLeft != null && hardCloseLeft > 0
@@ -72,7 +72,7 @@ export function CoupleDeadlineBanner({
         </p>
       ) : null}
       <p className="mt-2 text-xs">
-        <Link href="/couple/dossier" className="font-semibold text-[#A07070] underline">
+        <Link href="/couple/dossier" className="font-semibold text-[#7F5557] underline">
           Voir le dossier livrables →
         </Link>
       </p>

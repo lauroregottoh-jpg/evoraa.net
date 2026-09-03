@@ -160,18 +160,18 @@ export function CoachingReservePanel({
   }
 
   return (
-    <section className="rounded-2xl border border-[#A07070]/15 bg-[#F2EBE0] p-5 sm:p-6 space-y-5">
+    <section className="rounded-2xl border border-[#7F5557]/15 bg-[#F2EBE0] p-5 sm:p-6 space-y-5">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="font-serif text-xl font-bold text-[#A07070]">
+        <h2 className="font-serif text-xl font-bold text-[#7F5557]">
           Réserver mon coaching
         </h2>
-        <p className="text-sm text-[#A07070]/70">
+        <p className="text-sm text-[#7F5557]/70">
           1 crédit = {COACHING_CREDIT_DISPLAY_MINUTES} min
         </p>
       </div>
 
       <div className="space-y-2">
-        <p className="text-sm font-medium text-[#A07070]">Je préfère un coach…</p>
+        <p className="text-sm font-medium text-[#7F5557]">Je préfère un coach…</p>
         <div className="grid grid-cols-2 gap-2">
           {(
             [
@@ -186,8 +186,8 @@ export function CoachingReservePanel({
               className={cn(
                 "rounded-xl border px-3 py-3 text-sm font-semibold transition-colors",
                 pref === opt.id
-                  ? "border-[#A07070] bg-[#A07070] text-[#F2EBE0]"
-                  : "border-[#A07070]/20 bg-white text-[#A07070] hover:border-[#A07070]/40"
+                  ? "border-[#7F5557] bg-[#7F5557] text-[#F2EBE0]"
+                  : "border-[#7F5557]/20 bg-white text-[#7F5557] hover:border-[#7F5557]/40"
               )}
             >
               {opt.label}
@@ -201,9 +201,9 @@ export function CoachingReservePanel({
           Votre coach
         </p>
         {loadingCoach ? (
-          <p className="font-serif text-2xl font-bold text-[#A07070] mt-1">…</p>
+          <p className="font-serif text-2xl font-bold text-[#7F5557] mt-1">…</p>
         ) : coach ? (
-          <p className="font-serif text-2xl font-bold text-[#A07070] mt-1">
+          <p className="font-serif text-2xl font-bold text-[#7F5557] mt-1">
             {coach.name}
           </p>
         ) : (
@@ -227,8 +227,8 @@ export function CoachingReservePanel({
               className={cn(
                 "rounded-xl border px-3 py-3 text-sm font-semibold",
                 credits === opt.c
-                  ? "border-[#A07070] bg-[#A07070] text-[#F2EBE0]"
-                  : "border-[#A07070]/20 bg-white"
+                  ? "border-[#7F5557] bg-[#7F5557] text-[#F2EBE0]"
+                  : "border-[#7F5557]/20 bg-white"
               )}
             >
               {opt.label}
@@ -255,8 +255,8 @@ export function CoachingReservePanel({
                 className={cn(
                   "text-left rounded-xl border px-3 py-2.5 text-sm",
                   selected === o.iso
-                    ? "border-[#A07070] bg-[#A07070]/8"
-                    : "border-border bg-white hover:border-[#A07070]/35"
+                    ? "border-[#7F5557] bg-[#7F5557]/8"
+                    : "border-border bg-white hover:border-[#7F5557]/35"
                 )}
               >
                 {o.label}
@@ -283,7 +283,7 @@ export function CoachingReservePanel({
         type="button"
         disabled={loading || !selected || !coach}
         onClick={() => void book()}
-        className="h-11 w-full rounded-xl bg-[#A07070] text-sm font-bold text-[#F2EBE0] disabled:opacity-60"
+        className="h-11 w-full rounded-xl bg-[#7F5557] text-sm font-bold text-[#F2EBE0] disabled:opacity-60"
       >
         {loading
           ? "Réservation…"

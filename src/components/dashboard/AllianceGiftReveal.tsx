@@ -91,7 +91,7 @@ export function AllianceGiftReveal({ firstName }: { firstName: string }) {
   }, [cycle])
 
   return (
-    <section className="relative z-10 overflow-hidden rounded-[1.85rem] border-2 border-[#B8954A]/55 bg-gradient-to-br from-[#120f10] via-[#2A1810] to-[#7F5557] text-[#F5EDE0] px-4 py-10 sm:px-8 sm:py-12 shadow-elevated min-h-[28rem] sm:min-h-[32rem]">
+    <section className="relative z-10 overflow-hidden rounded-[1.85rem] border-2 border-[#B8954A]/55 bg-gradient-to-br from-[#120f10] via-[#7F5557] to-[#7F5557] text-[#F5EDE0] px-4 py-10 sm:px-8 sm:py-12 shadow-elevated min-h-[28rem] sm:min-h-[32rem]">
       <div
         aria-hidden
         className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-50"

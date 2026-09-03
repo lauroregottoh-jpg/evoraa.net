@@ -1033,7 +1033,7 @@ export function AdminConsole(props: Props) {
                         <p className="font-semibold text-foreground">
                           {m.nameOne || "Membre"} ↔ {m.nameTwo || "Membre"}
                         </p>
-                        <span className="shrink-0 rounded-full bg-[#A07070] text-[#F2EBE0] text-xs font-bold px-2.5 py-1">
+                        <span className="shrink-0 rounded-full bg-[#7F5557] text-[#F2EBE0] text-xs font-bold px-2.5 py-1">
                           {m.score != null ? `${Math.round(m.score)}%` : "—"}
                         </span>
                       </div>

@@ -43,7 +43,7 @@ export function CoachingCannedChat({
         <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
           Messages
         </p>
-        <h3 className="font-serif text-lg font-bold text-[#A07070]">
+        <h3 className="font-serif text-lg font-bold text-[#7F5557]">
           Messages prédéfinis
         </h3>
         <p className="text-xs text-muted-foreground mt-1">
@@ -86,7 +86,7 @@ export function CoachingCannedChat({
               setSending(false)
               void refresh()
             }}
-            className="rounded-xl border border-[#A07070]/25 px-3 py-2 text-xs font-semibold hover:bg-[#A07070]/5 disabled:opacity-50"
+            className="rounded-xl border border-[#7F5557]/25 px-3 py-2 text-xs font-semibold hover:bg-[#7F5557]/5 disabled:opacity-50"
           >
             {t.label}
           </button>

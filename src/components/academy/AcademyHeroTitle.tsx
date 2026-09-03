@@ -10,7 +10,7 @@ export function AcademyHeroTitle({ className }: { className?: string }) {
     <header
       className={cn(
         "relative overflow-hidden rounded-[1.75rem] border border-primary/20",
-        "bg-gradient-to-br from-[#A07070] via-[#722F37] to-[#8B5C62]",
+        "bg-gradient-to-br from-[#7F5557] via-[#722F37] to-[#8B5C62]",
         "px-6 py-10 sm:px-10 sm:py-12 text-center shadow-elevated",
         className
       )}

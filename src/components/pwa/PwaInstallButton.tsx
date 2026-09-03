@@ -24,7 +24,7 @@ const VARIANT_CLASS: Record<Variant, string> = {
   alliance:
     "bg-accent text-accent-foreground hover:opacity-95 border border-transparent font-bold",
   discovery:
-    "bg-[#A07070] text-white hover:brightness-110 border border-transparent",
+    "bg-[#7F5557] text-white hover:brightness-110 border border-transparent",
 }
 
 function defaultLabel(canPrompt: boolean, isIos: boolean, isMobile: boolean) {

@@ -27,7 +27,7 @@ export function CoffreCover({ resource, locked, className }: Props) {
         showImage
           ? undefined
           : {
-              background: `linear-gradient(155deg, ${meta.tone} 0%, #A07070 78%)`,
+              background: `linear-gradient(155deg, ${meta.tone} 0%, #7F5557 78%)`,
             }
       }
     >
@@ -80,7 +80,7 @@ export function CoffreCover({ resource, locked, className }: Props) {
         >
           {meta.label}
         </span>
-        <span className="inline-flex items-center gap-1 rounded-full border border-[#B8954A]/55 bg-gradient-to-r from-[#A07070] to-[#7A5F28] px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-[#F2EBE0] shadow-sm">
+        <span className="inline-flex items-center gap-1 rounded-full border border-[#B8954A]/55 bg-gradient-to-r from-[#7F5557] to-[#7A5F28] px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-[#F2EBE0] shadow-sm">
           <Crown className="h-3 w-3 text-[#D4AF72]" />
           Premium
         </span>

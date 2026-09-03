@@ -18,7 +18,7 @@ export function CoupleOffreCheckout({
   enabledPaymentModes?: BictorysPaymentMode[]
 }) {
   return (
-    <Suspense fallback={<p className="text-sm text-[#A07070]/60">Chargement…</p>}>
+    <Suspense fallback={<p className="text-sm text-[#7F5557]/60">Chargement…</p>}>
       <Inner
         demoPricing={demoPricing}
         showModePicker={showModePicker}

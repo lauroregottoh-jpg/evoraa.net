@@ -66,7 +66,7 @@ export function PersonalizedReportView({
 
   return (
     <article className="space-y-5 max-w-3xl mx-auto">
-      <header className="relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/40 bg-gradient-to-br from-[#A07070] via-[#2A1810] to-[#A07070] p-6 sm:p-8 text-[#F2EBE0] shadow-elevated">
+      <header className="relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/40 bg-gradient-to-br from-[#7F5557] via-[#7F5557] to-[#7F5557] p-6 sm:p-8 text-[#F2EBE0] shadow-elevated">
         <div
           aria-hidden
           className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-40"
@@ -198,7 +198,7 @@ export function PersonalizedReportView({
           </p>
           <Link
             href={living.nextUnlock.href}
-            className="inline-flex h-9 items-center gap-1 rounded-xl bg-[#B8954A] px-3 text-xs font-bold text-[#A07070]"
+            className="inline-flex h-9 items-center gap-1 rounded-xl bg-[#B8954A] px-3 text-xs font-bold text-[#7F5557]"
           >
             Faire le test <ArrowRight className="h-3.5 w-3.5" />
           </Link>
@@ -293,7 +293,7 @@ export function PersonalizedReportView({
                           href={
                             variant === "global" ? "/rapport" : "/rapport/global"
                           }
-                          className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#B8954A] px-4 text-sm font-bold text-[#A07070]"
+                          className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#B8954A] px-4 text-sm font-bold text-[#7F5557]"
                         >
                           {variant === "global"
                             ? "Retour au hub Rapport"

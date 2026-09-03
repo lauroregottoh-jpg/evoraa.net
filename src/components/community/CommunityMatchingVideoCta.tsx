@@ -13,7 +13,7 @@ export function CommunityMatchingCta({
   compact?: boolean
 }) {
   return (
-    <aside className="relative overflow-hidden rounded-2xl border border-[#7F5557]/20 bg-gradient-to-br from-[#7F5557] via-[#4A1820] to-[#2A1810] text-[#F5EDE0] p-5 sm:p-6">
+    <aside className="relative overflow-hidden rounded-2xl border border-[#7F5557]/20 bg-gradient-to-br from-[#7F5557] via-[#4A1820] to-[#7F5557] text-[#F5EDE0] p-5 sm:p-6">
       <div className="space-y-3 max-w-2xl">
         <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#D4AF72]">
           Matching KELIAA

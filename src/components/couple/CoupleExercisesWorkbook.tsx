@@ -10,7 +10,7 @@ function WriteLines({ lines = 3 }: { lines?: number }) {
   return (
     <div className="mt-3 space-y-3">
       {Array.from({ length: lines }).map((_, i) => (
-        <div key={i} className="h-9 border-b border-[#A07070]/25" />
+        <div key={i} className="h-9 border-b border-[#7F5557]/25" />
       ))}
     </div>
   )
@@ -28,31 +28,31 @@ function ExerciseCard({
   return (
     <article
       className={cn(
-        "break-inside-avoid rounded-[1.75rem] border border-[#A07070]/10 bg-white p-6 sm:p-9 shadow-sm space-y-5",
+        "break-inside-avoid rounded-[1.75rem] border border-[#7F5557]/10 bg-white p-6 sm:p-9 shadow-sm space-y-5",
         ex.premiumPlus && "border-[#B8954A]/40"
       )}
     >
       <header className="space-y-2">
         {ex.premiumPlus ? (
-          <span className="inline-block text-[10px] font-bold uppercase tracking-[0.18em] text-[#A07070] bg-[#A07070]/10 px-2.5 py-1 rounded-full">
+          <span className="inline-block text-[10px] font-bold uppercase tracking-[0.18em] text-[#7F5557] bg-[#7F5557]/10 px-2.5 py-1 rounded-full">
             Premium Plus
           </span>
         ) : null}
-        <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#A07070] leading-tight">
+        <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#7F5557] leading-tight">
           {ex.title}
         </h2>
-        <p className="text-base sm:text-lg leading-relaxed text-[#A07070]/85">
-          <span className="font-semibold text-[#A07070]">Objectif — </span>
+        <p className="text-base sm:text-lg leading-relaxed text-[#7F5557]/85">
+          <span className="font-semibold text-[#7F5557]">Objectif — </span>
           {ex.objective}
         </p>
-        <p className="text-base leading-relaxed text-[#A07070]/75">{ex.why}</p>
+        <p className="text-base leading-relaxed text-[#7F5557]/75">{ex.why}</p>
         <p className="text-sm text-[#8A6A2E]">
           Durée : {ex.duration} · {ex.preparation}
         </p>
       </header>
 
       <div>
-        <h3 className="font-serif text-xl font-bold text-[#A07070]">Consignes</h3>
+        <h3 className="font-serif text-xl font-bold text-[#7F5557]">Consignes</h3>
         <ol className="mt-3 list-decimal pl-6 space-y-2.5 text-base sm:text-[17px] leading-relaxed">
           {ex.steps.map((s) => (
             <li key={s}>{s}</li>
@@ -62,7 +62,7 @@ function ExerciseCard({
 
       {ex.questions.length ? (
         <div>
-          <h3 className="font-serif text-xl font-bold text-[#A07070]">Questions</h3>
+          <h3 className="font-serif text-xl font-bold text-[#7F5557]">Questions</h3>
           <ul className="mt-3 list-disc pl-6 space-y-2 text-base leading-relaxed">
             {ex.questions.map((q) => (
               <li key={q}>{q}</li>
@@ -77,22 +77,22 @@ function ExerciseCard({
             key={prompt}
             className="rounded-2xl border border-dashed border-[#B8954A]/50 bg-[#F2EBE0] p-5"
           >
-            <p className="text-base font-semibold text-[#A07070]">{prompt}</p>
+            <p className="text-base font-semibold text-[#7F5557]">{prompt}</p>
             <WriteLines lines={3} />
           </div>
         )
       )}
 
       {ex.rolePlay ? (
-        <div className="rounded-2xl border border-[#A07070]/20 bg-gradient-to-br from-[#F2EBE0] to-white p-5 sm:p-6 space-y-4">
+        <div className="rounded-2xl border border-[#7F5557]/20 bg-gradient-to-br from-[#F2EBE0] to-white p-5 sm:p-6 space-y-4">
           <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
             Jeu de rôle
           </p>
           <h3 className="font-serif text-xl font-bold">{ex.rolePlay.title}</h3>
           <p className="text-base leading-relaxed">{ex.rolePlay.scene}</p>
           <div className="grid gap-3 sm:grid-cols-2">
-            <div className="rounded-xl bg-[#A07070]/10 p-4">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-[#A07070]">
+            <div className="rounded-xl bg-[#7F5557]/10 p-4">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#7F5557]">
                 {nameA} — Rôle A
               </p>
               <p className="mt-2 text-base leading-relaxed">{ex.rolePlay.roleA}</p>
@@ -107,7 +107,7 @@ function ExerciseCard({
         </div>
       ) : null}
 
-      <div className="space-y-2 text-base leading-relaxed border-t border-[#A07070]/10 pt-4">
+      <div className="space-y-2 text-base leading-relaxed border-t border-[#7F5557]/10 pt-4">
         <p>
           <span className="font-semibold">Mise en commun — </span>
           {ex.share}
@@ -116,7 +116,7 @@ function ExerciseCard({
           <span className="font-semibold">Débrief — </span>
           {ex.debrief}
         </p>
-        <p className="italic text-[#A07070]">
+        <p className="italic text-[#7F5557]">
           <span className="font-semibold not-italic">À retenir — </span>
           {ex.takeaway}
         </p>
@@ -134,8 +134,8 @@ function buildExercisesHtml(doc: CoupleReportDocument): string {
   const parts = [
     `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"/><title>Cahier exercices — ${doc.names.nameA} & ${doc.names.nameB}</title>`,
     `<style>
-      body{font-family:Georgia,serif;max-width:740px;margin:2rem auto;padding:0 1.25rem;color:#A07070;line-height:1.7;background:#F2EBE0;font-size:16px}
-      h1{font-size:1.9rem} h2{font-size:1.45rem;color:#A07070;margin-top:2.5rem;border-top:1px solid #ddd;padding-top:1.25rem}
+      body{font-family:Georgia,serif;max-width:740px;margin:2rem auto;padding:0 1.25rem;color:#7F5557;line-height:1.7;background:#F2EBE0;font-size:16px}
+      h1{font-size:1.9rem} h2{font-size:1.45rem;color:#7F5557;margin-top:2.5rem;border-top:1px solid #ddd;padding-top:1.25rem}
       .meta{color:#666;font-size:14px}.fill{border:1px dashed #B8954A99;padding:1rem;min-height:5rem;margin:1rem 0;border-radius:12px;background:#fff}
       .role{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.box{background:#F2EBE0;padding:1rem;border-radius:12px}
       @media print{.no-print{display:none}}
@@ -194,10 +194,10 @@ export function CoupleExercisesWorkbook({
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#B8954A]">
           Cahier à vivre
         </p>
-        <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#A07070]">
+        <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#7F5557]">
           Exercices — {doc.names.nameA} & {doc.names.nameB}
         </h1>
-        <p className="text-base sm:text-lg leading-relaxed text-[#A07070]/75 max-w-xl">
+        <p className="text-base sm:text-lg leading-relaxed text-[#7F5557]/75 max-w-xl">
           Grandes cartes, zones à remplir, jeux de rôle. Imprimez ou téléchargez
           pour écrire à la main.
         </p>
@@ -205,14 +205,14 @@ export function CoupleExercisesWorkbook({
           <button
             type="button"
             onClick={() => window.print()}
-            className="inline-flex h-11 items-center gap-2 rounded-xl border border-[#A07070]/15 bg-white px-4 text-sm font-semibold"
+            className="inline-flex h-11 items-center gap-2 rounded-xl border border-[#7F5557]/15 bg-white px-4 text-sm font-semibold"
           >
             <Printer className="h-4 w-4" /> Imprimer / PDF
           </button>
           <button
             type="button"
             onClick={handleDownload}
-            className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#A07070] px-4 text-sm font-semibold text-[#F2EBE0]"
+            className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#7F5557] px-4 text-sm font-semibold text-[#F2EBE0]"
           >
             <Download className="h-4 w-4" /> Télécharger le cahier
           </button>

@@ -35,14 +35,14 @@ export const LANDING_SITUATIONS = [
     label: "Intérêt mutuel",
     title: "Vous vous intéressez l’un à l’autre",
     body: "Vous souhaitez savoir où cette relation peut vous mener.",
-    accent: "from-[#A07070] to-[#8B2E3A]",
+    accent: "from-[#7F5557] to-[#8B2E3A]",
   },
   {
     id: "path",
     label: "Chemin ensemble",
     title: "Vous avez décidé de cheminer ensemble",
     body: "Vous voulez prendre le temps de mieux vous connaître avant d’aller plus loin.",
-    accent: "from-[#2A1810] to-[#5C3A1A]",
+    accent: "from-[#7F5557] to-[#5C3A1A]",
   },
   {
     id: "engaged",
@@ -109,7 +109,7 @@ export const LANDING_REPORT_PILLARS = {
     {
       title: "Vos forces",
       body: "Ce qui fonctionne déjà entre vous — une vraie ressource pour votre relation.",
-      accent: "from-[#A07070] to-[#8B2E3A]",
+      accent: "from-[#7F5557] to-[#8B2E3A]",
     },
     {
       title: "Vos convergences",
@@ -119,7 +119,7 @@ export const LANDING_REPORT_PILLARS = {
     {
       title: "Vos différences",
       body: "Les sujets sur lesquels vous ne voyez pas forcément les choses de la même manière.",
-      accent: "from-[#2A1810] to-[#5C3A1A]",
+      accent: "from-[#7F5557] to-[#5C3A1A]",
     },
     {
       title: "Zones de vigilance",

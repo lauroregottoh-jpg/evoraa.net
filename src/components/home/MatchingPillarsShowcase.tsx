@@ -21,13 +21,13 @@ const PILLARS: {
     icon: Heart,
     title: "Compatibilité relationnelle",
     desc: "Communication, émotions, conflits, confiance.",
-    accent: "from-[#A07070] to-[#8B2E3A]",
+    accent: "from-[#7F5557] to-[#8B2E3A]",
   },
   {
     icon: Sparkles,
     title: "Compatibilité spirituelle",
     desc: "Parcours de foi, convictions, pratique, vision chrétienne.",
-    accent: "from-[#2A1810] to-[#5C3A1A]",
+    accent: "from-[#7F5557] to-[#5C3A1A]",
   },
   {
     icon: Home,
@@ -65,7 +65,7 @@ export function MatchingPillarsShowcase({
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#A07070] via-[#2A1810] to-[#A07070]"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#7F5557] via-[#7F5557] to-[#7F5557]"
       />
       <div
         aria-hidden
@@ -92,7 +92,7 @@ export function MatchingPillarsShowcase({
             return (
               <article
                 key={pillar.title}
-                className="matching-pillar-card group relative flex flex-col overflow-hidden rounded-2xl border-2 border-[#B8954A]/55 bg-[#F2EBE0] p-5 text-[#A07070] shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
+                className="matching-pillar-card group relative flex flex-col overflow-hidden rounded-2xl border-2 border-[#B8954A]/55 bg-[#F2EBE0] p-5 text-[#7F5557] shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
                 style={{ animationDelay: `${i * 100}ms` }}
               >
                 <div
@@ -106,13 +106,13 @@ export function MatchingPillarsShowcase({
                     <Icon className="h-7 w-7" strokeWidth={2.25} />
                   </span>
                 </div>
-                <span className="matching-pillar-num mb-2 inline-flex h-8 w-fit items-center rounded-lg bg-[#B8954A]/20 px-2.5 font-mono text-xs font-bold text-[#A07070]">
+                <span className="matching-pillar-num mb-2 inline-flex h-8 w-fit items-center rounded-lg bg-[#B8954A]/20 px-2.5 font-mono text-xs font-bold text-[#7F5557]">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <h3 className="font-serif text-lg font-bold leading-snug text-[#A07070]">
+                <h3 className="font-serif text-lg font-bold leading-snug text-[#7F5557]">
                   {pillar.title}
                 </h3>
-                <p className="mt-2 text-xs text-[#A07070]/70 leading-relaxed grow">
+                <p className="mt-2 text-xs text-[#7F5557]/70 leading-relaxed grow">
                   {pillar.desc}
                 </p>
               </article>

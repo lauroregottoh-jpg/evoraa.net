@@ -42,10 +42,10 @@ type Chapter =
 
 const A4_PRINT_CSS = `
 @page { size: A4 portrait; margin: 18mm 16mm; }
-body{font-family:Georgia,"Times New Roman",serif;color:#A07070;line-height:1.65;font-size:14pt;background:#fff}
-h1{font-size:22pt;color:#A07070;line-height:1.25;margin:0 0 .4em}
-h2{font-size:16pt;color:#A07070;margin:1.1em 0 .45em}
-h3{font-size:14pt;color:#A07070;margin:1em 0 .35em}
+body{font-family:Georgia,"Times New Roman",serif;color:#7F5557;line-height:1.65;font-size:14pt;background:#fff}
+h1{font-size:22pt;color:#7F5557;line-height:1.25;margin:0 0 .4em}
+h2{font-size:16pt;color:#7F5557;margin:1.1em 0 .45em}
+h3{font-size:14pt;color:#7F5557;margin:1em 0 .35em}
 .meta{color:#555;font-size:12pt}
 .sub{color:#8A6A2E;font-style:italic;font-size:14pt}
 p,li{font-size:14pt;line-height:1.65}
@@ -149,8 +149,8 @@ function ChapterBody({
     return (
       <div className="space-y-8 text-[14pt] leading-[1.65]">
         {doc.exercises.map((ex) => (
-          <div key={ex.id} className="space-y-3 border-t border-[#A07070]/10 pt-6">
-            <h3 className="font-serif text-[18pt] font-bold text-[#A07070]">
+          <div key={ex.id} className="space-y-3 border-t border-[#7F5557]/10 pt-6">
+            <h3 className="font-serif text-[18pt] font-bold text-[#7F5557]">
               {ex.title}
             </h3>
             <p>
@@ -168,10 +168,10 @@ function ChapterBody({
                 key={prompt}
                 className="rounded-xl border border-dashed border-[#B8954A]/50 p-4"
               >
-                <p className="font-semibold text-[#A07070]">{prompt}</p>
+                <p className="font-semibold text-[#7F5557]">{prompt}</p>
                 <div className="mt-3 space-y-3">
                   {[0, 1, 2].map((i) => (
-                    <div key={i} className="h-8 border-b border-[#A07070]/20" />
+                    <div key={i} className="h-8 border-b border-[#7F5557]/20" />
                   ))}
                 </div>
               </div>
@@ -184,7 +184,7 @@ function ChapterBody({
   return (
     <ol className="space-y-5 text-[14pt] leading-[1.65]">
       {doc.actionPlan.map((step) => (
-        <li key={step.order} className="border-t border-[#A07070]/10 pt-4">
+        <li key={step.order} className="border-t border-[#7F5557]/10 pt-4">
           <p className="text-[12pt] font-bold uppercase tracking-wider text-[#B8954A]">
             Étape {step.order}
           </p>
@@ -216,7 +216,7 @@ function A4Page({
     <section
       id={`ch-${ch.id}`}
       className={cn(
-        "report-a4 mx-auto w-full max-w-[210mm] bg-white text-[#A07070] shadow-md border border-[#A07070]/10",
+        "report-a4 mx-auto w-full max-w-[210mm] bg-white text-[#7F5557] shadow-md border border-[#7F5557]/10",
         "px-[16mm] py-[14mm] sm:px-[18mm] sm:py-[16mm]",
         "scroll-mt-24",
         className
@@ -228,7 +228,7 @@ function A4Page({
             Page {ch.page}
             {ch.id.startsWith("pp-") ? " · Premium Plus" : ""}
           </p>
-          <h2 className="mt-2 font-serif text-[22pt] font-bold leading-tight text-[#A07070]">
+          <h2 className="mt-2 font-serif text-[22pt] font-bold leading-tight text-[#7F5557]">
             {ch.title}
           </h2>
           {ch.kind === "section" && ch.subtitle ? (
@@ -240,7 +240,7 @@ function A4Page({
         <button
           type="button"
           onClick={() => downloadChapter(ch, doc)}
-          className="print:hidden inline-flex h-10 shrink-0 items-center gap-1.5 rounded-xl border border-[#A07070]/15 bg-[#F2EBE0] px-3 text-[12pt] font-semibold"
+          className="print:hidden inline-flex h-10 shrink-0 items-center gap-1.5 rounded-xl border border-[#7F5557]/15 bg-[#F2EBE0] px-3 text-[12pt] font-semibold"
         >
           <Download className="h-4 w-4" /> Télécharger
         </button>
@@ -383,7 +383,7 @@ export function CoupleReportView({
   return (
     <article
       className={cn(
-        "mx-auto w-full max-w-[240mm] pb-20 text-[#A07070] print:max-w-none",
+        "mx-auto w-full max-w-[240mm] pb-20 text-[#7F5557] print:max-w-none",
         className
       )}
       style={
@@ -412,14 +412,14 @@ export function CoupleReportView({
         <button
           type="button"
           onClick={() => window.print()}
-          className="inline-flex h-11 items-center gap-2 rounded-xl border border-[#A07070]/15 bg-white px-4 text-[14pt] font-semibold"
+          className="inline-flex h-11 items-center gap-2 rounded-xl border border-[#7F5557]/15 bg-white px-4 text-[14pt] font-semibold"
         >
           <Printer className="h-4 w-4" /> Imprimer A4
         </button>
         <button
           type="button"
           onClick={handleDownloadAll}
-          className="inline-flex h-11 items-center gap-2 rounded-xl border border-[#A07070]/15 bg-white px-4 text-[14pt] font-semibold"
+          className="inline-flex h-11 items-center gap-2 rounded-xl border border-[#7F5557]/15 bg-white px-4 text-[14pt] font-semibold"
         >
           <Download className="h-4 w-4" /> Télécharger A4
         </button>
@@ -429,15 +429,15 @@ export function CoupleReportView({
           className={cn(
             "inline-flex h-11 items-center gap-2 rounded-xl border px-4 text-[14pt] font-semibold",
             focusOne
-              ? "border-[#A07070] bg-[#A07070] text-white"
-              : "border-[#A07070]/15 bg-white"
+              ? "border-[#7F5557] bg-[#7F5557] text-white"
+              : "border-[#7F5557]/15 bg-white"
           )}
         >
           {focusOne ? "Voir toutes les pages" : "Une page à la fois"}
         </button>
       </div>
 
-      <header className="relative overflow-hidden rounded-[1.25rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#A07070] via-[#8B5C62] to-[#A07070] p-6 sm:p-8 text-[#F2EBE0] mb-6 print:hidden">
+      <header className="relative overflow-hidden rounded-[1.25rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#7F5557] via-[#8B5C62] to-[#7F5557] p-6 sm:p-8 text-[#F2EBE0] mb-6 print:hidden">
         <p className="inline-flex items-center gap-1.5 text-[12pt] font-bold uppercase tracking-[0.18em] text-[#D4AF72]">
           <HeartHandshake className="h-4 w-4" />
           {doc.brand}
@@ -495,12 +495,12 @@ export function CoupleReportView({
       </header>
 
       {doc.safetyNotice ? (
-        <div className="mb-5 rounded-2xl border border-[#A07070]/30 bg-[#F2EBE0] px-5 py-4 text-[14pt] leading-[1.65]">
+        <div className="mb-5 rounded-2xl border border-[#7F5557]/30 bg-[#F2EBE0] px-5 py-4 text-[14pt] leading-[1.65]">
           {doc.safetyNotice}
         </div>
       ) : null}
 
-      <nav className="mb-6 rounded-2xl border border-[#A07070]/10 bg-[#F2EBE0]/90 p-4 print:hidden">
+      <nav className="mb-6 rounded-2xl border border-[#7F5557]/10 bg-[#F2EBE0]/90 p-4 print:hidden">
         <p className="text-[12pt] font-bold uppercase tracking-[0.14em] text-[#B8954A] mb-2">
           Sommaire · {chapters.length} pages A4
         </p>
@@ -509,7 +509,7 @@ export function CoupleReportView({
             <li key={ch.id} className="break-inside-avoid">
               <button
                 type="button"
-                className="text-left text-[#A07070] hover:underline"
+                className="text-left text-[#7F5557] hover:underline"
                 onClick={() => {
                   setIndex(i)
                   if (!focusOne) {
@@ -529,7 +529,7 @@ export function CoupleReportView({
       {focusOne ? (
         <div className="space-y-4 print:hidden">
           <div className="flex items-center justify-between gap-3">
-            <p className="text-[12pt] text-[#A07070]/55">
+            <p className="text-[12pt] text-[#7F5557]/55">
               Page {current.page} / {chapters.length}
             </p>
             <div className="flex gap-2">
@@ -569,7 +569,7 @@ export function CoupleReportView({
         ))}
       </div>
 
-      <footer className="pt-8 border-t border-[#A07070]/10 space-y-2 text-[12pt] text-[#A07070]/50">
+      <footer className="pt-8 border-t border-[#7F5557]/10 space-y-2 text-[12pt] text-[#7F5557]/50">
         <p>
           Versions — questionnaire {doc.versions.questionnaire_version} · scoring{" "}
           {doc.versions.scoring_version} · contenu {doc.versions.content_version}{" "}
@@ -577,7 +577,7 @@ export function CoupleReportView({
         </p>
         <p>
           Ce bilan n’est pas un diagnostic clinique ni un verdict d’avenir.{" "}
-          <Link href="/couple" className="font-semibold text-[#A07070]">
+          <Link href="/couple" className="font-semibold text-[#7F5557]">
             Retour à KELYA Couple →
           </Link>
         </p>

@@ -42,7 +42,7 @@ export default async function CoupleCheckoutPage({
       <CoupleShell activeHref="/couple/offre" showWelcome={false} variant="sales">
         <Suspense
           fallback={
-            <p className="p-8 text-sm text-[#A07070]/60">Chargement…</p>
+            <p className="p-8 text-sm text-[#7F5557]/60">Chargement…</p>
           }
         >
           <CoupleCheckoutClient

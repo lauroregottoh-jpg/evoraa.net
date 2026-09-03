@@ -53,19 +53,19 @@ export function CoupleSituationCards({ selected, onSelect }: Props) {
                 <Icon className="h-6 w-6" strokeWidth={2.25} />
               </span>
             </div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#A07070]/70">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#7F5557]/70">
               {s.label}
             </p>
-            <h3 className="mt-1.5 font-serif text-lg sm:text-xl font-bold text-[#A07070] leading-snug">
+            <h3 className="mt-1.5 font-serif text-lg sm:text-xl font-bold text-[#7F5557] leading-snug">
               {s.title}
             </h3>
-            <p className="mt-2 text-sm text-[#A07070]/70 leading-relaxed">
+            <p className="mt-2 text-sm text-[#7F5557]/70 leading-relaxed">
               {s.body}
             </p>
             <span
               className={cn(
                 "mt-4 inline-flex text-xs font-semibold transition-colors",
-                isOn ? "text-accent" : "text-[#A07070]/45 group-hover:text-primary"
+                isOn ? "text-accent" : "text-[#7F5557]/45 group-hover:text-primary"
               )}
             >
               {isOn ? "C’est votre situation ✓" : "C’est mon cas →"}

@@ -163,7 +163,7 @@ export function AllianceWelcomeExperience({
           <button
             type="button"
             onClick={() => setPhase("privileges")}
-            className="mt-8 inline-flex h-11 items-center rounded-xl bg-[#B8954A] px-6 text-sm font-bold text-[#A07070]"
+            className="mt-8 inline-flex h-11 items-center rounded-xl bg-[#B8954A] px-6 text-sm font-bold text-[#7F5557]"
           >
             {isRenewal ? "Continuer" : "Commencer"}
           </button>
@@ -171,7 +171,7 @@ export function AllianceWelcomeExperience({
       ) : null}
 
       {phase === "privileges" ? (
-        <section className="rounded-[1.75rem] border border-accent/30 bg-gradient-to-br from-[#A07070] via-[#722F37] to-[#8B5C62] p-6 sm:p-8 text-[#F2EBE0] space-y-5">
+        <section className="rounded-[1.75rem] border border-accent/30 bg-gradient-to-br from-[#7F5557] via-[#722F37] to-[#8B5C62] p-6 sm:p-8 text-[#F2EBE0] space-y-5">
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D4AF72]">
             {isRenewal ? "Votre renouvellement" : "Vos privilèges"}
           </p>

@@ -17,11 +17,11 @@ export function RegisterServiceWorker() {
           const keys = await caches.keys()
           await Promise.all(
             keys
-              .filter((k) => k.startsWith("keliaa-shell-") && k !== "keliaa-shell-v13")
+              .filter((k) => k.startsWith("keliaa-shell-") && k !== "keliaa-shell-v14")
               .map((k) => caches.delete(k))
           )
         }
-        await navigator.serviceWorker.register("/sw.js?v=13")
+        await navigator.serviceWorker.register("/sw.js?v=14")
       } catch (err) {
         console.warn("[pwa] sw register failed", err)
       }

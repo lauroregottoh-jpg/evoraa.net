@@ -24,7 +24,7 @@ export function CoachingSessionLobby({
   const waitingPeer = !peerReady
 
   return (
-    <div className="rounded-2xl border border-[#A07070]/20 bg-gradient-to-br from-[#A07070] to-[#3D2A14] text-[#F2EBE0] p-6 sm:p-8 space-y-5">
+    <div className="rounded-2xl border border-[#7F5557]/20 bg-gradient-to-br from-[#7F5557] to-[#3D2A14] text-[#F2EBE0] p-6 sm:p-8 space-y-5">
       <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#D4AF72]">
         Salle d’attente · coaching
       </p>
@@ -82,7 +82,7 @@ export function CoachingSessionLobby({
           type="button"
           onClick={onEnter}
           disabled={entering}
-          className="inline-flex h-12 w-full sm:w-auto items-center justify-center rounded-xl bg-[#D4AF72] px-5 text-sm font-bold text-[#A07070] disabled:opacity-60"
+          className="inline-flex h-12 w-full sm:w-auto items-center justify-center rounded-xl bg-[#D4AF72] px-5 text-sm font-bold text-[#7F5557] disabled:opacity-60"
         >
           {entering ? "Ouverture…" : "Entrer en séance"}
         </button>

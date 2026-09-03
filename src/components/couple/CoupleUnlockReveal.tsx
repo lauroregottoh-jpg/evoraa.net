@@ -44,7 +44,7 @@ export function CoupleUnlockReveal({
   }, [])
 
   return (
-    <section className="relative overflow-hidden rounded-[1.85rem] border-2 border-[#B8954A]/40 bg-gradient-to-br from-[#A07070] via-[#8B5C62] to-[#A07070] text-[#F2EBE0] px-5 py-10 sm:px-8 sm:py-12 shadow-lg">
+    <section className="relative overflow-hidden rounded-[1.85rem] border-2 border-[#B8954A]/40 bg-gradient-to-br from-[#7F5557] via-[#8B5C62] to-[#7F5557] text-[#F2EBE0] px-5 py-10 sm:px-8 sm:py-12 shadow-lg">
       {/* Confettis */}
       {phase !== "closed" && (
         <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -92,13 +92,13 @@ export function CoupleUnlockReveal({
           <div className="absolute inset-0 rounded-xl bg-[#F2EBE0] border-2 border-[#B8954A] shadow-xl" />
           <div
             className={cn(
-              "absolute inset-x-2 top-2 h-[55%] origin-top rounded-t-lg bg-[#A07070] border border-[#B8954A]/50 transition-transform duration-700",
+              "absolute inset-x-2 top-2 h-[55%] origin-top rounded-t-lg bg-[#7F5557] border border-[#B8954A]/50 transition-transform duration-700",
               phase === "closed" ? "rotate-0" : "-rotate-[28deg] -translate-y-1"
             )}
           />
           <div className="absolute inset-x-4 bottom-4 top-[42%] rounded-md bg-white/90 p-2 space-y-1.5">
-            <div className="h-1.5 rounded bg-[#A07070]/30 w-full" />
-            <div className="h-1.5 rounded bg-[#A07070]/20 w-4/5" />
+            <div className="h-1.5 rounded bg-[#7F5557]/30 w-full" />
+            <div className="h-1.5 rounded bg-[#7F5557]/20 w-4/5" />
             <div className="h-1.5 rounded bg-[#B8954A]/50 w-3/5" />
           </div>
         </div>
@@ -124,7 +124,7 @@ export function CoupleUnlockReveal({
       <div className="relative z-10 mt-8 flex flex-wrap justify-center gap-3">
         <Link
           href={onContinueHref}
-          className="inline-flex h-12 items-center rounded-xl bg-[#B8954A] text-[#A07070] px-6 text-sm font-bold"
+          className="inline-flex h-12 items-center rounded-xl bg-[#B8954A] text-[#7F5557] px-6 text-sm font-bold"
         >
           Commencer l’onboarding
         </Link>

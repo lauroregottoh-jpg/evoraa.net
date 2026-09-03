@@ -168,7 +168,7 @@ function axeCardsHtml(cards: InsightCard[]): string {
 
 const PRINT_CSS = `
 :root {
-  --ink:#A07070; --gold:#B8954A; --gold-soft:#D4AF72; --gold-deep:#8A6A2E;
+  --ink:#7F5557; --gold:#B8954A; --gold-soft:#D4AF72; --gold-deep:#8A6A2E;
   --muted:#5c534c; --cream:#F2EBE0; --paper:#FFFEFB; --line:#e4d5b5;
 }
 * { box-sizing: border-box; }
@@ -192,7 +192,7 @@ body {
   background: #fff; color: var(--ink); cursor: pointer; text-decoration: none;
   display: inline-flex; align-items: center; justify-content: center;
 }
-.toolbar .primary { background: var(--gold); border-color: var(--gold); color: #A07070; }
+.toolbar .primary { background: var(--gold); border-color: var(--gold); color: #7F5557; }
 .toolbar .secondary { background: #fff; border-color: var(--gold); color: var(--gold-deep); }
 .frame {
   position: relative;
@@ -215,7 +215,7 @@ body {
 .frame .corner-bl { bottom: 10px; left: 10px; border-bottom: 2px solid; border-left: 2px solid; }
 .frame .corner-br { bottom: 10px; right: 10px; border-bottom: 2px solid; border-right: 2px solid; }
 .cover {
-  background: linear-gradient(145deg, #A07070 0%, #2A1810 45%, #A07070 100%);
+  background: linear-gradient(145deg, #7F5557 0%, #7F5557 45%, #7F5557 100%);
   color: #F2EBE0; border-color: rgba(215,184,102,.55);
   padding: 1.75rem 1.5rem 1.6rem;
 }
@@ -297,9 +297,9 @@ p { margin: .5rem 0; }
 .card-n {
   flex-shrink: 0; width: 2rem; height: 2rem; border-radius: 999px;
   display:flex; align-items:center; justify-content:center;
-  background: var(--gold); color: #A07070; font-weight: 700; font-size: .9rem;
+  background: var(--gold); color: #7F5557; font-weight: 700; font-size: .9rem;
 }
-.card-n.alt { background: rgba(100,31,43,.12); color: #A07070; }
+.card-n.alt { background: rgba(100,31,43,.12); color: #7F5557; }
 .card h3 { margin-top: 0; }
 .dims {
   border: 1px solid rgba(215,184,102,.28); border-radius: 16px;
@@ -326,7 +326,7 @@ p { margin: .5rem 0; }
   width: 2.1rem; height: 2.1rem; border-radius: 999px; flex-shrink: 0;
   display:flex; align-items:center; justify-content:center;
   border: 2px solid var(--gold); background: linear-gradient(135deg, #D4AF72, #B8954A);
-  font-weight: 700; color: #A07070;
+  font-weight: 700; color: #7F5557;
 }
 .priority {
   position: relative; overflow: hidden;

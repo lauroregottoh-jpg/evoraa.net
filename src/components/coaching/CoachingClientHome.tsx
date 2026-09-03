@@ -83,7 +83,7 @@ export function CoachingClientHome({
         <button
           type="button"
           onClick={() => setActiveSessionId(null)}
-          className="text-xs font-semibold text-[#A07070] underline"
+          className="text-xs font-semibold text-[#7F5557] underline"
         >
           ← Retour à mon espace
         </button>
@@ -108,7 +108,7 @@ export function CoachingClientHome({
 
   return (
     <div className="max-w-3xl mx-auto space-y-6 pb-10">
-      <header className="relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#A07070] via-[#8B5C62] to-[#A07070] p-7 sm:p-9 text-[#F2EBE0]">
+      <header className="relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#7F5557] via-[#8B5C62] to-[#7F5557] p-7 sm:p-9 text-[#F2EBE0]">
         <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#D4AF72]">
           Parcours coaché
         </p>
@@ -147,22 +147,22 @@ export function CoachingClientHome({
             className="pointer-events-none select-none opacity-[0.45] grayscale-[0.25]"
             aria-hidden
           >
-            <div className="rounded-2xl border border-[#A07070]/15 bg-[#F2EBE0] p-6 h-48" />
+            <div className="rounded-2xl border border-[#7F5557]/15 bg-[#F2EBE0] p-6 h-48" />
           </div>
           <div className="absolute inset-0 z-10 flex items-start justify-center p-4 pt-6 bg-[#F2EBE0]/40 backdrop-blur-[1px]">
             <div className="w-full max-w-md rounded-2xl border border-[#B8954A]/40 bg-white shadow-elevated p-6 space-y-4 text-center">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#A07070]/10 text-[#A07070]">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#7F5557]/10 text-[#7F5557]">
                 <Lock className="h-5 w-5" />
               </div>
-              <h2 className="font-serif text-2xl font-bold text-[#A07070]">
+              <h2 className="font-serif text-2xl font-bold text-[#7F5557]">
                 Débloquez votre session
               </h2>
-              <p className="text-sm text-[#A07070]/75 leading-relaxed">
+              <p className="text-sm text-[#7F5557]/75 leading-relaxed">
                 Après paiement vous pourrez réserver et rejoindre la réunion.
               </p>
               <Link
                 href="/coaching#payer"
-                className="inline-flex h-11 items-center justify-center rounded-xl bg-[#A07070] px-5 text-sm font-semibold text-[#F2EBE0] w-full"
+                className="inline-flex h-11 items-center justify-center rounded-xl bg-[#7F5557] px-5 text-sm font-semibold text-[#F2EBE0] w-full"
               >
                 Prendre mon coaching
               </Link>
@@ -178,7 +178,7 @@ export function CoachingClientHome({
             }}
           />
 
-          <section className="rounded-2xl border border-[#A07070]/25 bg-gradient-to-br from-[#A07070] to-[#8B5C62] p-5 sm:p-6 text-[#F2EBE0] space-y-4">
+          <section className="rounded-2xl border border-[#7F5557]/25 bg-gradient-to-br from-[#7F5557] to-[#8B5C62] p-5 sm:p-6 text-[#F2EBE0] space-y-4">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#D4AF72]">
                 Espace de réunion
@@ -219,7 +219,7 @@ export function CoachingClientHome({
                               : ""}
                           </p>
                         </div>
-                        <span className="shrink-0 rounded-lg bg-[#D4AF72] px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-[#A07070]">
+                        <span className="shrink-0 rounded-lg bg-[#D4AF72] px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-[#7F5557]">
                           Rejoindre
                         </span>
                       </div>
@@ -231,8 +231,8 @@ export function CoachingClientHome({
           </section>
 
           {pastSessions.length > 0 ? (
-            <section className="rounded-2xl border border-[#A07070]/10 bg-white p-5 space-y-3">
-              <h2 className="font-serif text-lg font-bold text-[#A07070]">
+            <section className="rounded-2xl border border-[#7F5557]/10 bg-white p-5 space-y-3">
+              <h2 className="font-serif text-lg font-bold text-[#7F5557]">
                 Séances passées
               </h2>
               <ul className="space-y-2">
@@ -245,10 +245,10 @@ export function CoachingClientHome({
                       }}
                       className={cn(
                         "w-full text-left rounded-xl border border-[#B8954A]/25 bg-[#F2EBE0] px-4 py-3",
-                        s.status === "COMPLETED" && "hover:border-[#A07070]/30"
+                        s.status === "COMPLETED" && "hover:border-[#7F5557]/30"
                       )}
                     >
-                      <p className="text-sm font-semibold text-[#A07070]">
+                      <p className="text-sm font-semibold text-[#7F5557]">
                         {s.coachName}
                       </p>
                       <p className="text-xs text-muted-foreground mt-0.5">

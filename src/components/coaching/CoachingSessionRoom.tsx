@@ -372,7 +372,7 @@ export function CoachingSessionRoom({
           <button
             type="button"
             onClick={leaveLobby}
-            className="inline-flex h-11 items-center rounded-xl border border-[#A07070]/25 bg-white px-4 text-sm font-semibold text-[#A07070]"
+            className="inline-flex h-11 items-center rounded-xl border border-[#7F5557]/25 bg-white px-4 text-sm font-semibold text-[#7F5557]"
           >
             Quitter la salle d’attente
           </button>
@@ -387,7 +387,7 @@ export function CoachingSessionRoom({
   }
 
   return (
-    <div className="rounded-2xl border border-[#A07070]/25 bg-gradient-to-br from-[#A07070] via-[#8B5C62] to-[#A07070] text-[#F2EBE0] overflow-hidden">
+    <div className="rounded-2xl border border-[#7F5557]/25 bg-gradient-to-br from-[#7F5557] via-[#8B5C62] to-[#7F5557] text-[#F2EBE0] overflow-hidden">
       <div className="p-4 sm:p-5 space-y-3 border-b border-white/10">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
@@ -438,7 +438,7 @@ export function CoachingSessionRoom({
             type="button"
             onClick={() => void hangUp()}
             disabled={busy}
-            className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#D4AF72] px-4 text-sm font-bold text-[#A07070] disabled:opacity-60"
+            className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#D4AF72] px-4 text-sm font-bold text-[#7F5557] disabled:opacity-60"
           >
             <PhoneOff className="h-4 w-4" />
             {canComplete ? "Terminer · valider" : "Quitter (sans valider)"}
@@ -464,7 +464,7 @@ export function CoachingSessionRoom({
         )}
       </div>
 
-      <div className="p-5 sm:p-6 space-y-4 bg-[#F2EBE0] text-[#A07070]">
+      <div className="p-5 sm:p-6 space-y-4 bg-[#F2EBE0] text-[#7F5557]">
         <CoachingLiveTranscript
           sessionId={sessionId}
           role={role}
@@ -475,7 +475,7 @@ export function CoachingSessionRoom({
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
             Messages
           </p>
-          <h3 className="font-serif text-lg font-bold text-[#A07070]">
+          <h3 className="font-serif text-lg font-bold text-[#7F5557]">
             Échanges dans KELIAA
           </h3>
         </div>
@@ -515,7 +515,7 @@ export function CoachingSessionRoom({
                 setSending(false)
                 void refreshMessages()
               }}
-              className="rounded-xl border border-[#A07070]/25 bg-white px-3 py-2 text-xs font-semibold hover:bg-[#A07070]/5 disabled:opacity-50"
+              className="rounded-xl border border-[#7F5557]/25 bg-white px-3 py-2 text-xs font-semibold hover:bg-[#7F5557]/5 disabled:opacity-50"
             >
               {t.label}
             </button>

@@ -82,7 +82,7 @@ export function ReportDocumentView({
         <button
           type="button"
           onClick={() => window.print()}
-          className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#B8954A] px-4 text-xs font-bold text-[#A07070] shadow-sm hover:brightness-105 transition"
+          className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#B8954A] px-4 text-xs font-bold text-[#7F5557] shadow-sm hover:brightness-105 transition"
         >
           <Printer className="h-3.5 w-3.5" />
           Imprimer
@@ -98,7 +98,7 @@ export function ReportDocumentView({
 
       {/* ——— COUVERTURE PREMIUM ——— */}
       <OrnamentFrame>
-        <section className="rapport-reveal relative overflow-hidden rounded-[1.75rem] border-2 border-[#B8954A]/55 bg-gradient-to-br from-[#A07070] via-[#2A1810] to-[#A07070] text-[#F2EBE0] p-8 sm:p-12 shadow-elevated print:border print:shadow-none">
+        <section className="rapport-reveal relative overflow-hidden rounded-[1.75rem] border-2 border-[#B8954A]/55 bg-gradient-to-br from-[#7F5557] via-[#7F5557] to-[#7F5557] text-[#F2EBE0] p-8 sm:p-12 shadow-elevated print:border print:shadow-none">
           <div
             aria-hidden
             className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-50 print:hidden"
@@ -257,7 +257,7 @@ export function ReportDocumentView({
                 Niveau de préparation actuel
               </p>
               <PrepStars score={living.glance.score} />
-              <p className="font-serif text-4xl font-bold text-[#A07070]">
+              <p className="font-serif text-4xl font-bold text-[#7F5557]">
                 {living.glance.score}{" "}
                 <span className="text-lg text-[#B8954A]">/ 100</span>
               </p>
@@ -376,7 +376,7 @@ export function ReportDocumentView({
             <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
               Évaluation recommandée
             </p>
-            <h3 className="font-serif text-3xl font-bold text-[#A07070]">
+            <h3 className="font-serif text-3xl font-bold text-[#7F5557]">
               {living.nextStep.title}
             </h3>
             <ul className="grid sm:grid-cols-2 gap-2">
@@ -532,7 +532,7 @@ export function ReportDocumentView({
         <div className="flex flex-wrap gap-2 print:hidden">
           <Link
             href="/coaching"
-            className="inline-flex h-10 items-center rounded-xl bg-[#B8954A] px-4 text-xs font-bold text-[#A07070]"
+            className="inline-flex h-10 items-center rounded-xl bg-[#B8954A] px-4 text-xs font-bold text-[#7F5557]"
           >
             Réserver une séance de coaching
           </Link>
@@ -739,7 +739,7 @@ function NarrativeBlock({
             className={cn(
               "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold",
               kind === "force"
-                ? "bg-[#B8954A] text-[#A07070]"
+                ? "bg-[#B8954A] text-[#7F5557]"
                 : "bg-primary/15 text-primary"
             )}
           >
