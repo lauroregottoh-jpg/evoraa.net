@@ -91,7 +91,7 @@ export function AllianceGiftReveal({ firstName }: { firstName: string }) {
   }, [cycle])
 
   return (
-    <section className="relative z-10 overflow-hidden rounded-[1.85rem] border-2 border-[#B8954A]/55 bg-gradient-to-br from-[#120f10] via-[#2A1810] to-[#A07070] text-[#F2EBE0] px-4 py-10 sm:px-8 sm:py-12 shadow-elevated min-h-[28rem] sm:min-h-[32rem]">
+    <section className="relative z-10 overflow-hidden rounded-[1.85rem] border-2 border-[#B8954A]/55 bg-gradient-to-br from-[#120f10] via-[#2A1810] to-[#7F5557] text-[#F5EDE0] px-4 py-10 sm:px-8 sm:py-12 shadow-elevated min-h-[28rem] sm:min-h-[32rem]">
       <div
         aria-hidden
         className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-50"
@@ -124,7 +124,7 @@ export function AllianceGiftReveal({ firstName }: { firstName: string }) {
               key={`${cycle}-${item.title}`}
               href={item.href}
               className={cn(
-                "absolute left-1/2 top-1/2 z-30 flex items-center gap-2 rounded-xl border border-[#B8954A]/45 bg-[#A07070]/95 px-3 py-2 shadow-lg backdrop-blur-sm transition-all duration-700",
+                "absolute left-1/2 top-1/2 z-30 flex items-center gap-2 rounded-xl border border-[#B8954A]/45 bg-[#7F5557]/95 px-3 py-2 shadow-lg backdrop-blur-sm transition-all duration-700",
                 show
                   ? "opacity-100 scale-100"
                   : "opacity-0 scale-50 pointer-events-none"
@@ -139,7 +139,7 @@ export function AllianceGiftReveal({ firstName }: { firstName: string }) {
               <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#B8954A]/25 text-[#D4AF72]">
                 <Icon className="h-4 w-4" />
               </span>
-              <span className="text-xs font-bold whitespace-nowrap text-[#F2EBE0]">
+              <span className="text-xs font-bold whitespace-nowrap text-[#F5EDE0]">
                 {item.title}
               </span>
             </Link>
@@ -169,11 +169,11 @@ export function AllianceGiftReveal({ firstName }: { firstName: string }) {
             <div className="absolute inset-x-3 top-3 h-1 rounded-full bg-[#D4AF72]/35" />
             <Gift
               className={cn(
-                "h-12 w-12 text-[#A07070] transition-all duration-500",
+                "h-12 w-12 text-[#7F5557] transition-all duration-500",
                 phase === "burst" && "scale-90 opacity-50"
               )}
             />
-            <div className="absolute inset-x-6 bottom-4 h-2 rounded-full bg-[#A07070]/15" />
+            <div className="absolute inset-x-6 bottom-4 h-2 rounded-full bg-[#7F5557]/15" />
           </div>
         </div>
 

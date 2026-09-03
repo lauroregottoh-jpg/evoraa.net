@@ -11,21 +11,21 @@ export function MessageCreditsCallout({
 
   return (
     <div className="rounded-xl border border-[#B8954A]/35 bg-[#F7F0E0]/80 px-4 py-3">
-      <p className="text-sm text-[#8B5C62] leading-relaxed">
+      <p className="text-sm text-[#7F5557] leading-relaxed">
         Gagnez des messages en invitant vos étoiles à un test{" "}
-        <span className="text-[#8B5C62]/70">(jusqu&apos;à 20 messages)</span>
+        <span className="text-[#7F5557]/70">(jusqu&apos;à 20 messages)</span>
         .
       </p>
       <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
         <Link
           href={inviteHref}
-          className="text-xs font-semibold text-[#A07070] underline underline-offset-2"
+          className="text-xs font-semibold text-[#7F5557] underline underline-offset-2"
         >
           Inviter depuis une suggestion
         </Link>
         <Link
           href="/assessments"
-          className="text-xs font-semibold text-[#A07070] underline underline-offset-2"
+          className="text-xs font-semibold text-[#7F5557] underline underline-offset-2"
         >
           Faire un test
         </Link>

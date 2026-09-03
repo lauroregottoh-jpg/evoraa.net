@@ -69,20 +69,20 @@ export function DiscoveryPathVisual({
   const activeStep = assessmentsDone < 5 ? 2 : 3
 
   return (
-    <section className="relative overflow-hidden rounded-[1.75rem] border border-[#E4D8CC] bg-white text-[#2F2424] shadow-card">
+    <section className="relative overflow-hidden rounded-[1.75rem] border border-[#DED1C4] bg-white text-[#2F2424] shadow-card">
       <div
         aria-hidden
         className="discovery-orb discovery-orb-a pointer-events-none absolute -left-10 top-6 h-36 w-36 rounded-full bg-[#B8954A]/15 blur-3xl"
       />
       <div
         aria-hidden
-        className="discovery-orb discovery-orb-b pointer-events-none absolute -right-8 bottom-4 h-40 w-40 rounded-full bg-[#A07070]/08 blur-3xl"
+        className="discovery-orb discovery-orb-b pointer-events-none absolute -right-8 bottom-4 h-40 w-40 rounded-full bg-[#7F5557]/08 blur-3xl"
       />
 
       <div className="relative z-10 p-5 sm:p-8 space-y-6">
         <div className="space-y-2 max-w-xl">
-          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#8B5A57] inline-flex items-center gap-1.5">
-            <Sparkles className="h-3.5 w-3.5 discovery-spark text-[#8B5A57]" />
+          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#7F5557] inline-flex items-center gap-1.5">
+            <Sparkles className="h-3.5 w-3.5 discovery-spark text-[#7F5557]" />
             Votre marche à suivre
           </p>
           <h2 className="font-serif text-2xl sm:text-3xl font-bold leading-tight text-[#2F2424]">
@@ -94,10 +94,10 @@ export function DiscoveryPathVisual({
         </div>
 
         {/* Frise claire */}
-        <div className="relative overflow-hidden rounded-2xl border border-[#E4D8CC] bg-[#F8F4EC] px-3 py-6 sm:px-6 sm:py-8 shadow-sm">
+        <div className="relative overflow-hidden rounded-2xl border border-[#DED1C4] bg-[#F5EDE0] px-3 py-6 sm:px-6 sm:py-8 shadow-sm">
           <div
             aria-hidden
-            className="discovery-horizon-line absolute left-6 right-6 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[#8B5A57]/35 to-transparent"
+            className="discovery-horizon-line absolute left-6 right-6 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[#7F5557]/35 to-transparent"
           />
           <div className="relative flex items-end justify-between gap-1 sm:gap-2">
             {STEPS.map((step, i) => {
@@ -114,9 +114,9 @@ export function DiscoveryPathVisual({
                     className={cn(
                       "flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full border-2 shadow-md",
                       isGoal
-                        ? "border-[#8B5A57] bg-[#8B5A57] text-[#F7F1EA] discovery-goal-pulse"
+                        ? "border-[#7F5557] bg-[#7F5557] text-[#F7F1EA] discovery-goal-pulse"
                         : isActive
-                          ? "border-[#8B5A57] bg-[#8B5A57]/15 text-[#8B5A57] discovery-step-pulse"
+                          ? "border-[#7F5557] bg-[#7F5557]/15 text-[#7F5557] discovery-step-pulse"
                           : "border-[#B8954A]/30 bg-white text-[#7A5F28]"
                     )}
                   >
@@ -163,9 +163,9 @@ export function DiscoveryPathVisual({
                     className={cn(
                       "discovery-step-badge relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 font-serif text-base font-bold",
                       isActive
-                        ? "border-[#B8954A] bg-gradient-to-br from-[#D4AF72] to-[#B8954A] text-[#A07070] discovery-step-pulse"
+                        ? "border-[#B8954A] bg-gradient-to-br from-[#D4AF72] to-[#B8954A] text-[#7F5557] discovery-step-pulse"
                         : isDone
-                          ? "border-[#B8954A]/60 bg-[#B8954A]/15 text-[#A07070]"
+                          ? "border-[#B8954A]/60 bg-[#B8954A]/15 text-[#7F5557]"
                           : "border-[#B8954A]/25 bg-white text-[#7A5F28]"
                     )}
                   >
@@ -185,7 +185,7 @@ export function DiscoveryPathVisual({
                         className={cn(
                           "discovery-step-icon hidden sm:flex h-10 w-10 items-center justify-center rounded-xl border shrink-0",
                           isActive
-                            ? "border-[#B8954A]/40 bg-[#B8954A]/15 text-[#A07070]"
+                            ? "border-[#B8954A]/40 bg-[#B8954A]/15 text-[#7F5557]"
                             : "border-[#B8954A]/20 bg-white text-[#7A5F28]/80"
                         )}
                       >
@@ -197,8 +197,8 @@ export function DiscoveryPathVisual({
                       className={cn(
                         "inline-flex h-9 items-center gap-1.5 rounded-xl px-3 text-xs font-bold transition",
                         isActive
-                          ? "bg-[#8B5A57] text-[#F7F1EA] hover:bg-[#7A4F55]"
-                          : "border border-[#E4D8CC] bg-[#F8F4EC] text-[#2F2424] hover:bg-white"
+                          ? "bg-[#7F5557] text-[#F7F1EA] hover:bg-[#7F5557]"
+                          : "border border-[#DED1C4] bg-[#F5EDE0] text-[#2F2424] hover:bg-white"
                       )}
                     >
                       {step.cta}
@@ -211,7 +211,7 @@ export function DiscoveryPathVisual({
           </ol>
         </div>
 
-        <p className="text-center text-xs text-[#A07070]/45 italic">
+        <p className="text-center text-xs text-[#7F5557]/45 italic">
           Une étape après l’autre — la bonne personne se découvre dans le bon
           cadre.
         </p>

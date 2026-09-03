@@ -144,7 +144,7 @@ export function SettingsForm({
         >
           <CardHeader className="border-b border-border/40 pb-4">
             <CardTitle className="font-serif text-2xl text-foreground flex items-center gap-2">
-              <Badge className="bg-[#B8954A] text-[#A07070]">Alliance</Badge>
+              <Badge className="bg-[#B8954A] text-[#7F5557]">Alliance</Badge>
               Amitiés même sexe
             </CardTitle>
             <CardDescription className="text-xs text-muted-foreground">
@@ -169,7 +169,7 @@ export function SettingsForm({
               variant={sameSexFriendship ? "default" : "outline"}
               className={`rounded-xl h-10 px-5 font-medium shrink-0 ${
                 sameSexFriendship
-                  ? "bg-[#A07070] hover:bg-[#A07070]/90 text-[#F2EBE0]"
+                  ? "bg-[#7F5557] hover:bg-[#7F5557]/90 text-[#F5EDE0]"
                   : "border-[#B8954A]/40"
               }`}
             >

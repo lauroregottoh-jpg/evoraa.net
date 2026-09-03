@@ -30,17 +30,17 @@ export function AllianceLevelStrip({
   return (
     <section
       className="rounded-2xl px-5 py-5 sm:px-6 space-y-3"
-      style={{ background: "#FFFFFF", border: "1px solid #E4D8CC" }}
+      style={{ background: "#FFFFFF", border: "1px solid #DED1C4" }}
     >
       {/* En-tête */}
       <div className="flex items-center justify-between gap-2">
         <h2 className="font-serif text-lg font-bold" style={{ color: "#2F2424" }}>
           Votre parcours Alliance
         </h2>
-        <div className="h-px flex-1 mx-3 rounded-full" style={{ background: "#8B5A57", opacity: 0.25 }} />
+        <div className="h-px flex-1 mx-3 rounded-full" style={{ background: "#7F5557", opacity: 0.25 }} />
         <span
           className="text-[10px] font-bold uppercase tracking-widest"
-          style={{ color: "#8B5A57" }}
+          style={{ color: "#7F5557" }}
         >
           {Object.values(done).filter(Boolean).length} / {STEPS.length}
         </span>
@@ -69,8 +69,8 @@ export function AllianceLevelStrip({
                 <span
                   className="flex h-7 w-7 items-center justify-center rounded-full shrink-0"
                   style={{
-                    background: unlocked ? "#A07070" : "#DDD0C4",
-                    color: unlocked ? "#F2EBE0" : "#7A4F55",
+                    background: unlocked ? "#7F5557" : "#DED1C4",
+                    color: unlocked ? "#F5EDE0" : "#7F5557",
                   }}
                 >
                   {unlocked ? (
@@ -89,7 +89,7 @@ export function AllianceLevelStrip({
 
                 <span
                   className="ml-auto text-[10px] font-bold uppercase tracking-wider"
-                  style={{ color: unlocked ? "#8B5A57" : "#A89890" }}
+                  style={{ color: unlocked ? "#7F5557" : "#A89890" }}
                 >
                   {unlocked ? "Disponible ✓" : "À débloquer"}
                 </span>

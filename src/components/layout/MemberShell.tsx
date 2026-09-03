@@ -287,7 +287,7 @@ export function MemberShell({
       gold &&
         !accent &&
         active &&
-        "bg-[#F7F1EA] text-[#7A4F55] shadow-[inset_0_0_0_1px_rgba(184,149,74,0.65)]",
+        "bg-[#F7F1EA] text-[#7F5557] shadow-[inset_0_0_0_1px_rgba(184,149,74,0.65)]",
       !accent &&
         !gold &&
         active &&
@@ -486,9 +486,9 @@ export function MemberShell({
     <div className="min-h-screen bg-background text-foreground md:flex">
       {/* Sidebar — rose mat pastel Farata (#AC7D79) desktop + mobile */}
       <aside
+        style={{ backgroundColor: "#AC7D79", color: "#F7F1EA" }}
         className={cn(
-          "hidden md:flex shrink-0 flex-col sticky top-0 h-screen z-40",
-          "bg-[#AC7D79] text-[#F7F1EA]",
+          "keliaa-member-rail hidden md:flex shrink-0 flex-col sticky top-0 h-screen z-40",
           "border-r border-[#7F5557]/25 shadow-[4px_0_24px_-12px_rgba(62,34,45,0.18)]",
           "transition-[width] duration-300 ease-out",
           sidebarReady ? (sidebarOpen ? "md:w-56 lg:w-60" : "md:w-[4.25rem]") : "md:w-56 lg:w-60",
@@ -628,7 +628,7 @@ export function MemberShell({
                     <form action={logoutAction} className="px-1.5 pb-0.5">
                       <button
                         type="submit"
-                        className="flex w-full items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#7A4F55] hover:bg-white/80 transition-colors"
+                        className="flex w-full items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#7F5557] hover:bg-white/80 transition-colors"
                       >
                         <LogOut className="h-4 w-4 text-[#B8954A]" />
                         Déconnexion
@@ -641,7 +641,10 @@ export function MemberShell({
           </div>
 
           {mobileOpen && (
-            <div className="md:hidden border-t border-[#7F5557]/30 bg-[#AC7D79] px-3 py-3 max-h-[75vh] overflow-y-auto z-[70] animate-in slide-in-from-top-2 fade-in duration-300 member-sidebar-scroll">
+            <div
+              style={{ backgroundColor: "#AC7D79" }}
+              className="keliaa-member-rail md:hidden border-t border-[#7F5557]/30 px-3 py-3 max-h-[75vh] overflow-y-auto z-[70] animate-in slide-in-from-top-2 fade-in duration-300 member-sidebar-scroll"
+            >
               <nav className="flex flex-col gap-0.5 text-[#F7F1EA]" aria-label="Navigation membre">
                 {renderNavLinks(false)}
               </nav>
@@ -685,7 +688,8 @@ export function MemberShell({
         </main>
 
         <nav
-          className="md:hidden fixed bottom-0 inset-x-0 z-[60] border-t border-[#7F5557]/30 bg-[#AC7D79] text-[#F7F1EA] backdrop-blur-md"
+          style={{ backgroundColor: "#AC7D79", color: "#F7F1EA" }}
+          className="keliaa-member-rail md:hidden fixed bottom-0 inset-x-0 z-[60] border-t border-[#7F5557]/30 backdrop-blur-md"
           aria-label="Navigation mobile"
         >
           <div className="mx-auto max-w-lg grid grid-cols-5 h-16">

@@ -81,6 +81,12 @@
   }
 }
 
+/* Rail membre — rose mat forcé (desktop sidebar + mobile bar) */
+.keliaa-member-rail {
+  background-color: #AC7D79 !important;
+  color: #F7F1EA !important;
+}
+
 @layer utilities {
   .glass {
     background: rgba(242, 235, 224, 0.88);
@@ -98,7 +104,7 @@
 
   /* Dégradé marque : bordeaux profond → or Farata */
   .text-gradient {
-    background: linear-gradient(135deg, #A07070 0%, #B8954A 60%, #D4AF72 100%);
+    background: linear-gradient(135deg, #7F5557 0%, #B8954A 60%, #D4AF72 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -111,7 +117,7 @@
 
   .card-kelia {
     background: #FFFFFF;
-    border: 1px solid #C9BBAF;
+    border: 1px solid #DED1C4;
     box-shadow: var(--shadow-card);
     border-radius: 0.75rem;
   }
@@ -125,19 +131,19 @@
 
   /* Section dark — fond bordeaux profond style Farata */
   .section-dark {
-    background-color: #A07070;
-    color: #F2EBE0;
+    background-color: #7F5557;
+    color: #F5EDE0;
   }
 
   /* Section ivoire — fond chaud principal */
   .section-ivory {
-    background-color: #F2EBE0;
+    background-color: #F5EDE0;
   }
 
   /* Bouton or Farata */
   .btn-gold {
     background-color: #B8954A;
-    color: #A07070;
+    color: #7F5557;
     font-weight: 600;
     border-radius: 999px;
   }
@@ -799,7 +805,7 @@
 }
 
 .couple-sit-active {
-  color: #A07070;
+  color: #7F5557;
   border-color: #B8954A;
 }
 

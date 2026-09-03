@@ -18,7 +18,7 @@ export function LoyaltyProgramCard({
   return (
     <section
       className={cn(
-        "relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/40 bg-gradient-to-br from-[#FFFBF5] via-[#F2EBE0] to-[#F0E6D4] shadow-card",
+        "relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/40 bg-gradient-to-br from-[#FFFBF5] via-[#F5EDE0] to-[#F0E6D4] shadow-card",
         compact ? "p-5" : "p-5 sm:p-7"
       )}
     >
@@ -33,23 +33,23 @@ export function LoyaltyProgramCard({
               <Gift className="h-3.5 w-3.5 text-[#B8954A]" />
               Programme Fidélité Alliance
             </p>
-            <h2 className="font-serif text-2xl font-bold text-[#A07070]">
+            <h2 className="font-serif text-2xl font-bold text-[#7F5557]">
               Votre fidélité est récompensée
             </h2>
-            <p className="max-w-lg text-sm text-[#A07070]/65 leading-relaxed">
+            <p className="max-w-lg text-sm text-[#7F5557]/65 leading-relaxed">
               Chaque renouvellement vous offre des avantages supplémentaires pour
               poursuivre vos échanges et préparer votre projet de mariage avec
               sérénité.
             </p>
           </div>
-          <span className="rounded-full border border-[#B8954A]/40 bg-white px-3 py-1 text-[11px] font-bold text-[#A07070]">
+          <span className="rounded-full border border-[#B8954A]/40 bg-white px-3 py-1 text-[11px] font-bold text-[#7F5557]">
             Carte · {loyalty.fidelityCardLabel}
           </span>
         </div>
 
         <div className="rounded-2xl border border-[#B8954A]/25 bg-white/80 p-4 space-y-3">
           <div className="flex items-center justify-between text-sm">
-            <span className="font-semibold text-[#A07070]">
+            <span className="font-semibold text-[#7F5557]">
               Mois {Math.min(loyalty.consecutiveMonths, 12)} sur 12
               {loyalty.consecutiveMonths > 12
                 ? ` · total ${loyalty.consecutiveMonths}`
@@ -63,7 +63,7 @@ export function LoyaltyProgramCard({
           </div>
           <div className="h-2.5 overflow-hidden rounded-full bg-[#E8D5B5]">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#B8954A] to-[#A07070] transition-all"
+              className="h-full rounded-full bg-gradient-to-r from-[#B8954A] to-[#7F5557] transition-all"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -72,7 +72,7 @@ export function LoyaltyProgramCard({
               <p className="text-[10px] font-bold uppercase tracking-wide text-[#7A5F28]">
                 Prochaine récompense
               </p>
-              <p className="mt-1 font-semibold text-[#A07070]">
+              <p className="mt-1 font-semibold text-[#7F5557]">
                 +{loyalty.nextBonusMessages} messages
                 {loyalty.nextBoosts > 0 ? " + Boost 24 h" : ""}
               </p>
@@ -81,7 +81,7 @@ export function LoyaltyProgramCard({
               <p className="text-[10px] font-bold uppercase tracking-wide text-[#7A5F28]">
                 Boosts dispo
               </p>
-              <p className="mt-1 font-semibold text-[#A07070] inline-flex items-center gap-1">
+              <p className="mt-1 font-semibold text-[#7F5557] inline-flex items-center gap-1">
                 <Zap className="h-3.5 w-3.5 text-[#B8954A]" />
                 {loyalty.profileBoostsAvailable}
               </p>
@@ -97,10 +97,10 @@ export function LoyaltyProgramCard({
 
         {!compact ? (
           <details className="rounded-xl border border-[#B8954A]/25 bg-white/70 px-4 py-3 text-sm">
-            <summary className="cursor-pointer font-semibold text-[#A07070]">
+            <summary className="cursor-pointer font-semibold text-[#7F5557]">
               En savoir plus
             </summary>
-            <ul className="mt-2 space-y-1.5 text-xs text-[#A07070]/70 list-disc pl-4">
+            <ul className="mt-2 space-y-1.5 text-xs text-[#7F5557]/70 list-disc pl-4">
               <li>+15 messages à chaque renouvellement mensuel</li>
               <li>
                 Tous les 3 mois : +30 messages + 1 Boost Profil 24 h
@@ -115,7 +115,7 @@ export function LoyaltyProgramCard({
         ) : (
           <Link
             href="/premium#fidelite"
-            className="inline-flex text-xs font-bold text-[#A07070] underline"
+            className="inline-flex text-xs font-bold text-[#7F5557] underline"
           >
             Voir le programme →
           </Link>
@@ -143,15 +143,15 @@ export function LoyaltyRewardReveal({
       <div className="relative w-full max-w-md overflow-hidden rounded-[1.75rem] border-2 border-[#B8954A]/50 bg-gradient-to-br from-[#FFFBF5] to-[#F0E6D4] p-6 shadow-elevated text-center space-y-4">
         <div className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-40" />
         <p className="relative text-4xl">{milestone ? "🎉" : "🎁"}</p>
-        <h2 className="relative font-serif text-2xl font-bold text-[#A07070]">
+        <h2 className="relative font-serif text-2xl font-bold text-[#7F5557]">
           {milestone
             ? "Félicitations ! Nouveau palier"
             : "Merci pour votre fidélité !"}
         </h2>
-        <p className="relative text-sm text-[#A07070]/70">
+        <p className="relative text-sm text-[#7F5557]/70">
           Vous venez de recevoir :
         </p>
-        <ul className="relative space-y-2 text-sm font-semibold text-[#A07070]">
+        <ul className="relative space-y-2 text-sm font-semibold text-[#7F5557]">
           <li className="rounded-xl bg-white/80 px-3 py-2">
             ✓ +{bonusMessages} messages bonus
           </li>
@@ -169,7 +169,7 @@ export function LoyaltyRewardReveal({
         <button
           type="button"
           onClick={onContinue}
-          className="relative inline-flex h-11 w-full items-center justify-center rounded-xl bg-[#A07070] text-sm font-bold text-[#F2EBE0]"
+          className="relative inline-flex h-11 w-full items-center justify-center rounded-xl bg-[#7F5557] text-sm font-bold text-[#F5EDE0]"
         >
           Continuer
         </button>
@@ -180,20 +180,20 @@ export function LoyaltyRewardReveal({
 
 export function PricingLoyaltyTeaser() {
   return (
-    <section className="rounded-[1.75rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#FFFBF5] via-white to-[#F2EBE0] p-6 sm:p-8 shadow-card space-y-3">
+    <section className="rounded-[1.75rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#FFFBF5] via-white to-[#F5EDE0] p-6 sm:p-8 shadow-card space-y-3">
       <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#7A5F28] inline-flex items-center gap-1.5">
         <Sparkles className="h-3.5 w-3.5 text-[#B8954A]" />
         Votre fidélité est récompensée
       </p>
-      <h2 className="font-serif text-2xl font-bold text-[#A07070]">
+      <h2 className="font-serif text-2xl font-bold text-[#7F5557]">
         Programme Fidélité Alliance
       </h2>
-      <p className="text-sm text-[#A07070]/70 leading-relaxed max-w-2xl">
+      <p className="text-sm text-[#7F5557]/70 leading-relaxed max-w-2xl">
         Chaque renouvellement Alliance vous permet de débloquer progressivement
         des récompenses exclusives (+15 messages, paliers +30 + Boost, Session
         VIP à 12 mois) et de faire évoluer votre Carte de Fidélité.
       </p>
-      <ul className="grid sm:grid-cols-2 gap-2 text-xs text-[#A07070]/75">
+      <ul className="grid sm:grid-cols-2 gap-2 text-xs text-[#7F5557]/75">
         <li className="rounded-xl border border-[#B8954A]/20 bg-white/80 px-3 py-2">
           +15 messages après chaque renouvellement mensuel
         </li>

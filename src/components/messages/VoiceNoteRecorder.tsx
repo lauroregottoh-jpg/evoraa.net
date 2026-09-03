@@ -210,18 +210,18 @@ export function VoiceNoteRecorder({
           title="Fonctionnalité Premium"
         >
           <Mic className="h-4 w-4" />
-          <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#A07070] text-[9px] text-white">
+          <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#7F5557] text-[9px] text-white">
             🔒
           </span>
         </button>
         {showPremiumHint ? (
-          <div className="absolute bottom-14 right-0 z-20 w-44 rounded-xl border border-border bg-[#F2EBE0] p-3 shadow-md">
+          <div className="absolute bottom-14 right-0 z-20 w-44 rounded-xl border border-border bg-[#F5EDE0] p-3 shadow-md">
             <p className="text-xs font-semibold text-foreground">
               Fonctionnalité Premium
             </p>
             <Link
               href="/premium"
-              className="mt-2 inline-flex text-[11px] font-bold text-[#A07070] underline underline-offset-2"
+              className="mt-2 inline-flex text-[11px] font-bold text-[#7F5557] underline underline-offset-2"
             >
               Découvrir Premium
             </Link>

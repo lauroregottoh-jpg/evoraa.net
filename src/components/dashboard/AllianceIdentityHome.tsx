@@ -81,20 +81,16 @@ export function AllianceIdentityHome({
       {/* 1. Grand coffret animé — AVANT la carte */}
       <AllianceGiftReveal firstName={name} />
 
-      {/* 2. Carte membre */}
-      <section className="relative z-10 overflow-hidden rounded-[1.6rem] border-2 border-[#B8954A]/55 bg-gradient-to-br from-[#A07070] via-[#2A1A12] to-[#3D2418] text-[#F2EBE0] p-5 sm:p-7 shadow-elevated">
+      {/* 2. Carte membre — blanc + filet or (harmonie pastel) */}
+      <section className="relative z-10 overflow-hidden rounded-[1.6rem] border border-[#DED1C4] bg-white text-[#3E222D] p-5 sm:p-7 shadow-card">
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-10 -top-12 h-48 w-48 rounded-full bg-[#B8954A]/30 blur-3xl"
-        />
-        <div
-          aria-hidden
-          className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-55"
+          className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#AC7D79] via-[#B8954A] to-[#AC7D79]"
         />
 
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center gap-5">
           <div className="relative mx-auto sm:mx-0 shrink-0">
-            <div className="h-28 w-28 sm:h-32 sm:w-32 rounded-2xl overflow-hidden border-2 border-[#B8954A]/70 shadow-[0_12px_40px_-12px_rgba(215,184,102,0.65)] ring-2 ring-[#D4AF72]/25">
+            <div className="h-28 w-28 sm:h-32 sm:w-32 rounded-2xl overflow-hidden border-2 border-[#DED1C4] shadow-card ring-2 ring-[#AC7D79]/20">
               <Image
                 src={photo}
                 alt={`Portrait de ${fullName}`}
@@ -105,32 +101,32 @@ export function AllianceIdentityHome({
                 priority
               />
             </div>
-            <span className="absolute -bottom-2 -right-2 flex h-9 w-9 items-center justify-center rounded-xl border border-[#B8954A]/50 bg-[#B8954A] text-[#A07070]">
+            <span className="absolute -bottom-2 -right-2 flex h-9 w-9 items-center justify-center rounded-xl border border-[#B8954A]/50 bg-[#B8954A] text-[#3E222D]">
               <Crown className="h-4 w-4" />
             </span>
           </div>
 
           <div className="flex-1 min-w-0 text-center sm:text-left space-y-2">
-            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#D4AF72]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#7F5557]">
               Carte membre Alliance
             </p>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
-              Bienvenue, {name} ✨
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold leading-tight text-[#3E222D]">
+              Bienvenue, {name}
             </h1>
-            <p className="text-sm text-[#D4AF72]/90 font-medium">
+            <p className="text-sm text-[#7F5557] font-medium">
               Félicitations — Alliance était le bon choix.
             </p>
-            <p className="text-sm text-white/65">{fullName}</p>
+            <p className="text-sm text-[#6B5354]">{fullName}</p>
             <div className="flex flex-wrap justify-center sm:justify-start gap-2 pt-1">
-              <span className="inline-flex items-center gap-1 rounded-full border border-[#B8954A]/45 bg-[#B8954A]/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#D4AF72]">
+              <span className="inline-flex items-center gap-1 rounded-full border border-[#B8954A]/45 bg-[#F5EDE0] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#7F5557]">
                 <BadgeCheck className="h-3.5 w-3.5" />
                 Membre Premium
               </span>
-              <span className="rounded-full border border-[#B8954A]/25 bg-white/5 px-3 py-1 text-[10px] font-semibold text-[#D4AF72]/85">
+              <span className="rounded-full border border-[#DED1C4] bg-[#F5EDE0] px-3 py-1 text-[10px] font-semibold text-[#6B5354]">
                 Depuis {memberSinceLabel}
               </span>
               {isVerified ? (
-                <span className="rounded-full border border-emerald-400/30 bg-emerald-500/15 px-3 py-1 text-[10px] font-semibold text-emerald-200">
+                <span className="rounded-full border border-emerald-400/40 bg-emerald-50 px-3 py-1 text-[10px] font-semibold text-emerald-700">
                   Profil vérifié
                 </span>
               ) : null}
@@ -140,7 +136,7 @@ export function AllianceIdentityHome({
       </section>
 
       {/* 3. Espace enrichi */}
-      <section className="relative z-10 rounded-[1.5rem] border border-[#E4D8CC] bg-white p-5 sm:p-7 space-y-4 shadow-card">
+      <section className="relative z-10 rounded-[1.5rem] border border-[#DED1C4] bg-white p-5 sm:p-7 space-y-4 shadow-card">
         <div className="space-y-2">
           <p className="text-[11px] font-bold uppercase tracking-widest text-accent">
             Espace enrichi débloqué
@@ -179,7 +175,7 @@ export function AllianceIdentityHome({
           })}
         </ul>
 
-        <div className="rounded-xl border border-[#E4D8CC] bg-[#F8F4EC] p-4 space-y-2">
+        <div className="rounded-xl border border-[#DED1C4] bg-[#F5EDE0] p-4 space-y-2">
           <p className="text-[10px] font-bold uppercase tracking-widest text-[#7F5557]">
             Prochaine étape
           </p>
