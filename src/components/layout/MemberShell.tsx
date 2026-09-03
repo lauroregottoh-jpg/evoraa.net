@@ -488,7 +488,7 @@ export function MemberShell({
       <aside
         className={cn(
           "hidden md:flex shrink-0 flex-col sticky top-0 h-screen z-40",
-          "bg-[#AC7D79] text-[#F7F1EA]",
+          "bg-[#8B5A57] text-[#F7F1EA]",
           "border-r border-[#B8954A]/35 shadow-[4px_0_24px_-10px_rgba(122,79,85,0.28)]",
           "transition-[width] duration-300 ease-out",
           sidebarReady ? (sidebarOpen ? "md:w-56 lg:w-60" : "md:w-[4.25rem]") : "md:w-56 lg:w-60",
@@ -552,7 +552,7 @@ export function MemberShell({
             <div className="flex items-center gap-3 min-w-0">
               <button
                 type="button"
-                className="md:hidden p-2 rounded-lg shrink-0 bg-[#AC7D79] text-[#F7F1EA] border border-[#B8954A]/40"
+                className="md:hidden p-2 rounded-lg shrink-0 bg-[#8B5A57] text-[#F7F1EA] border border-[#8B5A57]"
                 onClick={() => setMobileOpen((v) => !v)}
                 aria-label="Ouvrir le menu"
                 aria-expanded={mobileOpen}
@@ -596,7 +596,7 @@ export function MemberShell({
                 <button
                   type="button"
                   onClick={() => setAccountOpen((v) => !v)}
-                  className="inline-flex items-center justify-center rounded-full w-9 h-9 border border-[#B8954A]/40 bg-[#AC7D79]/15 hover:bg-[#AC7D79]/25 transition-colors"
+                  className="inline-flex items-center justify-center rounded-full w-9 h-9 border border-[#8B5A57]/30 bg-[#8B5A57]/10 hover:bg-[#8B5A57]/18 transition-colors"
                   title="Compte"
                   aria-label="Menu compte"
                   aria-expanded={accountOpen}
@@ -641,7 +641,7 @@ export function MemberShell({
           </div>
 
           {mobileOpen && (
-            <div className="md:hidden border-t border-[#B8954A]/30 bg-[#AC7D79] px-3 py-3 max-h-[75vh] overflow-y-auto z-[70] animate-in slide-in-from-top-2 fade-in duration-300 member-sidebar-scroll">
+            <div className="md:hidden border-t border-[#8B5A57]/40 bg-[#8B5A57] px-3 py-3 max-h-[75vh] overflow-y-auto z-[70] animate-in slide-in-from-top-2 fade-in duration-300 member-sidebar-scroll">
               <nav className="flex flex-col gap-0.5 text-[#F7F1EA]" aria-label="Navigation membre">
                 {renderNavLinks(false)}
               </nav>
@@ -685,7 +685,7 @@ export function MemberShell({
         </main>
 
         <nav
-          className="md:hidden fixed bottom-0 inset-x-0 z-[60] border-t border-[#B8954A]/30 bg-[#AC7D79] text-[#F7F1EA] backdrop-blur-md"
+          className="md:hidden fixed bottom-0 inset-x-0 z-[60] border-t border-[#8B5A57]/40 bg-[#8B5A57] text-[#F7F1EA] backdrop-blur-md"
           aria-label="Navigation mobile"
         >
           <div className="mx-auto max-w-lg grid grid-cols-5 h-16">

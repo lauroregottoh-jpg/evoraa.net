@@ -140,7 +140,7 @@ export function AllianceIdentityHome({
       </section>
 
       {/* 3. Espace enrichi */}
-      <section className="relative z-10 rounded-[1.5rem] border-2 border-[#B8954A]/45 bg-gradient-to-br from-[#B8954A]/18 via-white to-primary/[0.04] p-5 sm:p-7 space-y-4 shadow-elevated">
+      <section className="relative z-10 rounded-[1.5rem] border border-[#E4D8CC] bg-white p-5 sm:p-7 space-y-4 shadow-card">
         <div className="space-y-2">
           <p className="text-[11px] font-bold uppercase tracking-widest text-accent">
             Espace enrichi débloqué
@@ -179,18 +179,18 @@ export function AllianceIdentityHome({
           })}
         </ul>
 
-        <div className="rounded-xl border border-[#B8954A]/35 bg-[#B8954A]/12 p-4 space-y-2">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
+        <div className="rounded-xl border border-[#E4D8CC] bg-[#F8F4EC] p-4 space-y-2">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#8B5A57]">
             Prochaine étape
           </p>
-          <p className="text-sm font-semibold">
+          <p className="text-sm font-semibold text-[#2F2424]">
             {assessmentsDone < 5
               ? "Complétez vos tests Matching, puis explorez les 10 clés Alliance."
               : "Suivez votre parcours : missions, rapport global et Coffre Premium."}
           </p>
           <Link
             href={nextHref}
-            className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#B8954A] px-5 text-sm font-bold text-[#A07070]"
+            className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#8B5A57] px-5 text-sm font-bold text-[#F7F1EA]"
           >
             {nextLabel}
             <ArrowRight className="h-4 w-4" />

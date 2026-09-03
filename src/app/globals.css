@@ -6,8 +6,8 @@
      Ivoire chaud → Taupe → Caramel → Rose mauve → Prune rosée
      ───────────────────────────────────────────────────────────── */
 
-  /* Fond & surfaces — ivoire pierre, pas rose bonbon */
-  --color-background: #F4EFE6;
+  /* Fond interface — champagne, PAS rosâtre */
+  --color-background: #F8F4EC;
   --color-foreground: #2F2424;
 
   /* Primaire — prune mate (CTA) */
@@ -26,8 +26,8 @@
   --color-accent: #8F6566;
   --color-accent-foreground: #F7F1EA;
 
-  /* Sidebar — rose mat un peu plus foncé + or */
-  --color-sidebar: #AC7D79;
+  /* Sidebar seule — rose mat plus foncé */
+  --color-sidebar: #8B5A57;
   --color-sidebar-foreground: #F7F1EA;
 
   /* Or — couleur dorée marqueterie (dividers, ornements) */
@@ -47,7 +47,7 @@
 
   /* Card & surfaces */
   --color-card: #FFFFFF;
-  --color-card-foreground: #3D2B2B;
+  --color-card-foreground: #2F2424;
 
   /* Typographies */
   --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;

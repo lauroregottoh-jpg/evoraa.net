@@ -67,7 +67,7 @@ export default async function AssessmentsHubPage() {
   return (
     <MemberPage>
       <div className="relative space-y-10 py-2 max-w-4xl mx-auto">
-        <header className="relative z-10 overflow-hidden rounded-[1.75rem] border border-[#D0C4B8] bg-[#FFFCFA] p-6 sm:p-8 shadow-card">
+        <header className="relative z-10 overflow-hidden rounded-[1.75rem] border border-[#E4D8CC] bg-white p-6 sm:p-8 shadow-card">
           <div className="relative z-10 space-y-4">
             <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground">
               {isAlliance ? "Tests · Matching & Rapport" : "Tests"}

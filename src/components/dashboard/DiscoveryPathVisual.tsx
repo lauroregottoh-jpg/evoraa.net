@@ -69,7 +69,7 @@ export function DiscoveryPathVisual({
   const activeStep = assessmentsDone < 5 ? 2 : 3
 
   return (
-    <section className="relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#FFFBF5] via-[#F2EBE0] to-[#F0E6D4] text-[#A07070] shadow-card">
+    <section className="relative overflow-hidden rounded-[1.75rem] border border-[#E4D8CC] bg-white text-[#2F2424] shadow-card">
       <div
         aria-hidden
         className="discovery-orb discovery-orb-a pointer-events-none absolute -left-10 top-6 h-36 w-36 rounded-full bg-[#B8954A]/15 blur-3xl"
@@ -81,23 +81,23 @@ export function DiscoveryPathVisual({
 
       <div className="relative z-10 p-5 sm:p-8 space-y-6">
         <div className="space-y-2 max-w-xl">
-          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#7A5F28] inline-flex items-center gap-1.5">
-            <Sparkles className="h-3.5 w-3.5 discovery-spark text-[#B8954A]" />
+          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#8B5A57] inline-flex items-center gap-1.5">
+            <Sparkles className="h-3.5 w-3.5 discovery-spark text-[#8B5A57]" />
             Votre marche à suivre
           </p>
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold leading-tight text-[#A07070]">
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold leading-tight text-[#2F2424]">
             Le chemin jusqu’à la bonne rencontre
           </h2>
-          <p className="text-sm text-[#A07070]/65 leading-relaxed">
+          <p className="text-sm text-[#5E4A4B] leading-relaxed">
             Cinq étapes claires pour passer de Découverte à une relation alignée.
           </p>
         </div>
 
         {/* Frise claire */}
-        <div className="relative overflow-hidden rounded-2xl border border-[#B8954A]/25 bg-white/70 px-3 py-6 sm:px-6 sm:py-8 shadow-sm">
+        <div className="relative overflow-hidden rounded-2xl border border-[#E4D8CC] bg-[#F8F4EC] px-3 py-6 sm:px-6 sm:py-8 shadow-sm">
           <div
             aria-hidden
-            className="discovery-horizon-line absolute left-6 right-6 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[#B8954A]/55 to-transparent"
+            className="discovery-horizon-line absolute left-6 right-6 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[#8B5A57]/35 to-transparent"
           />
           <div className="relative flex items-end justify-between gap-1 sm:gap-2">
             {STEPS.map((step, i) => {
@@ -114,9 +114,9 @@ export function DiscoveryPathVisual({
                     className={cn(
                       "flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full border-2 shadow-md",
                       isGoal
-                        ? "border-[#B8954A] bg-gradient-to-br from-[#D4AF72] to-[#B8954A] text-[#A07070] discovery-goal-pulse"
+                        ? "border-[#8B5A57] bg-[#8B5A57] text-[#F7F1EA] discovery-goal-pulse"
                         : isActive
-                          ? "border-[#B8954A] bg-[#B8954A]/20 text-[#A07070] discovery-step-pulse"
+                          ? "border-[#8B5A57] bg-[#8B5A57]/15 text-[#8B5A57] discovery-step-pulse"
                           : "border-[#B8954A]/30 bg-white text-[#7A5F28]"
                     )}
                   >
@@ -174,10 +174,10 @@ export function DiscoveryPathVisual({
                   <div className="min-w-0 flex-1 space-y-2">
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <p className="font-serif text-lg font-bold leading-snug text-[#A07070]">
+                        <p className="font-serif text-lg font-bold leading-snug text-[#2F2424]">
                           {step.title}
                         </p>
-                        <p className="text-sm text-[#A07070]/60 mt-1 leading-relaxed">
+                        <p className="text-sm text-[#5E4A4B] mt-1 leading-relaxed">
                           {step.desc}
                         </p>
                       </div>
@@ -197,8 +197,8 @@ export function DiscoveryPathVisual({
                       className={cn(
                         "inline-flex h-9 items-center gap-1.5 rounded-xl px-3 text-xs font-bold transition",
                         isActive
-                          ? "bg-[#A07070] text-[#F2EBE0] hover:bg-[#A07070]/90"
-                          : "border border-[#B8954A]/35 bg-white text-[#A07070] hover:bg-[#F7F0E0]"
+                          ? "bg-[#8B5A57] text-[#F7F1EA] hover:bg-[#7A4F55]"
+                          : "border border-[#E4D8CC] bg-[#F8F4EC] text-[#2F2424] hover:bg-white"
                       )}
                     >
                       {step.cta}
