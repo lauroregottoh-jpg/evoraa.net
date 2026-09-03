@@ -484,12 +484,12 @@ export function MemberShell({
 
   return (
     <div className="min-h-screen bg-background text-foreground md:flex">
-      {/* Sidebar — roseâtre pastel + or Farata */}
+      {/* Sidebar desktop — bordeaux original KELIAA ; mobile reste rose */}
       <aside
         className={cn(
           "hidden md:flex shrink-0 flex-col sticky top-0 h-screen z-40",
-          "bg-[#8B5A57] text-[#F7F1EA]",
-          "border-r border-[#B8954A]/35 shadow-[4px_0_24px_-10px_rgba(122,79,85,0.28)]",
+          "bg-[#5C1F28] text-[#F8F4EE]",
+          "border-r border-[#3D1519]/80 shadow-[4px_0_24px_-12px_rgba(92,31,40,0.35)]",
           "transition-[width] duration-300 ease-out",
           sidebarReady ? (sidebarOpen ? "md:w-56 lg:w-60" : "md:w-[4.25rem]") : "md:w-56 lg:w-60",
           sidebarOpen ? "px-3 py-4 gap-3" : "px-2 py-4 gap-3"
@@ -505,7 +505,7 @@ export function MemberShell({
             href="/dashboard"
             onClick={go("/dashboard")}
             className={cn(
-              "font-serif font-bold tracking-tight text-[#F7F1EA] transition-all duration-300",
+              "font-serif font-bold tracking-tight text-[#F8F4EE] transition-all duration-300",
               sidebarOpen ? "text-2xl px-1" : "text-lg"
             )}
             title="KELIAA"

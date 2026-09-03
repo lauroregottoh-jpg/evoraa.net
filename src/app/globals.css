@@ -26,9 +26,9 @@
   --color-accent: #8F6566;
   --color-accent-foreground: #F7F1EA;
 
-  /* Sidebar seule — rose mat plus foncé */
-  --color-sidebar: #8B5A57;
-  --color-sidebar-foreground: #F7F1EA;
+  /* Sidebar desktop = bordeaux original ; mobile = rose (voir MemberShell) */
+  --color-sidebar: #5C1F28;
+  --color-sidebar-foreground: #F8F4EE;
 
   /* Or — couleur dorée marqueterie (dividers, ornements) */
   --color-gold: #B8954A;
