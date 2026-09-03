@@ -26,9 +26,9 @@
   --color-accent: #A07070;
   --color-accent-foreground: #F9F3EE;
 
-  /* Sidebar — rose mauve principal Farata */
-  --color-sidebar: #A07070;
-  --color-sidebar-foreground: #F9F3EE;
+  /* Sidebar — roseâtre pastel + or */
+  --color-sidebar: #E8D4D0;
+  --color-sidebar-foreground: #3D2B2B;
 
   /* Or — couleur dorée marqueterie (dividers, ornements) */
   --color-gold: #B8954A;
@@ -413,27 +413,27 @@
   scrollbar-width: none;
 }
 
-/* Barre de scroll visible sur le menu membre (bordeaux) */
+/* Barre de scroll — sidebar roseâtre pastel */
 .member-sidebar-scroll {
   scrollbar-width: thin;
-  scrollbar-color: rgba(248, 244, 238, 0.45) rgba(255, 255, 255, 0.08);
+  scrollbar-color: rgba(184, 149, 74, 0.55) rgba(255, 255, 255, 0.35);
 }
 .member-sidebar-scroll::-webkit-scrollbar {
   width: 8px;
 }
 .member-sidebar-scroll::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.35);
   border-radius: 999px;
   margin-block: 4px;
 }
 .member-sidebar-scroll::-webkit-scrollbar-thumb {
-  background: rgba(248, 244, 238, 0.4);
+  background: rgba(184, 149, 74, 0.5);
   border-radius: 999px;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 .member-sidebar-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(248, 244, 238, 0.6);
+  background: rgba(184, 149, 74, 0.75);
   background-clip: padding-box;
 }
 
