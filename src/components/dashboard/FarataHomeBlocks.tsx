@@ -23,15 +23,15 @@ import type { EditorialItem } from "@/lib/editorial/library"
 
 /* ─── Palette Farata — rosâtre & pastel ─── */
 const F = {
-  bg: "#F2EBE0",          /* ivoire chaud */
-  primary: "#7A4F55",     /* prune rosée — boutons CTA, avatars */
-  sidebar: "#A07070",     /* rose mauve — accent interface */
+  bg: "#F5EDE0",          /* ivoire chaud */
+  primary: "#7F5557",     /* prune rosée — boutons CTA, avatars */
+  sidebar: "#AC7D79",     /* rose mauve — accent interface */
   gold: "#B8954A",        /* or — ornements */
   goldLight: "#D4AF72",
   border: "#D4C5BC",      /* border pastel */
   borderGold: "rgba(184,149,74,0.4)",
-  muted: "#A07070",       /* rose mauve — texte secondaire */
-  text: "#2F2424",        /* texte principal lisible */
+  muted: "#AC7D79",       /* rose mauve — texte secondaire */
+  text: "#3E222D",        /* texte principal lisible */
   white: "#FFFFFF",
 }
 
@@ -150,8 +150,8 @@ export function QuickAccessGrid({
       label: "Messages",
       sub: unreadMessages > 0 ? `${unreadMessages} non lu(s)` : "Conversations",
       icon: MessageCircle,
-      iconBg: "#A07070",
-      iconColor: "#F2EBE0",
+      iconBg: "#AC7D79",
+      iconColor: "#F5EDE0",
       lock: false,
     },
     {
@@ -159,8 +159,8 @@ export function QuickAccessGrid({
       label: "Compatibilités",
       sub: "Suggestions",
       icon: Heart,
-      iconBg: "#7A4F55",
-      iconColor: "#F2EBE0",
+      iconBg: "#7F5557",
+      iconColor: "#F5EDE0",
       lock: false,
     },
     {
@@ -169,7 +169,7 @@ export function QuickAccessGrid({
       sub: "Bibliothèque",
       icon: MessageSquareHeart,
       iconBg: "#B8954A",
-      iconColor: "#A07070",
+      iconColor: "#AC7D79",
       lock: false,
     },
     {
@@ -177,8 +177,8 @@ export function QuickAccessGrid({
       label: "Visiteurs",
       sub: isPaid ? `${social.visitorCount}` : "Alliance",
       icon: Eye,
-      iconBg: isPaid ? "#A07070" : "#DDD0C4",
-      iconColor: isPaid ? "#F2EBE0" : "#7A4F55",
+      iconBg: isPaid ? "#AC7D79" : "#DDD0C4",
+      iconColor: isPaid ? "#F5EDE0" : "#7F5557",
       lock: !isPaid,
     },
     {
@@ -187,7 +187,7 @@ export function QuickAccessGrid({
       sub: isPaid ? `${social.favoriteCount}` : "Mes coups de ♥",
       icon: Star,
       iconBg: isPaid ? "#B8954A" : "#DDD0C4",
-      iconColor: isPaid ? "#A07070" : "#7A4F55",
+      iconColor: isPaid ? "#AC7D79" : "#7F5557",
       lock: !isPaid,
     },
   ] as const
@@ -251,7 +251,7 @@ export function DailyQuotaCard({ usage }: { usage: UsageSnapshot }) {
         <div className="flex items-center gap-3 min-w-0">
           <div
             className="h-10 w-10 rounded-full flex items-center justify-center shrink-0"
-            style={{ background: "#F2EBE0" }}
+            style={{ background: "#F5EDE0" }}
           >
             <Send className="h-4 w-4" style={{ color: F.primary }} />
           </div>
@@ -272,7 +272,7 @@ export function DailyQuotaCard({ usage }: { usage: UsageSnapshot }) {
       {/* Barre de progression */}
       <div
         className="mt-3 h-2 rounded-full overflow-hidden"
-        style={{ background: "#F2EBE0" }}
+        style={{ background: "#F5EDE0" }}
       >
         <div
           className="h-full rounded-full transition-all"
@@ -300,7 +300,7 @@ export function AcademyTeaser() {
     >
       <div
         className="h-11 w-11 rounded-xl flex items-center justify-center shrink-0"
-        style={{ background: "#F2EBE0" }}
+        style={{ background: "#F5EDE0" }}
       >
         <GraduationCap className="h-5 w-5" style={{ color: F.primary }} />
       </div>

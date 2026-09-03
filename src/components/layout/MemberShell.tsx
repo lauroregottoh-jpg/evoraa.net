@@ -484,12 +484,12 @@ export function MemberShell({
 
   return (
     <div className="min-h-screen bg-background text-foreground md:flex">
-      {/* Sidebar desktop — bordeaux original KELIAA ; mobile reste rose */}
+      {/* Sidebar — rose mat pastel Farata (#AC7D79) desktop + mobile */}
       <aside
         className={cn(
           "hidden md:flex shrink-0 flex-col sticky top-0 h-screen z-40",
-          "bg-[#5C1F28] text-[#F8F4EE]",
-          "border-r border-[#3D1519]/80 shadow-[4px_0_24px_-12px_rgba(92,31,40,0.35)]",
+          "bg-[#AC7D79] text-[#F7F1EA]",
+          "border-r border-[#7F5557]/25 shadow-[4px_0_24px_-12px_rgba(62,34,45,0.18)]",
           "transition-[width] duration-300 ease-out",
           sidebarReady ? (sidebarOpen ? "md:w-56 lg:w-60" : "md:w-[4.25rem]") : "md:w-56 lg:w-60",
           sidebarOpen ? "px-3 py-4 gap-3" : "px-2 py-4 gap-3"
@@ -505,7 +505,7 @@ export function MemberShell({
             href="/dashboard"
             onClick={go("/dashboard")}
             className={cn(
-              "font-serif font-bold tracking-tight text-[#F8F4EE] transition-all duration-300",
+              "font-serif font-bold tracking-tight text-[#F7F1EA] transition-all duration-300",
               sidebarOpen ? "text-2xl px-1" : "text-lg"
             )}
             title="KELIAA"
@@ -552,7 +552,7 @@ export function MemberShell({
             <div className="flex items-center gap-3 min-w-0">
               <button
                 type="button"
-                className="md:hidden p-2 rounded-lg shrink-0 bg-[#8B5A57] text-[#F7F1EA] border border-[#8B5A57]"
+                className="md:hidden p-2 rounded-lg shrink-0 bg-[#AC7D79] text-[#F7F1EA] border border-[#AC7D79]"
                 onClick={() => setMobileOpen((v) => !v)}
                 aria-label="Ouvrir le menu"
                 aria-expanded={mobileOpen}
@@ -596,12 +596,12 @@ export function MemberShell({
                 <button
                   type="button"
                   onClick={() => setAccountOpen((v) => !v)}
-                  className="inline-flex items-center justify-center rounded-full w-9 h-9 border border-[#8B5A57]/30 bg-[#8B5A57]/10 hover:bg-[#8B5A57]/18 transition-colors"
+                  className="inline-flex items-center justify-center rounded-full w-9 h-9 border border-[#AC7D79]/35 bg-[#AC7D79]/12 hover:bg-[#AC7D79]/20 transition-colors"
                   title="Compte"
                   aria-label="Menu compte"
                   aria-expanded={accountOpen}
                 >
-                  <User className="h-4 w-4 text-[#7A4F55]" />
+                  <User className="h-4 w-4 text-[#7F5557]" />
                 </button>
                 {accountOpen && (
                   <div
@@ -641,7 +641,7 @@ export function MemberShell({
           </div>
 
           {mobileOpen && (
-            <div className="md:hidden border-t border-[#8B5A57]/40 bg-[#8B5A57] px-3 py-3 max-h-[75vh] overflow-y-auto z-[70] animate-in slide-in-from-top-2 fade-in duration-300 member-sidebar-scroll">
+            <div className="md:hidden border-t border-[#7F5557]/30 bg-[#AC7D79] px-3 py-3 max-h-[75vh] overflow-y-auto z-[70] animate-in slide-in-from-top-2 fade-in duration-300 member-sidebar-scroll">
               <nav className="flex flex-col gap-0.5 text-[#F7F1EA]" aria-label="Navigation membre">
                 {renderNavLinks(false)}
               </nav>
@@ -685,7 +685,7 @@ export function MemberShell({
         </main>
 
         <nav
-          className="md:hidden fixed bottom-0 inset-x-0 z-[60] border-t border-[#8B5A57]/40 bg-[#8B5A57] text-[#F7F1EA] backdrop-blur-md"
+          className="md:hidden fixed bottom-0 inset-x-0 z-[60] border-t border-[#7F5557]/30 bg-[#AC7D79] text-[#F7F1EA] backdrop-blur-md"
           aria-label="Navigation mobile"
         >
           <div className="mx-auto max-w-lg grid grid-cols-5 h-16">

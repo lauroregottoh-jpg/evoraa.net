@@ -39,32 +39,32 @@ const PILLAR_META: Record<
 > = {
   personality: {
     short: "Personnalités",
-    accent: "from-[#A07070]/[0.14] via-white to-[#D4AF37]/[0.08]",
-    glow: "group-hover:shadow-[0_18px_40px_-18px_rgba(100,31,43,0.45)]",
+    accent: "from-white via-white to-[#F5EDE0]",
+    glow: "group-hover:shadow-[0_18px_40px_-18px_rgba(62,34,45,0.18)]",
     icon: HeartHandshake,
   },
   spiritual: {
     short: "Spirituelle",
-    accent: "from-[#D4AF37]/[0.16] via-white to-[#A07070]/[0.06]",
-    glow: "group-hover:shadow-[0_18px_40px_-18px_rgba(212,175,55,0.4)]",
+    accent: "from-white via-white to-[#F5EDE0]",
+    glow: "group-hover:shadow-[0_18px_40px_-18px_rgba(62,34,45,0.18)]",
     icon: Sparkles,
   },
   relationship: {
     short: "Relationnelle",
-    accent: "from-[#722F37]/[0.12] via-white to-[#FDFBF7]",
-    glow: "group-hover:shadow-[0_18px_40px_-18px_rgba(114,47,55,0.4)]",
+    accent: "from-white via-white to-[#F5EDE0]",
+    glow: "group-hover:shadow-[0_18px_40px_-18px_rgba(62,34,45,0.18)]",
     icon: MessageCircleHeart,
   },
   couple_life: {
     short: "Projets de vie",
-    accent: "from-[#2F4A3C]/[0.1] via-white to-[#D4AF37]/[0.08]",
-    glow: "group-hover:shadow-[0_18px_40px_-18px_rgba(47,74,60,0.35)]",
+    accent: "from-white via-white to-[#F5EDE0]",
+    glow: "group-hover:shadow-[0_18px_40px_-18px_rgba(62,34,45,0.18)]",
     icon: Compass,
   },
   finances: {
     short: "Valeurs",
-    accent: "from-[#4A3B2F]/[0.1] via-white to-[#A07070]/[0.08]",
-    glow: "group-hover:shadow-[0_18px_40px_-18px_rgba(74,59,47,0.35)]",
+    accent: "from-white via-white to-[#F5EDE0]",
+    glow: "group-hover:shadow-[0_18px_40px_-18px_rgba(62,34,45,0.18)]",
     icon: Scale,
   },
 }
@@ -86,7 +86,7 @@ export function AssessmentPillarCards({
           <article
             key={item.slug}
             className={cn(
-              "group relative overflow-hidden rounded-[1.35rem] border border-[#D0C4B8] bg-[#FFFCFA] p-5 sm:p-6",
+              "group relative overflow-hidden rounded-[1.35rem] border border-[#DED1C4] bg-white p-5 sm:p-6",
               "transition-all duration-500 ease-out hover:-translate-y-1.5",
               meta.accent,
               meta.glow,

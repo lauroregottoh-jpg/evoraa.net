@@ -85,7 +85,7 @@ export default async function AssessmentsHubPage() {
               <div className="rounded-2xl border border-accent/40 bg-accent/10 p-4 space-y-3">
                 <div className="flex items-center gap-2">
                   <KeyRound className="h-4 w-4 text-accent" />
-                  <p className="text-[11px] font-bold uppercase tracking-widest text-[#7A5F28]">
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-[#7F5557]">
                     Progression des 10 clés
                   </p>
                 </div>
@@ -99,10 +99,10 @@ export default async function AssessmentsHubPage() {
                         className={
                           done
                             ? "rounded-lg border border-accent/50 bg-accent/25 px-2 py-1.5 text-[10px] font-semibold text-foreground"
-                            : "rounded-lg border border-border bg-secondary/60 px-2 py-1.5 text-[10px] font-medium text-muted-foreground"
+                            : "rounded-lg border border-[#DED1C4] bg-secondary/60 px-2 py-1.5 text-[10px] font-medium text-muted-foreground"
                         }
                       >
-                        <span className="text-[#7A5F28] font-bold">
+                        <span className="text-[#7F5557] font-bold">
                           {String(a.order).padStart(2, "0")}
                         </span>{" "}
                         {a.title.replace(
@@ -130,7 +130,7 @@ export default async function AssessmentsHubPage() {
               {!isAlliance ? (
                 <Link
                   href="/premium"
-                  className="inline-flex h-12 items-center gap-2 rounded-xl border border-border bg-transparent px-5 text-sm font-semibold text-primary"
+                  className="inline-flex h-12 items-center gap-2 rounded-xl border border-[#DED1C4] bg-transparent px-5 text-sm font-semibold text-primary"
                 >
                   <Crown className="h-4 w-4 text-accent" />
                   Découvrir Premium
@@ -154,7 +154,7 @@ export default async function AssessmentsHubPage() {
         </header>
 
         {incoming.invites.length > 0 ? (
-          <div className="relative z-10 space-y-3 rounded-[1.35rem] border border-border bg-[#F2EBE0] p-5">
+          <div className="relative z-10 space-y-3 rounded-[1.35rem] border border-[#DED1C4] bg-white p-5">
             <p className="font-serif text-lg font-bold text-primary">
               Invitations à un test
             </p>
@@ -180,7 +180,7 @@ export default async function AssessmentsHubPage() {
           </div>
         ) : null}
 
-        <div className="relative z-10 rounded-[1.35rem] border border-border bg-[#F2EBE0] p-5 shadow-card">
+        <div className="relative z-10 rounded-[1.35rem] border border-[#DED1C4] bg-white p-5 shadow-card">
           <PillarBadges
             pillars={progress.map((p) => ({
               slug: p.slug,
@@ -193,7 +193,7 @@ export default async function AssessmentsHubPage() {
           <p className="relative z-10 text-sm text-destructive">{error}</p>
         ) : null}
 
-        <section className="relative z-10 space-y-4 rounded-[1.75rem] border border-border bg-[#F2EBE0] p-5 sm:p-7 shadow-card">
+        <section className="relative z-10 space-y-4 rounded-[1.75rem] border border-[#DED1C4] bg-white p-5 sm:p-7 shadow-card">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary inline-flex items-center gap-1.5">
               <Sparkles className="h-4 w-4" />
@@ -206,13 +206,13 @@ export default async function AssessmentsHubPage() {
           <AssessmentPillarCards items={[...progress]} />
         </section>
 
-        <section className="relative z-10 space-y-4 rounded-[1.75rem] border border-accent/35 bg-[#F2EBE0] p-5 sm:p-7 shadow-card">
+        <section className="relative z-10 space-y-4 rounded-[1.75rem] border border-accent/35 bg-white p-5 sm:p-7 shadow-card">
           <div className="space-y-3">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#7A5F28] inline-flex items-center gap-1.5 flex-wrap">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#7F5557] inline-flex items-center gap-1.5 flex-wrap">
               <Crown className="h-4 w-4 text-accent" />
               Alliance
               {!isAlliance ? (
-                <span className="rounded-full border border-border bg-white px-2 py-0.5 text-[9px] font-bold uppercase text-primary">
+                <span className="rounded-full border border-[#DED1C4] bg-white px-2 py-0.5 text-[9px] font-bold uppercase text-primary">
                   Aperçu
                 </span>
               ) : null}

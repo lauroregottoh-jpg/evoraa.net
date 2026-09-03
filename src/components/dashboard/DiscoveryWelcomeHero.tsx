@@ -14,18 +14,18 @@ export function DiscoveryWelcomeHero({
   const name = firstName?.trim() || null
 
   return (
-    <section className="relative overflow-hidden rounded-2xl border border-[#E4D8CC] bg-white px-6 py-10 sm:px-10 sm:py-12">
+    <section className="relative overflow-hidden rounded-2xl border border-[#DED1C4] bg-white px-6 py-10 sm:px-10 sm:py-12">
       <div className="relative z-10 space-y-4">
-        <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#8B5A57]">
+        <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#7F5557]">
           {name ? `Bonjour, ${name}` : "Bienvenue sur KELIAA"}
         </p>
-        <div className="h-px w-10 rounded-full bg-[#8B5A57]/40" />
-        <h1 className="font-serif text-3xl sm:text-4xl font-bold leading-tight whitespace-pre-line text-[#2F2424]">
+        <div className="h-px w-10 rounded-full bg-[#AC7D79]/50" />
+        <h1 className="font-serif text-3xl sm:text-4xl font-bold leading-tight whitespace-pre-line text-[#3E222D]">
           {variant === "alliance"
             ? "Plus qu'un match.\nUne alliance."
             : "Foi, valeurs\net vision du mariage."}
         </h1>
-        <p className="text-sm sm:text-base leading-relaxed text-[#5E4A4B]">
+        <p className="text-sm sm:text-base leading-relaxed text-[#6B5354]">
           {variant === "alliance"
             ? "Votre parcours Alliance est actif — matching enrichi et rapport personnalisé disponibles."
             : "Trouvez une personne qui partage votre foi, vos valeurs et votre vision du mariage."}

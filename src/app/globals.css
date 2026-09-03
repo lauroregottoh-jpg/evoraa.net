@@ -2,52 +2,44 @@
 
 @theme {
   /* ─────────────────────────────────────────────────────────────
-     KELIAA — Palette Farata (Inspiration 1) — Rosâtre & Pastel
-     Ivoire chaud → Taupe → Caramel → Rose mauve → Prune rosée
+     KELIAA — Palette Farata PASTEL HARMONISÉE (audit verrouillé)
+     1 Champagne #F5EDE0  2 Taupe #DED1C4  3 Dust #CAAF9B
+     4 Sidebar #AC7D79    5 CTA #7F5557    6 Texte #3E222D
+     Règle : sidebar rose mat partout ; page champagne ; cartes BLANC
      ───────────────────────────────────────────────────────────── */
 
-  /* Fond interface — champagne, PAS rosâtre */
-  --color-background: #F8F4EC;
-  --color-foreground: #2F2424;
+  --color-background: #F5EDE0;
+  --color-foreground: #3E222D;
 
-  /* Primaire — prune mate (CTA) */
-  --color-primary: #7A4F55;
+  --color-primary: #7F5557;
   --color-primary-foreground: #F7F1EA;
 
-  /* Secondaire — taupe/lin */
-  --color-secondary: #E4D8CC;
-  --color-secondary-foreground: #2F2424;
+  --color-secondary: #DED1C4;
+  --color-secondary-foreground: #3E222D;
 
-  /* Muted — lisible, pas rose pâle */
-  --color-muted: #EDE4DA;
-  --color-muted-foreground: #5E4A4B;
+  --color-muted: #EDE6DC;
+  --color-muted-foreground: #6B5354;
 
-  /* Accent — rose mat Farata */
-  --color-accent: #8F6566;
+  --color-accent: #AC7D79;
   --color-accent-foreground: #F7F1EA;
 
-  /* Sidebar desktop = bordeaux original ; mobile = rose (voir MemberShell) */
-  --color-sidebar: #5C1F28;
-  --color-sidebar-foreground: #F8F4EE;
+  --color-sidebar: #AC7D79;
+  --color-sidebar-foreground: #F7F1EA;
 
-  /* Or — couleur dorée marqueterie (dividers, ornements) */
   --color-gold: #B8954A;
   --color-gold-light: #D4AF72;
 
-  /* États */
   --color-destructive: #C0555A;
-  --color-destructive-foreground: #F9F3EE;
+  --color-destructive-foreground: #F7F1EA;
   --color-success: #4A7C6F;
-  --color-success-foreground: #F9F3EE;
+  --color-success-foreground: #F7F1EA;
 
-  /* Bordures & inputs */
-  --color-border: #D4C5BC;
-  --color-input: #D4C5BC;
-  --color-ring: #A07070;
+  --color-border: #DED1C4;
+  --color-input: #DED1C4;
+  --color-ring: #AC7D79;
 
-  /* Card & surfaces */
   --color-card: #FFFFFF;
-  --color-card-foreground: #2F2424;
+  --color-card-foreground: #3E222D;
 
   /* Typographies */
   --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;

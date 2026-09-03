@@ -147,8 +147,8 @@ export function CommunityMemberCardView({
             className={cn(
               "flex h-9 flex-1 items-center justify-center gap-1.5 rounded-xl text-xs font-bold transition",
               liked
-                ? "bg-[#8B5A57] text-[#F7F1EA]"
-                : "border border-[#E4D8CC] bg-white text-[#8B5A57] hover:bg-[#F8F4EC]"
+                ? "bg-[#7F5557] text-[#F7F1EA]"
+                : "border border-[#DED1C4] bg-white text-[#7F5557] hover:bg-[#F5EDE0]"
             )}
           >
             <Heart className={cn("h-3.5 w-3.5", liked && "fill-current")} />
@@ -158,7 +158,7 @@ export function CommunityMemberCardView({
             type="button"
             disabled={busy}
             onClick={() => void onMessage()}
-            className="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-xl bg-[#8B5A57] px-2 text-[11px] font-bold text-[#F7F1EA] hover:opacity-90 disabled:opacity-60"
+            className="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-xl bg-[#7F5557] px-2 text-[11px] font-bold text-[#F7F1EA] hover:opacity-90 disabled:opacity-60"
           >
             <MessageCircle className="h-3.5 w-3.5" />
             Message

@@ -180,7 +180,7 @@ export function AllianceIdentityHome({
         </ul>
 
         <div className="rounded-xl border border-[#E4D8CC] bg-[#F8F4EC] p-4 space-y-2">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-[#8B5A57]">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#7F5557]">
             Prochaine étape
           </p>
           <p className="text-sm font-semibold text-[#2F2424]">
@@ -190,7 +190,7 @@ export function AllianceIdentityHome({
           </p>
           <Link
             href={nextHref}
-            className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#8B5A57] px-5 text-sm font-bold text-[#F7F1EA]"
+            className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#7F5557] px-5 text-sm font-bold text-[#F7F1EA]"
           >
             {nextLabel}
             <ArrowRight className="h-4 w-4" />

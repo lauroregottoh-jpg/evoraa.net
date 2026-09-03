@@ -8,19 +8,18 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        /* Bordeaux profond Farata — CTA principal */
-        default: "bg-[#A07070] text-[#F2EBE0] hover:bg-[#8B5C62] shadow-sm",
-        /* Or Farata — CTA secondaire premium */
-        gold: "bg-[#B8954A] text-[#A07070] hover:bg-[#C9A55A] shadow-sm font-bold",
+        default: "bg-[#7F5557] text-[#F7F1EA] hover:bg-[#6B484A] shadow-sm",
+        /* Or Farata — ornements / premium only */
+        gold: "bg-[#B8954A] text-[#3E222D] hover:bg-[#C9A55A] shadow-sm font-bold",
         outline:
-          "border-[#C9BBAF] bg-transparent text-[#A07070] hover:bg-[#F2EBE0] aria-expanded:bg-[#F2EBE0]",
+          "border-[#DED1C4] bg-transparent text-[#3E222D] hover:bg-[#F5EDE0] aria-expanded:bg-[#F5EDE0]",
         secondary:
-          "bg-[#DDD0C4] text-[#A07070] hover:bg-[#CFC0B2] aria-expanded:bg-[#DDD0C4]",
+          "bg-[#DED1C4] text-[#3E222D] hover:bg-[#D0C2B4] aria-expanded:bg-[#DED1C4]",
         ghost:
-          "hover:bg-[#DDD0C4] text-[#A07070] aria-expanded:bg-[#DDD0C4]",
+          "hover:bg-[#DED1C4] text-[#3E222D] aria-expanded:bg-[#DED1C4]",
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20",
-        link: "text-[#B8954A] underline-offset-4 hover:underline",
+        link: "text-[#7F5557] underline-offset-4 hover:underline",
       },
       size: {
         default:
