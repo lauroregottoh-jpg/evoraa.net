@@ -57,25 +57,27 @@ export function CompatibilityCard({
 
   return (
     <Card className="rounded-2xl flex flex-col justify-between overflow-hidden group transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5" style={{ background: "#FFFCFA", border: "1px solid #D0C4B8", boxShadow: "0 4px 18px -8px rgba(47,36,36,0.14)" }}>
-      <div className="relative h-48 sm:h-56 overflow-hidden" style={{ background: "#F2EBE0", borderBottom: "1px solid #C9BBAF" }}>
-        {profile.photoUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={profile.photoUrl}
-            alt=""
-            className={`absolute inset-0 h-full w-full object-cover transition-all duration-500 ${
-              isBlurred ? "scale-110 blur-xl" : "scale-100 blur-0"
-            }`}
-          />
-        ) : (
-          <div
-            className={`w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 via-accent/15 to-secondary transition-all duration-500 ${
-              isBlurred ? "filter blur-xl scale-110" : ""
-            }`}
-          >
-            <span className="font-serif text-6xl text-primary/40 select-none">{initial}</span>
-          </div>
-        )}
+      <div className="relative h-48 sm:h-56 overflow-hidden" style={{ background: "#F8F4EC", borderBottom: "1px solid #E4D8CC" }}>
+        <Link href={`/compatibility/${profile.id}`} className="absolute inset-0 z-0 block" aria-label={`Voir la fiche de ${profile.name}`}>
+          {profile.photoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={profile.photoUrl}
+              alt=""
+              className={`absolute inset-0 h-full w-full object-cover transition-all duration-500 ${
+                isBlurred ? "scale-110 blur-xl" : "scale-100 blur-0"
+              }`}
+            />
+          ) : (
+            <div
+              className={`w-full h-full flex items-center justify-center bg-gradient-to-br from-[#8B5A57]/15 via-[#F8F4EC] to-[#E4D8CC] transition-all duration-500 ${
+                isBlurred ? "filter blur-xl scale-110" : ""
+              }`}
+            >
+              <span className="font-serif text-6xl text-[#8B5A57]/35 select-none">{initial}</span>
+            </div>
+          )}
+        </Link>
 
         {!profile.photoUrl && (
           <div className="absolute inset-x-0 bottom-3 text-center">
@@ -85,7 +87,7 @@ export function CompatibilityCard({
           </div>
         )}
 
-        <div className="absolute top-3 left-3 flex items-center gap-1.5 backdrop-blur-md px-3 py-1.5 rounded-full" style={{ background: "#7A4F55", border: "1px solid rgba(184,149,74,0.5)" }}>
+        <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 backdrop-blur-md px-3 py-1.5 rounded-full" style={{ background: "#7A4F55", border: "1px solid rgba(184,149,74,0.5)" }}>
           <Sparkles className="h-4 w-4" style={{ color: "#B8954A", fill: "#B8954A" }} />
           <span className="font-serif font-bold text-sm" style={{ color: "#F2EBE0" }}>
             {profile.harmonyScore}% d&apos;harmonie
@@ -106,7 +108,7 @@ export function CompatibilityCard({
               e.preventDefault();
               setIsBlurred(!isBlurred);
             }}
-            className="absolute top-3 right-3 flex items-center gap-1 bg-background/80 backdrop-blur-md hover:bg-background px-2.5 py-1.5 rounded-full border border-border/60 text-xs font-medium text-muted-foreground transition-colors"
+            className="absolute top-3 right-3 z-10 flex items-center gap-1 bg-background/80 backdrop-blur-md hover:bg-background px-2.5 py-1.5 rounded-full border border-border/60 text-xs font-medium text-muted-foreground transition-colors"
             title={isBlurred ? "Afficher la photo" : "Flouter la photo"}
           >
             {isBlurred ? (
@@ -126,9 +128,11 @@ export function CompatibilityCard({
 
       <CardHeader className="space-y-1 pb-3 pt-4 px-5">
         <div className="flex items-center justify-between gap-2">
-          <h3 className="font-serif text-2xl font-bold" style={{ color: "#2F2424" }}>
-            {profile.name}, {profile.age} ans
-          </h3>
+          <Link href={`/compatibility/${profile.id}`}>
+            <h3 className="font-serif text-2xl font-bold hover:opacity-80" style={{ color: "#2F2424" }}>
+              {profile.name}, {profile.age} ans
+            </h3>
+          </Link>
           <span
             className="text-[10px] uppercase font-bold tracking-wider shrink-0 px-2 py-0.5 rounded-full"
             style={{ background: "#F2EBE0", color: "#7A4F55", border: "1px solid #C9BBAF" }}

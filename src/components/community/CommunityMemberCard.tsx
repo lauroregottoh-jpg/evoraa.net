@@ -98,8 +98,11 @@ export function CommunityMemberCardView({
   }
 
   return (
-    <article className="group overflow-hidden rounded-2xl border border-border/60 bg-[#F2EBE0] shadow-sm">
-      <div className="relative aspect-[3/4] bg-gradient-to-br from-[#F3E8D0] to-[#E8D5B5]">
+    <article className="group overflow-hidden rounded-2xl border border-[#E4D8CC] bg-white shadow-sm">
+      <Link
+        href={`/compatibility/${member.profileId}`}
+        className="relative block aspect-[3/4] bg-gradient-to-br from-[#F8F4EC] to-[#EDE4DA]"
+      >
         {member.avatarUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -108,7 +111,7 @@ export function CommunityMemberCardView({
             className="absolute inset-0 h-full w-full object-cover"
           />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center font-serif text-5xl font-bold text-[#A07070]/25">
+          <div className="absolute inset-0 flex items-center justify-center font-serif text-5xl font-bold text-[#8B5A57]/25">
             {member.firstName.charAt(0)}
           </div>
         )}
@@ -117,7 +120,7 @@ export function CommunityMemberCardView({
           <BadgePill badge={member.badge} />
         </div>
         {member.sameGender ? (
-          <span className="absolute right-2 top-2 rounded-md bg-[#A07070]/80 px-1.5 py-0.5 text-[9px] font-bold uppercase text-[#D4AF72]">
+          <span className="absolute right-2 top-2 rounded-md bg-[#8B5A57]/85 px-1.5 py-0.5 text-[9px] font-bold uppercase text-[#F7F1EA]">
             Amitié
           </span>
         ) : null}
@@ -130,12 +133,12 @@ export function CommunityMemberCardView({
             <MapPin className="h-3 w-3 shrink-0" />
             {member.city || "Ville non précisée"}
           </p>
+          <p className="mt-1 text-[10px] font-semibold text-white/70">
+            Voir la fiche →
+          </p>
         </div>
-      </div>
+      </Link>
       <div className="space-y-2 p-2.5">
-        <p className="text-[11px] font-semibold text-muted-foreground">
-          Connecter avec quelqu’un
-        </p>
         <div className="flex gap-2">
           <button
             type="button"
@@ -144,8 +147,8 @@ export function CommunityMemberCardView({
             className={cn(
               "flex h-9 flex-1 items-center justify-center gap-1.5 rounded-xl text-xs font-bold transition",
               liked
-                ? "bg-[#A07070] text-[#F2EBE0]"
-                : "border border-border bg-white text-[#A07070] hover:bg-[#F7F1E8]"
+                ? "bg-[#8B5A57] text-[#F7F1EA]"
+                : "border border-[#E4D8CC] bg-white text-[#8B5A57] hover:bg-[#F8F4EC]"
             )}
           >
             <Heart className={cn("h-3.5 w-3.5", liked && "fill-current")} />
@@ -155,14 +158,14 @@ export function CommunityMemberCardView({
             type="button"
             disabled={busy}
             onClick={() => void onMessage()}
-            className="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-xl bg-[#A07070] px-2 text-[11px] font-bold text-[#F2EBE0] hover:opacity-90 disabled:opacity-60"
+            className="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-xl bg-[#8B5A57] px-2 text-[11px] font-bold text-[#F7F1EA] hover:opacity-90 disabled:opacity-60"
           >
             <MessageCircle className="h-3.5 w-3.5" />
             Message
           </button>
         </div>
         {hint ? (
-          <p className="text-[10px] leading-snug text-[#A07070]">{hint}</p>
+          <p className="text-[10px] leading-snug text-[#8B5A57]">{hint}</p>
         ) : null}
       </div>
     </article>
@@ -182,7 +185,7 @@ export function CommunityTeaser({
   const preview = members.slice(0, 4)
 
   return (
-    <section className="rounded-[1.75rem] border border-border/50 bg-[#F2EBE0] shadow-sm">
+    <section className="rounded-[1.75rem] border border-[#E4D8CC] bg-white shadow-sm">
       <div className="space-y-4 p-5 sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="space-y-1">
@@ -196,7 +199,7 @@ export function CommunityTeaser({
           </div>
           <Link
             href="/communaute"
-            className="inline-flex h-10 items-center gap-1.5 rounded-xl bg-[#A07070] px-4 text-xs font-bold text-[#F2EBE0] hover:opacity-90"
+            className="inline-flex h-10 items-center gap-1.5 rounded-xl bg-[#8B5A57] px-4 text-xs font-bold text-[#F7F1EA] hover:opacity-90"
           >
             <Sparkles className="h-3.5 w-3.5" />
             Voir →
