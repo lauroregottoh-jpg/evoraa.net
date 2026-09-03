@@ -46,12 +46,12 @@ export function CoachingWalletPanel() {
   }
 
   return (
-    <section className="rounded-2xl border border-[#641F2B]/15 bg-[#FCFAF6] p-5 space-y-4">
+    <section className="rounded-2xl border border-[#5C1F28]/15 bg-[#FBF9F6] p-5 space-y-4">
       <div>
-        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#D7B866]">
+        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
           Mon coaching
         </p>
-        <h2 className="font-serif text-xl font-bold text-[#641F2B] mt-1">
+        <h2 className="font-serif text-xl font-bold text-[#5C1F28] mt-1">
           Crédits & coach
         </h2>
         <p className="text-sm text-[#2B2421]/70 mt-1">
@@ -60,11 +60,11 @@ export function CoachingWalletPanel() {
         </p>
       </div>
 
-      <div className="rounded-xl bg-white border border-[#D7B866]/30 px-4 py-3">
+      <div className="rounded-xl bg-white border border-[#B8954A]/30 px-4 py-3">
         <p className="text-xs uppercase tracking-wider text-[#8A6A2E] font-semibold">
           Mes crédits
         </p>
-        <p className="font-serif text-3xl font-bold text-[#641F2B] mt-1">
+        <p className="font-serif text-3xl font-bold text-[#5C1F28] mt-1">
           {balance === null ? "…" : balance}
         </p>
       </div>
@@ -76,21 +76,21 @@ export function CoachingWalletPanel() {
             value={code}
             onChange={(e) => setCode(e.target.value)}
             placeholder="ex. KE-4827"
-            className="mt-1 w-full rounded-xl border border-[#641F2B]/20 bg-white px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-xl border border-[#5C1F28]/20 bg-white px-3 py-2 text-sm"
             autoCapitalize="characters"
           />
         </label>
         <button
           type="submit"
           disabled={busy || !code.trim()}
-          className="rounded-xl bg-[#641F2B] text-[#FFFDF9] px-4 py-2 text-sm font-semibold disabled:opacity-50"
+          className="rounded-xl bg-[#5C1F28] text-[#F8F4EE] px-4 py-2 text-sm font-semibold disabled:opacity-50"
         >
           Associer mon coach
         </button>
       </form>
 
       {msg ? (
-        <p className="text-sm text-[#641F2B] bg-[#641F2B]/08 rounded-lg px-3 py-2">
+        <p className="text-sm text-[#5C1F28] bg-[#5C1F28]/08 rounded-lg px-3 py-2">
           {msg}
         </p>
       ) : null}

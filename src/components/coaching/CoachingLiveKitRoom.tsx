@@ -182,10 +182,10 @@ export const CoachingLiveKitRoom = React.forwardRef<
       <audio ref={remoteAudioRef} autoPlay playsInline className="hidden" />
 
       <div className="text-center space-y-2">
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#E8D49A]">
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#F3D9A4]">
           Audio LiveKit · dans KELIAA
         </p>
-        <p className="font-serif text-xl font-bold text-[#FCFAF6]">
+        <p className="font-serif text-xl font-bold text-[#FBF9F6]">
           {connected
             ? peerLabel
               ? `En ligne avec ${peerLabel}`

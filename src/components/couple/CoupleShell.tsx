@@ -95,9 +95,9 @@ function CoupleWelcomeGate({ children }: { children: React.ReactNode }) {
 
   if (phase === "welcome") {
     return (
-      <div className="relative overflow-hidden rounded-[1.75rem] border border-[#D7B866]/35 bg-gradient-to-br from-[#641F2B] via-[#4A1820] to-[#2A1810] text-[#FCFAF6] px-6 py-12 sm:px-10 sm:py-16 animate-in fade-in zoom-in-95 duration-700">
+      <div className="relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#5C1F28] via-[#4A1820] to-[#2A1810] text-[#FBF9F6] px-6 py-12 sm:px-10 sm:py-16 animate-in fade-in zoom-in-95 duration-700">
         <div className="relative max-w-xl mx-auto text-center space-y-5">
-          <p className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em] text-[#E8D49A]">
+          <p className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
             <HeartHandshake className="h-4 w-4" />
             {COUPLE_BRAND}
           </p>
@@ -110,7 +110,7 @@ function CoupleWelcomeGate({ children }: { children: React.ReactNode }) {
           <button
             type="button"
             onClick={enter}
-            className="mt-2 inline-flex h-12 items-center justify-center rounded-xl bg-[#E8D49A] px-8 text-sm font-bold text-[#641F2B]"
+            className="mt-2 inline-flex h-12 items-center justify-center rounded-xl bg-[#F3D9A4] px-8 text-sm font-bold text-[#5C1F28]"
           >
             Entrer
           </button>
@@ -155,7 +155,7 @@ export function CoupleShell({
           </div>
           <Link
             href="/couple/espace"
-            className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-[#641F2B]/20 bg-white px-3 text-xs sm:text-sm font-semibold text-[#641F2B] shrink-0"
+            className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-[#5C1F28]/20 bg-white px-3 text-xs sm:text-sm font-semibold text-[#5C1F28] shrink-0"
           >
             Mon espace
             <ArrowRight className="h-3.5 w-3.5" />
@@ -180,7 +180,7 @@ export function CoupleShell({
         </div>
         <Link
           href="/couple"
-          className="inline-flex items-center gap-1 text-xs font-semibold text-[#641F2B] underline underline-offset-2 shrink-0"
+          className="inline-flex items-center gap-1 text-xs font-semibold text-[#5C1F28] underline underline-offset-2 shrink-0"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Présentation
@@ -204,7 +204,7 @@ export function CoupleShell({
               className={cn(
                 "inline-flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-xs sm:text-sm font-semibold transition-colors",
                 active
-                  ? "bg-[#641F2B] text-[#FCFAF6]"
+                  ? "bg-[#5C1F28] text-[#FBF9F6]"
                   : "bg-[#F3EEE6] text-[#2B2421]/75 hover:bg-[#E8DFD2]"
               )}
             >
@@ -242,8 +242,8 @@ export function CoupleAccessDashboardCard({
     <Link
       href="/couple/espace"
       className={cn(
-        "group relative block overflow-hidden rounded-[1.75rem] border border-[#D7B866]/40",
-        "bg-gradient-to-br from-[#641F2B] via-[#451923] to-[#2B2421] p-6 sm:p-8 text-[#FCFAF6]",
+        "group relative block overflow-hidden rounded-[1.75rem] border border-[#B8954A]/40",
+        "bg-gradient-to-br from-[#5C1F28] via-[#3D1519] to-[#2B2421] p-6 sm:p-8 text-[#FBF9F6]",
         "shadow-elevated transition-transform hover:scale-[1.01]",
         className
       )}
@@ -255,7 +255,7 @@ export function CoupleAccessDashboardCard({
             "radial-gradient(circle, rgba(243,217,164,0.45), transparent 70%)",
         }}
       />
-      <p className="relative text-[10px] font-bold uppercase tracking-[0.22em] text-[#E8D49A]">
+      <p className="relative text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
         Espace client
       </p>
       <h2 className="relative mt-2 font-serif text-2xl sm:text-3xl font-bold leading-tight">
@@ -266,7 +266,7 @@ export function CoupleAccessDashboardCard({
         exercices et plan — avec aperçu verrouillé tant que le bilan n’est pas
         débloqué.
       </p>
-      <span className="relative mt-5 inline-flex h-11 items-center gap-2 rounded-xl bg-[#E8D49A] px-5 text-sm font-bold text-[#641F2B]">
+      <span className="relative mt-5 inline-flex h-11 items-center gap-2 rounded-xl bg-[#F3D9A4] px-5 text-sm font-bold text-[#5C1F28]">
         Accéder à mon espace
         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
       </span>
@@ -299,7 +299,7 @@ export function CoupleDashTile({
         "relative flex flex-col rounded-2xl border p-5 sm:p-6 transition-all",
         "hover:-translate-y-0.5 hover:shadow-md",
         accent
-          ? "border-[#D7B866]/45 bg-gradient-to-br from-[#D7B866]/15 via-white to-[#FCFAF6]"
+          ? "border-[#B8954A]/45 bg-gradient-to-br from-[#B8954A]/15 via-white to-[#FBF9F6]"
           : "border-[#2B2421]/10 bg-white",
         locked && "opacity-95"
       )}
@@ -309,14 +309,14 @@ export function CoupleDashTile({
           className={cn(
             "flex h-11 w-11 items-center justify-center rounded-xl",
             accent
-              ? "bg-[#641F2B] text-[#E8D49A]"
-              : "bg-[#641F2B]/8 text-[#641F2B]"
+              ? "bg-[#5C1F28] text-[#F3D9A4]"
+              : "bg-[#5C1F28]/8 text-[#5C1F28]"
           )}
         >
           <Icon className="h-5 w-5" />
         </span>
         {locked ? (
-          <Lock className="h-4 w-4 text-[#641F2B]/45 shrink-0" />
+          <Lock className="h-4 w-4 text-[#5C1F28]/45 shrink-0" />
         ) : null}
       </div>
       <h3 className="mt-4 font-serif text-xl font-bold text-[#2B2421]">
@@ -330,7 +330,7 @@ export function CoupleDashTile({
           {status}
         </p>
       ) : (
-        <p className="mt-3 text-xs font-semibold text-[#641F2B]">
+        <p className="mt-3 text-xs font-semibold text-[#5C1F28]">
           {locked ? "Aperçu · débloquer →" : "Ouvrir →"}
         </p>
       )}

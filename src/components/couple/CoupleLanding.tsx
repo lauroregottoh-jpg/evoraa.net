@@ -80,7 +80,7 @@ export function CoupleLanding() {
   )
 
   return (
-    <div ref={rootRef} className="bg-[#FCFAF6] text-[#2B2421]">
+    <div ref={rootRef} className="bg-[#FBF9F6] text-[#2B2421]">
       <PageHero
         eyebrow={COUPLE_TAGLINE}
         title={COUPLE_BRAND}
@@ -197,7 +197,7 @@ export function CoupleLanding() {
       </section>
 
       {/* 03 — Deux personnes (était 04) */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#FFFDF9]">
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#F8F4EE]">
         <div className="max-w-5xl mx-auto space-y-10">
           <div className="ck-reveal space-y-3">
             <p className="couple-chapter text-xs font-bold uppercase text-primary">
@@ -265,10 +265,10 @@ export function CoupleLanding() {
       </section>
 
       {/* Piliers rapport — mise en valeur */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#641F2B] text-[#FCFAF6]">
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#5C1F28] text-[#FBF9F6]">
         <div className="max-w-5xl mx-auto space-y-10">
           <div className="ck-reveal max-w-2xl space-y-3">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#E8D49A]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#F3D9A4]">
               {LANDING_REPORT_PILLARS.eyebrow}
             </p>
             <h2 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
@@ -283,7 +283,7 @@ export function CoupleLanding() {
               <article
                 key={item.title}
                 className={cn(
-                  "ck-reveal rounded-2xl p-5 sm:p-6 bg-gradient-to-br text-[#FCFAF6] border border-white/10",
+                  "ck-reveal rounded-2xl p-5 sm:p-6 bg-gradient-to-br text-[#FBF9F6] border border-white/10",
                   item.accent
                 )}
               >
@@ -331,9 +331,9 @@ export function CoupleLanding() {
       </section>
 
       {/* 06 — Action enrichie */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#FCFAF6]">
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#FBF9F6]">
         <div className="max-w-4xl mx-auto space-y-10">
-          <div className="ck-reveal space-y-3 rounded-2xl bg-[#E8DFD2] border border-[#641F2B]/10 p-6 sm:p-8">
+          <div className="ck-reveal space-y-3 rounded-2xl bg-[#E8DFD2] border border-[#5C1F28]/10 p-6 sm:p-8">
             <p className="couple-chapter text-xs font-bold uppercase text-primary">
               06 — Et ensuite
             </p>
@@ -348,9 +348,9 @@ export function CoupleLanding() {
             {LANDING_TOOLS.items.map((item, i) => (
               <div
                 key={item.title}
-                className="ck-reveal space-y-2 rounded-2xl border border-[#641F2B]/08 bg-[#FFFCF8] p-5 sm:p-6 shadow-sm"
+                className="ck-reveal space-y-2 rounded-2xl border border-[#5C1F28]/08 bg-[#FFFCF8] p-5 sm:p-6 shadow-sm"
               >
-                <p className="font-mono text-sm font-bold text-[#D7B866]">
+                <p className="font-mono text-sm font-bold text-[#B8954A]">
                   {String(i + 1).padStart(2, "0")}
                 </p>
                 <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#2B2421]">
@@ -408,7 +408,7 @@ export function CoupleLanding() {
               {LANDING_STEPS.map((step) => (
                 <li
                   key={step.n}
-                  className="ck-reveal rounded-xl border border-[#2B2421]/12 bg-[#FCFAF6] px-4 py-4 sm:px-5 sm:py-5"
+                  className="ck-reveal rounded-xl border border-[#2B2421]/12 bg-[#FBF9F6] px-4 py-4 sm:px-5 sm:py-5"
                 >
                   <p className="font-mono text-sm font-bold text-accent">
                     {step.n}
@@ -427,7 +427,7 @@ export function CoupleLanding() {
       </section>
 
       {/* 09 — Offres */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-24 bg-[#FFFDF9]">
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-24 bg-[#F8F4EE]">
         <div className="max-w-5xl mx-auto space-y-12">
           <div className="ck-reveal max-w-2xl space-y-3">
             <p className="couple-chapter text-xs font-bold uppercase text-primary">
@@ -512,7 +512,7 @@ export function CoupleLanding() {
           <div className="ck-reveal">
             <VizReportUnlockScene />
           </div>
-          <div className="ck-reveal space-y-5 rounded-2xl bg-[#E8DFD2]/70 border border-[#641F2B]/10 p-6 sm:p-8">
+          <div className="ck-reveal space-y-5 rounded-2xl bg-[#E8DFD2]/70 border border-[#5C1F28]/10 p-6 sm:p-8">
             <p className="couple-chapter text-xs font-bold uppercase text-primary">
               10 — Imaginez
             </p>
@@ -540,7 +540,7 @@ export function CoupleLanding() {
       </section>
 
       {/* Closing — texte gauche, image couple droite */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#FFFDF9]">
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#F8F4EE]">
         <div className="max-w-5xl mx-auto grid lg:grid-cols-[1fr_1.05fr] gap-10 lg:gap-14 items-center">
           <div className="space-y-6">
             <h2 className="ck-reveal font-serif text-3xl sm:text-5xl font-bold leading-tight text-[#2B2421]">
@@ -592,7 +592,7 @@ export function CoupleLanding() {
           <div className="ck-reveal order-2 lg:order-1">
             <VizDualFinish />
           </div>
-          <div className="ck-reveal order-1 lg:order-2 space-y-6 rounded-2xl bg-[#FCFAF6] border border-[#641F2B]/10 p-6 sm:p-8">
+          <div className="ck-reveal order-1 lg:order-2 space-y-6 rounded-2xl bg-[#FBF9F6] border border-[#5C1F28]/10 p-6 sm:p-8">
             <p className="couple-chapter text-xs font-bold uppercase text-primary">
               {LANDING_CLOSING.finishTitle}
             </p>
@@ -625,7 +625,7 @@ export function CoupleLanding() {
       </section>
 
       {/* FAQ */}
-      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#FCFAF6]">
+      <section className="px-6 sm:px-12 lg:px-20 py-16 sm:py-20 bg-[#FBF9F6]">
         <div className="max-w-3xl mx-auto space-y-8">
           <div className="ck-reveal space-y-2">
             <p className="couple-chapter text-xs font-bold uppercase text-primary">

@@ -56,11 +56,11 @@ export default function CoupleConfirmationClient() {
           </p>
 
           {inviteCode ? (
-            <div className="rounded-xl border border-[#D7B866]/40 bg-[#FFFDF9] p-4 space-y-1">
+            <div className="rounded-xl border border-[#B8954A]/40 bg-[#F8F4EE] p-4 space-y-1">
               <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                 Code à communiquer
               </p>
-              <p className="font-mono text-2xl font-bold tracking-widest text-[#641F2B]">
+              <p className="font-mono text-2xl font-bold tracking-widest text-[#5C1F28]">
                 {inviteCode}
               </p>
               <button
@@ -102,7 +102,7 @@ export default function CoupleConfirmationClient() {
           </div>
 
           {tokenPath && !inviteCode ? (
-            <p className="text-xs rounded-xl border bg-[#FFFDF9] px-3 py-2 break-all">
+            <p className="text-xs rounded-xl border bg-[#F8F4EE] px-3 py-2 break-all">
               Lien d’invitation : <span className="font-mono">{tokenPath}</span>
             </p>
           ) : null}
@@ -118,7 +118,7 @@ export default function CoupleConfirmationClient() {
             </a>
             <Link
               href="/couple/espace"
-              className="inline-flex h-11 items-center rounded-xl bg-[#641F2B] text-white px-5 text-sm font-semibold"
+              className="inline-flex h-11 items-center rounded-xl bg-[#5C1F28] text-white px-5 text-sm font-semibold"
             >
               Ouvrir notre espace
             </Link>

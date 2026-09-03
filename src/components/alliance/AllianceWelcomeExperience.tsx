@@ -103,7 +103,7 @@ export function AllianceWelcomeExperience({
         />
       ) : null}
       {phase === "cinema" ? (
-        <section className="relative overflow-hidden rounded-[1.75rem] bg-[#120f10] text-[#FFFDF9] px-6 py-16 sm:py-20 text-center shadow-elevated">
+        <section className="relative overflow-hidden rounded-[1.75rem] bg-[#120f10] text-[#F8F4EE] px-6 py-16 sm:py-20 text-center shadow-elevated">
           <div
             aria-hidden
             className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-70"
@@ -118,14 +118,14 @@ export function AllianceWelcomeExperience({
           </p>
           <div
             className={cn(
-              "mx-auto mt-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-[#D7B866]/50 bg-[#D7B866]/15 transition-all duration-700",
+              "mx-auto mt-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-[#B8954A]/50 bg-[#B8954A]/15 transition-all duration-700",
               line >= 1 ? "opacity-100 scale-100" : "opacity-0 scale-75"
             )}
           >
             {isRenewal ? (
-              <RefreshCw className="h-7 w-7 text-[#E8D49A]" />
+              <RefreshCw className="h-7 w-7 text-[#F3D9A4]" />
             ) : (
-              <Crown className="h-7 w-7 text-[#E8D49A]" />
+              <Crown className="h-7 w-7 text-[#F3D9A4]" />
             )}
           </div>
           <h1
@@ -151,7 +151,7 @@ export function AllianceWelcomeExperience({
             </p>
             <p
               className={cn(
-                "text-sm sm:text-base text-[#E8D49A] leading-relaxed transition-all duration-700 delay-300",
+                "text-sm sm:text-base text-[#F3D9A4] leading-relaxed transition-all duration-700 delay-300",
                 line >= 3 ? "opacity-100" : "opacity-0"
               )}
             >
@@ -163,7 +163,7 @@ export function AllianceWelcomeExperience({
           <button
             type="button"
             onClick={() => setPhase("privileges")}
-            className="mt-8 inline-flex h-11 items-center rounded-xl bg-[#D7B866] px-6 text-sm font-bold text-[#2B2421]"
+            className="mt-8 inline-flex h-11 items-center rounded-xl bg-[#B8954A] px-6 text-sm font-bold text-[#2B2421]"
           >
             {isRenewal ? "Continuer" : "Commencer"}
           </button>
@@ -171,8 +171,8 @@ export function AllianceWelcomeExperience({
       ) : null}
 
       {phase === "privileges" ? (
-        <section className="rounded-[1.75rem] border border-accent/30 bg-gradient-to-br from-[#641F2B] via-[#722F37] to-[#3D141A] p-6 sm:p-8 text-[#FFFDF9] space-y-5">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#E8D49A]">
+        <section className="rounded-[1.75rem] border border-accent/30 bg-gradient-to-br from-[#5C1F28] via-[#722F37] to-[#3D141A] p-6 sm:p-8 text-[#F8F4EE] space-y-5">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#F3D9A4]">
             {isRenewal ? "Votre renouvellement" : "Vos privilèges"}
           </p>
           <h2 className="font-serif text-2xl sm:text-3xl font-bold">
@@ -193,7 +193,7 @@ export function AllianceWelcomeExperience({
                       : "opacity-0 -translate-x-3"
                   )}
                 >
-                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#D7B866]/25 text-[#E8D49A]">
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#B8954A]/25 text-[#F3D9A4]">
                     <Check className="h-3.5 w-3.5" />
                   </span>
                   <div>

@@ -48,7 +48,7 @@ export function DashboardAlertBanners({ banners }: { banners: Banner[] }) {
             key={b.id}
             className={cn(
               "relative rounded-2xl px-4 py-3.5 flex flex-col sm:flex-row sm:items-center gap-3 justify-between",
-              isGold && "bg-[#EFE5DA] border border-accent/40",
+              isGold && "bg-[#F7F0E0] border border-accent/40",
               isGreen && "bg-primary text-primary-foreground border border-primary",
               isTests && "bg-primary/10 border border-primary/30",
               !isGold && !isGreen && !isTests && "bg-card border border-border"

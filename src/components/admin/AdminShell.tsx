@@ -361,7 +361,7 @@ export function KpiCard({
         className={cn(
           "font-serif text-3xl font-bold mt-2 tracking-tight",
           tone === "green" && "text-emerald-700",
-          tone === "gold" && "text-[#A78335]",
+          tone === "gold" && "text-[#7A5F28]",
           tone === "red" && "text-red-600"
         )}
       >

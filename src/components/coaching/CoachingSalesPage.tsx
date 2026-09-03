@@ -30,7 +30,7 @@ export function CoachingSalesPage({
 }) {
   return (
     <div className="max-w-3xl mx-auto space-y-8 pb-10">
-      <header className="relative overflow-hidden rounded-[1.75rem] border border-primary/15 bg-gradient-to-br from-[#641F2B] via-[#4A1820] to-[#3D2A14] px-5 py-8 sm:px-8 sm:py-10 text-[#FFFDF9] shadow-elevated">
+      <header className="relative overflow-hidden rounded-[1.75rem] border border-primary/15 bg-gradient-to-br from-[#5C1F28] via-[#4A1820] to-[#3D2A14] px-5 py-8 sm:px-8 sm:py-10 text-[#F8F4EE] shadow-elevated">
         <div
           className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full opacity-40"
           style={{
@@ -39,7 +39,7 @@ export function CoachingSalesPage({
           }}
         />
         <div className="relative space-y-3 max-w-2xl">
-          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#E8D49A]">
+          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
             Coaching relationnel · audio
           </p>
           <h1 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
@@ -54,14 +54,14 @@ export function CoachingSalesPage({
             {hasCredits ? (
               <Link
                 href="/coaching/session"
-                className="inline-flex h-11 items-center rounded-xl bg-[#E8D49A] px-5 text-sm font-bold text-[#641F2B]"
+                className="inline-flex h-11 items-center rounded-xl bg-[#F3D9A4] px-5 text-sm font-bold text-[#5C1F28]"
               >
                 Faire votre session
               </Link>
             ) : (
               <a
                 href="#payer"
-                className="inline-flex h-11 items-center rounded-xl bg-[#E8D49A] px-5 text-sm font-bold text-[#641F2B]"
+                className="inline-flex h-11 items-center rounded-xl bg-[#F3D9A4] px-5 text-sm font-bold text-[#5C1F28]"
               >
                 Prendre une session — débloquer
               </a>
@@ -89,16 +89,16 @@ export function CoachingSalesPage({
 
       <CoachingWhyGrid />
 
-      <section className="relative overflow-hidden rounded-2xl border border-[#641F2B]/15 bg-[#FCFAF6] p-5 sm:p-6">
+      <section className="relative overflow-hidden rounded-2xl border border-[#5C1F28]/15 bg-[#FBF9F6] p-5 sm:p-6">
         <div className="flex items-start gap-3 mb-4">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#641F2B]/10 text-[#641F2B]">
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#5C1F28]/10 text-[#5C1F28]">
             <Headphones className="h-5 w-5" />
           </span>
           <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#D7B866]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
               Ce qui se débloque
             </p>
-            <h2 className="font-serif text-xl font-bold text-[#641F2B]">
+            <h2 className="font-serif text-xl font-bold text-[#5C1F28]">
               Votre salle audio privée
             </h2>
           </div>
@@ -114,9 +114,9 @@ export function CoachingSalesPage({
           ].map((line) => (
             <li key={line} className="flex gap-2 items-start">
               {hasCredits ? (
-                <CheckCircle2 className="h-4 w-4 text-[#641F2B] shrink-0 mt-0.5" />
+                <CheckCircle2 className="h-4 w-4 text-[#5C1F28] shrink-0 mt-0.5" />
               ) : (
-                <Lock className="h-4 w-4 text-[#641F2B]/45 shrink-0 mt-0.5" />
+                <Lock className="h-4 w-4 text-[#5C1F28]/45 shrink-0 mt-0.5" />
               )}
               <span className={hasCredits ? "" : "opacity-80"}>{line}</span>
             </li>
@@ -128,7 +128,7 @@ export function CoachingSalesPage({
         </p>
         <Link
           href="/coaching/session"
-          className="mt-4 inline-flex text-sm font-semibold text-[#641F2B] underline underline-offset-4"
+          className="mt-4 inline-flex text-sm font-semibold text-[#5C1F28] underline underline-offset-4"
         >
           {hasCredits
             ? "Accéder à Faire votre session →"

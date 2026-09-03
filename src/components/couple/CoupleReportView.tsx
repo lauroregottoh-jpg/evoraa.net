@@ -43,15 +43,15 @@ type Chapter =
 const A4_PRINT_CSS = `
 @page { size: A4 portrait; margin: 18mm 16mm; }
 body{font-family:Georgia,"Times New Roman",serif;color:#2B2421;line-height:1.65;font-size:14pt;background:#fff}
-h1{font-size:22pt;color:#641F2B;line-height:1.25;margin:0 0 .4em}
-h2{font-size:16pt;color:#641F2B;margin:1.1em 0 .45em}
-h3{font-size:14pt;color:#641F2B;margin:1em 0 .35em}
+h1{font-size:22pt;color:#5C1F28;line-height:1.25;margin:0 0 .4em}
+h2{font-size:16pt;color:#5C1F28;margin:1.1em 0 .45em}
+h3{font-size:14pt;color:#5C1F28;margin:1em 0 .35em}
 .meta{color:#555;font-size:12pt}
 .sub{color:#8A6A2E;font-style:italic;font-size:14pt}
 p,li{font-size:14pt;line-height:1.65}
 ul,ol{padding-left:1.35rem}
-.callout{border:1px solid #D7B86666;background:#D7B86612;padding:12pt;border-radius:8px;margin:12pt 0;font-size:14pt}
-.fill{border:1px dashed #D7B86688;padding:12pt;margin:12pt 0;min-height:48pt;border-radius:8px;font-size:14pt}
+.callout{border:1px solid #B8954A66;background:#B8954A12;padding:12pt;border-radius:8px;margin:12pt 0;font-size:14pt}
+.fill{border:1px dashed #B8954A88;padding:12pt;margin:12pt 0;min-height:48pt;border-radius:8px;font-size:14pt}
 .page-break{page-break-before:always}
 `
 
@@ -150,7 +150,7 @@ function ChapterBody({
       <div className="space-y-8 text-[14pt] leading-[1.65]">
         {doc.exercises.map((ex) => (
           <div key={ex.id} className="space-y-3 border-t border-[#2B2421]/10 pt-6">
-            <h3 className="font-serif text-[18pt] font-bold text-[#641F2B]">
+            <h3 className="font-serif text-[18pt] font-bold text-[#5C1F28]">
               {ex.title}
             </h3>
             <p>
@@ -166,9 +166,9 @@ function ChapterBody({
             {(ex.fillPrompts || []).map((prompt) => (
               <div
                 key={prompt}
-                className="rounded-xl border border-dashed border-[#D7B866]/50 p-4"
+                className="rounded-xl border border-dashed border-[#B8954A]/50 p-4"
               >
-                <p className="font-semibold text-[#641F2B]">{prompt}</p>
+                <p className="font-semibold text-[#5C1F28]">{prompt}</p>
                 <div className="mt-3 space-y-3">
                   {[0, 1, 2].map((i) => (
                     <div key={i} className="h-8 border-b border-[#2B2421]/20" />
@@ -185,7 +185,7 @@ function ChapterBody({
     <ol className="space-y-5 text-[14pt] leading-[1.65]">
       {doc.actionPlan.map((step) => (
         <li key={step.order} className="border-t border-[#2B2421]/10 pt-4">
-          <p className="text-[12pt] font-bold uppercase tracking-wider text-[#D7B866]">
+          <p className="text-[12pt] font-bold uppercase tracking-wider text-[#B8954A]">
             Étape {step.order}
           </p>
           <p className="font-serif text-[18pt] font-bold mt-1">{step.what}</p>
@@ -224,11 +224,11 @@ function A4Page({
     >
       <div className="flex flex-wrap items-start justify-between gap-3 mb-6">
         <div className="min-w-0">
-          <p className="text-[12pt] font-bold uppercase tracking-[0.14em] text-[#D7B866]">
+          <p className="text-[12pt] font-bold uppercase tracking-[0.14em] text-[#B8954A]">
             Page {ch.page}
             {ch.id.startsWith("pp-") ? " · Premium Plus" : ""}
           </p>
-          <h2 className="mt-2 font-serif text-[22pt] font-bold leading-tight text-[#641F2B]">
+          <h2 className="mt-2 font-serif text-[22pt] font-bold leading-tight text-[#5C1F28]">
             {ch.title}
           </h2>
           {ch.kind === "section" && ch.subtitle ? (
@@ -240,7 +240,7 @@ function A4Page({
         <button
           type="button"
           onClick={() => downloadChapter(ch, doc)}
-          className="print:hidden inline-flex h-10 shrink-0 items-center gap-1.5 rounded-xl border border-[#2B2421]/15 bg-[#FCFAF6] px-3 text-[12pt] font-semibold"
+          className="print:hidden inline-flex h-10 shrink-0 items-center gap-1.5 rounded-xl border border-[#2B2421]/15 bg-[#FBF9F6] px-3 text-[12pt] font-semibold"
         >
           <Download className="h-4 w-4" /> Télécharger
         </button>
@@ -429,7 +429,7 @@ export function CoupleReportView({
           className={cn(
             "inline-flex h-11 items-center gap-2 rounded-xl border px-4 text-[14pt] font-semibold",
             focusOne
-              ? "border-[#641F2B] bg-[#641F2B] text-white"
+              ? "border-[#5C1F28] bg-[#5C1F28] text-white"
               : "border-[#2B2421]/15 bg-white"
           )}
         >
@@ -437,15 +437,15 @@ export function CoupleReportView({
         </button>
       </div>
 
-      <header className="relative overflow-hidden rounded-[1.25rem] border border-[#D7B866]/35 bg-gradient-to-br from-[#641F2B] via-[#451923] to-[#2B2421] p-6 sm:p-8 text-[#FCFAF6] mb-6 print:hidden">
-        <p className="inline-flex items-center gap-1.5 text-[12pt] font-bold uppercase tracking-[0.18em] text-[#E8D49A]">
+      <header className="relative overflow-hidden rounded-[1.25rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#5C1F28] via-[#3D1519] to-[#2B2421] p-6 sm:p-8 text-[#FBF9F6] mb-6 print:hidden">
+        <p className="inline-flex items-center gap-1.5 text-[12pt] font-bold uppercase tracking-[0.18em] text-[#F3D9A4]">
           <HeartHandshake className="h-4 w-4" />
           {doc.brand}
         </p>
         <h1 className="mt-3 font-serif text-[24pt] sm:text-[28pt] font-bold leading-tight">
           Bilan de compatibilité & dynamique du couple
         </h1>
-        <p className="mt-2 font-serif text-[18pt] text-[#E8D49A]">
+        <p className="mt-2 font-serif text-[18pt] text-[#F3D9A4]">
           {doc.names.nameA} & {doc.names.nameB}
         </p>
         <p className="mt-1 text-[12pt] text-white/70">{dateLabel}</p>
@@ -454,7 +454,7 @@ export function CoupleReportView({
             <p className="text-[12pt] uppercase tracking-wider text-white/50">
               Score global
             </p>
-            <p className="font-serif text-[36pt] font-bold text-[#E8D49A] leading-none">
+            <p className="font-serif text-[36pt] font-bold text-[#F3D9A4] leading-none">
               {doc.globalScore}
               <span className="text-[14pt] text-white/50 font-normal"> %</span>
             </p>
@@ -478,7 +478,7 @@ export function CoupleReportView({
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
           {isPP ? (
-            <span className="inline-flex items-center gap-1 rounded-full border border-[#D7B866]/50 bg-[#D7B866]/20 px-3 py-1 text-[11pt] font-bold uppercase tracking-wider text-[#E8D49A]">
+            <span className="inline-flex items-center gap-1 rounded-full border border-[#B8954A]/50 bg-[#B8954A]/20 px-3 py-1 text-[11pt] font-bold uppercase tracking-wider text-[#F3D9A4]">
               <Crown className="h-3.5 w-3.5" /> Premium Plus · Premium + Points
             </span>
           ) : (
@@ -495,13 +495,13 @@ export function CoupleReportView({
       </header>
 
       {doc.safetyNotice ? (
-        <div className="mb-5 rounded-2xl border border-[#641F2B]/30 bg-[#FFFDF9] px-5 py-4 text-[14pt] leading-[1.65]">
+        <div className="mb-5 rounded-2xl border border-[#5C1F28]/30 bg-[#F8F4EE] px-5 py-4 text-[14pt] leading-[1.65]">
           {doc.safetyNotice}
         </div>
       ) : null}
 
-      <nav className="mb-6 rounded-2xl border border-[#2B2421]/10 bg-[#FFFDF9]/90 p-4 print:hidden">
-        <p className="text-[12pt] font-bold uppercase tracking-[0.14em] text-[#D7B866] mb-2">
+      <nav className="mb-6 rounded-2xl border border-[#2B2421]/10 bg-[#F8F4EE]/90 p-4 print:hidden">
+        <p className="text-[12pt] font-bold uppercase tracking-[0.14em] text-[#B8954A] mb-2">
           Sommaire · {chapters.length} pages A4
         </p>
         <ol className="columns-1 sm:columns-2 gap-x-8 text-[14pt] space-y-1.5">
@@ -509,7 +509,7 @@ export function CoupleReportView({
             <li key={ch.id} className="break-inside-avoid">
               <button
                 type="button"
-                className="text-left text-[#641F2B] hover:underline"
+                className="text-left text-[#5C1F28] hover:underline"
                 onClick={() => {
                   setIndex(i)
                   if (!focusOne) {
@@ -577,7 +577,7 @@ export function CoupleReportView({
         </p>
         <p>
           Ce bilan n’est pas un diagnostic clinique ni un verdict d’avenir.{" "}
-          <Link href="/couple" className="font-semibold text-[#641F2B]">
+          <Link href="/couple" className="font-semibold text-[#5C1F28]">
             Retour à KELYA Couple →
           </Link>
         </p>

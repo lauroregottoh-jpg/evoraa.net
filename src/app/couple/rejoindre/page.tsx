@@ -70,7 +70,7 @@ function RejoindreInner() {
         <div className="flex flex-wrap gap-2">
           <Link
             href={`/register?next=${encodeURIComponent(nextPath)}`}
-            className="inline-flex h-11 items-center rounded-xl bg-[#641F2B] px-5 text-sm font-semibold text-white"
+            className="inline-flex h-11 items-center rounded-xl bg-[#5C1F28] px-5 text-sm font-semibold text-white"
           >
             S’inscrire d’abord
           </Link>

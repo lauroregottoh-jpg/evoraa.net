@@ -91,18 +91,18 @@ export function AllianceGiftReveal({ firstName }: { firstName: string }) {
   }, [cycle])
 
   return (
-    <section className="relative z-10 overflow-hidden rounded-[1.85rem] border-2 border-[#D7B866]/55 bg-gradient-to-br from-[#120f10] via-[#2A1810] to-[#641F2B] text-[#FFFDF9] px-4 py-10 sm:px-8 sm:py-12 shadow-elevated min-h-[28rem] sm:min-h-[32rem]">
+    <section className="relative z-10 overflow-hidden rounded-[1.85rem] border-2 border-[#B8954A]/55 bg-gradient-to-br from-[#120f10] via-[#2A1810] to-[#5C1F28] text-[#F8F4EE] px-4 py-10 sm:px-8 sm:py-12 shadow-elevated min-h-[28rem] sm:min-h-[32rem]">
       <div
         aria-hidden
         className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-50"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#D7B866]/25 blur-3xl"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#B8954A]/25 blur-3xl"
       />
 
       <div className="relative z-10 text-center space-y-2 mb-8">
-        <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#E8D49A]">
+        <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#F3D9A4]">
           Votre coffret Alliance
         </p>
         <h2 className="font-serif text-2xl sm:text-4xl font-bold leading-tight">
@@ -124,7 +124,7 @@ export function AllianceGiftReveal({ firstName }: { firstName: string }) {
               key={`${cycle}-${item.title}`}
               href={item.href}
               className={cn(
-                "absolute left-1/2 top-1/2 z-30 flex items-center gap-2 rounded-xl border border-[#D7B866]/45 bg-[#2B2421]/95 px-3 py-2 shadow-lg backdrop-blur-sm transition-all duration-700",
+                "absolute left-1/2 top-1/2 z-30 flex items-center gap-2 rounded-xl border border-[#B8954A]/45 bg-[#2B2421]/95 px-3 py-2 shadow-lg backdrop-blur-sm transition-all duration-700",
                 show
                   ? "opacity-100 scale-100"
                   : "opacity-0 scale-50 pointer-events-none"
@@ -136,10 +136,10 @@ export function AllianceGiftReveal({ firstName }: { firstName: string }) {
                 transitionDelay: show ? `${i * 90}ms` : "0ms",
               }}
             >
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#D7B866]/25 text-[#E8D49A]">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#B8954A]/25 text-[#F3D9A4]">
                 <Icon className="h-4 w-4" />
               </span>
-              <span className="text-xs font-bold whitespace-nowrap text-[#FFFDF9]">
+              <span className="text-xs font-bold whitespace-nowrap text-[#F8F4EE]">
                 {item.title}
               </span>
             </Link>
@@ -157,7 +157,7 @@ export function AllianceGiftReveal({ firstName }: { firstName: string }) {
           {/* Couvercle */}
           <div
             className={cn(
-              "relative mx-auto h-14 w-44 sm:h-16 sm:w-52 rounded-t-2xl border-2 border-[#E8D49A]/70 bg-gradient-to-b from-[#E8C56A] to-[#D7B866] shadow-xl origin-bottom transition-transform duration-700 ease-out",
+              "relative mx-auto h-14 w-44 sm:h-16 sm:w-52 rounded-t-2xl border-2 border-[#F3D9A4]/70 bg-gradient-to-b from-[#E8C56A] to-[#B8954A] shadow-xl origin-bottom transition-transform duration-700 ease-out",
               phase !== "closed" && "-translate-y-14 -rotate-[18deg]"
             )}
           >
@@ -165,8 +165,8 @@ export function AllianceGiftReveal({ firstName }: { firstName: string }) {
             <div className="absolute -bottom-1 left-1/2 h-3 w-8 -translate-x-1/2 rounded-sm bg-[#8A6B2E]" />
           </div>
           {/* Corps */}
-          <div className="relative mx-auto -mt-1 flex h-28 w-44 sm:h-32 sm:w-52 items-center justify-center rounded-b-2xl border-2 border-[#D7B866]/80 bg-gradient-to-b from-[#C9A227] to-[#A78335] shadow-[0_20px_50px_-12px_rgba(215,184,102,0.85)]">
-            <div className="absolute inset-x-3 top-3 h-1 rounded-full bg-[#E8D49A]/35" />
+          <div className="relative mx-auto -mt-1 flex h-28 w-44 sm:h-32 sm:w-52 items-center justify-center rounded-b-2xl border-2 border-[#B8954A]/80 bg-gradient-to-b from-[#C9A227] to-[#7A5F28] shadow-[0_20px_50px_-12px_rgba(215,184,102,0.85)]">
+            <div className="absolute inset-x-3 top-3 h-1 rounded-full bg-[#F3D9A4]/35" />
             <Gift
               className={cn(
                 "h-12 w-12 text-[#2B2421] transition-all duration-500",

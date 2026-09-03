@@ -53,7 +53,7 @@ export function CoffreUnlockSection({ resources, isPaid, onUnlockCta }: Props) {
   }, [resources])
 
   return (
-    <section className="relative overflow-hidden rounded-[1.75rem] border border-primary/20 bg-gradient-to-br from-[#2A1216] via-[#641F2B] to-[#3D2A14] text-[#FFFDF9] shadow-elevated">
+    <section className="relative overflow-hidden rounded-[1.75rem] border border-primary/20 bg-gradient-to-br from-[#2A1216] via-[#5C1F28] to-[#3D2A14] text-[#F8F4EE] shadow-elevated">
       <div
         className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full opacity-40"
         style={{

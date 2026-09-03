@@ -105,7 +105,7 @@ export function CoffreLibrary({ resources, initialAccess }: Props) {
 
   return (
     <div className="space-y-8">
-      <header className="relative overflow-hidden rounded-[1.75rem] border border-border/70 bg-gradient-to-br from-[#FFFDF9] via-[#F3EFE8] to-[#E8E0D4] px-5 py-8 sm:px-8 sm:py-10 shadow-premium">
+      <header className="relative overflow-hidden rounded-[1.75rem] border border-border/70 bg-gradient-to-br from-[#F8F4EE] via-[#F3EFE8] to-[#E8E0D4] px-5 py-8 sm:px-8 sm:py-10 shadow-premium">
         <div
           className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full opacity-40"
           style={{

@@ -11,7 +11,7 @@ export function AllianceRapportGate({
   return (
     <MemberPage>
       <div className="max-w-lg mx-auto py-12 space-y-5 text-center">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#D7B866]/15 text-[#D7B866]">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#B8954A]/15 text-[#B8954A]">
           <Lock className="h-6 w-6" />
         </div>
         <h1 className="font-serif text-3xl font-bold">
@@ -24,7 +24,7 @@ export function AllianceRapportGate({
         </p>
         <Link
           href={`/premium?next=${encodeURIComponent(nextPath)}`}
-          className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#D7B866] px-5 text-sm font-bold text-[#2B2421]"
+          className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#B8954A] px-5 text-sm font-bold text-[#2B2421]"
         >
           <Crown className="h-4 w-4" />
           Rejoindre Alliance

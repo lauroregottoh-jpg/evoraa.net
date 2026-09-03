@@ -43,7 +43,7 @@ export function HomeDualPricingSection() {
             href="/couple"
             className="rounded-[1.5rem] border border-accent/35 bg-card p-6 sm:p-8 space-y-4 hover:border-accent/55 transition-colors block shadow-card"
           >
-            <p className="text-[10px] font-bold uppercase tracking-wider text-[#A78335]">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-[#7A5F28]">
               {COUPLE_BRAND}
             </p>
             <h3 className="font-serif text-2xl font-bold">Pour les couples</h3>

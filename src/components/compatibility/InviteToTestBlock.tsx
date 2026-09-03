@@ -46,7 +46,7 @@ export function InviteToTestBlock({
   }
 
   return (
-    <div className="rounded-2xl border border-[#D7B866]/40 bg-[#EFE5DA]/50 p-5 space-y-3">
+    <div className="rounded-2xl border border-[#B8954A]/40 bg-[#F7F0E0]/50 p-5 space-y-3">
       <p className="font-serif text-lg font-bold text-foreground">
         Proposer un test · {partnerName}
       </p>

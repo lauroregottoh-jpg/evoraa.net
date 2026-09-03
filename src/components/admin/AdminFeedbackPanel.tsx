@@ -52,7 +52,7 @@ export function AdminFeedbackPanel({
     <div className="space-y-5">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-widest text-[#A78335] mb-1">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-[#7A5F28] mb-1">
             Retours utilisateurs
           </p>
           <h1 className="font-serif text-3xl font-bold tracking-tight flex items-center gap-2">

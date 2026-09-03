@@ -176,7 +176,7 @@ export default function CoupleQuestionnairePage() {
                 body="72 questions individuelles et confidentielles — pour croiser vos deux regards."
                 status={`Aperçu · 1 / ${questions.length}`}
               />
-              <div className="space-y-4 rounded-2xl border bg-[#FFFDF9] p-6">
+              <div className="space-y-4 rounded-2xl border bg-[#F8F4EE] p-6">
                 <div className="h-2 rounded-full bg-[#2B2421]/10" />
                 <p className="font-serif text-lg font-semibold text-[#2B2421]/50">
                   Aperçu de la première question…

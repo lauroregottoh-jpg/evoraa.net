@@ -19,7 +19,7 @@ export function CoupleHeroCard({
   return (
     <header
       className={cn(
-        "relative overflow-hidden rounded-[1.75rem] border border-[#D7B866]/35 bg-gradient-to-br from-[#641F2B] via-[#451923] to-[#2B2421] p-7 sm:p-9 text-[#FCFAF6]",
+        "relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#5C1F28] via-[#3D1519] to-[#2B2421] p-7 sm:p-9 text-[#FBF9F6]",
         className
       )}
     >
@@ -30,7 +30,7 @@ export function CoupleHeroCard({
             "radial-gradient(circle, rgba(243,217,164,0.4), transparent 70%)",
         }}
       />
-      <p className="relative text-[10px] font-bold uppercase tracking-[0.22em] text-[#E8D49A]">
+      <p className="relative text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
         {eyebrow}
       </p>
       <h1 className="relative mt-2 font-serif text-3xl sm:text-4xl font-bold leading-tight">

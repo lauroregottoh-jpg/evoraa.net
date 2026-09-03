@@ -55,7 +55,7 @@ export function CoffreCover({ resource, locked, className }: Props) {
             }}
           />
           <div
-            className="absolute inset-3 rounded-[0.85rem] border border-[#D7B866]/35"
+            className="absolute inset-3 rounded-[0.85rem] border border-[#B8954A]/35"
             aria-hidden
           />
           <div
@@ -80,8 +80,8 @@ export function CoffreCover({ resource, locked, className }: Props) {
         >
           {meta.label}
         </span>
-        <span className="inline-flex items-center gap-1 rounded-full border border-[#D7B866]/55 bg-gradient-to-r from-[#641F2B] to-[#A78335] px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-[#FFFDF9] shadow-sm">
-          <Crown className="h-3 w-3 text-[#E8D49A]" />
+        <span className="inline-flex items-center gap-1 rounded-full border border-[#B8954A]/55 bg-gradient-to-r from-[#5C1F28] to-[#7A5F28] px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-[#F8F4EE] shadow-sm">
+          <Crown className="h-3 w-3 text-[#F3D9A4]" />
           Premium
         </span>
       </div>

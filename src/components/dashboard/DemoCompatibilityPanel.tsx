@@ -9,14 +9,14 @@ import { DEMO_COMPATIBILITIES } from "@/lib/demo/demoCompatibilities"
 /** Aperçu démo des fiches compatibilité. */
 export function DemoCompatibilityPanel() {
   return (
-    <section className="relative overflow-hidden rounded-[1.75rem] border border-dashed border-[#D7B866]/45 bg-gradient-to-br from-[#FFFBF5] via-[#FFFDF9] to-[#F0E6D4] shadow-card">
+    <section className="relative overflow-hidden rounded-[1.75rem] border border-dashed border-[#B8954A]/45 bg-gradient-to-br from-[#FFFBF5] via-[#F8F4EE] to-[#F0E6D4] shadow-card">
       <div className="relative z-10 space-y-4 p-5 sm:p-6">
         <div className="space-y-1.5">
-          <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.28em] text-[#A78335]">
-            <span className="rounded bg-[#641F2B] px-1.5 py-0.5 text-[9px] tracking-widest text-[#E8D49A]">
+          <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.28em] text-[#7A5F28]">
+            <span className="rounded bg-[#5C1F28] px-1.5 py-0.5 text-[9px] tracking-widest text-[#F3D9A4]">
               Démo
             </span>
-            <Sparkles className="h-3.5 w-3.5 text-[#D7B866]" />
+            <Sparkles className="h-3.5 w-3.5 text-[#B8954A]" />
             Compatibilités · aperçu
           </p>
           <h2 className="font-serif text-2xl font-bold text-[#2B2421]">
@@ -32,7 +32,7 @@ export function DemoCompatibilityPanel() {
           {DEMO_COMPATIBILITIES.map((c, i) => (
             <article
               key={c.id}
-              className="sim-match-card overflow-hidden rounded-2xl border border-[#D7B866]/25 bg-white shadow-sm"
+              className="sim-match-card overflow-hidden rounded-2xl border border-[#B8954A]/25 bg-white shadow-sm"
               style={{ animationDelay: `${i * 100}ms` }}
             >
               <div
@@ -45,7 +45,7 @@ export function DemoCompatibilityPanel() {
                   {c.name.charAt(0)}
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                <span className="absolute left-2 top-2 rounded-md border border-dashed border-white/60 bg-[#641F2B]/85 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-[#E8D49A]">
+                <span className="absolute left-2 top-2 rounded-md border border-dashed border-white/60 bg-[#5C1F28]/85 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-[#F3D9A4]">
                   Démo
                 </span>
                 <span className="absolute right-2 top-2 inline-flex items-center gap-0.5 rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
@@ -75,7 +75,7 @@ export function DemoCompatibilityPanel() {
                           ? "jonathan-ade"
                           : "marc-toure"
                   }`}
-                  className="inline-flex h-9 w-full items-center justify-center rounded-xl bg-[#641F2B] text-[11px] font-bold text-[#FFFDF9]"
+                  className="inline-flex h-9 w-full items-center justify-center rounded-xl bg-[#5C1F28] text-[11px] font-bold text-[#F8F4EE]"
                 >
                   Voir l’échange démo
                 </Link>

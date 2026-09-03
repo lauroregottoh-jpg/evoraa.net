@@ -28,7 +28,7 @@ export default function CoupleOffrePage() {
       <CoupleShell activeHref="/couple/offre" showWelcome={false} variant="sales">
         <div className="max-w-xl mx-auto space-y-8 pb-6">
           <header className="space-y-2">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#641F2B]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#5C1F28]">
               {COUPLE_BRAND}
             </p>
             <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#2B2421]">
@@ -49,17 +49,17 @@ export default function CoupleOffrePage() {
           />
 
           <p className="text-center text-sm text-[#2B2421]/55">
-            <Link href="/couple" className="font-semibold text-[#641F2B]">
+            <Link href="/couple" className="font-semibold text-[#5C1F28]">
               ← Retour à la présentation
             </Link>
             {" · "}
-            <Link href="/couple/espace" className="font-semibold text-[#641F2B]">
+            <Link href="/couple/espace" className="font-semibold text-[#5C1F28]">
               Déjà acheteur ? Espace couple
             </Link>
             {" · "}
             <Link
               href="/couple/rejoindre"
-              className="font-semibold text-[#641F2B]"
+              className="font-semibold text-[#5C1F28]"
             >
               J’ai un code partenaire
             </Link>

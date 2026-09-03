@@ -113,7 +113,7 @@ export function AdminCoachingPanel() {
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-[11px] font-bold uppercase tracking-widest text-[#A78335]">
+        <p className="text-[11px] font-bold uppercase tracking-widest text-[#7A5F28]">
           Produit · Coaching
         </p>
         <h1 className="font-serif text-3xl font-bold tracking-tight mt-1">
@@ -133,7 +133,7 @@ export function AdminCoachingPanel() {
             onClick={() => setTab(t.id)}
             className={
               tab === t.id
-                ? "rounded-xl bg-[#641F2B] text-[#FCFAF6] px-3 py-2 text-sm font-semibold"
+                ? "rounded-xl bg-[#5C1F28] text-[#FBF9F6] px-3 py-2 text-sm font-semibold"
                 : "rounded-xl border border-border bg-card px-3 py-2 text-sm font-semibold"
             }
           >
@@ -264,7 +264,7 @@ export function AdminCoachingPanel() {
           <div className="rounded-2xl border bg-card p-4 space-y-3">
             {selected ? (
               <>
-                <p className="text-[10px] font-bold uppercase tracking-wider text-[#A78335]">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[#7A5F28]">
                   Détail session
                 </p>
                 <h2 className="font-serif text-xl font-bold">
@@ -281,7 +281,7 @@ export function AdminCoachingPanel() {
                 ) : null}
                 <div>
                   <p className="text-xs font-semibold mb-1">Transcription</p>
-                  <pre className="text-xs whitespace-pre-wrap rounded-xl border bg-[#FCFAF6] p-3 max-h-48 overflow-y-auto">
+                  <pre className="text-xs whitespace-pre-wrap rounded-xl border bg-[#FBF9F6] p-3 max-h-48 overflow-y-auto">
                     {selected.transcriptPreview ||
                       "Pas encore de transcription — ajouter une démo ou brancher l’audio→texte."}
                   </pre>
@@ -307,7 +307,7 @@ export function AdminCoachingPanel() {
                     type="button"
                     disabled={busy}
                     onClick={() => void saveNotes()}
-                    className="mt-2 inline-flex h-9 items-center rounded-xl bg-[#641F2B] px-4 text-xs font-semibold text-white"
+                    className="mt-2 inline-flex h-9 items-center rounded-xl bg-[#5C1F28] px-4 text-xs font-semibold text-white"
                   >
                     Enregistrer les notes
                   </button>
@@ -480,7 +480,7 @@ export function AdminProductsHub({
       <div className="space-y-3">
       <div className="flex items-end justify-between gap-3">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-widest text-[#A78335]">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-[#7A5F28]">
             Produits KELIAA
           </p>
           <h2 className="font-serif text-2xl font-bold">Hub produits</h2>
@@ -507,7 +507,7 @@ export function AdminProductsHub({
                   {item.price} · {item.summary}
                 </p>
               </div>
-              <span className="text-xl font-bold text-[#641F2B]">
+              <span className="text-xl font-bold text-[#5C1F28]">
                 {isOpen ? "−" : "+"}
               </span>
             </button>
@@ -519,7 +519,7 @@ export function AdminProductsHub({
                 <button
                   type="button"
                   onClick={() => onOpen(item.nav)}
-                  className="inline-flex h-10 items-center rounded-xl bg-[#641F2B] px-4 text-sm font-semibold text-white"
+                  className="inline-flex h-10 items-center rounded-xl bg-[#5C1F28] px-4 text-sm font-semibold text-white"
                 >
                   Ouvrir {item.title} →
                 </button>

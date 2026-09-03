@@ -67,12 +67,12 @@ function buildPrintableHtml(doc: CoupleReportDocument): string {
 
   return `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"/><title>${doc.brand} — Dossier</title>
   <style>
-    body{font-family:Georgia,serif;max-width:720px;margin:40px auto;padding:0 16px;color:#1c1412;line-height:1.7;background:#FCFAF6;font-size:16px}
-    h1,h2,h3{font-weight:700} h1{font-size:28px} h2{font-size:22px;margin-top:32px;color:#641F2B;border-top:1px solid #D7B86644;padding-top:1rem}
-    h3{font-size:18px;color:#641F2B} .sub{font-style:italic;color:#8A6A2E}
+    body{font-family:Georgia,serif;max-width:720px;margin:40px auto;padding:0 16px;color:#1c1412;line-height:1.7;background:#FBF9F6;font-size:16px}
+    h1,h2,h3{font-weight:700} h1{font-size:28px} h2{font-size:22px;margin-top:32px;color:#5C1F28;border-top:1px solid #B8954A44;padding-top:1rem}
+    h3{font-size:18px;color:#5C1F28} .sub{font-style:italic;color:#8A6A2E}
     p,li{font-size:16px} .meta{color:#666;font-size:13px}
-    .callout{border:1px solid #D7B86666;background:#D7B86614;padding:1rem;border-radius:12px;margin:1rem 0}
-    .fill{border:1px dashed #D7B86688;padding:1rem;min-height:4.5rem;margin:1rem 0;border-radius:12px;background:#fff}
+    .callout{border:1px solid #B8954A66;background:#B8954A14;padding:1rem;border-radius:12px;margin:1rem 0}
+    .fill{border:1px dashed #B8954A88;padding:1rem;min-height:4.5rem;margin:1rem 0;border-radius:12px;background:#fff}
   </style></head><body>
   <h1>${doc.brand}</h1>
   <p class="meta">${doc.names.nameA} & ${doc.names.nameB} · Score ${doc.globalScore} % · ${doc.versions.offer}</p>

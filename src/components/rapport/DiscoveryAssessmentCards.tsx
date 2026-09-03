@@ -119,13 +119,13 @@ function Card({
       className={cn(
         "group relative overflow-hidden rounded-[1.35rem] border p-5 sm:p-6 transition-all duration-500",
         done
-          ? "border-[#D7B866]/40 bg-gradient-to-br from-[#D7B866]/10 via-white to-white"
+          ? "border-[#B8954A]/40 bg-gradient-to-br from-[#B8954A]/10 via-white to-white"
           : isPremiumPlus
             ? "border-dashed border-accent/35 bg-accent/[0.04]"
             : locked
               ? "border-border/80 bg-secondary/40"
               : gold
-                ? "border-[#D7B866]/30 bg-gradient-to-br from-white via-white to-[#D7B866]/[0.08] hover:-translate-y-1"
+                ? "border-[#B8954A]/30 bg-gradient-to-br from-white via-white to-[#B8954A]/[0.08] hover:-translate-y-1"
                 : "border-border/70 bg-gradient-to-br from-white via-white to-accent/[0.06] hover:-translate-y-1",
         "assessment-pillar-card"
       )}
@@ -196,7 +196,7 @@ function Card({
             {isAlliance ? (
               <Link
                 href="/rapport/global"
-                className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-[#D7B866]/40 bg-[#D7B866]/15 px-3 text-xs font-bold text-[#A78335]"
+                className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-[#B8954A]/40 bg-[#B8954A]/15 px-3 text-xs font-bold text-[#7A5F28]"
               >
                 Voir analyse
               </Link>

@@ -39,10 +39,10 @@ export function CoupleDeadlineBanner({
 
   const tone =
     variant === "hard"
-      ? "border-[#641F2B]/40 bg-[#641F2B]/10"
+      ? "border-[#5C1F28]/40 bg-[#5C1F28]/10"
       : variant === "warning"
-        ? "border-[#D7B866]/50 bg-[#D7B866]/12"
-        : "border-[#2B2421]/12 bg-[#FFFDF9]"
+        ? "border-[#B8954A]/50 bg-[#B8954A]/12"
+        : "border-[#2B2421]/12 bg-[#F8F4EE]"
 
   return (
     <aside
@@ -52,7 +52,7 @@ export function CoupleDeadlineBanner({
         className
       )}
     >
-      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#641F2B]">
+      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#5C1F28]">
         Délais du bilan
       </p>
       <p className="mt-1.5">
@@ -72,7 +72,7 @@ export function CoupleDeadlineBanner({
         </p>
       ) : null}
       <p className="mt-2 text-xs">
-        <Link href="/couple/dossier" className="font-semibold text-[#641F2B] underline">
+        <Link href="/couple/dossier" className="font-semibold text-[#5C1F28] underline">
           Voir le dossier livrables →
         </Link>
       </p>

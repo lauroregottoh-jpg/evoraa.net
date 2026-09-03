@@ -71,7 +71,7 @@ export default function CoupleCheckoutClient({
             <>
               {" "}
               ·{" "}
-              <span className="font-semibold text-[#641F2B]">
+              <span className="font-semibold text-[#5C1F28]">
                 {COUPLE_DEMO_AMOUNT_XOF} FCFA (démo)
               </span>
             </>
@@ -85,7 +85,7 @@ export default function CoupleCheckoutClient({
           type="button"
           disabled={loading}
           onClick={() => void confirm()}
-          className="inline-flex h-11 items-center justify-center rounded-xl bg-[#641F2B] text-white px-5 text-sm font-semibold disabled:opacity-60"
+          className="inline-flex h-11 items-center justify-center rounded-xl bg-[#5C1F28] text-white px-5 text-sm font-semibold disabled:opacity-60"
         >
           {loading ? "Confirmation…" : "Confirmer et ouvrir mon espace couple"}
         </button>
@@ -94,7 +94,7 @@ export default function CoupleCheckoutClient({
             {error}
           </p>
         )}
-        <Link href="/couple/offre" className="text-sm font-semibold text-[#641F2B]">
+        <Link href="/couple/offre" className="text-sm font-semibold text-[#5C1F28]">
           ← Retour aux offres
         </Link>
       </div>
@@ -104,7 +104,7 @@ export default function CoupleCheckoutClient({
   return (
     <div className="max-w-xl mx-auto py-10 px-4 sm:px-6">
       <div className="mb-6 space-y-1">
-        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#641F2B]">
+        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#5C1F28]">
           KELYA Couple
         </p>
         <h1 className="font-serif text-3xl font-bold text-[#2B2421]">

@@ -44,7 +44,7 @@ export function CoupleUnlockReveal({
   }, [])
 
   return (
-    <section className="relative overflow-hidden rounded-[1.85rem] border-2 border-[#D7B866]/40 bg-gradient-to-br from-[#641F2B] via-[#451923] to-[#2B2421] text-[#FCFAF6] px-5 py-10 sm:px-8 sm:py-12 shadow-lg">
+    <section className="relative overflow-hidden rounded-[1.85rem] border-2 border-[#B8954A]/40 bg-gradient-to-br from-[#5C1F28] via-[#3D1519] to-[#2B2421] text-[#FBF9F6] px-5 py-10 sm:px-8 sm:py-12 shadow-lg">
       {/* Confettis */}
       {phase !== "closed" && (
         <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -55,7 +55,7 @@ export function CoupleUnlockReveal({
               style={{
                 width: 6 + (i % 3) * 2,
                 height: 8 + (i % 4) * 2,
-                background: i % 2 === 0 ? "#D7B866" : "#E8D49A",
+                background: i % 2 === 0 ? "#B8954A" : "#F3D9A4",
                 ["--dx" as string]: `${((i % 9) - 4) * 28}px`,
                 ["--dy" as string]: `${-40 - (i % 5) * 18}px`,
                 animationDelay: `${i * 40}ms`,
@@ -66,7 +66,7 @@ export function CoupleUnlockReveal({
       )}
 
       <div className="relative z-10 text-center space-y-3">
-        <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[#E8D49A]">
+        <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
           <HeartHandshake className="h-3.5 w-3.5" />
           {COUPLE_BRAND}
         </p>
@@ -89,17 +89,17 @@ export function CoupleUnlockReveal({
             phase !== "closed" && "scale-100"
           )}
         >
-          <div className="absolute inset-0 rounded-xl bg-[#FFFDF9] border-2 border-[#D7B866] shadow-xl" />
+          <div className="absolute inset-0 rounded-xl bg-[#F8F4EE] border-2 border-[#B8954A] shadow-xl" />
           <div
             className={cn(
-              "absolute inset-x-2 top-2 h-[55%] origin-top rounded-t-lg bg-[#641F2B] border border-[#D7B866]/50 transition-transform duration-700",
+              "absolute inset-x-2 top-2 h-[55%] origin-top rounded-t-lg bg-[#5C1F28] border border-[#B8954A]/50 transition-transform duration-700",
               phase === "closed" ? "rotate-0" : "-rotate-[28deg] -translate-y-1"
             )}
           />
           <div className="absolute inset-x-4 bottom-4 top-[42%] rounded-md bg-white/90 p-2 space-y-1.5">
-            <div className="h-1.5 rounded bg-[#641F2B]/30 w-full" />
-            <div className="h-1.5 rounded bg-[#641F2B]/20 w-4/5" />
-            <div className="h-1.5 rounded bg-[#D7B866]/50 w-3/5" />
+            <div className="h-1.5 rounded bg-[#5C1F28]/30 w-full" />
+            <div className="h-1.5 rounded bg-[#5C1F28]/20 w-4/5" />
+            <div className="h-1.5 rounded bg-[#B8954A]/50 w-3/5" />
           </div>
         </div>
       </div>
@@ -115,7 +115,7 @@ export function CoupleUnlockReveal({
             key={u.title}
             className="flex items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-3 py-2.5 text-sm"
           >
-            <u.icon className="h-4 w-4 text-[#E8D49A] shrink-0" />
+            <u.icon className="h-4 w-4 text-[#F3D9A4] shrink-0" />
             <span className="font-medium">{u.title}</span>
           </div>
         ))}
@@ -124,7 +124,7 @@ export function CoupleUnlockReveal({
       <div className="relative z-10 mt-8 flex flex-wrap justify-center gap-3">
         <Link
           href={onContinueHref}
-          className="inline-flex h-12 items-center rounded-xl bg-[#D7B866] text-[#2B2421] px-6 text-sm font-bold"
+          className="inline-flex h-12 items-center rounded-xl bg-[#B8954A] text-[#2B2421] px-6 text-sm font-bold"
         >
           Commencer l’onboarding
         </Link>

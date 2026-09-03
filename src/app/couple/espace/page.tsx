@@ -144,8 +144,8 @@ export default function CoupleEspacePage() {
               }
             />
 
-            <section className="rounded-2xl border border-[#D7B866]/30 bg-[#FCFAF6] p-5 space-y-3">
-              <h2 className="font-serif text-xl font-bold text-[#641F2B]">
+            <section className="rounded-2xl border border-[#B8954A]/30 bg-[#FBF9F6] p-5 space-y-3">
+              <h2 className="font-serif text-xl font-bold text-[#5C1F28]">
                 Où vous en êtes
               </h2>
               <ul className="space-y-2 text-sm">

@@ -39,13 +39,13 @@ const PILLAR_META: Record<
 > = {
   personality: {
     short: "Personnalités",
-    accent: "from-[#641F2B]/[0.14] via-white to-[#D4AF37]/[0.08]",
+    accent: "from-[#5C1F28]/[0.14] via-white to-[#D4AF37]/[0.08]",
     glow: "group-hover:shadow-[0_18px_40px_-18px_rgba(100,31,43,0.45)]",
     icon: HeartHandshake,
   },
   spiritual: {
     short: "Spirituelle",
-    accent: "from-[#D4AF37]/[0.16] via-white to-[#641F2B]/[0.06]",
+    accent: "from-[#D4AF37]/[0.16] via-white to-[#5C1F28]/[0.06]",
     glow: "group-hover:shadow-[0_18px_40px_-18px_rgba(212,175,55,0.4)]",
     icon: Sparkles,
   },
@@ -63,7 +63,7 @@ const PILLAR_META: Record<
   },
   finances: {
     short: "Valeurs",
-    accent: "from-[#4A3B2F]/[0.1] via-white to-[#641F2B]/[0.08]",
+    accent: "from-[#4A3B2F]/[0.1] via-white to-[#5C1F28]/[0.08]",
     glow: "group-hover:shadow-[0_18px_40px_-18px_rgba(74,59,47,0.35)]",
     icon: Scale,
   },

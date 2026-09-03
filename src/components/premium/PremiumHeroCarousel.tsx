@@ -78,7 +78,7 @@ export function PremiumHeroCarousel({
         </p>
       </div>
 
-      <div className="inline-flex flex-wrap items-baseline justify-center gap-2 rounded-2xl border border-[#D7B866]/35 bg-[#D7B866]/10 px-5 py-3">
+      <div className="inline-flex flex-wrap items-baseline justify-center gap-2 rounded-2xl border border-[#B8954A]/35 bg-[#B8954A]/10 px-5 py-3">
         {alliance.compareAtXof ? (
           <span className="text-base text-muted-foreground line-through">
             {alliance.compareAtXof.toLocaleString("fr-FR")}

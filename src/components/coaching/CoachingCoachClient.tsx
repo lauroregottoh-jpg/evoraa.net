@@ -54,8 +54,8 @@ export function CoachingCoachClient() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-6 pb-10">
-      <header className="rounded-[1.75rem] border border-[#D7B866]/35 bg-gradient-to-br from-[#641F2B] via-[#451923] to-[#2B2421] p-7 text-[#FCFAF6]">
-        <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#E8D49A]">
+      <header className="rounded-[1.75rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#5C1F28] via-[#3D1519] to-[#2B2421] p-7 text-[#FBF9F6]">
+        <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
           Espace coach
         </p>
         <h1 className="mt-2 font-serif text-3xl font-bold">

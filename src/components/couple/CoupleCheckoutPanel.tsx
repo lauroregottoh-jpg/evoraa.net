@@ -142,7 +142,7 @@ export function CoupleCheckoutPanel({
       )}
     >
       <div className="space-y-1">
-        <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#641F2B]">
+        <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#5C1F28]">
           <HeartHandshake className="h-3.5 w-3.5" />
           Paiement sécurisé
         </p>
@@ -156,7 +156,7 @@ export function CoupleCheckoutPanel({
       </div>
 
       {demoPricing && !promoAmount && (
-        <div className="rounded-xl border border-[#D7B866]/35 bg-[#D7B866]/10 px-4 py-3 text-sm">
+        <div className="rounded-xl border border-[#B8954A]/35 bg-[#B8954A]/10 px-4 py-3 text-sm">
           <p className="font-semibold text-[#2B2421]">
             Mode démo — {COUPLE_DEMO_AMOUNT_XOF} FCFA
           </p>
@@ -181,12 +181,12 @@ export function CoupleCheckoutPanel({
               className={cn(
                 "relative w-full text-left rounded-2xl border px-4 py-4 transition-all",
                 active
-                  ? "border-[#641F2B] bg-[#FFFDF9] shadow-sm"
-                  : "border-[#2B2421]/12 hover:border-[#641F2B]/40 bg-white"
+                  ? "border-[#5C1F28] bg-[#F8F4EE] shadow-sm"
+                  : "border-[#2B2421]/12 hover:border-[#5C1F28]/40 bg-white"
               )}
             >
               {o.popular && (
-                <span className="absolute -top-2.5 left-4 rounded-full bg-[#D7B866] text-[#2B2421] text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5">
+                <span className="absolute -top-2.5 left-4 rounded-full bg-[#B8954A] text-[#2B2421] text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5">
                   Le plus choisi
                 </span>
               )}
@@ -196,7 +196,7 @@ export function CoupleCheckoutPanel({
                     className={cn(
                       "mt-1 h-4 w-4 rounded-full border-2 shrink-0",
                       active
-                        ? "border-[#641F2B] bg-[#641F2B]"
+                        ? "border-[#5C1F28] bg-[#5C1F28]"
                         : "border-[#2B2421]/25"
                     )}
                   />
@@ -225,7 +225,7 @@ export function CoupleCheckoutPanel({
                       {COUPLE_DEMO_AMOUNT_XOF.toLocaleString("fr-FR")}
                     </p>
                   )}
-                  <p className="font-serif text-xl font-bold text-[#641F2B]">
+                  <p className="font-serif text-xl font-bold text-[#5C1F28]">
                     {amount.toLocaleString("fr-FR")}
                     <span className="text-xs font-sans font-medium text-[#2B2421]/55 ml-1">
                       FCFA
@@ -238,9 +238,9 @@ export function CoupleCheckoutPanel({
         })}
       </div>
 
-      <div className="rounded-xl border border-[#2B2421]/12 bg-[#FFFDF9] px-4 py-4 space-y-3">
+      <div className="rounded-xl border border-[#2B2421]/12 bg-[#F8F4EE] px-4 py-4 space-y-3">
         <p className="text-sm font-semibold text-[#2B2421] inline-flex items-center gap-2">
-          <Tag className="h-4 w-4 text-[#641F2B]" />
+          <Tag className="h-4 w-4 text-[#5C1F28]" />
           J&apos;ai un code
         </p>
         <div className="flex flex-wrap gap-2">
@@ -253,12 +253,12 @@ export function CoupleCheckoutPanel({
             }}
             placeholder="Saisir votre code"
             autoComplete="off"
-            className="flex-1 min-w-[12rem] rounded-xl border border-[#2B2421]/15 bg-white px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#D7B866]/50"
+            className="flex-1 min-w-[12rem] rounded-xl border border-[#2B2421]/15 bg-white px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#B8954A]/50"
           />
           <button
             type="button"
             onClick={() => void applyPromo()}
-            className="rounded-xl bg-[#641F2B] text-white px-4 py-2.5 text-sm font-semibold hover:brightness-110"
+            className="rounded-xl bg-[#5C1F28] text-white px-4 py-2.5 text-sm font-semibold hover:brightness-110"
           >
             Appliquer
           </button>
@@ -267,7 +267,7 @@ export function CoupleCheckoutPanel({
           <p
             className={cn(
               "text-xs",
-              promoAmount ? "text-[#641F2B] font-semibold" : "text-destructive"
+              promoAmount ? "text-[#5C1F28] font-semibold" : "text-destructive"
             )}
           >
             {promoHint}
@@ -324,7 +324,7 @@ export function CoupleCheckoutPanel({
         type="button"
         onClick={() => void pay()}
         disabled={loading}
-        className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#641F2B] text-white h-12 px-6 text-sm font-bold hover:brightness-110 disabled:opacity-60"
+        className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#5C1F28] text-white h-12 px-6 text-sm font-bold hover:brightness-110 disabled:opacity-60"
       >
         {loading
           ? "Préparation du paiement…"
@@ -342,7 +342,7 @@ export function CoupleCheckoutPanel({
       )}
       <p className="text-center text-xs text-[#2B2421]/55">
         Déjà un code d&apos;invitation partenaire ?{" "}
-        <Link href="/couple/rejoindre" className="font-semibold text-[#641F2B]">
+        <Link href="/couple/rejoindre" className="font-semibold text-[#5C1F28]">
           Rejoindre le bilan →
         </Link>
       </p>
@@ -370,12 +370,12 @@ function PayModeCard({
       className={cn(
         "rounded-2xl border px-4 py-4 text-left transition-all",
         active
-          ? "border-[#D7B866] bg-[#D7B866]/10"
-          : "border-[#2B2421]/12 hover:border-[#D7B866]/40"
+          ? "border-[#B8954A] bg-[#B8954A]/10"
+          : "border-[#2B2421]/12 hover:border-[#B8954A]/40"
       )}
     >
       <div className="flex items-center gap-2 text-[#2B2421] font-semibold text-sm">
-        <span className="text-[#641F2B]">{icon}</span>
+        <span className="text-[#5C1F28]">{icon}</span>
         {title}
       </div>
       <div className="mt-3 flex flex-wrap gap-1.5">

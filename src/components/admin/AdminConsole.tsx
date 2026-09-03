@@ -329,7 +329,7 @@ export function AdminConsole(props: Props) {
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-widest text-[#A78335] mb-1">
+              <p className="text-[11px] font-bold uppercase tracking-widest text-[#7A5F28] mb-1">
                 Console ops — pas le dashboard membre
               </p>
               <h1 className="font-serif text-3xl font-bold tracking-tight">
@@ -1033,7 +1033,7 @@ export function AdminConsole(props: Props) {
                         <p className="font-semibold text-foreground">
                           {m.nameOne || "Membre"} ↔ {m.nameTwo || "Membre"}
                         </p>
-                        <span className="shrink-0 rounded-full bg-[#641F2B] text-[#FFFDF9] text-xs font-bold px-2.5 py-1">
+                        <span className="shrink-0 rounded-full bg-[#5C1F28] text-[#F8F4EE] text-xs font-bold px-2.5 py-1">
                           {m.score != null ? `${Math.round(m.score)}%` : "—"}
                         </span>
                       </div>
