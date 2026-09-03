@@ -276,26 +276,26 @@ export function MemberShell({
       compact ? "justify-center px-0 py-2.5" : "gap-2.5 px-3 py-2",
       accent &&
         !active &&
-        "text-[#7A4F55] bg-white/55 border border-[#B8954A]/40 hover:bg-white/80",
+        "text-[#F7F1EA] bg-[#B8954A]/20 border border-[#B8954A]/45 hover:bg-[#B8954A]/30",
       accent &&
         active &&
-        "bg-[#B8954A] text-[#3D2B2B] border border-[#B8954A] shadow-sm",
+        "bg-[#B8954A] text-[#2F2424] border border-[#B8954A] shadow-sm",
       gold &&
         !accent &&
         !active &&
-        "text-[#7A4F55] hover:text-[#3D2B2B] hover:bg-white/50",
+        "text-[#F3E6C8] hover:text-[#F7F1EA] hover:bg-white/12",
       gold &&
         !accent &&
         active &&
-        "bg-white text-[#7A4F55] shadow-[inset_0_0_0_1px_rgba(184,149,74,0.55)]",
+        "bg-[#F7F1EA] text-[#7A4F55] shadow-[inset_0_0_0_1px_rgba(184,149,74,0.65)]",
       !accent &&
         !gold &&
         active &&
-        "bg-white text-[#3D2B2B] shadow-[inset_0_0_0_1px_rgba(184,149,74,0.45)]",
+        "bg-[#F7F1EA] text-[#2F2424] shadow-[inset_0_0_0_1px_rgba(184,149,74,0.5)]",
       !accent &&
         !gold &&
         !active &&
-        "text-[#3D2B2B]/72 hover:text-[#3D2B2B] hover:bg-white/45"
+        "text-[#F7F1EA]/88 hover:text-white hover:bg-white/12"
     );
   };
 
@@ -368,8 +368,8 @@ export function MemberShell({
             className={cn(
               "relative flex w-full items-center justify-center rounded-xl py-2.5",
               opts.active
-                ? "bg-white text-[#3D2B2B]"
-                : "text-[#3D2B2B]/70 hover:text-[#3D2B2B] hover:bg-white/50"
+                ? "bg-[#F7F1EA] text-[#2F2424]"
+                : "text-[#F7F1EA]/80 hover:text-white hover:bg-white/12"
             )}
           >
             <Icon className="h-4 w-4" />
@@ -391,15 +391,15 @@ export function MemberShell({
           aria-expanded={opts.open}
           className={cn(
             "flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all",
-            "border border-[#B8954A]/25",
+            "border border-[#B8954A]/35",
             opts.active || opts.open
-              ? "bg-white text-[#3D2B2B] border-[#B8954A]/50"
-              : "text-[#3D2B2B]/85 hover:text-[#3D2B2B] hover:bg-white/50"
+              ? "bg-[#F7F1EA] text-[#2F2424] border-[#B8954A]/55"
+              : "text-[#F7F1EA]/90 hover:text-white hover:bg-white/12"
           )}
         >
           <Icon className="h-4 w-4 shrink-0 text-[#B8954A]" />
           <span className="truncate flex-1 text-left">{opts.label}</span>
-          <span className="text-[9px] font-bold uppercase tracking-wider text-[#7A4F55]/55 mr-0.5">
+          <span className="text-[9px] font-bold uppercase tracking-wider text-[#F7F1EA]/55 mr-0.5">
             {opts.open ? "Réduire" : "Ouvrir"}
           </span>
           <ChevronDown
@@ -410,7 +410,7 @@ export function MemberShell({
           />
         </button>
         {opts.open ? (
-          <div className="ml-2 pl-2 border-l border-[#B8954A]/25 space-y-0.5">
+          <div className="ml-2 pl-2 border-l border-[#B8954A]/35 space-y-0.5">
             {opts.items.map((item) => renderItem(item, false))}
           </div>
         ) : null}
@@ -421,7 +421,7 @@ export function MemberShell({
   const renderNavLinks = (compact: boolean) => (
     <>
       {!compact ? (
-        <p className="px-3 pt-1 pb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
+        <p className="px-3 pt-1 pb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#F3E6C8]">
           Principale
         </p>
       ) : (
@@ -466,13 +466,13 @@ export function MemberShell({
   );
 
   const logoutButton = (compact: boolean) => (
-    <form action={logoutAction} className="shrink-0 pt-3 border-t border-[#B8954A]/25">
+    <form action={logoutAction} className="shrink-0 pt-3 border-t border-[#B8954A]/30">
       <button
         type="submit"
         title={compact ? "Déconnexion" : undefined}
         className={cn(
           "flex w-full items-center rounded-xl text-sm font-bold transition-all duration-300",
-          "bg-white/70 text-[#7A4F55] hover:bg-white border border-[#B8954A]/35",
+          "bg-[#F7F1EA]/18 text-[#F7F1EA] hover:bg-[#F7F1EA]/28 border border-[#B8954A]/40",
           compact ? "justify-center px-0 py-2.5" : "gap-2.5 px-3 py-2.5"
         )}
       >
@@ -488,8 +488,8 @@ export function MemberShell({
       <aside
         className={cn(
           "hidden md:flex shrink-0 flex-col sticky top-0 h-screen z-40",
-          "bg-[#E8D4D0] text-[#3D2B2B]",
-          "border-r border-[#B8954A]/30 shadow-[4px_0_24px_-12px_rgba(160,112,112,0.22)]",
+          "bg-[#AC7D79] text-[#F7F1EA]",
+          "border-r border-[#B8954A]/35 shadow-[4px_0_24px_-10px_rgba(122,79,85,0.28)]",
           "transition-[width] duration-300 ease-out",
           sidebarReady ? (sidebarOpen ? "md:w-56 lg:w-60" : "md:w-[4.25rem]") : "md:w-56 lg:w-60",
           sidebarOpen ? "px-3 py-4 gap-3" : "px-2 py-4 gap-3"
@@ -505,7 +505,7 @@ export function MemberShell({
             href="/dashboard"
             onClick={go("/dashboard")}
             className={cn(
-              "font-serif font-bold tracking-tight text-[#7A4F55] transition-all duration-300",
+              "font-serif font-bold tracking-tight text-[#F7F1EA] transition-all duration-300",
               sidebarOpen ? "text-2xl px-1" : "text-lg"
             )}
             title="KELIAA"
@@ -516,8 +516,8 @@ export function MemberShell({
             type="button"
             onClick={toggleSidebar}
             className={cn(
-              "inline-flex items-center justify-center rounded-xl border border-[#B8954A]/35 bg-white/70",
-              "text-[#7A4F55] hover:text-[#3D2B2B] hover:bg-white transition-all duration-300",
+              "inline-flex items-center justify-center rounded-xl border border-[#B8954A]/40 bg-[#F7F1EA]/15",
+              "text-[#F7F1EA] hover:bg-[#F7F1EA]/25 transition-all duration-300",
               "hover:scale-105 active:scale-95 h-9 w-9"
             )}
             aria-label={sidebarOpen ? "Masquer le menu" : "Afficher le menu"}
@@ -552,7 +552,7 @@ export function MemberShell({
             <div className="flex items-center gap-3 min-w-0">
               <button
                 type="button"
-                className="md:hidden p-2 rounded-lg shrink-0 bg-[#E8D4D0] text-[#7A4F55] border border-[#B8954A]/40"
+                className="md:hidden p-2 rounded-lg shrink-0 bg-[#AC7D79] text-[#F7F1EA] border border-[#B8954A]/40"
                 onClick={() => setMobileOpen((v) => !v)}
                 aria-label="Ouvrir le menu"
                 aria-expanded={mobileOpen}
@@ -596,7 +596,7 @@ export function MemberShell({
                 <button
                   type="button"
                   onClick={() => setAccountOpen((v) => !v)}
-                  className="inline-flex items-center justify-center rounded-full w-9 h-9 border border-[#B8954A]/35 bg-[#E8D4D0] hover:bg-[#E0C8C4] transition-colors"
+                  className="inline-flex items-center justify-center rounded-full w-9 h-9 border border-[#B8954A]/40 bg-[#AC7D79]/15 hover:bg-[#AC7D79]/25 transition-colors"
                   title="Compte"
                   aria-label="Menu compte"
                   aria-expanded={accountOpen}
@@ -641,8 +641,8 @@ export function MemberShell({
           </div>
 
           {mobileOpen && (
-            <div className="md:hidden border-t border-[#B8954A]/30 bg-[#E8D4D0] px-3 py-3 max-h-[75vh] overflow-y-auto z-[70] animate-in slide-in-from-top-2 fade-in duration-300 member-sidebar-scroll">
-              <nav className="flex flex-col gap-0.5 text-[#3D2B2B]" aria-label="Navigation membre">
+            <div className="md:hidden border-t border-[#B8954A]/30 bg-[#AC7D79] px-3 py-3 max-h-[75vh] overflow-y-auto z-[70] animate-in slide-in-from-top-2 fade-in duration-300 member-sidebar-scroll">
+              <nav className="flex flex-col gap-0.5 text-[#F7F1EA]" aria-label="Navigation membre">
                 {renderNavLinks(false)}
               </nav>
               <div className="mt-3">{logoutButton(false)}</div>
@@ -685,7 +685,7 @@ export function MemberShell({
         </main>
 
         <nav
-          className="md:hidden fixed bottom-0 inset-x-0 z-[60] border-t border-[#B8954A]/30 bg-[#E8D4D0]/95 text-[#3D2B2B] backdrop-blur-md"
+          className="md:hidden fixed bottom-0 inset-x-0 z-[60] border-t border-[#B8954A]/30 bg-[#AC7D79] text-[#F7F1EA] backdrop-blur-md"
           aria-label="Navigation mobile"
         >
           <div className="mx-auto max-w-lg grid grid-cols-5 h-16">
@@ -699,7 +699,7 @@ export function MemberShell({
                   onClick={go(item.href)}
                   className={cn(
                     "flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold cursor-pointer transition-colors",
-                    active ? "text-[#B8954A]" : "text-[#7A4F55]/75"
+                    active ? "text-[#F3E6C8]" : "text-[#F7F1EA]/75"
                   )}
                 >
                   <Icon className="h-5 w-5" />
@@ -712,7 +712,7 @@ export function MemberShell({
               onClick={() => setMobileOpen(true)}
               className={cn(
                 "flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold transition-colors",
-                accountActive || mobileOpen ? "text-[#B8954A]" : "text-[#7A4F55]/75"
+                accountActive || mobileOpen ? "text-[#F3E6C8]" : "text-[#F7F1EA]/75"
               )}
             >
               <Menu className="h-5 w-5" />

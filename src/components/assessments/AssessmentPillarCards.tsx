@@ -86,7 +86,7 @@ export function AssessmentPillarCards({
           <article
             key={item.slug}
             className={cn(
-              "group relative overflow-hidden rounded-[1.35rem] border border-border/70 bg-gradient-to-br p-5 sm:p-6",
+              "group relative overflow-hidden rounded-[1.35rem] border border-[#D0C4B8] bg-[#FFFCFA] p-5 sm:p-6",
               "transition-all duration-500 ease-out hover:-translate-y-1.5",
               meta.accent,
               meta.glow,

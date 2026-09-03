@@ -56,7 +56,7 @@ export function CompatibilityCard({
   const domains = (profile.domainScores ?? []).slice(0, 5);
 
   return (
-    <Card className="rounded-2xl flex flex-col justify-between overflow-hidden group transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5" style={{ background: "#FFFFFF", border: "1px solid #C9BBAF", boxShadow: "0 2px 14px -4px rgba(122, 79, 85,0.09)" }}>
+    <Card className="rounded-2xl flex flex-col justify-between overflow-hidden group transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5" style={{ background: "#FFFCFA", border: "1px solid #D0C4B8", boxShadow: "0 4px 18px -8px rgba(47,36,36,0.14)" }}>
       <div className="relative h-48 sm:h-56 overflow-hidden" style={{ background: "#F2EBE0", borderBottom: "1px solid #C9BBAF" }}>
         {profile.photoUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -126,7 +126,7 @@ export function CompatibilityCard({
 
       <CardHeader className="space-y-1 pb-3 pt-4 px-5">
         <div className="flex items-center justify-between gap-2">
-          <h3 className="font-serif text-2xl font-bold" style={{ color: "#A07070" }}>
+          <h3 className="font-serif text-2xl font-bold" style={{ color: "#2F2424" }}>
             {profile.name}, {profile.age} ans
           </h3>
           <span
@@ -136,7 +136,7 @@ export function CompatibilityCard({
             {profile.community}
           </span>
         </div>
-        <p className="text-xs flex items-center gap-1" style={{ color: "#7A4F55" }}>
+        <p className="text-xs flex items-center gap-1" style={{ color: "#5E4A4B" }}>
           <MapPin className="h-3.5 w-3.5" /> {profile.city}
         </p>
       </CardHeader>
@@ -179,7 +179,7 @@ export function CompatibilityCard({
               <span
                 key={idx}
                 className="text-xs font-medium px-2.5 py-1 rounded-lg flex items-center gap-1"
-                style={{ background: "#F2EBE0", color: "#A07070", border: "1px solid rgba(184,149,74,0.3)" }}
+                style={{ background: "#F4EFE6", color: "#2F2424", border: "1px solid rgba(184,149,74,0.35)" }}
               >
                 ✓ {reason}
               </span>
@@ -188,7 +188,7 @@ export function CompatibilityCard({
         </div>
       </CardContent>
 
-      <CardFooter className="px-5 pt-2 pb-5" style={{ borderTop: "1px solid #C9BBAF", background: "#F2EBE0" }}>
+      <CardFooter className="px-5 pt-2 pb-5" style={{ borderTop: "1px solid #D0C4B8", background: "#F4EFE6" }}>
         <Link href={`/compatibility/${profile.id}`} className="w-full">
           <          button
             className="w-full flex items-center justify-center gap-2 rounded-full h-10 text-sm font-semibold transition-all hover:opacity-90"

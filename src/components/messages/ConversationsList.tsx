@@ -115,7 +115,7 @@ function ConvRow({ conv }: { conv: ConversationListItem }) {
             {/* Texte */}
             <div className="space-y-0.5 min-w-0">
               <div className="flex items-center gap-2">
-                <h3 className="font-serif font-bold text-base truncate" style={{ color: "#A07070" }}>
+                <h3 className="font-serif font-bold text-base truncate" style={{ color: "#2F2424" }}>
                   {conv.partnerName}
                 </h3>
                 {conv.harmonyScore > 0 && (
@@ -130,7 +130,7 @@ function ConvRow({ conv }: { conv: ConversationListItem }) {
               </div>
               <p
                 className="text-xs truncate"
-                style={{ color: conv.unread ? "#A07070" : "#7A4F55", fontWeight: conv.unread ? 600 : 400 }}
+                style={{ color: conv.unread ? "#2F2424" : "#5E4A4B", fontWeight: conv.unread ? 600 : 400 }}
               >
                 {conv.lastMessage}
               </p>
@@ -218,10 +218,10 @@ export function ConversationsList({
             >
               Messagerie
             </Badge>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#A07070]">
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#2F2424]">
               Vos conversations
             </h1>
-            <p className="text-sm text-[#A07070]/65 max-w-md">
+            <p className="text-sm text-[#5E4A4B] max-w-md">
               Recherchez par nom, filtrez par jour, et retrouvez vos échanges
               classés.
             </p>

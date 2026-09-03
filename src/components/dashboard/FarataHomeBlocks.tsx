@@ -31,7 +31,7 @@ const F = {
   border: "#D4C5BC",      /* border pastel */
   borderGold: "rgba(184,149,74,0.4)",
   muted: "#A07070",       /* rose mauve — texte secondaire */
-  text: "#3D2B2B",        /* texte principal doux */
+  text: "#2F2424",        /* texte principal lisible */
   white: "#FFFFFF",
 }
 

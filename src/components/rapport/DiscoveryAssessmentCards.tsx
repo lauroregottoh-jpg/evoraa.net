@@ -126,7 +126,7 @@ function Card({
               ? "border-border/80 bg-secondary/40"
               : gold
                 ? "border-[#B8954A]/30 bg-gradient-to-br from-white via-white to-[#B8954A]/[0.08] hover:-translate-y-1"
-                : "border-border/70 bg-gradient-to-br from-white via-white to-accent/[0.06] hover:-translate-y-1",
+                : "border-[#D0C4B8] bg-[#FFFCFA] hover:-translate-y-1",
         "assessment-pillar-card"
       )}
       style={{ animationDelay: `${index * 55}ms` }}
@@ -148,7 +148,7 @@ function Card({
               : `Clé ${String(card.order).padStart(2, "0")}`}
             {done ? " · Terminé" : locked && !isPremiumPlus ? " · Verrouillé" : ""}
           </p>
-          <h3 className="font-serif text-xl font-bold leading-tight mt-0.5">
+          <h3 className="font-serif text-xl font-bold leading-tight mt-0.5 text-[#2F2424]">
             {card.title}
           </h3>
           <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">

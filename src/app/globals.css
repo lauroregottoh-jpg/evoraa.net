@@ -6,29 +6,29 @@
      Ivoire chaud → Taupe → Caramel → Rose mauve → Prune rosée
      ───────────────────────────────────────────────────────────── */
 
-  /* Fond & surfaces */
-  --color-background: #F2EBE0;          /* ivoire chaud principal */
-  --color-foreground: #3D2B2B;          /* brun-prune doux (lisible, rosé chaud) */
+  /* Fond & surfaces — ivoire pierre, pas rose bonbon */
+  --color-background: #F4EFE6;
+  --color-foreground: #2F2424;
 
-  /* Primaire — prune rosée (boutons CTA, liens actifs) */
+  /* Primaire — prune mate (CTA) */
   --color-primary: #7A4F55;
-  --color-primary-foreground: #F9F3EE;
+  --color-primary-foreground: #F7F1EA;
 
-  /* Secondaire — taupe/lin doux */
-  --color-secondary: #DDD0C4;
-  --color-secondary-foreground: #3D2B2B;
+  /* Secondaire — taupe/lin */
+  --color-secondary: #E4D8CC;
+  --color-secondary-foreground: #2F2424;
 
-  /* Muted — crème rosé */
-  --color-muted: #EDE3DB;
-  --color-muted-foreground: #A07070;
+  /* Muted — lisible, pas rose pâle */
+  --color-muted: #EDE4DA;
+  --color-muted-foreground: #5E4A4B;
 
-  /* Accent — rose mauve (icônes, badges, highlights) */
-  --color-accent: #A07070;
-  --color-accent-foreground: #F9F3EE;
+  /* Accent — rose mat Farata */
+  --color-accent: #8F6566;
+  --color-accent-foreground: #F7F1EA;
 
-  /* Sidebar — roseâtre pastel + or */
-  --color-sidebar: #E8D4D0;
-  --color-sidebar-foreground: #3D2B2B;
+  /* Sidebar — rose mat un peu plus foncé + or */
+  --color-sidebar: #AC7D79;
+  --color-sidebar-foreground: #F7F1EA;
 
   /* Or — couleur dorée marqueterie (dividers, ornements) */
   --color-gold: #B8954A;
