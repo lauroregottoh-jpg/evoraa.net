@@ -4,8 +4,8 @@
   /* ─────────────────────────────────────────────────────────────
      KELIAA — Palette Farata PASTEL HARMONISÉE (audit verrouillé)
      1 Champagne #F5EDE0  2 Taupe #DED1C4  3 Dust #CAAF9B
-     4 Sidebar #AC7D79    5 CTA #7F5557    6 Texte #3E222D
-     Règle : sidebar rose mat partout ; page champagne ; cartes BLANC
+     4 Sidebar #A07070 (rose mauve PWA)  5 CTA #7F5557  6 Texte #3E222D
+     Règle : sidebar = rose Farata #A07070 (pas de bordeaux blanchi) ; page champagne ; cartes BLANC
      ───────────────────────────────────────────────────────────── */
 
   --color-background: #F5EDE0;
@@ -20,11 +20,11 @@
   --color-muted: #EDE6DC;
   --color-muted-foreground: #6B5354;
 
-  --color-accent: #AC7D79;
-  --color-accent-foreground: #F7F1EA;
+  --color-accent: #A07070;
+  --color-accent-foreground: #FFFFFF;
 
-  --color-sidebar: #AC7D79;
-  --color-sidebar-foreground: #F7F1EA;
+  --color-sidebar: #A07070;
+  --color-sidebar-foreground: #FFFFFF;
 
   --color-gold: #B8954A;
   --color-gold-light: #D4AF72;
@@ -36,7 +36,7 @@
 
   --color-border: #DED1C4;
   --color-input: #DED1C4;
-  --color-ring: #AC7D79;
+  --color-ring: #A07070;
 
   --color-card: #FFFFFF;
   --color-card-foreground: #3E222D;
@@ -81,10 +81,10 @@
   }
 }
 
-/* Rail membre — rose mat forcé (desktop sidebar + mobile bar) */
+/* Rail membre — rose mauve Farata #A07070 (PWA), sans voile blanc */
 .keliaa-member-rail {
-  background-color: #AC7D79 !important;
-  color: #F7F1EA !important;
+  background-color: #A07070 !important;
+  color: #FFFFFF !important;
 }
 
 @layer utilities {

@@ -262,6 +262,10 @@ export function MemberShell({
     router.push(href);
   };
 
+  /** Rose Farata / PWA — pas un bordeaux blanchi */
+  const RAIL = "#A07070"
+  const RAIL_INK = "#FFFFFF"
+
   const navLinkClass = (
     href: string,
     opts?: { accent?: boolean; allianceGold?: boolean; compact?: boolean }
@@ -276,26 +280,26 @@ export function MemberShell({
       compact ? "justify-center px-0 py-2.5" : "gap-2.5 px-3 py-2",
       accent &&
         !active &&
-        "text-[#F7F1EA] bg-[#B8954A]/20 border border-[#B8954A]/45 hover:bg-[#B8954A]/30",
+        "text-white bg-[#B8954A]/25 border border-[#B8954A]/55 hover:bg-[#B8954A]/35",
       accent &&
         active &&
         "bg-[#B8954A] text-[#2F2424] border border-[#B8954A] shadow-sm",
       gold &&
         !accent &&
         !active &&
-        "text-[#F3E6C8] hover:text-[#F7F1EA] hover:bg-white/12",
+        "text-white hover:bg-[#8A5A5A]",
       gold &&
         !accent &&
         active &&
-        "bg-[#F7F1EA] text-[#7F5557] shadow-[inset_0_0_0_1px_rgba(184,149,74,0.65)]",
+        "bg-white text-[#A07070] shadow-sm",
       !accent &&
         !gold &&
         active &&
-        "bg-[#F7F1EA] text-[#2F2424] shadow-[inset_0_0_0_1px_rgba(184,149,74,0.5)]",
+        "bg-white text-[#A07070] shadow-sm",
       !accent &&
         !gold &&
         !active &&
-        "text-[#F7F1EA]/88 hover:text-white hover:bg-white/12"
+        "text-white hover:bg-[#8A5A5A]"
     );
   };
 
@@ -321,9 +325,13 @@ export function MemberShell({
         <Icon
           className={cn(
             "h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110",
-            (accent || gold) && !isActive(item.href) && "text-[#B8954A]",
-            gold && isActive(item.href) && "text-[#B8954A]"
+            isActive(item.href)
+              ? gold || accent
+                ? "text-[#B8954A]"
+                : "text-[#A07070]"
+              : "text-white"
           )}
+          strokeWidth={2.25}
         />
         <span
           className={cn(
@@ -368,11 +376,11 @@ export function MemberShell({
             className={cn(
               "relative flex w-full items-center justify-center rounded-xl py-2.5",
               opts.active
-                ? "bg-[#F7F1EA] text-[#2F2424]"
-                : "text-[#F7F1EA]/80 hover:text-white hover:bg-white/12"
+                ? "bg-white text-[#A07070]"
+                : "text-white hover:bg-[#8A5A5A]"
             )}
           >
-            <Icon className="h-4 w-4" />
+            <Icon className="h-4 w-4 text-inherit" strokeWidth={2.25} />
             {opts.active ? (
               <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full bg-[#B8954A]" />
             ) : null}
@@ -391,26 +399,27 @@ export function MemberShell({
           aria-expanded={opts.open}
           className={cn(
             "flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all",
-            "border border-[#B8954A]/35",
+            "border border-white/25",
             opts.active || opts.open
-              ? "bg-[#F7F1EA] text-[#2F2424] border-[#B8954A]/55"
-              : "text-[#F7F1EA]/90 hover:text-white hover:bg-white/12"
+              ? "bg-white text-[#A07070] border-white"
+              : "text-white hover:bg-[#8A5A5A]"
           )}
         >
-          <Icon className="h-4 w-4 shrink-0 text-[#B8954A]" />
+          <Icon className="h-4 w-4 shrink-0 text-inherit" strokeWidth={2.25} />
           <span className="truncate flex-1 text-left">{opts.label}</span>
-          <span className="text-[9px] font-bold uppercase tracking-wider text-[#F7F1EA]/55 mr-0.5">
+          <span className="text-[9px] font-bold uppercase tracking-wider text-inherit/70 mr-0.5">
             {opts.open ? "Réduire" : "Ouvrir"}
           </span>
           <ChevronDown
             className={cn(
-              "h-4 w-4 shrink-0 opacity-70 transition-transform",
+              "h-4 w-4 shrink-0 text-inherit transition-transform",
               opts.open && "rotate-180"
             )}
+            strokeWidth={2.25}
           />
         </button>
         {opts.open ? (
-          <div className="ml-2 pl-2 border-l border-[#B8954A]/35 space-y-0.5">
+          <div className="ml-2 pl-2 border-l border-white/30 space-y-0.5">
             {opts.items.map((item) => renderItem(item, false))}
           </div>
         ) : null}
@@ -421,7 +430,7 @@ export function MemberShell({
   const renderNavLinks = (compact: boolean) => (
     <>
       {!compact ? (
-        <p className="px-3 pt-1 pb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#F3E6C8]">
+        <p className="px-3 pt-1 pb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/90">
           Principale
         </p>
       ) : (
@@ -466,17 +475,17 @@ export function MemberShell({
   );
 
   const logoutButton = (compact: boolean) => (
-    <form action={logoutAction} className="shrink-0 pt-3 border-t border-[#B8954A]/30">
+    <form action={logoutAction} className="shrink-0 pt-3 border-t border-white/25">
       <button
         type="submit"
         title={compact ? "Déconnexion" : undefined}
         className={cn(
           "flex w-full items-center rounded-xl text-sm font-bold transition-all duration-300",
-          "bg-[#F7F1EA]/18 text-[#F7F1EA] hover:bg-[#F7F1EA]/28 border border-[#B8954A]/40",
+          "bg-[#8A5A5A] text-white hover:bg-[#7A4F55] border border-white/20",
           compact ? "justify-center px-0 py-2.5" : "gap-2.5 px-3 py-2.5"
         )}
       >
-        <LogOut className="h-4 w-4 shrink-0" />
+        <LogOut className="h-4 w-4 shrink-0 text-white" strokeWidth={2.25} />
         {!compact ? <span>Déconnexion</span> : null}
       </button>
     </form>
@@ -484,12 +493,12 @@ export function MemberShell({
 
   return (
     <div className="min-h-screen bg-background text-foreground md:flex">
-      {/* Sidebar — rose mat pastel Farata (#AC7D79) desktop + mobile */}
+      {/* Sidebar — rose mauve Farata #A07070 (PWA), pas de voile blanc */}
       <aside
-        style={{ backgroundColor: "#AC7D79", color: "#F7F1EA" }}
+        style={{ backgroundColor: RAIL, color: RAIL_INK }}
         className={cn(
           "keliaa-member-rail hidden md:flex shrink-0 flex-col sticky top-0 h-screen z-40",
-          "border-r border-[#7F5557]/25 shadow-[4px_0_24px_-12px_rgba(62,34,45,0.18)]",
+          "border-r border-[#7A4F55]/40 shadow-[4px_0_24px_-12px_rgba(62,34,45,0.22)]",
           "transition-[width] duration-300 ease-out",
           sidebarReady ? (sidebarOpen ? "md:w-56 lg:w-60" : "md:w-[4.25rem]") : "md:w-56 lg:w-60",
           sidebarOpen ? "px-3 py-4 gap-3" : "px-2 py-4 gap-3"
@@ -505,7 +514,7 @@ export function MemberShell({
             href="/dashboard"
             onClick={go("/dashboard")}
             className={cn(
-              "font-serif font-bold tracking-tight text-[#F7F1EA] transition-all duration-300",
+              "font-serif font-bold tracking-tight text-white transition-all duration-300",
               sidebarOpen ? "text-2xl px-1" : "text-lg"
             )}
             title="KELIAA"
@@ -516,8 +525,8 @@ export function MemberShell({
             type="button"
             onClick={toggleSidebar}
             className={cn(
-              "inline-flex items-center justify-center rounded-xl border border-[#B8954A]/40 bg-[#F7F1EA]/15",
-              "text-[#F7F1EA] hover:bg-[#F7F1EA]/25 transition-all duration-300",
+              "inline-flex items-center justify-center rounded-xl border border-white/30 bg-[#8A5A5A]",
+              "text-white hover:bg-[#7A4F55] transition-all duration-300",
               "hover:scale-105 active:scale-95 h-9 w-9"
             )}
             aria-label={sidebarOpen ? "Masquer le menu" : "Afficher le menu"}
@@ -552,7 +561,7 @@ export function MemberShell({
             <div className="flex items-center gap-3 min-w-0">
               <button
                 type="button"
-                className="md:hidden p-2 rounded-lg shrink-0 bg-[#AC7D79] text-[#F7F1EA] border border-[#AC7D79]"
+                className="md:hidden p-2 rounded-lg shrink-0 bg-[#A07070] text-white border border-[#A07070]"
                 onClick={() => setMobileOpen((v) => !v)}
                 aria-label="Ouvrir le menu"
                 aria-expanded={mobileOpen}
@@ -596,7 +605,7 @@ export function MemberShell({
                 <button
                   type="button"
                   onClick={() => setAccountOpen((v) => !v)}
-                  className="inline-flex items-center justify-center rounded-full w-9 h-9 border border-[#AC7D79]/35 bg-[#AC7D79]/12 hover:bg-[#AC7D79]/20 transition-colors"
+                  className="inline-flex items-center justify-center rounded-full w-9 h-9 border border-[#A07070]/35 bg-[#A07070]/12 hover:bg-[#A07070]/20 transition-colors"
                   title="Compte"
                   aria-label="Menu compte"
                   aria-expanded={accountOpen}
@@ -642,10 +651,10 @@ export function MemberShell({
 
           {mobileOpen && (
             <div
-              style={{ backgroundColor: "#AC7D79" }}
-              className="keliaa-member-rail md:hidden border-t border-[#7F5557]/30 px-3 py-3 max-h-[75vh] overflow-y-auto z-[70] animate-in slide-in-from-top-2 fade-in duration-300 member-sidebar-scroll"
+              style={{ backgroundColor: RAIL, color: RAIL_INK }}
+              className="keliaa-member-rail md:hidden border-t border-[#7A4F55]/40 px-3 py-3 max-h-[75vh] overflow-y-auto z-[70] animate-in slide-in-from-top-2 fade-in duration-300 member-sidebar-scroll"
             >
-              <nav className="flex flex-col gap-0.5 text-[#F7F1EA]" aria-label="Navigation membre">
+              <nav className="flex flex-col gap-0.5 text-white" aria-label="Navigation membre">
                 {renderNavLinks(false)}
               </nav>
               <div className="mt-3">{logoutButton(false)}</div>
@@ -688,8 +697,8 @@ export function MemberShell({
         </main>
 
         <nav
-          style={{ backgroundColor: "#AC7D79", color: "#F7F1EA" }}
-          className="keliaa-member-rail md:hidden fixed bottom-0 inset-x-0 z-[60] border-t border-[#7F5557]/30 backdrop-blur-md"
+          style={{ backgroundColor: RAIL, color: RAIL_INK }}
+          className="keliaa-member-rail md:hidden fixed bottom-0 inset-x-0 z-[60] border-t border-[#7A4F55]/40"
           aria-label="Navigation mobile"
         >
           <div className="mx-auto max-w-lg grid grid-cols-5 h-16">
@@ -703,10 +712,13 @@ export function MemberShell({
                   onClick={go(item.href)}
                   className={cn(
                     "flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold cursor-pointer transition-colors",
-                    active ? "text-[#F3E6C8]" : "text-[#F7F1EA]/75"
+                    active ? "text-white" : "text-white/85"
                   )}
                 >
-                  <Icon className="h-5 w-5" />
+                  <Icon
+                    className={cn("h-5 w-5", active ? "text-white" : "text-white/90")}
+                    strokeWidth={active ? 2.5 : 2.25}
+                  />
                   {item.label}
                 </a>
               );
@@ -716,10 +728,10 @@ export function MemberShell({
               onClick={() => setMobileOpen(true)}
               className={cn(
                 "flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold transition-colors",
-                accountActive || mobileOpen ? "text-[#F3E6C8]" : "text-[#F7F1EA]/75"
+                accountActive || mobileOpen ? "text-white" : "text-white/85"
               )}
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-5 w-5 text-white" strokeWidth={2.25} />
               Menu
             </button>
           </div>

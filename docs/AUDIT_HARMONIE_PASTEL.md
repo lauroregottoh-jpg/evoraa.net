@@ -16,14 +16,15 @@ Résultat : pas d’harmonie, contraste faible, look “girly” ou “sale” s
 | Champagne | `#F5EDE0` | Fond de page uniquement |
 | Taupe clair | `#DED1C4` | Bordures, secondary |
 | Rose poussière | `#CAAF9B` | Soft hover / muted soft |
-| **Rose mat sidebar** | `#AC7D79` | Sidebar desktop **et** mobile |
+| **Rose mauve sidebar / PWA** | `#A07070` | Sidebar desktop **et** mobile — **pas** `#AC7D79` (bordeaux blanchi) |
 | Prune CTA | `#7F5557` | Boutons, liens actifs |
 | Plum texte | `#3E222D` | Titres et texte principal |
 
 ## Règles d’harmonie
-1. **Sidebar seule** = `#AC7D79` (même couleur téléphone + ordinateur).
-2. **Page** = champagne `#F5EDE0` — jamais le même rose que la sidebar.
-3. **Cartes / tests** = blanc pur `#FFFFFF` + bordure `#DED1C4`.
-4. **Texte** = `#3E222D` (lisible) — pas de titres or/bronze.
-5. **CTA** = `#7F5557` texte `#F7F1EA` — pas d’or sur les boutons d’action.
-6. Or `#B8954A` = ornements fins uniquement (filet, badge Alliance), jamais fond de carte ni CTA principal.
+1. **Sidebar seule** = `#A07070` (même rose Farata / PWA, téléphone + ordinateur). Icônes **blanc opaque**.
+2. **Pas de voile blanc** sur le fond sidebar (`white/12`, cream/15, backdrop-blur interdits sur le rail).
+3. **Page** = champagne `#F5EDE0` — jamais le même rose que la sidebar.
+4. **Cartes / tests** = blanc pur `#FFFFFF` + bordure `#DED1C4`.
+5. **Texte** = `#3E222D` (lisible) — pas de titres or/bronze.
+6. **CTA** = `#7F5557` texte `#F7F1EA` — pas d’or sur les boutons d’action.
+7. Or `#B8954A` = ornements fins uniquement (filet, badge Alliance), jamais fond de carte ni CTA principal.
