@@ -21,15 +21,17 @@ import type { UsageSnapshot } from "@/lib/billing/usage"
 import type { SocialInsights } from "@/app/actions/social"
 import type { EditorialItem } from "@/lib/editorial/library"
 
-/* ─── Palette Farata ─── */
+/* ─── Palette Farata — rosâtre & pastel ─── */
 const F = {
-  bg: "#F2EBE0",
-  primary: "#2D1020",
-  gold: "#B8954A",
+  bg: "#F2EBE0",          /* ivoire chaud */
+  primary: "#7A4F55",     /* prune rosée — boutons CTA, avatars */
+  sidebar: "#A07070",     /* rose mauve — accent interface */
+  gold: "#B8954A",        /* or — ornements */
   goldLight: "#D4AF72",
-  border: "#C9BBAF",
+  border: "#D4C5BC",      /* border pastel */
   borderGold: "rgba(184,149,74,0.4)",
-  muted: "#7A4F55",
+  muted: "#A07070",       /* rose mauve — texte secondaire */
+  text: "#3D2B2B",        /* texte principal doux */
   white: "#FFFFFF",
 }
 
@@ -70,7 +72,7 @@ export function DailyEditorialCard({
       style={{
         background: featured ? F.primary : F.white,
         border: `1px solid ${featured ? F.borderGold : F.border}`,
-        boxShadow: "0 2px 12px -4px rgba(45,16,32,0.08)",
+        boxShadow: "0 2px 12px -4px rgba(122, 79, 85,0.08)",
       }}
     >
       {/* Label */}
@@ -148,7 +150,7 @@ export function QuickAccessGrid({
       label: "Messages",
       sub: unreadMessages > 0 ? `${unreadMessages} non lu(s)` : "Conversations",
       icon: MessageCircle,
-      iconBg: "#2D1020",
+      iconBg: "#A07070",
       iconColor: "#F2EBE0",
       lock: false,
     },
@@ -167,7 +169,7 @@ export function QuickAccessGrid({
       sub: "Bibliothèque",
       icon: MessageSquareHeart,
       iconBg: "#B8954A",
-      iconColor: "#2D1020",
+      iconColor: "#A07070",
       lock: false,
     },
     {
@@ -175,7 +177,7 @@ export function QuickAccessGrid({
       label: "Visiteurs",
       sub: isPaid ? `${social.visitorCount}` : "Alliance",
       icon: Eye,
-      iconBg: isPaid ? "#2D1020" : "#DDD0C4",
+      iconBg: isPaid ? "#A07070" : "#DDD0C4",
       iconColor: isPaid ? "#F2EBE0" : "#7A4F55",
       lock: !isPaid,
     },
@@ -185,7 +187,7 @@ export function QuickAccessGrid({
       sub: isPaid ? `${social.favoriteCount}` : "Mes coups de ♥",
       icon: Star,
       iconBg: isPaid ? "#B8954A" : "#DDD0C4",
-      iconColor: isPaid ? "#2D1020" : "#7A4F55",
+      iconColor: isPaid ? "#A07070" : "#7A4F55",
       lock: !isPaid,
     },
   ] as const
@@ -202,7 +204,7 @@ export function QuickAccessGrid({
             style={{
               background: F.white,
               border: `1px solid ${F.border}`,
-              boxShadow: "0 2px 10px -4px rgba(45,16,32,0.07)",
+              boxShadow: "0 2px 10px -4px rgba(122, 79, 85,0.07)",
             }}
           >
             {item.lock && (
@@ -242,7 +244,7 @@ export function DailyQuotaCard({ usage }: { usage: UsageSnapshot }) {
       style={{
         background: F.white,
         border: `1px solid ${F.border}`,
-        boxShadow: "0 2px 10px -4px rgba(45,16,32,0.07)",
+        boxShadow: "0 2px 10px -4px rgba(122, 79, 85,0.07)",
       }}
     >
       <div className="flex items-center justify-between gap-3">
@@ -293,7 +295,7 @@ export function AcademyTeaser() {
       style={{
         background: F.white,
         border: `1px solid ${F.borderGold}`,
-        boxShadow: "0 2px 10px -4px rgba(45,16,32,0.07)",
+        boxShadow: "0 2px 10px -4px rgba(122, 79, 85,0.07)",
       }}
     >
       <div

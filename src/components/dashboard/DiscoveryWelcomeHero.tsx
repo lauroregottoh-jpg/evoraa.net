@@ -16,7 +16,7 @@ export function DiscoveryWelcomeHero({
   return (
     <section
       className="relative overflow-hidden rounded-2xl px-6 py-10 sm:px-10 sm:py-12"
-      style={{ background: "#2D1020" }}
+      style={{ background: "#7A4F55" }}
     >
       {/* Ornement fond — cercle flou or */}
       <div
@@ -58,7 +58,7 @@ export function DiscoveryWelcomeHero({
         {/* Sous-titre */}
         <p
           className="text-sm sm:text-base leading-relaxed"
-          style={{ color: "rgba(242,235,224,0.72)" }}
+          style={{ color: "rgba(249,243,238,0.80)" }}
         >
           {variant === "alliance"
             ? "Votre parcours Alliance est actif — matching enrichi et rapport personnalisé disponibles."

@@ -137,19 +137,19 @@ export function CoupleCheckoutPanel({
     <section
       id="payer"
       className={cn(
-        "rounded-2xl border border-[#2D1020]/10 bg-white p-5 sm:p-7 space-y-6 shadow-sm",
+        "rounded-2xl border border-[#A07070]/10 bg-white p-5 sm:p-7 space-y-6 shadow-sm",
         className
       )}
     >
       <div className="space-y-1">
-        <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#2D1020]">
+        <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#A07070]">
           <HeartHandshake className="h-3.5 w-3.5" />
           Paiement sécurisé
         </p>
-        <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#2D1020]">
+        <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#A07070]">
           Choisissez votre bilan et payez
         </h2>
-        <p className="text-sm text-[#2D1020]/70 leading-relaxed">
+        <p className="text-sm text-[#A07070]/70 leading-relaxed">
           Mobile Money ou carte bancaire. Un seul achat couvre les deux
           participants.
         </p>
@@ -157,10 +157,10 @@ export function CoupleCheckoutPanel({
 
       {demoPricing && !promoAmount && (
         <div className="rounded-xl border border-[#B8954A]/35 bg-[#B8954A]/10 px-4 py-3 text-sm">
-          <p className="font-semibold text-[#2D1020]">
+          <p className="font-semibold text-[#A07070]">
             Mode démo — {COUPLE_DEMO_AMOUNT_XOF} FCFA
           </p>
-          <p className="text-xs text-[#2D1020]/65 mt-1 leading-relaxed">
+          <p className="text-xs text-[#A07070]/65 mt-1 leading-relaxed">
             Montant de test. Les prix catalogue restent affichés barrés.
           </p>
         </div>
@@ -181,12 +181,12 @@ export function CoupleCheckoutPanel({
               className={cn(
                 "relative w-full text-left rounded-2xl border px-4 py-4 transition-all",
                 active
-                  ? "border-[#2D1020] bg-[#F2EBE0] shadow-sm"
-                  : "border-[#2D1020]/12 hover:border-[#2D1020]/40 bg-white"
+                  ? "border-[#A07070] bg-[#F2EBE0] shadow-sm"
+                  : "border-[#A07070]/12 hover:border-[#A07070]/40 bg-white"
               )}
             >
               {o.popular && (
-                <span className="absolute -top-2.5 left-4 rounded-full bg-[#B8954A] text-[#2D1020] text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5">
+                <span className="absolute -top-2.5 left-4 rounded-full bg-[#B8954A] text-[#A07070] text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5">
                   Le plus choisi
                 </span>
               )}
@@ -196,18 +196,18 @@ export function CoupleCheckoutPanel({
                     className={cn(
                       "mt-1 h-4 w-4 rounded-full border-2 shrink-0",
                       active
-                        ? "border-[#2D1020] bg-[#2D1020]"
-                        : "border-[#2D1020]/25"
+                        ? "border-[#A07070] bg-[#A07070]"
+                        : "border-[#A07070]/25"
                     )}
                   />
                   <div className="min-w-0">
-                    <p className="font-semibold text-[#2D1020]">
+                    <p className="font-semibold text-[#A07070]">
                       {o.marketingName}
                     </p>
-                    <p className="text-sm mt-1 text-[#2D1020]/70 leading-snug">
+                    <p className="text-sm mt-1 text-[#A07070]/70 leading-snug">
                       {o.description}
                     </p>
-                    <ul className="mt-2 space-y-0.5 text-xs text-[#2D1020]/65">
+                    <ul className="mt-2 space-y-0.5 text-xs text-[#A07070]/65">
                       {o.features.slice(0, 4).map((f) => (
                         <li key={f}>· {f}</li>
                       ))}
@@ -216,18 +216,18 @@ export function CoupleCheckoutPanel({
                 </div>
                 <div className="shrink-0 text-right">
                   {(demoPricing || promoAmount) && amount !== o.amountXof && (
-                    <p className="text-xs text-[#2D1020]/45 line-through">
+                    <p className="text-xs text-[#A07070]/45 line-through">
                       {o.amountXof.toLocaleString("fr-FR")}
                     </p>
                   )}
                   {promoAmount && demoPricing && (
-                    <p className="text-xs text-[#2D1020]/45 line-through">
+                    <p className="text-xs text-[#A07070]/45 line-through">
                       {COUPLE_DEMO_AMOUNT_XOF.toLocaleString("fr-FR")}
                     </p>
                   )}
-                  <p className="font-serif text-xl font-bold text-[#2D1020]">
+                  <p className="font-serif text-xl font-bold text-[#A07070]">
                     {amount.toLocaleString("fr-FR")}
-                    <span className="text-xs font-sans font-medium text-[#2D1020]/55 ml-1">
+                    <span className="text-xs font-sans font-medium text-[#A07070]/55 ml-1">
                       FCFA
                     </span>
                   </p>
@@ -238,9 +238,9 @@ export function CoupleCheckoutPanel({
         })}
       </div>
 
-      <div className="rounded-xl border border-[#2D1020]/12 bg-[#F2EBE0] px-4 py-4 space-y-3">
-        <p className="text-sm font-semibold text-[#2D1020] inline-flex items-center gap-2">
-          <Tag className="h-4 w-4 text-[#2D1020]" />
+      <div className="rounded-xl border border-[#A07070]/12 bg-[#F2EBE0] px-4 py-4 space-y-3">
+        <p className="text-sm font-semibold text-[#A07070] inline-flex items-center gap-2">
+          <Tag className="h-4 w-4 text-[#A07070]" />
           J&apos;ai un code
         </p>
         <div className="flex flex-wrap gap-2">
@@ -253,12 +253,12 @@ export function CoupleCheckoutPanel({
             }}
             placeholder="Saisir votre code"
             autoComplete="off"
-            className="flex-1 min-w-[12rem] rounded-xl border border-[#2D1020]/15 bg-white px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#B8954A]/50"
+            className="flex-1 min-w-[12rem] rounded-xl border border-[#A07070]/15 bg-white px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#B8954A]/50"
           />
           <button
             type="button"
             onClick={() => void applyPromo()}
-            className="rounded-xl bg-[#2D1020] text-white px-4 py-2.5 text-sm font-semibold hover:brightness-110"
+            className="rounded-xl bg-[#A07070] text-white px-4 py-2.5 text-sm font-semibold hover:brightness-110"
           >
             Appliquer
           </button>
@@ -267,7 +267,7 @@ export function CoupleCheckoutPanel({
           <p
             className={cn(
               "text-xs",
-              promoAmount ? "text-[#2D1020] font-semibold" : "text-destructive"
+              promoAmount ? "text-[#A07070] font-semibold" : "text-destructive"
             )}
           >
             {promoHint}
@@ -277,7 +277,7 @@ export function CoupleCheckoutPanel({
 
       {(showModePicker || enabledPaymentModes.length === 1) && (
         <div className="space-y-3">
-          <p className="text-sm font-semibold text-[#2D1020]">
+          <p className="text-sm font-semibold text-[#A07070]">
             Comment voulez-vous payer ?
           </p>
           <div className="grid sm:grid-cols-2 gap-3">
@@ -303,18 +303,18 @@ export function CoupleCheckoutPanel({
         </div>
       )}
 
-      <div className="flex flex-wrap items-end justify-between gap-3 border-t border-[#2D1020]/10 pt-4">
+      <div className="flex flex-wrap items-end justify-between gap-3 border-t border-[#A07070]/10 pt-4">
         <div>
-          <p className="text-xs text-[#2D1020]/55">Total à payer</p>
-          <p className="font-serif text-2xl font-bold text-[#2D1020] flex items-baseline gap-2">
+          <p className="text-xs text-[#A07070]/55">Total à payer</p>
+          <p className="font-serif text-2xl font-bold text-[#A07070] flex items-baseline gap-2">
             {promoAmount ? (
-              <span className="text-lg text-[#2D1020]/40 line-through font-sans font-normal">
+              <span className="text-lg text-[#A07070]/40 line-through font-sans font-normal">
                 {baseCharge.toLocaleString("fr-FR")}
               </span>
             ) : null}
             {charge.toLocaleString("fr-FR")} FCFA
           </p>
-          <p className="text-[11px] text-[#2D1020]/55">
+          <p className="text-[11px] text-[#A07070]/55">
             {offer.marketingName} · 2 participants inclus
           </p>
         </div>
@@ -324,14 +324,14 @@ export function CoupleCheckoutPanel({
         type="button"
         onClick={() => void pay()}
         disabled={loading}
-        className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#2D1020] text-white h-12 px-6 text-sm font-bold hover:brightness-110 disabled:opacity-60"
+        className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#A07070] text-white h-12 px-6 text-sm font-bold hover:brightness-110 disabled:opacity-60"
       >
         {loading
           ? "Préparation du paiement…"
           : `Payer ${charge.toLocaleString("fr-FR")} FCFA`}
       </button>
 
-      <p className="text-center text-[11px] text-[#2D1020]/55">
+      <p className="text-center text-[11px] text-[#A07070]/55">
         Sans code valide, le paiement passe par Mobile Money / carte (prestataire).
         Un code d’audit n’est jamais public.
       </p>
@@ -340,9 +340,9 @@ export function CoupleCheckoutPanel({
           {error}
         </p>
       )}
-      <p className="text-center text-xs text-[#2D1020]/55">
+      <p className="text-center text-xs text-[#A07070]/55">
         Déjà un code d&apos;invitation partenaire ?{" "}
-        <Link href="/couple/rejoindre" className="font-semibold text-[#2D1020]">
+        <Link href="/couple/rejoindre" className="font-semibold text-[#A07070]">
           Rejoindre le bilan →
         </Link>
       </p>
@@ -371,18 +371,18 @@ function PayModeCard({
         "rounded-2xl border px-4 py-4 text-left transition-all",
         active
           ? "border-[#B8954A] bg-[#B8954A]/10"
-          : "border-[#2D1020]/12 hover:border-[#B8954A]/40"
+          : "border-[#A07070]/12 hover:border-[#B8954A]/40"
       )}
     >
-      <div className="flex items-center gap-2 text-[#2D1020] font-semibold text-sm">
-        <span className="text-[#2D1020]">{icon}</span>
+      <div className="flex items-center gap-2 text-[#A07070] font-semibold text-sm">
+        <span className="text-[#A07070]">{icon}</span>
         {title}
       </div>
       <div className="mt-3 flex flex-wrap gap-1.5">
         {brands.map((b) => (
           <span
             key={b}
-            className="rounded-md bg-white border border-[#2D1020]/10 px-2 py-0.5 text-[10px] font-semibold text-[#2D1020]/55"
+            className="rounded-md bg-white border border-[#A07070]/10 px-2 py-0.5 text-[10px] font-semibold text-[#A07070]/55"
           >
             {b}
           </span>

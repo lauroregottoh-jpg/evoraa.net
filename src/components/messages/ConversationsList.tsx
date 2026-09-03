@@ -71,7 +71,7 @@ function VoiceSandboxOpener() {
           type="button"
           disabled={busy}
           onClick={() => void open()}
-          className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#2D1020] px-4 text-xs font-bold text-[#F2EBE0] disabled:opacity-60"
+          className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#A07070] px-4 text-xs font-bold text-[#F2EBE0] disabled:opacity-60"
         >
           <Mic className="h-3.5 w-3.5" />
           {busy ? "Ouverture…" : "Ouvrir l’essai vocaux"}
@@ -92,7 +92,7 @@ function ConvRow({ conv }: { conv: ConversationListItem }) {
           border: conv.unread ? "1px solid rgba(184,149,74,0.55)" : "1px solid #C9BBAF",
           boxShadow: conv.unread
             ? "0 2px 12px -4px rgba(184,149,74,0.2)"
-            : "0 2px 8px -4px rgba(45,16,32,0.07)",
+            : "0 2px 8px -4px rgba(122, 79, 85,0.07)",
         }}
       >
         <div className="p-4 sm:p-5 flex items-center justify-between gap-4">
@@ -101,7 +101,7 @@ function ConvRow({ conv }: { conv: ConversationListItem }) {
             <div className="relative shrink-0">
               <div
                 className="w-12 h-12 rounded-full flex items-center justify-center font-serif text-lg font-bold"
-                style={{ background: "#2D1020", color: "#F2EBE0" }}
+                style={{ background: "#A07070", color: "#F9F3EE" }}
               >
                 {conv.partnerName[0]}
               </div>
@@ -115,13 +115,13 @@ function ConvRow({ conv }: { conv: ConversationListItem }) {
             {/* Texte */}
             <div className="space-y-0.5 min-w-0">
               <div className="flex items-center gap-2">
-                <h3 className="font-serif font-bold text-base truncate" style={{ color: "#2D1020" }}>
+                <h3 className="font-serif font-bold text-base truncate" style={{ color: "#A07070" }}>
                   {conv.partnerName}
                 </h3>
                 {conv.harmonyScore > 0 && (
                   <span
                     className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0"
-                    style={{ background: "#2D1020", color: "#B8954A" }}
+                    style={{ background: "#A07070", color: "#B8954A" }}
                   >
                     <Sparkles className="h-2.5 w-2.5" style={{ fill: "#B8954A", color: "#B8954A" }} />
                     {conv.harmonyScore}%
@@ -130,7 +130,7 @@ function ConvRow({ conv }: { conv: ConversationListItem }) {
               </div>
               <p
                 className="text-xs truncate"
-                style={{ color: conv.unread ? "#2D1020" : "#7A4F55", fontWeight: conv.unread ? 600 : 400 }}
+                style={{ color: conv.unread ? "#A07070" : "#7A4F55", fontWeight: conv.unread ? 600 : 400 }}
               >
                 {conv.lastMessage}
               </p>
@@ -218,15 +218,15 @@ export function ConversationsList({
             >
               Messagerie
             </Badge>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#2D1020]">
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#A07070]">
               Vos conversations
             </h1>
-            <p className="text-sm text-[#2D1020]/65 max-w-md">
+            <p className="text-sm text-[#A07070]/65 max-w-md">
               Recherchez par nom, filtrez par jour, et retrouvez vos échanges
               classés.
             </p>
           </div>
-          <span className="rounded-full bg-[#2D1020] px-3 py-1.5 text-xs font-bold text-[#F2EBE0]">
+          <span className="rounded-full bg-[#A07070] px-3 py-1.5 text-xs font-bold text-[#F2EBE0]">
             {conversations.length} conversation
             {conversations.length > 1 ? "s" : ""}
           </span>
@@ -268,7 +268,7 @@ export function ConversationsList({
 
           <Link
             href="/communaute"
-            className="inline-flex h-11 items-center justify-center rounded-xl bg-[#2D1020] px-4 text-xs font-bold text-[#F2EBE0]"
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-[#A07070] px-4 text-xs font-bold text-[#F2EBE0]"
           >
             Communauté
           </Link>
@@ -285,8 +285,8 @@ export function ConversationsList({
               className={cn(
                 "inline-flex h-9 items-center gap-1.5 rounded-full px-3.5 text-xs font-bold transition",
                 tab === t.id
-                  ? "bg-[#2D1020] text-[#F2EBE0]"
-                  : "border border-[#B8954A]/30 bg-white text-[#2D1020] hover:bg-[#F7F0E0]"
+                  ? "bg-[#A07070] text-[#F2EBE0]"
+                  : "border border-[#B8954A]/30 bg-white text-[#A07070] hover:bg-[#F7F0E0]"
               )}
             >
               {t.label}
@@ -384,7 +384,7 @@ export function ConversationsList({
         {hasDemo ? (
           <section className="space-y-2">
             <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#7A5F28]">
-              <span className="rounded bg-[#2D1020] px-1.5 py-0.5 text-[9px] tracking-widest text-[#D4AF72]">
+              <span className="rounded bg-[#A07070] px-1.5 py-0.5 text-[9px] tracking-widest text-[#D4AF72]">
                 Démo
               </span>
               Aperçu (jusqu’à 5 vrais échanges)
@@ -420,7 +420,7 @@ export function ConversationsList({
                         </p>
                       </div>
                     </div>
-                    <span className="inline-flex items-center gap-1 rounded-lg bg-[#2D1020] px-2.5 py-1 text-[10px] font-bold text-[#F2EBE0]">
+                    <span className="inline-flex items-center gap-1 rounded-lg bg-[#A07070] px-2.5 py-1 text-[10px] font-bold text-[#F2EBE0]">
                       Ouvrir
                       <ChevronRight className="h-3.5 w-3.5" />
                     </span>

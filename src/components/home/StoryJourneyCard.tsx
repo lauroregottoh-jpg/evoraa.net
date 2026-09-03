@@ -71,7 +71,7 @@ export function StoryJourneyCard() {
         <div className="my-6 flex items-center justify-center">
           <ProfileInitial initials="VO" label="Vous" />
           <div className="relative mx-3 h-px flex-1 bg-gradient-to-r from-white/10 via-accent to-white/10">
-            <Heart className="absolute left-1/2 top-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent p-2 text-[#2D1020] shadow-lg" />
+            <Heart className="absolute left-1/2 top-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent p-2 text-[#A07070] shadow-lg" />
           </div>
           <ProfileInitial initials="PC" label="Profil compatible" accent />
         </div>

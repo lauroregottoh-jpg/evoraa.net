@@ -178,7 +178,7 @@ export const CoachingLiveKitRoom = React.forwardRef<
   }
 
   return (
-    <div className="relative flex min-h-[280px] flex-col items-center justify-center gap-4 bg-gradient-to-b from-[#2D1020] to-black px-4 py-10 sm:min-h-[360px]">
+    <div className="relative flex min-h-[280px] flex-col items-center justify-center gap-4 bg-gradient-to-b from-[#A07070] to-black px-4 py-10 sm:min-h-[360px]">
       <audio ref={remoteAudioRef} autoPlay playsInline className="hidden" />
 
       <div className="text-center space-y-2">

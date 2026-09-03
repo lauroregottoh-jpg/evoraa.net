@@ -28,13 +28,13 @@ export default function CoupleOffrePage() {
       <CoupleShell activeHref="/couple/offre" showWelcome={false} variant="sales">
         <div className="max-w-xl mx-auto space-y-8 pb-6">
           <header className="space-y-2">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#2D1020]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#A07070]">
               {COUPLE_BRAND}
             </p>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#2D1020]">
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#A07070]">
               Offres & paiement
             </h1>
-            <p className="text-sm sm:text-base text-[#2D1020]/70 max-w-xl leading-relaxed">
+            <p className="text-sm sm:text-base text-[#A07070]/70 max-w-xl leading-relaxed">
               Premium Plus = tout le Premium + Points d’approfondissement,
               analyses, scénarios, protocoles et charte. Payez ici dans KELIAA
               par Mobile Money ou carte — puis accédez à votre espace couple.
@@ -48,18 +48,18 @@ export default function CoupleOffrePage() {
             enabledPaymentModes={enabledPaymentModes}
           />
 
-          <p className="text-center text-sm text-[#2D1020]/55">
-            <Link href="/couple" className="font-semibold text-[#2D1020]">
+          <p className="text-center text-sm text-[#A07070]/55">
+            <Link href="/couple" className="font-semibold text-[#A07070]">
               ← Retour à la présentation
             </Link>
             {" · "}
-            <Link href="/couple/espace" className="font-semibold text-[#2D1020]">
+            <Link href="/couple/espace" className="font-semibold text-[#A07070]">
               Déjà acheteur ? Espace couple
             </Link>
             {" · "}
             <Link
               href="/couple/rejoindre"
-              className="font-semibold text-[#2D1020]"
+              className="font-semibold text-[#A07070]"
             >
               J’ai un code partenaire
             </Link>

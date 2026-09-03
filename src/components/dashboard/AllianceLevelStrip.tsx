@@ -34,7 +34,7 @@ export function AllianceLevelStrip({
     >
       {/* En-tête */}
       <div className="flex items-center justify-between gap-2">
-        <h2 className="font-serif text-lg font-bold" style={{ color: "#2D1020" }}>
+        <h2 className="font-serif text-lg font-bold" style={{ color: "#A07070" }}>
           Votre parcours Alliance
         </h2>
         <div className="h-px flex-1 mx-3 rounded-full" style={{ background: "#B8954A", opacity: 0.35 }} />
@@ -69,7 +69,7 @@ export function AllianceLevelStrip({
                 <span
                   className="flex h-7 w-7 items-center justify-center rounded-full shrink-0"
                   style={{
-                    background: unlocked ? "#2D1020" : "#DDD0C4",
+                    background: unlocked ? "#A07070" : "#DDD0C4",
                     color: unlocked ? "#F2EBE0" : "#7A4F55",
                   }}
                 >
@@ -82,7 +82,7 @@ export function AllianceLevelStrip({
 
                 <span
                   className="font-semibold"
-                  style={{ color: unlocked ? "#2D1020" : "#7A4F55" }}
+                  style={{ color: unlocked ? "#A07070" : "#7A4F55" }}
                 >
                   {step.label}
                 </span>

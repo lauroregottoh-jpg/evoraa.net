@@ -45,11 +45,11 @@ export default function CoupleConfirmationClient() {
       <div className="max-w-2xl mx-auto space-y-8 py-6 px-1">
         <CoupleUnlockReveal onContinueHref="/couple/onboarding" />
 
-        <div className="space-y-4 rounded-2xl border border-[#2D1020]/10 bg-white p-5 sm:p-6">
-          <h2 className="font-serif text-xl font-bold text-[#2D1020]">
+        <div className="space-y-4 rounded-2xl border border-[#A07070]/10 bg-white p-5 sm:p-6">
+          <h2 className="font-serif text-xl font-bold text-[#A07070]">
             Partagez l’accès — {COUPLE_BRAND}
           </h2>
-          <p className="text-sm text-[#2D1020]/80 leading-relaxed">
+          <p className="text-sm text-[#A07070]/80 leading-relaxed">
             Envoyez le lien et le code à l’autre. S’il/elle n’a pas de compte, le
             lien demande l’inscription. Après inscription, un nouveau clic ouvre
             l’espace. S’il/elle est déjà inscrit(e), on lui demande le code.
@@ -60,7 +60,7 @@ export default function CoupleConfirmationClient() {
               <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                 Code à communiquer
               </p>
-              <p className="font-mono text-2xl font-bold tracking-widest text-[#2D1020]">
+              <p className="font-mono text-2xl font-bold tracking-widest text-[#A07070]">
                 {inviteCode}
               </p>
               <button
@@ -118,13 +118,13 @@ export default function CoupleConfirmationClient() {
             </a>
             <Link
               href="/couple/espace"
-              className="inline-flex h-11 items-center rounded-xl bg-[#2D1020] text-white px-5 text-sm font-semibold"
+              className="inline-flex h-11 items-center rounded-xl bg-[#A07070] text-white px-5 text-sm font-semibold"
             >
               Ouvrir notre espace
             </Link>
             <Link
               href="/couple/inviter"
-              className="inline-flex h-11 items-center rounded-xl border border-[#2D1020]/15 px-5 text-sm font-semibold"
+              className="inline-flex h-11 items-center rounded-xl border border-[#A07070]/15 px-5 text-sm font-semibold"
             >
               Voir / régénérer
             </Link>

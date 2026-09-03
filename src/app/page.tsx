@@ -373,7 +373,7 @@ export default function Home() {
       <TestimonialsCarousel />
 
       {/* Imaginez votre histoire */}
-      <section className="py-28 px-6 sm:px-12 relative overflow-hidden bg-[#2D1020] text-white">
+      <section className="py-28 px-6 sm:px-12 relative overflow-hidden bg-[#A07070] text-white">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-40"

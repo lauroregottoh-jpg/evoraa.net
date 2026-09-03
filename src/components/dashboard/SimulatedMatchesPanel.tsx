@@ -34,11 +34,11 @@ function MatchCard({
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
         {thread.verified ? (
-          <span className="absolute top-2.5 left-2.5 inline-flex items-center gap-1 rounded-md bg-[#D4AF72] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[#2D1020]">
+          <span className="absolute top-2.5 left-2.5 inline-flex items-center gap-1 rounded-md bg-[#D4AF72] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[#A07070]">
             <Crown className="h-2.5 w-2.5" /> Vérifié
           </span>
         ) : null}
-        <span className="absolute left-2.5 bottom-14 z-10 rounded-md border border-dashed border-white/70 bg-[#2D1020]/85 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-[#D4AF72]">
+        <span className="absolute left-2.5 bottom-14 z-10 rounded-md border border-dashed border-white/70 bg-[#A07070]/85 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-[#D4AF72]">
           Démo
         </span>
         <span className="absolute top-2.5 right-2.5 inline-flex items-center gap-1 rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
@@ -59,12 +59,12 @@ function MatchCard({
       </div>
 
       <div className="space-y-3 p-3.5">
-        <p className="line-clamp-2 text-xs leading-relaxed text-[#2D1020]/70">
+        <p className="line-clamp-2 text-xs leading-relaxed text-[#A07070]/70">
           {thread.preview}
         </p>
         <Link
           href={`/messages/demo/${thread.id}`}
-          className="sim-open-msg inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#2D1020] text-xs font-bold text-[#F2EBE0] transition hover:bg-[#2D1020]/90"
+          className="sim-open-msg inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#A07070] text-xs font-bold text-[#F2EBE0] transition hover:bg-[#A07070]/90"
         >
           <MessageCircle className="h-3.5 w-3.5" />
           Ouvrir le message
@@ -103,31 +103,31 @@ export function SimulatedMatchesPanel({
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="space-y-1.5">
             <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.28em] text-[#7A5F28]">
-              <span className="rounded bg-[#2D1020] px-1.5 py-0.5 text-[9px] tracking-widest text-[#D4AF72]">
+              <span className="rounded bg-[#A07070] px-1.5 py-0.5 text-[9px] tracking-widest text-[#D4AF72]">
                 Démo
               </span>
               <Sparkles className="h-3.5 w-3.5 text-[#B8954A] discovery-spark" />
               Aperçu matchs & messages
             </p>
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#2D1020] leading-tight">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#A07070] leading-tight">
               Exemples pour vous guider
             </h2>
-            <p className="max-w-lg text-sm text-[#2D1020]/65 leading-relaxed">
+            <p className="max-w-lg text-sm text-[#A07070]/65 leading-relaxed">
               Ces conversations sont{" "}
-              <span className="font-semibold text-[#2D1020]">simulées</span>. Elles
+              <span className="font-semibold text-[#A07070]">simulées</span>. Elles
               disparaissent dès que vous avez 5 matchs, compatibilités ou
               conversations réels.
             </p>
           </div>
           <div className="flex items-center gap-2">
             {unread > 0 ? (
-              <span className="rounded-full bg-[#2D1020] px-3 py-1 text-[11px] font-bold text-[#F2EBE0]">
+              <span className="rounded-full bg-[#A07070] px-3 py-1 text-[11px] font-bold text-[#F2EBE0]">
                 {unread} non lu{unread > 1 ? "s" : ""}
               </span>
             ) : null}
             <Link
               href="/messages"
-              className="rounded-full border border-[#B8954A]/40 bg-white px-3 py-1 text-[11px] font-bold text-[#2D1020] hover:bg-[#F7F0E0]"
+              className="rounded-full border border-[#B8954A]/40 bg-white px-3 py-1 text-[11px] font-bold text-[#A07070] hover:bg-[#F7F0E0]"
             >
               Messages →
             </Link>

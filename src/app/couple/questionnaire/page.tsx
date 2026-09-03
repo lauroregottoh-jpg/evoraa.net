@@ -177,15 +177,15 @@ export default function CoupleQuestionnairePage() {
                 status={`Aperçu · 1 / ${questions.length}`}
               />
               <div className="space-y-4 rounded-2xl border bg-[#F2EBE0] p-6">
-                <div className="h-2 rounded-full bg-[#2D1020]/10" />
-                <p className="font-serif text-lg font-semibold text-[#2D1020]/50">
+                <div className="h-2 rounded-full bg-[#A07070]/10" />
+                <p className="font-serif text-lg font-semibold text-[#A07070]/50">
                   Aperçu de la première question…
                 </p>
                 <div className="space-y-2 opacity-40">
                   {[1, 2, 3, 4, 5].map((n) => (
                     <div
                       key={n}
-                      className="h-11 rounded-xl border border-[#2D1020]/10 bg-white"
+                      className="h-11 rounded-xl border border-[#A07070]/10 bg-white"
                     />
                   ))}
                 </div>

@@ -207,8 +207,8 @@ export async function runDailyOpsDigest(): Promise<{
     "lauroregottoh@gmail.com"
 
   const html = `
-    <div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;color:#2D1020">
-      <h1 style="font-size:22px;color:#2D1020">${digest.headline}</h1>
+    <div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;color:#A07070">
+      <h1 style="font-size:22px;color:#A07070">${digest.headline}</h1>
       <p style="color:#666;font-size:13px">Généré automatiquement · ${digest.dayKey}</p>
       <ul style="line-height:1.7;font-size:15px">
         ${digest.bullets.map((b) => `<li>${b}</li>`).join("")}

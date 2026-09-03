@@ -10,7 +10,7 @@ export function AllianceMemberCard({
   memberSinceLabel: string
 }) {
   return (
-    <div className="relative overflow-hidden rounded-[1.35rem] border border-[#B8954A]/40 bg-[#2D1020] text-[#F2EBE0] p-5 sm:p-6 shadow-elevated">
+    <div className="relative overflow-hidden rounded-[1.35rem] border border-[#B8954A]/40 bg-[#A07070] text-[#F2EBE0] p-5 sm:p-6 shadow-elevated">
       <div
         aria-hidden
         className="pointer-events-none absolute -right-8 -top-10 h-40 w-40 rounded-full bg-[#B8954A]/20 blur-3xl"

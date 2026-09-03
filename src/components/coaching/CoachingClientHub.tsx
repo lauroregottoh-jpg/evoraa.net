@@ -59,15 +59,15 @@ export function CoachingClientHub({
 
   return (
     <div className="space-y-8">
-      <section className="rounded-2xl border border-[#2D1020]/15 bg-[#F2EBE0] p-5 sm:p-6 space-y-5">
+      <section className="rounded-2xl border border-[#A07070]/15 bg-[#F2EBE0] p-5 sm:p-6 space-y-5">
         <div>
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
             Réserver mon coaching
           </p>
-          <h2 className="font-serif text-xl font-bold text-[#2D1020] mt-1">
+          <h2 className="font-serif text-xl font-bold text-[#A07070] mt-1">
             Crédits & préférence coach
           </h2>
-          <p className="text-sm text-[#2D1020]/70 mt-1">
+          <p className="text-sm text-[#A07070]/70 mt-1">
             1 crédit = {COACHING_CREDIT_DISPLAY_MINUTES} minutes de séance.
             Choisissez le type de coach souhaité — le système propose un coach
             disponible selon votre préférence.
@@ -78,13 +78,13 @@ export function CoachingClientHub({
           <p className="text-xs uppercase tracking-wider text-[#8A6A2E] font-semibold">
             Mes crédits
           </p>
-          <p className="font-serif text-3xl font-bold text-[#2D1020] mt-1">
+          <p className="font-serif text-3xl font-bold text-[#A07070] mt-1">
             {balance === null ? "…" : balance}
           </p>
         </div>
 
         <div className="space-y-2">
-          <p className="text-sm font-medium text-[#2D1020]">
+          <p className="text-sm font-medium text-[#A07070]">
             Je préfère un coach…
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -102,8 +102,8 @@ export function CoachingClientHub({
                 className={cn(
                   "rounded-xl border px-3 py-3 text-sm font-semibold transition-colors",
                   pref === opt.id
-                    ? "border-[#2D1020] bg-[#2D1020] text-[#F2EBE0]"
-                    : "border-[#2D1020]/20 bg-white text-[#2D1020] hover:border-[#2D1020]/40"
+                    ? "border-[#A07070] bg-[#A07070] text-[#F2EBE0]"
+                    : "border-[#A07070]/20 bg-white text-[#A07070] hover:border-[#A07070]/40"
                 )}
               >
                 {opt.label}
@@ -111,17 +111,17 @@ export function CoachingClientHub({
             ))}
           </div>
           {saved ? (
-            <p className="text-xs text-[#2D1020]">Préférence enregistrée.</p>
+            <p className="text-xs text-[#A07070]">Préférence enregistrée.</p>
           ) : null}
         </div>
       </section>
 
       {!hideHistoryPlaceholder ? (
-        <section className="rounded-2xl border border-[#2D1020]/10 bg-white p-5 sm:p-6 space-y-3">
+        <section className="rounded-2xl border border-[#A07070]/10 bg-white p-5 sm:p-6 space-y-3">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
             Suivre mes sessions
           </p>
-          <h2 className="font-serif text-xl font-bold text-[#2D1020]">
+          <h2 className="font-serif text-xl font-bold text-[#A07070]">
             Mes séances de coaching
           </h2>
           {linked.length > 0 ? (
@@ -136,7 +136,7 @@ export function CoachingClientHub({
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-[#2D1020]/60 leading-relaxed">
+            <p className="text-sm text-[#A07070]/60 leading-relaxed">
               Aucune séance planifiée pour le moment. Achetez des crédits,
               indiquez votre préférence de genre, puis réservez sur le
               calendrier — votre coach apparaîtra dans l’historique.
@@ -144,7 +144,7 @@ export function CoachingClientHub({
           )}
         </section>
       ) : linked.length > 0 ? (
-        <section className="rounded-2xl border border-[#2D1020]/10 bg-white p-5 space-y-2">
+        <section className="rounded-2xl border border-[#A07070]/10 bg-white p-5 space-y-2">
           <p className="text-xs font-semibold text-[#8A6A2E]">Coach(s) associé(s)</p>
           <ul className="text-sm space-y-1">
             {linked.map((c) => (

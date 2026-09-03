@@ -1,5 +1,5 @@
 /* KELIAA PWA — cache shell/static uniquement. Pas de pages auth/membre. */
-const CACHE = "keliaa-shell-v5"
+const CACHE = "keliaa-shell-v6"
 const PRECACHE = [
   "/manifest.webmanifest",
   "/icons/icon-192.png",

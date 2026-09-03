@@ -33,7 +33,7 @@ export function RapportHubView({
 
   return (
     <article className="space-y-5 max-w-3xl mx-auto">
-      <header className="rapport-reveal relative overflow-hidden rounded-[1.75rem] border-2 border-[#B8954A]/45 bg-gradient-to-br from-[#2D1020] via-[#2A1810] to-[#2D1020] p-6 sm:p-8 text-[#F2EBE0] shadow-elevated">
+      <header className="rapport-reveal relative overflow-hidden rounded-[1.75rem] border-2 border-[#B8954A]/45 bg-gradient-to-br from-[#A07070] via-[#2A1810] to-[#A07070] p-6 sm:p-8 text-[#F2EBE0] shadow-elevated">
         <div
           aria-hidden
           className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-40"
@@ -108,7 +108,7 @@ export function RapportHubView({
         <div className="relative z-10 mt-6 flex flex-wrap gap-2">
           <Link
             href="/rapport/global"
-            className="inline-flex h-12 items-center gap-2 rounded-xl bg-[#B8954A] px-5 text-sm font-bold text-[#2D1020] hover:brightness-105 transition"
+            className="inline-flex h-12 items-center gap-2 rounded-xl bg-[#B8954A] px-5 text-sm font-bold text-[#A07070] hover:brightness-105 transition"
           >
             Découvrir le rapport global
             <ArrowRight className="h-4 w-4" />
@@ -142,7 +142,7 @@ export function RapportHubView({
         <div className="flex flex-col sm:flex-row gap-3">
           <Link
             href="/rapport/global"
-            className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-[#B8954A] px-4 text-sm font-bold text-[#2D1020]"
+            className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-[#B8954A] px-4 text-sm font-bold text-[#A07070]"
           >
             Découvrir votre rapport complet
             <ArrowRight className="h-4 w-4" />
@@ -165,7 +165,7 @@ export function RapportHubView({
           </p>
           <Link
             href={living.nextUnlock.href}
-            className="inline-flex h-9 items-center gap-1 rounded-xl bg-[#B8954A] px-3 text-xs font-bold text-[#2D1020]"
+            className="inline-flex h-9 items-center gap-1 rounded-xl bg-[#B8954A] px-3 text-xs font-bold text-[#A07070]"
           >
             Faire le test <ArrowRight className="h-3.5 w-3.5" />
           </Link>

@@ -60,7 +60,7 @@ export const COFFRE_DOMAIN_META: Record<
   "preparation-mariage": {
     label: "Préparation au mariage",
     blurb: "Discerner, choisir et se préparer avant de s’engager.",
-    tone: "#2D1020",
+    tone: "#A07070",
     ink: "#F2EBE0",
     order: 1,
   },
@@ -75,7 +75,7 @@ export const COFFRE_DOMAIN_META: Record<
     label: "Identité & guérison",
     blurb: "Se reconstruire, pardonner et aimer depuis un cœur soigné.",
     tone: "#B8954A",
-    ink: "#2D1020",
+    ink: "#A07070",
     order: 3,
   },
   "education-enfants": {
@@ -100,7 +100,7 @@ export const COFFRE_CATEGORY_META: Record<
 > = {
   guide: {
     label: "Guide",
-    tone: "#2D1020",
+    tone: "#A07070",
     ink: "#F2EBE0",
   },
   journal: {
@@ -121,7 +121,7 @@ export const COFFRE_CATEGORY_META: Record<
   affirmations: {
     label: "Affirmations",
     tone: "#B8954A",
-    ink: "#2D1020",
+    ink: "#A07070",
   },
   lettre: {
     label: "Lettre",

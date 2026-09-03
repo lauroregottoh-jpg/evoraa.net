@@ -210,7 +210,7 @@ export function VoiceNoteRecorder({
           title="Fonctionnalité Premium"
         >
           <Mic className="h-4 w-4" />
-          <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#2D1020] text-[9px] text-white">
+          <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#A07070] text-[9px] text-white">
             🔒
           </span>
         </button>
@@ -221,7 +221,7 @@ export function VoiceNoteRecorder({
             </p>
             <Link
               href="/premium"
-              className="mt-2 inline-flex text-[11px] font-bold text-[#2D1020] underline underline-offset-2"
+              className="mt-2 inline-flex text-[11px] font-bold text-[#A07070] underline underline-offset-2"
             >
               Découvrir Premium
             </Link>

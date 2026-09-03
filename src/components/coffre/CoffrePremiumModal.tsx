@@ -43,7 +43,7 @@ export function CoffrePremiumModal({ open, onClose, resourceTitle }: Props) {
     >
       <button
         type="button"
-        className="absolute inset-0 bg-[#2D1020]/55 backdrop-blur-[2px] animate-in fade-in duration-300"
+        className="absolute inset-0 bg-[#A07070]/55 backdrop-blur-[2px] animate-in fade-in duration-300"
         aria-label="Fermer"
         onClick={onClose}
       />
@@ -52,7 +52,7 @@ export function CoffrePremiumModal({ open, onClose, resourceTitle }: Props) {
           className="h-28 sm:h-32 relative"
           style={{
             background:
-              "linear-gradient(135deg, #2D1020 0%, #3D181E 55%, #B8954A 140%)",
+              "linear-gradient(135deg, #A07070 0%, #3D181E 55%, #B8954A 140%)",
           }}
         >
           <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_70%_20%,rgba(255,253,249,0.35),transparent_50%)]" />

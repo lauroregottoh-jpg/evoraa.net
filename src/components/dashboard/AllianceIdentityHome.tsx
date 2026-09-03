@@ -82,7 +82,7 @@ export function AllianceIdentityHome({
       <AllianceGiftReveal firstName={name} />
 
       {/* 2. Carte membre */}
-      <section className="relative z-10 overflow-hidden rounded-[1.6rem] border-2 border-[#B8954A]/55 bg-gradient-to-br from-[#2D1020] via-[#2A1A12] to-[#3D2418] text-[#F2EBE0] p-5 sm:p-7 shadow-elevated">
+      <section className="relative z-10 overflow-hidden rounded-[1.6rem] border-2 border-[#B8954A]/55 bg-gradient-to-br from-[#A07070] via-[#2A1A12] to-[#3D2418] text-[#F2EBE0] p-5 sm:p-7 shadow-elevated">
         <div
           aria-hidden
           className="pointer-events-none absolute -right-10 -top-12 h-48 w-48 rounded-full bg-[#B8954A]/30 blur-3xl"
@@ -105,7 +105,7 @@ export function AllianceIdentityHome({
                 priority
               />
             </div>
-            <span className="absolute -bottom-2 -right-2 flex h-9 w-9 items-center justify-center rounded-xl border border-[#B8954A]/50 bg-[#B8954A] text-[#2D1020]">
+            <span className="absolute -bottom-2 -right-2 flex h-9 w-9 items-center justify-center rounded-xl border border-[#B8954A]/50 bg-[#B8954A] text-[#A07070]">
               <Crown className="h-4 w-4" />
             </span>
           </div>
@@ -190,7 +190,7 @@ export function AllianceIdentityHome({
           </p>
           <Link
             href={nextHref}
-            className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#B8954A] px-5 text-sm font-bold text-[#2D1020]"
+            className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#B8954A] px-5 text-sm font-bold text-[#A07070]"
           >
             {nextLabel}
             <ArrowRight className="h-4 w-4" />

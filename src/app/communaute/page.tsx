@@ -18,10 +18,10 @@ export default async function CommunautePage() {
             <Users className="h-3.5 w-3.5 text-[#B8954A]" />
             Communauté KELIAA
           </p>
-          <h1 className="mt-2 font-serif text-3xl sm:text-4xl font-bold text-[#2D1020]">
+          <h1 className="mt-2 font-serif text-3xl sm:text-4xl font-bold text-[#A07070]">
             Découvrir la communauté
           </h1>
-          <p className="mt-2 max-w-2xl text-sm text-[#2D1020]/70 leading-relaxed">
+          <p className="mt-2 max-w-2xl text-sm text-[#A07070]/70 leading-relaxed">
             Au-delà du Matching, découvrez de belles amitiés et connectez avec
             des personnes qui partagent vos valeurs. Likez un profil — un like
             mutuel ouvre les messages. Pas de contact direct.

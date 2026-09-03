@@ -19,7 +19,7 @@ export function CoupleHeroCard({
   return (
     <header
       className={cn(
-        "relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#2D1020] via-[#3D1830] to-[#2D1020] p-7 sm:p-9 text-[#F2EBE0]",
+        "relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#A07070] via-[#8B5C62] to-[#A07070] p-7 sm:p-9 text-[#F2EBE0]",
         className
       )}
     >

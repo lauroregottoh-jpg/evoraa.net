@@ -66,7 +66,7 @@ export function ScoreRing({
         </defs>
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-        <p className="font-serif text-3xl font-bold text-[#2D1020] leading-none">
+        <p className="font-serif text-3xl font-bold text-[#A07070] leading-none">
           {pct}
         </p>
         <p className="text-[9px] font-bold uppercase tracking-wider text-[#B8954A] mt-1">
@@ -184,7 +184,7 @@ export function MonthTimeline({
           className="rapport-reveal relative flex gap-4 pb-5 last:pb-0"
           style={{ animationDelay: `${i * 120}ms` }}
         >
-          <div className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-[#B8954A] bg-gradient-to-br from-[#D4AF72] to-[#B8954A] font-serif text-sm font-bold text-[#2D1020] shadow-sm">
+          <div className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-[#B8954A] bg-gradient-to-br from-[#D4AF72] to-[#B8954A] font-serif text-sm font-bold text-[#A07070] shadow-sm">
             {i + 1}
           </div>
           <div className="min-w-0 pt-1">

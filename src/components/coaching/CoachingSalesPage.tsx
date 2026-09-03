@@ -30,7 +30,7 @@ export function CoachingSalesPage({
 }) {
   return (
     <div className="max-w-3xl mx-auto space-y-8 pb-10">
-      <header className="relative overflow-hidden rounded-[1.75rem] border border-primary/15 bg-gradient-to-br from-[#2D1020] via-[#4A1820] to-[#3D2A14] px-5 py-8 sm:px-8 sm:py-10 text-[#F2EBE0] shadow-elevated">
+      <header className="relative overflow-hidden rounded-[1.75rem] border border-primary/15 bg-gradient-to-br from-[#A07070] via-[#4A1820] to-[#3D2A14] px-5 py-8 sm:px-8 sm:py-10 text-[#F2EBE0] shadow-elevated">
         <div
           className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full opacity-40"
           style={{
@@ -54,14 +54,14 @@ export function CoachingSalesPage({
             {hasCredits ? (
               <Link
                 href="/coaching/session"
-                className="inline-flex h-11 items-center rounded-xl bg-[#D4AF72] px-5 text-sm font-bold text-[#2D1020]"
+                className="inline-flex h-11 items-center rounded-xl bg-[#D4AF72] px-5 text-sm font-bold text-[#A07070]"
               >
                 Faire votre session
               </Link>
             ) : (
               <a
                 href="#payer"
-                className="inline-flex h-11 items-center rounded-xl bg-[#D4AF72] px-5 text-sm font-bold text-[#2D1020]"
+                className="inline-flex h-11 items-center rounded-xl bg-[#D4AF72] px-5 text-sm font-bold text-[#A07070]"
               >
                 Prendre une session — débloquer
               </a>
@@ -89,21 +89,21 @@ export function CoachingSalesPage({
 
       <CoachingWhyGrid />
 
-      <section className="relative overflow-hidden rounded-2xl border border-[#2D1020]/15 bg-[#F2EBE0] p-5 sm:p-6">
+      <section className="relative overflow-hidden rounded-2xl border border-[#A07070]/15 bg-[#F2EBE0] p-5 sm:p-6">
         <div className="flex items-start gap-3 mb-4">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2D1020]/10 text-[#2D1020]">
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#A07070]/10 text-[#A07070]">
             <Headphones className="h-5 w-5" />
           </span>
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
               Ce qui se débloque
             </p>
-            <h2 className="font-serif text-xl font-bold text-[#2D1020]">
+            <h2 className="font-serif text-xl font-bold text-[#A07070]">
               Votre salle audio privée
             </h2>
           </div>
         </div>
-        <ul className="space-y-2.5 text-sm text-[#2D1020]/80">
+        <ul className="space-y-2.5 text-sm text-[#A07070]/80">
           {[
             "1 crédit = 30 min · packs 30 min / 1 h / multi-séances",
             "Répartition des séances dès l’achat",
@@ -114,21 +114,21 @@ export function CoachingSalesPage({
           ].map((line) => (
             <li key={line} className="flex gap-2 items-start">
               {hasCredits ? (
-                <CheckCircle2 className="h-4 w-4 text-[#2D1020] shrink-0 mt-0.5" />
+                <CheckCircle2 className="h-4 w-4 text-[#A07070] shrink-0 mt-0.5" />
               ) : (
-                <Lock className="h-4 w-4 text-[#2D1020]/45 shrink-0 mt-0.5" />
+                <Lock className="h-4 w-4 text-[#A07070]/45 shrink-0 mt-0.5" />
               )}
               <span className={hasCredits ? "" : "opacity-80"}>{line}</span>
             </li>
           ))}
         </ul>
-        <p className="mt-4 text-xs text-[#2D1020]/55 leading-relaxed">
+        <p className="mt-4 text-xs text-[#A07070]/55 leading-relaxed">
           Un compte-rendu de séance est généré automatiquement pour le suivi.
           Les échanges restent dans KELIAA (messages prédéfinis).
         </p>
         <Link
           href="/coaching/session"
-          className="mt-4 inline-flex text-sm font-semibold text-[#2D1020] underline underline-offset-4"
+          className="mt-4 inline-flex text-sm font-semibold text-[#A07070] underline underline-offset-4"
         >
           {hasCredits
             ? "Accéder à Faire votre session →"

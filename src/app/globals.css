@@ -2,57 +2,61 @@
 
 @theme {
   /* ─────────────────────────────────────────────────────────────
-     KELIAA — Palette Farata (Inspiration 1)
-     Ivoire chaud → Taupe → Caramel → Prune rose → Bordeaux profond
+     KELIAA — Palette Farata (Inspiration 1) — Rosâtre & Pastel
+     Ivoire chaud → Taupe → Caramel → Rose mauve → Prune rosée
      ───────────────────────────────────────────────────────────── */
 
   /* Fond & surfaces */
   --color-background: #F2EBE0;          /* ivoire chaud principal */
-  --color-foreground: #2D1020;          /* bordeaux très profond / quasi noir */
+  --color-foreground: #3D2B2B;          /* brun-prune doux (lisible, rosé chaud) */
 
-  /* Primaire — bordeaux profond (sections sombres, boutons CTA) */
-  --color-primary: #2D1020;
-  --color-primary-foreground: #F2EBE0;
+  /* Primaire — prune rosée (boutons CTA, liens actifs) */
+  --color-primary: #7A4F55;
+  --color-primary-foreground: #F9F3EE;
 
   /* Secondaire — taupe/lin doux */
   --color-secondary: #DDD0C4;
-  --color-secondary-foreground: #2D1020;
+  --color-secondary-foreground: #3D2B2B;
 
-  /* Muted — caramel rosé */
-  --color-muted: #E8DDD4;
-  --color-muted-foreground: #7A4F55;
+  /* Muted — crème rosé */
+  --color-muted: #EDE3DB;
+  --color-muted-foreground: #A07070;
 
-  /* Accent — prune rosée (icônes, badges, highlights) */
-  --color-accent: #7A4F55;
-  --color-accent-foreground: #F2EBE0;
+  /* Accent — rose mauve (icônes, badges, highlights) */
+  --color-accent: #A07070;
+  --color-accent-foreground: #F9F3EE;
 
-  /* Or — couleur dorée marqueterie (dividers, ornements, sous-titres) */
+  /* Sidebar — rose mauve principal Farata */
+  --color-sidebar: #A07070;
+  --color-sidebar-foreground: #F9F3EE;
+
+  /* Or — couleur dorée marqueterie (dividers, ornements) */
   --color-gold: #B8954A;
   --color-gold-light: #D4AF72;
 
   /* États */
-  --color-destructive: #9F1239;
-  --color-destructive-foreground: #F2EBE0;
-  --color-success: #2D6A4F;
-  --color-success-foreground: #F2EBE0;
+  --color-destructive: #C0555A;
+  --color-destructive-foreground: #F9F3EE;
+  --color-success: #4A7C6F;
+  --color-success-foreground: #F9F3EE;
 
   /* Bordures & inputs */
-  --color-border: #C9BBAF;
-  --color-input: #C9BBAF;
-  --color-ring: #B8954A;
+  --color-border: #D4C5BC;
+  --color-input: #D4C5BC;
+  --color-ring: #A07070;
 
   /* Card & surfaces */
   --color-card: #FFFFFF;
-  --color-card-foreground: #2D1020;
+  --color-card-foreground: #3D2B2B;
 
   /* Typographies */
   --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
 
   /* Ombres — teintées bordeaux profond */
-  --shadow-premium: 0 12px 40px -12px rgba(45, 16, 32, 0.14);
-  --shadow-card:    0 4px 20px -4px  rgba(45, 16, 32, 0.08);
-  --shadow-elevated: 0 18px 48px -14px rgba(45, 16, 32, 0.16);
+  --shadow-premium: 0 12px 40px -12px rgba(122, 79, 85, 0.14);
+  --shadow-card:    0 4px 20px -4px  rgba(122, 79, 85, 0.08);
+  --shadow-elevated: 0 18px 48px -14px rgba(122, 79, 85, 0.16);
 
   /* Rayons */
   --radius-lg: 0.75rem;
@@ -102,7 +106,7 @@
 
   /* Dégradé marque : bordeaux profond → or Farata */
   .text-gradient {
-    background: linear-gradient(135deg, #2D1020 0%, #B8954A 60%, #D4AF72 100%);
+    background: linear-gradient(135deg, #A07070 0%, #B8954A 60%, #D4AF72 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -129,7 +133,7 @@
 
   /* Section dark — fond bordeaux profond style Farata */
   .section-dark {
-    background-color: #2D1020;
+    background-color: #A07070;
     color: #F2EBE0;
   }
 
@@ -141,7 +145,7 @@
   /* Bouton or Farata */
   .btn-gold {
     background-color: #B8954A;
-    color: #2D1020;
+    color: #A07070;
     font-weight: 600;
     border-radius: 999px;
   }
@@ -803,7 +807,7 @@
 }
 
 .couple-sit-active {
-  color: #2D1020;
+  color: #A07070;
   border-color: #B8954A;
 }
 

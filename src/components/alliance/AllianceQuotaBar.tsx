@@ -14,7 +14,7 @@ export function AllianceQuotaBar({
   coffreQuota?: number
 }) {
   return (
-    <div className="border-b border-[#B8954A]/25 bg-gradient-to-r from-[#2D1020] via-[#2A1810] to-[#2D1020] text-[#F2EBE0]">
+    <div className="border-b border-[#B8954A]/25 bg-gradient-to-r from-[#A07070] via-[#2A1810] to-[#A07070] text-[#F2EBE0]">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px]">
         <Link
           href="/alliance/parcours"

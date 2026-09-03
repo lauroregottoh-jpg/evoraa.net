@@ -21,7 +21,7 @@ export const DEMO_COMPATIBILITIES: DemoCompatibilityCard[] = [
     city: "Lomé",
     score: 91,
     community: "Assemblées de Dieu",
-    gradient: "from-[#2D1020] to-[#B8954A]",
+    gradient: "from-[#A07070] to-[#B8954A]",
     highlight: "Foi · projet de foyer · communication",
   },
   {
@@ -41,7 +41,7 @@ export const DEMO_COMPATIBILITIES: DemoCompatibilityCard[] = [
     city: "Abidjan",
     score: 84,
     community: "Communauté évangélique",
-    gradient: "from-[#2A1810] to-[#2D1020]",
+    gradient: "from-[#2A1810] to-[#A07070]",
     highlight: "Vision mariage · famille · respect",
   },
   {

@@ -13,7 +13,7 @@ export function CommunityMatchingCta({
   compact?: boolean
 }) {
   return (
-    <aside className="relative overflow-hidden rounded-2xl border border-[#2D1020]/20 bg-gradient-to-br from-[#2D1020] via-[#4A1820] to-[#2A1810] text-[#F2EBE0] p-5 sm:p-6">
+    <aside className="relative overflow-hidden rounded-2xl border border-[#A07070]/20 bg-gradient-to-br from-[#A07070] via-[#4A1820] to-[#2A1810] text-[#F2EBE0] p-5 sm:p-6">
       <div className="space-y-3 max-w-2xl">
         <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#D4AF72]">
           Matching KELIAA
@@ -30,7 +30,7 @@ export function CommunityMatchingCta({
         <div className="flex flex-wrap gap-2 pt-1">
           <Link
             href="/assessments"
-            className="inline-flex h-11 items-center rounded-xl bg-[#D4AF72] px-5 text-sm font-semibold text-[#2D1020]"
+            className="inline-flex h-11 items-center rounded-xl bg-[#D4AF72] px-5 text-sm font-semibold text-[#A07070]"
           >
             Fais tes cinq tests maintenant
           </Link>
@@ -54,8 +54,8 @@ export function CommunityHeroWithVideo() {
   return (
     <div className="space-y-4">
       {/* Desktop / tablette large : vidéo + CTAs */}
-      <section className="hidden md:block rounded-2xl border border-[#2D1020]/20 bg-[#F2EBE0] p-4 sm:p-5 shadow-card">
-        <div className="overflow-hidden rounded-xl border border-[#2D1020]/25 bg-black shadow-sm">
+      <section className="hidden md:block rounded-2xl border border-[#A07070]/20 bg-[#F2EBE0] p-4 sm:p-5 shadow-card">
+        <div className="overflow-hidden rounded-xl border border-[#A07070]/25 bg-black shadow-sm">
           <video
             className="block w-full aspect-video max-h-[380px] object-contain bg-black"
             src={VIDEO_SRC}
@@ -67,13 +67,13 @@ export function CommunityHeroWithVideo() {
         <div className="mt-4 flex flex-wrap gap-2 justify-center">
           <Link
             href="/assessments"
-            className="inline-flex h-11 items-center rounded-xl bg-[#2D1020] px-5 text-sm font-semibold text-[#F2EBE0]"
+            className="inline-flex h-11 items-center rounded-xl bg-[#A07070] px-5 text-sm font-semibold text-[#F2EBE0]"
           >
             Faites un test maintenant
           </Link>
           <Link
             href="/compatibility"
-            className="inline-flex h-11 items-center rounded-xl border border-[#2D1020]/30 px-5 text-sm font-semibold text-[#2D1020]"
+            className="inline-flex h-11 items-center rounded-xl border border-[#A07070]/30 px-5 text-sm font-semibold text-[#A07070]"
           >
             Voir le Matching
           </Link>
@@ -91,19 +91,19 @@ export function CommunityHeroWithVideo() {
 /** Vidéo après les clés (Tests) — paysage, toujours visible. */
 export function KeliaaTestVideoBlock() {
   return (
-    <section className="rounded-2xl border border-[#2D1020]/15 bg-[#F2EBE0] p-4 sm:p-5 space-y-3">
+    <section className="rounded-2xl border border-[#A07070]/15 bg-[#F2EBE0] p-4 sm:p-5 space-y-3">
       <div>
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#B8954A]">
           Vidéo
         </p>
-        <h2 className="font-serif text-xl font-bold text-[#2D1020] mt-1">
+        <h2 className="font-serif text-xl font-bold text-[#A07070] mt-1">
           KELIAA TEST
         </h2>
-        <p className="text-sm text-[#2D1020]/65 mt-1">
+        <p className="text-sm text-[#A07070]/65 mt-1">
           Comprendre le parcours tests → matching, en images.
         </p>
       </div>
-      <div className="relative w-full overflow-hidden rounded-xl border border-[#2D1020]/20 bg-[#2D1020] shadow-sm">
+      <div className="relative w-full overflow-hidden rounded-xl border border-[#A07070]/20 bg-[#A07070] shadow-sm">
         <video
           className="block w-full max-h-[min(70vh,420px)] aspect-video object-contain bg-black"
           src={VIDEO_SRC}

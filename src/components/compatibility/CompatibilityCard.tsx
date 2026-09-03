@@ -56,7 +56,7 @@ export function CompatibilityCard({
   const domains = (profile.domainScores ?? []).slice(0, 5);
 
   return (
-    <Card className="rounded-2xl flex flex-col justify-between overflow-hidden group transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5" style={{ background: "#FFFFFF", border: "1px solid #C9BBAF", boxShadow: "0 2px 14px -4px rgba(45,16,32,0.09)" }}>
+    <Card className="rounded-2xl flex flex-col justify-between overflow-hidden group transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5" style={{ background: "#FFFFFF", border: "1px solid #C9BBAF", boxShadow: "0 2px 14px -4px rgba(122, 79, 85,0.09)" }}>
       <div className="relative h-48 sm:h-56 overflow-hidden" style={{ background: "#F2EBE0", borderBottom: "1px solid #C9BBAF" }}>
         {profile.photoUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -85,7 +85,7 @@ export function CompatibilityCard({
           </div>
         )}
 
-        <div className="absolute top-3 left-3 flex items-center gap-1.5 backdrop-blur-md px-3 py-1.5 rounded-full" style={{ background: "#2D1020", border: "1px solid rgba(184,149,74,0.5)" }}>
+        <div className="absolute top-3 left-3 flex items-center gap-1.5 backdrop-blur-md px-3 py-1.5 rounded-full" style={{ background: "#7A4F55", border: "1px solid rgba(184,149,74,0.5)" }}>
           <Sparkles className="h-4 w-4" style={{ color: "#B8954A", fill: "#B8954A" }} />
           <span className="font-serif font-bold text-sm" style={{ color: "#F2EBE0" }}>
             {profile.harmonyScore}% d&apos;harmonie
@@ -93,7 +93,7 @@ export function CompatibilityCard({
         </div>
         {profile.basis === "demande" ? (
           <div className="absolute bottom-3 left-3 right-3">
-            <span className="inline-flex max-w-full rounded-lg bg-[#2D1020]/85 px-2.5 py-1 text-[10px] font-semibold leading-snug text-[#F2EBE0]">
+            <span className="inline-flex max-w-full rounded-lg bg-[#A07070]/85 px-2.5 py-1 text-[10px] font-semibold leading-snug text-[#F2EBE0]">
               Compatibilité à préciser
             </span>
           </div>
@@ -126,7 +126,7 @@ export function CompatibilityCard({
 
       <CardHeader className="space-y-1 pb-3 pt-4 px-5">
         <div className="flex items-center justify-between gap-2">
-          <h3 className="font-serif text-2xl font-bold" style={{ color: "#2D1020" }}>
+          <h3 className="font-serif text-2xl font-bold" style={{ color: "#A07070" }}>
             {profile.name}, {profile.age} ans
           </h3>
           <span
@@ -157,7 +157,7 @@ export function CompatibilityCard({
                       className="h-full rounded-full"
                       style={{
                         width: `${Math.max(6, Math.min(100, d.score))}%`,
-                        background: d.status === "strong" ? "#2D1020" : d.status === "watch" ? "#B8954A" : "#7A4F55",
+                        background: d.status === "strong" ? "#A07070" : d.status === "watch" ? "#B8954A" : "#7A4F55",
                       }}
                     />
                   </div>
@@ -179,7 +179,7 @@ export function CompatibilityCard({
               <span
                 key={idx}
                 className="text-xs font-medium px-2.5 py-1 rounded-lg flex items-center gap-1"
-                style={{ background: "#F2EBE0", color: "#2D1020", border: "1px solid rgba(184,149,74,0.3)" }}
+                style={{ background: "#F2EBE0", color: "#A07070", border: "1px solid rgba(184,149,74,0.3)" }}
               >
                 ✓ {reason}
               </span>
@@ -190,9 +190,9 @@ export function CompatibilityCard({
 
       <CardFooter className="px-5 pt-2 pb-5" style={{ borderTop: "1px solid #C9BBAF", background: "#F2EBE0" }}>
         <Link href={`/compatibility/${profile.id}`} className="w-full">
-          <button
+          <          button
             className="w-full flex items-center justify-center gap-2 rounded-full h-10 text-sm font-semibold transition-all hover:opacity-90"
-            style={{ background: "#2D1020", color: "#F2EBE0" }}
+            style={{ background: "#7A4F55", color: "#F9F3EE" }}
           >
             <span>Consulter le Diagnostic d&apos;EVA</span>
             <ArrowRight className="h-3.5 w-3.5" />

@@ -9,15 +9,15 @@ const buttonVariants = cva(
     variants: {
       variant: {
         /* Bordeaux profond Farata — CTA principal */
-        default: "bg-[#2D1020] text-[#F2EBE0] hover:bg-[#3D1830] shadow-sm",
+        default: "bg-[#A07070] text-[#F2EBE0] hover:bg-[#8B5C62] shadow-sm",
         /* Or Farata — CTA secondaire premium */
-        gold: "bg-[#B8954A] text-[#2D1020] hover:bg-[#C9A55A] shadow-sm font-bold",
+        gold: "bg-[#B8954A] text-[#A07070] hover:bg-[#C9A55A] shadow-sm font-bold",
         outline:
-          "border-[#C9BBAF] bg-transparent text-[#2D1020] hover:bg-[#F2EBE0] aria-expanded:bg-[#F2EBE0]",
+          "border-[#C9BBAF] bg-transparent text-[#A07070] hover:bg-[#F2EBE0] aria-expanded:bg-[#F2EBE0]",
         secondary:
-          "bg-[#DDD0C4] text-[#2D1020] hover:bg-[#CFC0B2] aria-expanded:bg-[#DDD0C4]",
+          "bg-[#DDD0C4] text-[#A07070] hover:bg-[#CFC0B2] aria-expanded:bg-[#DDD0C4]",
         ghost:
-          "hover:bg-[#DDD0C4] text-[#2D1020] aria-expanded:bg-[#DDD0C4]",
+          "hover:bg-[#DDD0C4] text-[#A07070] aria-expanded:bg-[#DDD0C4]",
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20",
         link: "text-[#B8954A] underline-offset-4 hover:underline",

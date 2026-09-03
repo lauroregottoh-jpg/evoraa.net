@@ -18,16 +18,16 @@ export function CoupleOfferPrice({
 
   return (
     <div className={cn("space-y-1.5", className)}>
-      <p className="text-base text-[#2D1020]/55 line-through">
+      <p className="text-base text-[#A07070]/55 line-through">
         {fmt(p.compareAtXof)} FCFA
       </p>
-      <p className="font-serif text-3xl sm:text-4xl font-bold text-[#2D1020]">
+      <p className="font-serif text-3xl sm:text-4xl font-bold text-[#A07070]">
         <span className="text-primary">{fmt(p.coupleTotalXof)} FCFA</span>
-        <span className="ml-2 text-base font-sans font-medium text-[#2D1020]">
+        <span className="ml-2 text-base font-sans font-medium text-[#A07070]">
           pour vous deux
         </span>
       </p>
-      <p className="text-base sm:text-lg font-semibold text-[#2D1020]">
+      <p className="text-base sm:text-lg font-semibold text-[#A07070]">
         soit {fmt(p.perPersonXof)} FCFA par personne
       </p>
     </div>
