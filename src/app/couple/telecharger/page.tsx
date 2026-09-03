@@ -67,9 +67,9 @@ function buildPrintableHtml(doc: CoupleReportDocument): string {
 
   return `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"/><title>${doc.brand} — Dossier</title>
   <style>
-    body{font-family:Georgia,serif;max-width:720px;margin:40px auto;padding:0 16px;color:#1c1412;line-height:1.7;background:#FBF9F6;font-size:16px}
-    h1,h2,h3{font-weight:700} h1{font-size:28px} h2{font-size:22px;margin-top:32px;color:#5C1F28;border-top:1px solid #B8954A44;padding-top:1rem}
-    h3{font-size:18px;color:#5C1F28} .sub{font-style:italic;color:#8A6A2E}
+    body{font-family:Georgia,serif;max-width:720px;margin:40px auto;padding:0 16px;color:#1c1412;line-height:1.7;background:#F2EBE0;font-size:16px}
+    h1,h2,h3{font-weight:700} h1{font-size:28px} h2{font-size:22px;margin-top:32px;color:#2D1020;border-top:1px solid #B8954A44;padding-top:1rem}
+    h3{font-size:18px;color:#2D1020} .sub{font-style:italic;color:#8A6A2E}
     p,li{font-size:16px} .meta{color:#666;font-size:13px}
     .callout{border:1px solid #B8954A66;background:#B8954A14;padding:1rem;border-radius:12px;margin:1rem 0}
     .fill{border:1px dashed #B8954A88;padding:1rem;min-height:4.5rem;margin:1rem 0;border-radius:12px;background:#fff}

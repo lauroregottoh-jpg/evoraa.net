@@ -33,7 +33,7 @@ export function RapportHubView({
 
   return (
     <article className="space-y-5 max-w-3xl mx-auto">
-      <header className="rapport-reveal relative overflow-hidden rounded-[1.75rem] border-2 border-[#B8954A]/45 bg-gradient-to-br from-[#2B2421] via-[#2A1810] to-[#5C1F28] p-6 sm:p-8 text-[#F8F4EE] shadow-elevated">
+      <header className="rapport-reveal relative overflow-hidden rounded-[1.75rem] border-2 border-[#B8954A]/45 bg-gradient-to-br from-[#2D1020] via-[#2A1810] to-[#2D1020] p-6 sm:p-8 text-[#F2EBE0] shadow-elevated">
         <div
           aria-hidden
           className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-40"
@@ -45,7 +45,7 @@ export function RapportHubView({
 
         <div className="relative z-10 flex flex-col sm:flex-row gap-6 sm:items-start sm:justify-between">
           <div className="min-w-0 space-y-2">
-            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#D4AF72]">
               KELIAA · Rapport Personnalisé
             </p>
             <h1 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
@@ -73,13 +73,13 @@ export function RapportHubView({
         <div className="relative z-10 mt-5 space-y-2">
           <div className="flex items-center justify-between text-[11px] text-white/60">
             <span>Progression du document</span>
-            <span className="font-bold text-[#F3D9A4]">
+            <span className="font-bold text-[#D4AF72]">
               {living.completenessPercent}%
             </span>
           </div>
           <div className="h-2.5 rounded-full bg-white/10 overflow-hidden">
             <div
-              className="rapport-bar-fill h-full rounded-full bg-gradient-to-r from-[#B8954A] to-[#F3D9A4]"
+              className="rapport-bar-fill h-full rounded-full bg-gradient-to-r from-[#B8954A] to-[#D4AF72]"
               style={{ width: `${Math.min(100, living.completenessPercent)}%` }}
             />
           </div>
@@ -87,7 +87,7 @@ export function RapportHubView({
 
         <div className="relative z-10 mt-5 flex flex-wrap gap-2">
           {isAlliance ? (
-            <span className="rapport-cover-seal inline-flex items-center gap-1 rounded-full border border-[#B8954A]/50 bg-[#B8954A]/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#F3D9A4]">
+            <span className="rapport-cover-seal inline-flex items-center gap-1 rounded-full border border-[#B8954A]/50 bg-[#B8954A]/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#D4AF72]">
               <Crown className="h-3 w-3" /> {living.base.offerLabel}
             </span>
           ) : (
@@ -99,7 +99,7 @@ export function RapportHubView({
             {unlockedCount}/{chapters.length} parties ouvertes
           </span>
           {living.globalIndex != null ? (
-            <span className="rounded-full border border-[#B8954A]/40 bg-[#B8954A]/15 px-3 py-1 text-[10px] font-semibold text-[#F3D9A4]">
+            <span className="rounded-full border border-[#B8954A]/40 bg-[#B8954A]/15 px-3 py-1 text-[10px] font-semibold text-[#D4AF72]">
               Indice {living.globalIndex}/100
             </span>
           ) : null}
@@ -108,14 +108,14 @@ export function RapportHubView({
         <div className="relative z-10 mt-6 flex flex-wrap gap-2">
           <Link
             href="/rapport/global"
-            className="inline-flex h-12 items-center gap-2 rounded-xl bg-[#B8954A] px-5 text-sm font-bold text-[#2B2421] hover:brightness-105 transition"
+            className="inline-flex h-12 items-center gap-2 rounded-xl bg-[#B8954A] px-5 text-sm font-bold text-[#2D1020] hover:brightness-105 transition"
           >
             Découvrir le rapport global
             <ArrowRight className="h-4 w-4" />
           </Link>
           <a
             href="/rapport/telecharger?dl=1"
-            className="inline-flex h-12 items-center gap-2 rounded-xl border border-[#B8954A]/50 bg-white/10 px-5 text-sm font-bold text-[#F3D9A4]"
+            className="inline-flex h-12 items-center gap-2 rounded-xl border border-[#B8954A]/50 bg-white/10 px-5 text-sm font-bold text-[#D4AF72]"
           >
             Télécharger
           </a>
@@ -142,7 +142,7 @@ export function RapportHubView({
         <div className="flex flex-col sm:flex-row gap-3">
           <Link
             href="/rapport/global"
-            className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-[#B8954A] px-4 text-sm font-bold text-[#2B2421]"
+            className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-[#B8954A] px-4 text-sm font-bold text-[#2D1020]"
           >
             Découvrir votre rapport complet
             <ArrowRight className="h-4 w-4" />
@@ -165,7 +165,7 @@ export function RapportHubView({
           </p>
           <Link
             href={living.nextUnlock.href}
-            className="inline-flex h-9 items-center gap-1 rounded-xl bg-[#B8954A] px-3 text-xs font-bold text-[#2B2421]"
+            className="inline-flex h-9 items-center gap-1 rounded-xl bg-[#B8954A] px-3 text-xs font-bold text-[#2D1020]"
           >
             Faire le test <ArrowRight className="h-3.5 w-3.5" />
           </Link>

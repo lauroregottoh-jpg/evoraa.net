@@ -163,15 +163,15 @@ export function CoachingBookingCalendar({
   }
 
   return (
-    <section className="rounded-2xl border border-[#5C1F28]/15 bg-[#FBF9F6] p-5 sm:p-6 space-y-4">
+    <section className="rounded-2xl border border-[#2D1020]/15 bg-[#F2EBE0] p-5 sm:p-6 space-y-4">
       <div>
         <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
           Calendrier
         </p>
-        <h2 className="font-serif text-xl font-bold text-[#5C1F28] mt-1">
+        <h2 className="font-serif text-xl font-bold text-[#2D1020] mt-1">
           Réserver un créneau
         </h2>
-        <p className="text-sm text-[#2B2421]/70 mt-1">
+        <p className="text-sm text-[#2D1020]/70 mt-1">
           1 crédit = 30 min. Une séance d’1 h consomme 2 crédits.
         </p>
       </div>
@@ -212,8 +212,8 @@ export function CoachingBookingCalendar({
                   className={cn(
                     "rounded-xl border px-3 py-3 text-sm font-semibold",
                     credits === opt.c
-                      ? "border-[#5C1F28] bg-[#5C1F28] text-[#F8F4EE]"
-                      : "border-[#5C1F28]/20 bg-white"
+                      ? "border-[#2D1020] bg-[#2D1020] text-[#F2EBE0]"
+                      : "border-[#2D1020]/20 bg-white"
                   )}
                 >
                   {opt.label}
@@ -255,8 +255,8 @@ export function CoachingBookingCalendar({
                     className={cn(
                       "text-left rounded-xl border px-3 py-2.5 text-sm",
                       selected === o.iso
-                        ? "border-[#5C1F28] bg-[#5C1F28]/8"
-                        : "border-border bg-white hover:border-[#5C1F28]/35"
+                        ? "border-[#2D1020] bg-[#2D1020]/8"
+                        : "border-border bg-white hover:border-[#2D1020]/35"
                     )}
                   >
                     {o.label}
@@ -274,7 +274,7 @@ export function CoachingBookingCalendar({
             type="button"
             disabled={loading || !selected}
             onClick={() => void book()}
-            className="h-11 w-full rounded-xl bg-[#5C1F28] text-sm font-bold text-[#FBF9F6] disabled:opacity-60"
+            className="h-11 w-full rounded-xl bg-[#2D1020] text-sm font-bold text-[#F2EBE0] disabled:opacity-60"
           >
             {loading
               ? "Réservation…"

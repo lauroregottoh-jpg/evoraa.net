@@ -97,15 +97,15 @@ export function CoachingCoachInbox({
         <button
           type="button"
           onClick={() => setActiveId(null)}
-          className="text-xs font-semibold text-[#5C1F28] underline"
+          className="text-xs font-semibold text-[#2D1020] underline"
         >
           ← Retour inbox
         </button>
-        <div className="rounded-2xl border bg-[#FBF9F6] p-4 space-y-2">
+        <div className="rounded-2xl border bg-[#F2EBE0] p-4 space-y-2">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
             Brief
           </p>
-          <h2 className="font-serif text-lg font-bold text-[#5C1F28]">
+          <h2 className="font-serif text-lg font-bold text-[#2D1020]">
             {active.clientDisplayName}
             {active.displayAnonymous && active.realFirstName
               ? ` · identité suivie : ${active.realFirstName}`
@@ -115,7 +115,7 @@ export function CoachingCoachInbox({
             <p className="text-sm font-medium">{active.subject}</p>
           ) : null}
           {active.briefMessage ? (
-            <p className="text-sm text-[#2B2421]/70">{active.briefMessage}</p>
+            <p className="text-sm text-[#2D1020]/70">{active.briefMessage}</p>
           ) : null}
           {active.objectives.length > 0 ? (
             <ul className="text-sm list-disc pl-5 space-y-1">
@@ -150,8 +150,8 @@ export function CoachingCoachInbox({
 
   return (
     <div className="max-w-3xl mx-auto space-y-6 pb-10">
-      <header className="rounded-[1.75rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#5C1F28] via-[#3D1519] to-[#2B2421] p-7 text-[#FBF9F6]">
-        <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
+      <header className="rounded-[1.75rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#2D1020] via-[#3D1830] to-[#2D1020] p-7 text-[#F2EBE0]">
+        <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#D4AF72]">
           Espace coach
         </p>
         <h1 className="mt-2 font-serif text-3xl font-bold">
@@ -163,7 +163,7 @@ export function CoachingCoachInbox({
       </header>
 
       <section className="rounded-2xl border bg-white p-5 space-y-4">
-        <h2 className="font-serif text-xl font-bold text-[#5C1F28]">
+        <h2 className="font-serif text-xl font-bold text-[#2D1020]">
           Disponibilités
         </h2>
         <p className="text-sm text-muted-foreground">
@@ -205,7 +205,7 @@ export function CoachingCoachInbox({
               if (r.error) setAvailError(r.error)
               else void refresh()
             }}
-            className="h-10 rounded-xl bg-[#5C1F28] text-[#FBF9F6] text-sm font-semibold"
+            className="h-10 rounded-xl bg-[#2D1020] text-[#F2EBE0] text-sm font-semibold"
           >
             Ajouter
           </button>
@@ -244,7 +244,7 @@ export function CoachingCoachInbox({
       </section>
 
       <section className="rounded-2xl border bg-white p-5 space-y-3">
-        <h2 className="font-serif text-xl font-bold text-[#5C1F28]">
+        <h2 className="font-serif text-xl font-bold text-[#2D1020]">
           Sessions à venir
         </h2>
         {sessions.length === 0 ? (
@@ -265,8 +265,8 @@ export function CoachingCoachInbox({
                     className={cn(
                       "w-full text-left rounded-xl border px-4 py-3",
                       live
-                        ? "border-[#5C1F28] bg-[#5C1F28]/5"
-                        : "border-border bg-[#FBF9F6]"
+                        ? "border-[#2D1020] bg-[#2D1020]/5"
+                        : "border-border bg-[#F2EBE0]"
                     )}
                   >
                     <p className="text-sm font-semibold">

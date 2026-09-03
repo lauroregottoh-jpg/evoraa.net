@@ -21,7 +21,7 @@ const PILLARS: {
     icon: Heart,
     title: "Compatibilité relationnelle",
     desc: "Communication, émotions, conflits, confiance.",
-    accent: "from-[#5C1F28] to-[#8B2E3A]",
+    accent: "from-[#2D1020] to-[#8B2E3A]",
   },
   {
     icon: Sparkles,
@@ -65,7 +65,7 @@ export function MatchingPillarsShowcase({
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#2B2421] via-[#2A1810] to-[#5C1F28]"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#2D1020] via-[#2A1810] to-[#2D1020]"
       />
       <div
         aria-hidden
@@ -74,13 +74,13 @@ export function MatchingPillarsShowcase({
 
       <div className="relative z-10 mx-auto max-w-6xl space-y-10">
         <div className="text-center space-y-3">
-          <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#F3D9A4]">
+          <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#D4AF72]">
             Matching KELIAA™
           </p>
-          <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#F8F4EE] leading-tight drop-shadow-sm">
+          <h2 className="font-serif text-3xl sm:text-5xl font-bold text-[#F2EBE0] leading-tight drop-shadow-sm">
             Les 5 piliers du Matching KELIAA™
           </h2>
-          <p className="text-sm sm:text-base text-[#F8F4EE]/85 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-[#F2EBE0]/85 max-w-2xl mx-auto leading-relaxed">
             Parce qu&apos;une relation durable ne repose jamais sur un seul
             critère.
           </p>
@@ -92,7 +92,7 @@ export function MatchingPillarsShowcase({
             return (
               <article
                 key={pillar.title}
-                className="matching-pillar-card group relative flex flex-col overflow-hidden rounded-2xl border-2 border-[#B8954A]/55 bg-[#F8F4EE] p-5 text-[#2B2421] shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
+                className="matching-pillar-card group relative flex flex-col overflow-hidden rounded-2xl border-2 border-[#B8954A]/55 bg-[#F2EBE0] p-5 text-[#2D1020] shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
                 style={{ animationDelay: `${i * 100}ms` }}
               >
                 <div
@@ -102,17 +102,17 @@ export function MatchingPillarsShowcase({
                     pillar.accent
                   )}
                 >
-                  <span className="matching-pillar-icon flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#F3D9A4]/70 bg-black/25 text-[#F3D9A4] shadow-lg">
+                  <span className="matching-pillar-icon flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#D4AF72]/70 bg-black/25 text-[#D4AF72] shadow-lg">
                     <Icon className="h-7 w-7" strokeWidth={2.25} />
                   </span>
                 </div>
-                <span className="matching-pillar-num mb-2 inline-flex h-8 w-fit items-center rounded-lg bg-[#B8954A]/20 px-2.5 font-mono text-xs font-bold text-[#5C1F28]">
+                <span className="matching-pillar-num mb-2 inline-flex h-8 w-fit items-center rounded-lg bg-[#B8954A]/20 px-2.5 font-mono text-xs font-bold text-[#2D1020]">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <h3 className="font-serif text-lg font-bold leading-snug text-[#2B2421]">
+                <h3 className="font-serif text-lg font-bold leading-snug text-[#2D1020]">
                   {pillar.title}
                 </h3>
-                <p className="mt-2 text-xs text-[#2B2421]/70 leading-relaxed grow">
+                <p className="mt-2 text-xs text-[#2D1020]/70 leading-relaxed grow">
                   {pillar.desc}
                 </p>
               </article>

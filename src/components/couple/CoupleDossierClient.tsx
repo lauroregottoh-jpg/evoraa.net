@@ -172,12 +172,12 @@ export function CoupleDossierClient({ demo = false }: Props) {
                 {pieces.slice(0, 4).map((p) => (
                   <li
                     key={p.id}
-                    className="flex gap-4 rounded-2xl border border-[#2B2421]/10 bg-[#F8F4EE]/80 p-5 opacity-80"
+                    className="flex gap-4 rounded-2xl border border-[#2D1020]/10 bg-[#F2EBE0]/80 p-5 opacity-80"
                   >
-                    <Lock className="h-5 w-5 text-[#5C1F28]/50" />
+                    <Lock className="h-5 w-5 text-[#2D1020]/50" />
                     <div>
                       <p className="font-serif text-lg font-bold">{p.title}</p>
-                      <p className="text-sm text-[#2B2421]/60">{p.description}</p>
+                      <p className="text-sm text-[#2D1020]/60">{p.description}</p>
                     </div>
                   </li>
                 ))}
@@ -204,31 +204,31 @@ export function CoupleDossierClient({ demo = false }: Props) {
                   className={cn(
                     "flex gap-4 rounded-2xl border p-5 transition-colors",
                     locked
-                      ? "border-[#2B2421]/10 bg-[#F8F4EE]/80 opacity-80"
+                      ? "border-[#2D1020]/10 bg-[#F2EBE0]/80 opacity-80"
                       : "border-[#B8954A]/30 bg-white hover:border-[#B8954A]/55"
                   )}
                 >
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#5C1F28]/10 text-[#5C1F28]">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#2D1020]/10 text-[#2D1020]">
                     {locked ? <Lock className="h-5 w-5" /> : p.icon}
                   </div>
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
                       <p className="font-serif text-lg font-bold">{p.title}</p>
                       {p.premiumPlus ? (
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C1F28] bg-[#5C1F28]/10 px-2 py-0.5 rounded-full">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#2D1020] bg-[#2D1020]/10 px-2 py-0.5 rounded-full">
                           Premium Plus
                         </span>
                       ) : null}
                     </div>
-                    <p className="mt-1 text-sm text-[#2B2421]/70 leading-relaxed">
+                    <p className="mt-1 text-sm text-[#2D1020]/70 leading-relaxed">
                       {p.description}
                     </p>
                     {locked ? (
-                      <p className="mt-2 text-xs text-[#2B2421]/50">
+                      <p className="mt-2 text-xs text-[#2D1020]/50">
                         Disponible après questionnaires + génération du rapport
                       </p>
                     ) : (
-                      <p className="mt-2 text-xs font-semibold text-[#5C1F28]">
+                      <p className="mt-2 text-xs font-semibold text-[#2D1020]">
                         Ouvrir →
                       </p>
                     )}
@@ -253,7 +253,7 @@ export function CoupleDossierClient({ demo = false }: Props) {
             <div className="flex flex-wrap gap-2">
               <Link
                 href="/couple/questionnaire"
-                className="inline-flex h-11 items-center rounded-xl bg-[#5C1F28] px-5 text-sm font-semibold text-[#FBF9F6]"
+                className="inline-flex h-11 items-center rounded-xl bg-[#2D1020] px-5 text-sm font-semibold text-[#F2EBE0]"
               >
                 Continuer le questionnaire
               </Link>
@@ -267,8 +267,8 @@ export function CoupleDossierClient({ demo = false }: Props) {
           ) : null}
 
           {demo ? (
-            <p className="text-sm text-[#2B2421]/60">
-              <Link href="/couple/rapport/demo" className="font-semibold text-[#5C1F28] underline">
+            <p className="text-sm text-[#2D1020]/60">
+              <Link href="/couple/rapport/demo" className="font-semibold text-[#2D1020] underline">
                 Voir le rapport démo →
               </Link>
             </p>

@@ -27,7 +27,7 @@ export function AllianceLevelStrip({
   }
 
   return (
-    <section className="rounded-2xl border border-border/60 bg-[#FBF9F6] px-4 py-5 sm:px-6 space-y-4">
+    <section className="rounded-2xl border border-border/60 bg-[#F2EBE0] px-4 py-5 sm:px-6 space-y-4">
       <h2 className="font-serif text-xl font-bold text-foreground">
         Niveau d’Alliance
       </h2>
@@ -49,7 +49,7 @@ export function AllianceLevelStrip({
                   className={cn(
                     "flex h-7 w-7 items-center justify-center rounded-full shrink-0",
                     unlocked
-                      ? "bg-[#5C1F28] text-[#F8F4EE]"
+                      ? "bg-[#2D1020] text-[#F2EBE0]"
                       : "bg-secondary text-muted-foreground"
                   )}
                 >

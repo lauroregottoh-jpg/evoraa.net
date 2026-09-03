@@ -13,7 +13,7 @@ export function DiscoveryWelcomeHero({
   const name = firstName?.trim() || null
 
   return (
-    <section className="rounded-[1.75rem] border border-border/50 bg-[#FBF9F6] px-5 py-8 sm:px-8 sm:py-10">
+    <section className="rounded-[1.75rem] border border-border/50 bg-[#F2EBE0] px-5 py-8 sm:px-8 sm:py-10">
       <div className="text-center space-y-3">
         {name ? (
           <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-muted-foreground">
@@ -21,7 +21,7 @@ export function DiscoveryWelcomeHero({
           </p>
         ) : null}
 
-        <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#5C1F28] leading-tight">
+        <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#2D1020] leading-tight">
           Foi, discernement et matching enrichi.
         </h1>
 

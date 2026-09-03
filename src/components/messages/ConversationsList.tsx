@@ -71,7 +71,7 @@ function VoiceSandboxOpener() {
           type="button"
           disabled={busy}
           onClick={() => void open()}
-          className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#5C1F28] px-4 text-xs font-bold text-[#F8F4EE] disabled:opacity-60"
+          className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#2D1020] px-4 text-xs font-bold text-[#F2EBE0] disabled:opacity-60"
         >
           <Mic className="h-3.5 w-3.5" />
           {busy ? "Ouverture…" : "Ouvrir l’essai vocaux"}
@@ -200,7 +200,7 @@ export function ConversationsList({
   return (
     <div className="space-y-5 py-4">
       {/* Hero inbox */}
-      <header className="relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/30 bg-gradient-to-br from-[#FFFBF5] via-[#F8F4EE] to-[#F0E6D4] p-5 sm:p-7 shadow-card">
+      <header className="relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/30 bg-gradient-to-br from-[#FFFBF5] via-[#F2EBE0] to-[#F0E6D4] p-5 sm:p-7 shadow-card">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="space-y-1">
             <Badge
@@ -209,15 +209,15 @@ export function ConversationsList({
             >
               Messagerie
             </Badge>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#2B2421]">
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#2D1020]">
               Vos conversations
             </h1>
-            <p className="text-sm text-[#2B2421]/65 max-w-md">
+            <p className="text-sm text-[#2D1020]/65 max-w-md">
               Recherchez par nom, filtrez par jour, et retrouvez vos échanges
               classés.
             </p>
           </div>
-          <span className="rounded-full bg-[#5C1F28] px-3 py-1.5 text-xs font-bold text-[#F8F4EE]">
+          <span className="rounded-full bg-[#2D1020] px-3 py-1.5 text-xs font-bold text-[#F2EBE0]">
             {conversations.length} conversation
             {conversations.length > 1 ? "s" : ""}
           </span>
@@ -259,7 +259,7 @@ export function ConversationsList({
 
           <Link
             href="/communaute"
-            className="inline-flex h-11 items-center justify-center rounded-xl bg-[#5C1F28] px-4 text-xs font-bold text-[#F8F4EE]"
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-[#2D1020] px-4 text-xs font-bold text-[#F2EBE0]"
           >
             Communauté
           </Link>
@@ -276,8 +276,8 @@ export function ConversationsList({
               className={cn(
                 "inline-flex h-9 items-center gap-1.5 rounded-full px-3.5 text-xs font-bold transition",
                 tab === t.id
-                  ? "bg-[#5C1F28] text-[#F8F4EE]"
-                  : "border border-[#B8954A]/30 bg-white text-[#5C1F28] hover:bg-[#F7F0E0]"
+                  ? "bg-[#2D1020] text-[#F2EBE0]"
+                  : "border border-[#B8954A]/30 bg-white text-[#2D1020] hover:bg-[#F7F0E0]"
               )}
             >
               {t.label}
@@ -375,7 +375,7 @@ export function ConversationsList({
         {hasDemo ? (
           <section className="space-y-2">
             <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#7A5F28]">
-              <span className="rounded bg-[#5C1F28] px-1.5 py-0.5 text-[9px] tracking-widest text-[#F3D9A4]">
+              <span className="rounded bg-[#2D1020] px-1.5 py-0.5 text-[9px] tracking-widest text-[#D4AF72]">
                 Démo
               </span>
               Aperçu (jusqu’à 5 vrais échanges)
@@ -411,7 +411,7 @@ export function ConversationsList({
                         </p>
                       </div>
                     </div>
-                    <span className="inline-flex items-center gap-1 rounded-lg bg-[#5C1F28] px-2.5 py-1 text-[10px] font-bold text-[#F8F4EE]">
+                    <span className="inline-flex items-center gap-1 rounded-lg bg-[#2D1020] px-2.5 py-1 text-[10px] font-bold text-[#F2EBE0]">
                       Ouvrir
                       <ChevronRight className="h-3.5 w-3.5" />
                     </span>

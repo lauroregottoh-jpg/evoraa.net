@@ -133,7 +133,7 @@ export function AdminCoachingPanel() {
             onClick={() => setTab(t.id)}
             className={
               tab === t.id
-                ? "rounded-xl bg-[#5C1F28] text-[#FBF9F6] px-3 py-2 text-sm font-semibold"
+                ? "rounded-xl bg-[#2D1020] text-[#F2EBE0] px-3 py-2 text-sm font-semibold"
                 : "rounded-xl border border-border bg-card px-3 py-2 text-sm font-semibold"
             }
           >
@@ -281,7 +281,7 @@ export function AdminCoachingPanel() {
                 ) : null}
                 <div>
                   <p className="text-xs font-semibold mb-1">Transcription</p>
-                  <pre className="text-xs whitespace-pre-wrap rounded-xl border bg-[#FBF9F6] p-3 max-h-48 overflow-y-auto">
+                  <pre className="text-xs whitespace-pre-wrap rounded-xl border bg-[#F2EBE0] p-3 max-h-48 overflow-y-auto">
                     {selected.transcriptPreview ||
                       "Pas encore de transcription — ajouter une démo ou brancher l’audio→texte."}
                   </pre>
@@ -307,7 +307,7 @@ export function AdminCoachingPanel() {
                     type="button"
                     disabled={busy}
                     onClick={() => void saveNotes()}
-                    className="mt-2 inline-flex h-9 items-center rounded-xl bg-[#5C1F28] px-4 text-xs font-semibold text-white"
+                    className="mt-2 inline-flex h-9 items-center rounded-xl bg-[#2D1020] px-4 text-xs font-semibold text-white"
                   >
                     Enregistrer les notes
                   </button>
@@ -507,7 +507,7 @@ export function AdminProductsHub({
                   {item.price} · {item.summary}
                 </p>
               </div>
-              <span className="text-xl font-bold text-[#5C1F28]">
+              <span className="text-xl font-bold text-[#2D1020]">
                 {isOpen ? "−" : "+"}
               </span>
             </button>
@@ -519,7 +519,7 @@ export function AdminProductsHub({
                 <button
                   type="button"
                   onClick={() => onOpen(item.nav)}
-                  className="inline-flex h-10 items-center rounded-xl bg-[#5C1F28] px-4 text-sm font-semibold text-white"
+                  className="inline-flex h-10 items-center rounded-xl bg-[#2D1020] px-4 text-sm font-semibold text-white"
                 >
                   Ouvrir {item.title} →
                 </button>

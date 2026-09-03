@@ -43,16 +43,16 @@ export function CoffrePremiumModal({ open, onClose, resourceTitle }: Props) {
     >
       <button
         type="button"
-        className="absolute inset-0 bg-[#2B2421]/55 backdrop-blur-[2px] animate-in fade-in duration-300"
+        className="absolute inset-0 bg-[#2D1020]/55 backdrop-blur-[2px] animate-in fade-in duration-300"
         aria-label="Fermer"
         onClick={onClose}
       />
-      <div className="relative w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl border border-border bg-[#F8F4EE] shadow-elevated overflow-hidden animate-in fade-in slide-in-from-bottom-4 sm:zoom-in-95 duration-300">
+      <div className="relative w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl border border-border bg-[#F2EBE0] shadow-elevated overflow-hidden animate-in fade-in slide-in-from-bottom-4 sm:zoom-in-95 duration-300">
         <div
           className="h-28 sm:h-32 relative"
           style={{
             background:
-              "linear-gradient(135deg, #5C1F28 0%, #3D181E 55%, #B8954A 140%)",
+              "linear-gradient(135deg, #2D1020 0%, #3D181E 55%, #B8954A 140%)",
           }}
         >
           <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_70%_20%,rgba(255,253,249,0.35),transparent_50%)]" />

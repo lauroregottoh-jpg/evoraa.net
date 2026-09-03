@@ -43,7 +43,7 @@ export function CoachingCannedChat({
         <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
           Messages
         </p>
-        <h3 className="font-serif text-lg font-bold text-[#5C1F28]">
+        <h3 className="font-serif text-lg font-bold text-[#2D1020]">
           Messages prédéfinis
         </h3>
         <p className="text-xs text-muted-foreground mt-1">
@@ -58,7 +58,7 @@ export function CoachingCannedChat({
           messages.map((m) => (
             <div
               key={m.id}
-              className="rounded-xl border border-[#B8954A]/20 bg-[#FBF9F6] px-3 py-2 text-sm"
+              className="rounded-xl border border-[#B8954A]/20 bg-[#F2EBE0] px-3 py-2 text-sm"
             >
               <p className="text-[10px] uppercase tracking-wider text-[#8A6A2E] font-semibold">
                 {m.fromRole === "coach" ? "Coach" : "Coaché"}
@@ -86,7 +86,7 @@ export function CoachingCannedChat({
               setSending(false)
               void refresh()
             }}
-            className="rounded-xl border border-[#5C1F28]/25 px-3 py-2 text-xs font-semibold hover:bg-[#5C1F28]/5 disabled:opacity-50"
+            className="rounded-xl border border-[#2D1020]/25 px-3 py-2 text-xs font-semibold hover:bg-[#2D1020]/5 disabled:opacity-50"
           >
             {t.label}
           </button>

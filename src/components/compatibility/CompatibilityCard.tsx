@@ -93,7 +93,7 @@ export function CompatibilityCard({
         </div>
         {profile.basis === "demande" ? (
           <div className="absolute bottom-3 left-3 right-3">
-            <span className="inline-flex max-w-full rounded-lg bg-[#5C1F28]/85 px-2.5 py-1 text-[10px] font-semibold leading-snug text-[#F8F4EE]">
+            <span className="inline-flex max-w-full rounded-lg bg-[#2D1020]/85 px-2.5 py-1 text-[10px] font-semibold leading-snug text-[#F2EBE0]">
               Compatibilité à préciser
             </span>
           </div>

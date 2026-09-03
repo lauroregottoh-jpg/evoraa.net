@@ -149,13 +149,13 @@ export default function PricingPage() {
       </PageHero>
 
       {/* Deux portes */}
-      <section className="py-14 px-6 sm:px-12 lg:px-20 bg-[#F8F4EE]">
+      <section className="py-14 px-6 sm:px-12 lg:px-20 bg-[#F2EBE0]">
         <div className="max-w-5xl mx-auto space-y-8">
           <div className="text-center space-y-2 max-w-2xl mx-auto">
-            <h2 className="font-serif text-3xl font-bold text-[#2B2421]">
+            <h2 className="font-serif text-3xl font-bold text-[#2D1020]">
               Choisissez votre parcours
             </h2>
-            <p className="text-sm text-[#2B2421]/65 leading-relaxed">
+            <p className="text-sm text-[#2D1020]/65 leading-relaxed">
               Cliquez pour aller directement à la section qui vous concerne.
             </p>
           </div>
@@ -165,10 +165,10 @@ export default function PricingPage() {
               className="rounded-2xl border border-[#B8954A]/25 bg-white px-5 py-6 space-y-3 shadow-card hover:border-primary/40 transition-colors block"
             >
               <Users className="h-6 w-6 text-primary" />
-              <h3 className="font-serif text-xl font-bold text-[#5C1F28]">
+              <h3 className="font-serif text-xl font-bold text-[#2D1020]">
                 Pour les célibataires
               </h3>
-              <p className="text-sm text-[#2B2421]/70 leading-relaxed">
+              <p className="text-sm text-[#2D1020]/70 leading-relaxed">
                 Rencontrez la bonne personne : Matching à 5 piliers, Communauté,
                 Rapport Alliance, Coffre Premium, programme Fidélité.
               </p>
@@ -181,10 +181,10 @@ export default function PricingPage() {
               className="rounded-2xl border border-accent/35 bg-gradient-to-br from-white to-accent/10 px-5 py-6 space-y-3 shadow-card hover:border-accent/55 transition-colors block"
             >
               <HeartHandshake className="h-6 w-6 text-accent" />
-              <h3 className="font-serif text-xl font-bold text-[#5C1F28]">
+              <h3 className="font-serif text-xl font-bold text-[#2D1020]">
                 Pour les couples — {COUPLE_BRAND}
               </h3>
-              <p className="text-sm text-[#2B2421]/70 leading-relaxed">
+              <p className="text-sm text-[#2D1020]/70 leading-relaxed">
                 {COUPLE_TAGLINE}. Bilan ponctuel pour fiancés, cheminants et
                 mariés — pas un abonnement.
               </p>
@@ -430,7 +430,7 @@ export default function PricingPage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <article className="rounded-2xl border border-[#5C1F28]/15 bg-[#FBF9F6] p-6 sm:p-8 flex flex-col gap-4">
+            <article className="rounded-2xl border border-[#2D1020]/15 bg-[#F2EBE0] p-6 sm:p-8 flex flex-col gap-4">
               <h3 className="font-serif text-2xl font-bold">
                 {essential.marketingName}
               </h3>
@@ -464,7 +464,7 @@ export default function PricingPage() {
               </MagneticButton>
             </article>
 
-            <article className="rounded-2xl border-2 border-accent bg-[#FBF9F6] p-6 sm:p-8 flex flex-col gap-4 shadow-elevated relative">
+            <article className="rounded-2xl border-2 border-accent bg-[#F2EBE0] p-6 sm:p-8 flex flex-col gap-4 shadow-elevated relative">
               <span className="absolute -top-3 left-6 text-[10px] font-bold uppercase tracking-wider bg-accent text-accent-foreground px-3 py-1 rounded-full">
                 Le plus choisi
               </span>

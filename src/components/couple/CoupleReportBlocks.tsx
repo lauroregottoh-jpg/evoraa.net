@@ -20,7 +20,7 @@ export function CoupleReportBlocks({
             return (
               <h3
                 key={key}
-                className="font-serif text-[18pt] sm:text-[20pt] font-bold text-[#5C1F28] pt-2 leading-snug"
+                className="font-serif text-[18pt] sm:text-[20pt] font-bold text-[#2D1020] pt-2 leading-snug"
               >
                 {block.text}
               </h3>
@@ -29,7 +29,7 @@ export function CoupleReportBlocks({
             return (
               <p
                 key={key}
-                className="text-[14pt] leading-[1.65] text-[#2B2421]"
+                className="text-[14pt] leading-[1.65] text-[#2D1020]"
               >
                 {block.text}
               </p>
@@ -59,9 +59,9 @@ export function CoupleReportBlocks({
           case "callout": {
             const tone =
               block.tone === "alert"
-                ? "border-[#5C1F28]/35 bg-[#5C1F28]/08"
+                ? "border-[#2D1020]/35 bg-[#2D1020]/08"
                 : block.tone === "info"
-                  ? "border-[#2B2421]/15 bg-[#F8F4EE]"
+                  ? "border-[#2D1020]/15 bg-[#F2EBE0]"
                   : "border-[#B8954A]/40 bg-[#B8954A]/10"
             return (
               <aside
@@ -93,7 +93,7 @@ export function CoupleReportBlocks({
                 key={key}
                 className="rounded-2xl border border-dashed border-[#B8954A]/45 bg-white/70 p-4 sm:p-5"
               >
-                <p className="text-sm font-semibold text-[#5C1F28] mb-3">
+                <p className="text-sm font-semibold text-[#2D1020] mb-3">
                   {block.prompt}
                 </p>
                 <div
@@ -103,7 +103,7 @@ export function CoupleReportBlocks({
                   {Array.from({ length: block.lines ?? 2 }).map((_, li) => (
                     <div
                       key={li}
-                      className="border-b border-[#2B2421]/20 h-8"
+                      className="border-b border-[#2D1020]/20 h-8"
                     />
                   ))}
                 </div>
@@ -113,18 +113,18 @@ export function CoupleReportBlocks({
             return (
               <div
                 key={key}
-                className="rounded-2xl border border-[#5C1F28]/20 bg-[#FBF9F6] p-5 space-y-3"
+                className="rounded-2xl border border-[#2D1020]/20 bg-[#F2EBE0] p-5 space-y-3"
               >
                 <p className="text-[12pt] font-bold uppercase tracking-[0.18em] text-[#B8954A]">
                   Jeu de rôle
                 </p>
                 <p className="font-serif text-[18pt] font-bold">{block.title}</p>
-                <p className="text-[14pt] leading-[1.65] text-[#2B2421]">
+                <p className="text-[14pt] leading-[1.65] text-[#2D1020]">
                   {block.scene}
                 </p>
                 <div className="grid gap-3 sm:grid-cols-2">
-                  <div className="rounded-xl bg-[#5C1F28]/08 p-4">
-                    <p className="text-[12pt] font-bold uppercase tracking-wider text-[#5C1F28]">
+                  <div className="rounded-xl bg-[#2D1020]/08 p-4">
+                    <p className="text-[12pt] font-bold uppercase tracking-wider text-[#2D1020]">
                       Rôle A
                     </p>
                     <p className="mt-1 text-[14pt] leading-[1.65]">{block.roleA}</p>
@@ -142,25 +142,25 @@ export function CoupleReportBlocks({
             return (
               <div
                 key={key}
-                className="rounded-2xl border border-[#5C1F28]/20 bg-[#F8F4EE] p-5 sm:p-6"
+                className="rounded-2xl border border-[#2D1020]/20 bg-[#F2EBE0] p-5 sm:p-6"
               >
                 <p className="text-[12pt] font-bold uppercase tracking-[0.16em] text-[#B8954A]">
                   Schéma
                 </p>
-                <p className="font-serif text-[18pt] font-bold text-[#5C1F28] mt-1">
+                <p className="font-serif text-[18pt] font-bold text-[#2D1020] mt-1">
                   {block.title}
                 </p>
                 <ol className="mt-4 space-y-0">
                   {block.steps.map((step, si) => (
                     <li key={step} className="flex flex-col items-stretch">
-                      <div className="rounded-xl border border-[#5C1F28]/15 bg-white px-4 py-3 text-[14pt] leading-[1.5]">
+                      <div className="rounded-xl border border-[#2D1020]/15 bg-white px-4 py-3 text-[14pt] leading-[1.5]">
                         <span className="font-bold text-[#B8954A] mr-2">
                           {si + 1}.
                         </span>
                         {step}
                       </div>
                       {si < block.steps.length - 1 ? (
-                        <div className="flex justify-center py-1 text-[#5C1F28] text-[18pt] leading-none">
+                        <div className="flex justify-center py-1 text-[#2D1020] text-[18pt] leading-none">
                           ↓
                         </div>
                       ) : null}
@@ -172,14 +172,14 @@ export function CoupleReportBlocks({
           case "visualCards":
             return (
               <div key={key} className="space-y-3">
-                <p className="font-serif text-[18pt] font-bold text-[#5C1F28]">
+                <p className="font-serif text-[18pt] font-bold text-[#2D1020]">
                   {block.title}
                 </p>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {block.cards.map((card) => (
                     <div
                       key={card.label}
-                      className="rounded-2xl border border-[#B8954A]/35 bg-gradient-to-br from-white to-[#F8F4EE] p-4"
+                      className="rounded-2xl border border-[#B8954A]/35 bg-gradient-to-br from-white to-[#F2EBE0] p-4"
                     >
                       <p className="text-[12pt] font-bold uppercase tracking-wider text-[#B8954A]">
                         {card.label}

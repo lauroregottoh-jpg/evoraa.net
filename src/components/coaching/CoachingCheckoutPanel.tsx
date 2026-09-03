@@ -244,7 +244,7 @@ export function CoachingCheckoutPanel({
       className="rounded-[1.5rem] border border-border/80 bg-white shadow-elevated overflow-hidden"
     >
       {/* Step tabs — même encart, navigation */}
-      <div className="border-b border-border/60 bg-[#F8F4EE] px-3 sm:px-4 pt-3 pb-0">
+      <div className="border-b border-border/60 bg-[#F2EBE0] px-3 sm:px-4 pt-3 pb-0">
         <ol className="grid grid-cols-3 gap-1 sm:gap-2">
           {STEPS.map((s) => {
             const Icon = s.icon
@@ -658,7 +658,7 @@ export function CoachingCheckoutPanel({
       </div>
 
       {/* Footer navigation */}
-      <div className="border-t border-border/60 bg-[#F8F4EE] px-5 sm:px-7 py-4 flex items-center justify-between gap-3">
+      <div className="border-t border-border/60 bg-[#F2EBE0] px-5 sm:px-7 py-4 flex items-center justify-between gap-3">
         <button
           type="button"
           onClick={prev}

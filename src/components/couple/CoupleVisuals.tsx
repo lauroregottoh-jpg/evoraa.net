@@ -182,7 +182,7 @@ export function VizReportUnlock({ className }: { className?: string }) {
           rx="4"
           stroke="currentColor"
           strokeWidth="1.75"
-          fill="#FBF9F6"
+          fill="#F2EBE0"
         />
         <rect
           x="116"
@@ -192,7 +192,7 @@ export function VizReportUnlock({ className }: { className?: string }) {
           rx="4"
           stroke="currentColor"
           strokeWidth="1.75"
-          fill="#FBF9F6"
+          fill="#F2EBE0"
           className="couple-viz-unlock-page"
         />
         <path

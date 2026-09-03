@@ -59,14 +59,14 @@ export function ScoreRing({
         />
         <defs>
           <linearGradient id="rapportGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#F3D9A4" />
+            <stop offset="0%" stopColor="#D4AF72" />
             <stop offset="55%" stopColor="#B8954A" />
             <stop offset="100%" stopColor="#8A6A2E" />
           </linearGradient>
         </defs>
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-        <p className="font-serif text-3xl font-bold text-[#2B2421] leading-none">
+        <p className="font-serif text-3xl font-bold text-[#2D1020] leading-none">
           {pct}
         </p>
         <p className="text-[9px] font-bold uppercase tracking-wider text-[#B8954A] mt-1">
@@ -109,7 +109,7 @@ export function ForceBars({
             </div>
             <div className="h-2.5 rounded-full bg-[#B8954A]/12 overflow-hidden border border-[#B8954A]/15">
               <div
-                className="rapport-bar-fill h-full rounded-full bg-gradient-to-r from-[#8A6A2E] via-[#B8954A] to-[#F3D9A4]"
+                className="rapport-bar-fill h-full rounded-full bg-gradient-to-r from-[#8A6A2E] via-[#B8954A] to-[#D4AF72]"
                 style={{
                   width: `${v}%`,
                   animationDelay: `${200 + i * 100}ms`,
@@ -184,7 +184,7 @@ export function MonthTimeline({
           className="rapport-reveal relative flex gap-4 pb-5 last:pb-0"
           style={{ animationDelay: `${i * 120}ms` }}
         >
-          <div className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-[#B8954A] bg-gradient-to-br from-[#F3D9A4] to-[#B8954A] font-serif text-sm font-bold text-[#2B2421] shadow-sm">
+          <div className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-[#B8954A] bg-gradient-to-br from-[#D4AF72] to-[#B8954A] font-serif text-sm font-bold text-[#2D1020] shadow-sm">
             {i + 1}
           </div>
           <div className="min-w-0 pt-1">
@@ -207,7 +207,7 @@ export function ChapterProgressDots({
 }) {
   const done = items.filter((i) => i.unlocked).length
   return (
-    <div className="rounded-2xl border border-[#B8954A]/25 bg-gradient-to-br from-[#B8954A]/[0.08] via-white to-[#F8F4EE] p-4 space-y-3">
+    <div className="rounded-2xl border border-[#B8954A]/25 bg-gradient-to-br from-[#B8954A]/[0.08] via-white to-[#F2EBE0] p-4 space-y-3">
       <div className="flex items-center justify-between">
         <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
           Dimensions analysées

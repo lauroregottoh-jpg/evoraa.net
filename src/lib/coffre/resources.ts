@@ -60,22 +60,22 @@ export const COFFRE_DOMAIN_META: Record<
   "preparation-mariage": {
     label: "Préparation au mariage",
     blurb: "Discerner, choisir et se préparer avant de s’engager.",
-    tone: "#5C1F28",
-    ink: "#F8F4EE",
+    tone: "#2D1020",
+    ink: "#F2EBE0",
     order: 1,
   },
   "vie-couple": {
     label: "Vie de couple",
     blurb: "Nourrir la relation, la prière à deux et le projet commun.",
     tone: "#7A4050",
-    ink: "#F8F4EE",
+    ink: "#F2EBE0",
     order: 2,
   },
   "identite-guerison": {
     label: "Identité & guérison",
     blurb: "Se reconstruire, pardonner et aimer depuis un cœur soigné.",
     tone: "#B8954A",
-    ink: "#2B2421",
+    ink: "#2D1020",
     order: 3,
   },
   "education-enfants": {
@@ -89,7 +89,7 @@ export const COFFRE_DOMAIN_META: Record<
     label: "Famille & foyer",
     blurb: "Préparer le climat du foyer et l’héritage familial.",
     tone: "#5A3A55",
-    ink: "#F8F4EE",
+    ink: "#F2EBE0",
     order: 5,
   },
 }
@@ -100,8 +100,8 @@ export const COFFRE_CATEGORY_META: Record<
 > = {
   guide: {
     label: "Guide",
-    tone: "#5C1F28",
-    ink: "#F8F4EE",
+    tone: "#2D1020",
+    ink: "#F2EBE0",
   },
   journal: {
     label: "Journal",
@@ -111,22 +111,22 @@ export const COFFRE_CATEGORY_META: Record<
   priere: {
     label: "Prière",
     tone: "#4A3F2A",
-    ink: "#F8F4EE",
+    ink: "#F2EBE0",
   },
   exercice: {
     label: "Exercice",
     tone: "#6B3A2A",
-    ink: "#F8F4EE",
+    ink: "#F2EBE0",
   },
   affirmations: {
     label: "Affirmations",
     tone: "#B8954A",
-    ink: "#2B2421",
+    ink: "#2D1020",
   },
   lettre: {
     label: "Lettre",
     tone: "#7A4050",
-    ink: "#F8F4EE",
+    ink: "#F2EBE0",
   },
   fiche: {
     label: "Fiche",
@@ -136,7 +136,7 @@ export const COFFRE_CATEGORY_META: Record<
   checklist: {
     label: "Check-list",
     tone: "#4A5540",
-    ink: "#F8F4EE",
+    ink: "#F2EBE0",
   },
 }
 

@@ -20,7 +20,7 @@ export function PwaMemberInstallCard({ isPaid, className }: Props) {
       className={cn(
         "rounded-2xl border px-4 py-4 sm:px-5 sm:py-5 flex flex-col sm:flex-row sm:items-center gap-4 justify-between",
         isPaid
-          ? "border-accent/35 bg-gradient-to-r from-accent/10 via-[#F8F4EE] to-primary/5"
+          ? "border-accent/35 bg-gradient-to-r from-accent/10 via-[#F2EBE0] to-primary/5"
           : "border-primary/20 bg-gradient-to-r from-primary/[0.06] via-card to-accent/[0.06]",
         className
       )}

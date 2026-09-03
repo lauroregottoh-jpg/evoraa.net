@@ -24,7 +24,7 @@ const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "https://keliaa.org";
 
 export const viewport: Viewport = {
-  themeColor: "#0F1F1A",
+  themeColor: "#2D1020",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,

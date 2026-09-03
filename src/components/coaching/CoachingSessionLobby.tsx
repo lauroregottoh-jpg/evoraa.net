@@ -24,8 +24,8 @@ export function CoachingSessionLobby({
   const waitingPeer = !peerReady
 
   return (
-    <div className="rounded-2xl border border-[#5C1F28]/20 bg-gradient-to-br from-[#5C1F28] to-[#3D2A14] text-[#F8F4EE] p-6 sm:p-8 space-y-5">
-      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#F3D9A4]">
+    <div className="rounded-2xl border border-[#2D1020]/20 bg-gradient-to-br from-[#2D1020] to-[#3D2A14] text-[#F2EBE0] p-6 sm:p-8 space-y-5">
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#D4AF72]">
         Salle d’attente · coaching
       </p>
 
@@ -67,7 +67,7 @@ export function CoachingSessionLobby({
       <div className="flex flex-wrap items-center gap-3 text-xs text-white/70">
         {waitingPeer ? (
           <span className="inline-flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-[#F3D9A4] animate-pulse" />
+            <span className="h-2 w-2 rounded-full bg-[#D4AF72] animate-pulse" />
             En attente de connexion…
           </span>
         ) : (
@@ -82,7 +82,7 @@ export function CoachingSessionLobby({
           type="button"
           onClick={onEnter}
           disabled={entering}
-          className="inline-flex h-12 w-full sm:w-auto items-center justify-center rounded-xl bg-[#F3D9A4] px-5 text-sm font-bold text-[#5C1F28] disabled:opacity-60"
+          className="inline-flex h-12 w-full sm:w-auto items-center justify-center rounded-xl bg-[#D4AF72] px-5 text-sm font-bold text-[#2D1020] disabled:opacity-60"
         >
           {entering ? "Ouverture…" : "Entrer en séance"}
         </button>

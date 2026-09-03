@@ -276,18 +276,18 @@ export function MemberShell({
       compact ? "justify-center px-0 py-2.5" : "gap-2.5 px-3 py-2",
       accent &&
         !active &&
-        "text-[#F3D9A4] bg-white/10 border border-[#B8954A]/35 hover:bg-white/15",
+        "text-[#D4AF72] bg-white/10 border border-[#B8954A]/35 hover:bg-white/15",
       accent &&
         active &&
-        "bg-[#B8954A] text-[#2B2421] border border-[#B8954A] shadow-sm",
+        "bg-[#B8954A] text-[#2D1020] border border-[#B8954A] shadow-sm",
       gold &&
         !accent &&
         !active &&
-        "text-[#F3D9A4]/95 hover:text-[#F3D9A4] hover:bg-[#B8954A]/15",
+        "text-[#D4AF72]/95 hover:text-[#D4AF72] hover:bg-[#B8954A]/15",
       gold &&
         !accent &&
         active &&
-        "bg-[#B8954A]/25 text-[#F3D9A4] shadow-[inset_0_0_0_1px_rgba(215,184,102,0.45)]",
+        "bg-[#B8954A]/25 text-[#D4AF72] shadow-[inset_0_0_0_1px_rgba(215,184,102,0.45)]",
       !accent &&
         !gold &&
         active &&
@@ -321,8 +321,8 @@ export function MemberShell({
         <Icon
           className={cn(
             "h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110",
-            (accent || gold) && !isActive(item.href) && "text-[#F3D9A4]",
-            gold && isActive(item.href) && "text-[#F3D9A4]"
+            (accent || gold) && !isActive(item.href) && "text-[#D4AF72]",
+            gold && isActive(item.href) && "text-[#D4AF72]"
           )}
         />
         <span
@@ -397,7 +397,7 @@ export function MemberShell({
               : "text-white/85 hover:text-white hover:bg-white/10"
           )}
         >
-          <Icon className="h-4 w-4 shrink-0 text-[#F3D9A4]" />
+          <Icon className="h-4 w-4 shrink-0 text-[#D4AF72]" />
           <span className="truncate flex-1 text-left">{opts.label}</span>
           <span className="text-[9px] font-bold uppercase tracking-wider text-white/45 mr-0.5">
             {opts.open ? "Réduire" : "Ouvrir"}
@@ -488,8 +488,8 @@ export function MemberShell({
       <aside
         className={cn(
           "hidden md:flex shrink-0 flex-col sticky top-0 h-screen z-40",
-          "bg-[#5C1F28] text-[#F8F4EE]",
-          "border-r border-[#3D141A]/80 shadow-[4px_0_24px_-12px_rgba(100,31,43,0.35)]",
+          "bg-[#2D1020] text-[#F2EBE0]",
+          "border-r border-[#3D1830]/80 shadow-[4px_0_24px_-12px_rgba(100,31,43,0.35)]",
           "transition-[width] duration-300 ease-out",
           sidebarReady ? (sidebarOpen ? "md:w-56 lg:w-60" : "md:w-[4.25rem]") : "md:w-56 lg:w-60",
           sidebarOpen ? "px-3 py-4 gap-3" : "px-2 py-4 gap-3"
@@ -505,7 +505,7 @@ export function MemberShell({
             href="/dashboard"
             onClick={go("/dashboard")}
             className={cn(
-              "font-serif font-bold tracking-tight text-[#F8F4EE] transition-all duration-300",
+              "font-serif font-bold tracking-tight text-[#F2EBE0] transition-all duration-300",
               sidebarOpen ? "text-2xl px-1" : "text-lg"
             )}
             title="KELIAA"
@@ -552,7 +552,7 @@ export function MemberShell({
             <div className="flex items-center gap-3 min-w-0">
               <button
                 type="button"
-                className="md:hidden p-2 rounded-lg border border-border shrink-0 bg-[#5C1F28] text-white border-[#5C1F28]"
+                className="md:hidden p-2 rounded-lg border border-border shrink-0 bg-[#2D1020] text-white border-[#2D1020]"
                 onClick={() => setMobileOpen((v) => !v)}
                 aria-label="Ouvrir le menu"
                 aria-expanded={mobileOpen}
@@ -596,41 +596,41 @@ export function MemberShell({
                 <button
                   type="button"
                   onClick={() => setAccountOpen((v) => !v)}
-                  className="inline-flex items-center justify-center rounded-full w-9 h-9 border border-[#5C1F28]/25 bg-[#5C1F28]/[0.08] hover:bg-[#5C1F28]/15 transition-colors"
+                  className="inline-flex items-center justify-center rounded-full w-9 h-9 border border-[#2D1020]/25 bg-[#2D1020]/[0.08] hover:bg-[#2D1020]/15 transition-colors"
                   title="Compte"
                   aria-label="Menu compte"
                   aria-expanded={accountOpen}
                 >
-                  <User className="h-4 w-4 text-[#5C1F28]" />
+                  <User className="h-4 w-4 text-[#2D1020]" />
                 </button>
                 {accountOpen && (
                   <div
                     role="menu"
-                    className="absolute right-0 mt-2 w-56 rounded-2xl border border-[#3D141A]/80 bg-[#5C1F28] text-[#F8F4EE] shadow-2xl z-[200] overflow-hidden py-1.5 animate-in fade-in zoom-in-95 duration-200"
+                    className="absolute right-0 mt-2 w-56 rounded-2xl border border-[#3D1830]/80 bg-[#2D1020] text-[#F2EBE0] shadow-2xl z-[200] overflow-hidden py-1.5 animate-in fade-in zoom-in-95 duration-200"
                   >
                     <a
                       href="/profile"
                       onClick={go("/profile")}
-                      className="flex items-center gap-2.5 px-3.5 py-2.5 text-sm font-semibold text-[#F8F4EE]/90 hover:bg-white/12 hover:text-white transition-colors"
+                      className="flex items-center gap-2.5 px-3.5 py-2.5 text-sm font-semibold text-[#F2EBE0]/90 hover:bg-white/12 hover:text-white transition-colors"
                     >
-                      <User className="h-4 w-4 text-[#F3D9A4]" />
+                      <User className="h-4 w-4 text-[#D4AF72]" />
                       Profil
                     </a>
                     <a
                       href="/settings"
                       onClick={go("/settings")}
-                      className="flex items-center gap-2.5 px-3.5 py-2.5 text-sm font-semibold text-[#F8F4EE]/90 hover:bg-white/12 hover:text-white transition-colors"
+                      className="flex items-center gap-2.5 px-3.5 py-2.5 text-sm font-semibold text-[#F2EBE0]/90 hover:bg-white/12 hover:text-white transition-colors"
                     >
-                      <Settings className="h-4 w-4 text-[#F3D9A4]" />
+                      <Settings className="h-4 w-4 text-[#D4AF72]" />
                       Paramètres
                     </a>
                     <div className="my-1.5 mx-3 h-px bg-gradient-to-r from-transparent via-[#B8954A]/55 to-transparent" />
                     <form action={logoutAction} className="px-1.5 pb-0.5">
                       <button
                         type="submit"
-                        className="flex w-full items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#F8F4EE]/90 hover:bg-white/12 hover:text-white transition-colors"
+                        className="flex w-full items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-[#F2EBE0]/90 hover:bg-white/12 hover:text-white transition-colors"
                       >
-                        <LogOut className="h-4 w-4 text-[#F3D9A4]" />
+                        <LogOut className="h-4 w-4 text-[#D4AF72]" />
                         Déconnexion
                       </button>
                     </form>
@@ -641,8 +641,8 @@ export function MemberShell({
           </div>
 
           {mobileOpen && (
-            <div className="md:hidden border-t border-[#3D141A] bg-[#5C1F28] px-3 py-3 max-h-[75vh] overflow-y-auto z-[70] animate-in slide-in-from-top-2 fade-in duration-300 member-sidebar-scroll">
-              <nav className="flex flex-col gap-0.5 text-[#F8F4EE]" aria-label="Navigation membre">
+            <div className="md:hidden border-t border-[#3D1830] bg-[#2D1020] px-3 py-3 max-h-[75vh] overflow-y-auto z-[70] animate-in slide-in-from-top-2 fade-in duration-300 member-sidebar-scroll">
+              <nav className="flex flex-col gap-0.5 text-[#F2EBE0]" aria-label="Navigation membre">
                 {renderNavLinks(false)}
               </nav>
               <div className="mt-3">{logoutButton(false)}</div>
@@ -685,7 +685,7 @@ export function MemberShell({
         </main>
 
         <nav
-          className="md:hidden fixed bottom-0 inset-x-0 z-[60] border-t border-[#3D141A]/40 bg-[#5C1F28] text-white backdrop-blur-md"
+          className="md:hidden fixed bottom-0 inset-x-0 z-[60] border-t border-[#3D1830]/40 bg-[#2D1020] text-white backdrop-blur-md"
           aria-label="Navigation mobile"
         >
           <div className="mx-auto max-w-lg grid grid-cols-5 h-16">
@@ -699,7 +699,7 @@ export function MemberShell({
                   onClick={go(item.href)}
                   className={cn(
                     "flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold cursor-pointer transition-colors",
-                    active ? "text-[#F3D9A4]" : "text-white/75"
+                    active ? "text-[#D4AF72]" : "text-white/75"
                   )}
                 >
                   <Icon className="h-5 w-5" />
@@ -712,7 +712,7 @@ export function MemberShell({
               onClick={() => setMobileOpen(true)}
               className={cn(
                 "flex flex-col items-center justify-center gap-0.5 text-[10px] font-semibold transition-colors",
-                accountActive || mobileOpen ? "text-[#F3D9A4]" : "text-white/75"
+                accountActive || mobileOpen ? "text-[#D4AF72]" : "text-white/75"
               )}
             >
               <Menu className="h-5 w-5" />

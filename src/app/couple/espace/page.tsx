@@ -144,15 +144,15 @@ export default function CoupleEspacePage() {
               }
             />
 
-            <section className="rounded-2xl border border-[#B8954A]/30 bg-[#FBF9F6] p-5 space-y-3">
-              <h2 className="font-serif text-xl font-bold text-[#5C1F28]">
+            <section className="rounded-2xl border border-[#B8954A]/30 bg-[#F2EBE0] p-5 space-y-3">
+              <h2 className="font-serif text-xl font-bold text-[#2D1020]">
                 Où vous en êtes
               </h2>
               <ul className="space-y-2 text-sm">
                 {(state.participants || []).map((p) => (
                   <li
                     key={p.id}
-                    className="flex justify-between gap-3 rounded-xl bg-white border border-[#2B2421]/8 px-3 py-2.5"
+                    className="flex justify-between gap-3 rounded-xl bg-white border border-[#2D1020]/8 px-3 py-2.5"
                   >
                     <span>
                       Place {p.seat}

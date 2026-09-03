@@ -42,10 +42,10 @@ type Chapter =
 
 const A4_PRINT_CSS = `
 @page { size: A4 portrait; margin: 18mm 16mm; }
-body{font-family:Georgia,"Times New Roman",serif;color:#2B2421;line-height:1.65;font-size:14pt;background:#fff}
-h1{font-size:22pt;color:#5C1F28;line-height:1.25;margin:0 0 .4em}
-h2{font-size:16pt;color:#5C1F28;margin:1.1em 0 .45em}
-h3{font-size:14pt;color:#5C1F28;margin:1em 0 .35em}
+body{font-family:Georgia,"Times New Roman",serif;color:#2D1020;line-height:1.65;font-size:14pt;background:#fff}
+h1{font-size:22pt;color:#2D1020;line-height:1.25;margin:0 0 .4em}
+h2{font-size:16pt;color:#2D1020;margin:1.1em 0 .45em}
+h3{font-size:14pt;color:#2D1020;margin:1em 0 .35em}
 .meta{color:#555;font-size:12pt}
 .sub{color:#8A6A2E;font-style:italic;font-size:14pt}
 p,li{font-size:14pt;line-height:1.65}
@@ -149,8 +149,8 @@ function ChapterBody({
     return (
       <div className="space-y-8 text-[14pt] leading-[1.65]">
         {doc.exercises.map((ex) => (
-          <div key={ex.id} className="space-y-3 border-t border-[#2B2421]/10 pt-6">
-            <h3 className="font-serif text-[18pt] font-bold text-[#5C1F28]">
+          <div key={ex.id} className="space-y-3 border-t border-[#2D1020]/10 pt-6">
+            <h3 className="font-serif text-[18pt] font-bold text-[#2D1020]">
               {ex.title}
             </h3>
             <p>
@@ -168,10 +168,10 @@ function ChapterBody({
                 key={prompt}
                 className="rounded-xl border border-dashed border-[#B8954A]/50 p-4"
               >
-                <p className="font-semibold text-[#5C1F28]">{prompt}</p>
+                <p className="font-semibold text-[#2D1020]">{prompt}</p>
                 <div className="mt-3 space-y-3">
                   {[0, 1, 2].map((i) => (
-                    <div key={i} className="h-8 border-b border-[#2B2421]/20" />
+                    <div key={i} className="h-8 border-b border-[#2D1020]/20" />
                   ))}
                 </div>
               </div>
@@ -184,7 +184,7 @@ function ChapterBody({
   return (
     <ol className="space-y-5 text-[14pt] leading-[1.65]">
       {doc.actionPlan.map((step) => (
-        <li key={step.order} className="border-t border-[#2B2421]/10 pt-4">
+        <li key={step.order} className="border-t border-[#2D1020]/10 pt-4">
           <p className="text-[12pt] font-bold uppercase tracking-wider text-[#B8954A]">
             Étape {step.order}
           </p>
@@ -216,7 +216,7 @@ function A4Page({
     <section
       id={`ch-${ch.id}`}
       className={cn(
-        "report-a4 mx-auto w-full max-w-[210mm] bg-white text-[#2B2421] shadow-md border border-[#2B2421]/10",
+        "report-a4 mx-auto w-full max-w-[210mm] bg-white text-[#2D1020] shadow-md border border-[#2D1020]/10",
         "px-[16mm] py-[14mm] sm:px-[18mm] sm:py-[16mm]",
         "scroll-mt-24",
         className
@@ -228,7 +228,7 @@ function A4Page({
             Page {ch.page}
             {ch.id.startsWith("pp-") ? " · Premium Plus" : ""}
           </p>
-          <h2 className="mt-2 font-serif text-[22pt] font-bold leading-tight text-[#5C1F28]">
+          <h2 className="mt-2 font-serif text-[22pt] font-bold leading-tight text-[#2D1020]">
             {ch.title}
           </h2>
           {ch.kind === "section" && ch.subtitle ? (
@@ -240,7 +240,7 @@ function A4Page({
         <button
           type="button"
           onClick={() => downloadChapter(ch, doc)}
-          className="print:hidden inline-flex h-10 shrink-0 items-center gap-1.5 rounded-xl border border-[#2B2421]/15 bg-[#FBF9F6] px-3 text-[12pt] font-semibold"
+          className="print:hidden inline-flex h-10 shrink-0 items-center gap-1.5 rounded-xl border border-[#2D1020]/15 bg-[#F2EBE0] px-3 text-[12pt] font-semibold"
         >
           <Download className="h-4 w-4" /> Télécharger
         </button>
@@ -383,7 +383,7 @@ export function CoupleReportView({
   return (
     <article
       className={cn(
-        "mx-auto w-full max-w-[240mm] pb-20 text-[#2B2421] print:max-w-none",
+        "mx-auto w-full max-w-[240mm] pb-20 text-[#2D1020] print:max-w-none",
         className
       )}
       style={
@@ -412,14 +412,14 @@ export function CoupleReportView({
         <button
           type="button"
           onClick={() => window.print()}
-          className="inline-flex h-11 items-center gap-2 rounded-xl border border-[#2B2421]/15 bg-white px-4 text-[14pt] font-semibold"
+          className="inline-flex h-11 items-center gap-2 rounded-xl border border-[#2D1020]/15 bg-white px-4 text-[14pt] font-semibold"
         >
           <Printer className="h-4 w-4" /> Imprimer A4
         </button>
         <button
           type="button"
           onClick={handleDownloadAll}
-          className="inline-flex h-11 items-center gap-2 rounded-xl border border-[#2B2421]/15 bg-white px-4 text-[14pt] font-semibold"
+          className="inline-flex h-11 items-center gap-2 rounded-xl border border-[#2D1020]/15 bg-white px-4 text-[14pt] font-semibold"
         >
           <Download className="h-4 w-4" /> Télécharger A4
         </button>
@@ -429,23 +429,23 @@ export function CoupleReportView({
           className={cn(
             "inline-flex h-11 items-center gap-2 rounded-xl border px-4 text-[14pt] font-semibold",
             focusOne
-              ? "border-[#5C1F28] bg-[#5C1F28] text-white"
-              : "border-[#2B2421]/15 bg-white"
+              ? "border-[#2D1020] bg-[#2D1020] text-white"
+              : "border-[#2D1020]/15 bg-white"
           )}
         >
           {focusOne ? "Voir toutes les pages" : "Une page à la fois"}
         </button>
       </div>
 
-      <header className="relative overflow-hidden rounded-[1.25rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#5C1F28] via-[#3D1519] to-[#2B2421] p-6 sm:p-8 text-[#FBF9F6] mb-6 print:hidden">
-        <p className="inline-flex items-center gap-1.5 text-[12pt] font-bold uppercase tracking-[0.18em] text-[#F3D9A4]">
+      <header className="relative overflow-hidden rounded-[1.25rem] border border-[#B8954A]/35 bg-gradient-to-br from-[#2D1020] via-[#3D1830] to-[#2D1020] p-6 sm:p-8 text-[#F2EBE0] mb-6 print:hidden">
+        <p className="inline-flex items-center gap-1.5 text-[12pt] font-bold uppercase tracking-[0.18em] text-[#D4AF72]">
           <HeartHandshake className="h-4 w-4" />
           {doc.brand}
         </p>
         <h1 className="mt-3 font-serif text-[24pt] sm:text-[28pt] font-bold leading-tight">
           Bilan de compatibilité & dynamique du couple
         </h1>
-        <p className="mt-2 font-serif text-[18pt] text-[#F3D9A4]">
+        <p className="mt-2 font-serif text-[18pt] text-[#D4AF72]">
           {doc.names.nameA} & {doc.names.nameB}
         </p>
         <p className="mt-1 text-[12pt] text-white/70">{dateLabel}</p>
@@ -454,7 +454,7 @@ export function CoupleReportView({
             <p className="text-[12pt] uppercase tracking-wider text-white/50">
               Score global
             </p>
-            <p className="font-serif text-[36pt] font-bold text-[#F3D9A4] leading-none">
+            <p className="font-serif text-[36pt] font-bold text-[#D4AF72] leading-none">
               {doc.globalScore}
               <span className="text-[14pt] text-white/50 font-normal"> %</span>
             </p>
@@ -478,7 +478,7 @@ export function CoupleReportView({
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
           {isPP ? (
-            <span className="inline-flex items-center gap-1 rounded-full border border-[#B8954A]/50 bg-[#B8954A]/20 px-3 py-1 text-[11pt] font-bold uppercase tracking-wider text-[#F3D9A4]">
+            <span className="inline-flex items-center gap-1 rounded-full border border-[#B8954A]/50 bg-[#B8954A]/20 px-3 py-1 text-[11pt] font-bold uppercase tracking-wider text-[#D4AF72]">
               <Crown className="h-3.5 w-3.5" /> Premium Plus · Premium + Points
             </span>
           ) : (
@@ -495,12 +495,12 @@ export function CoupleReportView({
       </header>
 
       {doc.safetyNotice ? (
-        <div className="mb-5 rounded-2xl border border-[#5C1F28]/30 bg-[#F8F4EE] px-5 py-4 text-[14pt] leading-[1.65]">
+        <div className="mb-5 rounded-2xl border border-[#2D1020]/30 bg-[#F2EBE0] px-5 py-4 text-[14pt] leading-[1.65]">
           {doc.safetyNotice}
         </div>
       ) : null}
 
-      <nav className="mb-6 rounded-2xl border border-[#2B2421]/10 bg-[#F8F4EE]/90 p-4 print:hidden">
+      <nav className="mb-6 rounded-2xl border border-[#2D1020]/10 bg-[#F2EBE0]/90 p-4 print:hidden">
         <p className="text-[12pt] font-bold uppercase tracking-[0.14em] text-[#B8954A] mb-2">
           Sommaire · {chapters.length} pages A4
         </p>
@@ -509,7 +509,7 @@ export function CoupleReportView({
             <li key={ch.id} className="break-inside-avoid">
               <button
                 type="button"
-                className="text-left text-[#5C1F28] hover:underline"
+                className="text-left text-[#2D1020] hover:underline"
                 onClick={() => {
                   setIndex(i)
                   if (!focusOne) {
@@ -529,7 +529,7 @@ export function CoupleReportView({
       {focusOne ? (
         <div className="space-y-4 print:hidden">
           <div className="flex items-center justify-between gap-3">
-            <p className="text-[12pt] text-[#2B2421]/55">
+            <p className="text-[12pt] text-[#2D1020]/55">
               Page {current.page} / {chapters.length}
             </p>
             <div className="flex gap-2">
@@ -569,7 +569,7 @@ export function CoupleReportView({
         ))}
       </div>
 
-      <footer className="pt-8 border-t border-[#2B2421]/10 space-y-2 text-[12pt] text-[#2B2421]/50">
+      <footer className="pt-8 border-t border-[#2D1020]/10 space-y-2 text-[12pt] text-[#2D1020]/50">
         <p>
           Versions — questionnaire {doc.versions.questionnaire_version} · scoring{" "}
           {doc.versions.scoring_version} · contenu {doc.versions.content_version}{" "}
@@ -577,7 +577,7 @@ export function CoupleReportView({
         </p>
         <p>
           Ce bilan n’est pas un diagnostic clinique ni un verdict d’avenir.{" "}
-          <Link href="/couple" className="font-semibold text-[#5C1F28]">
+          <Link href="/couple" className="font-semibold text-[#2D1020]">
             Retour à KELYA Couple →
           </Link>
         </p>

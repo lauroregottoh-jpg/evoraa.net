@@ -67,7 +67,7 @@ export default async function AssessmentsHubPage() {
   return (
     <MemberPage>
       <div className="relative space-y-10 py-2 max-w-4xl mx-auto">
-        <header className="relative z-10 overflow-hidden rounded-[1.75rem] border border-border bg-[#FBF9F6] p-6 sm:p-8 shadow-card">
+        <header className="relative z-10 overflow-hidden rounded-[1.75rem] border border-border bg-[#F2EBE0] p-6 sm:p-8 shadow-card">
           <div className="relative z-10 space-y-4">
             <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground">
               {isAlliance ? "Tests · Matching & Rapport" : "Tests"}
@@ -154,7 +154,7 @@ export default async function AssessmentsHubPage() {
         </header>
 
         {incoming.invites.length > 0 ? (
-          <div className="relative z-10 space-y-3 rounded-[1.35rem] border border-border bg-[#FBF9F6] p-5">
+          <div className="relative z-10 space-y-3 rounded-[1.35rem] border border-border bg-[#F2EBE0] p-5">
             <p className="font-serif text-lg font-bold text-primary">
               Invitations à un test
             </p>
@@ -180,7 +180,7 @@ export default async function AssessmentsHubPage() {
           </div>
         ) : null}
 
-        <div className="relative z-10 rounded-[1.35rem] border border-border bg-[#FBF9F6] p-5 shadow-card">
+        <div className="relative z-10 rounded-[1.35rem] border border-border bg-[#F2EBE0] p-5 shadow-card">
           <PillarBadges
             pillars={progress.map((p) => ({
               slug: p.slug,
@@ -193,7 +193,7 @@ export default async function AssessmentsHubPage() {
           <p className="relative z-10 text-sm text-destructive">{error}</p>
         ) : null}
 
-        <section className="relative z-10 space-y-4 rounded-[1.75rem] border border-border bg-[#FBF9F6] p-5 sm:p-7 shadow-card">
+        <section className="relative z-10 space-y-4 rounded-[1.75rem] border border-border bg-[#F2EBE0] p-5 sm:p-7 shadow-card">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary inline-flex items-center gap-1.5">
               <Sparkles className="h-4 w-4" />
@@ -206,7 +206,7 @@ export default async function AssessmentsHubPage() {
           <AssessmentPillarCards items={[...progress]} />
         </section>
 
-        <section className="relative z-10 space-y-4 rounded-[1.75rem] border border-accent/35 bg-[#FBF9F6] p-5 sm:p-7 shadow-card">
+        <section className="relative z-10 space-y-4 rounded-[1.75rem] border border-accent/35 bg-[#F2EBE0] p-5 sm:p-7 shadow-card">
           <div className="space-y-3">
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#7A5F28] inline-flex items-center gap-1.5 flex-wrap">
               <Crown className="h-4 w-4 text-accent" />

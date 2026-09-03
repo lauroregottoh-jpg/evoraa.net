@@ -178,14 +178,14 @@ export const CoachingLiveKitRoom = React.forwardRef<
   }
 
   return (
-    <div className="relative flex min-h-[280px] flex-col items-center justify-center gap-4 bg-gradient-to-b from-[#2B2421] to-black px-4 py-10 sm:min-h-[360px]">
+    <div className="relative flex min-h-[280px] flex-col items-center justify-center gap-4 bg-gradient-to-b from-[#2D1020] to-black px-4 py-10 sm:min-h-[360px]">
       <audio ref={remoteAudioRef} autoPlay playsInline className="hidden" />
 
       <div className="text-center space-y-2">
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#F3D9A4]">
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#D4AF72]">
           Audio LiveKit · dans KELIAA
         </p>
-        <p className="font-serif text-xl font-bold text-[#FBF9F6]">
+        <p className="font-serif text-xl font-bold text-[#F2EBE0]">
           {connected
             ? peerLabel
               ? `En ligne avec ${peerLabel}`

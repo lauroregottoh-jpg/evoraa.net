@@ -38,10 +38,10 @@ export function CoachingSessionReminders() {
         return (
           <div
             key={`${r.sessionId}-${r.role}`}
-            className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#B8954A]/40 bg-[#FBF9F6] px-3 py-2.5 text-sm"
+            className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#B8954A]/40 bg-[#F2EBE0] px-3 py-2.5 text-sm"
           >
             <div className="min-w-0">
-              <p className="font-semibold text-[#5C1F28] truncate">{r.label}</p>
+              <p className="font-semibold text-[#2D1020] truncate">{r.label}</p>
               <p className="text-xs text-muted-foreground">
                 {when.toLocaleString("fr-FR")}
                 {urgency ? ` · ${urgency}` : ""}
@@ -53,7 +53,7 @@ export function CoachingSessionReminders() {
                 onClick={() => {
                   void clearSessionReminderAction(r.sessionId, r.role)
                 }}
-                className="inline-flex h-9 items-center rounded-lg bg-[#5C1F28] px-3 text-xs font-bold text-[#FBF9F6]"
+                className="inline-flex h-9 items-center rounded-lg bg-[#2D1020] px-3 text-xs font-bold text-[#F2EBE0]"
               >
                 Entrer en salle
               </Link>

@@ -23,7 +23,7 @@ export function AuthHeroShell({
           className="object-cover"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#2B2421]/55 via-[#5C1F28]/45 to-[#2B2421]/75" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#2D1020]/55 via-[#2D1020]/45 to-[#2D1020]/75" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(215,184,102,0.18),_transparent_55%)]" />
       </div>
 

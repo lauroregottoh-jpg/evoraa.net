@@ -24,26 +24,26 @@ export default function CoupleRapportDemoClient() {
   const doc = React.useMemo(() => buildDemoCoupleReport(offerId), [offerId])
 
   return (
-    <div className="min-h-screen bg-[#FBF9F6]">
-      <div className="sticky top-0 z-30 border-b border-[#2B2421]/10 bg-[#FBF9F6]/95 backdrop-blur-md">
+    <div className="min-h-screen bg-[#F2EBE0]">
+      <div className="sticky top-0 z-30 border-b border-[#2D1020]/10 bg-[#F2EBE0]/95 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#5C1F28]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#2D1020]">
               Aperçu démo · moteur décision
             </p>
-            <p className="text-sm font-medium text-[#2B2421]">
+            <p className="text-sm font-medium text-[#2D1020]">
               {DEMO_COUPLE_META.label}
             </p>
           </div>
-          <div className="flex rounded-xl border border-[#2B2421]/15 bg-white p-1">
+          <div className="flex rounded-xl border border-[#2D1020]/15 bg-white p-1">
             <button
               type="button"
               onClick={() => setOfferId("couple_essential")}
               className={cn(
                 "rounded-lg px-3 py-1.5 text-xs font-bold transition-colors",
                 offerId === "couple_essential"
-                  ? "bg-[#5C1F28] text-white"
-                  : "text-[#2B2421]/70 hover:bg-[#F8F4EE]"
+                  ? "bg-[#2D1020] text-white"
+                  : "text-[#2D1020]/70 hover:bg-[#F2EBE0]"
               )}
             >
               Premium
@@ -54,8 +54,8 @@ export default function CoupleRapportDemoClient() {
               className={cn(
                 "rounded-lg px-3 py-1.5 text-xs font-bold transition-colors",
                 offerId === "couple_premium_plus"
-                  ? "bg-[#5C1F28] text-white"
-                  : "text-[#2B2421]/70 hover:bg-[#F8F4EE]"
+                  ? "bg-[#2D1020] text-white"
+                  : "text-[#2D1020]/70 hover:bg-[#F2EBE0]"
               )}
             >
               Premium Plus
@@ -63,18 +63,18 @@ export default function CoupleRapportDemoClient() {
           </div>
           <Link
             href="/couple/dossier/demo"
-            className="text-xs font-semibold text-[#5C1F28] underline underline-offset-2"
+            className="text-xs font-semibold text-[#2D1020] underline underline-offset-2"
           >
             Dossier démo
           </Link>
           <Link
             href="/couple"
-            className="text-xs font-semibold text-[#5C1F28] underline underline-offset-2"
+            className="text-xs font-semibold text-[#2D1020] underline underline-offset-2"
           >
             Landing Couple
           </Link>
         </div>
-        <p className="max-w-6xl mx-auto px-4 sm:px-6 pb-3 text-xs text-[#2B2421]/55">
+        <p className="max-w-6xl mx-auto px-4 sm:px-6 pb-3 text-xs text-[#2D1020]/55">
           {DEMO_COUPLE_META.status} — {DEMO_COUPLE_META.note}
         </p>
       </div>

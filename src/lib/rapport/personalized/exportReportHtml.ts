@@ -44,7 +44,7 @@ function scoreRingSvg(
     <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" class="ring" aria-hidden="true">
       <defs>
         <linearGradient id="${gradId}" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#F3D9A4"/>
+          <stop offset="0%" stop-color="#D4AF72"/>
           <stop offset="55%" stop-color="#B8954A"/>
           <stop offset="100%" stop-color="#8A6A2E"/>
         </linearGradient>
@@ -168,8 +168,8 @@ function axeCardsHtml(cards: InsightCard[]): string {
 
 const PRINT_CSS = `
 :root {
-  --ink:#2B2421; --gold:#B8954A; --gold-soft:#F3D9A4; --gold-deep:#8A6A2E;
-  --muted:#5c534c; --cream:#F8F4EE; --paper:#FFFEFB; --line:#e4d5b5;
+  --ink:#2D1020; --gold:#B8954A; --gold-soft:#D4AF72; --gold-deep:#8A6A2E;
+  --muted:#5c534c; --cream:#F2EBE0; --paper:#FFFEFB; --line:#e4d5b5;
 }
 * { box-sizing: border-box; }
 body {
@@ -192,7 +192,7 @@ body {
   background: #fff; color: var(--ink); cursor: pointer; text-decoration: none;
   display: inline-flex; align-items: center; justify-content: center;
 }
-.toolbar .primary { background: var(--gold); border-color: var(--gold); color: #2B2421; }
+.toolbar .primary { background: var(--gold); border-color: var(--gold); color: #2D1020; }
 .toolbar .secondary { background: #fff; border-color: var(--gold); color: var(--gold-deep); }
 .frame {
   position: relative;
@@ -215,8 +215,8 @@ body {
 .frame .corner-bl { bottom: 10px; left: 10px; border-bottom: 2px solid; border-left: 2px solid; }
 .frame .corner-br { bottom: 10px; right: 10px; border-bottom: 2px solid; border-right: 2px solid; }
 .cover {
-  background: linear-gradient(145deg, #2B2421 0%, #2A1810 45%, #5C1F28 100%);
-  color: #F8F4EE; border-color: rgba(215,184,102,.55);
+  background: linear-gradient(145deg, #2D1020 0%, #2A1810 45%, #2D1020 100%);
+  color: #F2EBE0; border-color: rgba(215,184,102,.55);
   padding: 1.75rem 1.5rem 1.6rem;
 }
 .cover .brand { letter-spacing: .24em; text-transform: uppercase; font-size: .68rem; color: var(--gold-soft); font-weight: 700; margin: 0; }
@@ -234,7 +234,7 @@ body {
 .progress { margin-top: .75rem; }
 .progress .labels { display:flex; justify-content:space-between; font-size:.7rem; color:rgba(255,255,255,.5); margin-bottom:.3rem; }
 .progress .track { height: 8px; border-radius: 999px; background: rgba(255,255,255,.12); overflow: hidden; }
-.progress .fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #8A6A2E, #B8954A, #F3D9A4); }
+.progress .fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #8A6A2E, #B8954A, #D4AF72); }
 h2 {
   font-size: 1.4rem; margin: 0 0 .75rem; padding-bottom: .4rem;
   border-bottom: 1px solid var(--line);
@@ -274,7 +274,7 @@ p { margin: .5rem 0; }
 }
 .bar-fill {
   height: 100%; border-radius: 999px;
-  background: linear-gradient(90deg, #8A6A2E, #B8954A, #F3D9A4);
+  background: linear-gradient(90deg, #8A6A2E, #B8954A, #D4AF72);
 }
 .panel {
   border: 1px solid rgba(215,184,102,.28); border-radius: 14px;
@@ -297,9 +297,9 @@ p { margin: .5rem 0; }
 .card-n {
   flex-shrink: 0; width: 2rem; height: 2rem; border-radius: 999px;
   display:flex; align-items:center; justify-content:center;
-  background: var(--gold); color: #2B2421; font-weight: 700; font-size: .9rem;
+  background: var(--gold); color: #2D1020; font-weight: 700; font-size: .9rem;
 }
-.card-n.alt { background: rgba(100,31,43,.12); color: #5C1F28; }
+.card-n.alt { background: rgba(100,31,43,.12); color: #2D1020; }
 .card h3 { margin-top: 0; }
 .dims {
   border: 1px solid rgba(215,184,102,.28); border-radius: 16px;
@@ -325,8 +325,8 @@ p { margin: .5rem 0; }
 .tl-num {
   width: 2.1rem; height: 2.1rem; border-radius: 999px; flex-shrink: 0;
   display:flex; align-items:center; justify-content:center;
-  border: 2px solid var(--gold); background: linear-gradient(135deg, #F3D9A4, #B8954A);
-  font-weight: 700; color: #2B2421;
+  border: 2px solid var(--gold); background: linear-gradient(135deg, #D4AF72, #B8954A);
+  font-weight: 700; color: #2D1020;
 }
 .priority {
   position: relative; overflow: hidden;

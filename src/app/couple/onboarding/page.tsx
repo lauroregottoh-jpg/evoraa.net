@@ -69,7 +69,7 @@ export default function CoupleOnboardingPage() {
           <div className="flex flex-wrap gap-3">
             <Link
               href="/couple/dossier"
-              className="inline-flex h-11 items-center rounded-xl border border-[#B8954A]/40 bg-[#B8954A]/10 px-5 text-sm font-semibold text-[#5C1F28]"
+              className="inline-flex h-11 items-center rounded-xl border border-[#B8954A]/40 bg-[#B8954A]/10 px-5 text-sm font-semibold text-[#2D1020]"
             >
               Voir le dossier
             </Link>

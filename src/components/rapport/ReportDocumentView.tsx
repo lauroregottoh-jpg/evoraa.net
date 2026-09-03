@@ -82,7 +82,7 @@ export function ReportDocumentView({
         <button
           type="button"
           onClick={() => window.print()}
-          className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#B8954A] px-4 text-xs font-bold text-[#2B2421] shadow-sm hover:brightness-105 transition"
+          className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#B8954A] px-4 text-xs font-bold text-[#2D1020] shadow-sm hover:brightness-105 transition"
         >
           <Printer className="h-3.5 w-3.5" />
           Imprimer
@@ -98,7 +98,7 @@ export function ReportDocumentView({
 
       {/* ——— COUVERTURE PREMIUM ——— */}
       <OrnamentFrame>
-        <section className="rapport-reveal relative overflow-hidden rounded-[1.75rem] border-2 border-[#B8954A]/55 bg-gradient-to-br from-[#2B2421] via-[#2A1810] to-[#5C1F28] text-[#F8F4EE] p-8 sm:p-12 shadow-elevated print:border print:shadow-none">
+        <section className="rapport-reveal relative overflow-hidden rounded-[1.75rem] border-2 border-[#B8954A]/55 bg-gradient-to-br from-[#2D1020] via-[#2A1810] to-[#2D1020] text-[#F2EBE0] p-8 sm:p-12 shadow-elevated print:border print:shadow-none">
           <div
             aria-hidden
             className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-50 print:hidden"
@@ -110,7 +110,7 @@ export function ReportDocumentView({
 
           <div className="relative z-10 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-8">
             <div className="space-y-3 min-w-0">
-              <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#F3D9A4]">
+              <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#D4AF72]">
                 KELIAA ALLIANCE™
               </p>
               <h1 className="font-serif text-3xl sm:text-5xl font-bold leading-tight">
@@ -120,12 +120,12 @@ export function ReportDocumentView({
                     : "Rapport Personnalisé"}
                 </span>
               </h1>
-              <p className="text-base text-[#F3D9A4]/90">
+              <p className="text-base text-[#D4AF72]/90">
                 Préparation au Mariage
               </p>
               <div className="pt-1">
                 {isAlliance ? (
-                  <span className="rapport-cover-seal inline-flex items-center gap-1.5 rounded-full border border-[#B8954A]/50 bg-[#B8954A]/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#F3D9A4]">
+                  <span className="rapport-cover-seal inline-flex items-center gap-1.5 rounded-full border border-[#B8954A]/50 bg-[#B8954A]/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#D4AF72]">
                     <Crown className="h-3 w-3" /> {living.base.offerLabel}
                   </span>
                 ) : (
@@ -159,7 +159,7 @@ export function ReportDocumentView({
           </div>
 
           <div className="relative z-10 mt-8 rounded-2xl border border-white/15 bg-black/25 backdrop-blur-sm p-5 space-y-3">
-            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#D4AF72]">
               {living.confidentialLabel}
             </p>
             <dl className="grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm">
@@ -174,13 +174,13 @@ export function ReportDocumentView({
             <div className="pt-2">
               <div className="flex justify-between text-[10px] text-white/50 mb-1.5">
                 <span>Progression du document</span>
-                <span className="text-[#F3D9A4] font-bold">
+                <span className="text-[#D4AF72] font-bold">
                   {living.completenessPercent}%
                 </span>
               </div>
               <div className="h-2 rounded-full bg-white/10 overflow-hidden">
                 <div
-                  className="rapport-bar-fill h-full rounded-full bg-gradient-to-r from-[#8A6A2E] via-[#B8954A] to-[#F3D9A4]"
+                  className="rapport-bar-fill h-full rounded-full bg-gradient-to-r from-[#8A6A2E] via-[#B8954A] to-[#D4AF72]"
                   style={{ width: `${living.completenessPercent}%` }}
                 />
               </div>
@@ -257,7 +257,7 @@ export function ReportDocumentView({
                 Niveau de préparation actuel
               </p>
               <PrepStars score={living.glance.score} />
-              <p className="font-serif text-4xl font-bold text-[#2B2421]">
+              <p className="font-serif text-4xl font-bold text-[#2D1020]">
                 {living.glance.score}{" "}
                 <span className="text-lg text-[#B8954A]">/ 100</span>
               </p>
@@ -369,14 +369,14 @@ export function ReportDocumentView({
 
       {!complete && living.nextStep ? (
         <DocPage number={++page} title="Votre prochaine étape">
-          <div className="rounded-2xl border-2 border-[#B8954A]/40 bg-gradient-to-br from-[#B8954A]/15 via-white to-[#F8F4EE] p-6 space-y-4">
+          <div className="rounded-2xl border-2 border-[#B8954A]/40 bg-gradient-to-br from-[#B8954A]/15 via-white to-[#F2EBE0] p-6 space-y-4">
             <p className="text-sm text-foreground/90 leading-relaxed">
               {living.nextStep.completenessNote}
             </p>
             <p className="text-[10px] font-bold uppercase tracking-widest text-accent">
               Évaluation recommandée
             </p>
-            <h3 className="font-serif text-3xl font-bold text-[#2B2421]">
+            <h3 className="font-serif text-3xl font-bold text-[#2D1020]">
               {living.nextStep.title}
             </h3>
             <ul className="grid sm:grid-cols-2 gap-2">
@@ -532,7 +532,7 @@ export function ReportDocumentView({
         <div className="flex flex-wrap gap-2 print:hidden">
           <Link
             href="/coaching"
-            className="inline-flex h-10 items-center rounded-xl bg-[#B8954A] px-4 text-xs font-bold text-[#2B2421]"
+            className="inline-flex h-10 items-center rounded-xl bg-[#B8954A] px-4 text-xs font-bold text-[#2D1020]"
           >
             Réserver une séance de coaching
           </Link>
@@ -625,7 +625,7 @@ function MetaRow({ label, value }: { label: string; value: string }) {
       <dt className="text-[10px] uppercase tracking-wider text-white/45">
         {label}
       </dt>
-      <dd className="font-medium text-[#F3D9A4]">{value}</dd>
+      <dd className="font-medium text-[#D4AF72]">{value}</dd>
     </div>
   )
 }
@@ -663,7 +663,7 @@ function PartDivider({ title }: { title: string }) {
     <div className="rapport-reveal pt-6 pb-2 text-center space-y-3">
       <div className="flex items-center justify-center gap-3">
         <span className="h-px w-10 bg-gradient-to-r from-transparent to-[#B8954A]" />
-        <span className="h-2 w-2 rotate-45 border border-[#B8954A] bg-[#F3D9A4]/40" />
+        <span className="h-2 w-2 rotate-45 border border-[#B8954A] bg-[#D4AF72]/40" />
         <span className="h-px w-10 bg-gradient-to-l from-transparent to-[#B8954A]" />
       </div>
       <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-accent">
@@ -739,7 +739,7 @@ function NarrativeBlock({
             className={cn(
               "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold",
               kind === "force"
-                ? "bg-[#B8954A] text-[#2B2421]"
+                ? "bg-[#B8954A] text-[#2D1020]"
                 : "bg-primary/15 text-primary"
             )}
           >

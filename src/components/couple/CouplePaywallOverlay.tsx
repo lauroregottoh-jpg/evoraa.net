@@ -52,13 +52,13 @@ export function CouplePaywallOverlay({
       >
         {children}
       </div>
-      <div className="absolute inset-0 z-10 flex items-center justify-center p-4 bg-[#FBF9F6]/55 backdrop-blur-[2px]">
+      <div className="absolute inset-0 z-10 flex items-center justify-center p-4 bg-[#F2EBE0]/55 backdrop-blur-[2px]">
         <div className="w-full max-w-md rounded-2xl border border-[#B8954A]/40 bg-white shadow-elevated p-6 space-y-4 text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#5C1F28]/10 text-[#5C1F28]">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#2D1020]/10 text-[#2D1020]">
             <Lock className="h-5 w-5" />
           </div>
-          <h2 className="font-serif text-2xl font-bold text-[#5C1F28]">{title}</h2>
-          <p className="text-sm text-[#2B2421]/75 leading-relaxed">{body}</p>
+          <h2 className="font-serif text-2xl font-bold text-[#2D1020]">{title}</h2>
+          <p className="text-sm text-[#2D1020]/75 leading-relaxed">{body}</p>
           <form onSubmit={submitCode} className="space-y-2 text-left">
             <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
               Déjà inscrit(e) ? Entrez le code partenaire
@@ -73,7 +73,7 @@ export function CouplePaywallOverlay({
             <button
               type="submit"
               disabled={loading || !code.trim()}
-              className="w-full h-11 rounded-xl bg-[#5C1F28] text-sm font-semibold text-[#FBF9F6] disabled:opacity-60"
+              className="w-full h-11 rounded-xl bg-[#2D1020] text-sm font-semibold text-[#F2EBE0] disabled:opacity-60"
             >
               {loading ? "Vérification…" : "Entrer dans l’espace"}
             </button>
@@ -84,13 +84,13 @@ export function CouplePaywallOverlay({
           <div className="flex flex-col sm:flex-row gap-2 justify-center pt-1">
             <Link
               href="/couple/offre"
-              className="inline-flex h-11 items-center justify-center rounded-xl bg-[#5C1F28] px-5 text-sm font-semibold text-[#FBF9F6]"
+              className="inline-flex h-11 items-center justify-center rounded-xl bg-[#2D1020] px-5 text-sm font-semibold text-[#F2EBE0]"
             >
               Faire le paiement — débloquer
             </Link>
             <Link
               href="/couple/rejoindre"
-              className="inline-flex h-11 items-center justify-center rounded-xl border border-[#5C1F28]/25 px-5 text-sm font-semibold text-[#5C1F28]"
+              className="inline-flex h-11 items-center justify-center rounded-xl border border-[#2D1020]/25 px-5 text-sm font-semibold text-[#2D1020]"
             >
               J’ai un code partenaire
             </Link>
@@ -112,15 +112,15 @@ export function CoupleLockedCard({
   onUnlockHref?: string
 }) {
   return (
-    <div className="relative rounded-2xl border border-[#2B2421]/10 bg-[#F8F4EE]/90 p-5 opacity-90">
+    <div className="relative rounded-2xl border border-[#2D1020]/10 bg-[#F2EBE0]/90 p-5 opacity-90">
       <div className="flex gap-3 items-start">
-        <Lock className="h-5 w-5 text-[#5C1F28]/50 shrink-0 mt-0.5" />
+        <Lock className="h-5 w-5 text-[#2D1020]/50 shrink-0 mt-0.5" />
         <div className="min-w-0 flex-1">
-          <p className="font-serif text-lg font-bold text-[#2B2421]/70">{title}</p>
-          <p className="mt-1 text-sm text-[#2B2421]/55">{description}</p>
+          <p className="font-serif text-lg font-bold text-[#2D1020]/70">{title}</p>
+          <p className="mt-1 text-sm text-[#2D1020]/55">{description}</p>
           <Link
             href={onUnlockHref}
-            className="mt-3 inline-flex text-xs font-bold uppercase tracking-wider text-[#5C1F28]"
+            className="mt-3 inline-flex text-xs font-bold uppercase tracking-wider text-[#2D1020]"
           >
             Débloquer →
           </Link>

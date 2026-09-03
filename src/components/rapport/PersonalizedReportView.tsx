@@ -66,12 +66,12 @@ export function PersonalizedReportView({
 
   return (
     <article className="space-y-5 max-w-3xl mx-auto">
-      <header className="relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/40 bg-gradient-to-br from-[#2B2421] via-[#2A1810] to-[#5C1F28] p-6 sm:p-8 text-[#F8F4EE] shadow-elevated">
+      <header className="relative overflow-hidden rounded-[1.75rem] border border-[#B8954A]/40 bg-gradient-to-br from-[#2D1020] via-[#2A1810] to-[#2D1020] p-6 sm:p-8 text-[#F2EBE0] shadow-elevated">
         <div
           aria-hidden
           className="alliance-gold-sweep pointer-events-none absolute inset-0 opacity-40"
         />
-        <p className="relative z-10 text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3D9A4]">
+        <p className="relative z-10 text-[10px] font-bold uppercase tracking-[0.22em] text-[#D4AF72]">
           KELIAA · Rapport complet
         </p>
         <h1 className="relative z-10 mt-3 font-serif text-3xl sm:text-4xl font-bold leading-tight">
@@ -88,13 +88,13 @@ export function PersonalizedReportView({
         <div className="relative z-10 mt-5 space-y-2">
           <div className="flex items-center justify-between text-[11px] text-white/60">
             <span>Complétude du rapport</span>
-            <span className="font-bold text-[#F3D9A4]">
+            <span className="font-bold text-[#D4AF72]">
               {living.completenessPercent}%
             </span>
           </div>
           <div className="h-2 rounded-full bg-white/10 overflow-hidden">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#B8954A] to-[#F3D9A4] transition-all duration-700"
+              className="h-full rounded-full bg-gradient-to-r from-[#B8954A] to-[#D4AF72] transition-all duration-700"
               style={{ width: `${Math.min(100, living.completenessPercent)}%` }}
             />
           </div>
@@ -113,7 +113,7 @@ export function PersonalizedReportView({
             <p className="text-[10px] uppercase tracking-wider text-white/50">
               Parties ouvertes
             </p>
-            <p className="font-serif text-2xl font-bold text-[#F3D9A4]">
+            <p className="font-serif text-2xl font-bold text-[#D4AF72]">
               {unlockedCount}
               <span className="text-base text-white/45 font-normal">
                 /{ordered.length}
@@ -135,7 +135,7 @@ export function PersonalizedReportView({
 
         <div className="relative z-10 mt-4 flex flex-wrap gap-2">
           {isAlliance ? (
-            <span className="inline-flex items-center gap-1 rounded-full border border-[#B8954A]/50 bg-[#B8954A]/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#F3D9A4]">
+            <span className="inline-flex items-center gap-1 rounded-full border border-[#B8954A]/50 bg-[#B8954A]/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#D4AF72]">
               <Crown className="h-3 w-3" /> {base.offerLabel}
             </span>
           ) : (
@@ -198,7 +198,7 @@ export function PersonalizedReportView({
           </p>
           <Link
             href={living.nextUnlock.href}
-            className="inline-flex h-9 items-center gap-1 rounded-xl bg-[#B8954A] px-3 text-xs font-bold text-[#2B2421]"
+            className="inline-flex h-9 items-center gap-1 rounded-xl bg-[#B8954A] px-3 text-xs font-bold text-[#2D1020]"
           >
             Faire le test <ArrowRight className="h-3.5 w-3.5" />
           </Link>
@@ -293,7 +293,7 @@ export function PersonalizedReportView({
                           href={
                             variant === "global" ? "/rapport" : "/rapport/global"
                           }
-                          className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#B8954A] px-4 text-sm font-bold text-[#2B2421]"
+                          className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#B8954A] px-4 text-sm font-bold text-[#2D1020]"
                         >
                           {variant === "global"
                             ? "Retour au hub Rapport"
